@@ -1,0 +1,458 @@
+{
+  "0.15": {
+    "modes": {
+      "mapping": {
+        "all_valid": {
+          "miou": 0.6211525862705272,
+          "vehicle_iou": 0.16960983510481734,
+          "pixel_error_rate": 0.07642243711571976,
+          "vehicle_recall": 0.20782409391089077,
+          "vehicle_precision": 0.4794471367704747,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.5935607469907692,
+          "vehicle_iou": 0.1108041426112313,
+          "pixel_error_rate": 0.08294784629742742,
+          "vehicle_recall": 0.13496117669944271,
+          "vehicle_precision": 0.38175157531267506,
+          "pixels": 2902267
+        },
+        "weak_evidence": {
+          "miou": 0.8077798767605225,
+          "vehicle_iou": 0.5584549628559127,
+          "pixel_error_rate": 0.032988964772948326,
+          "vehicle_recall": 0.725104713826852,
+          "vehicle_precision": 0.7078723718067539,
+          "pixels": 111676.66666666667
+        },
+        "strong_evidence": {
+          "miou": 0.8755734374614293,
+          "vehicle_iou": 0.6899310994890215,
+          "pixel_error_rate": 0.01560593530175299,
+          "vehicle_recall": 0.882815729765726,
+          "vehicle_precision": 0.7598390174856429,
+          "pixels": 232005.33333333334
+        }
+      },
+      "sb": {
+        "all_valid": {
+          "miou": 0.5888155565734754,
+          "vehicle_iou": 0.15686203128248075,
+          "pixel_error_rate": 0.09731494035591233,
+          "vehicle_recall": 0.1808709609407412,
+          "vehicle_precision": 0.5433931822400061,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.5567235201520574,
+          "vehicle_iou": 0.09223902798642424,
+          "pixel_error_rate": 0.10604083207625925,
+          "vehicle_recall": 0.10494440014484858,
+          "vehicle_precision": 0.4349380129142359,
+          "pixels": 2902267
+        },
+        "weak_evidence": {
+          "miou": 0.8029225333927852,
+          "vehicle_iou": 0.5676777623034528,
+          "pixel_error_rate": 0.038207739250689175,
+          "vehicle_recall": 0.7371532693848428,
+          "vehicle_precision": 0.7118390894151343,
+          "pixels": 111676.66666666667
+        },
+        "strong_evidence": {
+          "miou": 0.8720671128886226,
+          "vehicle_iou": 0.6827482560063789,
+          "pixel_error_rate": 0.01642327202974836,
+          "vehicle_recall": 0.8768092137180952,
+          "vehicle_precision": 0.7556074655001954,
+          "pixels": 232005.33333333334
+        }
+      },
+      "mapping_received_sb_missing": {
+        "all_valid": {
+          "miou": 0.5896161211947252,
+          "vehicle_iou": 0.15714062363486492,
+          "pixel_error_rate": 0.0967469503269049,
+          "vehicle_recall": 0.18072813586065714,
+          "vehicle_precision": 0.547949912902859,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.5573031727013822,
+          "vehicle_iou": 0.09234598544681348,
+          "pixel_error_rate": 0.1055887904731158,
+          "vehicle_recall": 0.10474992549279857,
+          "vehicle_precision": 0.44075722377693816,
+          "pixels": 2902267
+        },
+        "weak_evidence": {
+          "miou": 0.8075432502067237,
+          "vehicle_iou": 0.5626485231865418,
+          "pixel_error_rate": 0.03402748758810159,
+          "vehicle_recall": 0.72757286742986,
+          "vehicle_precision": 0.7127421781221323,
+          "pixels": 111676.66666666667
+        },
+        "strong_evidence": {
+          "miou": 0.8726980641835831,
+          "vehicle_iou": 0.6834527037387486,
+          "pixel_error_rate": 0.01616134353094682,
+          "vehicle_recall": 0.880661611459563,
+          "vehicle_precision": 0.7536878956053105,
+          "pixels": 232005.33333333334
+        }
+      },
+      "sb_received_mapping_missing": {
+        "all_valid": {
+          "miou": 0.6213628725260572,
+          "vehicle_iou": 0.1699268533686477,
+          "pixel_error_rate": 0.07632857653236902,
+          "vehicle_recall": 0.20805533451674113,
+          "vehicle_precision": 0.48080553709981366,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.5938928050090568,
+          "vehicle_iou": 0.1112431623838611,
+          "pixel_error_rate": 0.08279569852854303,
+          "vehicle_recall": 0.13549256636040002,
+          "vehicle_precision": 0.3827792112030422,
+          "pixels": 2902267
+        },
+        "weak_evidence": {
+          "miou": 0.8095544906980394,
+          "vehicle_iou": 0.5700050105745416,
+          "pixel_error_rate": 0.034176990558073474,
+          "vehicle_recall": 0.7331866365675295,
+          "vehicle_precision": 0.7189362798765756,
+          "pixels": 111676.66666666667
+        },
+        "strong_evidence": {
+          "miou": 0.875179376628624,
+          "vehicle_iou": 0.6886681640043428,
+          "pixel_error_rate": 0.015621790804755675,
+          "vehicle_recall": 0.8765341260561386,
+          "vehicle_precision": 0.7628386273918181,
+          "pixels": 232005.33333333334
+        }
+      }
+    },
+    "latent_mse": {
+      "mapping": {
+        "no_evidence": 1.4717418274366159,
+        "weak_evidence": 0.7581629594993191,
+        "strong_evidence": 0.20942939190688115
+      },
+      "sb": {
+        "no_evidence": 1.6230732508530072,
+        "weak_evidence": 0.8051149462672756,
+        "strong_evidence": 0.232041474971258
+      }
+    }
+  },
+  "0.5": {
+    "modes": {
+      "mapping": {
+        "all_valid": {
+          "miou": 0.7567221925542987,
+          "vehicle_iou": 0.38494743906870243,
+          "pixel_error_rate": 0.029040608257656936,
+          "vehicle_recall": 0.4996701420769487,
+          "vehicle_precision": 0.6262831149035465,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.6979794697734707,
+          "vehicle_iou": 0.23626046623709704,
+          "pixel_error_rate": 0.03628285311164159,
+          "vehicle_recall": 0.31477200480446754,
+          "vehicle_precision": 0.4863612548989244,
+          "pixels": 2101427.6666666665
+        },
+        "weak_evidence": {
+          "miou": 0.8422630885476133,
+          "vehicle_iou": 0.6062731189107872,
+          "pixel_error_rate": 0.019443913258657537,
+          "vehicle_recall": 0.7530705160312569,
+          "vehicle_precision": 0.7569940714205856,
+          "pixels": 375291.6666666667
+        },
+        "strong_evidence": {
+          "miou": 0.8857292403263388,
+          "vehicle_iou": 0.7125918798340742,
+          "pixel_error_rate": 0.013953785091613677,
+          "vehicle_recall": 0.8781055640743397,
+          "vehicle_precision": 0.7908705659414241,
+          "pixels": 769229.6666666666
+        }
+      },
+      "sb": {
+        "all_valid": {
+          "miou": 0.751912009899451,
+          "vehicle_iou": 0.3934783379068575,
+          "pixel_error_rate": 0.034128693950521094,
+          "vehicle_recall": 0.4935694707990723,
+          "vehicle_precision": 0.6598296234031505,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.6876132234877487,
+          "vehicle_iou": 0.23804037672099435,
+          "pixel_error_rate": 0.04368475764267621,
+          "vehicle_recall": 0.29934259663407004,
+          "vehicle_precision": 0.5373984386942003,
+          "pixels": 2101427.6666666665
+        },
+        "weak_evidence": {
+          "miou": 0.8402918220554579,
+          "vehicle_iou": 0.6091737235553469,
+          "pixel_error_rate": 0.02144536319284651,
+          "vehicle_recall": 0.7734016737985453,
+          "vehicle_precision": 0.7421906805479028,
+          "pixels": 375291.6666666667
+        },
+        "strong_evidence": {
+          "miou": 0.8859657879121067,
+          "vehicle_iou": 0.7144027212658789,
+          "pixel_error_rate": 0.014192459907675592,
+          "vehicle_recall": 0.8846767095243055,
+          "vehicle_precision": 0.7877638798746489,
+          "pixels": 769229.6666666666
+        }
+      },
+      "mapping_received_sb_missing": {
+        "all_valid": {
+          "miou": 0.7526810280755293,
+          "vehicle_iou": 0.3936998114689146,
+          "pixel_error_rate": 0.03362786455774055,
+          "vehicle_recall": 0.4912842695177273,
+          "vehicle_precision": 0.6645636371232112,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.688169384510009,
+          "vehicle_iou": 0.23789946217396288,
+          "pixel_error_rate": 0.04323788714712377,
+          "vehicle_recall": 0.297517648541137,
+          "vehicle_precision": 0.5426709480152678,
+          "pixels": 2101427.6666666665
+        },
+        "weak_evidence": {
+          "miou": 0.8429904793663171,
+          "vehicle_iou": 0.6096237665395666,
+          "pixel_error_rate": 0.019688720455708353,
+          "vehicle_recall": 0.7572263455931181,
+          "vehicle_precision": 0.7579606328182694,
+          "pixels": 375291.6666666667
+        },
+        "strong_evidence": {
+          "miou": 0.8858939239336566,
+          "vehicle_iou": 0.7139438268493532,
+          "pixel_error_rate": 0.014147781276865964,
+          "vehicle_recall": 0.8876626218932244,
+          "vehicle_precision": 0.7849247587246806,
+          "pixels": 769229.6666666666
+        }
+      },
+      "sb_received_mapping_missing": {
+        "all_valid": {
+          "miou": 0.7574975242744746,
+          "vehicle_iou": 0.38708864581630187,
+          "pixel_error_rate": 0.02898659221078333,
+          "vehicle_recall": 0.5022477947127515,
+          "vehicle_precision": 0.6278897762971977,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.6985475035892152,
+          "vehicle_iou": 0.23766917195803827,
+          "pixel_error_rate": 0.03619819474135255,
+          "vehicle_recall": 0.31621543257638157,
+          "vehicle_precision": 0.4888486937775694,
+          "pixels": 2101427.6666666665
+        },
+        "weak_evidence": {
+          "miou": 0.8446403134235253,
+          "vehicle_iou": 0.6147522918015229,
+          "pixel_error_rate": 0.01973387584515481,
+          "vehicle_recall": 0.7727913444169089,
+          "vehicle_precision": 0.7510038600926766,
+          "pixels": 375291.6666666667
+        },
+        "strong_evidence": {
+          "miou": 0.8861282113397764,
+          "vehicle_iou": 0.7132144958913941,
+          "pixel_error_rate": 0.013822843735896298,
+          "vehicle_recall": 0.8755896429359918,
+          "vehicle_precision": 0.7936314399622743,
+          "pixels": 769229.6666666666
+        }
+      }
+    },
+    "latent_mse": {
+      "mapping": {
+        "no_evidence": 1.081159187950924,
+        "weak_evidence": 0.6490899294602571,
+        "strong_evidence": 0.1790063012099286
+      },
+      "sb": {
+        "no_evidence": 1.2036567123214763,
+        "weak_evidence": 0.666897845862284,
+        "strong_evidence": 0.18384335961909434
+      }
+    }
+  },
+  "1.0": {
+    "modes": {
+      "mapping": {
+        "all_valid": {
+          "miou": 0.8363525349400308,
+          "vehicle_iou": 0.5816031490838072,
+          "pixel_error_rate": 0.018237296190831476,
+          "vehicle_recall": 0.7197771928750688,
+          "vehicle_precision": 0.7518658032099315,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.7410340369698998,
+          "vehicle_iou": 0.3276128989505953,
+          "pixel_error_rate": 0.026553746555895524,
+          "vehicle_recall": 0.4182556937451764,
+          "vehicle_precision": 0.6019542737390821,
+          "pixels": 942801.6666666666
+        },
+        "weak_evidence": {
+          "miou": 0.8484921751269426,
+          "vehicle_iou": 0.6161402871844476,
+          "pixel_error_rate": 0.01737719281781421,
+          "vehicle_recall": 0.7522788629490391,
+          "vehicle_precision": 0.7729858562291347,
+          "pixels": 757422
+        },
+        "strong_evidence": {
+          "miou": 0.8891921422498408,
+          "vehicle_iou": 0.7218093489095401,
+          "pixel_error_rate": 0.013606630419070212,
+          "vehicle_recall": 0.881895847274713,
+          "vehicle_precision": 0.7990940024688661,
+          "pixels": 1545725.3333333333
+        }
+      },
+      "sb": {
+        "all_valid": {
+          "miou": 0.8413322159326214,
+          "vehicle_iou": 0.5991478089267167,
+          "pixel_error_rate": 0.018700745657638684,
+          "vehicle_recall": 0.7364741248563248,
+          "vehicle_precision": 0.7626056484212741,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.7449501467018155,
+          "vehicle_iou": 0.3496953001077918,
+          "pixel_error_rate": 0.028641544206736074,
+          "vehicle_recall": 0.43281092229272083,
+          "vehicle_precision": 0.6455413619947057,
+          "pixels": 942801.6666666666
+        },
+        "weak_evidence": {
+          "miou": 0.856997020367531,
+          "vehicle_iou": 0.6424181795635558,
+          "pixel_error_rate": 0.017446632334312834,
+          "vehicle_recall": 0.802316706058455,
+          "vehicle_precision": 0.7631970050024233,
+          "pixels": 757422
+        },
+        "strong_evidence": {
+          "miou": 0.891755758267439,
+          "vehicle_iou": 0.7281679536459066,
+          "pixel_error_rate": 0.013263852156373454,
+          "vehicle_recall": 0.8848038103025907,
+          "vehicle_precision": 0.8044330722778607,
+          "pixels": 1545725.3333333333
+        }
+      },
+      "mapping_received_sb_missing": {
+        "all_valid": {
+          "miou": 0.838958421841174,
+          "vehicle_iou": 0.5921203755253688,
+          "pixel_error_rate": 0.018757534391329028,
+          "vehicle_recall": 0.7265647847762068,
+          "vehicle_precision": 0.7618949078227256,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.7450814049777902,
+          "vehicle_iou": 0.3488412163344111,
+          "pixel_error_rate": 0.028348176422730093,
+          "vehicle_recall": 0.4294586160510416,
+          "vehicle_precision": 0.6502224192373074,
+          "pixels": 942801.6666666666
+        },
+        "weak_evidence": {
+          "miou": 0.8496084239834676,
+          "vehicle_iou": 0.6197447593358354,
+          "pixel_error_rate": 0.017417281203765993,
+          "vehicle_recall": 0.7583180950847744,
+          "vehicle_precision": 0.7722821612175601,
+          "pixels": 757422
+        },
+        "strong_evidence": {
+          "miou": 0.889610954208916,
+          "vehicle_iou": 0.7229358897821804,
+          "pixel_error_rate": 0.013573958987819842,
+          "vehicle_recall": 0.886211875744789,
+          "vehicle_precision": 0.7969433122621569,
+          "pixels": 1545725.3333333333
+        }
+      },
+      "sb_received_mapping_missing": {
+        "all_valid": {
+          "miou": 0.8396171141733471,
+          "vehicle_iou": 0.5904565055038435,
+          "pixel_error_rate": 0.017977074398478437,
+          "vehicle_recall": 0.7300197914753831,
+          "vehicle_precision": 0.7553779963742292,
+          "pixels": 3245949
+        },
+        "no_evidence": {
+          "miou": 0.7423338893368524,
+          "vehicle_iou": 0.3311448223219452,
+          "pixel_error_rate": 0.026444423646239223,
+          "vehicle_recall": 0.42202798026376914,
+          "vehicle_precision": 0.6059981241432327,
+          "pixels": 942801.6666666666
+        },
+        "weak_evidence": {
+          "miou": 0.8574207717749317,
+          "vehicle_iou": 0.6422020173395989,
+          "pixel_error_rate": 0.017109320748931605,
+          "vehicle_recall": 0.7978266088950176,
+          "vehicle_precision": 0.7670097215315869,
+          "pixels": 757422
+        },
+        "strong_evidence": {
+          "miou": 0.8912471381694581,
+          "vehicle_iou": 0.7265625247991949,
+          "pixel_error_rate": 0.013256297855574991,
+          "vehicle_recall": 0.8800737383452355,
+          "vehicle_precision": 0.8064154739317382,
+          "pixels": 1545725.3333333333
+        }
+      }
+    },
+    "latent_mse": {
+      "mapping": {
+        "no_evidence": 0.930880456202376,
+        "weak_evidence": 0.5991058284531502,
+        "strong_evidence": 0.16075331665158352
+      },
+      "sb": {
+        "no_evidence": 1.0115248365945617,
+        "weak_evidence": 0.5966990144317375,
+        "strong_evidence": 0.16023696111694574
+      }
+    }
+  }
+}

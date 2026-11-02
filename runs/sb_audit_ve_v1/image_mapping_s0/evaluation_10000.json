@@ -1,0 +1,14 @@
+{
+  "split": "CIFAR10 train-heldout val",
+  "n": 1000,
+  "modes": {
+    "one_step": {
+      "psnr": 23.310990814208985,
+      "hole_psnr": 17.290391021728517,
+      "ssim": 0.7028759889602662,
+      "lpips_alex_64": 0.14631965517997741,
+      "max_known_pixel_error": 0.0
+    }
+  },
+  "scope": "Small I2SB-style adaptation, not paper-scale reproduction or posterior calibration."
+}

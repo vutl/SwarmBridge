@@ -1,0 +1,28 @@
+{
+  "split": "CIFAR10 train-heldout val",
+  "n": 16,
+  "modes": {
+    "one_step": {
+      "psnr": 12.977163314819336,
+      "hole_psnr": 6.956564426422119,
+      "ssim": 0.21594911813735962,
+      "lpips_alex_64": 0.4502166211605072,
+      "max_known_pixel_error": 0.0
+    },
+    "sde_4": {
+      "psnr": 12.749120712280273,
+      "hole_psnr": 6.72852087020874,
+      "ssim": 0.21121948957443237,
+      "lpips_alex_64": 0.459403932094574,
+      "max_known_pixel_error": 0.0
+    },
+    "sde_16": {
+      "psnr": 12.734312057495117,
+      "hole_psnr": 6.713711261749268,
+      "ssim": 0.2123362421989441,
+      "lpips_alex_64": 0.45776912569999695,
+      "max_known_pixel_error": 0.0
+    }
+  },
+  "scope": "Small I2SB-style adaptation, not paper-scale reproduction or posterior calibration."
+}

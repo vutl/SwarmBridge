@@ -1,0 +1,41 @@
+# Local Python environments and generated caches
+/.venv/
+/.venv-sb-papers/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Third-party repositories and local package caches
+/pdf/GithubModels/
+/runs/tool_cache/
+/runs/tool_cache_deps/
+/runs/git_tool/
+/runs/sb_paper_reproductions/downloads/
+
+# Model checkpoints and weights
+*.pt
+*.pth
+*.pth.tar
+*.ckpt
+*.safetensors
+*.onnx
+*.nemo
+**/checkpoints/
+
+# Archives exceeding GitHub's 100 MiB regular Git file limit
+/data/coperception_uav/raw/coperception_uav_town3.zip
+/data/cifar10/cifar-10-python.tar.gz
+
+# Local credentials and IDE state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,5 @@
+{"step": 30100, "reconstruction_loss": 0.1272620413452387, "task_ce": 0.031150516588240862, "interval_s": 40.20844289998058, "updates": 100, "updated_at": "2026-10-31T19:55:28+09:00"}
+{"step": 30200, "reconstruction_loss": 0.12492564119398594, "task_ce": 0.03127097201067954, "interval_s": 22.13287709999713, "updates": 100, "updated_at": "2026-10-31T19:55:51+09:00"}
+{"step": 30300, "reconstruction_loss": 0.13210312098264695, "task_ce": 0.03282627874519676, "interval_s": 22.097152000002097, "updates": 100, "updated_at": "2026-10-31T19:56:13+09:00"}
+{"step": 30400, "reconstruction_loss": 0.1290627769753337, "task_ce": 0.0319039616920054, "interval_s": 22.217526799999177, "updates": 100, "updated_at": "2026-10-31T19:56:35+09:00"}
+{"step": 30500, "reconstruction_loss": 0.12853558093309403, "task_ce": 0.030844351556152106, "interval_s": 22.1207410999923, "updates": 100, "updated_at": "2026-10-31T19:56:57+09:00"}

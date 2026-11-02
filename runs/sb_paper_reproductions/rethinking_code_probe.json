@@ -1,0 +1,32 @@
+{
+  "status": "code_smoke_only",
+  "pretrained": false,
+  "note": "Random initialization, synthetic complex inputs; no quality claim.",
+  "results": [
+    {
+      "backbone": "tfgridnet_5l32c100",
+      "parameters": 2158355,
+      "output_shape": [
+        1,
+        1,
+        257,
+        16
+      ],
+      "loss": 36.55153274536133,
+      "gradient_norm": 2652.7397535595524,
+      "sampler_finite": true
+    },
+    {
+      "backbone": "tfgridnet_5l32c100_predictive",
+      "parameters": 2112275,
+      "output_shape": [
+        1,
+        1,
+        257,
+        16
+      ],
+      "loss": 9.595528602600098,
+      "gradient_norm": 309.4294299686071
+    }
+  ]
+}

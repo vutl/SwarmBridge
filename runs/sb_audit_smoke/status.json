@@ -1,0 +1,11 @@
+{
+  "state": "completed",
+  "started_at": "2026-10-30T23:48:04+09:00",
+  "pid": 11188,
+  "job": "mapping_csi_residual_s0",
+  "step": 20,
+  "target_step": 20,
+  "updated_at": "2026-10-30T23:49:16+09:00",
+  "job_train_s": 7.645862899997155,
+  "checkpoint": "runs\\sb_audit_smoke\\mapping_csi_residual_s0\\last.pt"
+}

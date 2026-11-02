@@ -1,0 +1,12 @@
+{
+  "state": "completed",
+  "started_at": "2026-10-31T20:57:51+09:00",
+  "pid": 50852,
+  "version": "sb_pilot_matched_v1",
+  "job": "sb_c_p50_s0",
+  "step": 20,
+  "target_step": 20,
+  "updated_at": "2026-10-31T20:58:36+09:00",
+  "job_train_s": 4.785641399997985,
+  "checkpoint": "runs\\sb_pilot_smoke\\sb_c_p50_s0\\last.pt"
+}

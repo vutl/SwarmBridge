@@ -1,0 +1,53 @@
+{
+  "train": {
+    "grids": 1100,
+    "scenes": 11,
+    "sequences": 55,
+    "lengths": [
+      20
+    ],
+    "all_indices_covered_once": true,
+    "predecessor_unique": true,
+    "graph_errors": [],
+    "dt_raw_median": 1512032256.0,
+    "dt_seconds_if_nanoseconds_median": 1.512032256,
+    "dt_seconds_if_nanoseconds_minmax": [
+      0.474010112,
+      11.079236352
+    ]
+  },
+  "val": {
+    "grids": 200,
+    "scenes": 2,
+    "sequences": 10,
+    "lengths": [
+      20
+    ],
+    "all_indices_covered_once": true,
+    "predecessor_unique": true,
+    "graph_errors": [],
+    "dt_raw_median": 1255526784.0,
+    "dt_seconds_if_nanoseconds_median": 1.255526784,
+    "dt_seconds_if_nanoseconds_minmax": [
+      0.504010752,
+      3.36007168
+    ]
+  },
+  "test": {
+    "grids": 400,
+    "scenes": 4,
+    "sequences": 20,
+    "lengths": [
+      20
+    ],
+    "all_indices_covered_once": true,
+    "predecessor_unique": true,
+    "graph_errors": [],
+    "dt_raw_median": 1377029376.0,
+    "dt_seconds_if_nanoseconds_median": 1.377029376,
+    "dt_seconds_if_nanoseconds_minmax": [
+      0.066001408,
+      7.854167552
+    ]
+  }
+}

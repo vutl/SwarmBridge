@@ -1,0 +1,755 @@
+{
+  "scope": "Training-cache diagnostic; existing EMA checkpoints, seed 0, 32 fixed examples, 15% selected send budget. No quality-training run.",
+  "allocation": {
+    "endpoint_sample_probability": 0.1,
+    "batch": 32,
+    "expected_endpoint_samples_per_update": 3.2,
+    "probability_of_any_endpoint_in_update": 0.9656631617970749
+  },
+  "profiles": {
+    "6000": [
+      {
+        "t": 0.0,
+        "mse": 0.016176517638895247,
+        "ce": 0.027841593123324605,
+        "miou": 0.9089140730355005,
+        "vehicle_iou": 0.770259458223797,
+        "per_class_iou": [
+          0.989766634468663,
+          0.9667161264140415,
+          0.770259458223797
+        ],
+        "missing_mse": 0.029008270086121207,
+        "untrained_copy_missing_mse": 0.0,
+        "rescaled_copy_missing_mse": 0.0,
+        "clean_coefficient": 1.0,
+        "bridge_variance": 0.0,
+        "clean_signal_to_bridge_noise": null
+      },
+      {
+        "t": 0.25,
+        "mse": 0.05859926177395714,
+        "ce": 0.02803855574615684,
+        "miou": 0.9083591963783946,
+        "vehicle_iou": 0.7691071838420932,
+        "per_class_iou": [
+          0.9896242209766559,
+          0.9663461843164346,
+          0.7691071838420932
+        ],
+        "missing_mse": 0.11120304055351979,
+        "untrained_copy_missing_mse": 0.1361235494279419,
+        "rescaled_copy_missing_mse": 0.14335777323931964,
+        "clean_coefficient": 0.8936716318130493,
+        "bridge_variance": 0.11456284672021866,
+        "clean_signal_to_bridge_noise": 6.971274375915527
+      },
+      {
+        "t": 0.5,
+        "mse": 0.11378646228048536,
+        "ce": 0.028824768459242155,
+        "miou": 0.9068374194302304,
+        "vehicle_iou": 0.765893963736516,
+        "per_class_iou": [
+          0.9892790661870705,
+          0.9653392283671052,
+          0.765893963736516
+        ],
+        "missing_mse": 0.22605387228878437,
+        "untrained_copy_missing_mse": 0.38870281109041677,
+        "rescaled_copy_missing_mse": 0.4634220256982442,
+        "clean_coefficient": 0.7222222089767456,
+        "bridge_variance": 0.24187162518501282,
+        "clean_signal_to_bridge_noise": 2.156536102294922
+      },
+      {
+        "t": 0.75,
+        "mse": 0.19534886876742044,
+        "ce": 0.03231876903818263,
+        "miou": 0.8991658916810621,
+        "vehicle_iou": 0.7488324410525117,
+        "per_class_iou": [
+          0.9877684138096929,
+          0.9608968201809818,
+          0.7488324410525117
+        ],
+        "missing_mse": 0.40470892782933926,
+        "untrained_copy_missing_mse": 0.8813607780899363,
+        "rescaled_copy_missing_mse": 1.4980694662089624,
+        "clean_coefficient": 0.44576847553253174,
+        "bridge_variance": 0.2978634238243103,
+        "clean_signal_to_bridge_noise": 0.6671162843704224
+      },
+      {
+        "t": 0.9,
+        "mse": 0.2950695620642768,
+        "ce": 0.04191182281469345,
+        "miou": 0.8827580163591542,
+        "vehicle_iou": 0.7128136200716846,
+        "per_class_iou": [
+          0.9843147769547876,
+          0.9511456520509904,
+          0.7128136200716846
+        ],
+        "missing_mse": 0.632878870131121,
+        "untrained_copy_missing_mse": 1.397663818731386,
+        "rescaled_copy_missing_mse": 4.69706311577954,
+        "clean_coefficient": 0.20415204763412476,
+        "bridge_variance": 0.19588465988636017,
+        "clean_signal_to_bridge_noise": 0.21276837587356567
+      },
+      {
+        "t": 0.95,
+        "mse": 0.3733659651544359,
+        "ce": 0.05614910588691305,
+        "miou": 0.8581099982278731,
+        "vehicle_iou": 0.6559400484901917,
+        "per_class_iou": [
+          0.9798644621556148,
+          0.9385254840378132,
+          0.6559400484901917
+        ],
+        "missing_mse": 0.8159655185101815,
+        "untrained_copy_missing_mse": 1.6276668448711733,
+        "rescaled_copy_missing_mse": 10.061211895259039,
+        "clean_coefficient": 0.1069488525390625,
+        "bridge_variance": 0.11515138298273087,
+        "clean_signal_to_bridge_noise": 0.0993306040763855
+      },
+      {
+        "t": 0.99,
+        "mse": 0.5660486221313477,
+        "ce": 0.1618464465707811,
+        "miou": 0.7183383118338402,
+        "vehicle_iou": 0.3607628279422611,
+        "per_class_iou": [
+          0.9432850795077945,
+          0.850967028051465,
+          0.3607628279422611
+        ],
+        "missing_mse": 1.2709329871692756,
+        "untrained_copy_missing_mse": 1.838185088557539,
+        "rescaled_copy_missing_mse": 53.03340144064275,
+        "clean_coefficient": 0.022214889526367188,
+        "bridge_variance": 0.02618812397122383,
+        "clean_signal_to_bridge_noise": 0.018844470381736755
+      },
+      {
+        "t": 1.0,
+        "mse": 0.7314043707317777,
+        "ce": 0.3377164777212102,
+        "miou": 0.5613425440508408,
+        "vehicle_iou": 0.19673739727707593,
+        "per_class_iou": [
+          0.846596375932332,
+          0.6406938589431146,
+          0.19673739727707593
+        ],
+        "missing_mse": 1.6606414537050664,
+        "untrained_copy_missing_mse": 1.8942978638726797,
+        "rescaled_copy_missing_mse": null,
+        "clean_coefficient": 0.0,
+        "bridge_variance": 0.0,
+        "clean_signal_to_bridge_noise": null
+      }
+    ],
+    "15000": [
+      {
+        "t": 0.0,
+        "mse": 0.010482529178261757,
+        "ce": 0.02727332977603124,
+        "miou": 0.9097533612000039,
+        "vehicle_iou": 0.7716968170368674,
+        "per_class_iou": [
+          0.9900732257116055,
+          0.9674900408515389,
+          0.7716968170368674
+        ],
+        "missing_mse": 0.018610750180662033,
+        "untrained_copy_missing_mse": 0.0,
+        "rescaled_copy_missing_mse": 0.0,
+        "clean_coefficient": 1.0,
+        "bridge_variance": 0.0,
+        "clean_signal_to_bridge_noise": null
+      },
+      {
+        "t": 0.25,
+        "mse": 0.053879919979307384,
+        "ce": 0.026676646076068778,
+        "miou": 0.9113930637733093,
+        "vehicle_iou": 0.7758780036968577,
+        "per_class_iou": [
+          0.9902210074714639,
+          0.9680801801516065,
+          0.7758780036968577
+        ],
+        "missing_mse": 0.10352131296251103,
+        "untrained_copy_missing_mse": 0.1361235494279419,
+        "rescaled_copy_missing_mse": 0.14335777323931964,
+        "clean_coefficient": 0.8936716318130493,
+        "bridge_variance": 0.11456284672021866,
+        "clean_signal_to_bridge_noise": 6.971274375915527
+      },
+      {
+        "t": 0.5,
+        "mse": 0.10398084256384107,
+        "ce": 0.026815174505064546,
+        "miou": 0.9120184464378678,
+        "vehicle_iou": 0.7773909006499535,
+        "per_class_iou": [
+          0.9902851173823306,
+          0.9683793212813194,
+          0.7773909006499535
+        ],
+        "missing_mse": 0.20865733934944894,
+        "untrained_copy_missing_mse": 0.38870281109041677,
+        "rescaled_copy_missing_mse": 0.4634220256982442,
+        "clean_coefficient": 0.7222222089767456,
+        "bridge_variance": 0.24187162518501282,
+        "clean_signal_to_bridge_noise": 2.156536102294922
+      },
+      {
+        "t": 0.75,
+        "mse": 0.17474109596676296,
+        "ce": 0.0292233983124333,
+        "miou": 0.9058223527312221,
+        "vehicle_iou": 0.7636258660508083,
+        "per_class_iou": [
+          0.9890500529023518,
+          0.9647911392405063,
+          0.7636258660508083
+        ],
+        "missing_mse": 0.3639452725933734,
+        "untrained_copy_missing_mse": 0.8813607780899363,
+        "rescaled_copy_missing_mse": 1.4980694662089624,
+        "clean_coefficient": 0.44576847553253174,
+        "bridge_variance": 0.2978634238243103,
+        "clean_signal_to_bridge_noise": 0.6671162843704224
+      },
+      {
+        "t": 0.9,
+        "mse": 0.26232635974884033,
+        "ce": 0.03642682479178769,
+        "miou": 0.8915277871337304,
+        "vehicle_iou": 0.731150906809627,
+        "per_class_iou": [
+          0.9864750373984649,
+          0.9569574171930996,
+          0.731150906809627
+        ],
+        "missing_mse": 0.5634356920268995,
+        "untrained_copy_missing_mse": 1.397663818731386,
+        "rescaled_copy_missing_mse": 4.69706311577954,
+        "clean_coefficient": 0.20415204763412476,
+        "bridge_variance": 0.19588465988636017,
+        "clean_signal_to_bridge_noise": 0.21276837587356567
+      },
+      {
+        "t": 0.95,
+        "mse": 0.3333623806635539,
+        "ce": 0.046730776569384326,
+        "miou": 0.8723606741092423,
+        "vehicle_iou": 0.6862722962293971,
+        "per_class_iou": [
+          0.9832983345806293,
+          0.9475113915177007,
+          0.6862722962293971
+        ],
+        "missing_mse": 0.7284791172004865,
+        "untrained_copy_missing_mse": 1.6276668448711733,
+        "rescaled_copy_missing_mse": 10.061211895259039,
+        "clean_coefficient": 0.1069488525390625,
+        "bridge_variance": 0.11515138298273087,
+        "clean_signal_to_bridge_noise": 0.0993306040763855
+      },
+      {
+        "t": 0.99,
+        "mse": 0.5189679993523492,
+        "ce": 0.13190553836367944,
+        "miou": 0.7538462975050959,
+        "vehicle_iou": 0.4232607541157727,
+        "per_class_iou": [
+          0.9577148122298209,
+          0.8805633261696942,
+          0.4232607541157727
+        ],
+        "missing_mse": 1.1650985842481645,
+        "untrained_copy_missing_mse": 1.838185088557539,
+        "rescaled_copy_missing_mse": 53.03340144064275,
+        "clean_coefficient": 0.022214889526367188,
+        "bridge_variance": 0.02618812397122383,
+        "clean_signal_to_bridge_noise": 0.018844470381736755
+      },
+      {
+        "t": 1.0,
+        "mse": 0.6932387351989746,
+        "ce": 0.2918859919986259,
+        "miou": 0.593209463138203,
+        "vehicle_iou": 0.22383508172725056,
+        "per_class_iou": [
+          0.8672291752154289,
+          0.6885641324719298,
+          0.22383508172725056
+        ],
+        "missing_mse": 1.5766894774748061,
+        "untrained_copy_missing_mse": 1.8942978638726797,
+        "rescaled_copy_missing_mse": null,
+        "clean_coefficient": 0.0,
+        "bridge_variance": 0.0,
+        "clean_signal_to_bridge_noise": null
+      }
+    ],
+    "30000": [
+      {
+        "t": 0.0,
+        "mse": 0.008819710463285446,
+        "ce": 0.026654087047148473,
+        "miou": 0.9104224576680299,
+        "vehicle_iou": 0.7728159797956606,
+        "per_class_iou": [
+          0.990321198423834,
+          0.9681301947845948,
+          0.7728159797956606
+        ],
+        "missing_mse": 0.015528524197738147,
+        "untrained_copy_missing_mse": 0.0,
+        "rescaled_copy_missing_mse": 0.0,
+        "clean_coefficient": 1.0,
+        "bridge_variance": 0.0,
+        "clean_signal_to_bridge_noise": null
+      },
+      {
+        "t": 0.25,
+        "mse": 0.052224889397621155,
+        "ce": 0.025492601667543968,
+        "miou": 0.9145411427102108,
+        "vehicle_iou": 0.7829980230259332,
+        "per_class_iou": [
+          0.9907870374260848,
+          0.9698383676786145,
+          0.7829980230259332
+        ],
+        "missing_mse": 0.10099524886245823,
+        "untrained_copy_missing_mse": 0.1361235494279419,
+        "rescaled_copy_missing_mse": 0.14335777323931964,
+        "clean_coefficient": 0.8936716318130493,
+        "bridge_variance": 0.11456284672021866,
+        "clean_signal_to_bridge_noise": 6.971274375915527
+      },
+      {
+        "t": 0.5,
+        "mse": 0.09961999621656206,
+        "ce": 0.02538606315622702,
+        "miou": 0.9156966523000417,
+        "vehicle_iou": 0.7861473880597015,
+        "per_class_iou": [
+          0.990825816572357,
+          0.9701167522680668,
+          0.7861473880597015
+        ],
+        "missing_mse": 0.20078978173239673,
+        "untrained_copy_missing_mse": 0.38870281109041677,
+        "rescaled_copy_missing_mse": 0.4634220256982442,
+        "clean_coefficient": 0.7222222089767456,
+        "bridge_variance": 0.24187162518501282,
+        "clean_signal_to_bridge_noise": 2.156536102294922
+      },
+      {
+        "t": 0.75,
+        "mse": 0.165415753920873,
+        "ce": 0.02725776428637166,
+        "miou": 0.91034081143641,
+        "vehicle_iou": 0.7740886928256326,
+        "per_class_iou": [
+          0.9898137181608694,
+          0.9671200233227283,
+          0.7740886928256326
+        ],
+        "missing_mse": 0.34516326950798243,
+        "untrained_copy_missing_mse": 0.8813607780899363,
+        "rescaled_copy_missing_mse": 1.4980694662089624,
+        "clean_coefficient": 0.44576847553253174,
+        "bridge_variance": 0.2978634238243103,
+        "clean_signal_to_bridge_noise": 0.6671162843704224
+      },
+      {
+        "t": 0.9,
+        "mse": 0.2465839385986328,
+        "ce": 0.03323732139509969,
+        "miou": 0.8961364267930849,
+        "vehicle_iou": 0.7406045282151477,
+        "per_class_iou": [
+          0.987663162370687,
+          0.9601415897934202,
+          0.7406045282151477
+        ],
+        "missing_mse": 0.5293169889543868,
+        "untrained_copy_missing_mse": 1.397663818731386,
+        "rescaled_copy_missing_mse": 4.69706311577954,
+        "clean_coefficient": 0.20415204763412476,
+        "bridge_variance": 0.19588465988636017,
+        "clean_signal_to_bridge_noise": 0.21276837587356567
+      },
+      {
+        "t": 0.95,
+        "mse": 0.31355920765135026,
+        "ce": 0.04229042333729285,
+        "miou": 0.8775719453718311,
+        "vehicle_iou": 0.6965564268666894,
+        "per_class_iou": [
+          0.9848252854165154,
+          0.9513341238322888,
+          0.6965564268666894
+        ],
+        "missing_mse": 0.6839053598793116,
+        "untrained_copy_missing_mse": 1.6276668448711733,
+        "rescaled_copy_missing_mse": 10.061211895259039,
+        "clean_coefficient": 0.1069488525390625,
+        "bridge_variance": 0.11515138298273087,
+        "clean_signal_to_bridge_noise": 0.0993306040763855
+      },
+      {
+        "t": 0.99,
+        "mse": 0.4946712652842204,
+        "ce": 0.11175569066310953,
+        "miou": 0.7705381360445382,
+        "vehicle_iou": 0.4506132989025178,
+        "per_class_iou": [
+          0.9647970616667728,
+          0.8962040475643244,
+          0.4506132989025178
+        ],
+        "missing_mse": 1.111426132969421,
+        "untrained_copy_missing_mse": 1.838185088557539,
+        "rescaled_copy_missing_mse": 53.03340144064275,
+        "clean_coefficient": 0.022214889526367188,
+        "bridge_variance": 0.02618812397122383,
+        "clean_signal_to_bridge_noise": 0.018844470381736755
+      },
+      {
+        "t": 1.0,
+        "mse": 0.6676215198304919,
+        "ce": 0.2801082141337345,
+        "miou": 0.6079455703493133,
+        "vehicle_iou": 0.23936362540677353,
+        "per_class_iou": [
+          0.8745969905152792,
+          0.7098760951258871,
+          0.23936362540677353
+        ],
+        "missing_mse": 1.524538483245169,
+        "untrained_copy_missing_mse": 1.8942978638726797,
+        "rescaled_copy_missing_mse": null,
+        "clean_coefficient": 0.0,
+        "bridge_variance": 0.0,
+        "clean_signal_to_bridge_noise": null
+      }
+    ]
+  },
+  "gradients": {
+    "6000": [
+      {
+        "batch": 0,
+        "endpoint": {
+          "mse": 0.7290999889373779,
+          "ce": 0.3348388075828552,
+          "loss": 1.063938856124878,
+          "norm": 2.156283140182495
+        },
+        "interior": {
+          "mse": 0.09824715554714203,
+          "ce": 0.02606179378926754,
+          "loss": 0.12430895119905472,
+          "norm": 0.09368916600942612
+        },
+        "cosine": 0.15686047077178955,
+        "mixtures": {
+          "0.1": {
+            "norm": 0.24353541433811188,
+            "cosine_with_endpoint": 0.9397188425064087,
+            "endpoint_directional_dot": 0.4934757947921753,
+            "weighted_endpoint_to_interior_norm_ratio": 2.5572542245890824
+          },
+          "0.5": {
+            "norm": 1.086475133895874,
+            "cosine_with_endpoint": 0.9990929365158081,
+            "endpoint_directional_dot": 2.340622901916504,
+            "weighted_endpoint_to_interior_norm_ratio": 23.01528802130174
+          },
+          "1.0": {
+            "norm": 2.156283140182495,
+            "cosine_with_endpoint": 1.0,
+            "endpoint_directional_dot": 4.649557113647461,
+            "weighted_endpoint_to_interior_norm_ratio": null
+          }
+        }
+      },
+      {
+        "batch": 1,
+        "endpoint": {
+          "mse": 0.7337087988853455,
+          "ce": 0.34057775139808655,
+          "loss": 1.0742865800857544,
+          "norm": 1.7723664045333862
+        },
+        "interior": {
+          "mse": 0.1536804437637329,
+          "ce": 0.03445761278271675,
+          "loss": 0.18813805282115936,
+          "norm": 0.1071799099445343
+        },
+        "cosine": 0.29118919372558594,
+        "mixtures": {
+          "0.1": {
+            "norm": 0.2251097857952118,
+            "cosine_with_endpoint": 0.9121118783950806,
+            "endpoint_directional_dot": 0.3639116883277893,
+            "weighted_endpoint_to_interior_norm_ratio": 1.8373741926599942
+          },
+          "0.5": {
+            "norm": 0.903244137763977,
+            "cosine_with_endpoint": 0.99838787317276,
+            "endpoint_directional_dot": 1.5982987880706787,
+            "weighted_endpoint_to_interior_norm_ratio": 16.536367733939947
+          },
+          "1.0": {
+            "norm": 1.7723664045333862,
+            "cosine_with_endpoint": 1.0,
+            "endpoint_directional_dot": 3.141282558441162,
+            "weighted_endpoint_to_interior_norm_ratio": null
+          }
+        }
+      }
+    ],
+    "15000": [
+      {
+        "batch": 0,
+        "endpoint": {
+          "mse": 0.6921485662460327,
+          "ce": 0.2863721251487732,
+          "loss": 0.9785206913948059,
+          "norm": 2.113243818283081
+        },
+        "interior": {
+          "mse": 0.08936426788568497,
+          "ce": 0.024293147027492523,
+          "loss": 0.11365741491317749,
+          "norm": 0.06340271234512329
+        },
+        "cosine": 0.31113964319229126,
+        "mixtures": {
+          "0.1": {
+            "norm": 0.23541025817394257,
+            "cosine_with_endpoint": 0.9731045365333557,
+            "endpoint_directional_dot": 0.4840993285179138,
+            "weighted_endpoint_to_interior_norm_ratio": 3.7033883884966077
+          },
+          "0.5": {
+            "norm": 1.066910982131958,
+            "cosine_with_endpoint": 0.9996012449264526,
+            "endpoint_directional_dot": 2.253743886947632,
+            "weighted_endpoint_to_interior_norm_ratio": 33.33049549646947
+          },
+          "1.0": {
+            "norm": 2.113243818283081,
+            "cosine_with_endpoint": 1.0,
+            "endpoint_directional_dot": 4.465799808502197,
+            "weighted_endpoint_to_interior_norm_ratio": null
+          }
+        }
+      },
+      {
+        "batch": 1,
+        "endpoint": {
+          "mse": 0.6943288445472717,
+          "ce": 0.2973684072494507,
+          "loss": 0.9916972517967224,
+          "norm": 1.584593653678894
+        },
+        "interior": {
+          "mse": 0.13996630907058716,
+          "ce": 0.03300926461815834,
+          "loss": 0.1729755699634552,
+          "norm": 0.09782008081674576
+        },
+        "cosine": 0.2290676385164261,
+        "mixtures": {
+          "0.1": {
+            "norm": 0.19811934232711792,
+            "cosine_with_endpoint": 0.9016083478927612,
+            "endpoint_directional_dot": 0.28304973244667053,
+            "weighted_endpoint_to_interior_norm_ratio": 1.7998958910054028
+          },
+          "0.5": {
+            "norm": 0.8049098253250122,
+            "cosine_with_endpoint": 0.9982492923736572,
+            "endpoint_directional_dot": 1.2732220888137817,
+            "weighted_endpoint_to_interior_norm_ratio": 16.199063019048626
+          },
+          "1.0": {
+            "norm": 1.584593653678894,
+            "cosine_with_endpoint": 1.0000001192092896,
+            "endpoint_directional_dot": 2.510937452316284,
+            "weighted_endpoint_to_interior_norm_ratio": null
+          }
+        }
+      }
+    ],
+    "30000": [
+      {
+        "batch": 0,
+        "endpoint": {
+          "mse": 0.6643408536911011,
+          "ce": 0.28260746598243713,
+          "loss": 0.9469482898712158,
+          "norm": 2.1085522174835205
+        },
+        "interior": {
+          "mse": 0.0855688825249672,
+          "ce": 0.023064307868480682,
+          "loss": 0.10863319039344788,
+          "norm": 0.058902062475681305
+        },
+        "cosine": 0.3397851586341858,
+        "mixtures": {
+          "0.1": {
+            "norm": 0.23423556983470917,
+            "cosine_with_endpoint": 0.9770841598510742,
+            "endpoint_directional_dot": 0.4825798273086548,
+            "weighted_endpoint_to_interior_norm_ratio": 3.9775106316034186
+          },
+          "0.5": {
+            "norm": 1.0646435022354126,
+            "cosine_with_endpoint": 0.9996614456176758,
+            "endpoint_directional_dot": 2.244096517562866,
+            "weighted_endpoint_to_interior_norm_ratio": 35.79759568443077
+          },
+          "1.0": {
+            "norm": 2.1085522174835205,
+            "cosine_with_endpoint": 1.0,
+            "endpoint_directional_dot": 4.445992469787598,
+            "weighted_endpoint_to_interior_norm_ratio": null
+          }
+        }
+      },
+      {
+        "batch": 1,
+        "endpoint": {
+          "mse": 0.6709021329879761,
+          "ce": 0.2776232063770294,
+          "loss": 0.9485253095626831,
+          "norm": 1.678079605102539
+        },
+        "interior": {
+          "mse": 0.13346192240715027,
+          "ce": 0.03126368671655655,
+          "loss": 0.16472560167312622,
+          "norm": 0.10268592834472656
+        },
+        "cosine": 0.3149561285972595,
+        "mixtures": {
+          "0.1": {
+            "norm": 0.21556758880615234,
+            "cosine_with_endpoint": 0.9134739637374878,
+            "endpoint_directional_dot": 0.33043965697288513,
+            "weighted_endpoint_to_interior_norm_ratio": 1.8157628066612594
+          },
+          "0.5": {
+            "norm": 0.8565977811813354,
+            "cosine_with_endpoint": 0.9983805418014526,
+            "endpoint_directional_dot": 1.4351115226745605,
+            "weighted_endpoint_to_interior_norm_ratio": 16.341865259951334
+          },
+          "1.0": {
+            "norm": 1.678079605102539,
+            "cosine_with_endpoint": 1.0,
+            "endpoint_directional_dot": 2.815951108932495,
+            "weighted_endpoint_to_interior_norm_ratio": null
+          }
+        }
+      }
+    ]
+  },
+  "endpoint_only_training_control": {
+    "updates": 3,
+    "raw_max_difference": 0.0011225012131035328,
+    "ema_max_difference": 2.8312206268310547e-06,
+    "losses": [
+      {
+        "step": 0,
+        "model": 0,
+        "loss": 3.1848843097686768
+      },
+      {
+        "step": 0,
+        "model": 1,
+        "loss": 3.1848840713500977
+      },
+      {
+        "step": 0,
+        "model": 2,
+        "loss": 3.1848840713500977
+      },
+      {
+        "step": 1,
+        "model": 0,
+        "loss": 3.2217206954956055
+      },
+      {
+        "step": 1,
+        "model": 1,
+        "loss": 3.221888542175293
+      },
+      {
+        "step": 1,
+        "model": 2,
+        "loss": 3.221797466278076
+      },
+      {
+        "step": 2,
+        "model": 0,
+        "loss": 2.9419662952423096
+      },
+      {
+        "step": 2,
+        "model": 1,
+        "loss": 2.942232608795166
+      },
+      {
+        "step": 2,
+        "model": 2,
+        "loss": 2.941889762878418
+      }
+    ],
+    "mapping_twin_raw_max_difference": 0.0010911640711128712,
+    "mapping_twin_ema_max_difference": 2.76835635304451e-06,
+    "first_prediction_max_difference": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "first_gradient_max_difference": [
+      0.0,
+      0.00390625,
+      0.00390625
+    ]
+  },
+  "mapping_30000_endpoint": {
+    "t": 1.0,
+    "mse": 0.5947375694910686,
+    "ce": 0.19190129627302133,
+    "miou": 0.664475952547278,
+    "vehicle_iou": 0.2786712055405564,
+    "per_class_iou": [
+      0.9188599664506862,
+      0.7958966856505912,
+      0.2786712055405564
+    ],
+    "missing_mse": 1.3557412987320785,
+    "untrained_copy_missing_mse": 1.8942978638726797,
+    "rescaled_copy_missing_mse": null,
+    "clean_coefficient": 0.0,
+    "bridge_variance": 0.0,
+    "clean_signal_to_bridge_noise": null
+  }
+}

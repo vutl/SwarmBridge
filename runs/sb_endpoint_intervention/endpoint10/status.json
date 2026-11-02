@@ -1,0 +1,12 @@
+{
+  "state": "evaluating",
+  "pid": 38184,
+  "started_at": "2026-10-31T19:54:29+09:00",
+  "branch": "endpoint10",
+  "updated_at": "2026-10-31T19:56:57+09:00",
+  "job": "sb_ve_xt_endpoint_s0",
+  "step": 30500,
+  "target_step": 30500,
+  "job_train_s": 6438.963745200017,
+  "checkpoint": "C:\\Users\\USER\\Documents\\SwarmBridge\\runs\\sb_endpoint_intervention\\endpoint10\\sb_ve_xt_endpoint_s0\\last.pt"
+}

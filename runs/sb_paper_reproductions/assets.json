@@ -1,0 +1,52 @@
+[
+  {
+    "repository": "sp-uhh/sgmse",
+    "branch": "main",
+    "commit": "1961cf4483e37df1bb92ccf0eb8b28bf6f44cb0e",
+    "source_files": 36,
+    "python_files": 31,
+    "path": "pdf\\GithubModels\\sp-uhh__sgmse"
+  },
+  {
+    "repository": "sony/sbctm",
+    "branch": "main",
+    "commit": "1174860e3719ff729f2cc2203a850cfdc032788e",
+    "source_files": 35,
+    "python_files": 31,
+    "path": "pdf\\GithubModels\\sony__sbctm"
+  },
+  {
+    "repository": "NVIDIA/diffusion-audio-restoration",
+    "error": "Unsafe repository path"
+  },
+  {
+    "repository": "Taltt/FNSE-SBGAN",
+    "branch": "main",
+    "commit": "40d7e43ce28131de5cde15544cc42f880dcca6dd",
+    "source_files": 1,
+    "python_files": 0,
+    "path": "pdf\\GithubModels\\Taltt__FNSE-SBGAN"
+  },
+  {
+    "repository": "thuhcsi/interspeech2026-BridgeCodec",
+    "branch": "master",
+    "commit": "fb4203e0471844ac1be1a66dbdbfed390d210f84",
+    "source_files": 1,
+    "python_files": 0,
+    "path": "pdf\\GithubModels\\thuhcsi__interspeech2026-BridgeCodec"
+  },
+  {
+    "repository": "sbmse/sbmse.github.io",
+    "branch": "main",
+    "commit": "fe32bab1929bbb730e7a53fc00c95276639dd9a9",
+    "source_files": 1,
+    "python_files": 0,
+    "path": "pdf\\GithubModels\\sbmse__sbmse.github.io"
+  },
+  {
+    "url": "https://huggingface.co/nvidia/se_den_sb_16k_small/resolve/fe9725b1ae90f7f6b11d9b95c5f9ccec736a211f/se_den_sb_16k_small.nemo",
+    "path": "runs\\sb_paper_reproductions\\checkpoints\\se_den_sb_16k_small.nemo",
+    "size": 100853760,
+    "sha256": "9de7f36d08df4109402e68e41d78e781c8da6a3d7691a674c5231b840151ff09"
+  }
+]

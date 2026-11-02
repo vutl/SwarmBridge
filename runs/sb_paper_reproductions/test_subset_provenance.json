@@ -1,0 +1,126 @@
+{
+  "dataset_url": "https://datashare.ed.ac.uk/handle/10283/2791",
+  "method": "First 12 matching ZIP members from archive prefixes, each decompressed completely and CRC-validated. Full archives not downloaded.",
+  "files": [
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_001.wav",
+      "sha256": "58976c41995f22917a143bf00654bf54e86525ee15e729c7a805b8eef28849c3",
+      "bytes": 167208
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_002.wav",
+      "sha256": "034de7f89e16082e6aeae23746978d2a42add1d81c29d9f8c615b3e020d70643",
+      "bytes": 260704
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_003.wav",
+      "sha256": "85bd30db189b8abdde6719efb07b34965fb5fb9b6e476ae23f6e6b2d4fd720db",
+      "bytes": 689790
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_005.wav",
+      "sha256": "89b1ebdeabff150a3cc12629178e5b98a2366e052f3e8028ea853c2059f69494",
+      "bytes": 599720
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_006.wav",
+      "sha256": "337d07d33650b223ec973413db1e455aa907dc21a94e49f0544f561e2bce600c",
+      "bytes": 489980
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_007.wav",
+      "sha256": "74d3ecad4aacbb89cfc4d1bd6dde9bb2c12f6014aaced6e281ff961c421f48f7",
+      "bytes": 379810
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_009.wav",
+      "sha256": "a659b948b1f4f79dcd9f8282bcb9b05587fddfd577ed9a8ccbe582a915ab5c16",
+      "bytes": 399176
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_010.wav",
+      "sha256": "3b0c7a3e675b557133a8919ddf9823496f8dab4108942bfa4cdca9e5e8b0bfcb",
+      "bytes": 265424
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_011.wav",
+      "sha256": "b21765d847cc1ddf3ba05cf6fe5016d3d24f96ab3a6c7ce47e2feb79f7875617",
+      "bytes": 627706
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_012.wav",
+      "sha256": "4af0f8d29bcf281cc731632ace842206ede9f1fa6a4afad21b2c741321eacac2",
+      "bytes": 416266
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_013.wav",
+      "sha256": "d7a51b4fdfb02657cf9410dbd34b4ea165acbec48581a8a074e1d45fdd3b3334",
+      "bytes": 378612
+    },
+    {
+      "path": "data\\sb_speech_test\\clean\\p232_014.wav",
+      "sha256": "54c19a5eccdb614e646e58ff6df7561c5e43ae6aafcb06cd4839d66269eddc09",
+      "bytes": 443264
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_001.wav",
+      "sha256": "b573339154dd3f05d971ca9f721c0e25867426ef39afc7806c31bc7f7fb36050",
+      "bytes": 167208
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_002.wav",
+      "sha256": "00500720e81fc0b7510669ad5ae50cbd03bb31dcee5bda2b51cac15cedf559be",
+      "bytes": 260704
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_003.wav",
+      "sha256": "e8d3be9cc8e2343b7f55fc6922b65233fc6e2abd93c3d9f85153fb2c00870a7e",
+      "bytes": 689790
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_005.wav",
+      "sha256": "de6caa84eeaf24977976dbd43c728f0305671465d17db7e4db428def5b1d5276",
+      "bytes": 599720
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_006.wav",
+      "sha256": "53b9be9b754b28c4907469333a1d938bc3d6ae7e513e7b371c999f337720d095",
+      "bytes": 489980
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_007.wav",
+      "sha256": "4d36133cdfd72c5de9379bae4139fc534ae5498a7b788d6c1f346feeeffec211",
+      "bytes": 379810
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_009.wav",
+      "sha256": "f7957a28f677cbefd4c3f3eac57b9858d46531f0130c77e98385562a779604c6",
+      "bytes": 399176
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_010.wav",
+      "sha256": "2887fbf7affce79ad2a0abae51ed028a79b3f8f06f850729e0fc35a0f31609d7",
+      "bytes": 265424
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_011.wav",
+      "sha256": "c58b098feb266db35d8fa88adbfc1efd6d29b38d259f6301bae9299d74edf9f1",
+      "bytes": 627706
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_012.wav",
+      "sha256": "035653dadc318df78312872e8b4e7dec0749b452139aa375de60c88d23703c7f",
+      "bytes": 416266
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_013.wav",
+      "sha256": "792e6137d41cf9b3a27c2bc962be6838de2d53d204ae402aac6962dcb7c965cc",
+      "bytes": 378612
+    },
+    {
+      "path": "data\\sb_speech_test\\noisy\\p232_014.wav",
+      "sha256": "56c3d9b536d22e3a81acbb012fccfd67e050b39373c5895b1d12acc990dac7ab",
+      "bytes": 443264
+    }
+  ]
+}

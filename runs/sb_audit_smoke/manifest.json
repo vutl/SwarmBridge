@@ -1,0 +1,67 @@
+{
+  "version": "sb_audit_ve_v1",
+  "settings": {
+    "suite": "all",
+    "out": "runs/sb_audit_smoke",
+    "teacher": "runs/teacher",
+    "image_root": "data/cifar10",
+    "steps": 20,
+    "image_steps": 20,
+    "seeds": [
+      0
+    ],
+    "width": 64,
+    "batch": 32,
+    "microbatch": 16,
+    "image_batch": 64,
+    "eval_batch": 32,
+    "bev_eval": 8,
+    "image_eval": 16,
+    "endpoint_fraction": 0.1,
+    "task_weight": 1.0,
+    "lr": 0.0003,
+    "ema": 0.999,
+    "save_every": 10,
+    "log_every": 10,
+    "device": "cuda"
+  },
+  "hashes": {
+    "swarmbridge/bridges/audit.py": "01a15963c592e5635334e34d102c81c614352aa865cfec6c110253c170ca4173",
+    "swarmbridge/bridges/backbone.py": "562420dbc6189c78386b78603dac1a6539aefd34dd61cc3652704e457a9022fd",
+    "swarmbridge/channel/channel.py": "ff44d9a742e06121f67e48e59b98020d827d221e6b01dc0b8cfdbfda3053a6df",
+    "swarmbridge/data/real.py": "16c5ec60189e2904fca7c9ed1a93c0fd0848502759ce3d59600a46425e684f33",
+    "swarmbridge/teacher/model.py": "8db6c968577ee12351fff7fa57ea93d5899219b445dc16a9a71f232d66e2f3d8",
+    "swarmbridge/experiments/sb_audit/run.py": "ed7848b5b458c8a85c8d099dee8e3cc70a698a3e16eff3172a99b7ed348591f1",
+    "swarmbridge/experiments/q2_progressive/run.py": "6577ccd6f30cb89c99c7bb7d903a64620326874b71786c5b16f9f578397a18c6",
+    "swarmbridge/experiments/q2_retx/run.py": "aa8834df481cb4f1f5437914424910168c6caaf6d404ebe1b5d4a4e737f1ab99",
+    "runs\\teacher\\teacher.pt": "fd6fcdd7e671e32a994c088d8d0b4727db5ede1a05edb26087d35b52aaa8d56b",
+    "runs\\teacher\\latent_stats.pt": "a13abf9c9817c8c886063e2bbb35cbb62ff62d5247e78ca6f2eab5f63dc0f81c",
+    "runs\\teacher\\latents_train.pt": "ce0385eaa5dee9cf3187700eee085893f6704decadfe5f399f86b8a6a8929db9",
+    "runs\\teacher\\latents_val.pt": "cfc806009f8e454d2a4fe0b4ba34376cc3095c5ae0736e5dd9b87c8d33a4a365"
+  },
+  "environment": {
+    "torch": "2.12.0+cu130",
+    "torchvision": "0.27.0+cu130",
+    "python": "3.12.16",
+    "gpu": "NVIDIA GeForce RTX 3070"
+  },
+  "ve": {
+    "kind": "ve",
+    "c": 0.4,
+    "k": 2.6,
+    "q": 1.0
+  },
+  "sources": [
+    "https://www.isca-archive.org/interspeech_2024/jukic24_interspeech.pdf",
+    "https://arxiv.org/html/2510.16834v2",
+    "https://github.com/NVlabs/I2SB/blob/master/i2sb/runner.py",
+    "https://github.com/NVlabs/I2SB/blob/master/i2sb/diffusion.py"
+  ],
+  "limitations": [
+    "BEV adaptation uses a U-Net and segmentation CE, not the speech architecture/loss.",
+    "Endpoint fraction is an audit design choice, not a claimed paper hyperparameter.",
+    "CIFAR diagnostic is not reproduction of I2SB ImageNet results.",
+    "Validation-only audit; no test-set recipe selection.",
+    "Finite-step sample variance is not assumed calibrated."
+  ]
+}

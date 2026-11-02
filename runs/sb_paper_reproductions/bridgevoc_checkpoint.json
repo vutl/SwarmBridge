@@ -1,0 +1,6 @@
+{
+  "url": "https://huggingface.co/AndongLi/BridgeVoC/resolve/4fb28d4dc8a22ab8f7e4241fae93074ccf0fea91/ckpt/Libritts/pretrained/bridgevoc_bcd_single_libritts_24k_fmax12k_nmel100.pt",
+  "sha256": "539e3a6a767aada3432131c52dfc8c98ec0085bc111e6e70e7f079fb612e4581",
+  "bytes": 31627874,
+  "variant": "Extended BridgeVoC single-step; not original IJCAI checkpoint"
+}

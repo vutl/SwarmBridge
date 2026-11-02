@@ -1,0 +1,590 @@
+{
+  "args": {
+    "teacher": "runs/teacher",
+    "steps": 6000,
+    "seed": 1,
+    "fracs": [
+      0.0,
+      0.05,
+      0.1,
+      0.2,
+      0.4
+    ],
+    "out": "runs/q2_retx_v2_s1.json"
+  },
+  "results": {
+    "mid": {
+      "base_miou": 0.8440625071525574,
+      "n_candidate_blocks": 14393,
+      "curves": {
+        "random": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8440625071525574,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.8451423645019531,
+            "share_worst_third": 0.049757082015275955,
+            "share_best_third": 0.04892205446958542
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.8470232486724854,
+            "share_worst_third": 0.09931562840938568,
+            "share_best_third": 0.09805141389369965
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.8498719334602356,
+            "share_worst_third": 0.20650561153888702,
+            "share_best_third": 0.19838309288024902
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.8557917475700378,
+            "share_worst_third": 0.40056756138801575,
+            "share_best_third": 0.40174129605293274
+          }
+        ],
+        "channel": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8440625071525574,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.8508896827697754,
+            "share_worst_third": 0.04582428187131882,
+            "share_best_third": 0.043117742985486984
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.8568680882453918,
+            "share_worst_third": 0.11676067858934402,
+            "share_best_third": 0.07794361561536789
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.8667473793029785,
+            "share_worst_third": 0.23118852078914642,
+            "share_best_third": 0.16459369659423828
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.8707583546638489,
+            "share_worst_third": 0.43416720628738403,
+            "share_best_third": 0.3658789396286011
+          }
+        ],
+        "uncertainty": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8440625071525574,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.8605802655220032,
+            "share_worst_third": 0.06262701004743576,
+            "share_best_third": 0.037728022783994675
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.8664059638977051,
+            "share_worst_third": 0.12089785933494568,
+            "share_best_third": 0.07773631811141968
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.8708310127258301,
+            "share_worst_third": 0.22187477350234985,
+            "share_best_third": 0.17081260681152344
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.8730506300926208,
+            "share_worst_third": 0.43645915389060974,
+            "share_best_third": 0.3561359643936157
+          }
+        ],
+        "uncertainty_per_uav": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8440625071525574,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 8.18176,
+            "miou": 0.8593407273292542,
+            "share_worst_third": 0.05556723102927208,
+            "share_best_third": 0.0555555522441864
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.336,
+            "miou": 0.8655421137809753,
+            "share_worst_third": 0.09724266082048416,
+            "share_best_third": 0.0972222238779068
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 28.661759999999997,
+            "miou": 0.8701855540275574,
+            "share_worst_third": 0.19448532164096832,
+            "share_best_third": 0.1944444477558136
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 59.35104,
+            "miou": 0.8728141784667969,
+            "share_worst_third": 0.40265220403671265,
+            "share_best_third": 0.402777761220932
+          }
+        ],
+        "oracle": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8440625071525574,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.8661544919013977,
+            "share_worst_third": 0.06242554634809494,
+            "share_best_third": 0.036898840218782425
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.8689562678337097,
+            "share_worst_third": 0.11861466616392136,
+            "share_best_third": 0.07898010313510895
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.8711562156677246,
+            "share_worst_third": 0.2264382392168045,
+            "share_best_third": 0.16956880688667297
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.872880756855011,
+            "share_worst_third": 0.43853792548179626,
+            "share_best_third": 0.35903817415237427
+          }
+        ]
+      }
+    },
+    "severe": {
+      "base_miou": 0.7319505214691162,
+      "n_candidate_blocks": 14393,
+      "curves": {
+        "random": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.7319505214691162,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.7366510033607483,
+            "share_worst_third": 0.05451906844973564,
+            "share_best_third": 0.050787728279829025
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.7413351535797119,
+            "share_worst_third": 0.10675787180662155,
+            "share_best_third": 0.1007462665438652
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.7492104172706604,
+            "share_worst_third": 0.21061359345912933,
+            "share_best_third": 0.19838307797908783
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.7657042145729065,
+            "share_worst_third": 0.4079602062702179,
+            "share_best_third": 0.4046434462070465
+          }
+        ],
+        "channel": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.7319505214691162,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.7386681437492371,
+            "share_worst_third": 0.048507463186979294,
+            "share_best_third": 0.05223880335688591
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.7474290728569031,
+            "share_worst_third": 0.0990879014134407,
+            "share_best_third": 0.09763681888580322
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.763580322265625,
+            "share_worst_third": 0.20439469814300537,
+            "share_best_third": 0.18325041234493256
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.7872911095619202,
+            "share_worst_third": 0.41003313660621643,
+            "share_best_third": 0.41210612654685974
+          }
+        ],
+        "uncertainty": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.7319505214691162,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.7569563388824463,
+            "share_worst_third": 0.0555555559694767,
+            "share_best_third": 0.042288560420274734
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.7704684138298035,
+            "share_worst_third": 0.11194029450416565,
+            "share_best_third": 0.08354063332080841
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.786499559879303,
+            "share_worst_third": 0.21973463892936707,
+            "share_best_third": 0.1720563918352127
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.8006052374839783,
+            "share_worst_third": 0.427238792181015,
+            "share_best_third": 0.367951899766922
+          }
+        ],
+        "uncertainty_per_uav": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.7319505214691162,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 8.18176,
+            "miou": 0.7573258280754089,
+            "share_worst_third": 0.0555555522441864,
+            "share_best_third": 0.0555555522441864
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.336,
+            "miou": 0.7662407755851746,
+            "share_worst_third": 0.0972222238779068,
+            "share_best_third": 0.0972222238779068
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 28.661759999999997,
+            "miou": 0.7832971215248108,
+            "share_worst_third": 0.1944444477558136,
+            "share_best_third": 0.1944444477558136
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 59.35104,
+            "miou": 0.7997757792472839,
+            "share_worst_third": 0.402777761220932,
+            "share_best_third": 0.402777761220932
+          }
+        ],
+        "oracle": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.7319505214691162,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.7760632038116455,
+            "share_worst_third": 0.057213932275772095,
+            "share_best_third": 0.03606965392827988
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.7893415093421936,
+            "share_worst_third": 0.11380596458911896,
+            "share_best_third": 0.08063846826553345
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.7989957332611084,
+            "share_worst_third": 0.22118572890758514,
+            "share_best_third": 0.1683250218629837
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.8043999075889587,
+            "share_worst_third": 0.42060530185699463,
+            "share_best_third": 0.36567163467407227
+          }
+        ]
+      }
+    },
+    "hetero": {
+      "base_miou": 0.8238556385040283,
+      "n_candidate_blocks": 14393,
+      "curves": {
+        "random": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8238556385040283,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.8260658383369446,
+            "share_worst_third": 0.047470979392528534,
+            "share_best_third": 0.052314188331365585
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.8288614153862,
+            "share_worst_third": 0.09950248152017593,
+            "share_best_third": 0.09984169900417328
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.8319358825683594,
+            "share_worst_third": 0.20066334307193756,
+            "share_best_third": 0.1990426629781723
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.8400958180427551,
+            "share_worst_third": 0.40360698103904724,
+            "share_best_third": 0.39725613594055176
+          }
+        ],
+        "channel": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8238556385040283,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.829590380191803,
+            "share_worst_third": 0.04622719809412956,
+            "share_best_third": 0.04083747789263725
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.8354237079620361,
+            "share_worst_third": 0.0988805964589119,
+            "share_best_third": 0.0677860677242279
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.8458199501037598,
+            "share_worst_third": 0.22139303386211395,
+            "share_best_third": 0.13297152519226074
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.8551216721534729,
+            "share_worst_third": 0.583747923374176,
+            "share_best_third": 0.21413764357566833
+          }
+        ],
+        "uncertainty": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8238556385040283,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.8414077162742615,
+            "share_worst_third": 0.08208955079317093,
+            "share_best_third": 0.016376452520489693
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.8483231663703918,
+            "share_worst_third": 0.16459369659423828,
+            "share_best_third": 0.03505200892686844
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.8545546531677246,
+            "share_worst_third": 0.3351989686489105,
+            "share_best_third": 0.07547489553689957
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.856673002243042,
+            "share_worst_third": 0.6654228568077087,
+            "share_best_third": 0.1674393117427826
+          }
+        ],
+        "uncertainty_per_uav": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8238556385040283,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 8.18176,
+            "miou": 0.8399255871772766,
+            "share_worst_third": 0.0555555522441864,
+            "share_best_third": 0.05540478974580765
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.336,
+            "miou": 0.8443503975868225,
+            "share_worst_third": 0.0972222238779068,
+            "share_best_third": 0.09735413640737534
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 28.661759999999997,
+            "miou": 0.8518626093864441,
+            "share_worst_third": 0.1944444477558136,
+            "share_best_third": 0.19448214769363403
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 59.35104,
+            "miou": 0.856120765209198,
+            "share_worst_third": 0.402777761220932,
+            "share_best_third": 0.40264585614204407
+          }
+        ],
+        "oracle": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.8238556385040283,
+            "share_worst_third": 0.0,
+            "share_best_third": 0.0
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.8464789390563965,
+            "share_worst_third": 0.08312603831291199,
+            "share_best_third": 0.01805366948246956
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.8515768647193909,
+            "share_worst_third": 0.16521558165550232,
+            "share_best_third": 0.03983868658542633
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.8550775051116943,
+            "share_worst_third": 0.33063846826553345,
+            "share_best_third": 0.08154304325580597
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.8569404482841492,
+            "share_worst_third": 0.6594113111495972,
+            "share_best_third": 0.1724332869052887
+          }
+        ]
+      }
+    }
+  }
+}

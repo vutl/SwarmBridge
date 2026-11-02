@@ -1,0 +1,86 @@
+{
+  "task": "Vocoder: clean waveform -> 100-band mel -> range-space prior -> pretrained SB -> waveform",
+  "variant": "Extended BridgeVoC single-step, Andong-Li-speech/BridgeVoC; not original IJCAI checkpoint",
+  "n": 12,
+  "checkpoint_training": "LibriTTS",
+  "test_subset": "12 VoiceBank test utterances, one speaker",
+  "metrics": {
+    "estoi": 0.98572100305125,
+    "log_mel_l1": 0.10189009023209412
+  },
+  "no_claim": "No matched predictive vocoder baseline evaluated; no comparison with denoising task scores.",
+  "results": [
+    {
+      "file": "p232_001.wav",
+      "estoi": 0.9743738130248806,
+      "log_mel_l1": 0.105869360268116,
+      "duration": 1.7412916666666667
+    },
+    {
+      "file": "p232_002.wav",
+      "estoi": 0.9829721300593119,
+      "log_mel_l1": 0.10637743771076202,
+      "duration": 2.7152083333333334
+    },
+    {
+      "file": "p232_003.wav",
+      "estoi": 0.9827871076900662,
+      "log_mel_l1": 0.1064489483833313,
+      "duration": 7.184875
+    },
+    {
+      "file": "p232_005.wav",
+      "estoi": 0.9825170086299029,
+      "log_mel_l1": 0.10956359654664993,
+      "duration": 6.246625
+    },
+    {
+      "file": "p232_006.wav",
+      "estoi": 0.9892842789449776,
+      "log_mel_l1": 0.09895062446594238,
+      "duration": 5.1035
+    },
+    {
+      "file": "p232_007.wav",
+      "estoi": 0.9903505714322828,
+      "log_mel_l1": 0.09589976817369461,
+      "duration": 3.9559166666666665
+    },
+    {
+      "file": "p232_009.wav",
+      "estoi": 0.9900465652212118,
+      "log_mel_l1": 0.09651248157024384,
+      "duration": 4.157625
+    },
+    {
+      "file": "p232_010.wav",
+      "estoi": 0.9899071157945443,
+      "log_mel_l1": 0.09975700825452805,
+      "duration": 2.764375
+    },
+    {
+      "file": "p232_011.wav",
+      "estoi": 0.9851867683921003,
+      "log_mel_l1": 0.09972000122070312,
+      "duration": 6.538166666666666
+    },
+    {
+      "file": "p232_012.wav",
+      "estoi": 0.9893646478803395,
+      "log_mel_l1": 0.09565651416778564,
+      "duration": 4.335666666666667
+    },
+    {
+      "file": "p232_013.wav",
+      "estoi": 0.9873752843612679,
+      "log_mel_l1": 0.1090477705001831,
+      "duration": 3.943416666666667
+    },
+    {
+      "file": "p232_014.wav",
+      "estoi": 0.9844867451841144,
+      "log_mel_l1": 0.09887757152318954,
+      "duration": 4.616875
+    }
+  ]
+}

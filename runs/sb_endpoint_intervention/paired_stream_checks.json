@@ -1,0 +1,9 @@
+{
+  "source_checkpoint_unchanged": true,
+  "final_data_rng_equal": true,
+  "final_bridge_rng_equal": true,
+  "final_steps": [
+    30500,
+    30500
+  ]
+}

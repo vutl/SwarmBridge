@@ -1,0 +1,2 @@
+{"step": 10, "reconstruction_loss": 1.037540727853775, "task_ce": 0.5456936247646809, "interval_s": 2.3913795999833383, "updates": 10, "updated_at": "2026-10-31T20:58:27+09:00"}
+{"step": 20, "reconstruction_loss": 0.9169448643922806, "task_ce": 0.2145247735083103, "interval_s": 2.397221699997317, "updates": 10, "updated_at": "2026-10-31T20:58:29+09:00"}

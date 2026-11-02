@@ -1,0 +1,11 @@
+{
+  "engine": "nvidia",
+  "n": 12,
+  "checkpoint": "runs\\sb_paper_reproductions\\checkpoints\\se_den_sb_16k_small.nemo",
+  "checkpoint_sha256": "9de7f36d08df4109402e68e41d78e781c8da6a3d7691a674c5231b840151ff09",
+  "torch": "2.5.1+cu124",
+  "gpu": "NVIDIA GeForce RTX 3070",
+  "subset": "First 12 archive members; one speaker, small inference probe, not full test benchmark.",
+  "resampling": "scipy.signal.resample_poly, official 48 kHz test audio to 16 kHz",
+  "scope": "Official numerical code and pretrained weights with documented Windows inference adapters; no retraining."
+}

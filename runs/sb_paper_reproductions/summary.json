@@ -1,0 +1,53 @@
+{
+  "status": "completed_small_probes",
+  "date": "2026-10-31",
+  "timezone": "Asia/Seoul",
+  "nvidia": {
+    "ode_1": {
+      "si_sdr_db": 12.890149815240449,
+      "estoi": 0.8947300304311558
+    },
+    "ode_10": {
+      "si_sdr_db": 12.618858563202881,
+      "estoi": 0.894850186125377
+    },
+    "sde_10": {
+      "si_sdr_db": 12.459503090587711,
+      "estoi": 0.896185780501018
+    },
+    "sde_50": {
+      "si_sdr_db": 12.229046504463366,
+      "estoi": 0.888285320994561
+    },
+    "input": {
+      "si_sdr_db": 9.096080756336375,
+      "estoi": 0.8151120710833976
+    }
+  },
+  "sony": {
+    "ctm_1": {
+      "si_sdr_db": 13.28768626031921,
+      "estoi": 0.8978820244557243
+    },
+    "ctm_4": {
+      "si_sdr_db": 14.367900479691816,
+      "estoi": 0.9010934168138192
+    },
+    "input": {
+      "si_sdr_db": 9.096080756336375,
+      "estoi": 0.8151120710833977
+    }
+  },
+  "bridgevoc": {
+    "estoi": 0.98572100305125,
+    "log_mel_l1": 0.10189009023209412
+  },
+  "rethinking": "code_smoke_only",
+  "limitations": [
+    "12 utterances, one speaker; not full benchmark",
+    "No matched predictive speech baseline rerun",
+    "BridgeVoC extended checkpoint, not original IJCAI weights",
+    "Inference framework/Windows adapters documented",
+    "PESQ build unavailable: missing Microsoft Visual C++ build tools"
+  ]
+}

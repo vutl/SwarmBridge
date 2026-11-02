@@ -1,0 +1,87 @@
+[
+  {
+    "repository": "Andong-Li-speech/BridgeVoC",
+    "branch": "master",
+    "commit": "e5804223c90818df2c0b62ca98ae55acda1277ea",
+    "source_files": 54,
+    "python_files": 37,
+    "path": "pdf\\GithubModels\\Andong-Li-speech__BridgeVoC"
+  },
+  {
+    "repository": "Dahan-Wang/Rethinking-Flow-and-Diffusion-Bridge-Models-for-Speech-Enhancement",
+    "branch": "main",
+    "commit": "232eb8388a83f676742c174828506e0d3fc11cb6",
+    "source_files": 35,
+    "python_files": 28,
+    "path": "pdf\\GithubModels\\Dahan-Wang__Rethinking-Flow-and-Diffusion-Bridge-Models-for-Speech-Enhancement"
+  },
+  {
+    "repository": "NVIDIA/diffusion-audio-restoration",
+    "branch": "main",
+    "commit": "02ddff01c4dbbe20839e13e09da1988db7dd4be9",
+    "source_files": 29,
+    "python_files": 19,
+    "path": "pdf\\GithubModels\\NVIDIA__diffusion-audio-restoration"
+  },
+  {
+    "package": "nemo_toolkit==2.0.0",
+    "source": "https://github.com/NVIDIA/NeMo/tree/v2.0.0",
+    "modules": {
+      "collections\\asr\\parts\\preprocessing\\features.py": "d54718dae45bfeeeb996759128002a7767be4b8967f9a9b894c9bbb7d65697b7",
+      "collections\\audio\\modules\\transforms.py": "034a7e62b1492ff42d6c22744a4c3908056509fb1008b6c1ef424ecfddb0104e",
+      "collections\\audio\\parts\\submodules\\ncsnpp.py": "c204de78f067dc5194ad4f668f3112205c696e86a2f0ea31dd8b86fbaae68f7d",
+      "collections\\audio\\parts\\submodules\\schroedinger_bridge.py": "19c681289bc279285ee88d6f9dff937456cd920716ace7f89a3b1607208777e7",
+      "collections\\common\\parts\\utils.py": "ab4c214a0982328ea60a077597ae296212bb7730a50d2866b1e4b1270ae763e1"
+    },
+    "adapter": "scripts/nemo_sb_inference_adapter.py",
+    "notes": "Official numerical modules unchanged. Type metadata and framework decorators bypassed. Waveform normalization/inference orchestration implemented in adapter following official enhancement.forward."
+  },
+  {
+    "repository": "sbmse/sbmse.github.io",
+    "branch": "main",
+    "commit": "fe32bab1929bbb730e7a53fc00c95276639dd9a9",
+    "source_files": 1,
+    "python_files": 0,
+    "path": "pdf\\GithubModels\\sbmse__sbmse.github.io"
+  },
+  {
+    "repository": "sony/sbctm",
+    "branch": "main",
+    "commit": "1174860e3719ff729f2cc2203a850cfdc032788e",
+    "source_files": 35,
+    "python_files": 31,
+    "path": "pdf\\GithubModels\\sony__sbctm"
+  },
+  {
+    "repository": "sp-uhh/sgmse",
+    "branch": "main",
+    "commit": "1961cf4483e37df1bb92ccf0eb8b28bf6f44cb0e",
+    "source_files": 36,
+    "python_files": 31,
+    "path": "pdf\\GithubModels\\sp-uhh__sgmse"
+  },
+  {
+    "repository": "Taltt/FNSE-SBGAN",
+    "branch": "main",
+    "commit": "40d7e43ce28131de5cde15544cc42f880dcca6dd",
+    "source_files": 1,
+    "python_files": 0,
+    "path": "pdf\\GithubModels\\Taltt__FNSE-SBGAN"
+  },
+  {
+    "repository": "tencent-ailab/BridgeVocoder",
+    "branch": "main",
+    "commit": "07428f3f4f65cf0b9545f4498d26c418f4eb4ebb",
+    "source_files": 46,
+    "python_files": 36,
+    "path": "pdf\\GithubModels\\tencent-ailab__BridgeVocoder"
+  },
+  {
+    "repository": "thuhcsi/interspeech2026-BridgeCodec",
+    "branch": "master",
+    "commit": "fb4203e0471844ac1be1a66dbdbfed390d210f84",
+    "source_files": 1,
+    "python_files": 0,
+    "path": "pdf\\GithubModels\\thuhcsi__interspeech2026-BridgeCodec"
+  }
+]

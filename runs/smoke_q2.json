@@ -1,0 +1,245 @@
+{
+  "args": {
+    "teacher": "runs/teacher",
+    "steps": 50,
+    "seed": 0,
+    "fracs": [
+      0.0,
+      0.05,
+      0.1,
+      0.2,
+      0.4
+    ],
+    "out": "runs/smoke_q2.json"
+  },
+  "results": {
+    "mid": {
+      "base_miou": 0.660861074924469,
+      "n_candidate_blocks": 14393,
+      "curves": {
+        "random": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.660861074924469
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.6635162234306335
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.6642686128616333
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.6647103428840637
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.6686251759529114
+          }
+        ],
+        "channel": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.660861074924469
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.6624289155006409
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.6657212972640991
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.666888415813446
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.667830765247345
+          }
+        ],
+        "uncertainty": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.660861074924469
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.6663777232170105
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.6735520362854004
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.6822039484977722
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.6834840774536133
+          }
+        ],
+        "oracle": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.660861074924469
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.6787256598472595
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.6840243935585022
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.6864380836486816
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.6835096478462219
+          }
+        ]
+      }
+    },
+    "severe": {
+      "base_miou": 0.5504923462867737,
+      "n_candidate_blocks": 14393,
+      "curves": {
+        "random": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.5504923462867737
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.55503249168396
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.5581755638122559
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.5620411038398743
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.5754855275154114
+          }
+        ],
+        "channel": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.5504923462867737
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.5546579957008362
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.5607319474220276
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.568690299987793
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.5841171145439148
+          }
+        ],
+        "uncertainty": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.5504923462867737
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.5590662956237793
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.5669113993644714
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.5775478482246399
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.5955396294593811
+          }
+        ],
+        "oracle": [
+          {
+            "frac": 0.0,
+            "extra_kbit_per_uav": 0.0,
+            "miou": 0.5504923462867737
+          },
+          {
+            "frac": 0.05,
+            "extra_kbit_per_uav": 7.3728,
+            "miou": 0.5667868852615356
+          },
+          {
+            "frac": 0.1,
+            "extra_kbit_per_uav": 14.73536,
+            "miou": 0.5770497918128967
+          },
+          {
+            "frac": 0.2,
+            "extra_kbit_per_uav": 29.48096,
+            "miou": 0.5911774039268494
+          },
+          {
+            "frac": 0.4,
+            "extra_kbit_per_uav": 58.96192,
+            "miou": 0.6034732460975647
+          }
+        ]
+      }
+    }
+  }
+}

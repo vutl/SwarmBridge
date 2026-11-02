@@ -1,0 +1,64 @@
+{
+  "trained_any_model": false,
+  "used_gpu": false,
+  "scope": "Exact toy enumeration only; not evidence of Town3 gains.",
+  "mse": [
+    {
+      "p_plus": 0.5,
+      "posterior_mean": 0.0,
+      "bayes_mse": 1.0,
+      "independent_posterior_sample_mse": 2.0,
+      "pythagorean_max_error": 0.0
+    },
+    {
+      "p_plus": 0.8,
+      "posterior_mean": 0.6000000000000001,
+      "bayes_mse": 0.6399999999999999,
+      "independent_posterior_sample_mse": 1.2799999999999998,
+      "pythagorean_max_error": 0.0
+    }
+  ],
+  "marginal_counterexample": {
+    "reference_is_feasible_exact_sb": true,
+    "both_marginals": [
+      0.5,
+      0.5
+    ],
+    "sb_kl_to_reference": 0.0,
+    "true_pairing_kl_to_reference": 2.302585092994046,
+    "sb_pairwise_task_mse": 3.6,
+    "true_pairing_task_mse": 0.0
+  },
+  "gibbs_update": {
+    "prior": [
+      0.7,
+      0.3
+    ],
+    "likelihood": [
+      0.2,
+      0.9
+    ],
+    "posterior": [
+      0.34146341463414626,
+      0.6585365853658537
+    ],
+    "variational_identity_max_error": 2.220446049250313e-16,
+    "scope": "Unconstrained Bayes tilt; not a two-fixed-marginal SB theorem."
+  },
+  "task_value": [
+    {
+      "query": "reveal_task_bit",
+      "information_gain_bits": 1.0,
+      "bayes_classification_error_before": 0.5,
+      "expected_error_after": 0.0,
+      "task_value_of_information": 0.5
+    },
+    {
+      "query": "reveal_nuisance",
+      "information_gain_bits": 2.0,
+      "bayes_classification_error_before": 0.5,
+      "expected_error_after": 0.5,
+      "task_value_of_information": 0.0
+    }
+  ]
+}

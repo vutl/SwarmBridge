@@ -1,0 +1,7 @@
+﻿{
+    "pid":  10696,
+    "launched_at":  "2026-10-30T23:50:44.6581681+09:00",
+    "stdout":  "C:\\Users\\USER\\Documents\\SwarmBridge\\runs\\sb_audit_ve_v1\\stdout-20261030-235044.log",
+    "stderr":  "C:\\Users\\USER\\Documents\\SwarmBridge\\runs\\sb_audit_ve_v1\\stderr-20261030-235044.log",
+    "command":  ".venv\\Scripts\\python.exe -u -m swarmbridge.experiments.sb_audit.run --suite all"
+}

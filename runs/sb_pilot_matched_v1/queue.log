@@ -1,0 +1,6 @@
+﻿stage 1 (map_x sb_x_p50 sb_x_p10) start 2026-10-31T23:15:13
+stage 1 end 2026-11-01T01:23:33 exit 0
+stage 2 (sb_x_p70) start 2026-11-01T01:23:33
+stage 2 end 2026-11-01T02:28:17 exit 0
+stage 3 (map_c sb_c_p10 sb_c_p50) start 2026-11-01T02:28:17
+stage 3 end 2026-11-01T04:37:39 exit 0

@@ -1,0 +1,35 @@
+{
+  "scope": "CPU Monte Carlo on training footprint geometry; no model training or test evaluation",
+  "n": 20000,
+  "train_erasure_probability": [
+    0,
+    0.9
+  ],
+  "eval15_selected_fraction": 0.15,
+  "eval_physical_erasure_probability": [
+    0,
+    0.6
+  ],
+  "train_mean_received": 0.5506821870803833,
+  "eval15_mean_received": 0.10702317953109741,
+  "thresholds": {
+    "0.1": {
+      "train_fraction": 0.02085000090301037,
+      "eval15_fraction": 0.43654999136924744,
+      "train_joint_exact_endpoint10": 0.002085000090301037,
+      "train_joint_exact_endpoint50": 0.010425000451505184
+    },
+    "0.15": {
+      "train_fraction": 0.06279999762773514,
+      "eval15_fraction": 0.8769500255584717,
+      "train_joint_exact_endpoint10": 0.006279999762773514,
+      "train_joint_exact_endpoint50": 0.03139999881386757
+    },
+    "0.2": {
+      "train_fraction": 0.11704999953508377,
+      "eval15_fraction": 1.0,
+      "train_joint_exact_endpoint10": 0.011704999953508377,
+      "train_joint_exact_endpoint50": 0.058524999767541885
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "start_step": 30000,
+  "additional_updates": 500,
+  "seed": 0,
+  "varied_factor": "endpoint sample probability: 0.1 vs 0.5",
+  "same_initial_model_optimizer_ema_and_rng": true,
+  "source_checkpoint": "C:\\Users\\USER\\Documents\\SwarmBridge\\runs\\sb_audit_ve_v1\\sb_ve_xt_endpoint_s0\\last.pt",
+  "source_sha256": "5dcd00addb760f4b20709e732e82ab870952534af5fbd9180fc60a82d8156b4c",
+  "primary": "one_step validation at fixed final update 30500",
+  "limitation": "One-seed local continuation, not from-scratch pilot or matched comparison with mapping."
+}

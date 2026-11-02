@@ -1,0 +1,65 @@
+{
+  "updates": 3,
+  "deterministic": true,
+  "raw_max_difference": 0.0,
+  "ema_max_difference": 0.0,
+  "losses": [
+    {
+      "step": 0,
+      "model": 0,
+      "loss": 3.1849899291992188
+    },
+    {
+      "step": 0,
+      "model": 1,
+      "loss": 3.1849899291992188
+    },
+    {
+      "step": 0,
+      "model": 2,
+      "loss": 3.1849899291992188
+    },
+    {
+      "step": 1,
+      "model": 0,
+      "loss": 3.2217202186584473
+    },
+    {
+      "step": 1,
+      "model": 1,
+      "loss": 3.2217202186584473
+    },
+    {
+      "step": 1,
+      "model": 2,
+      "loss": 3.2217202186584473
+    },
+    {
+      "step": 2,
+      "model": 0,
+      "loss": 2.9416847229003906
+    },
+    {
+      "step": 2,
+      "model": 1,
+      "loss": 2.9416847229003906
+    },
+    {
+      "step": 2,
+      "model": 2,
+      "loss": 2.9416847229003906
+    }
+  ],
+  "mapping_twin_raw_max_difference": 0.0,
+  "mapping_twin_ema_max_difference": 0.0,
+  "first_prediction_max_difference": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "first_gradient_max_difference": [
+    0.0,
+    0.0,
+    0.0
+  ]
+}

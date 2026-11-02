@@ -1,0 +1,7 @@
+{
+  "dtype": "float32, as in actual training",
+  "clean_weight_max_abs_error": 2.384185791015625e-07,
+  "source_weight_max_abs_error": 2.384185791015625e-07,
+  "variance_max_abs_error": 2.682209014892578e-07,
+  "note": "Official NeMo numerical source vs our real-valued forward marginal, including upstream epsilon regularization."
+}
