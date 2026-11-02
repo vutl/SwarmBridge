@@ -24,6 +24,14 @@ __pycache__/
 *.nemo
 **/checkpoints/
 
+# Cached latent datasets/statistics are data, not model checkpoints.
+!/runs/teacher/latents_test.pt
+!/runs/teacher/latents_val.pt
+!/runs/teacher/latent_stats.pt
+!/runs/teacher_v1_flatground/latents_test.pt
+!/runs/teacher_v1_flatground/latents_val.pt
+!/runs/teacher_v1_flatground/latent_stats.pt
+
 # Archives exceeding GitHub's 100 MiB regular Git file limit
 /data/coperception_uav/raw/coperception_uav_town3.zip
 /data/cifar10/cifar-10-python.tar.gz

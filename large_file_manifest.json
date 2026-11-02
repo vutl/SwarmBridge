@@ -1,0 +1,444 @@
+{
+  "version": 1,
+  "part_size": 94371840,
+  "files": [
+    {
+      "path": "data/coperception_uav/raw/coperception_uav_town3.zip",
+      "size": 6743958723,
+      "sha256": "bae90663773e1fad7d5c10000f7405efaa2b1f9c763447c096f28f5bd29053c9",
+      "parts": [
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part000",
+          "size": 94371840,
+          "sha256": "a8926bcd8117ae971183cd6aa27f5c34f54f7c04dfbb02cf0c1a6b106384e7b4"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part001",
+          "size": 94371840,
+          "sha256": "34db0744842fab9070c16da27c548e68f7a9d2018e167fcfd3f815ad6c72931a"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part002",
+          "size": 94371840,
+          "sha256": "ef43c168b1c0e5281c1f5fb1fcb0627762d56d872c797cf417605bda8fad5ca7"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part003",
+          "size": 94371840,
+          "sha256": "17a8205e41264d9e14ba4ec62672edf77017029abed867d46800736f61495873"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part004",
+          "size": 94371840,
+          "sha256": "df23e8bf4530f15fb92fb3b00f15f070c3bd9284cdf075039aad4c79be825a2a"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part005",
+          "size": 94371840,
+          "sha256": "48841a4ba20876e01d7eab4d8b11759536c7b27eacbf2ee4144488a81fd47fdb"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part006",
+          "size": 94371840,
+          "sha256": "5795b8fc3c5f5b1d8f88d969734cdb7b9b7bb316255d4cf96235b77b588ab917"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part007",
+          "size": 94371840,
+          "sha256": "38e55bb0779bdbe6692eb8b851909feb9540297af9da1dd518f9a541a4b000b5"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part008",
+          "size": 94371840,
+          "sha256": "db4b3fea602233e8aabaa1e22ee0f02c4db2c3851c7e3bfc536311236906eda0"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part009",
+          "size": 94371840,
+          "sha256": "502d8e737214b891b60e095fa650554c39f1661893e9b59fdcdf441d3578e88a"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part010",
+          "size": 94371840,
+          "sha256": "7372a3bf710661806fcbace0059c61c7935838b5eb7abace07c5f6e08348865d"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part011",
+          "size": 94371840,
+          "sha256": "81debb620db266b6e591f604f765cffb6d921a324e27ff4ce7b873d66dc32db5"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part012",
+          "size": 94371840,
+          "sha256": "319052ff9a105dab51ee118d1f82cb38c6af6e54f1d1c63f1df8fe8d990cedf6"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part013",
+          "size": 94371840,
+          "sha256": "d5bd92425200f4c4a4103b4f1a481ed1821380a3bc493df60ef39105c10c5401"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part014",
+          "size": 94371840,
+          "sha256": "45d78bde270be0c9b8fe508444c5d1e9676ac3b10a52fc6c47540333bf8af516"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part015",
+          "size": 94371840,
+          "sha256": "0469b56d5fafd2a0da2c823a824be2bb137e497e3a850ced5ea36f8025aef135"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part016",
+          "size": 94371840,
+          "sha256": "b1efc9db34b54de1a9e7be6cfed3193bcf522d2f0857bb6d8c475a6d373a8ec7"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part017",
+          "size": 94371840,
+          "sha256": "8909ff5e64938a0e5ab2a745c9a12b3a0c57e96a3a54d68601c2dd618ccabf1a"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part018",
+          "size": 94371840,
+          "sha256": "b88169273bdfdd7d0ed37068d6c342ef90e1df9a6784424ec4d291e017ded43b"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part019",
+          "size": 94371840,
+          "sha256": "c565ea5b43f11975d4bdd7d98a6498e0213882bed6931bc5f7cbf7bc54cd572f"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part020",
+          "size": 94371840,
+          "sha256": "27593f565a3c5bdef7ee261d621a614faeb76ac2110ef97d7b99b55f0914b57d"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part021",
+          "size": 94371840,
+          "sha256": "9e06b0216799c2530ffb60cd6fe73f6e5e79833936084724b2e768feb7fb7259"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part022",
+          "size": 94371840,
+          "sha256": "ea58780e1b5507f82522f3030d9e96be08120a3f0c51287c74d08d6319e33cc4"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part023",
+          "size": 94371840,
+          "sha256": "d6336cbb5033142eb523b951f379c6bea0161d0b1ba7ff6ce3fbc27fdcdfd710"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part024",
+          "size": 94371840,
+          "sha256": "2ea0e60af90a4e00b9cba1a2b46d11e09dd092c1fe5f333188f64c7cbd8cd23c"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part025",
+          "size": 94371840,
+          "sha256": "0975002bc9504fff45b5767cadf231465509712594f9290cbde315830d06cb5f"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part026",
+          "size": 94371840,
+          "sha256": "85216280edcf66e581dfdf92c3f4c73ce9ca408ee4e7633d4dbd1c5166c85ddd"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part027",
+          "size": 94371840,
+          "sha256": "e1fa0d664aac0305951990e432c7ee085dce884f327ce54030817e886aa0c644"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part028",
+          "size": 94371840,
+          "sha256": "0df227591a76903f8666ebb903231de62cd5456c785981bdecda2647e20464c7"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part029",
+          "size": 94371840,
+          "sha256": "269582162cf06a9621023963a93f2b87185438ed155e848c1cb3176e003f58e2"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part030",
+          "size": 94371840,
+          "sha256": "360ff2833473460f7cd73e3e80e4804b649c4a80fab922b606d2862e2baecc78"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part031",
+          "size": 94371840,
+          "sha256": "67846addeb77ed55def37e572eb754f3663b104d61d0c430d883955eb385035c"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part032",
+          "size": 94371840,
+          "sha256": "5d768990e5c2e7855088f126a62572939899ac2d2344f774a0835755e5e71bfa"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part033",
+          "size": 94371840,
+          "sha256": "b12181bb7118cfa82baa672a7d09680815067e738df2d444aa4d4cc609dca6ec"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part034",
+          "size": 94371840,
+          "sha256": "366d9c3622d994a41d5ad16b5c039ea9a1e9fa623f8ed68e272c7993bb4ca3c2"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part035",
+          "size": 94371840,
+          "sha256": "ddf71fb5243fbe26fe1099ef43c10d6a8f1a7ac0cf867da0e35dd50448956588"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part036",
+          "size": 94371840,
+          "sha256": "471f56a88050a590627d8ee2b15f0da839551e34458a49391f51bb1d78fe25f2"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part037",
+          "size": 94371840,
+          "sha256": "f1fa3d04342f374ba6316734245eb2e17d0de66c92bf4bcda89a8902a71477d7"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part038",
+          "size": 94371840,
+          "sha256": "2c2c675611781226237c83463779bfaf22e6d238d15a559cd598dc2217925cf0"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part039",
+          "size": 94371840,
+          "sha256": "c7325dc255e291fbc43496802bb83078883d369e79d1b1da9f15bb605f50b260"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part040",
+          "size": 94371840,
+          "sha256": "fc9ea16de286c504bd1a78cbef1fb34d924a82bce1b3cc80560e75c5d5ab07a0"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part041",
+          "size": 94371840,
+          "sha256": "12240f2d1d6184e31738b9f136e623e9e41b56cb624693d0a62a29d9e75e3c1d"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part042",
+          "size": 94371840,
+          "sha256": "2a150f2d76fdba4fc4fe0ce3e01e67427dc58e30e6a4bd65f384e73bd2d06c03"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part043",
+          "size": 94371840,
+          "sha256": "84d69cb16da54344aa47ed7c0c014d7fc83debf3ac17fa1be17e6ab0c84f6cce"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part044",
+          "size": 94371840,
+          "sha256": "bd4314d7ba3cac7291e0c0ad63e00e0a860084e1174ff25035f6a121d3a17fbc"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part045",
+          "size": 94371840,
+          "sha256": "74303ddfb010bdfc8dd76b3a3552fedbf96a5703633047a875288aa5f37d683c"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part046",
+          "size": 94371840,
+          "sha256": "fe5885077f5c3e4a12423d315b0bce4746b1119e72350a964000cee5491956af"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part047",
+          "size": 94371840,
+          "sha256": "cd879adb234d0c5ee844b26e4ed612f182504ac2edf1fb1cb08260bf00c3b481"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part048",
+          "size": 94371840,
+          "sha256": "6c67598c4b310f2aa5815efa77fec82d29bcdbac2a8519bc8a20bc4cd2ba83b2"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part049",
+          "size": 94371840,
+          "sha256": "91965aa5b5b0a0e6a3ae119646e075c25a086a91c64e0efa24febf1075827fb8"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part050",
+          "size": 94371840,
+          "sha256": "0373f8b4fd13b42d65493f8dd5c32be0086e853100395eca43171d3af653d2c3"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part051",
+          "size": 94371840,
+          "sha256": "e868fe6482cf809b38cef866ac816bc7ea11d7980d614f6ba2de8a1cefab6fd8"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part052",
+          "size": 94371840,
+          "sha256": "46acd0bfaddfbe74614fcc450c43d0159e9e8abb3d192b0979fb9824c307159c"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part053",
+          "size": 94371840,
+          "sha256": "a30be8bb97944a57ff3a08105698f3b4c8667a9ac0aa126e133728f5fff87c2b"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part054",
+          "size": 94371840,
+          "sha256": "c586cd1d7f226a4cde1eb7a671cd38e9d5907b5c975558969d8355f421546a22"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part055",
+          "size": 94371840,
+          "sha256": "4ef49580e9a2c6de1f3335137729a08269adefb19b3a5265f31dbb3ae98fdd56"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part056",
+          "size": 94371840,
+          "sha256": "e7c73f72a288b9b12a1ad7fbb9ed5a5e3b564eeb8354cfedaebb3a958efeb596"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part057",
+          "size": 94371840,
+          "sha256": "ae7ee0a1570c09ef6ce85f615e883ce23d2e2d04381366f07e948e7a03f7efcc"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part058",
+          "size": 94371840,
+          "sha256": "948571310a79fb88c2bc3867a71d80c1d2daed30ec7f39f682085115b8c3c69e"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part059",
+          "size": 94371840,
+          "sha256": "a3b0be2a82fe334b7b45ca0794545eebbec09bbbd8fe3178a797a57765a4f6e4"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part060",
+          "size": 94371840,
+          "sha256": "240937ef2c801fcffacb386655493de0301a3b6b0046055ceecc779064e727fa"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part061",
+          "size": 94371840,
+          "sha256": "27bedb6835332471d47e88ae3fef3963a00b1f910332da25f678e150f1527063"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part062",
+          "size": 94371840,
+          "sha256": "fc0d336566389db80a54326099bb6c949a807a3ab1d2d1127874c24b6c20bb93"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part063",
+          "size": 94371840,
+          "sha256": "0be7213612315a547080d4eef4c9f75b5b67035b95b312113c890674dfb70736"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part064",
+          "size": 94371840,
+          "sha256": "e31afe8f53ae2432738548d32ac3289b31244deea776a9a071b7a6ec48408dae"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part065",
+          "size": 94371840,
+          "sha256": "7a853b1cc9e7227275f072a8e0612e30c6a9bc69f8fdeaa5373381a60aedcd87"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part066",
+          "size": 94371840,
+          "sha256": "04e5b3f90b8d4f845212edbb590f3c4b6aef427eea8348d88a7f9f0d7bf70659"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part067",
+          "size": 94371840,
+          "sha256": "128644cedba6f41fd172587916f51824f2f92ec231c8167c8ee13dbd6a05bb12"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part068",
+          "size": 94371840,
+          "sha256": "2a29f7e3a818eb461885de8d2952a9fc220a712b996eae16d09201423fcdac27"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part069",
+          "size": 94371840,
+          "sha256": "7ef5fa0d780581d1d7230976194154b166d15f87ee8648c335365a5ddabf9f09"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part070",
+          "size": 94371840,
+          "sha256": "2cb0a2e7f2582c525fab6c60717501ded4e55244fc1793a8f7b95dd28f893600"
+        },
+        {
+          "path": "data/coperception_uav/raw/coperception_uav_town3.zip.part071",
+          "size": 43558083,
+          "sha256": "09a477e1eb7656496e83183ded21fff3f7228a03bb92c797a83d42d97b5bfb8f"
+        }
+      ]
+    },
+    {
+      "path": "data/cifar10/cifar-10-python.tar.gz",
+      "size": 170498071,
+      "sha256": "6d958be074577803d12ecdefd02955f39262c83c16fe9348329d7fe0b5c001ce",
+      "parts": [
+        {
+          "path": "data/cifar10/cifar-10-python.tar.gz.part000",
+          "size": 94371840,
+          "sha256": "a208ebcbaa4335023e856660a6ad17f115c3dc79befb3f801db0209d43bd4370"
+        },
+        {
+          "path": "data/cifar10/cifar-10-python.tar.gz.part001",
+          "size": 76126231,
+          "sha256": "231d32a3f3c46a5c55da4cc7629a7e7389a5534df2e642e18e3402557ee8e9ba"
+        }
+      ]
+    },
+    {
+      "path": "runs/teacher/latents_train.pt",
+      "size": 286437465,
+      "sha256": "ce0385eaa5dee9cf3187700eee085893f6704decadfe5f399f86b8a6a8929db9",
+      "parts": [
+        {
+          "path": "runs/teacher/latents_train.pt.part000",
+          "size": 94371840,
+          "sha256": "4ef5fecf5e24deffc77e05843debb0952db0d688621c9dcb1895cf2c42fc44f5"
+        },
+        {
+          "path": "runs/teacher/latents_train.pt.part001",
+          "size": 94371840,
+          "sha256": "92dd020473b3e6ac02e075601a413ed59c7e2bf710c479b0242642b0f3f19cea"
+        },
+        {
+          "path": "runs/teacher/latents_train.pt.part002",
+          "size": 94371840,
+          "sha256": "f37fa207526701d555ff387d68b1873f4bdbd8691c8970f1fbaa20c335d41b68"
+        },
+        {
+          "path": "runs/teacher/latents_train.pt.part003",
+          "size": 3321945,
+          "sha256": "349311dc7cb6cafe41616a79cc9b777cf9f25d2cfc2b14d8f78590a0885bb388"
+        }
+      ]
+    },
+    {
+      "path": "runs/teacher_v1_flatground/latents_train.pt",
+      "size": 286437465,
+      "sha256": "c3f4d357ee8bd172dfcdb2ea0fb2668f0c7672c8b63a39135fcb65119b6dd30b",
+      "parts": [
+        {
+          "path": "runs/teacher_v1_flatground/latents_train.pt.part000",
+          "size": 94371840,
+          "sha256": "518ba242d4d8d2a48ae979a0f80d022f35389d9050d8f18ba209a06aa1a6ef88"
+        },
+        {
+          "path": "runs/teacher_v1_flatground/latents_train.pt.part001",
+          "size": 94371840,
+          "sha256": "9c2ac416bf73fae951c33dd6420f372958f701998b9a6e494265b53d783836fe"
+        },
+        {
+          "path": "runs/teacher_v1_flatground/latents_train.pt.part002",
+          "size": 94371840,
+          "sha256": "f37fa207526701d555ff387d68b1873f4bdbd8691c8970f1fbaa20c335d41b68"
+        },
+        {
+          "path": "runs/teacher_v1_flatground/latents_train.pt.part003",
+          "size": 3321945,
+          "sha256": "b91643605e9644695f115e1d4a48961eb728f0114ebd24fdceac545f6d3768ea"
+        }
+      ]
+    }
+  ]
+}

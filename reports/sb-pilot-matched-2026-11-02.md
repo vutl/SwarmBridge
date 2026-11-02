@@ -31,11 +31,11 @@ Gate: **không biến thể SB nào qua, ở cả 3 seed** (chi tiết theo seed
 | Sửa sampler (vẫn 10% endpoint) | −3,94 | +0,6 |
 | 50% endpoint | −0,99 | +3,0 |
 | 70% endpoint (thăm dò) | −0,63 | +0,4 |
-| Thêm conditioning [z_recv, r] (ở 50%) | −0,80 so với map_c tương ứng | không giúp |
+| Thêm conditioning [z_recv, r] (ở 50%) | −1,20 so với map_c tương ứng (sửa 02/11, trước ghi nhầm −0,80) | không giúp |
 
 ## Kết luận
 
-1. **Root chính là phân bổ huấn luyện endpoint** (≈3 điểm trên 4,5), phần nhỏ là sampler train/eval lệch (≈0,6). Không phải lỗi công thức, và conditioning không giúp.
+1. **Trong các cấu hình đã thử, yếu tố lớn nhất là phân bổ huấn luyện endpoint** (≈3 điểm trên 4,5), phần nhỏ là sampler train/eval lệch (≈0,6). Không phải lỗi công thức, và conditioning không giúp. Chưa chứng minh đây là nguyên nhân duy nhất, hay mọi kiến trúc SB-decoder đều thua (Codex review 02/11).
 2. Khi tăng tỉ lệ endpoint, SB tiến dần về mapping (p=1 đúng là mapping). Lợi thế xe ở 70/100% của SB so với map_x (+0,3–0,4) giảm cùng lúc với khoảng cách ở vùng gửi ít, tức đây là một đường đánh đổi, không có điểm nào thắng cả hai.
 3. **So với mapping mạnh nhất (`map_c`), mọi biến thể SB đều kém ở mọi mức gửi, kể cả IoU xe.**
 4. Sửa sampler giúp cả mapping (+0,7 điểm tại 15% so với sampler cũ); nên dùng sampler này cho decoder Q2.
