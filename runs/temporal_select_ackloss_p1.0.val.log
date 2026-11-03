@@ -1,0 +1,53 @@
+seed 0 budget 15%: random 0.6792/0.2451 | entropy 0.7172/0.3208 | ens_latent 0.7129/0.3333 | ens_task 0.7320/0.3519 | replica_latent 0.7555/0.4309 | replica_task 0.7588/0.4505 | ideal_latent 0.7741/0.4549 | ideal_task 0.7755/0.4672
+seed 0 budget 30%: random 0.7546/0.3833 | entropy 0.8044/0.5063 | ens_latent 0.7852/0.4679 | ens_task 0.8079/0.5151 | replica_latent 0.8134/0.5436 | replica_task 0.8234/0.5625 | ideal_latent 0.8233/0.5636 | ideal_task 0.8300/0.5755
+seed 0 budget 50%: random 0.7990/0.4873 | entropy 0.8415/0.5990 | ens_latent 0.8237/0.5589 | ens_task 0.8436/0.6033 | replica_latent 0.8429/0.6061 | replica_task 0.8476/0.6173 | ideal_latent 0.8456/0.6119 | ideal_task 0.8484/0.6182
+seed 1 budget 15%: random 0.6906/0.2524 | entropy 0.7144/0.3012 | ens_latent 0.7083/0.3128 | ens_task 0.7250/0.3283 | replica_latent 0.7707/0.4453 | replica_task 0.7654/0.4406 | ideal_latent 0.7732/0.4505 | ideal_task 0.7800/0.4654
+seed 1 budget 30%: random 0.7562/0.3830 | entropy 0.8056/0.5044 | ens_latent 0.7861/0.4665 | ens_task 0.8113/0.5214 | replica_latent 0.8241/0.5618 | replica_task 0.8255/0.5647 | ideal_latent 0.8287/0.5717 | ideal_task 0.8348/0.5862
+seed 1 budget 50%: random 0.8045/0.4997 | entropy 0.8456/0.6078 | ens_latent 0.8302/0.5735 | ens_task 0.8473/0.6117 | replica_latent 0.8484/0.6172 | replica_task 0.8536/0.6295 | ideal_latent 0.8493/0.6190 | ideal_task 0.8529/0.6273
+seed 2 budget 15%: random 0.6754/0.2527 | entropy 0.7187/0.3304 | ens_latent 0.6848/0.3067 | ens_task 0.7334/0.3493 | replica_latent 0.7585/0.4347 | replica_task 0.7517/0.4630 | ideal_latent 0.7727/0.4550 | ideal_task 0.7773/0.4797
+seed 2 budget 30%: random 0.7648/0.4046 | entropy 0.8117/0.5240 | ens_latent 0.7891/0.4751 | ens_task 0.8201/0.5455 | replica_latent 0.8307/0.5797 | replica_task 0.8369/0.5963 | ideal_latent 0.8380/0.5969 | ideal_task 0.8416/0.6053
+seed 2 budget 50%: random 0.8012/0.4927 | entropy 0.8416/0.6019 | ens_latent 0.8327/0.5852 | ens_task 0.8431/0.6051 | replica_latent 0.8449/0.6152 | replica_task 0.8485/0.6258 | ideal_latent 0.8486/0.6243 | ideal_task 0.8517/0.6284
+# temporal_select_v1 — val, seeds [0, 1, 2], ACK loss 1.0
+
+mIoU / vehicle IoU, mean over seeds; delta vs random in mIoU points with the per-seed sign count.
+
+## budget 15% (half random, half chosen)
+
+| policy | mIoU | vehicle IoU | Δ mIoU vs random | seeds > random | s/rollout |
+|---|---:|---:|---:|---:|---:|
+| random | 0.6817 | 0.2501 | +0.00 | 0/3 | 1.7 |
+| entropy | 0.7168 | 0.3175 | +3.50 | 3/3 | 1.8 |
+| ens_latent | 0.7020 | 0.3176 | +2.02 | 3/3 | 1.4 |
+| ens_task | 0.7301 | 0.3432 | +4.84 | 3/3 | 3.3 |
+| replica_latent | 0.7616 | 0.4370 | +7.98 | 3/3 | 1.4 |
+| replica_task | 0.7587 | 0.4514 | +7.69 | 3/3 | 2.1 |
+| ideal_latent | 0.7734 | 0.4535 | +9.16 | 3/3 | 1.2 |
+| ideal_task | 0.7776 | 0.4708 | +9.59 | 3/3 | 1.8 |
+
+## budget 30% (half random, half chosen)
+
+| policy | mIoU | vehicle IoU | Δ mIoU vs random | seeds > random | s/rollout |
+|---|---:|---:|---:|---:|---:|
+| random | 0.7585 | 0.3903 | +0.00 | 0/3 | 1.6 |
+| entropy | 0.8072 | 0.5116 | +4.87 | 3/3 | 1.8 |
+| ens_latent | 0.7868 | 0.4698 | +2.83 | 3/3 | 1.4 |
+| ens_task | 0.8131 | 0.5273 | +5.46 | 3/3 | 3.3 |
+| replica_latent | 0.8227 | 0.5617 | +6.42 | 3/3 | 1.4 |
+| replica_task | 0.8286 | 0.5745 | +7.01 | 3/3 | 2.1 |
+| ideal_latent | 0.8300 | 0.5774 | +7.15 | 3/3 | 1.2 |
+| ideal_task | 0.8355 | 0.5890 | +7.69 | 3/3 | 1.8 |
+
+## budget 50% (half random, half chosen)
+
+| policy | mIoU | vehicle IoU | Δ mIoU vs random | seeds > random | s/rollout |
+|---|---:|---:|---:|---:|---:|
+| random | 0.8016 | 0.4933 | +0.00 | 0/3 | 1.6 |
+| entropy | 0.8429 | 0.6029 | +4.13 | 3/3 | 1.8 |
+| ens_latent | 0.8289 | 0.5725 | +2.73 | 3/3 | 1.4 |
+| ens_task | 0.8447 | 0.6067 | +4.31 | 3/3 | 3.3 |
+| replica_latent | 0.8454 | 0.6128 | +4.38 | 3/3 | 1.4 |
+| replica_task | 0.8499 | 0.6242 | +4.83 | 3/3 | 2.1 |
+| ideal_latent | 0.8478 | 0.6184 | +4.62 | 3/3 | 1.2 |
+| ideal_task | 0.8510 | 0.6246 | +4.94 | 3/3 | 1.8 |
+
+SELECT DONE
