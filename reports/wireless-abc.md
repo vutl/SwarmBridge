@@ -203,7 +203,21 @@ Bay đoàn (test, 3 seed; rate / outage):
   Trong cảnh tĩnh, hợp tác **thay cho bản đồ ở vùng chưa khảo sát** (+10% rate, −25% outage); ở vùng đã có bản đồ, nó
   không thêm gì. Oracle còn hơn coop ở vùng chưa phủ (5.06 vs 4.65) → còn dư địa cho fusion tốt hơn (attention/GNN),
   nhưng chỉ trong chế độ này.
-- Chưa kiểm: blocker động, 2 vs 3 UAV riêng, fusion học được.
+- **Fusion học được (attention nhỏ, `b_attn.py`, `runs/wireless_abc/b_attn/`, GPU 10 phút; Np = 4, cả hai loại pilot,
+  3 SNR, 3 seed; huấn luyện trực tiếp theo rate kỳ vọng trên episode train, map của điểm train loại chính episode đó):**
+  gộp test bay đoàn (rate / outage; `b_join.py`):
+
+  | vùng | map | trộn hiệp phương sai | attention | attention không message | oracle |
+  |---|---|---|---|---|---|
+  | bản đồ không phủ, có message | 3.92 / 0.365 | 4.62 / 0.270 | **4.65 / 0.274** | 4.45 / 0.310 | 5.27 / 0.188 |
+  | bản đồ có phủ, có message | 5.69 / 0.175 | 5.72 / 0.172 | 5.19 / 0.235 | 5.07 / 0.242 | 5.75 / 0.172 |
+  | không bản đồ, không message | 4.00 / 0.369 | = | 4.55 / 0.318 | 4.43 / 0.322 | = |
+
+  Attention không thu hẹp khoảng cách tới oracle ở vùng chưa có bản đồ (4.65 ≈ trộn hiệp phương sai 4.62; oracle 5.27);
+  ở vùng có bản đồ nó kém LMMSE-với-map (chỉ thấy hồ sơ beam, không thấy đủ hiệp phương sai). Message vẫn có giá trị
+  trong mạng học (+0.20 rate so với cùng mạng không message). Kết luận: lợi ích hợp tác ổn định qua hai cách fusion;
+  fusion phức tạp hơn chưa đem thêm gì.
+- Chưa kiểm: blocker động, 2 vs 3 UAV riêng.
 
 ## C — quản lý beam/pilot đo bằng tracking (xong; gate mở PPO: **không qua**)
 
@@ -241,7 +255,7 @@ Bước điều khiển 5 ms cho cùng kết quả (oracle 0.690, quét 20 ms 0.
 | B: hợp tác trực tuyến có lợi? | Có, **chỉ ở vùng chưa có bản đồ** (+10% rate, −25% outage); 0 ở vùng đã có bản đồ; vượt message tráo | Hướng có điều kiện: "bầy UAV tự dựng bản đồ góc khi chưa có khảo sát". Cần thêm fusion học được (còn khoảng cách tới oracle), nhiều cảnh, chi phí bit chặt hơn |
 | C: cần Deep RL cho beam/pilot? | Không: quét 20 ms ≈ oracle (Δ 0.002 AMOTA) | Không mở PPO. Nếu tiếp C, đổi biến quyết định sang vị trí/relay (vùng phủ) |
 
-Tài nguyên đã dùng: GPU 31 phút (A1) + 15 phút (A1 hội tụ); dữ liệu mới 4.6 GB (Fesl) + 54 MB trace; env 5.4 GB (không tính vào dữ liệu).
+Tài nguyên đã dùng: GPU 31 phút (A1) + 15 phút (A1 hội tụ) + 10 phút (B attention); dữ liệu mới 4.6 GB (Fesl) + 54 MB trace; env 5.4 GB (không tính vào dữ liệu).
 
 ### Việc tiếp theo (đề xuất, chờ người dùng/Codex)
 
