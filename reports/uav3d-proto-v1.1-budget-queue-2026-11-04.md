@@ -141,6 +141,20 @@ Kênh hằng: cap1.0 = adapt1.0 = oracle (0.634 ở R=4, 0.643 ở R=8); full_fi
    so với chênh lệch giữa các policy chọn nội dung ở mục 3 (≤ 0.03).
 3. **Với kênh fading, biết tốc độ hiện tại đáng 0.015–0.022 mAP** so với heuristic causal tốt nhất (cap0.75 ở R=4,
    cap0.5 ở R=8). Heuristic tốt nhất đổi theo R → một policy cố định không tối ưu cho mọi điều kiện kênh.
+4. **Kênh có tương quan theo thời gian (AR(1), ρ = 0.8) và sender ước lượng tốc độ từ frame trước (`est{a}`, causal qua
+   ACK) không giúp gì thêm** so với `adapt{a}` chỉ dùng backlog:
+
+   | R | kênh | cap0.5 | adapt0.5 | adapt0.75 | est0.5 | est0.75 | oracle |
+   |---|---|---|---|---|---|---|---|
+   | 4 | fade i.i.d. | 0.584 | 0.582 | 0.596 | 0.572 | 0.579 | 0.621 |
+   | 4 | AR(1) | 0.582 | 0.584 | 0.599 | 0.582 | 0.596 | 0.623 |
+   | 8 | fade i.i.d. | 0.627 | 0.626 | 0.623 | 0.608 | 0.610 | 0.641 |
+   | 8 | AR(1) | 0.627 | 0.629 | 0.626 | 0.622 | 0.628 | 0.644 |
+
+   Giải thích: backlog Q đã mang thông tin "kênh vừa chậm", nên adapt tự điều chỉnh; ước lượng một bước còn thêm nhiễu.
+   Khoảng 0.02 mAP còn lại tới oracle là nhiễu tốc độ trong frame hiện tại, mà một bộ dự đoán đơn giản không lấy lại được.
+   Muốn đòi phần này cần thông tin kênh tức thời (ví dụ CSI trước khi gửi) hoặc cơ chế khác (chia message thành lớp,
+   gửi phần quan trọng trước) — đây là câu hỏi thiết kế, không phải câu hỏi học policy.
    AMOTA: *(đang chạy)*.
 
 ## 5. Trả lời ba câu hỏi của ChatGPT (tạm thời, dev)

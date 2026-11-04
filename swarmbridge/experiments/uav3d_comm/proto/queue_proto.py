@@ -8,7 +8,8 @@ arrives" interact.
 Link model (each helper j -> UAV0, independent):
   rate      R_j(f) bit served during frame f.  "const": R_j(f) = R.  "fade": R_j(f) = R * exp(N(0, 0.5^2) - 0.125)
             (log-normal, mean R), i.i.d. per link and frame, seeded per (seed, scene, sender) - the same realisation
-            for every policy.
+            for every policy.  "ar": the log-rate follows an AR(1) process with correlation RHO per frame (stationary
+            N(0, 0.5^2), mean rate R) - a channel whose next-frame rate is partly predictable from the last one.
   service   FIFO, work-conserving: a packet enqueued at the start of frame s arrives at the first frame f >= s at which
             the cumulative service from frame s covers the backlog in front of it plus its own size (delay 0 if it
             fits in frame s). Bits on air = bits actually served.
@@ -24,6 +25,8 @@ Message content: each helper's KF-PV candidates (box_proto kf family), highest s
   adapt{a}_fifo           sender knows its own backlog Q (bits still waiting at the start of the frame) and the MEAN
                           rate R, not the realised rate: size = a * R - Q (no packet if not even one box fits), a in
                           ADAPT; a = 1 targets finishing in the current frame on average (causal, local information)
+  est{a}_fifo             as adapt{a}, but the sender estimates the rate by the realised rate of the PREVIOUS frame
+                          (known from link-layer ACKs; R for the first frame): size = a * R_j(s-1) - Q (causal)
   oracle_fifo             diagnostic: knows the realised rate of the current frame R_j(s): size = R_j(s) - Q
 Usage: python -I queue_proto.py DATA_ROOT AGENT_DIR OUT [--smoke]
 """
@@ -46,11 +49,12 @@ from fusion import load_variant, select  # noqa: E402
 from soft_fusion import fuse as soft_fuse  # noqa: E402
 
 RATES = [4, 8]                              # kbit per frame per link (= 20, 40 kbit/s at 0.2 s/frame)
-CHANNELS = [("const", 0), ("fade", 0), ("fade", 1), ("fade", 2)]
+CHANNELS = [("const", 0), ("fade", 0), ("fade", 1), ("fade", 2), ("ar", 0), ("ar", 1), ("ar", 2)]
+RHO = 0.8
 CAPS = [0.25, 0.5, 0.75, 1.0, 2.0]
 ADAPT = [0.5, 0.75, 1.0]           # adapt{a}: size = a * R - Q
 POLICIES = (["full_fifo", "full_drop"] + [f"cap{c}_fifo" for c in CAPS] + [f"adapt{a}_fifo" for a in ADAPT]
-            + ["oracle_fifo"])
+            + [f"est{a}_fifo" for a in ADAPT] + ["oracle_fifo"])
 HELPERS = (1, 2, 3, 4)
 SIGMA = 0.5
 MAX_AGE = 3
@@ -64,7 +68,15 @@ def rate_series(kind, seed, scene, j, n, R):
         return np.full(n, float(R))
     key = hashlib.sha256(f"{seed}|{scene}|{j}|rate".encode()).digest()
     rng = np.random.default_rng(int.from_bytes(key[:8], "little"))
-    return R * np.exp(rng.normal(0, SIGMA, n) - SIGMA ** 2 / 2)
+    if kind == "fade":
+        return R * np.exp(rng.normal(0, SIGMA, n) - SIGMA ** 2 / 2)
+    assert kind == "ar", kind
+    e = rng.normal(0, SIGMA, n)
+    x = np.zeros(n)
+    x[0] = e[0]
+    for f in range(1, n):
+        x[f] = RHO * x[f - 1] + np.sqrt(1 - RHO ** 2) * e[f]
+    return R * np.exp(x - SIGMA ** 2 / 2)
 
 
 def n_fit(bits, n_max):
@@ -155,6 +167,9 @@ def main():
                                 n = n_fit(float(policy[3:].split("_")[0]) * Rb, nmax)
                             elif policy.startswith("adapt"):
                                 n = n_fit(float(policy[5:].split("_")[0]) * Rb - backlog, nmax)
+                            elif policy.startswith("est"):
+                                rhat = rate[s - 1] if s > 0 else Rb
+                                n = n_fit(float(policy[3:].split("_")[0]) * rhat - backlog, nmax)
                             elif policy == "oracle_fifo":
                                 n = n_fit(rate[s] - backlog, nmax)
                             else:
