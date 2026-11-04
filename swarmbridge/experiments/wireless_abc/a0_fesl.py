@@ -36,7 +36,7 @@ def main():
         import h5py
         f = Path(args.bin) / f"120000UEs_500m_1x{n_rx}BS_1x{n_tx}MS_1carr_1symb_diff=0_quadriga_LOS.mat"
         ch = h5py.File(f, "r")["H_all"]
-        ch = np.transpose(np.array(ch[:, :, 110000:110000 + args.n]["real"]) + 1j * np.array(ch[:, :, 110000:110000 + args.n]["imag"]))
+        ch = np.transpose(np.array(ch[:, :, 100000:100000 + args.n]["real"]) + 1j * np.array(ch[:, :, 100000:100000 + args.n]["imag"]))
         data = ch
         mdir = Path(args.repo) / "results/best_models_dm_paper/quadriga_LOS"
     x = torch.from_numpy(np.asarray(data[:, None, :]))

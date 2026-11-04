@@ -93,7 +93,28 @@ cold start cho môi trường C (codec/sổ bit của UAV3D đã có 71 test tro
 
 **A0:** đang tải `Diffusion_channel_est.zip` (2.871 GB, md5 cfe59362…) vào `data/wireless_abc/fesl/` (gitignored).
 
-### 0.4 Việc tiếp theo
+### 0.4 Ghi chú môi trường (05/11, 01:50)
+
+Để chạy code Fesl (A0) đã thêm `h5py`, `tqdm`, `torchvision 0.27.1+cu130`, `pytorch-fid 0.3.0` (không deps). Lệnh cài
+torchvision đầu tiên tự nâng torch lên 2.15 — đã đưa về **torch 2.12.1+cu130** (kiểm tra `torch.cuda.is_available()`),
+lock file cập nhật lại.
+
+## A0 — chạy lại checkpoint Fesl (xong)
+
+`swarmbridge/experiments/wireless_abc/a0_fesl.py`, `scripts/wireless_abc/run_a0.sh`; kết quả `runs/wireless_abc/a0/`.
+Dataset Zenodo 20737830 (2.871 GB, md5 khớp `cfe59362…`), giải nén chọn lọc 2 file (82 MB test 3GPP + 1.9 GB QuaDRiGa;
+tổng dữ liệu mới 4.6 GB). Code và checkpoint của tác giả, Tester của tác giả (SNR-matched start, quá trình ngược tất
+định), 1 024 mẫu test đầu (tác giả: 10 000), CPU, torch 2.12 (tác giả: 2.1).
+
+| SNR (dB) | −10 | −5 | 0 | 5 | 10 | 15 | 20 | 25 | 30 | 35 | 40 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 3GPP: ta / công bố (NMSE dB) | −1.34 / −1.37 | −4.34 / −4.37 | −7.97 / −8.00 | −11.71 / −11.73 | −15.72 / −15.75 | −19.87 / −19.92 | −24.16 / −24.20 | −27.97 / −27.95 | −30.93 / −30.85 | −37.19 / −37.18 | −39.97 / −40.00 |
+| QuaDRiGa LoS: ta / công bố | −7.80 / −7.56 | −9.29 / −9.01 | −10.79 / −10.45 | −13.09 / −12.76 | −16.23 / −15.95 | −19.56 / −19.29 | −22.92 / −22.67 | −26.19 / −26.01 | −30.28 / −30.18 | −35.32 / −35.23 | −40.07 / −40.01 |
+
+Pipeline, chuẩn hóa và NMSE khớp: 3GPP lệch ≤ 0.08 dB; QuaDRiGa lệch 0.06–0.34 dB, cùng chiều (tập con 1 024 mẫu dễ hơn
+một chút). Chưa tái lập phần huấn luyện; chưa tái lập paper SB-ISAC (A0 thứ hai) — để sau A1 nếu còn ngân sách.
+
+### 0.5 Việc tiếp theo
 
 1. A0: giải nén chọn lọc, chạy checkpoint Fesl trên ≤ 1 024 mẫu, đối chiếu NMSE–SNR.
 2. Mốc 1: scene trace cho B/C — UAV bay thấp (15–25 m) theo quỹ đạo trong phố, blocker động (giải lại path mỗi bước khi

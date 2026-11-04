@@ -20,7 +20,7 @@ Methods (all get y, W, Ep, noise_var; learned ones also get the LMMSE estimate a
   sweep   (dft protocol only) pick the pilot beam with the largest |y_k| (classical beam sweep, no estimation)
 Decision rules: 'mean' = argmax |w^H h_hat|^2 (point estimate); 'egain' = argmax E|w^H h|^2; 'outage' = argmin
 P(SNR_b < GAMMA). Probabilistic methods use S=16 samples (analytic for lmmse/gmm).
-Output: OUT/a1_results.json (+ per-config rows), printed table. Usage: python a1_bench.py TRACE_DIR OUT [--seeds 0 1 2]
+Dev/test are capped at NEVAL = 8000 fixed random samples. Output: OUT/a1_results.json (+ per-config rows), printed table. Usage: python a1_bench.py TRACE_DIR OUT [--seeds 0 1 2]
 """
 import argparse
 import json
@@ -44,6 +44,7 @@ S = 16
 NFES = [1, 4, 8]
 STEPS = 3000
 REPS = 2
+NEVAL = 8000
 DEV = "cpu"
 torch.set_num_threads(6)
 
@@ -209,39 +210,40 @@ class Learned:
         if k == "gauss":
             o = self.net(c)
             m, lv = o[:, :2 * N], o[:, 2 * N:].clamp(-12, 8)
-            return m[None] + (0.5 * lv).exp()[None] * torch.randn((S, n, 2 * N), generator=gen)
+            return m[None] + (0.5 * lv).exp()[None] * torch.randn((S, n, 2 * N), generator=gen, device=c.device)
         c = c.repeat(S, 1)
         x1 = x1.repeat(S, 1)
         if k == "ddpm":
             ts = np.linspace(100, 0, nfe + 1).round().astype(int)
-            x = torch.randn((S * n, 2 * N), generator=gen)
+            x = torch.randn((S * n, 2 * N), generator=gen, device=c.device)
+            ab_all = self.ab.to(c.device)
             for a, b in zip(ts[:-1], ts[1:]):
-                aa, ab_ = self.ab[a], self.ab[b]
-                e = self.net(torch.cat([x, c, temb(torch.full((len(x),), a / 100.0))], 1))
+                aa, ab_ = ab_all[a], ab_all[b]
+                e = self.net(torch.cat([x, c, temb(torch.full((len(x),), a / 100.0, device=c.device))], 1))
                 x0 = (x - (1 - aa).sqrt() * e) / aa.sqrt()
                 if b == 0:
                     x = x0
                     break
                 sig = ((1 - ab_) / (1 - aa) * (1 - aa / ab_)).sqrt()          # DDIM eta = 1
-                x = ab_.sqrt() * x0 + (1 - ab_ - sig ** 2).clamp(min=0).sqrt() * e + sig * torch.randn(x.shape, generator=gen)
+                x = ab_.sqrt() * x0 + (1 - ab_ - sig ** 2).clamp(min=0).sqrt() * e + sig * torch.randn(x.shape, generator=gen, device=c.device)
             return x.reshape(S, n, -1)
         if k == "flow":
-            x = torch.randn((S * n, 2 * N), generator=gen)
+            x = torch.randn((S * n, 2 * N), generator=gen, device=c.device)
             for i in range(nfe):
-                t = torch.full((len(x),), i / nfe)
+                t = torch.full((len(x),), i / nfe, device=c.device)
                 x = x + self.net(torch.cat([x, c, temb(t)], 1)) / nfe
             return x.reshape(S, n, -1)
         # bridge sampler: start at x1 (t = 1), pinned posterior steps toward the predicted x
         ts = np.linspace(1, 0, nfe + 1)
         x = x1.clone()
         for a, b in zip(ts[:-1], ts[1:]):
-            x0 = self.net(torch.cat([x, c, temb(torch.full((len(x),), float(a)))], 1))
+            x0 = self.net(torch.cat([x, c, temb(torch.full((len(x),), float(a), device=c.device))], 1))
             if b == 0:
                 x = x0
                 break
             mean = x0 + (b / a) * (x - x0)
             var = self.sigma ** 2 * b * (a - b) / a
-            x = mean + np.sqrt(var) * torch.randn(x.shape, generator=gen)
+            x = mean + np.sqrt(var) * torch.randn(x.shape, generator=gen, device=c.device)
         return x.reshape(S, n, -1)
 
 
@@ -339,7 +341,6 @@ def run(Htr, Hdv, Hte, proto, n_p, seed, gmm, rows, log):
             loss.backward()
             opt.step()
             sched.step()
-        m.net.to("cpu")
         models[kind] = m
     log(f"  trained 6 models in {time.time() - t0:.0f}s")
     # ---- evaluate on dev and test at each SNR
@@ -400,13 +401,15 @@ def run(Htr, Hdv, Hte, proto, n_p, seed, gmm, rows, log):
             add("gmm", "outage", Mg, np.argmin(po - 1e-9 * eg, 1), extra=ext)
             # learned
             ysc = np.sqrt(1 + nv)
-            c = torch.tensor(cond_feats(Y, Ml, sdb, ysc))
-            x1 = torch.tensor(Lc.c2r(Ml), dtype=torch.float32)
-            gen = torch.Generator().manual_seed(seed * 1000 + sdb + 50)
+            c = torch.tensor(cond_feats(Y, Ml, sdb, ysc), device=DEV)
+            x1 = torch.tensor(Lc.c2r(Ml), dtype=torch.float32, device=DEV)
+            gen = torch.Generator(device=DEV).manual_seed(seed * 1000 + sdb + 50)
             for kind, m in models.items():
                 for nfe in ([0] if kind in ("map", "gauss") else NFES):
                     t1 = time.time()
-                    Xs = m.sample(c, x1, nfe, gen).numpy()
+                    Xs = m.sample(c, x1, nfe, gen).cpu().double().numpy()
+                    if DEV != "cpu":
+                        torch.cuda.synchronize()
                     secs = time.time() - t1
                     Hs_m = Lc.r2c(Xs)
                     Hm = Hs_m.mean(0)
@@ -438,6 +441,10 @@ def main():
         logf.flush()
     H, ep, n_ep = load_traces(args.trace)
     Htr, Hdv, Hte, info = split(H, ep, n_ep)
+    sub = np.random.default_rng(123)
+    Hdv = Hdv[np.sort(sub.permutation(len(Hdv))[:NEVAL])]
+    Hte = Hte[np.sort(sub.permutation(len(Hte))[:NEVAL])]
+    info.update(n_dev_eval=len(Hdv), n_test_eval=len(Hte), device=DEV)
     log(f"data {info}")
     rows = []
     res_path = out / "a1_results.json"
