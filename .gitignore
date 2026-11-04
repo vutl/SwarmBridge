@@ -64,3 +64,9 @@ Thumbs.db
 # Windows copy of the UAV3D CenterPoint tracking code + its py3.8 venv (extra CPU tracking workers)
 /external/uav3d_track_win/
 /runs/uav3d_proto/.claims/
+
+# wireless A/B/C pilot data (large, re-downloadable)
+/data/wireless_abc/
+/runs/wireless_abc/**/*.npy
+/runs/wireless_abc/**/*.npz
+/runs/wireless_abc/**/*.pt

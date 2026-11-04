@@ -16,7 +16,7 @@ tối đa 10 GB dữ liệu mới, 8 giờ GPU, một job GPU tại một thời
   nào** (bị chắn hoàn toàn với độ sâu 3); ở 50 m và 100 m mọi điểm có path, công suất −77…−84 dB. → NLoS có thật ở độ
   cao thấp; ray tracing cho scene nhỏ chạy được trên CPU, có thể không cần GPU cho RT.
 
-### 0.2 Điểm thiết kế cần sửa trong plan (Claude, chờ Codex xác nhận)
+### 0.2 Điểm thiết kế cần sửa trong plan (đã được Codex chấp nhận 05/11; C chốt phương án (c))
 
 1. **A1: mô hình phép đo pilot phải là beam training đường xuống.** BS 16 antenna, UAV 1 antenna: nếu pilot đường lên
    thu số hoàn toàn, *một* ký hiệu pilot đã cho 16 phép đo của h, nên "pilot dài 4/8/16" không tạo ra chế độ thiếu đo.
@@ -50,9 +50,51 @@ tối đa 10 GB dữ liệu mới, 8 giờ GPU, một job GPU tại một thời
    frame → cần các scene train (export detection 17 scene train, có trong mốc 4). Nếu vẫn thiếu, giảm đồng đều và ghi
    "chưa hội tụ" như plan đã nói.
 
-### 0.3 Thứ tự việc của Claude ngay sau khi Codex xác nhận 0.2
+### 0.3 Kết quả mốc 0 (05/11)
 
-1. Khóa manifest env; smoke test Sionna RT trên CPU và GPU (một scene nhỏ, có khóa GPU).
-2. Unit test chung (complex↔real, DFT unitary, SNR/noise, pseudoinverse, posterior Gaussian/GMM giải tích, coverage).
-3. A0: tải dataset Fesl (Zenodo, ~2.9 GB, chỉ giải nén phần cần), chạy checkpoint trên ≤ 1 024 mẫu.
-4. Scene RT nhỏ cho B/C (BS, 3 UAV, blocker di động, mặt phản xạ), cache ≤ 2 GB.
+**Khóa môi trường.** `scripts/wireless_abc/setup_env.sh` giờ dựng lại đúng bản khóa: Python 3.12.16 (uv) +
+`uv pip sync wireless-abc.lock.txt` (torch từ index PyTorch cu130, còn lại PyPI). Chạy `--dry-run` trên env hiện có:
+"Would make no changes" (77 package).
+
+**Thống kê RT có phân loại** (`scripts/wireless_abc/rt_stats.py`, kết quả `runs/wireless_abc/rt_smoke/rt_stats.json`).
+Cảnh Munich, BS cao 27 m tại (8.5, 21), 28 GHz, lưới 12×12 điểm trên 400×400 m quanh BS ở mỗi độ cao. Điểm nằm dưới mái
+nhà (tia từ 1 km chiếu xuống chạm hình học trước khi tới điểm) bị loại: 22/144 điểm ở 20 m, 0 ở 50/100 m.
+Lớp: `los` = có đường trực tiếp; `nlos` = không có đường trực tiếp nhưng còn đường khác; `nopath` = solver không tìm thấy
+đường nào với cấu hình đó.
+
+| Độ cao | Cấu hình solver | LoS | NLoS | không có đường | trung vị công suất LoS / NLoS (dB) |
+|---|---|---|---|---|---|
+| 20 m | LoS + phản xạ gương, độ sâu 3 | 0.393 | 0.279 | 0.328 | −105.0 / −127.5 |
+| 20 m | + nhiễu xạ | 0.393 | 0.549 | 0.057 | −105.5 / −152.8 |
+| 20 m | + phản xạ khuếch tán | 0.393 | 0.270 | 0.336 | −105.0 / −126.3 |
+| 20 m | độ sâu 5 | 0.393 | 0.344 | 0.262 | −105.0 / −135.3 |
+| 50 m | (mọi cấu hình) | 0.965 | 0.021–0.035 | 0–0.014 | −104.7 / −125…−132 |
+| 100 m | (mọi cấu hình) | 0.993 | 0–0.007 | 0–0.007 | −105.1 / — |
+
+Đọc:
+1. Lần smoke trước ("2/3 điểm ở 20 m không có path") là do điểm rơi vào trong nhà và solver thiếu nhiễu xạ; không phải
+   bằng chứng mất sóng.
+2. **NLoS chỉ đáng kể khi UAV thấp hơn hoặc ngang BS** (20 m, BS 27 m). Ở ≥ 50 m gần như toàn LoS trong vùng 400 m.
+   Với LoS và vị trí UAV/BS đã biết, beam tính thẳng từ hình học, không cần pilot. → Scene chính cho A/B/C phải là
+   **UAV bay thấp (≤ độ cao BS) trong phố**, hoặc BS thấp hơn; ghi rõ phạm vi này trong mọi kết luận.
+3. "Không có đường" giảm từ 33% xuống 6% khi bật nhiễu xạ, nhưng đường nhiễu xạ yếu hơn LoS khoảng 48 dB (trung vị) —
+   gần như không dùng được ở mmWave. Đường phản xạ yếu hơn khoảng 22 dB. Quỹ đường truyền (ví dụ 30 dBm, độ lợi
+   beam 16 antenna ~12 dB, nhiễu 100 MHz ~ −87 dBm): LoS ~ SNR 24 dB; phản xạ ~ 2 dB; nhiễu xạ ~ −24 dB. Vùng quan tâm
+   là NLoS **qua phản xạ**, nơi chọn đúng beam phản xạ quyết định link sống hay chết.
+4. Cấu hình solver dùng cho trace: độ sâu 5 + nhiễu xạ (để không đếm nhầm "không có đường"), ghi trong config.
+
+**Unit test lõi tuyến tính** (`swarmbridge/experiments/wireless_abc/linear.py`, `test_linear.py`): **14/14 qua**.
+Gồm complex↔real, CN(0,1) đúng công suất, DFT unitary và hướng beam, pilot đơn vị (DFT/ngẫu nhiên), phương sai nhiễu theo
+SNR, năng lượng pilot cố định (không chuẩn hóa theo kênh), pseudoinverse khôi phục h khi đủ pilot không nhiễu, posterior
+LMMSE khớp Monte Carlo (hiệp phương sai và coverage 95%), GMM một thành phần = LMMSE, trọng số GMM = Bayes chính xác,
+GMM nhận đúng trạng thái trong prior hai đỉnh, E|wᴴh|² = wᴴ(Σ+μμᴴ)w khớp Monte Carlo, mật độ CN chuẩn hóa.
+Còn chờ (viết khi có code tương ứng): endpoint/sampler bridge (A1), thời điểm hiệu lực pilot/feedback, queue, mất gói,
+cold start cho môi trường C (codec/sổ bit của UAV3D đã có 71 test trong `uav3d_comm/proto/test_proto.py`).
+
+**A0:** đang tải `Diffusion_channel_est.zip` (2.871 GB, md5 cfe59362…) vào `data/wireless_abc/fesl/` (gitignored).
+
+### 0.4 Việc tiếp theo
+
+1. A0: giải nén chọn lọc, chạy checkpoint Fesl trên ≤ 1 024 mẫu, đối chiếu NMSE–SNR.
+2. Mốc 1: scene trace cho B/C — UAV bay thấp (15–25 m) theo quỹ đạo trong phố, blocker động (giải lại path mỗi bước khi
+   hình học đổi), đo độ bền beam từ trace.
