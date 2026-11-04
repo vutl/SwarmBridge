@@ -1,0 +1,52 @@
+data {'n_total': 96480, 'dropped_frac': 0.3516, 'scale': 3.2708549476610127e-06, 'n_train': 38034, 'n_dev': 11767, 'n_test': 12761, 'n_dev_eval': 8000, 'n_test_eval': 8000, 'device': 'cuda'}
+seed 0: gmm fit 71s
+seed 0 dft Np=4
+  trained 6 models in 267s
+  dev dft Np=4 snr=-5 done
+  dev dft Np=4 snr=+5 done
+  dev dft Np=4 snr=+15 done
+  test dft Np=4 snr=-5 done
+  test dft Np=4 snr=+5 done
+  test dft Np=4 snr=+15 done
+seed 0 random Np=4
+  trained 6 models in 270s
+  dev random Np=4 snr=-5 done
+  dev random Np=4 snr=+5 done
+  dev random Np=4 snr=+15 done
+  test random Np=4 snr=-5 done
+  test random Np=4 snr=+5 done
+  test random Np=4 snr=+15 done
+seed 1: gmm fit 79s
+seed 1 dft Np=4
+  trained 6 models in 266s
+  dev dft Np=4 snr=-5 done
+  dev dft Np=4 snr=+5 done
+  dev dft Np=4 snr=+15 done
+  test dft Np=4 snr=-5 done
+  test dft Np=4 snr=+5 done
+  test dft Np=4 snr=+15 done
+seed 1 random Np=4
+  trained 6 models in 270s
+  dev random Np=4 snr=-5 done
+  dev random Np=4 snr=+5 done
+  dev random Np=4 snr=+15 done
+  test random Np=4 snr=-5 done
+  test random Np=4 snr=+5 done
+  test random Np=4 snr=+15 done
+seed 2: gmm fit 78s
+seed 2 dft Np=4
+  trained 6 models in 278s
+  dev dft Np=4 snr=-5 done
+  dev dft Np=4 snr=+5 done
+  dev dft Np=4 snr=+15 done
+  test dft Np=4 snr=-5 done
+  test dft Np=4 snr=+5 done
+  test dft Np=4 snr=+15 done
+seed 2 random Np=4
+  trained 6 models in 221s
+  dev random Np=4 snr=-5 done
+  dev random Np=4 snr=+5 done
+  dev random Np=4 snr=+15 done
+  test random Np=4 snr=-5 done
+  test random Np=4 snr=+5 done
+  test random Np=4 snr=+15 done

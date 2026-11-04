@@ -427,9 +427,13 @@ def main():
     ap.add_argument("trace"); ap.add_argument("out"); ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     ap.add_argument("--quick", action="store_true")
     ap.add_argument("--device", default="cpu")
+    ap.add_argument("--steps", type=int, default=None); ap.add_argument("--nps", type=int, nargs="+", default=None)
     args = ap.parse_args()
     global STEPS, DEV
     DEV = args.device
+    if args.steps:
+        STEPS = args.steps
+    nps = args.nps or NPS
     if args.quick:
         STEPS = 200
     out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
@@ -453,7 +457,7 @@ def main():
         gmm = fit_gmm(Htr, K=32, seed=seed)
         log(f"seed {seed}: gmm fit {time.time() - t0:.0f}s")
         for proto in PROTOS:
-            for n_p in NPS:
+            for n_p in nps:
                 log(f"seed {seed} {proto} Np={n_p}")
                 run(Htr, Hdv, Hte, proto, n_p, seed, gmm, rows, log)
                 res_path.write_text(json.dumps(dict(info=info, gamma=GAMMA, steps=STEPS, rows=rows)))

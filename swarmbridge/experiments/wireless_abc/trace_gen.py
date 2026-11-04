@@ -11,7 +11,8 @@ The scene is static (no moving blockers): Milestone-0 statistics showed links to
 buildings, which ground vehicles (2-4 m) cannot affect; this is stated as a scope limit.
 Per receiver sample we keep the K strongest paths: a (16 complex, per BS antenna), Doppler (Hz, receiver velocity set),
 delay, LoS flag. The narrowband channel at time offset dt inside a step is h(dt) = sum_p a_p exp(j 2 pi f_p dt).
-Output: OUT/ep{e:04d}.npz + OUT/meta.json. Usage: python trace_gen.py OUT [--episodes 60] [--seed 0]
+Output: OUT/ep{e:04d}.npz + OUT/meta.json.
+Usage: python trace_gen.py OUT [--episodes 60] [--seed 0] [--scene munich|etoile|...] [--bs x,y,z]
 """
 import argparse
 import json
@@ -31,8 +32,8 @@ HALF, LAG, ALT = 200.0, 2.0, (15.0, 25.0)
 SOLVER = dict(max_depth=5, diffraction=True)
 
 
-def build_scene():
-    scene = load_scene(rt.scene.munich)
+def build_scene(name="munich"):
+    scene = load_scene(getattr(rt.scene, name))
     scene.frequency = FREQ
     scene.tx_array = PlanarArray(num_rows=1, num_cols=N_ANT, vertical_spacing=0.5, horizontal_spacing=0.5,
                                  pattern="iso", polarization="V")
@@ -151,12 +152,17 @@ def solve(scene, tracks, dt):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("out"); ap.add_argument("--episodes", type=int, default=60); ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--scene", default="munich"); ap.add_argument("--bs", default=None, help="x,y,z of the BS")
     args = ap.parse_args()
+    global BS
+    if args.bs:
+        BS = np.array([float(v) for v in args.bs.split(",")])
     out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
-    scene = build_scene()
+    scene = build_scene(args.scene)
     free = Free(scene)
+    assert not free.under_roof(BS), "BS position is under a roof / inside a building"
     T = int(round(DUR / DT_RT)) + 1
-    meta = dict(bs=BS.tolist(), n_ant=N_ANT, freq=FREQ, dur=DUR, dt_rt=DT_RT, uavs=U, k_paths=K, half=HALF, lag=LAG,
+    meta = dict(scene=args.scene, bs=BS.tolist(), n_ant=N_ANT, freq=FREQ, dur=DUR, dt_rt=DT_RT, uavs=U, k_paths=K, half=HALF, lag=LAG,
                 alt=ALT, solver=SOLVER, seed=args.seed, episodes=[])
     for e in range(args.episodes):
         f = out / f"ep{e:04d}.npz"

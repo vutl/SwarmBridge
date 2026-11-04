@@ -165,6 +165,11 @@ Bridge kém đối chứng tốt nhất ở 16/18 cấu hình (−0.4…−6.1% 
 5. NMSE (random Np 4, 5 dB, seed 0): hồi quy −13.9, Gaussian −13.9, bridge@1 −13.6, flow@4 −13.0, LMMSE −3.1 dB.
    Độ trễ (ms/mẫu, GPU): hồi quy 0.002, bridge NFE 1/8 0.004/0.019, flow NFE 1/8 0.004/0.017.
 
+**Kiểm tra hội tụ** (`runs/wireless_abc/a1_long/`, 15 000 bước thay vì 3 000, Np = 4, cả hai loại pilot, 3 seed; GPU 15
+phút): gate SB **0/6**; bridge giờ bằng hồi quy (−1.5…+0.5% rate, không cấu hình nào cùng chiều thắng ở cả 3 seed);
+flow và Gaussian có đk cũng ngang. DDPM vẫn chưa hội tụ (NMSE +0.6…+6.5 dB) nhưng coverage khá hơn (≈ 0.65 / 0.76) —
+vẫn dưới danh định. Kết luận A không đổi khi huấn luyện lâu hơn.
+
 → **A: không có bằng chứng SB có lợi** cho ước lượng, uncertainty hay tốc độ ở bài toán này. B/C dùng LMMSE hoặc hồi quy.
 
 ## B — thông tin hiện tại từ UAV khác (xong; gate: **qua một phần, có điều kiện**)
@@ -236,7 +241,7 @@ Bước điều khiển 5 ms cho cùng kết quả (oracle 0.690, quét 20 ms 0.
 | B: hợp tác trực tuyến có lợi? | Có, **chỉ ở vùng chưa có bản đồ** (+10% rate, −25% outage); 0 ở vùng đã có bản đồ; vượt message tráo | Hướng có điều kiện: "bầy UAV tự dựng bản đồ góc khi chưa có khảo sát". Cần thêm fusion học được (còn khoảng cách tới oracle), nhiều cảnh, chi phí bit chặt hơn |
 | C: cần Deep RL cho beam/pilot? | Không: quét 20 ms ≈ oracle (Δ 0.002 AMOTA) | Không mở PPO. Nếu tiếp C, đổi biến quyết định sang vị trí/relay (vùng phủ) |
 
-Tài nguyên đã dùng: GPU 31 phút (A1); dữ liệu mới 4.6 GB (Fesl) + 54 MB trace; env 5.4 GB (không tính vào dữ liệu).
+Tài nguyên đã dùng: GPU 31 phút (A1) + 15 phút (A1 hội tụ); dữ liệu mới 4.6 GB (Fesl) + 54 MB trace; env 5.4 GB (không tính vào dữ liệu).
 
 ### Việc tiếp theo (đề xuất, chờ người dùng/Codex)
 
