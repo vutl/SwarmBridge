@@ -1,13 +1,13 @@
 # UAV3D protocol v1.1 — ablation Kalman, chọn message theo ngân sách, hàng đợi — 2026-11-04 (tối)
 
 Phạm vi: 3 scene dev (scene_11, 13, 15; 60 frame), CPU, không GPU. Chưa có khoảng tin cậy; mọi điều dưới đây là
-giả thuyết cho test set. Đây là phần tiếp theo của `uav3d-proto-box-results-2026-11-04.md`, làm theo góp ý của ChatGPT
-và Codex (`codex-review-proto-box-results-2026-11-04.md`).
+giả thuyết cho test set. Đây là phần tiếp theo của `archive/uav3d/uav3d-proto-box-results-2026-11-04.md`, làm theo góp ý của ChatGPT
+và Codex (`archive/uav3d/codex-review-proto-box-results-2026-11-04.md`).
 
 Bảng đầy đủ (mAP / AMOTA từng ô, sha256 đã đối chiếu): chạy
 `python -I swarmbridge/experiments/uav3d_comm/proto/summarize.py runs/uav3d_proto` (ghi `runs/uav3d_proto/summary.json`).
 
-**TRẠNG THÁI (19:30):** AMOTA đã có cho ablation Kalman (đủ seed), pilot ngân sách và hàng đợi (seed 0 cho các policy chính). Các seed còn lại, độ nhạy Kalman và `central_strong` vẫn đang tracking; `summarize.py` in bảng mới nhất.
+**TRẠNG THÁI (23:00):** AMOTA đủ 3 seed cho ablation Kalman, pilot ngân sách (kể cả `central_strong`, `central_demote`) và hàng đợi (kể cả `prog_fb`). Độ nhạy Kalman (ksens) còn đang tracking. Bảng đầy đủ: `runs/uav3d_proto/summary.md`.
 
 ## 0. Sửa lỗi theo review
 
@@ -223,6 +223,7 @@ bỏ. Không cần biết tốc độ kênh, không có hàng đợi kéo sang f
    cho nhãn "xe UAV0 bỏ sót") ưu tiên nhầm nhiều box sai; tp phân loại tốt hơn score (độ chính xác 0.82–0.85 vs 0.79–0.82)
    nhưng không đổi thành AMOTA tốt hơn. Bỏ trùng giữa helper theo message frame trước (novh1) cũng tệ hơn score.
    Phần dư địa của GT nằm ở thông tin "UAV0 đang bỏ sót xe nào ngay bây giờ", mà sender không quan sát được trực tiếp.
+   Feedback "receiver đã chắc xe nào" ở frame trước (prog_fb, mục 3b) cũng không lấy được: fb0.8 = prog.
 
 ## 3b. Sender biết receiver chắc chắn đến đâu (feedback)
 
@@ -237,7 +238,39 @@ không cần xác nhận cho cái receiver đã chắc; vẫn xác nhận các d
 | central_strong0.8 | 0.557 | 0.577 | 0.566 |
 | central_novh_strong0.8 | 0.561 | 0.555 | 0.551 |
 
-Bỏ cả những xe receiver đã tự tin vẫn hại mAP ở ngân sách vừa và rộng. AMOTA: *(đang chạy, chưa có trong bản này)*.
+Bỏ cả những xe receiver đã tự tin vẫn hại mAP ở ngân sách vừa và rộng. Nhưng theo AMOTA thì khác ở ngân sách chặt.
+
+Thêm `central_demote{τ}`: cùng feedback, nhưng box trùng xe receiver đã chắc được *đẩy xuống cuối* thay vì bỏ (gửi nếu còn
+ngân sách). Với message lũy tiến: `prog_fb{τ}` (queue_proto), cùng cách đẩy xuống cuối.
+
+AMOTA (sync seed 0 | rand trung bình 3 seed; feedback ~1.2 kbit/frame ở τ=0.6, ~0.6 ở τ=0.8, không tính vào B):
+
+| policy | sync B=5 | B=10 | B=20 | rand B=5 | B=10 | B=20 |
+|---|---|---|---|---|---|---|
+| central_score | 0.599 | 0.655 | 0.699 | 0.583 | 0.634 | 0.652 |
+| central_novh | 0.643 | **0.692** | 0.691 | 0.624 | **0.654** | 0.640 |
+| central_strong0.6 | **0.668** | 0.647 | 0.582 | **0.640** | 0.619 | 0.565 |
+| central_strong0.8 | 0.642 | 0.689 | 0.689 | 0.621 | 0.651 | 0.633 |
+| central_demote0.6 | 0.668 | 0.647 | 0.590 | 0.640 | 0.619 | 0.568 |
+| central_demote0.8 | 0.642 | 0.689 | 0.689 | 0.621 | 0.651 | 0.633 |
+| oracle_full (GT) | 0.674 | 0.717 | 0.720 | 0.658 | 0.676 | 0.667 |
+
+| thứ tự (lũy tiến) | R=4 const | R=4 fade (3 seed) | R=8 const | R=8 fade (3 seed) |
+|---|---|---|---|---|
+| prog (score) | 0.691 | 0.674 | 0.701 | 0.694 |
+| prog_fb0.6 | 0.630 | 0.634 | 0.614 | 0.654 |
+| prog_fb0.8 | 0.694 | 0.674 | 0.676 | 0.692 |
+| prog_gt (GT) | 0.735 | 0.713 | 0.704 | 0.711 |
+
+Đọc:
+1. **Chỉ ở ngân sách rất chặt (B=5, ~12 box/helper) feedback mới có ích**: strong0.6 gần chạm chẩn đoán GT (sync 0.668
+   vs 0.674; rand 0.640 vs 0.658), hơn score +0.057 và hơn novh +0.016 (rand). Ở B=10–20 nó hại.
+2. **Đẩy xuống cuối không làm policy tự thích nghi**: demote ≈ strong ở mọi ô. Lý do: danh sách box "chưa chắc" (gồm
+   nhiều box score thấp, thường sai) đủ dài để lấp hết ngân sách trước khi tới phần xác nhận.
+3. **Với message lũy tiến (~40 box/helper ở R=4) feedback không giúp**: fb0.8 = prog (0.674 vs 0.674), fb0.6 tệ hơn.
+   Dư địa +0.039 của thứ tự GT ở R=4 fade **chưa** lấy được bằng feedback causal dạng này.
+4. Kết luận: feedback "receiver đã chắc" là một công tắc có ích ở chế độ cực chặt, không phải nguồn của dư địa GT nói
+   chung. Một heuristic chọn giữa novh/strong theo ngân sách đủ cho chế độ đó; không cần học.
 
 ## 5. Trả lời ba câu hỏi của ChatGPT (tạm thời, dev)
 
@@ -249,7 +282,7 @@ giả thuyết sai. Trả lời dưới đây chỉ dựa trên 3 scene dev, ch�
   28–33% lợi ích mAP và **0%** lợi ích AMOTA. Phần mất này nằm ở phía gửi (gửi gì, khi nào), không ở phía nhận.
 - Giả định "chỉ gửi cái mới / cái receiver chưa có" (Where2comm-style, novelty, AoI value) **sai** cho tracking trong
   pipeline này: giá trị chủ yếu là xác nhận (65 vs 7.5 xe/message); bỏ cái receiver đã thấy kéo AMOTA xuống dưới ego;
-  ngay cả bỏ cái receiver đã *chắc chắn* cũng hại mAP. Bỏ trùng giữa các helper thì ngược lại có ích cho tracking khi
+  ngay cả bỏ cái receiver đã *chắc chắn* cũng hại mAP; theo AMOTA nó chỉ có ích ở ngân sách cực chặt (B=5, mục 3b). Bỏ trùng giữa các helper thì ngược lại có ích cho tracking khi
   ngân sách chặt. Chưa thấy công trình nào đo đánh đổi xác nhận/mới theo tracking loss — đây là khoảng trống hẹp nhưng có
   số liệu.
 

@@ -1,0 +1,16 @@
+{
+ "det_path": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/uav3d_proto/budget/dets/central_demote0.6_B5/sync_s0/results_nusc.json",
+ "det_sha256": "c8cc67e01ea4457979d7469303f1d98959ef708d8f9f19b01e32226d739cf1c6",
+ "dt": "0.2",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}

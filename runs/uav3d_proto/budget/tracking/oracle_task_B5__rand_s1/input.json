@@ -1,0 +1,16 @@
+{
+ "det_path": "C:/Users/USER/Documents/SwarmBridge\\runs/uav3d_proto/budget\\dets\\oracle_task_B5\\rand_s1\\results_nusc.json",
+ "det_sha256": "fdac77df756df61dc886545fe3e18c686fd2f681526e4701d1f70668ee293822",
+ "dt": "0.2",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}

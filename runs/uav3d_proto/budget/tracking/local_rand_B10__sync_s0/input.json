@@ -1,5 +1,5 @@
 {
- "det_path": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/uav3d_proto/budget/dets/local_rand_B10/sync_s0/results_nusc.json",
+ "det_path": "C:/Users/USER/Documents/SwarmBridge\\runs/uav3d_proto/budget\\dets\\local_rand_B10\\sync_s0\\results_nusc.json",
  "det_sha256": "e0e981439c6f8e3ec1eb35904f84b06aedc2f143254e0049a61cb839a0ab2d1f",
  "dt": "0.2",
  "scenes": [
