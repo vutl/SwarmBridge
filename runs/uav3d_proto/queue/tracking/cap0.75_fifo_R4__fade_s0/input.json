@@ -1,0 +1,16 @@
+{
+ "det_path": "C:/Users/USER/Documents/SwarmBridge\\runs/uav3d_proto/queue\\dets\\cap0.75_fifo_R4\\fade_s0\\results_nusc.json",
+ "det_sha256": "0dbb82b58a3c67617db98a64c2bbf0e6341c88e87b98eadd34add5d23b76764a",
+ "dt": "0.2",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}

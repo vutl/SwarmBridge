@@ -1,0 +1,16 @@
+{
+ "det_path": "C:/Users/USER/Documents/SwarmBridge\\runs/uav3d_proto/box\\dets\\kfv_nor\\loss0.5_s2\\results_nusc.json",
+ "det_sha256": "a0d1e6ba5939dbb5f94220b6e6c421f8736e88afa6627bd9e71ebfac661e1ba0",
+ "dt": "0.2",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}
