@@ -1,0 +1,16 @@
+{
+ "det_path": "C:/Users/USER/Documents/SwarmBridge\\runs/uav3d_proto/ksens\\dets\\sa6_g5\\fix1_s0\\results_nusc.json",
+ "det_sha256": "09675d2ad8c5bb49f06d1917ac0d391bee52b1f40271436d57ad48153a866340",
+ "dt": "0.2",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}

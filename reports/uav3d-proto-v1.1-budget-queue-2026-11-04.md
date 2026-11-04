@@ -7,7 +7,7 @@ và Codex (`archive/uav3d/codex-review-proto-box-results-2026-11-04.md`).
 Bảng đầy đủ (mAP / AMOTA từng ô, sha256 đã đối chiếu): chạy
 `python -I swarmbridge/experiments/uav3d_comm/proto/summarize.py runs/uav3d_proto` (ghi `runs/uav3d_proto/summary.json`).
 
-**TRẠNG THÁI (23:00):** AMOTA đủ 3 seed cho ablation Kalman, pilot ngân sách (kể cả `central_strong`, `central_demote`) và hàng đợi (kể cả `prog_fb`). Độ nhạy Kalman (ksens) còn đang tracking. Bảng đầy đủ: `runs/uav3d_proto/summary.md`.
+**TRẠNG THÁI (23:00):** AMOTA đủ 3 seed cho ablation Kalman, pilot ngân sách (kể cả `central_strong`, `central_demote`) và hàng đợi (kể cả `prog_fb`). Độ nhạy Kalman (ksens) xong (mục 1). Mọi tracking đã xong. Bảng đầy đủ: `runs/uav3d_proto/summary.md`.
 
 ## 0. Sửa lỗi theo review
 
@@ -55,7 +55,27 @@ nhiều nhất 0.002 (sync 0.690 = 0.690, fix1 0.633 vs 0.631, fix2 0.529 = 0.52
 Độ nhạy Kalman (sigma_a ∈ {1,3,6} × gate ∈ {2,3,5}, `runs/uav3d_proto/ksens/`): mAP frame ≥ 3 ở fix2 nằm trong
 0.519–0.568, mặc định 0.561, tốt nhất (sigma_a 6, gate 2) 0.568. Phần giữ được ở trễ 2 frame tăng từ 28% lên khoảng
 33% của lợi ích sync — kết luận "Kalman không lấy lại được giá trị" không do chọn tham số dở. Thêm cổng "chỉ dự báo box có
-tốc độ ≥ v_min" gần như không đổi mAP. AMOTA: *(đang chạy)*.
+tốc độ ≥ v_min" gần như không đổi mAP.
+
+AMOTA (seed 0; ego 0.542, mặc định sa3_g3 in đậm; sha256 đối chiếu với `kalman_sens.json`):
+
+| sigma_a / gate | sync | fix1 | fix2 | rand_s0 |
+|---|---|---|---|---|
+| 1 / 2 | 0.690 | 0.628 | 0.537 | 0.646 |
+| 1 / 3 | 0.689 | 0.612 | 0.514 | 0.631 |
+| 1 / 5 | 0.658 | 0.580 | 0.473 | 0.594 |
+| 3 / 2 | 0.692 | 0.639 | 0.550 | 0.647 |
+| **3 / 3** | **0.690** | **0.631** | **0.529** | **0.645** |
+| 3 / 5 | 0.666 | 0.608 | 0.504 | 0.617 |
+| 6 / 2 | 0.693 | 0.637 | 0.552 | 0.644 |
+| 6 / 3 | 0.695 | 0.628 | 0.532 | 0.649 |
+| 6 / 5 | 0.673 | 0.618 | 0.527 | 0.633 |
+| 3 / 3, v_min 0.5 | 0.690 | 0.634 | 0.529 | 0.644 |
+| 3 / 3, v_min 1.0 | 0.690 | 0.633 | 0.528 | 0.645 |
+
+Ở fix2, AMOTA nằm trong 0.473–0.552; tốt nhất (6 / 2) chỉ hơn ego 0.010, tức giữ khoảng 7% lợi ích sync (mặc định: 0%).
+Gate 2 m tốt hơn đều một chút (+0.01–0.02), gate 5 m tệ hơn rõ. Kết luận giữ nguyên: trễ 2 frame làm mất gần hết lợi ích
+tracking, không phải do tham số Kalman; mặc định không đổi (đổi sang gate 2 sau khi xem dev là chọn trên dev).
 
 ## 2. Giá trị của message theo tuổi lúc đến (chẩn đoán dùng GT)
 
