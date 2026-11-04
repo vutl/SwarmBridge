@@ -7,7 +7,7 @@ và Codex (`archive/uav3d/codex-review-proto-box-results-2026-11-04.md`).
 Bảng đầy đủ (mAP / AMOTA từng ô, sha256 đã đối chiếu): chạy
 `python -I swarmbridge/experiments/uav3d_comm/proto/summarize.py runs/uav3d_proto` (ghi `runs/uav3d_proto/summary.json`).
 
-**TRẠNG THÁI (23:00):** AMOTA đủ 3 seed cho ablation Kalman, pilot ngân sách (kể cả `central_strong`, `central_demote`) và hàng đợi (kể cả `prog_fb`). Độ nhạy Kalman (ksens) xong (mục 1). Mọi tracking đã xong. Bảng đầy đủ: `runs/uav3d_proto/summary.md`.
+**TRẠNG THÁI (05/11):** nhánh đóng băng ở mức nghiên cứu thăm dò; còn một thí nghiệm quyết định (cần GPU). **(23:00):** AMOTA đủ 3 seed cho ablation Kalman, pilot ngân sách (kể cả `central_strong`, `central_demote`) và hàng đợi (kể cả `prog_fb`). Độ nhạy Kalman (ksens) xong (mục 1). Mọi tracking đã xong. Bảng đầy đủ: `runs/uav3d_proto/summary.md`.
 
 ## 0. Sửa lỗi theo review
 
@@ -291,6 +291,15 @@ AMOTA (sync seed 0 | rand trung bình 3 seed; feedback ~1.2 kbit/frame ở τ=0.
    Dư địa +0.039 của thứ tự GT ở R=4 fade **chưa** lấy được bằng feedback causal dạng này.
 4. Kết luận: feedback "receiver đã chắc" là một công tắc có ích ở chế độ cực chặt, không phải nguồn của dư địa GT nói
    chung. Một heuristic chọn giữa novh/strong theo ngân sách đủ cho chế độ đó; không cần học.
+5. **Khi trừ bit feedback vào chính ngân sách (`_fbc`, góp ý ChatGPT), lợi thế so với novh biến mất.** B=5 AMOTA:
+   strong0.6_fbc 0.651 (sync) / 0.629 ±0.003 (rand, 3 seed) so với novh 0.643 / 0.624 — chênh +0.005–0.008, cỡ nhiễu
+   seed; vẫn hơn score +0.046. strong0.8_fbc 0.636 / 0.615. Như vậy với tổng chi phí truyền thông công bằng, feedback
+   "receiver đã chắc" **không** tốt hơn heuristic bỏ trùng giữa helper không cần feedback. Kết luận về feedback đơn giản:
+   bác.
+
+Hạn chế về nhân quả (góp ý ChatGPT): con số "65 xác nhận vs 7.5 tìm lại" ở mục 2 là đếm, không phải đóng góp nhân quả
+vào AMOTA. Bằng chứng can thiệp hiện có chỉ gián tiếp (nove bỏ phần đã thấy → dưới ego; strong0.6 bỏ phần đã chắc →
+AMOTA 0.652 → 0.565 ở B=20). Chưa có ablation sạch "bỏ riêng phần tìm lại vs bỏ riêng phần xác nhận ở cùng số bit".
 
 ## 5. Trả lời ba câu hỏi của ChatGPT (tạm thời, dev)
 
