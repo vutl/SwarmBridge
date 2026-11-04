@@ -47,3 +47,11 @@ __pycache__/
 Thumbs.db
 .vscode/
 .idea/
+
+# UAV3D mini dataset (7 GB) and released third-party checkpoint/detection files
+/data/v1.0-mini/
+/data/v1.0-mini.zip
+/external/uav3d_ckpt/det_*
+
+# Runtime GPU lock (rewritten on every run)
+/runs/.swarmbridge-gpu.lock

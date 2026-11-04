@@ -1,0 +1,12 @@
+{
+ "ego_cap83": 0,
+ "heat_max_cap83": 5767.168,
+ "heat_nor_cap83": 5767.168,
+ "heat_nor@0.02_cap83": 1377.3655,
+ "heat_nor@0.05_cap83": 841.2314,
+ "ego_cap500": 0,
+ "heat_max_cap500": 5767.168,
+ "heat_nor_cap500": 5767.168,
+ "heat_nor@0.02_cap500": 1377.3655,
+ "heat_nor@0.05_cap500": 841.2314
+}

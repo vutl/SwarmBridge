@@ -1,0 +1,104 @@
+[
+ {
+  "name": "u_ego",
+  "preds": "runs/uav3d_comm/cap500/ego_s2/results_nusc.json",
+  "mAP": 0.5123,
+  "amota": 0.5422562602957957
+ },
+ {
+  "name": "u_lfmax_clean",
+  "preds": "runs/uav3d_comm/box_stress_ft500/dets/clean/results_nusc.json",
+  "mAP": 0.6123,
+  "amota": 0.5947152425803921
+ },
+ {
+  "name": "u_wnor_clean",
+  "preds": "runs/uav3d_comm/box_stress_ft500_wnor/dets/clean/results_nusc.json",
+  "mAP": 0.6655,
+  "amota": 0.5884172497495583
+ },
+ {
+  "name": "u_lfmax_delay1_raw",
+  "preds": "runs/uav3d_comm/box_stress_ft500/dets/delay1_raw/results_nusc.json",
+  "mAP": 0.5325,
+  "amota": 0.5446040032132391
+ },
+ {
+  "name": "u_wnor_delay1_raw",
+  "preds": "runs/uav3d_comm/box_stress_ft500_wnor/dets/delay1_raw/results_nusc.json",
+  "mAP": 0.5943,
+  "amota": 0.5623469323335366
+ },
+ {
+  "name": "u_lfmax_delay2_raw",
+  "preds": "runs/uav3d_comm/box_stress_ft500/dets/delay2_raw/results_nusc.json",
+  "mAP": 0.414,
+  "amota": 0.357826550818515
+ },
+ {
+  "name": "u_wnor_delay2_raw",
+  "preds": "runs/uav3d_comm/box_stress_ft500_wnor/dets/delay2_raw/results_nusc.json",
+  "mAP": 0.4652,
+  "amota": 0.4347252751051488
+ },
+ {
+  "name": "u_lfmax_loss0.5_s0",
+  "preds": "runs/uav3d_comm/box_stress_ft500/dets/loss0.5_s0/results_nusc.json",
+  "mAP": 0.5726,
+  "amota": 0.5658123306178376
+ },
+ {
+  "name": "u_wnor_loss0.5_s0",
+  "preds": "runs/uav3d_comm/box_stress_ft500_wnor/dets/loss0.5_s0/results_nusc.json",
+  "mAP": 0.5862,
+  "amota": 0.5790251657885843
+ },
+ {
+  "name": "u_feat",
+  "preds": "runs/uav3d_comm/cap500/feat_s2/results_nusc.json",
+  "mAP": 0.693,
+  "amota": 0.7538021669611015
+ },
+ {
+  "name": "u_boxft_arm",
+  "preds": "runs/uav3d_comm/cap500/boxft_s0/results_nusc.json",
+  "mAP": 0.6221,
+  "amota": 0.7205491788342574
+ },
+ {
+  "name": "u_feat_delay1",
+  "preds": "runs/uav3d_comm/cap500_stress/feat_delay1/results_nusc.json",
+  "mAP": 0.5762,
+  "amota": 0.743035574173758
+ },
+ {
+  "name": "u_boxft_arm_delay1",
+  "preds": "runs/uav3d_comm/cap500_stress/boxft_delay1/results_nusc.json",
+  "mAP": 0.5985,
+  "amota": 0.7248144697577137
+ },
+ {
+  "name": "u_feat_delay2",
+  "preds": "runs/uav3d_comm/cap500_stress/feat_delay2/results_nusc.json",
+  "mAP": 0.4522,
+  "amota": 0.6355883875355415
+ },
+ {
+  "name": "u_boxft_arm_delay2",
+  "preds": "runs/uav3d_comm/cap500_stress/boxft_delay2/results_nusc.json",
+  "mAP": 0.5326,
+  "amota": 0.646345055907434
+ },
+ {
+  "name": "u_feat_loss0.5_s0",
+  "preds": "runs/uav3d_comm/cap500_stress/feat_loss0.5_s0/results_nusc.json",
+  "mAP": 0.5968,
+  "amota": 0.6464271603410805
+ },
+ {
+  "name": "u_boxft_arm_loss0.5_s0",
+  "preds": "runs/uav3d_comm/cap500_stress/boxft_loss0.5_s0/results_nusc.json",
+  "mAP": 0.557,
+  "amota": 0.6460940688606994
+ }
+]
