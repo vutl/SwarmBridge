@@ -124,6 +124,71 @@ def test_codec():
     check("logvar err <= 0.094", np.abs(d["logvar"] - b["logvar"]).max() <= 0.09375 + 1e-6)
 
 
+def test_kalman():
+    import kalman as K
+    rng = np.random.default_rng(1)
+    v = np.array([[5.0, -2.0], [0.0, 0.0], [-8.0, 3.0]])
+    p0 = np.array([[0.0, 0.0], [30.0, 30.0], [-40.0, 10.0]])
+    tr = K.Tracker()
+    outs = []
+    for k in range(15):
+        xy = p0 + v * k * K.DT + rng.normal(0, 0.3, (3, 2))
+        det = {"xy": xy, "z": np.ones(3), "size": np.ones((3, 3)), "yaw": np.zeros(3), "score": np.full(3, 0.9),
+               "vel": np.zeros((3, 2))}
+        outs.append(tr.step(det))
+    check("kalman: first frame emits nothing (MIN_HITS=2)", len(outs[0]["score"]) == 0)
+    last = outs[-1]
+    order = np.argsort(last["tid"])
+    check("kalman: 3 stable ids", list(last["tid"][order]) == [0, 1, 2], last["tid"])
+    verr = np.abs(last["vel"][order] - v).max()
+    check("kalman: velocity error < 1 m/s after 15 frames", verr < 1.0, verr)
+    true_next = p0 + v * 16 * K.DT
+    f = K.forecast(last, 2)
+    ferr = np.linalg.norm(f["xy"][order] - true_next, axis=1).max()
+    stale = np.linalg.norm(last["xy"][order] - true_next, axis=1).max()
+    check("kalman: 2-frame forecast beats stale position for movers", ferr < stale, (ferr, stale))
+
+
+def test_kalman_real(root):
+    """Velocity quality of the sender-side tracker on real detections; GT is used ONLY to score here."""
+    import json
+    import kalman as K
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from fusion import load_variant
+    from evaldet import MiniDB
+    from ledger import scene_frames_from_db
+    repo = Path(__file__).resolve().parents[4]
+    db = MiniDB(root)
+    det = load_variant(repo / "runs/uav3d_comm/agents_ft_cap500/agent1/results_nusc.json")
+    errs_fc, errs_stale = [], []
+    for sc, toks in scene_frames_from_db(db, ["scene_11", "scene_13", "scene_15"]).items():
+        outs = K.run_sequence([det[t] for t in toks])
+        for k in range(len(toks) - 2):
+            gt2 = np.array([a["translation"][:2] for a in db.gt[toks[k + 2]]])
+            gt0 = np.array([a["translation"][:2] for a in db.gt[toks[k]]])
+            gv = np.array([[a["vx"], a["vy"]] for a in db.gt[toks[k]]])
+            o = outs[k]
+            if not len(o["score"]) or not len(gt0):
+                continue
+            moving = np.linalg.norm(gv, axis=1) > 2
+            for i in range(len(o["score"])):
+                d = np.linalg.norm(gt0 - o["xy"][i], axis=1)
+                j = int(np.argmin(d))
+                if d[j] > 1.5 or not moving[j]:
+                    continue
+                inst = db.gt[toks[k]][j]["instance_token"]
+                nxt = [a for a in db.gt[toks[k + 2]] if a["instance_token"] == inst]
+                if not nxt:
+                    continue
+                target = np.array(nxt[0]["translation"][:2])
+                errs_fc.append(np.linalg.norm(o["xy"][i] + o["vel"][i] * 2 * K.DT - target))
+                errs_stale.append(np.linalg.norm(o["xy"][i] - target))
+    fc, st = np.median(errs_fc), np.median(errs_stale)
+    print(f"  kalman on real agent1 dets, moving cars, 2-frame-old message: median error forecast {fc:.2f} m "
+          f"vs stale {st:.2f} m (n={len(errs_fc)})")
+    check("kalman forecast helps on real moving cars", fc < st, (fc, st))
+
+
 def test_real(root):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from fusion import load_variant
@@ -151,6 +216,8 @@ def test_real(root):
 if __name__ == "__main__":
     test_ledger()
     test_codec()
+    test_kalman()
     if len(sys.argv) > 1:
         test_real(sys.argv[1])
+        test_kalman_real(sys.argv[1])
     print(f"ALL {len(PASSED)} CHECKS PASSED")
