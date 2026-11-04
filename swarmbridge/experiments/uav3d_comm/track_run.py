@@ -16,7 +16,7 @@ import sys
 sys.path.insert(0, os.getcwd())
 HELD = os.environ.get("TRACK_SCENES", "scene_11,scene_13,scene_15").split(",")
 DT = os.environ.get("TRACK_DT")
-ROOT = "/mnt/c/Users/USER/Documents/SwarmBridge/data/v1.0-mini/"
+ROOT = os.environ.get("TRACK_ROOT", "/mnt/c/Users/USER/Documents/SwarmBridge/data/v1.0-mini/")  # TRACK_ROOT: Windows workers
 
 import projects.splits as S  # noqa: E402
 _orig = S.create_splits_scenes
@@ -35,6 +35,11 @@ from pub_tracker import PubTracker  # noqa: E402
 from projects.evaluate import TrackingEval  # noqa: E402
 
 nusc = NuScenes(version="v1.0-mini", dataroot=ROOT, verbose=False)
+# Speed (protocol v1.1): TrackingEval re-loads the whole devkit DB for every file; hand it the one already loaded
+# (same version and dataroot), and skip PR/TP curve plots unless TRACK_PLOTS=1. Metrics are unchanged.
+import projects.evaluate as _PE  # noqa: E402
+_PE.NuScenes = lambda *a, **k: nusc
+PLOTS = os.environ.get("TRACK_PLOTS", "0") == "1"
 frames = []
 for scene in nusc.scene:
     if scene["name"] not in HELD:
@@ -84,7 +89,7 @@ def run(name, det_path, out_dir):
               open(os.path.join(d, "input.json"), "w"), indent=1)
     ev = TrackingEval(config=config_factory("tracking_nips_2019"), result_path=rp, eval_set="mini_val",
                       output_dir=d, nusc_version="v1.0-mini", nusc_dataroot=ROOT, verbose=False)
-    m = ev.main() if hasattr(ev, "main") else None
+    m = ev.main(render_curves=PLOTS)
     summ = json.load(open(os.path.join(d, "metrics_summary.json")))
     keys = ["amota", "amotp", "mota", "motp", "recall", "ids", "frag", "tid", "lgd"]
     print("TRACK", name, f"sha={sha[:12]} dt={DT or 'ts'}", " ".join(f"{k}={summ.get(k, float('nan')):.3f}" if isinstance(summ.get(k), float)

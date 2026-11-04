@@ -61,3 +61,6 @@ Thumbs.db
 /runs/uav3d_proto/**/plots/
 /runs/uav3d_comm/tracking_dtcheck/**/tracking_result.json
 /runs/uav3d_comm/tracking_dtcheck/**/plots/
+# Windows copy of the UAV3D CenterPoint tracking code + its py3.8 venv (extra CPU tracking workers)
+/external/uav3d_track_win/
+/runs/uav3d_proto/.claims/
