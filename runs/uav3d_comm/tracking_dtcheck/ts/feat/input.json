@@ -1,0 +1,16 @@
+{
+ "det_path": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/uav3d_comm/cap500/feat_s2/results_nusc.json",
+ "det_sha256": "10c9a32929ba38cf0e9f0e001f774465945aa20f3e0690074c28d8a6dae19f65",
+ "dt": "timestamps",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}

@@ -55,3 +55,9 @@ Thumbs.db
 
 # Runtime GPU lock (rewritten on every run)
 /runs/.swarmbridge-gpu.lock
+# Protocol-v1 bulky outputs: predictions/tracks are regenerated deterministically; sha256 kept in box_proto.json + input.json
+/runs/uav3d_proto/**/results_nusc.json
+/runs/uav3d_proto/**/tracking_result.json
+/runs/uav3d_proto/**/plots/
+/runs/uav3d_comm/tracking_dtcheck/**/tracking_result.json
+/runs/uav3d_comm/tracking_dtcheck/**/plots/
