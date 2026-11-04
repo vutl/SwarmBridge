@@ -22,6 +22,10 @@ Policies (greedy fill in priority order; a box is added if the packet sizes stil
                              0.3) at the PREVIOUS frame (needs 1-frame-old feedback from UAV0; feedback bits reported
                              separately as 26 bit per fed-back position, not charged to B)
   central_novhe              both skips
+  central_strong{tau}        score order, skip a box within 2 m of a receiver detection with score >= tau at the
+                             previous frame (receiver already SURE: no confirmation needed; weak receiver detections are
+                             still confirmed). Feedback = 26 bit per fed-back position (not charged to B)
+  central_novh_strong{tau}   central_strong{tau} + the novh cross-helper skip
 Diagnostics (NOT policies; they use ground truth and are "best-found", not upper bounds):
   oracle_task   knows GT and UAV0's own detections at the SEND frame (assumes age 0, does not know the channel):
                 boxes whose position is within 2 m of a GT car that UAV0 misses (no own confident detection within
@@ -54,8 +58,10 @@ from soft_fusion import fuse as soft_fuse  # noqa: E402
 
 BUDGETS = [5, 10, 20]                       # kbit / frame, all helpers
 LEDGERS = [("sync", 0), ("rand", 0), ("rand", 1), ("rand", 2)]
-POLICIES = ["local_rand", "local_score", "central_rand", "central_score", "central_novh", "central_nove",
-            "central_novhe", "oracle_task", "oracle_full"]
+STRONG = [0.6, 0.8]
+POLICIES = (["local_rand", "local_score", "central_rand", "central_score", "central_novh", "central_nove",
+             "central_novhe"] + [f"central_strong{x}" for x in STRONG] + [f"central_novh_strong{x}" for x in STRONG]
+            + ["oracle_task", "oracle_full"])
 R_DUP = 2.0
 EGO_CONF = 0.3
 FEEDBACK_BITS_PER_POS = 26                  # dx, dy at 13 bit each (same quantiser as the box codec)
@@ -150,10 +156,15 @@ def main():
                     rng = np.random.default_rng(int.from_bytes(key[:8], "little"))
                     order = [allidx[i] for i in rng.permutation(len(allidx))]
                 prev_ego = ego_conf[toks[k - 1]] if k > 0 else np.zeros((0, 2))
-                if policy in ("central_nove", "central_novhe"):
+                if "strong" in policy:
+                    tau = float(policy.split("strong")[1])
+                    if k > 0:
+                        pe = A[0][toks[k - 1]]
+                        prev_ego = BP.base(pe)["xy"][pe["score"] >= tau]
+                if policy in ("central_nove", "central_novhe") or "strong" in policy:
                     fb.append(FEEDBACK_BITS_PER_POS * len(prev_ego) / 1000)
-                if policy in ("central_novh", "central_nove", "central_novhe"):
-                    useh = policy != "central_nove"
+                if policy in ("central_novh", "central_nove", "central_novhe") or "strong" in policy:
+                    useh = policy in ("central_novh", "central_novhe") or policy.startswith("central_novh_strong")
                     usee = policy != "central_novh"
 
                     def skip(j, i, chosen, c=c, prev_ego=prev_ego, useh=useh, usee=usee):
