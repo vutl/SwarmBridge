@@ -6,7 +6,7 @@ Env: TRACK_DT=0.2, TRACK_ROOT=<REPO_ROOT>/data/v1.0-mini/.
 A job = one prediction file DIR/dets/<a>/<b>/results_nusc.json -> DIR/tracking/<a>__<b>/. It is skipped when the
 existing tracking input.json records the same sha256, and claimed by atomically creating
 REPO_ROOT/runs/uav3d_proto/.claims/<dir>__<name> (O_CREAT | O_EXCL). Clear .claims/ before a fresh launch.
-Jobs are taken in DIR order (priority).
+Jobs are taken in DIR order; env TRACK_PRIORITY=<file> with lines "<dir> <name>" puts those jobs first.
 """
 import glob
 import hashlib
@@ -28,12 +28,30 @@ def sha(p):
     return hashlib.sha256(open(p, "rb").read()).hexdigest()
 
 
+def jobs():
+    pri = []
+    if os.environ.get("TRACK_PRIORITY"):
+        for line in open(os.environ["TRACK_PRIORITY"]):
+            if line.strip():
+                d, name = line.split()
+                pri.append((d, name))
+    seen = set(pri)
+    for d, name in pri:
+        a, b = name.split("__")
+        yield d, os.path.join(repo, d, "dets", a, b, "results_nusc.json"), name
+    for d in dirs:
+        for f in sorted(glob.glob(os.path.join(repo, d, "dets", "*", "*", "results_nusc.json"))):
+            rel = os.path.relpath(os.path.dirname(f), os.path.join(repo, d, "dets")).replace("\\", "/")
+            name = rel.replace("/", "__")
+            if (d, name) not in seen:
+                yield d, f, name
+
+
 done = 0
-for d in dirs:
-    base = os.path.join(repo, d)
-    for f in sorted(glob.glob(os.path.join(base, "dets", "*", "*", "results_nusc.json"))):
-        rel = os.path.relpath(os.path.dirname(f), os.path.join(base, "dets")).replace("\\", "/")
-        name = rel.replace("/", "__")
+for d, f, name in jobs():
+        base = os.path.join(repo, d)
+        if not os.path.exists(f):
+            continue
         tdir = os.path.join(base, "tracking", name)
         if os.path.exists(os.path.join(tdir, "metrics_summary.json")) and os.path.exists(os.path.join(tdir, "input.json")):
             try:
