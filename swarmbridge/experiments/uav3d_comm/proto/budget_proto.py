@@ -26,6 +26,9 @@ Policies (greedy fill in priority order; a box is added if the packet sizes stil
                              previous frame (receiver already SURE: no confirmation needed; weak receiver detections are
                              still confirmed). Feedback = 26 bit per fed-back position (not charged to B)
   central_novh_strong{tau}   central_strong{tau} + the novh cross-helper skip
+  central_demote{tau}        score order, but boxes within 2 m of a receiver detection with score >= tau at the
+                             previous frame are moved to the END instead of skipped (sent only if budget remains).
+                             Same feedback as central_strong{tau}
 Diagnostics (NOT policies; they use ground truth and are "best-found", not upper bounds):
   oracle_task   knows GT and UAV0's own detections at the SEND frame (assumes age 0, does not know the channel):
                 boxes whose position is within 2 m of a GT car that UAV0 misses (no own confident detection within
@@ -34,7 +37,8 @@ Diagnostics (NOT policies; they use ground truth and are "best-found", not upper
                 position, and spends no payload on packets that will be lost or arrive after the episode
 Both diagnostics are one-step/myopic (value judged at one frame), ignoring later reuse from the receiver's cache.
 
-Usage: python -I budget_proto.py DATA_ROOT AGENT_DIR OUT
+Usage: python -I budget_proto.py DATA_ROOT AGENT_DIR OUT [--only P1,P2,...]
+  --only: run just these policies and merge their rows into an existing OUT/budget_proto.json
 Writes OUT/dets/<policy>_B<kbit>/<ledger>/results_nusc.json and OUT/budget_proto.json (mAP, sha256, bit accounting,
 boxes sent, feedback bits).
 """
@@ -61,7 +65,7 @@ LEDGERS = [("sync", 0), ("rand", 0), ("rand", 1), ("rand", 2)]
 STRONG = [0.6, 0.8]
 POLICIES = (["local_rand", "local_score", "central_rand", "central_score", "central_novh", "central_nove",
              "central_novhe"] + [f"central_strong{x}" for x in STRONG] + [f"central_novh_strong{x}" for x in STRONG]
-            + ["oracle_task", "oracle_full"])
+            + ["oracle_task", "oracle_full"] + [f"central_demote{x}" for x in STRONG])
 R_DUP = 2.0
 EGO_CONF = 0.3
 FEEDBACK_BITS_PER_POS = 26                  # dx, dy at 13 bit each (same quantiser as the box codec)
@@ -69,6 +73,11 @@ HELPERS = (1, 2, 3, 4)
 if "--smoke" in sys.argv:                     # quick end-to-end check on one ledger / budget
     sys.argv.remove("--smoke")
     BUDGETS, LEDGERS = [10], [("rand", 0)]
+ONLY = None
+if "--only" in sys.argv:
+    _k = sys.argv.index("--only")
+    ONLY = sys.argv[_k + 1].split(",")
+    del sys.argv[_k:_k + 2]
 
 
 def pkt_bits(n):
@@ -156,12 +165,16 @@ def main():
                     rng = np.random.default_rng(int.from_bytes(key[:8], "little"))
                     order = [allidx[i] for i in rng.permutation(len(allidx))]
                 prev_ego = ego_conf[toks[k - 1]] if k > 0 else np.zeros((0, 2))
-                if "strong" in policy:
-                    tau = float(policy.split("strong")[1])
+                if "strong" in policy or "demote" in policy:
+                    tau = float(policy.split("strong" if "strong" in policy else "demote")[1])
                     if k > 0:
                         pe = A[0][toks[k - 1]]
                         prev_ego = BP.base(pe)["xy"][pe["score"] >= tau]
-                if policy in ("central_nove", "central_novhe") or "strong" in policy:
+                if "demote" in policy:
+                    sure = set(ji for ji in by_score
+                               if len(prev_ego) and np.linalg.norm(prev_ego - c[ji[0]]["xy"][ji[1]], axis=1).min() < R_DUP)
+                    order = [ji for ji in by_score if ji not in sure] + [ji for ji in by_score if ji in sure]
+                if policy in ("central_nove", "central_novhe") or "strong" in policy or "demote" in policy:
                     fb.append(FEEDBACK_BITS_PER_POS * len(prev_ego) / 1000)
                 if policy in ("central_novh", "central_nove", "central_novhe") or "strong" in policy:
                     useh = policy in ("central_novh", "central_novhe") or policy.startswith("central_novh_strong")
@@ -209,7 +222,7 @@ def main():
     for name, led in ledgers.items():
         use = L.lookup(led)
         for budget in BUDGETS:
-            for policy in POLICIES:
+            for policy in (ONLY or POLICIES):
                 sel, fb = select_all(policy, budget, name)
                 msgs, tx = {}, []
                 for t in toks_all:
@@ -252,6 +265,9 @@ def main():
                 rows.append(row)
                 print(f"{tag:22s} {name:9s} mAP {row['mAP']:.3f} (f>=3 {row['mAP_f3']:.3f}) tx {row['kbit_tx_mean']:5.2f}"
                       f" kbit boxes {nbox:5.1f} fb {row['feedback_kbit_mean']:.2f}", flush=True)
+    if ONLY:
+        old = json.loads((out / "budget_proto.json").read_text())["rows"]
+        rows = [r for r in old if r["policy"] not in ONLY] + rows
     (out / "budget_proto.json").write_text(json.dumps({"budgets": BUDGETS, "full_kbit": round(float(full_kbit), 2),
                                                        "rows": rows}, indent=1))
 

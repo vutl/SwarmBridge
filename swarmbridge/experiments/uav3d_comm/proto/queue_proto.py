@@ -43,8 +43,11 @@ Message content: each helper's KF-PV candidates (box_proto kf family), highest s
                           (value includes confirmation), ordering by that probability
   prog_gt                 diagnostic ordering: boxes within 2 m of a GT car that UAV0's own confident detections (score
                           >= 0.3) miss at the send frame go first (uses GT; not a policy)
+  prog_fb{tau}            prog, but boxes within 2 m of a UAV0 detection with score >= tau at the PREVIOUS frame
+                          (receiver already sure; 1-frame-old feedback, not charged) are moved to the end
   oracle_fifo             diagnostic: knows the realised rate of the current frame R_j(s): size = R_j(s) - Q
-Usage: python -I queue_proto.py DATA_ROOT AGENT_DIR OUT [--smoke]
+Usage: python -I queue_proto.py DATA_ROOT AGENT_DIR OUT [--smoke] [--only P1,P2,...]
+  --only: run just these policies and merge their rows into an existing OUT/queue_proto.json
 """
 import hashlib
 import json
@@ -69,12 +72,19 @@ CHANNELS = [("const", 0), ("fade", 0), ("fade", 1), ("fade", 2), ("ar", 0), ("ar
 RHO = 0.8
 CAPS = [0.25, 0.5, 0.75, 1.0, 2.0]
 ADAPT = [0.5, 0.75, 1.0]           # adapt{a}: size = a * R - Q
+FB_TAU = [0.6, 0.8]
 POLICIES = (["full_fifo", "full_drop"] + [f"cap{c}_fifo" for c in CAPS] + [f"adapt{a}_fifo" for a in ADAPT]
-            + [f"est{a}_fifo" for a in ADAPT] + ["prog", "prog_novh1", "prog_lv", "prog_tp", "prog_gt", "oracle_fifo"])
+            + [f"est{a}_fifo" for a in ADAPT] + ["prog", "prog_novh1", "prog_lv", "prog_tp", "prog_gt", "oracle_fifo"]
+            + [f"prog_fb{x}" for x in FB_TAU])
 CHUNK, CHUNK_BITS = 8, 32
 HELPERS = (1, 2, 3, 4)
 SIGMA = 0.5
 MAX_AGE = 3
+ONLY = None
+if "--only" in sys.argv:
+    _k = sys.argv.index("--only")
+    ONLY = sys.argv[_k + 1].split(",")
+    del sys.argv[_k:_k + 2]
 if "--smoke" in sys.argv:
     sys.argv.remove("--smoke")
     RATES, CHANNELS = [8], [("fade", 0)]
@@ -202,6 +212,14 @@ def main():
                 if len(miss) and len(idx):
                     first = (np.linalg.norm(c["xy"][:, None] - miss[None], axis=2) <= 2.0).any(1)
                 order[("gt", j, t)] = np.concatenate([idx[first], idx[~first]])
+                for tau in FB_TAU:
+                    sure = np.zeros(len(idx), bool)
+                    if k > 0 and len(idx):
+                        pe = A[0][toks[k - 1]]
+                        pxy = BP.base(pe)["xy"][pe["score"] >= tau]
+                        if len(pxy):
+                            sure = (np.linalg.norm(c["xy"][:, None] - pxy[None], axis=2) <= 2.0).any(1)
+                    order[(f"fb{tau}", j, t)] = np.concatenate([idx[~sure], idx[sure]])
 
     # ---- learned value ordering (leave-one-scene-out logistic regression) ----
     feats, labels, labels_tp, keys = [], [], [], []
@@ -300,7 +318,7 @@ def main():
         Rb = R * 1000
         for kind, seed in CHANNELS:
             chan = f"{kind}_s{seed}"
-            for policy in POLICIES:
+            for policy in (ONLY or POLICIES):
                 drop = policy.endswith("_drop")
                 use, tx, sizes, ages, nmsg, n_none, n_links, n_tail, n_skip = {}, [], [], [], [], 0, 0, 0, 0
                 for sc, toks in frames.items():
@@ -366,7 +384,8 @@ def main():
                         if use[t][j] is None:
                             continue
                         src, age, n = use[t][j]
-                        ok = {"prog_novh1": "novh1", "prog_gt": "gt", "prog_lv": "lv", "prog_tp": "tp"}.get(policy, "score")
+                        ok = {"prog_novh1": "novh1", "prog_gt": "gt", "prog_lv": "lv", "prog_tp": "tp"}.get(
+                            policy, policy[5:] if policy.startswith("prog_fb") else "score")
                         m = K.forecast(message(j, src, n, ok)[0], age)
                         sets.append((j, m["xy"], m["score"], BP.records(m, t)))
                     recs = soft_fuse(sets, "noisyor", return_records=True)
@@ -393,6 +412,9 @@ def main():
                       f"{row['kbit_onair_mean']:5.2f} kbit/frame pkt {row['pkt_kbit_mean']:5.2f} kbit "
                       f"boxes {row['boxes_per_pkt']:5.1f} nomsg {row['frac_no_msg']:.2f} age {row['mean_age']} "
                       f"hist {row['age_hist']}", flush=True)
+    if ONLY:
+        old = json.loads((out / "queue_proto.json").read_text())["rows"]
+        rows = [r for r in old if r["policy"] not in ONLY] + rows
     (out / "queue_proto.json").write_text(json.dumps({"rates": RATES, "sigma": SIGMA, "rho": RHO, "learned_value": lv_info,
                                                       "rows": rows}, indent=1))
 
