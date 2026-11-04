@@ -81,11 +81,46 @@ def make_model(name, channels, width, endpoint_fraction):
     raise ValueError(name)
 
 
+_WINDOWS_HOLDER = r"""
+import msvcrt, sys
+f = open(sys.argv[1], 'a+b'); f.seek(0)
+try:
+    msvcrt.locking(f.fileno(), msvcrt.LK_NBLCK, 1)
+except OSError:
+    print('BUSY', flush=True); sys.exit(1)
+print('LOCKED', flush=True)
+sys.stdin.read()
+f.seek(0); msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
+"""
+
+
+@contextlib.contextmanager
+def _wsl_gpu_lock(path):
+    """Under WSL, Linux flock is invisible to Windows msvcrt locks, so take the WINDOWS lock through a child
+    Windows python that holds it until our stdin pipe closes (also when this process is killed)."""
+    import subprocess
+    windows_python = Path(".venv/Scripts/python.exe")
+    holder = subprocess.Popen([str(windows_python), "-c", _WINDOWS_HOLDER, str(path)],
+                              stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
+    if holder.stdout.readline().strip() != "LOCKED":
+        holder.wait()
+        raise RuntimeError("Another worker (Windows or WSL) holds the GPU lock")
+    try:
+        yield
+    finally:
+        holder.stdin.close()
+        holder.wait()
+
+
 @contextlib.contextmanager
 def gpu_lock():
     """An OS lock is automatically released on exit; PID text is informational."""
     path = Path("runs/.swarmbridge-gpu.lock")
     path.parent.mkdir(exist_ok=True)
+    if os.name != "nt" and "microsoft" in platform.release().lower():
+        with _wsl_gpu_lock(path):
+            yield
+        return
     with path.open("a+b") as stream:
         stream.seek(0)
         if os.name == "nt":
