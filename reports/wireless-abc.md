@@ -247,13 +247,35 @@ Bước điều khiển 5 ms cho cùng kết quả (oracle 0.690, quét 20 ms 0.
 3. Beam từ GPS (không tốn pilot) chỉ kém quét 20 ms 0.03 AMOTA, gần bằng quét 200 ms.
 4. Đây là mô phỏng ghép trace (helper UAV3D j ↔ UAV trace j−1), chưa có đồng đăng ký hình học.
 
+## Lặp lại ở cảnh thứ hai: Étoile (Paris)
+
+Trace `data/wireless_abc/trace_etoile/` (186 MB, seed 1): cảnh `etoile` của Sionna, nóc nhà trung vị 19 m (p90 25.6 m),
+BS (150, 0, 28) m trên nóc nhà 13 m, cùng cấu hình UAV/quỹ đạo/solver như Munich. LoS 55–58%, không có đường 2% (nhiều
+mặt tường phản xạ hơn Munich). Kiểm tra mô hình mảng: beam GPS trùng beam tốt nhất 95.4% mẫu LoS.
+
+**B (Étoile):** coop hơn map ở **12/12** cấu hình bay đoàn, cùng chiều 3 seed (+2.1…+6.8% rate, +2.6…+10.5% outage);
+qua gate **5/12**; shuffle = map. Theo vùng (bay đoàn, test, quy tắc outage):
+
+| vùng | tỉ lệ | map | coop | oracle |
+|---|---|---|---|---|
+| bản đồ có phủ, có message | 41% | 3.94 / 0.338 | 3.89 / 0.339 | 3.93 / 0.333 |
+| bản đồ **không** phủ, có message | 27% | 1.43 / 0.722 | **1.79 / 0.623** | 2.28 / 0.491 |
+
+→ Cùng kết luận như Munich: hợp tác chỉ có lợi ở vùng chưa có bản đồ (+25% rate, −14% outage), không thêm gì ở vùng đã
+có bản đồ; còn khoảng cách lớn tới oracle.
+
+**C (Étoile):** giao đúng hạn oracle 0.906 / quét 20 ms 0.904 / trung bình trượt 0.899 / quét 200 ms 0.868 / GPS 0.835 /
+một lần quét 0.764 (NLoS giao được 84% nhờ phản xạ). AMOTA UAV3D (3 seed): gửi đủ 0.690; oracle 0.664 ±0.036; quét 20
+ms trung bình trượt 0.665 ±0.035; quét 20 ms 0.658 ±0.044; quét 200 ms 0.649; GPS 0.658; một lần quét 0.631. Heuristic
+tốt nhất ≥ oracle → **không mở RL** (cùng kết luận). Beam GPS kém hơn ở Étoile (dùng phản xạ nhiều hơn).
+
 ## Bảng quyết định cuối vòng pilot (dev/feasibility, chưa phải bằng chứng tổng quát)
 
 | câu hỏi | kết quả | quyết định |
 |---|---|---|
 | A: cần mô hình sinh/SB? | Không: SB 0/18 gate; hồi quy ≈ flow ≈ bridge; uncertainty sai coverage > 5 điểm | Dừng SB cho CSI trong cấu hình này; B/C dùng LMMSE/hồi quy |
-| B: hợp tác trực tuyến có lợi? | Có, **chỉ ở vùng chưa có bản đồ** (+10% rate, −25% outage); 0 ở vùng đã có bản đồ; vượt message tráo | Hướng có điều kiện: "bầy UAV tự dựng bản đồ góc khi chưa có khảo sát". Cần thêm fusion học được (còn khoảng cách tới oracle), nhiều cảnh, chi phí bit chặt hơn |
-| C: cần Deep RL cho beam/pilot? | Không: quét 20 ms ≈ oracle (Δ 0.002 AMOTA) | Không mở PPO. Nếu tiếp C, đổi biến quyết định sang vị trí/relay (vùng phủ) |
+| B: hợp tác trực tuyến có lợi? | Có, **chỉ ở vùng chưa có bản đồ** (Munich +10% rate / −25% outage; Étoile +25% / −14%); 0 ở vùng đã có bản đồ; vượt message tráo; lặp lại ở 2 cảnh; fusion học được không thêm gì | Hướng có điều kiện: "bầy UAV tự dựng bản đồ góc khi chưa có khảo sát". Cần thêm fusion học được (còn khoảng cách tới oracle), nhiều cảnh, chi phí bit chặt hơn |
+| C: cần Deep RL cho beam/pilot? | Không: quét 20 ms ≈ oracle (Munich Δ 0.002 AMOTA; Étoile heuristic tốt nhất ≥ oracle) | Không mở PPO. Nếu tiếp C, đổi biến quyết định sang vị trí/relay (vùng phủ) |
 
 Tài nguyên đã dùng: GPU 31 phút (A1) + 15 phút (A1 hội tụ) + 10 phút (B attention); dữ liệu mới 4.6 GB (Fesl) + 54 MB trace; env 5.4 GB (không tính vào dữ liệu).
 
