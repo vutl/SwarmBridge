@@ -3,6 +3,8 @@
 Plan gốc: plan pilot của Codex (05/11), dựa trên `reports/ke-hoach-proposal-abc-2026-11-04.md`. Phạm vi: feasibility/dev,
 tối đa 10 GB dữ liệu mới, 8 giờ GPU, một job GPU tại một thời điểm (khóa chung Windows–WSL).
 
+**Tóm tắt (05/11 sáng):** A — SB không qua gate (0/18); B — hợp tác có lợi chỉ ở vùng chưa có bản đồ (qua 6/12 cấu hình bay đoàn); C — quét beam 20 ms ≈ oracle (Δ 0.002 AMOTA), không mở RL. Chi tiết và bảng quyết định ở cuối.
+
 ## Mốc 0 — audit và các điểm thiết kế phải chốt trước khi code
 
 ### 0.1 Môi trường (xong)
@@ -114,8 +116,133 @@ tổng dữ liệu mới 4.6 GB). Code và checkpoint của tác giả, Tester c
 Pipeline, chuẩn hóa và NMSE khớp: 3GPP lệch ≤ 0.08 dB; QuaDRiGa lệch 0.06–0.34 dB, cùng chiều (tập con 1 024 mẫu dễ hơn
 một chút). Chưa tái lập phần huấn luyện; chưa tái lập paper SB-ISAC (A0 thứ hai) — để sau A1 nếu còn ngân sách.
 
-### 0.5 Việc tiếp theo
+## Mốc 1 — trace kênh (xong)
 
-1. A0: giải nén chọn lọc, chạy checkpoint Fesl trên ≤ 1 024 mẫu, đối chiếu NMSE–SNR.
-2. Mốc 1: scene trace cho B/C — UAV bay thấp (15–25 m) theo quỹ đạo trong phố, blocker động (giải lại path mỗi bước khi
-   hình học đổi), đo độ bền beam từ trace.
+`swarmbridge/experiments/wireless_abc/trace_gen.py` → `data/wireless_abc/trace_v1/` (54 MB, gitignored, tái tạo tất định
+từ seed 0). Cảnh Munich (Sionna RT 2.2, CPU/LLVM), BS (8.5, 21, 27) m, ULA 16 phần tử, 28 GHz; UAV 1 antenna ở 15–25 m,
+4 UAV/episode, 20 s, mẫu RT mỗi 100 ms, 24 path mạnh nhất/mẫu kèm Doppler (vận tốc UAV); solver độ sâu 5 + nhiễu xạ.
+120 episode: chẵn = **bay đoàn** (UAV u đi lại đúng đường UAV 0 trễ 2u s, lệch ngang ~3 m), lẻ = **độc lập** (đối chứng).
+Quỹ đạo kiểm tra va chạm với hình học (không đi xuyên/dưới mái nhà). Trung bình mỗi mẫu: có LoS 44%, không có đường
+13% (bay đoàn 0.439/0.121, độc lập 0.431/0.136). 28–38 s CPU/episode.
+Kiểm tra mô hình mảng: beam tính từ hình học (GPS) trùng beam tốt nhất ở **99.8%** mẫu LoS (dấu ngược lại: 12%).
+**Phạm vi:** cảnh tĩnh, không có vật chắn di động. Ở 15–25 m, link BS–UAV bị nhà chắn; xe cộ (2–4 m) gần như không ảnh
+hưởng. Vì vậy B được kiểm bằng "vùng chưa có bản đồ", không phải blocker động.
+
+## A1 — ít pilot, posterior kênh và chọn beam (xong; gate SB: **không qua**)
+
+`a1_bench.py`, `runs/wireless_abc/a1/a1_results.json` (GPU qua khóa chung, 31 phút). Split theo episode 72/24/24; loại
+35% mẫu có công suất < median − 40 dB (link không dùng được); dev/test 8 000 mẫu cố định. Pilot y = Wᴴh + n (beam
+training đường xuống), Np ∈ {4, 8, 16}, DFT một phần / ngẫu nhiên, SNR tham chiếu −5/5/15 dB (chuẩn hóa toàn cục theo
+median train). Quyết định: codebook DFT 16 beam, rate log2(1 + SNR·|wᴴh|²), outage SNR < 0 dB. 3 seed (khởi tạo mạng,
+nhiễu, beam ngẫu nhiên). Mô hình học: MLP 4×256, 3 000 bước AdamW, batch 512, cùng đầu vào (y, ước lượng LMMSE, SNR);
+lấy mẫu S = 16. Chọn (quy tắc, NFE) trên dev, đọc trên test.
+
+Rate / outage trên test (trung bình 3 seed), một số cấu hình:
+
+| pilot | Np | SNR | LS | LMMSE | GMM | hồi quy | Gaussian có đk | DDPM | flow | bridge (SB) | bridge σ=0 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| random | 4 | −5 | 1.05 / 0.743 | 1.88 / 0.502 | 1.19 / 0.678 | **2.14 / 0.450** | 2.10 / 0.462 | 1.71 / 0.571 | 2.11 / 0.458 | 2.12 / 0.458 | 2.13 / 0.451 |
+| random | 4 | +5 | 3.14 / 0.486 | 4.20 / 0.362 | 3.18 / 0.434 | **5.06 / 0.266** | 5.05 / 0.267 | 4.34 / 0.354 | 5.01 / 0.272 | 5.02 / 0.270 | 4.98 / 0.275 |
+| random | 4 | +15 | 5.49 / 0.287 | 6.56 / 0.276 | 4.80 / 0.300 | 7.72 / 0.229 | **7.79 / 0.200** | 6.96 / 0.265 | 7.71 / 0.228 | 7.72 / 0.226 | 7.60 / 0.240 |
+| dft | 4 | +5 | 2.97 / 0.410 | 3.75 / 0.334 | 3.60 / 0.394 | **4.25 / 0.331** | 4.19 / 0.341 | 3.45 / 0.402 | 4.20 / 0.335 | 4.19 / 0.330 | 4.09 / 0.336 |
+| dft | 16 | +15 | **8.02 / 0.144** | 8.01 / 0.145 | 7.90 / 0.185 | 7.90 / 0.181 | 7.96 / 0.152 | 7.67 / 0.213 | 7.94 / 0.166 | 7.90 / 0.177 | 7.92 / 0.173 |
+
+Bảng đủ 18 cấu hình: `python summarize.py a1 runs/wireless_abc/a1/a1_results.json`.
+
+**Gate SB (≥ 5% rate hoặc ≥ 10% outage so với đối chứng mạnh nhất ở NFE ≤ của bridge, cùng chiều 3 seed): 0/18.**
+Bridge kém đối chứng tốt nhất ở 16/18 cấu hình (−0.4…−6.1% rate), ngang ở 2.
+1. **Mô hình học có ích; mô hình sinh không thêm gì.** Với 4 pilot, hồi quy hơn LMMSE rõ (random 5 dB: rate 5.06 vs 4.20,
+   outage 0.266 vs 0.362). Bridge, flow, Gaussian có điều kiện và hồi quy gần bằng nhau; bridge chọn trên dev hầu hết là
+   "mean, NFE 1", tức hoạt động như mạng hồi quy (khớp nhận định của *Rethinking Flow and Diffusion Bridge Models*).
+   Bridge σ = 0 kém σ = 1 một chút ở Np = 4 (≤ 0.12 rate).
+2. **Uncertainty chưa dùng được cho quyết định rủi ro.** Coverage khoảng 80% / 95% của beam gain (Np = 4, test): LMMSE
+   0.24–0.31 / 0.35–0.42; GMM 0.20–0.47 / 0.31–0.60; Gaussian có đk 0.20–0.57 / 0.32–0.67; flow@8 0.47–0.66 / 0.61–0.74;
+   bridge@8 0.42–0.68 / 0.56–0.78. Mọi phương pháp sai > 5 điểm phần trăm → theo plan, không dùng cho quyết định rủi ro.
+   Quy tắc "min outage" không được chọn trên dev ở cấu hình nào.
+3. **Đủ pilot, SNR cao: cổ điển thắng** (LS/OMP ở Np = 16, 15 dB).
+4. **Chưa đủ bằng chứng (không phải kết quả âm):** DDPM chưa hội tụ sau 3 000 bước (NMSE +5…+10 dB); GMM 32 thành phần fit
+   kém trên dữ liệu không dừng (NMSE ≈ 0 dB, kém LMMSE).
+5. NMSE (random Np 4, 5 dB, seed 0): hồi quy −13.9, Gaussian −13.9, bridge@1 −13.6, flow@4 −13.0, LMMSE −3.1 dB.
+   Độ trễ (ms/mẫu, GPU): hồi quy 0.002, bridge NFE 1/8 0.004/0.019, flow NFE 1/8 0.004/0.017.
+
+→ **A: không có bằng chứng SB có lợi** cho ước lượng, uncertainty hay tốc độ ở bài toán này. B/C dùng LMMSE hoặc hồi quy.
+
+## B — thông tin hiện tại từ UAV khác (xong; gate: **qua một phần, có điều kiện**)
+
+`b_coop.py`, `runs/wireless_abc/b/b_results.json` (CPU, 30 phút). Ở 28 GHz kênh phức đổi sau ~1 cm nên chỉ chia sẻ được
+cấu trúc góc: mọi phương pháp là LMMSE với hiệp phương sai prior khác nhau — global (train), **map** (kênh thật của train
+trong bán kính 5 m — bản đồ khảo sát offline), **coop** (map trộn với ước lượng của UAV khác trong 5 m, ≤ 10 s trước,
+nhân quả), **shuffle** (message từ episode khác, cùng chi phí), **oracle** (kênh thật của UAV khác — chẩn đoán). Hệ số
+trộn chọn trên dev. Message: Np số phức 2×8 bit + vị trí 48 bit + thời gian 16 bit; trung bình 13.6 message được dùng
+cho mỗi quyết định ở bay đoàn (≈ 1.3–1.7 kbit; không tốn thêm pilot).
+
+Bay đoàn (test, 3 seed; rate / outage):
+
+| pilot | Np | SNR | global | map | coop | shuffle | oracle | Δrate | Δoutage (tương đối) |
+|---|---|---|---|---|---|---|---|---|---|
+| dft | 4 | +5 | 3.46 / 0.365 | 4.88 / 0.247 | 5.10 / 0.222 | 4.88 / 0.247 | 5.35 / 0.199 | +4.4% | +10.3% |
+| random | 4 | −5 | 1.59 / 0.586 | 2.39 / 0.365 | 2.62 / 0.295 | 2.40 / 0.363 | 2.76 / 0.263 | +9.7% | +19.3% |
+| random | 4 | +5 | 4.11 / 0.375 | 5.00 / 0.257 | 5.24 / 0.226 | 5.01 / 0.257 | 5.34 / 0.206 | +4.7% | +12.0% |
+| random | 8 | +15 | 7.45 / 0.235 | 8.14 / 0.154 | 8.26 / 0.147 | 8.14 / 0.154 | 8.38 / 0.125 | +1.4% | +4.3% |
+
+- Coop hơn map ở **12/12** cấu hình bay đoàn, cùng chiều cả 3 seed (+1.4…+9.7% rate, +4.3…+19.3% outage); qua gate
+  (≥ 5% rate hoặc ≥ 10% outage) ở **6/12**. Shuffle = map: lợi ích đến từ đúng thông tin. Bay độc lập: hầu như không
+  có message trong 5 m → coop = map (đối chứng đúng).
+- **Lợi ích chỉ ở nơi bản đồ chưa phủ** (gộp mọi cấu hình, quy tắc outage, bay đoàn, test):
+
+  | vùng | tỉ lệ điểm | map | coop | oracle |
+  |---|---|---|---|---|
+  | bản đồ có phủ, có message | 41% | 5.64 / 0.173 | 5.61 / 0.169 | 5.70 / 0.161 |
+  | bản đồ **không** phủ, có message | 29% | 4.22 / 0.328 | **4.65 / 0.245** | 5.06 / 0.183 |
+
+  Trong cảnh tĩnh, hợp tác **thay cho bản đồ ở vùng chưa khảo sát** (+10% rate, −25% outage); ở vùng đã có bản đồ, nó
+  không thêm gì. Oracle còn hơn coop ở vùng chưa phủ (5.06 vs 4.65) → còn dư địa cho fusion tốt hơn (attention/GNN),
+  nhưng chỉ trong chế độ này.
+- Chưa kiểm: blocker động, 2 vs 3 UAV riêng, fusion học được.
+
+## C — quản lý beam/pilot đo bằng tracking (xong; gate mở PPO: **không qua**)
+
+`c_feas.py` (`runs/wireless_abc/c/`, 24 episode test), `uav3d_comm/proto/c_track.py` (`runs/uav3d_proto/wireless_c/`).
+Đường lên UAV → BS, một RF chain, 100 MHz, UAV 23 dBm, nhiễu −87 dBm; quét beam = burst SSB 16 beam (0.57 ms) với SNR đo
+từ quỹ đường truyền SSB (BS 30 dBm, 240 sóng mang con, 960 RE; cao hơn SNR dữ liệu 42.2 dB — bản chạy đầu dùng nhầm
+SNR dữ liệu cho phép đo, đã sửa trước khi đọc kết quả); bước điều khiển 10 ms, kênh trong bước tiến hóa theo Doppler
+từng path (mỗi 1 ms); payload 10.3 kbit/helper/frame 200 ms; phục vụ luân phiên. Độ bền beam (beam tốt nhất còn trong
+3 dB): trung vị 0.1 s, p10 0.01 s, p90 0.79 s.
+
+| chính sách | giao đúng hạn (mọi frame) | frame LoS | frame NLoS | AMOTA UAV3D (3 seed) |
+|---|---|---|---|---|
+| gửi đủ (không kênh) | 1.000 | — | — | 0.690 |
+| oracle (CSI thật mỗi 1 ms) | 0.689 | 1.000 | 0.391 | 0.632 ±0.028 |
+| quét SSB 20 ms | 0.686 | 1.000 | 0.385 | 0.630 ±0.026 |
+| quét 20 ms, trung bình trượt | 0.682 | 0.999 | 0.378 | 0.629 ±0.024 |
+| quét 200 ms | 0.636 | 0.999 | 0.289 | 0.606 ±0.024 |
+| beam từ GPS (không pilot) | 0.631 | 0.999 | 0.278 | 0.600 ±0.028 |
+| một lần quét đầu episode | 0.572 | 0.984 | 0.178 | 0.579 ±0.014 |
+
+Bước điều khiển 5 ms cho cùng kết quả (oracle 0.690, quét 20 ms 0.685).
+1. **Quét SSB 20 ms gần bằng oracle** (0.630 vs 0.632 AMOTA; giao gói 0.686 vs 0.689). Khoảng cải thiện tối đa của mọi
+   cơ chế quản lý beam/pilot trong cấu hình này là ~0.002 AMOTA < 0.01 → **không mở PPO/bandit** (đúng cổng của plan).
+2. Mất mát thật đến từ **vùng phủ**: oracle vẫn mất 0.058 AMOTA so với gửi đủ, vì ~61% frame NLoS không có đường đủ mạnh
+   với bất kỳ beam nào. Không chính sách beam nào lấy lại được phần này; cần đổi vị trí UAV, relay hoặc tần số — điều
+   khiển bay/relay, ngoài phạm vi vòng này.
+3. Beam từ GPS (không tốn pilot) chỉ kém quét 20 ms 0.03 AMOTA, gần bằng quét 200 ms.
+4. Đây là mô phỏng ghép trace (helper UAV3D j ↔ UAV trace j−1), chưa có đồng đăng ký hình học.
+
+## Bảng quyết định cuối vòng pilot (dev/feasibility, chưa phải bằng chứng tổng quát)
+
+| câu hỏi | kết quả | quyết định |
+|---|---|---|
+| A: cần mô hình sinh/SB? | Không: SB 0/18 gate; hồi quy ≈ flow ≈ bridge; uncertainty sai coverage > 5 điểm | Dừng SB cho CSI trong cấu hình này; B/C dùng LMMSE/hồi quy |
+| B: hợp tác trực tuyến có lợi? | Có, **chỉ ở vùng chưa có bản đồ** (+10% rate, −25% outage); 0 ở vùng đã có bản đồ; vượt message tráo | Hướng có điều kiện: "bầy UAV tự dựng bản đồ góc khi chưa có khảo sát". Cần thêm fusion học được (còn khoảng cách tới oracle), nhiều cảnh, chi phí bit chặt hơn |
+| C: cần Deep RL cho beam/pilot? | Không: quét 20 ms ≈ oracle (Δ 0.002 AMOTA) | Không mở PPO. Nếu tiếp C, đổi biến quyết định sang vị trí/relay (vùng phủ) |
+
+Tài nguyên đã dùng: GPU 31 phút (A1); dữ liệu mới 4.6 GB (Fesl) + 54 MB trace; env 5.4 GB (không tính vào dữ liệu).
+
+### Việc tiếp theo (đề xuất, chờ người dùng/Codex)
+
+1. B là hướng duy nhất qua gate (có điều kiện). Bước kiểm tra kế: nhiều cảnh Sionna (không chỉ Munich), bản đồ phủ ít/nhiều
+   khác nhau, fusion học nhỏ (attention) so với trộn hiệp phương sai, và đo chi phí bit chặt (lượng tử hiệp phương sai /
+   chọn message nào gửi — đây là chỗ SemCom có thể quay lại: chọn bằng chứng kênh nào đáng gửi).
+2. C: nếu muốn tiếp, câu hỏi đúng là **vị trí/relay** cho vùng NLoS (oracle beam vẫn mất 0.058 AMOTA), không phải beam.
+3. A: chỉ quay lại SB nếu có chế độ posterior đa đỉnh thật (pilot rất ít + lượng tử ADC thô) và đã sửa calibration; hiện
+   chưa có lý do.

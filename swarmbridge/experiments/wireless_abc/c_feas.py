@@ -10,7 +10,7 @@ Payload per helper per frame: PAYLOAD_BITS (UAV3D KF-PV full message ~ 41 kbit /
 0.75 on top of Shannon rate x 0.6 implementation loss. Delivered if the cumulative bits within the 200 ms frame reach the
 payload; otherwise the frame's message is lost (the receiver keeps its cached older message).
 Policies (beam for each UAV at each step; one RF chain: serving one UAV per step, round-robin among UAVs with pending
-payload; a beam sweep is a broadcast SSB burst of 16 beams x 4 OFDM symbols (120 kHz SCS, 8.93 us) = 0.57 ms):
+payload; a beam sweep (measurement SNR from the SSB link budget, see MEAS_GAIN_DB) is a broadcast SSB burst of 16 beams x 4 OFDM symbols (120 kHz SCS, 8.93 us) = 0.57 ms):
   oracle      best beam at every 1 ms with true CSI (upper reference)
   ssb20       full sweep every 20 ms (noisy measurement at the sweep time), keep the best measured beam until next
   ssb200      full sweep every 200 ms
@@ -36,6 +36,12 @@ PAYLOAD_BITS = 10300
 EFF = 0.75 * 0.6
 FRAME, DT_RT = 0.2, 0.1
 SSB_S = 16 * 4 * 8.93e-6
+# Beam-sweep measurement SNR (downlink SSB, reciprocity): BS 30 dBm over 240 subcarriers x 120 kHz, NF 7 dB, per-RE SNR,
+# then coherent combining over the 960 REs of one SSB (240 subcarriers x 4 symbols). Expressed relative to the data SNR
+# (UAV 23 dBm over 100 MHz): meas_snr = data_snr * 10^(MEAS_GAIN_DB / 10).
+SSB_PT_DBM, SSB_SC, SSB_SCS, SSB_RE = 30.0, 240, 120e3, 960
+MEAS_GAIN_DB = ((SSB_PT_DBM - 10 * np.log10(SSB_SC)) - (-174 + 10 * np.log10(SSB_SCS) + 7) + 10 * np.log10(SSB_RE)
+                - (PT_DBM - N0_DBM))
 
 
 def snr_lin(gain):
@@ -138,7 +144,8 @@ def main():
                     if last is None or (t0 + 1e-9) // period != last[0]:
                         h = channel_at(a[u], dop[u], None, t0)
                         g = np.abs(h @ F.conj()) ** 2
-                        meas = np.abs(np.sqrt(snr_lin(g)) * np.exp(1j * rng.uniform(0, 2 * np.pi, N)) + Lc.crandn(rng, N)) ** 2
+                        msnr = snr_lin(g) * 10 ** (MEAS_GAIN_DB / 10)
+                        meas = np.abs(np.sqrt(msnr) * np.exp(1j * rng.uniform(0, 2 * np.pi, N)) + Lc.crandn(rng, N)) ** 2
                         avg = meas if (last is None or p != "ssb20avg") else 0.3 * meas + 0.7 * last[2]
                         last = ((t0 + 1e-9) // period, int(np.argmax(avg)), avg)
                     beam[u, s] = last[1]
@@ -165,8 +172,8 @@ def main():
                     else:
                         st["nlos_frames"] += 1; st["nlos_deliv"] += ok
         print(f.name, {p: round(stats[p]["delivered"] / max(stats[p]["frames"], 1), 3) for p in pols}, flush=True)
-    res = dict(sign_calibration={str(k): v for k, v in agree.items()}, payload_bits=PAYLOAD_BITS, eff=EFF, pt_dbm=PT_DBM, n0_dbm=N0_DBM, step=args.step, episodes=len(files),
-               policies={p: dict(s, deliv_frac=round(s["delivered"] / max(s["frames"], 1), 4),
+    res = dict(meas_gain_db=round(float(MEAS_GAIN_DB), 2), sign_calibration={str(k): v for k, v in agree.items()}, payload_bits=PAYLOAD_BITS, eff=EFF, pt_dbm=PT_DBM, n0_dbm=N0_DBM, step=args.step, episodes=len(files),
+               policies={p: dict({k: int(v) for k, v in s.items()}, deliv_frac=round(s["delivered"] / max(s["frames"], 1), 4),
                                  los_frac=round(s["los_deliv"] / max(s["los_frames"], 1), 4),
                                  nlos_frac=round(s["nlos_deliv"] / max(s["nlos_frames"], 1), 4)) for p, s in stats.items()},
                beam_coherence_s=dict(median=float(np.median(coh)), p10=float(np.percentile(coh, 10)),

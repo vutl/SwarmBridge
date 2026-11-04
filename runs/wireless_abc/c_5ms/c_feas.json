@@ -1,0 +1,87 @@
+{
+ "meas_gain_db": 42.23,
+ "sign_calibration": {
+  "1.0": 0.9982394366197183,
+  "-1.0": 0.12323943661971831
+ },
+ "payload_bits": 10300,
+ "eff": 0.44999999999999996,
+ "pt_dbm": 23.0,
+ "n0_dbm": -87,
+ "step": 0.005,
+ "episodes": 24,
+ "policies": {
+  "oracle": {
+   "frames": 9600,
+   "delivered": 6626,
+   "los_frames": 4693,
+   "los_deliv": 4692,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1934,
+   "deliv_frac": 0.6902,
+   "los_frac": 0.9998,
+   "nlos_frac": 0.3941
+  },
+  "ssb20": {
+   "frames": 9600,
+   "delivered": 6580,
+   "los_frames": 4693,
+   "los_deliv": 4692,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1888,
+   "deliv_frac": 0.6854,
+   "los_frac": 0.9998,
+   "nlos_frac": 0.3848
+  },
+  "ssb20avg": {
+   "frames": 9600,
+   "delivered": 6555,
+   "los_frames": 4693,
+   "los_deliv": 4689,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1866,
+   "deliv_frac": 0.6828,
+   "los_frac": 0.9991,
+   "nlos_frac": 0.3803
+  },
+  "ssb200": {
+   "frames": 9600,
+   "delivered": 6113,
+   "los_frames": 4693,
+   "los_deliv": 4689,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1424,
+   "deliv_frac": 0.6368,
+   "los_frac": 0.9991,
+   "nlos_frac": 0.2902
+  },
+  "gps": {
+   "frames": 9600,
+   "delivered": 6072,
+   "los_frames": 4693,
+   "los_deliv": 4689,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1383,
+   "deliv_frac": 0.6325,
+   "los_frac": 0.9991,
+   "nlos_frac": 0.2818
+  },
+  "stale": {
+   "frames": 9600,
+   "delivered": 5503,
+   "los_frames": 4693,
+   "los_deliv": 4617,
+   "nlos_frames": 4907,
+   "nlos_deliv": 886,
+   "deliv_frac": 0.5732,
+   "los_frac": 0.9838,
+   "nlos_frac": 0.1806
+  }
+ },
+ "beam_coherence_s": {
+  "median": 0.1,
+  "p10": 0.005,
+  "p90": 0.705,
+  "n": 4441
+ }
+}

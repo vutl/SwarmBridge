@@ -1,0 +1,195 @@
+{
+ "test0": 96,
+ "offset": 10,
+ "rows": [
+  {
+   "policy": "gps",
+   "seed": 0,
+   "mAP": 0.5741,
+   "mAP_f3": 0.5844,
+   "deliv_frac": 0.4167,
+   "pred": "dets\\gps\\m0\\results_nusc.json",
+   "sha256": "5c6179bf78fa3bd38783b3bbd5af6f1c1b18cf59abf19ead8fda65bdc1855be2"
+  },
+  {
+   "policy": "gps",
+   "seed": 1,
+   "mAP": 0.5467,
+   "mAP_f3": 0.5616,
+   "deliv_frac": 0.3458,
+   "pred": "dets\\gps\\m1\\results_nusc.json",
+   "sha256": "99979685c6fbdac6b454078f1f722881f42c98528fde2c72d99a9ae5cf8c2cf4"
+  },
+  {
+   "policy": "gps",
+   "seed": 2,
+   "mAP": 0.6033,
+   "mAP_f3": 0.6212,
+   "deliv_frac": 0.625,
+   "pred": "dets\\gps\\m2\\results_nusc.json",
+   "sha256": "91407d968d7924069e10ecf83ee26984d3b64257e56fba38c949d5a49b13ed0e"
+  },
+  {
+   "policy": "oracle",
+   "seed": 0,
+   "mAP": 0.5798,
+   "mAP_f3": 0.592,
+   "deliv_frac": 0.4333,
+   "pred": "dets\\oracle\\m0\\results_nusc.json",
+   "sha256": "ba01134115507ba8ec6ae7f46b8aea7cad713479d93a3afb1f7c861cc7b11d0b"
+  },
+  {
+   "policy": "oracle",
+   "seed": 1,
+   "mAP": 0.5806,
+   "mAP_f3": 0.5943,
+   "deliv_frac": 0.425,
+   "pred": "dets\\oracle\\m1\\results_nusc.json",
+   "sha256": "91c606507d1cd8400acd7eb4564b0821c697a2b7e6ac31d25b350bbf0b713dea"
+  },
+  {
+   "policy": "oracle",
+   "seed": 2,
+   "mAP": 0.6316,
+   "mAP_f3": 0.651,
+   "deliv_frac": 0.7583,
+   "pred": "dets\\oracle\\m2\\results_nusc.json",
+   "sha256": "a0bcdf8ee323142dc4a5f30d569006756004cf222f42cbef65bbdb4a4231da50"
+  },
+  {
+   "policy": "ssb20",
+   "seed": 0,
+   "mAP": 0.5798,
+   "mAP_f3": 0.592,
+   "deliv_frac": 0.4333,
+   "pred": "dets\\ssb20\\m0\\results_nusc.json",
+   "sha256": "ba01134115507ba8ec6ae7f46b8aea7cad713479d93a3afb1f7c861cc7b11d0b"
+  },
+  {
+   "policy": "ssb20",
+   "seed": 1,
+   "mAP": 0.5806,
+   "mAP_f3": 0.5943,
+   "deliv_frac": 0.425,
+   "pred": "dets\\ssb20\\m1\\results_nusc.json",
+   "sha256": "91c606507d1cd8400acd7eb4564b0821c697a2b7e6ac31d25b350bbf0b713dea"
+  },
+  {
+   "policy": "ssb20",
+   "seed": 2,
+   "mAP": 0.6302,
+   "mAP_f3": 0.6502,
+   "deliv_frac": 0.75,
+   "pred": "dets\\ssb20\\m2\\results_nusc.json",
+   "sha256": "d6e842e5e8deecb6e27d2966d70d751ee87db3500eb22c8cc0e40019caaeea5c"
+  },
+  {
+   "policy": "ssb200",
+   "seed": 0,
+   "mAP": 0.5742,
+   "mAP_f3": 0.5878,
+   "deliv_frac": 0.4125,
+   "pred": "dets\\ssb200\\m0\\results_nusc.json",
+   "sha256": "2101ebe90ffb8b10b2ce751a1804f64e3a554ff2c85ae0cccc21b2b81ca8f19f"
+  },
+  {
+   "policy": "ssb200",
+   "seed": 1,
+   "mAP": 0.5579,
+   "mAP_f3": 0.573,
+   "deliv_frac": 0.3333,
+   "pred": "dets\\ssb200\\m1\\results_nusc.json",
+   "sha256": "5ece9a0f0e4213948634d8be35d39525c281ae6b96a80b915cfeda4aead2c632"
+  },
+  {
+   "policy": "ssb200",
+   "seed": 2,
+   "mAP": 0.6031,
+   "mAP_f3": 0.6219,
+   "deliv_frac": 0.6417,
+   "pred": "dets\\ssb200\\m2\\results_nusc.json",
+   "sha256": "684ad00b02456efa10d7d9dbcff91beadf318b99b604f2b1dc712743fa2f9498"
+  },
+  {
+   "policy": "ssb20avg",
+   "seed": 0,
+   "mAP": 0.5768,
+   "mAP_f3": 0.5884,
+   "deliv_frac": 0.425,
+   "pred": "dets\\ssb20avg\\m0\\results_nusc.json",
+   "sha256": "b15b7178a2d90507e192e75978797f5835257cb5fa6fbf1111aa5161b2f68716"
+  },
+  {
+   "policy": "ssb20avg",
+   "seed": 1,
+   "mAP": 0.5787,
+   "mAP_f3": 0.5943,
+   "deliv_frac": 0.4208,
+   "pred": "dets\\ssb20avg\\m1\\results_nusc.json",
+   "sha256": "f54d22cc583696f0c72ac10ae5d4340fcec803b50b6fdd8734537b721a6fb459"
+  },
+  {
+   "policy": "ssb20avg",
+   "seed": 2,
+   "mAP": 0.6239,
+   "mAP_f3": 0.6459,
+   "deliv_frac": 0.7208,
+   "pred": "dets\\ssb20avg\\m2\\results_nusc.json",
+   "sha256": "99b0e9e93a2ae30516736cf055d2422fa3e6dfd56cb662fe4812b33d338a5ac5"
+  },
+  {
+   "policy": "stale",
+   "seed": 0,
+   "mAP": 0.5464,
+   "mAP_f3": 0.559,
+   "deliv_frac": 0.2792,
+   "pred": "dets\\stale\\m0\\results_nusc.json",
+   "sha256": "e1d9340ab27f516c1761b81733364fb5a688c6923dc5d52b6e3fb9a794b60a1b"
+  },
+  {
+   "policy": "stale",
+   "seed": 1,
+   "mAP": 0.5415,
+   "mAP_f3": 0.5532,
+   "deliv_frac": 0.3333,
+   "pred": "dets\\stale\\m1\\results_nusc.json",
+   "sha256": "8a2f240a12b104311f289b7bfb479ddb2b78bd4fddef8473466a6459a5192c91"
+  },
+  {
+   "policy": "stale",
+   "seed": 2,
+   "mAP": 0.5827,
+   "mAP_f3": 0.5986,
+   "deliv_frac": 0.5833,
+   "pred": "dets\\stale\\m2\\results_nusc.json",
+   "sha256": "2f8a3d8faf88f19b639ab2269306e84f208162488ae7ee80415d9e9264dff5f1"
+  },
+  {
+   "policy": "all",
+   "seed": 0,
+   "mAP": 0.6485,
+   "mAP_f3": 0.6632,
+   "deliv_frac": 1.0,
+   "pred": "dets\\all\\m0\\results_nusc.json",
+   "sha256": "ead39bee366be26a79e0fa0614a04d777f9a091fb08531aa3fea3efdf62476c7"
+  },
+  {
+   "policy": "all",
+   "seed": 1,
+   "mAP": 0.6485,
+   "mAP_f3": 0.6632,
+   "deliv_frac": 1.0,
+   "pred": "dets\\all\\m1\\results_nusc.json",
+   "sha256": "ead39bee366be26a79e0fa0614a04d777f9a091fb08531aa3fea3efdf62476c7"
+  },
+  {
+   "policy": "all",
+   "seed": 2,
+   "mAP": 0.6485,
+   "mAP_f3": 0.6632,
+   "deliv_frac": 1.0,
+   "pred": "dets\\all\\m2\\results_nusc.json",
+   "sha256": "ead39bee366be26a79e0fa0614a04d777f9a091fb08531aa3fea3efdf62476c7"
+  }
+ ]
+}
