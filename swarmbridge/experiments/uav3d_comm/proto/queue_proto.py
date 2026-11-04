@@ -27,6 +27,22 @@ Message content: each helper's KF-PV candidates (box_proto kf family), highest s
                           ADAPT; a = 1 targets finishing in the current frame on average (causal, local information)
   est{a}_fifo             as adapt{a}, but the sender estimates the rate by the realised rate of the PREVIOUS frame
                           (known from link-layer ACKs; R for the first frame): size = a * R_j(s-1) - Q (causal)
+  prog                    progressive message with a deadline (no rate knowledge): during frame s the sender streams
+                          its boxes in score order as independently decodable chunks (header 132 bit once + CHUNK
+                          boxes of 87 bit + 32 bit chunk CRC/sequence each); at the end of frame s whatever whole chunks
+                          were served arrive (age 0), the rest is discarded. No queue carries over between frames.
+  prog_novh1              prog, but boxes that a LOWER-index helper also had in its previous-frame message (forecast
+                          by 0.2 s, <= 2 m) are moved to the end (one helper keeps each shared car first; causal: needs
+                          the other helpers' previous message, e.g. overheard broadcast)
+  prog_lv                 learned ordering: logistic-regression estimate of P(box recovers a car UAV0 misses), fitted
+                          leave-one-scene-out on the dev scenes (fit on the other two, applied to the held-out one).
+                          Causal features: score, distance to UAV0 / to the helper, decoded speed, inside UAV0's square,
+                          distance to UAV0's nearest confident detection at the PREVIOUS frame (needs 1-frame-old
+                          feedback, not charged), number of other helpers with the car in their previous message
+  prog_tp                 same features and LOSO fit, but the label is "box matches ANY GT car inside UAV0's square"
+                          (value includes confirmation), ordering by that probability
+  prog_gt                 diagnostic ordering: boxes within 2 m of a GT car that UAV0's own confident detections (score
+                          >= 0.3) miss at the send frame go first (uses GT; not a policy)
   oracle_fifo             diagnostic: knows the realised rate of the current frame R_j(s): size = R_j(s) - Q
 Usage: python -I queue_proto.py DATA_ROOT AGENT_DIR OUT [--smoke]
 """
@@ -54,7 +70,8 @@ RHO = 0.8
 CAPS = [0.25, 0.5, 0.75, 1.0, 2.0]
 ADAPT = [0.5, 0.75, 1.0]           # adapt{a}: size = a * R - Q
 POLICIES = (["full_fifo", "full_drop"] + [f"cap{c}_fifo" for c in CAPS] + [f"adapt{a}_fifo" for a in ADAPT]
-            + [f"est{a}_fifo" for a in ADAPT] + ["oracle_fifo"])
+            + [f"est{a}_fifo" for a in ADAPT] + ["prog", "prog_novh1", "prog_lv", "prog_tp", "prog_gt", "oracle_fifo"])
+CHUNK, CHUNK_BITS = 8, 32
 HELPERS = (1, 2, 3, 4)
 SIGMA = 0.5
 MAX_AGE = 3
@@ -86,6 +103,33 @@ def n_fit(bits, n_max):
     while n > 0 and 8 * BC.packet_bytes(n) > bits:
         n -= 1
     return n
+
+
+def prog_boxes(capacity, n_max):
+    """number of boxes delivered by the end of a frame with `capacity` bits when streaming whole chunks."""
+    left = capacity - 8 * BC.packet_bytes(0)
+    n = 0
+    while n < n_max:
+        k = min(CHUNK, n_max - n)
+        cost = k * BC.BOX_BITS + CHUNK_BITS
+        if cost > left:
+            break
+        left -= cost
+        n += k
+    return n
+
+
+def simulate_prog(rate, n_frames, nmax_fn):
+    """-> packets (one per frame, arriving at its own frame with n boxes), bits on air per frame, n per frame."""
+    pk, served, ns = [], np.zeros(n_frames), []
+    for s in range(n_frames):
+        nmax = nmax_fn(s)
+        n = prog_boxes(rate[s], nmax)
+        bits_needed = 8 * BC.packet_bytes(0) + nmax * BC.BOX_BITS + -(-nmax // CHUNK) * CHUNK_BITS
+        served[s] = min(rate[s], bits_needed)
+        ns.append(n)
+        pk.append({"send_frame": s, "size": int(served[s]), "arrival_frame": s if n > 0 else None, "drop": n == 0})
+    return pk, served, ns
 
 
 def simulate(sizes_fn, rate, n_frames, drop):
@@ -134,11 +178,119 @@ def main():
                 c = select(BP.base(trk[k]), trk[k]["score"] >= BP.TAU_SEND)
                 cand[(j, t)] = select(c, np.argsort(-c["score"]))   # highest score first
     enc = {}
+    order = {}
+    for sc, toks in frames.items():
+        for k, t in enumerate(toks):
+            gt = db.gt_xy(t)
+            e = A[0][t]
+            exy = BP.base(e)["xy"][e["score"] >= 0.3]
+            miss = gt[[not (len(exy) and np.linalg.norm(exy - g, axis=1).min() <= 2.0) for g in gt]] if len(gt) else gt
+            for j in HELPERS:
+                c = cand[(j, t)]
+                idx = np.arange(len(c["score"]))
+                order[("score", j, t)] = idx
+                dup = np.zeros(len(idx), bool)
+                if k > 0:
+                    for jj in HELPERS:
+                        if jj < j:
+                            o = cand[(jj, toks[k - 1])]
+                            oxy = o["xy"] + o["vel"] * K.DT
+                            if len(oxy) and len(idx):
+                                dup |= (np.linalg.norm(c["xy"][:, None] - oxy[None], axis=2) <= 2.0).any(1)
+                order[("novh1", j, t)] = np.concatenate([idx[~dup], idx[dup]])
+                first = np.zeros(len(idx), bool)
+                if len(miss) and len(idx):
+                    first = (np.linalg.norm(c["xy"][:, None] - miss[None], axis=2) <= 2.0).any(1)
+                order[("gt", j, t)] = np.concatenate([idx[first], idx[~first]])
 
-    def message(j, t, n):
-        key = (j, t, n)
+    # ---- learned value ordering (leave-one-scene-out logistic regression) ----
+    feats, labels, labels_tp, keys = [], [], [], []
+    for sc, toks in frames.items():
+        for k, t in enumerate(toks):
+            gt = db.gt_xy(t)
+            e = A[0][t]
+            exy = BP.base(e)["xy"][e["score"] >= 0.3]
+            hit = np.array([len(exy) > 0 and np.linalg.norm(exy - g, axis=1).min() <= 2.0 for g in gt], bool)
+            miss = gt[~hit] if len(gt) else gt
+            if k > 0:
+                pe = A[0][toks[k - 1]]
+                pexy = BP.base(pe)["xy"][pe["score"] >= 0.3]
+            else:
+                pexy = np.zeros((0, 2))
+            u0 = db.uav0[t]
+            for j in HELPERS:
+                c = cand[(j, t)]
+                if not len(c["score"]):
+                    continue
+                d_ego = (np.linalg.norm(c["xy"][:, None] - pexy[None], axis=2).min(1) if len(pexy)
+                         else np.full(len(c["score"]), 50.0))
+                n_oth = np.zeros(len(c["score"]))
+                if k > 0:
+                    for jj in HELPERS:
+                        if jj != j:
+                            o = cand[(jj, toks[k - 1])]
+                            if len(o["score"]):
+                                oxy = o["xy"] + o["vel"] * K.DT
+                                n_oth += (np.linalg.norm(c["xy"][:, None] - oxy[None], axis=2) <= 2.0).any(1)
+                dist0 = np.linalg.norm(c["xy"] - u0, axis=1)
+                insq = (np.abs(c["xy"] - u0) < 102.4).all(1)
+                distj = np.linalg.norm(c["xy"] - pos[(t, j)][:2], axis=1)
+                f = np.stack([c["score"], np.minimum(dist0, 150) / 100, np.minimum(distj, 150) / 100,
+                              np.linalg.norm(c["vel"], axis=1), insq.astype(float), np.minimum(d_ego, 10.0) / 10,
+                              (d_ego <= 2.0).astype(float), n_oth / 3], 1)
+                y = ((np.linalg.norm(c["xy"][:, None] - miss[None], axis=2) <= 2.0).any(1) if len(miss)
+                     else np.zeros(len(c["score"]), bool))
+                ytp = ((np.linalg.norm(c["xy"][:, None] - gt[None], axis=2) <= 2.0).any(1) & insq if len(gt)
+                       else np.zeros(len(c["score"]), bool))
+                for i in range(len(y)):
+                    feats.append(f[i]), labels.append(float(y[i])), labels_tp.append(float(ytp[i]))
+                    keys.append((sc, j, t, i))
+    X, Y, Y2 = np.array(feats), np.array(labels), np.array(labels_tp)
+    X = np.concatenate([X, np.ones((len(X), 1))], 1)
+    sc_of = np.array([k[0] for k in keys])
+    pv, pv2 = np.zeros(len(Y)), np.zeros(len(Y))
+
+    def logreg(Xa, ya, l2=1e-2, it=50):
+        w = np.zeros(Xa.shape[1])
+        for _ in range(it):                       # Newton / IRLS
+            p_ = 1 / (1 + np.exp(-Xa @ w))
+            g = Xa.T @ (p_ - ya) + l2 * w
+            Hm = (Xa * (p_ * (1 - p_))[:, None]).T @ Xa + l2 * np.eye(len(w))
+            w -= np.linalg.solve(Hm, g)
+        return w
+    lv_info = {}
+    for sc in frames:
+        tr = sc_of != sc
+        w = logreg(X[tr], Y[tr])
+        pv[~tr] = 1 / (1 + np.exp(-X[~tr] @ w))
+        te = ~tr
+        order_te = np.argsort(-pv[te])
+        prec = Y[te][order_te][: max(1, int(Y[te].sum()))].mean() if Y[te].sum() else float("nan")
+        w2 = logreg(X[tr], Y2[tr])
+        pv2[te] = 1 / (1 + np.exp(-X[te] @ w2))
+        o2 = np.argsort(-pv2[te])
+        o_s = np.argsort(-X[te][:, 0])
+        npos2 = max(1, int(Y2[te].sum()))
+        lv_info[sc] = {"w": [round(float(v), 3) for v in w], "pos_rate": round(float(Y[te].mean()), 4),
+                       "precision_at_npos": round(float(prec), 4), "w_tp": [round(float(v), 3) for v in w2],
+                       "tp_rate": round(float(Y2[te].mean()), 4),
+                       "tp_precision_at_npos": round(float(Y2[te][o2][:npos2].mean()), 4),
+                       "score_precision_at_npos": round(float(Y2[te][o_s][:npos2].mean()), 4)}
+    print("learned value ordering (LOSO):", json.dumps(lv_info), flush=True)
+    for name, pvx in (("lv", pv), ("tp", pv2)):
+        val = {}
+        for (sc, j, t, i), v in zip(keys, pvx):
+            val.setdefault((j, t), {})[i] = v
+        for j in HELPERS:
+            for t in toks_all:
+                n = len(cand[(j, t)]["score"])
+                v = np.array([val.get((j, t), {}).get(i, 0.0) for i in range(n)])
+                order[(name, j, t)] = np.argsort(-v, kind="stable")
+
+    def message(j, t, n, ok="score"):
+        key = (j, t, n, ok)
         if key not in enc:
-            m = select(cand[(j, t)], np.arange(n))
+            m = select(cand[(j, t)], order[(ok, j, t)][:n])
             data, st = BC.encode(j, fidx[t], pos[(t, j)], m)
             enc[key] = (BC.decode(data)[1], 8 * st["bytes"])
         return enc[key]
@@ -176,7 +328,12 @@ def main():
                                 raise ValueError(policy)
                             chosen[s] = n
                             return message(j, t, n)[1] if n > 0 else 0
-                        pk, served = simulate(sizes_fn, rate, T, drop)
+                        if policy.startswith("prog"):
+                            pk, served, ns = simulate_prog(rate, T, lambda s, j=j: len(cand[(j, toks[s])]["score"]))
+                            for s, n in enumerate(ns):
+                                chosen[s] = n
+                        else:
+                            pk, served = simulate(sizes_fn, rate, T, drop)
                         n_tail += sum(p["arrival_frame"] is None and not p["drop"] for p in pk)
                         n_skip += sum(p["size"] == 0 for p in pk)
                         tx.append(served)
@@ -209,7 +366,8 @@ def main():
                         if use[t][j] is None:
                             continue
                         src, age, n = use[t][j]
-                        m = K.forecast(message(j, src, n)[0], age)
+                        ok = {"prog_novh1": "novh1", "prog_gt": "gt", "prog_lv": "lv", "prog_tp": "tp"}.get(policy, "score")
+                        m = K.forecast(message(j, src, n, ok)[0], age)
                         sets.append((j, m["xy"], m["score"], BP.records(m, t)))
                     recs = soft_fuse(sets, "noisyor", return_records=True)
                     recs.sort(key=lambda r: -r["detection_score"])
@@ -235,7 +393,8 @@ def main():
                       f"{row['kbit_onair_mean']:5.2f} kbit/frame pkt {row['pkt_kbit_mean']:5.2f} kbit "
                       f"boxes {row['boxes_per_pkt']:5.1f} nomsg {row['frac_no_msg']:.2f} age {row['mean_age']} "
                       f"hist {row['age_hist']}", flush=True)
-    (out / "queue_proto.json").write_text(json.dumps({"rates": RATES, "sigma": SIGMA, "rows": rows}, indent=1))
+    (out / "queue_proto.json").write_text(json.dumps({"rates": RATES, "sigma": SIGMA, "rho": RHO, "learned_value": lv_info,
+                                                      "rows": rows}, indent=1))
 
 
 if __name__ == "__main__":
