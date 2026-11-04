@@ -12,5 +12,6 @@ case "$1" in
   b)  $PY b_coop.py "$T" "$R/runs/wireless_abc/b" --seeds 0 1 2 ;;
   b_et) $PY b_coop.py "$R/data/wireless_abc/trace_etoile" "$R/runs/wireless_abc/b_etoile" --seeds 0 1 2 ;;
   c_et) $PY c_feas.py "$R/data/wireless_abc/trace_etoile" "$R/runs/wireless_abc/c_etoile" --first_ep 96 ;;
+  a0b) $PY ../uav3d_comm/gpulock_run.py "$R" -- $PY a0_sbisac.py "$R/runs/wireless_abc/a0_sbisac" --device cuda ;;
   c)  $PY c_feas.py "$T" "$R/runs/wireless_abc/c" --first_ep 96 ;;
 esac
