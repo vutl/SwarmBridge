@@ -21,8 +21,19 @@ cần hạ sysroot conda về 2.17 và xóa cờ execstack của libtorch trên 
 2. **"Trễ làm mọi cách gộp tệ hơn không cộng tác" là nói quá.** Câu đó chỉ đúng với mAP của các cách gộp không học (late fusion, noisy-OR)
    và của feature đã train. Box kiểu CERF vẫn hơn ego (0.533). Về tracking, feature trễ 2 frame vẫn hơn ego (0.636 so với 0.542).
    Phát biểu đúng: *các cách gộp hiện tại mất phần lớn lợi ích cộng tác khi message không đồng bộ, và mức nhạy phụ thuộc vào biểu diễn, kiến trúc gộp và cách train.*
-3. **"0.2 s / 0.4 s" chưa được xác minh.** Timestamp trong metadata cách nhau khoảng 2.7 s chứ không phải 0.2 s.
-   Mọi chỗ ghi "trễ 0.2 s / 0.4 s" trong report này nên đọc là **trễ 1 / 2 frame**.
+3. **Thời gian mỗi frame: đã xác minh là 0.2 s thời gian mô phỏng** (cập nhật 13:00).
+   - Annotation có vận tốc `vx, vy` lấy thẳng từ trình mô phỏng, không suy ra từ timestamp.
+   - Trên 31 880 cặp xe chạy gần đều tốc (lệch tốc độ dưới 5%, tốc độ ít nhất 2 m/s), quãng đường giữa hai frame chia vận tốc
+     cho trung vị **0.2006 s** (p5 0.1998, p95 0.243).
+   - Timestamp là đồng hồ thật tính bằng **nano giây** (bắt đầu 2023-12-04), cách nhau khoảng 2.718 s mỗi frame: trình mô phỏng chạy chậm
+     hơn thời gian thật khoảng 13 lần. Tin nhắn trước của tôi chia cho 1e6 và gọi là "2718 giây" là sai đơn vị (Codex đã chỉ ra).
+   - Paper ghi 0.5 Hz, không khớp với dữ liệu mini. Có thể đó là tốc độ theo đồng hồ thật, hoặc là lỗi đánh máy.
+   - Hệ quả: tracker đang lấy dt từ timestamp (2.7 s). Hiện chưa sao vì detector cho vận tốc gần 0, nhưng protocol mới phải dùng dt = 0.2 s.
+     Report vẫn ghi độ trễ theo frame; 1 frame = 0.2 s mô phỏng.
+   - Kèm theo phát hiện của Codex: ở đầu scene, độ trễ thực tế ngắn hơn nhãn (warm-start). Với delay 2 frame thì 6/60 frame trễ ít hơn 2.
+3b. **Từ audit của Codex** (`reports/codex-uav3d-independent-audit-2026-11-04.md`): mAP 0.693 là của BEV FP16, chưa đi qua lượng tử q8.
+    Box chưa được lượng tử thật theo 85 bit. Poture lấy box helper ở cap 83, còn late fusion lấy ở cap 500.
+    Phép warp chỉ tịnh tiến, chưa xoay. Tất cả đã được ghi nhận; phải sửa trước thí nghiệm mới.
 4. **"2600 lần ít bit hơn" không phải phép so codec công bằng.** Feature được tính là dense 8 bit, chưa nén thật
    (CodeFilling, How2comm và các bài tương tự nén mạnh hơn nhiều). Kết luận được phép: *feature dense thô quá đắt, còn message dạng box là baseline rất mạnh.*
    Chưa có đường cong chất lượng theo bit cho feature đã nén, nên **câu hỏi box hay feature chưa có lời đáp.**
