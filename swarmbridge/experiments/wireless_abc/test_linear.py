@@ -149,3 +149,21 @@ def test_log_cn_pdf_normalised_1d():
     z = (X + 1j * Y).ravel()
     p = np.exp([log_cn_pdf(np.array([v]), np.zeros(1), np.array([[s]])) for v in z])
     assert abs(p.sum() * (g[1] - g[0]) ** 2 - 1) < 1e-3
+
+
+def test_batch_estimators_match_reference():
+    """a1_bench batch LMMSE / GMM posteriors equal the per-sample reference implementations in linear.py."""
+    import a1_bench as B
+    rng = np.random.default_rng(10)
+    ms = [crandn(rng, N), crandn(rng, N)]
+    Cs = [rand_cov(rng, N), rand_cov(rng, N, rank=3)]
+    W = pilot_beams(N, 4, "random", rng)
+    A = W.conj().T
+    Y = crandn(rng, 5, 4)
+    M, P = B.batch_lmmse(Y, A, 0.2, ms[0], Cs[0])
+    Wk, Mk, Pk = B.batch_gmm(Y, A, 0.2, (np.array([0.3, 0.7]), np.array(ms), np.array(Cs)))
+    for i, y in enumerate(Y):
+        m0, P0 = lmmse(y, W, 1.0, 0.2, ms[0], Cs[0])
+        assert np.allclose(M[i], m0) and np.allclose(P, P0)
+        w, m, Pc = gmm_posterior(y, W, 1.0, 0.2, [0.3, 0.7], ms, Cs)
+        assert np.allclose(Wk[i], w) and np.allclose(Mk[i], m) and np.allclose(Pk, Pc)
