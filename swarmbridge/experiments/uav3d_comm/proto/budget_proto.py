@@ -29,6 +29,7 @@ Policies (greedy fill in priority order; a box is added if the packet sizes stil
   central_demote{tau}        score order, but boxes within 2 m of a receiver detection with score >= tau at the
                              previous frame are moved to the END instead of skipped (sent only if budget remains).
                              Same feedback as central_strong{tau}
+  <policy>_fbc               feedback CHARGED: the frame's feedback bits are subtracted from B before filling
 Diagnostics (NOT policies; they use ground truth and are "best-found", not upper bounds):
   oracle_task   knows GT and UAV0's own detections at the SEND frame (assumes age 0, does not know the channel):
                 boxes whose position is within 2 m of a GT car that UAV0 misses (no own confident detection within
@@ -150,6 +151,8 @@ def main():
           for name, led in ledgers.items()}
 
     def select_all(policy, budget_kbit, ledger_name, rng_seed=0):
+        charged = policy.endswith("_fbc")
+        policy = policy[:-4] if charged else policy
         """-> {(j, t): chosen index list}, feedback bits per frame list"""
         B = budget_kbit * 1000
         sel, fb = {}, []
@@ -213,7 +216,7 @@ def main():
                             return True
                         covered.append(xy)
                         return False
-                ch = fill(c, order, B, per_helper, alive, skip)
+                ch = fill(c, order, B - (1000 * fb[-1] if charged and fb else 0), per_helper, alive, skip)
                 for j in HELPERS:
                     sel[(j, t)] = sorted(ch[j])
         return sel, fb
@@ -234,6 +237,8 @@ def main():
                         msgs[(j, t)] = (dec, st)
                         bits += 8 * st["bytes"]
                     assert bits <= budget * 1000, (policy, budget, bits)
+                    if policy.endswith("_fbc"):
+                        assert bits + 1000 * fb[len(tx)] <= budget * 1000 + 1e-6, (policy, budget, bits)
                     tx.append(bits / 1000)
                 preds = {}
                 for t in toks_all:
