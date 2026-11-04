@@ -3,7 +3,8 @@
  "cap": 500,
  "codec_saturated": {
   "box": 0,
-  "kf": 52
+  "kf": 52,
+  "kfw": 0
  },
  "rows": [
   {
@@ -22,11 +23,9 @@
     "scene_13": 0.4763,
     "scene_15": 0.5239
    },
-   "kbit_tx_mean": 0.0,
-   "kbit_tx_p95": 0.0,
-   "kbit_rx_mean": 0.0,
    "pred": "dets\\ego\\none\\results_nusc.json",
-   "sha256": "e681d2c9bfa5126eb7c8e8b70ba21edbeafa5fa8ef2a0b0c3b718940fc8b769f"
+   "sha256": "e681d2c9bfa5126eb7c8e8b70ba21edbeafa5fa8ef2a0b0c3b718940fc8b769f",
+   "kbit_tx_p95": 0.0
   },
   {
    "method": "box_max",
@@ -44,11 +43,22 @@
     "scene_13": 0.6173,
     "scene_15": 0.5874
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 49.61,
    "pred": "dets\\box_max\\sync_s0\\results_nusc.json",
-   "sha256": "353dad0f7f4ec987a27e6e0e90780e3d85e16d0fef6b4e24ed8354a3320194fc"
+   "sha256": "353dad0f7f4ec987a27e6e0e90780e3d85e16d0fef6b4e24ed8354a3320194fc",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 49.624,
+   "kbit_used_mean": 49.624,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0,
+   "frac_cached": 0.0,
+   "age_hist": [
+    240,
+    0,
+    0,
+    0
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_nor",
@@ -66,11 +76,22 @@
     "scene_13": 0.6605,
     "scene_15": 0.6576
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 49.61,
    "pred": "dets\\box_nor\\sync_s0\\results_nusc.json",
-   "sha256": "374e0f527895dc24b7c6f7bd8864f0532688e991478577daa6ce71b3de4fe2ec"
+   "sha256": "374e0f527895dc24b7c6f7bd8864f0532688e991478577daa6ce71b3de4fe2ec",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 49.624,
+   "kbit_used_mean": 49.624,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0,
+   "frac_cached": 0.0,
+   "age_hist": [
+    240,
+    0,
+    0,
+    0
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_max",
@@ -88,11 +109,22 @@
     "scene_13": 0.6053,
     "scene_15": 0.5876
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 41.07,
    "pred": "dets\\kf_max\\sync_s0\\results_nusc.json",
-   "sha256": "cf22ae105b2049d3fba20f35a7e56ff525814a1d6cab8b3e40545c8e87cfd4d5"
+   "sha256": "cf22ae105b2049d3fba20f35a7e56ff525814a1d6cab8b3e40545c8e87cfd4d5",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 41.083,
+   "kbit_used_mean": 41.083,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0,
+   "frac_cached": 0.0,
+   "age_hist": [
+    240,
+    0,
+    0,
+    0
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_nor",
@@ -110,11 +142,154 @@
     "scene_13": 0.6499,
     "scene_15": 0.6368
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 41.07,
    "pred": "dets\\kf_nor\\sync_s0\\results_nusc.json",
-   "sha256": "ead39bee366be26a79e0fa0614a04d777f9a091fb08531aa3fea3efdf62476c7"
+   "sha256": "ead39bee366be26a79e0fa0614a04d777f9a091fb08531aa3fea3efdf62476c7",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 41.083,
+   "kbit_used_mean": 41.083,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0,
+   "frac_cached": 0.0,
+   "age_hist": [
+    240,
+    0,
+    0,
+    0
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "sync_s0",
+   "mAP": 0.6485,
+   "mAP_f3": 0.6632,
+   "ap": [
+    0.2974,
+    0.6355,
+    0.7993,
+    0.862
+   ],
+   "per_scene": {
+    "scene_11": 0.6577,
+    "scene_13": 0.6499,
+    "scene_15": 0.6368
+   },
+   "pred": "dets\\kf0_nor\\sync_s0\\results_nusc.json",
+   "sha256": "4eecfb9ec3ff04ccb8b8587ba540368ec6422884d928b34b6dd95c86906548fa",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 41.083,
+   "kbit_used_mean": 41.083,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0,
+   "frac_cached": 0.0,
+   "age_hist": [
+    240,
+    0,
+    0,
+    0
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "sync_s0",
+   "mAP": 0.6485,
+   "mAP_f3": 0.6632,
+   "ap": [
+    0.2974,
+    0.6355,
+    0.7993,
+    0.862
+   ],
+   "per_scene": {
+    "scene_11": 0.6577,
+    "scene_13": 0.6499,
+    "scene_15": 0.6368
+   },
+   "pred": "dets\\kfv_nor\\sync_s0\\results_nusc.json",
+   "sha256": "ead39bee366be26a79e0fa0614a04d777f9a091fb08531aa3fea3efdf62476c7",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 41.083,
+   "kbit_used_mean": 41.083,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0,
+   "frac_cached": 0.0,
+   "age_hist": [
+    240,
+    0,
+    0,
+    0
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "sync_s0",
+   "mAP": 0.6485,
+   "mAP_f3": 0.6632,
+   "ap": [
+    0.2974,
+    0.6355,
+    0.7993,
+    0.862
+   ],
+   "per_scene": {
+    "scene_11": 0.6577,
+    "scene_13": 0.6499,
+    "scene_15": 0.6368
+   },
+   "pred": "dets\\kfp_nor\\sync_s0\\results_nusc.json",
+   "sha256": "4eecfb9ec3ff04ccb8b8587ba540368ec6422884d928b34b6dd95c86906548fa",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 41.083,
+   "kbit_used_mean": 41.083,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0,
+   "frac_cached": 0.0,
+   "age_hist": [
+    240,
+    0,
+    0,
+    0
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "sync_s0",
+   "mAP": 0.6485,
+   "mAP_f3": 0.6632,
+   "ap": [
+    0.2974,
+    0.6355,
+    0.7993,
+    0.862
+   ],
+   "per_scene": {
+    "scene_11": 0.6577,
+    "scene_13": 0.6499,
+    "scene_15": 0.6368
+   },
+   "pred": "dets\\kfw_nor\\sync_s0\\results_nusc.json",
+   "sha256": "4125027c3efb39344f236e682029264af81c5fee22f93086346b2010a95e386e",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 42.015,
+   "kbit_used_mean": 42.015,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.0,
+   "frac_cached": 0.0,
+   "age_hist": [
+    240,
+    0,
+    0,
+    0
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_max",
@@ -132,11 +307,22 @@
     "scene_13": 0.511,
     "scene_15": 0.5025
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 47.85,
    "pred": "dets\\box_max\\fix1_s0\\results_nusc.json",
-   "sha256": "e67df5358d9957e8598975e9a66d3e17323c62b925f5eae54f7abb5bae7a91b7"
+   "sha256": "e67df5358d9957e8598975e9a66d3e17323c62b925f5eae54f7abb5bae7a91b7",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 47.861,
+   "kbit_used_mean": 47.861,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    228,
+    0,
+    0
+   ],
+   "n_tail_packets": 12
   },
   {
    "method": "box_nor",
@@ -154,11 +340,22 @@
     "scene_13": 0.5597,
     "scene_15": 0.5605
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 47.85,
    "pred": "dets\\box_nor\\fix1_s0\\results_nusc.json",
-   "sha256": "2b0ec4bff070f205c31687fccd07937db09f9ad18f970e9bb9425081bb013e11"
+   "sha256": "2b0ec4bff070f205c31687fccd07937db09f9ad18f970e9bb9425081bb013e11",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 47.861,
+   "kbit_used_mean": 47.861,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    228,
+    0,
+    0
+   ],
+   "n_tail_packets": 12
   },
   {
    "method": "kf_max",
@@ -176,11 +373,22 @@
     "scene_13": 0.5361,
     "scene_15": 0.5273
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 39.49,
    "pred": "dets\\kf_max\\fix1_s0\\results_nusc.json",
-   "sha256": "3006148fc3e72f939e07e49108550ab5ff1201f604fbc0dabaadf1c9283a1da0"
+   "sha256": "3006148fc3e72f939e07e49108550ab5ff1201f604fbc0dabaadf1c9283a1da0",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.506,
+   "kbit_used_mean": 39.506,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    228,
+    0,
+    0
+   ],
+   "n_tail_packets": 12
   },
   {
    "method": "kf_nor",
@@ -198,11 +406,154 @@
     "scene_13": 0.5884,
     "scene_15": 0.585
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 39.49,
    "pred": "dets\\kf_nor\\fix1_s0\\results_nusc.json",
-   "sha256": "8ae416794193237be235670003fa6f452508337f3f3a9121f97bef52335b7b2c"
+   "sha256": "8ae416794193237be235670003fa6f452508337f3f3a9121f97bef52335b7b2c",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.506,
+   "kbit_used_mean": 39.506,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    228,
+    0,
+    0
+   ],
+   "n_tail_packets": 12
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "fix1_s0",
+   "mAP": 0.5503,
+   "mAP_f3": 0.5759,
+   "ap": [
+    0.0933,
+    0.4917,
+    0.7755,
+    0.8408
+   ],
+   "per_scene": {
+    "scene_11": 0.5826,
+    "scene_13": 0.5372,
+    "scene_15": 0.5302
+   },
+   "pred": "dets\\kf0_nor\\fix1_s0\\results_nusc.json",
+   "sha256": "a60252e10d88d38ef7d88f8610be88265474826ac363cefed64dc665e3c839dc",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.506,
+   "kbit_used_mean": 39.506,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    228,
+    0,
+    0
+   ],
+   "n_tail_packets": 12
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "fix1_s0",
+   "mAP": 0.5503,
+   "mAP_f3": 0.5759,
+   "ap": [
+    0.0933,
+    0.4917,
+    0.7755,
+    0.8408
+   ],
+   "per_scene": {
+    "scene_11": 0.5826,
+    "scene_13": 0.5372,
+    "scene_15": 0.5302
+   },
+   "pred": "dets\\kfv_nor\\fix1_s0\\results_nusc.json",
+   "sha256": "7ce2f23f10fc6e3af92c63705426fe141edb2332fc542ec73e4917930615ba09",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.506,
+   "kbit_used_mean": 39.506,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    228,
+    0,
+    0
+   ],
+   "n_tail_packets": 12
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "fix1_s0",
+   "mAP": 0.5943,
+   "mAP_f3": 0.626,
+   "ap": [
+    0.2125,
+    0.5655,
+    0.7663,
+    0.8328
+   ],
+   "per_scene": {
+    "scene_11": 0.6085,
+    "scene_13": 0.5884,
+    "scene_15": 0.585
+   },
+   "pred": "dets\\kfp_nor\\fix1_s0\\results_nusc.json",
+   "sha256": "c441d87b8cea8e4d748e20632d475d9b6d15169ed661827a25f09335ce07bad4",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.506,
+   "kbit_used_mean": 39.506,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    228,
+    0,
+    0
+   ],
+   "n_tail_packets": 12
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "fix1_s0",
+   "mAP": 0.5943,
+   "mAP_f3": 0.626,
+   "ap": [
+    0.2126,
+    0.5655,
+    0.7663,
+    0.8328
+   ],
+   "per_scene": {
+    "scene_11": 0.6085,
+    "scene_13": 0.5884,
+    "scene_15": 0.5849
+   },
+   "pred": "dets\\kfw_nor\\fix1_s0\\results_nusc.json",
+   "sha256": "73c6090004e99be5bc4230a71e833471cdc5e457ca41d85e3217b35f6244baf2",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 40.402,
+   "kbit_used_mean": 40.402,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    228,
+    0,
+    0
+   ],
+   "n_tail_packets": 12
   },
   {
    "method": "box_max",
@@ -220,11 +571,22 @@
     "scene_13": 0.3819,
     "scene_15": 0.3778
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 45.9,
    "pred": "dets\\box_max\\fix2_s0\\results_nusc.json",
-   "sha256": "c5dcc4579d6562a964888981e904590ae9794f810915e2f71d5098616a51b015"
+   "sha256": "c5dcc4579d6562a964888981e904590ae9794f810915e2f71d5098616a51b015",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 45.913,
+   "kbit_used_mean": 45.913,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    0,
+    216,
+    0
+   ],
+   "n_tail_packets": 24
   },
   {
    "method": "box_nor",
@@ -242,11 +604,22 @@
     "scene_13": 0.4207,
     "scene_15": 0.4112
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 45.9,
    "pred": "dets\\box_nor\\fix2_s0\\results_nusc.json",
-   "sha256": "87e99a26879c2cb3178ae0644f239e6a97d4089b334cba7757eb84a8e68546aa"
+   "sha256": "87e99a26879c2cb3178ae0644f239e6a97d4089b334cba7757eb84a8e68546aa",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 45.913,
+   "kbit_used_mean": 45.913,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    0,
+    216,
+    0
+   ],
+   "n_tail_packets": 24
   },
   {
    "method": "kf_max",
@@ -264,11 +637,22 @@
     "scene_13": 0.4578,
     "scene_15": 0.4557
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 37.79,
    "pred": "dets\\kf_max\\fix2_s0\\results_nusc.json",
-   "sha256": "21cc2ec7c79c46ec35833b1c340aba651a872ad93dd48aa096736f464fbd8214"
+   "sha256": "21cc2ec7c79c46ec35833b1c340aba651a872ad93dd48aa096736f464fbd8214",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 37.798,
+   "kbit_used_mean": 37.798,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    0,
+    216,
+    0
+   ],
+   "n_tail_packets": 24
   },
   {
    "method": "kf_nor",
@@ -286,11 +670,154 @@
     "scene_13": 0.5078,
     "scene_15": 0.5149
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 37.79,
    "pred": "dets\\kf_nor\\fix2_s0\\results_nusc.json",
-   "sha256": "50daa63cc3e73dcee76795d29ba096acf997194ca446d8b2c9f3f13f2916b494"
+   "sha256": "50daa63cc3e73dcee76795d29ba096acf997194ca446d8b2c9f3f13f2916b494",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 37.798,
+   "kbit_used_mean": 37.798,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    0,
+    216,
+    0
+   ],
+   "n_tail_packets": 24
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "fix2_s0",
+   "mAP": 0.4178,
+   "mAP_f3": 0.4444,
+   "ap": [
+    0.0406,
+    0.2145,
+    0.6277,
+    0.7884
+   ],
+   "per_scene": {
+    "scene_11": 0.4543,
+    "scene_13": 0.4077,
+    "scene_15": 0.3945
+   },
+   "pred": "dets\\kf0_nor\\fix2_s0\\results_nusc.json",
+   "sha256": "20f5a1d46a752cc1b081885ec5e11e15d2f62d00465628ea27abeffedbbd1d3c",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 37.798,
+   "kbit_used_mean": 37.798,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    0,
+    216,
+    0
+   ],
+   "n_tail_packets": 24
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "fix2_s0",
+   "mAP": 0.4178,
+   "mAP_f3": 0.4444,
+   "ap": [
+    0.0406,
+    0.2145,
+    0.6277,
+    0.7884
+   ],
+   "per_scene": {
+    "scene_11": 0.4543,
+    "scene_13": 0.4077,
+    "scene_15": 0.3945
+   },
+   "pred": "dets\\kfv_nor\\fix2_s0\\results_nusc.json",
+   "sha256": "10cadaab99aa0df083eafe787e64b7458d5cb1f47f76491fd921dae8cae7aab9",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 37.798,
+   "kbit_used_mean": 37.798,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    0,
+    216,
+    0
+   ],
+   "n_tail_packets": 24
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "fix2_s0",
+   "mAP": 0.5189,
+   "mAP_f3": 0.5612,
+   "ap": [
+    0.1214,
+    0.4676,
+    0.7041,
+    0.7823
+   ],
+   "per_scene": {
+    "scene_11": 0.536,
+    "scene_13": 0.5078,
+    "scene_15": 0.5149
+   },
+   "pred": "dets\\kfp_nor\\fix2_s0\\results_nusc.json",
+   "sha256": "3d84cf12c777d024b26a333cb363830dcee05ea5f3300fe9b9c69cc6a98d4246",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 37.798,
+   "kbit_used_mean": 37.798,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    0,
+    216,
+    0
+   ],
+   "n_tail_packets": 24
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "fix2_s0",
+   "mAP": 0.5197,
+   "mAP_f3": 0.5612,
+   "ap": [
+    0.1214,
+    0.4677,
+    0.7041,
+    0.7857
+   ],
+   "per_scene": {
+    "scene_11": 0.536,
+    "scene_13": 0.5079,
+    "scene_15": 0.5148
+   },
+   "pred": "dets\\kfw_nor\\fix2_s0\\results_nusc.json",
+   "sha256": "117793adb2240c91cb9709dc7d80ebecc51147ed2e275ba524999f3b66f8aaf5",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 38.656,
+   "kbit_used_mean": 38.656,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.0,
+   "age_hist": [
+    0,
+    0,
+    216,
+    0
+   ],
+   "n_tail_packets": 24
   },
   {
    "method": "box_max",
@@ -308,11 +835,22 @@
     "scene_13": 0.5257,
     "scene_15": 0.4967
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 48.44,
    "pred": "dets\\box_max\\rand_s0\\results_nusc.json",
-   "sha256": "f3d8c573cb806be3810440d2a1bfabc788516fdf2ec2bae96fa1c393653c9be9"
+   "sha256": "f3d8c573cb806be3810440d2a1bfabc788516fdf2ec2bae96fa1c393653c9be9",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 47.884,
+   "kbit_used_mean": 48.452,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.319,
+   "age_hist": [
+    98,
+    98,
+    36,
+    0
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "box_nor",
@@ -330,11 +868,22 @@
     "scene_13": 0.5891,
     "scene_15": 0.5795
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 48.44,
    "pred": "dets\\box_nor\\rand_s0\\results_nusc.json",
-   "sha256": "c076c93b9ab5f36135e842607fe642fc8e55a978e3b57b59c3501b0bcc9928b7"
+   "sha256": "c076c93b9ab5f36135e842607fe642fc8e55a978e3b57b59c3501b0bcc9928b7",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 47.884,
+   "kbit_used_mean": 48.452,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.319,
+   "age_hist": [
+    98,
+    98,
+    36,
+    0
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "kf_max",
@@ -352,11 +901,22 @@
     "scene_13": 0.5559,
     "scene_15": 0.5377
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 40.03,
    "pred": "dets\\kf_max\\rand_s0\\results_nusc.json",
-   "sha256": "aba095f77df27245d0e4edc11110d2f4cf26e240edcf1661937a207da00a039e"
+   "sha256": "aba095f77df27245d0e4edc11110d2f4cf26e240edcf1661937a207da00a039e",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.538,
+   "kbit_used_mean": 40.049,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.319,
+   "age_hist": [
+    98,
+    98,
+    36,
+    0
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "kf_nor",
@@ -374,11 +934,154 @@
     "scene_13": 0.6171,
     "scene_15": 0.5958
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 40.03,
    "pred": "dets\\kf_nor\\rand_s0\\results_nusc.json",
-   "sha256": "039ed8a3560195538898458ddde0646ccde7eb427465ac9ffa57e5d6debc0f6f"
+   "sha256": "039ed8a3560195538898458ddde0646ccde7eb427465ac9ffa57e5d6debc0f6f",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.538,
+   "kbit_used_mean": 40.049,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.319,
+   "age_hist": [
+    98,
+    98,
+    36,
+    0
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "rand_s0",
+   "mAP": 0.5779,
+   "mAP_f3": 0.5971,
+   "ap": [
+    0.1586,
+    0.5354,
+    0.7752,
+    0.8423
+   ],
+   "per_scene": {
+    "scene_11": 0.6161,
+    "scene_13": 0.5701,
+    "scene_15": 0.5418
+   },
+   "pred": "dets\\kf0_nor\\rand_s0\\results_nusc.json",
+   "sha256": "50e9b9afcb6520e0d9a23e1e136ffd83dcd152ce50629495526a434b9121f132",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.538,
+   "kbit_used_mean": 40.049,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.319,
+   "age_hist": [
+    98,
+    98,
+    36,
+    0
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "rand_s0",
+   "mAP": 0.5779,
+   "mAP_f3": 0.5971,
+   "ap": [
+    0.1586,
+    0.5354,
+    0.7752,
+    0.8423
+   ],
+   "per_scene": {
+    "scene_11": 0.6161,
+    "scene_13": 0.5701,
+    "scene_15": 0.5418
+   },
+   "pred": "dets\\kfv_nor\\rand_s0\\results_nusc.json",
+   "sha256": "7b16b501157240a94e8fca82c4ac0157af2dfd536c771927ec10d46c6a99b569",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.538,
+   "kbit_used_mean": 40.049,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.319,
+   "age_hist": [
+    98,
+    98,
+    36,
+    0
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "rand_s0",
+   "mAP": 0.6141,
+   "mAP_f3": 0.6383,
+   "ap": [
+    0.2442,
+    0.588,
+    0.7809,
+    0.8432
+   ],
+   "per_scene": {
+    "scene_11": 0.6285,
+    "scene_13": 0.6171,
+    "scene_15": 0.5958
+   },
+   "pred": "dets\\kfp_nor\\rand_s0\\results_nusc.json",
+   "sha256": "0a895adfe1dc659f1f8a7cba780a04d6ae10c5c2e266a31c5f1dafaa5471b7ec",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.538,
+   "kbit_used_mean": 40.049,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.319,
+   "age_hist": [
+    98,
+    98,
+    36,
+    0
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "rand_s0",
+   "mAP": 0.6141,
+   "mAP_f3": 0.6383,
+   "ap": [
+    0.2442,
+    0.588,
+    0.7809,
+    0.8432
+   ],
+   "per_scene": {
+    "scene_11": 0.6285,
+    "scene_13": 0.6171,
+    "scene_15": 0.5958
+   },
+   "pred": "dets\\kfw_nor\\rand_s0\\results_nusc.json",
+   "sha256": "6fc5705b664664cc471b8d828b0c3ff460607da2b0adec94ee4623fc9ef25e36",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 40.436,
+   "kbit_used_mean": 40.958,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.319,
+   "age_hist": [
+    98,
+    98,
+    36,
+    0
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "box_max",
@@ -396,11 +1099,22 @@
     "scene_13": 0.5262,
     "scene_15": 0.4898
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 49.07,
    "pred": "dets\\box_max\\rand_s1\\results_nusc.json",
-   "sha256": "79460b1e71aa4ad528854edf11a08ceeed5edb4eefd24355b61a698449c840ae"
+   "sha256": "79460b1e71aa4ad528854edf11a08ceeed5edb4eefd24355b61a698449c840ae",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 48.012,
+   "kbit_used_mean": 49.088,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.3856,
+   "age_hist": [
+    90,
+    102,
+    40,
+    4
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "box_nor",
@@ -418,11 +1132,22 @@
     "scene_13": 0.6028,
     "scene_15": 0.5793
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 49.07,
    "pred": "dets\\box_nor\\rand_s1\\results_nusc.json",
-   "sha256": "35aa44d03d396843e480368e6a8ce89890fd94e40ebaa2434dbc6dea530d87a3"
+   "sha256": "35aa44d03d396843e480368e6a8ce89890fd94e40ebaa2434dbc6dea530d87a3",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 48.012,
+   "kbit_used_mean": 49.088,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.3856,
+   "age_hist": [
+    90,
+    102,
+    40,
+    4
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "kf_max",
@@ -440,11 +1165,22 @@
     "scene_13": 0.555,
     "scene_15": 0.5327
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 39.3,
    "pred": "dets\\kf_max\\rand_s1\\results_nusc.json",
-   "sha256": "8febbcd633bfa2489f87514123814ef4f7a8c99566e0ccafec08f77131905d53"
+   "sha256": "8febbcd633bfa2489f87514123814ef4f7a8c99566e0ccafec08f77131905d53",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.641,
+   "kbit_used_mean": 39.319,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.3856,
+   "age_hist": [
+    90,
+    102,
+    40,
+    4
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "kf_nor",
@@ -462,11 +1198,154 @@
     "scene_13": 0.6106,
     "scene_15": 0.5847
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 39.3,
    "pred": "dets\\kf_nor\\rand_s1\\results_nusc.json",
-   "sha256": "7c68804e4457df230d69d15a1c464ae0fbf220868f0c5b7789f090b0b8e7c698"
+   "sha256": "7c68804e4457df230d69d15a1c464ae0fbf220868f0c5b7789f090b0b8e7c698",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.641,
+   "kbit_used_mean": 39.319,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.3856,
+   "age_hist": [
+    90,
+    102,
+    40,
+    4
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "rand_s1",
+   "mAP": 0.5663,
+   "mAP_f3": 0.5842,
+   "ap": [
+    0.1506,
+    0.5155,
+    0.764,
+    0.835
+   ],
+   "per_scene": {
+    "scene_11": 0.5861,
+    "scene_13": 0.5761,
+    "scene_15": 0.5333
+   },
+   "pred": "dets\\kf0_nor\\rand_s1\\results_nusc.json",
+   "sha256": "c9863ae314b942e0849ff0190248bfcdf76c068e4fedf051a7f3b6b6f7019c01",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.641,
+   "kbit_used_mean": 39.319,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.3856,
+   "age_hist": [
+    90,
+    102,
+    40,
+    4
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "rand_s1",
+   "mAP": 0.5663,
+   "mAP_f3": 0.5842,
+   "ap": [
+    0.1506,
+    0.5155,
+    0.764,
+    0.835
+   ],
+   "per_scene": {
+    "scene_11": 0.5861,
+    "scene_13": 0.5761,
+    "scene_15": 0.5333
+   },
+   "pred": "dets\\kfv_nor\\rand_s1\\results_nusc.json",
+   "sha256": "27d31c7689897046ce13e43016d3eba6b2c96ceccfcbf4b1f5386adc30364d30",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.641,
+   "kbit_used_mean": 39.319,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.3856,
+   "age_hist": [
+    90,
+    102,
+    40,
+    4
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "rand_s1",
+   "mAP": 0.604,
+   "mAP_f3": 0.6268,
+   "ap": [
+    0.2271,
+    0.578,
+    0.7725,
+    0.8383
+   ],
+   "per_scene": {
+    "scene_11": 0.6147,
+    "scene_13": 0.6106,
+    "scene_15": 0.5847
+   },
+   "pred": "dets\\kfp_nor\\rand_s1\\results_nusc.json",
+   "sha256": "ab59bb3047b3a57e1fd4c1a9b095bb0b4899db8a5595d0935430e96e685d1afa",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.641,
+   "kbit_used_mean": 39.319,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.3856,
+   "age_hist": [
+    90,
+    102,
+    40,
+    4
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "rand_s1",
+   "mAP": 0.604,
+   "mAP_f3": 0.6268,
+   "ap": [
+    0.2271,
+    0.578,
+    0.7725,
+    0.8383
+   ],
+   "per_scene": {
+    "scene_11": 0.6147,
+    "scene_13": 0.6106,
+    "scene_15": 0.5846
+   },
+   "pred": "dets\\kfw_nor\\rand_s1\\results_nusc.json",
+   "sha256": "5f4e56b10a6ad13120016211c444154ad5d1c48b9cad22f211473f981903cf8e",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 40.541,
+   "kbit_used_mean": 40.209,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.3856,
+   "age_hist": [
+    90,
+    102,
+    40,
+    4
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "box_max",
@@ -484,11 +1363,22 @@
     "scene_13": 0.4991,
     "scene_15": 0.512
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 48.61,
    "pred": "dets\\box_max\\rand_s2\\results_nusc.json",
-   "sha256": "207021a7c8dccab5a397da1220eb07f539ea61b2dbddfb615e14a856eef60fb4"
+   "sha256": "207021a7c8dccab5a397da1220eb07f539ea61b2dbddfb615e14a856eef60fb4",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 47.816,
+   "kbit_used_mean": 48.625,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.3578,
+   "age_hist": [
+    108,
+    85,
+    34,
+    5
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "box_nor",
@@ -506,11 +1396,22 @@
     "scene_13": 0.5842,
     "scene_15": 0.5905
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 48.61,
    "pred": "dets\\box_nor\\rand_s2\\results_nusc.json",
-   "sha256": "4cbadea80b7db305c7e29ecbc472369e29f527caa345f765ca555c16db65e2e1"
+   "sha256": "4cbadea80b7db305c7e29ecbc472369e29f527caa345f765ca555c16db65e2e1",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 47.816,
+   "kbit_used_mean": 48.625,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.3578,
+   "age_hist": [
+    108,
+    85,
+    34,
+    5
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "kf_max",
@@ -528,11 +1429,22 @@
     "scene_13": 0.5446,
     "scene_15": 0.5449
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 40.26,
    "pred": "dets\\kf_max\\rand_s2\\results_nusc.json",
-   "sha256": "1f3288bf7b76e5a2eebf5a2aef45d386c0137906eb2a6a65d4b2611d51155e8c"
+   "sha256": "1f3288bf7b76e5a2eebf5a2aef45d386c0137906eb2a6a65d4b2611d51155e8c",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.508,
+   "kbit_used_mean": 40.27,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.3578,
+   "age_hist": [
+    108,
+    85,
+    34,
+    5
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "kf_nor",
@@ -550,11 +1462,154 @@
     "scene_13": 0.6088,
     "scene_15": 0.6031
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 40.26,
    "pred": "dets\\kf_nor\\rand_s2\\results_nusc.json",
-   "sha256": "a1f0dc54187fb67c89729f48a8186678b9b904e8a0cfb7fbcf6e3910aa2cd997"
+   "sha256": "a1f0dc54187fb67c89729f48a8186678b9b904e8a0cfb7fbcf6e3910aa2cd997",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.508,
+   "kbit_used_mean": 40.27,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.3578,
+   "age_hist": [
+    108,
+    85,
+    34,
+    5
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "rand_s2",
+   "mAP": 0.5815,
+   "mAP_f3": 0.5963,
+   "ap": [
+    0.1732,
+    0.534,
+    0.7747,
+    0.8442
+   ],
+   "per_scene": {
+    "scene_11": 0.6149,
+    "scene_13": 0.5628,
+    "scene_15": 0.5667
+   },
+   "pred": "dets\\kf0_nor\\rand_s2\\results_nusc.json",
+   "sha256": "e447af2abcfbd213e5f936753d1cb83b84300d04707a164455ea716eb6af9d69",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.508,
+   "kbit_used_mean": 40.27,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.3578,
+   "age_hist": [
+    108,
+    85,
+    34,
+    5
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "rand_s2",
+   "mAP": 0.5815,
+   "mAP_f3": 0.5963,
+   "ap": [
+    0.1732,
+    0.534,
+    0.7747,
+    0.8442
+   ],
+   "per_scene": {
+    "scene_11": 0.6149,
+    "scene_13": 0.5628,
+    "scene_15": 0.5667
+   },
+   "pred": "dets\\kfv_nor\\rand_s2\\results_nusc.json",
+   "sha256": "cc946157c45c2085f43ad400498440fe2d30a3cb5f6417a9a88e0a1df491a67d",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.508,
+   "kbit_used_mean": 40.27,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.3578,
+   "age_hist": [
+    108,
+    85,
+    34,
+    5
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "rand_s2",
+   "mAP": 0.6163,
+   "mAP_f3": 0.6361,
+   "ap": [
+    0.2461,
+    0.5878,
+    0.7838,
+    0.8473
+   ],
+   "per_scene": {
+    "scene_11": 0.6385,
+    "scene_13": 0.6088,
+    "scene_15": 0.6031
+   },
+   "pred": "dets\\kfp_nor\\rand_s2\\results_nusc.json",
+   "sha256": "7a90f91d95dd99efec2ef5ecc1ddfa1800787d3a2fd856d06b13b5a7087250f0",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 39.508,
+   "kbit_used_mean": 40.27,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.3578,
+   "age_hist": [
+    108,
+    85,
+    34,
+    5
+   ],
+   "n_tail_packets": 11
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "rand_s2",
+   "mAP": 0.6163,
+   "mAP_f3": 0.6361,
+   "ap": [
+    0.2461,
+    0.5878,
+    0.7838,
+    0.8473
+   ],
+   "per_scene": {
+    "scene_11": 0.6385,
+    "scene_13": 0.6088,
+    "scene_15": 0.603
+   },
+   "pred": "dets\\kfw_nor\\rand_s2\\results_nusc.json",
+   "sha256": "c3fd288a20f130086c57e6e154cb2bd3293c1f5f014dba204594f711f3c1ebd2",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 40.404,
+   "kbit_used_mean": 41.184,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.0333,
+   "frac_cached": 0.3578,
+   "age_hist": [
+    108,
+    85,
+    34,
+    5
+   ],
+   "n_tail_packets": 11
   },
   {
    "method": "box_max",
@@ -572,11 +1627,22 @@
     "scene_13": 0.5547,
     "scene_15": 0.5576
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 47.17,
    "pred": "dets\\box_max\\loss0.2_s0\\results_nusc.json",
-   "sha256": "19609b1ce5ca405f6d4815437c8ccf946e8c00700b8b0de447180aea42856d35"
+   "sha256": "19609b1ce5ca405f6d4815437c8ccf946e8c00700b8b0de447180aea42856d35",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 38.116,
+   "kbit_used_mean": 47.19,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0458,
+   "frac_cached": 0.1921,
+   "age_hist": [
+    185,
+    33,
+    8,
+    3
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_nor",
@@ -594,11 +1660,22 @@
     "scene_13": 0.6258,
     "scene_15": 0.6425
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 47.17,
    "pred": "dets\\box_nor\\loss0.2_s0\\results_nusc.json",
-   "sha256": "d57480bf8db271bfdf59e0bfea89a14d8775281a7142fa8a05acfff4c0559a06"
+   "sha256": "d57480bf8db271bfdf59e0bfea89a14d8775281a7142fa8a05acfff4c0559a06",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 38.116,
+   "kbit_used_mean": 47.19,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0458,
+   "frac_cached": 0.1921,
+   "age_hist": [
+    185,
+    33,
+    8,
+    3
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_max",
@@ -616,11 +1693,22 @@
     "scene_13": 0.5845,
     "scene_15": 0.5719
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 39.06,
    "pred": "dets\\kf_max\\loss0.2_s0\\results_nusc.json",
-   "sha256": "0159da0eaf83577debe2790ded4c71d2159f36b2828ec459a304c746188c48c9"
+   "sha256": "0159da0eaf83577debe2790ded4c71d2159f36b2828ec459a304c746188c48c9",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 31.493,
+   "kbit_used_mean": 39.078,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0458,
+   "frac_cached": 0.1921,
+   "age_hist": [
+    185,
+    33,
+    8,
+    3
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_nor",
@@ -638,11 +1726,22 @@
     "scene_13": 0.6295,
     "scene_15": 0.6306
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 39.06,
    "pred": "dets\\kf_nor\\loss0.2_s0\\results_nusc.json",
-   "sha256": "1a86519948978d38531842bbf7a836a3c7841c1d087e09b6ac6d813c551351a7"
+   "sha256": "1a86519948978d38531842bbf7a836a3c7841c1d087e09b6ac6d813c551351a7",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 31.493,
+   "kbit_used_mean": 39.078,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0458,
+   "frac_cached": 0.1921,
+   "age_hist": [
+    185,
+    33,
+    8,
+    3
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_max",
@@ -660,11 +1759,22 @@
     "scene_13": 0.6033,
     "scene_15": 0.5624
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 48.77,
    "pred": "dets\\box_max\\loss0.2_s1\\results_nusc.json",
-   "sha256": "7b738fa2e97ff775013a239aebcf1cf81bb34238d6cd7b1c42d3613fe0b8fade"
+   "sha256": "7b738fa2e97ff775013a239aebcf1cf81bb34238d6cd7b1c42d3613fe0b8fade",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 40.867,
+   "kbit_used_mean": 48.787,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0208,
+   "frac_cached": 0.1617,
+   "age_hist": [
+    197,
+    31,
+    6,
+    1
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_nor",
@@ -682,11 +1792,22 @@
     "scene_13": 0.6492,
     "scene_15": 0.6467
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 48.77,
    "pred": "dets\\box_nor\\loss0.2_s1\\results_nusc.json",
-   "sha256": "c0a1a141ac04bb59c03b260fb57665cc75930e085a91d50a747f2102d8a34b35"
+   "sha256": "c0a1a141ac04bb59c03b260fb57665cc75930e085a91d50a747f2102d8a34b35",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 40.867,
+   "kbit_used_mean": 48.787,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0208,
+   "frac_cached": 0.1617,
+   "age_hist": [
+    197,
+    31,
+    6,
+    1
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_max",
@@ -704,11 +1825,22 @@
     "scene_13": 0.5997,
     "scene_15": 0.5766
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 41.0,
    "pred": "dets\\kf_max\\loss0.2_s1\\results_nusc.json",
-   "sha256": "ff611d7f258cfbe907665b6bd8dabed0755ac1919b9686f68ddb4b1803da3fbc"
+   "sha256": "ff611d7f258cfbe907665b6bd8dabed0755ac1919b9686f68ddb4b1803da3fbc",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 34.406,
+   "kbit_used_mean": 41.01,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0208,
+   "frac_cached": 0.1617,
+   "age_hist": [
+    197,
+    31,
+    6,
+    1
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_nor",
@@ -726,11 +1858,22 @@
     "scene_13": 0.6425,
     "scene_15": 0.6335
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 41.0,
    "pred": "dets\\kf_nor\\loss0.2_s1\\results_nusc.json",
-   "sha256": "8e39c397830927ef3e4ce2778ee32b188c401ac5fd2df59c675d7bd77ef603da"
+   "sha256": "8e39c397830927ef3e4ce2778ee32b188c401ac5fd2df59c675d7bd77ef603da",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 34.406,
+   "kbit_used_mean": 41.01,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0208,
+   "frac_cached": 0.1617,
+   "age_hist": [
+    197,
+    31,
+    6,
+    1
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_max",
@@ -748,11 +1891,22 @@
     "scene_13": 0.5583,
     "scene_15": 0.5711
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 48.77,
    "pred": "dets\\box_max\\loss0.2_s2\\results_nusc.json",
-   "sha256": "6d1452b3728b64d97d2ba748380e60e7ce0260433ba7d48113288cc850b02640"
+   "sha256": "6d1452b3728b64d97d2ba748380e60e7ce0260433ba7d48113288cc850b02640",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 40.382,
+   "kbit_used_mean": 48.789,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.1695,
+   "age_hist": [
+    196,
+    34,
+    4,
+    2
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_nor",
@@ -770,11 +1924,22 @@
     "scene_13": 0.6264,
     "scene_15": 0.6579
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 48.77,
    "pred": "dets\\box_nor\\loss0.2_s2\\results_nusc.json",
-   "sha256": "2159739bc5b916888346aadddf845848ffe2875b0f3b6d99bd807969d0426d4e"
+   "sha256": "2159739bc5b916888346aadddf845848ffe2875b0f3b6d99bd807969d0426d4e",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 40.382,
+   "kbit_used_mean": 48.789,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.1695,
+   "age_hist": [
+    196,
+    34,
+    4,
+    2
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_max",
@@ -792,11 +1957,22 @@
     "scene_13": 0.5727,
     "scene_15": 0.5802
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 40.25,
    "pred": "dets\\kf_max\\loss0.2_s2\\results_nusc.json",
-   "sha256": "01b3d11c28923f82b056281fe577177052f9112489266164908e497d1d577f9c"
+   "sha256": "01b3d11c28923f82b056281fe577177052f9112489266164908e497d1d577f9c",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 33.406,
+   "kbit_used_mean": 40.269,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.1695,
+   "age_hist": [
+    196,
+    34,
+    4,
+    2
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_nor",
@@ -814,11 +1990,22 @@
     "scene_13": 0.6281,
     "scene_15": 0.6321
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 40.25,
    "pred": "dets\\kf_nor\\loss0.2_s2\\results_nusc.json",
-   "sha256": "2ce46fbd11408dc58f4d47f58e091f9c4becdc925854e1b01c7bfa8751a09234"
+   "sha256": "2ce46fbd11408dc58f4d47f58e091f9c4becdc925854e1b01c7bfa8751a09234",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 33.406,
+   "kbit_used_mean": 40.269,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0167,
+   "frac_cached": 0.1695,
+   "age_hist": [
+    196,
+    34,
+    4,
+    2
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_max",
@@ -836,11 +2023,22 @@
     "scene_13": 0.5153,
     "scene_15": 0.502
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 41.42,
    "pred": "dets\\box_max\\loss0.5_s0\\results_nusc.json",
-   "sha256": "124aec20bb60e67c06c3b0faa072a11ba58785eb87d682d7c1f9c58242826d1e"
+   "sha256": "124aec20bb60e67c06c3b0faa072a11ba58785eb87d682d7c1f9c58242826d1e",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 21.87,
+   "kbit_used_mean": 41.433,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.1583,
+   "frac_cached": 0.4703,
+   "age_hist": [
+    107,
+    55,
+    26,
+    14
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_nor",
@@ -858,11 +2056,22 @@
     "scene_13": 0.5996,
     "scene_15": 0.5911
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 41.42,
    "pred": "dets\\box_nor\\loss0.5_s0\\results_nusc.json",
-   "sha256": "fac5bbb5972e20425ad04bb7720b3523b24ec48644db7afa4ac0db8d6e498183"
+   "sha256": "fac5bbb5972e20425ad04bb7720b3523b24ec48644db7afa4ac0db8d6e498183",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 21.87,
+   "kbit_used_mean": 41.433,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.1583,
+   "frac_cached": 0.4703,
+   "age_hist": [
+    107,
+    55,
+    26,
+    14
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_max",
@@ -880,11 +2089,22 @@
     "scene_13": 0.5618,
     "scene_15": 0.5442
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 33.72,
    "pred": "dets\\kf_max\\loss0.5_s0\\results_nusc.json",
-   "sha256": "61b58db68bb4d035f5e605c53e0e3e4239cd78424c38cbab64eb7f9313d7ebc6"
+   "sha256": "61b58db68bb4d035f5e605c53e0e3e4239cd78424c38cbab64eb7f9313d7ebc6",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 17.936,
+   "kbit_used_mean": 33.728,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1583,
+   "frac_cached": 0.4703,
+   "age_hist": [
+    107,
+    55,
+    26,
+    14
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_nor",
@@ -902,11 +2122,154 @@
     "scene_13": 0.6087,
     "scene_15": 0.5915
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 33.72,
    "pred": "dets\\kf_nor\\loss0.5_s0\\results_nusc.json",
-   "sha256": "d35c2e0d0dd23f1af76779658e908daa500064f68c4e294d05db819672f1604e"
+   "sha256": "d35c2e0d0dd23f1af76779658e908daa500064f68c4e294d05db819672f1604e",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 17.936,
+   "kbit_used_mean": 33.728,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1583,
+   "frac_cached": 0.4703,
+   "age_hist": [
+    107,
+    55,
+    26,
+    14
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "loss0.5_s0",
+   "mAP": 0.5746,
+   "mAP_f3": 0.5905,
+   "ap": [
+    0.1779,
+    0.5299,
+    0.7586,
+    0.8319
+   ],
+   "per_scene": {
+    "scene_11": 0.5844,
+    "scene_13": 0.5779,
+    "scene_15": 0.5605
+   },
+   "pred": "dets\\kf0_nor\\loss0.5_s0\\results_nusc.json",
+   "sha256": "e22da791bc159e0dd40e01883ef65295be05757e890d6fbbe5da9b308ae07829",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 17.936,
+   "kbit_used_mean": 33.728,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1583,
+   "frac_cached": 0.4703,
+   "age_hist": [
+    107,
+    55,
+    26,
+    14
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "loss0.5_s0",
+   "mAP": 0.5746,
+   "mAP_f3": 0.5905,
+   "ap": [
+    0.1779,
+    0.5299,
+    0.7586,
+    0.8319
+   ],
+   "per_scene": {
+    "scene_11": 0.5844,
+    "scene_13": 0.5779,
+    "scene_15": 0.5605
+   },
+   "pred": "dets\\kfv_nor\\loss0.5_s0\\results_nusc.json",
+   "sha256": "dd4058dc20fc6c9986528a0cf97ed6095c6649c16e24af74ad6fafe3dbe6a04e",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 17.936,
+   "kbit_used_mean": 33.728,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1583,
+   "frac_cached": 0.4703,
+   "age_hist": [
+    107,
+    55,
+    26,
+    14
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "loss0.5_s0",
+   "mAP": 0.6046,
+   "mAP_f3": 0.624,
+   "ap": [
+    0.2262,
+    0.5775,
+    0.7741,
+    0.8405
+   ],
+   "per_scene": {
+    "scene_11": 0.6131,
+    "scene_13": 0.6087,
+    "scene_15": 0.5915
+   },
+   "pred": "dets\\kfp_nor\\loss0.5_s0\\results_nusc.json",
+   "sha256": "84238edd7648f09c44b58a5d9273ed36e9832b3eea11be2110d7e59f9620b49a",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 17.936,
+   "kbit_used_mean": 33.728,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1583,
+   "frac_cached": 0.4703,
+   "age_hist": [
+    107,
+    55,
+    26,
+    14
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "loss0.5_s0",
+   "mAP": 0.6046,
+   "mAP_f3": 0.624,
+   "ap": [
+    0.2262,
+    0.5776,
+    0.7741,
+    0.8406
+   ],
+   "per_scene": {
+    "scene_11": 0.6131,
+    "scene_13": 0.6087,
+    "scene_15": 0.5915
+   },
+   "pred": "dets\\kfw_nor\\loss0.5_s0\\results_nusc.json",
+   "sha256": "8a4a361470a9e055d78692c693c39499c204700252dc6a08586255ac91ecbb5d",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 18.343,
+   "kbit_used_mean": 34.493,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.1583,
+   "frac_cached": 0.4703,
+   "age_hist": [
+    107,
+    55,
+    26,
+    14
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_max",
@@ -924,11 +2287,22 @@
     "scene_13": 0.5443,
     "scene_15": 0.5255
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 45.1,
    "pred": "dets\\box_max\\loss0.5_s1\\results_nusc.json",
-   "sha256": "c0fb236cd4cd43c24621e5286579b9cf7320c1167e942ccc379a159d110fdb63"
+   "sha256": "c0fb236cd4cd43c24621e5286579b9cf7320c1167e942ccc379a159d110fdb63",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 27.777,
+   "kbit_used_mean": 45.109,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.1042,
+   "frac_cached": 0.3814,
+   "age_hist": [
+    133,
+    55,
+    21,
+    6
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_nor",
@@ -946,11 +2320,22 @@
     "scene_13": 0.5919,
     "scene_15": 0.6055
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 45.1,
    "pred": "dets\\box_nor\\loss0.5_s1\\results_nusc.json",
-   "sha256": "0a5e7ed06c79e17566556c6a2bb725a685e136c5d9160e0d94664216bd36fd35"
+   "sha256": "0a5e7ed06c79e17566556c6a2bb725a685e136c5d9160e0d94664216bd36fd35",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 27.777,
+   "kbit_used_mean": 45.109,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.1042,
+   "frac_cached": 0.3814,
+   "age_hist": [
+    133,
+    55,
+    21,
+    6
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_max",
@@ -968,11 +2353,22 @@
     "scene_13": 0.5659,
     "scene_15": 0.5516
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 38.13,
    "pred": "dets\\kf_max\\loss0.5_s1\\results_nusc.json",
-   "sha256": "1898a0bd65c26b5f053ef185031694e7ac728fbac51c9c950aff295644214627"
+   "sha256": "1898a0bd65c26b5f053ef185031694e7ac728fbac51c9c950aff295644214627",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 23.59,
+   "kbit_used_mean": 38.139,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1042,
+   "frac_cached": 0.3814,
+   "age_hist": [
+    133,
+    55,
+    21,
+    6
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_nor",
@@ -990,11 +2386,154 @@
     "scene_13": 0.6154,
     "scene_15": 0.609
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 38.13,
    "pred": "dets\\kf_nor\\loss0.5_s1\\results_nusc.json",
-   "sha256": "436bd9693e57e8a4f69f6991fd417f47b5db0a3072b7825eaa91440768bd2afe"
+   "sha256": "436bd9693e57e8a4f69f6991fd417f47b5db0a3072b7825eaa91440768bd2afe",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 23.59,
+   "kbit_used_mean": 38.139,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1042,
+   "frac_cached": 0.3814,
+   "age_hist": [
+    133,
+    55,
+    21,
+    6
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "loss0.5_s1",
+   "mAP": 0.5943,
+   "mAP_f3": 0.6122,
+   "ap": [
+    0.2022,
+    0.5575,
+    0.7766,
+    0.841
+   ],
+   "per_scene": {
+    "scene_11": 0.6119,
+    "scene_13": 0.5897,
+    "scene_15": 0.5828
+   },
+   "pred": "dets\\kf0_nor\\loss0.5_s1\\results_nusc.json",
+   "sha256": "d0205e35ce921519324f45d44231aaa94ce293303037fb91422dcd531988eb51",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 23.59,
+   "kbit_used_mean": 38.139,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1042,
+   "frac_cached": 0.3814,
+   "age_hist": [
+    133,
+    55,
+    21,
+    6
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "loss0.5_s1",
+   "mAP": 0.5943,
+   "mAP_f3": 0.6122,
+   "ap": [
+    0.2022,
+    0.5575,
+    0.7766,
+    0.841
+   ],
+   "per_scene": {
+    "scene_11": 0.6119,
+    "scene_13": 0.5897,
+    "scene_15": 0.5828
+   },
+   "pred": "dets\\kfv_nor\\loss0.5_s1\\results_nusc.json",
+   "sha256": "ecd14158929132529559db0ad95cf6e18b4718194dabd73410814f3e4dc208a6",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 23.59,
+   "kbit_used_mean": 38.139,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1042,
+   "frac_cached": 0.3814,
+   "age_hist": [
+    133,
+    55,
+    21,
+    6
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "loss0.5_s1",
+   "mAP": 0.6169,
+   "mAP_f3": 0.6367,
+   "ap": [
+    0.2419,
+    0.5941,
+    0.7846,
+    0.8468
+   ],
+   "per_scene": {
+    "scene_11": 0.6258,
+    "scene_13": 0.6154,
+    "scene_15": 0.609
+   },
+   "pred": "dets\\kfp_nor\\loss0.5_s1\\results_nusc.json",
+   "sha256": "09df1fc2423eaf300fc25ef8eb8e1c69ccc794aa5cd7644bf36d9ca0c8727967",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 23.59,
+   "kbit_used_mean": 38.139,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1042,
+   "frac_cached": 0.3814,
+   "age_hist": [
+    133,
+    55,
+    21,
+    6
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "loss0.5_s1",
+   "mAP": 0.6169,
+   "mAP_f3": 0.6366,
+   "ap": [
+    0.2421,
+    0.5941,
+    0.7845,
+    0.8467
+   ],
+   "per_scene": {
+    "scene_11": 0.6258,
+    "scene_13": 0.6154,
+    "scene_15": 0.6089
+   },
+   "pred": "dets\\kfw_nor\\loss0.5_s1\\results_nusc.json",
+   "sha256": "b6e02e315117715373f1ec86c62099f0004d6bd5bfe2129ef958f39b28865d2e",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 24.126,
+   "kbit_used_mean": 39.005,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.1042,
+   "frac_cached": 0.3814,
+   "age_hist": [
+    133,
+    55,
+    21,
+    6
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_max",
@@ -1012,11 +2551,22 @@
     "scene_13": 0.4817,
     "scene_15": 0.4951
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 43.46,
    "pred": "dets\\box_max\\loss0.5_s2\\results_nusc.json",
-   "sha256": "2d7fbb9759205020f63dfcc11c2ba1912a7876e127eae8af9edcc845981367d6"
+   "sha256": "2d7fbb9759205020f63dfcc11c2ba1912a7876e127eae8af9edcc845981367d6",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 24.908,
+   "kbit_used_mean": 43.471,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.125,
+   "frac_cached": 0.4286,
+   "age_hist": [
+    120,
+    51,
+    27,
+    12
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_nor",
@@ -1034,11 +2584,22 @@
     "scene_13": 0.5444,
     "scene_15": 0.586
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 43.46,
    "pred": "dets\\box_nor\\loss0.5_s2\\results_nusc.json",
-   "sha256": "cd7a35035b153260bba6893a35af503eab96826dbe9aa60cdd1d6145cd0c7c34"
+   "sha256": "cd7a35035b153260bba6893a35af503eab96826dbe9aa60cdd1d6145cd0c7c34",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 24.908,
+   "kbit_used_mean": 43.471,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.125,
+   "frac_cached": 0.4286,
+   "age_hist": [
+    120,
+    51,
+    27,
+    12
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_max",
@@ -1056,11 +2617,22 @@
     "scene_13": 0.5128,
     "scene_15": 0.5433
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 35.95,
    "pred": "dets\\kf_max\\loss0.5_s2\\results_nusc.json",
-   "sha256": "9a6e766f91ebd069ebe788c09ef55dbb350eb83fa9bdba373b3c2e79814a6bef"
+   "sha256": "9a6e766f91ebd069ebe788c09ef55dbb350eb83fa9bdba373b3c2e79814a6bef",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 20.866,
+   "kbit_used_mean": 35.963,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.125,
+   "frac_cached": 0.4286,
+   "age_hist": [
+    120,
+    51,
+    27,
+    12
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "kf_nor",
@@ -1078,11 +2650,154 @@
     "scene_13": 0.5664,
     "scene_15": 0.6026
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 35.95,
    "pred": "dets\\kf_nor\\loss0.5_s2\\results_nusc.json",
-   "sha256": "af31bc15cae669e1839e27d7e21371b76e86492b4cd36409fdd5b64f1d2eaa62"
+   "sha256": "af31bc15cae669e1839e27d7e21371b76e86492b4cd36409fdd5b64f1d2eaa62",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 20.866,
+   "kbit_used_mean": 35.963,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.125,
+   "frac_cached": 0.4286,
+   "age_hist": [
+    120,
+    51,
+    27,
+    12
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kf0_nor",
+   "ledger": "loss0.5_s2",
+   "mAP": 0.5697,
+   "mAP_f3": 0.5836,
+   "ap": [
+    0.1789,
+    0.5227,
+    0.7456,
+    0.8315
+   ],
+   "per_scene": {
+    "scene_11": 0.6167,
+    "scene_13": 0.5312,
+    "scene_15": 0.556
+   },
+   "pred": "dets\\kf0_nor\\loss0.5_s2\\results_nusc.json",
+   "sha256": "761c351ca3302fba88073b009d63044350e118f525e02f018d5c2000917b8357",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 20.866,
+   "kbit_used_mean": 35.963,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.125,
+   "frac_cached": 0.4286,
+   "age_hist": [
+    120,
+    51,
+    27,
+    12
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfv_nor",
+   "ledger": "loss0.5_s2",
+   "mAP": 0.5697,
+   "mAP_f3": 0.5836,
+   "ap": [
+    0.1789,
+    0.5227,
+    0.7456,
+    0.8315
+   ],
+   "per_scene": {
+    "scene_11": 0.6167,
+    "scene_13": 0.5312,
+    "scene_15": 0.556
+   },
+   "pred": "dets\\kfv_nor\\loss0.5_s2\\results_nusc.json",
+   "sha256": "a0d1e6ba5939dbb5f94220b6e6c421f8736e88afa6627bd9e71ebfac661e1ba0",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 20.866,
+   "kbit_used_mean": 35.963,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.125,
+   "frac_cached": 0.4286,
+   "age_hist": [
+    120,
+    51,
+    27,
+    12
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfp_nor",
+   "ledger": "loss0.5_s2",
+   "mAP": 0.5992,
+   "mAP_f3": 0.6165,
+   "ap": [
+    0.2305,
+    0.5593,
+    0.7661,
+    0.8408
+   ],
+   "per_scene": {
+    "scene_11": 0.6313,
+    "scene_13": 0.5664,
+    "scene_15": 0.6026
+   },
+   "pred": "dets\\kfp_nor\\loss0.5_s2\\results_nusc.json",
+   "sha256": "b5794f26c01eba01f2c997b45a6b31b155f1088afe8868c87b1d2cdbc6efcc7c",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 20.866,
+   "kbit_used_mean": 35.963,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.125,
+   "frac_cached": 0.4286,
+   "age_hist": [
+    120,
+    51,
+    27,
+    12
+   ],
+   "n_tail_packets": 0
+  },
+  {
+   "method": "kfw_nor",
+   "ledger": "loss0.5_s2",
+   "mAP": 0.5992,
+   "mAP_f3": 0.6165,
+   "ap": [
+    0.2305,
+    0.5593,
+    0.7662,
+    0.8408
+   ],
+   "per_scene": {
+    "scene_11": 0.6312,
+    "scene_13": 0.5665,
+    "scene_15": 0.6026
+   },
+   "pred": "dets\\kfw_nor\\loss0.5_s2\\results_nusc.json",
+   "sha256": "b33d231b6370d04a5539e0721bd3fd0a043493fd2c4663e041a820bbcf7bfecd",
+   "kbit_tx_mean": 42.015,
+   "kbit_tx_useful_mean": 42.001,
+   "kbit_rx_arrived_mean": 21.339,
+   "kbit_used_mean": 36.78,
+   "kbit_tx_p95": 52.798,
+   "frac_no_msg": 0.125,
+   "frac_cached": 0.4286,
+   "age_hist": [
+    120,
+    51,
+    27,
+    12
+   ],
+   "n_tail_packets": 0
   },
   {
    "method": "box_max",
@@ -1100,11 +2815,22 @@
     "scene_13": 0.4677,
     "scene_15": 0.4767
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 44.89,
    "pred": "dets\\box_max\\rand_loss0.2_s0\\results_nusc.json",
-   "sha256": "dee949611a050d12f042e6254d10ba159d355fcb28004fe7a627a56be5a31910"
+   "sha256": "dee949611a050d12f042e6254d10ba159d355fcb28004fe7a627a56be5a31910",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 36.529,
+   "kbit_used_mean": 44.901,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.4028,
+   "age_hist": [
+    75,
+    83,
+    44,
+    14
+   ],
+   "n_tail_packets": 10
   },
   {
    "method": "box_nor",
@@ -1122,11 +2848,22 @@
     "scene_13": 0.5459,
     "scene_15": 0.5581
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 44.89,
    "pred": "dets\\box_nor\\rand_loss0.2_s0\\results_nusc.json",
-   "sha256": "01d09d5cf89cf9b2393ebe19be89eb3bc57c17a1e2f1981be0077c0ee13dfdf5"
+   "sha256": "01d09d5cf89cf9b2393ebe19be89eb3bc57c17a1e2f1981be0077c0ee13dfdf5",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 36.529,
+   "kbit_used_mean": 44.901,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.4028,
+   "age_hist": [
+    75,
+    83,
+    44,
+    14
+   ],
+   "n_tail_packets": 10
   },
   {
    "method": "kf_max",
@@ -1144,11 +2881,22 @@
     "scene_13": 0.528,
     "scene_15": 0.5264
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 36.86,
    "pred": "dets\\kf_max\\rand_loss0.2_s0\\results_nusc.json",
-   "sha256": "ac087328d8c9f24bf34ec639490716e8419d2a56b6e71f6c7e8eb17a830a8608"
+   "sha256": "ac087328d8c9f24bf34ec639490716e8419d2a56b6e71f6c7e8eb17a830a8608",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 30.09,
+   "kbit_used_mean": 36.878,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.4028,
+   "age_hist": [
+    75,
+    83,
+    44,
+    14
+   ],
+   "n_tail_packets": 10
   },
   {
    "method": "kf_nor",
@@ -1166,11 +2914,22 @@
     "scene_13": 0.5837,
     "scene_15": 0.5909
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 36.86,
    "pred": "dets\\kf_nor\\rand_loss0.2_s0\\results_nusc.json",
-   "sha256": "6abd974e814f4761b0b73bddc2d605450a641810ae652acfd945f44a6aafbb0c"
+   "sha256": "6abd974e814f4761b0b73bddc2d605450a641810ae652acfd945f44a6aafbb0c",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 30.09,
+   "kbit_used_mean": 36.878,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.1,
+   "frac_cached": 0.4028,
+   "age_hist": [
+    75,
+    83,
+    44,
+    14
+   ],
+   "n_tail_packets": 10
   },
   {
    "method": "box_max",
@@ -1188,11 +2947,22 @@
     "scene_13": 0.5057,
     "scene_15": 0.467
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 47.47,
    "pred": "dets\\box_max\\rand_loss0.2_s1\\results_nusc.json",
-   "sha256": "cfc716546d02a26145928c38e449a86b3e13c36f4b7681a641be5cde5044b8e9"
+   "sha256": "cfc716546d02a26145928c38e449a86b3e13c36f4b7681a641be5cde5044b8e9",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 39.411,
+   "kbit_used_mean": 47.489,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.4386,
+   "age_hist": [
+    74,
+    91,
+    50,
+    13
+   ],
+   "n_tail_packets": 10
   },
   {
    "method": "box_nor",
@@ -1210,11 +2980,22 @@
     "scene_13": 0.5794,
     "scene_15": 0.5537
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 47.47,
    "pred": "dets\\box_nor\\rand_loss0.2_s1\\results_nusc.json",
-   "sha256": "6533acdb489402368b2742ec49656b8d4397e5538c4b413e0b0a37cb10746547"
+   "sha256": "6533acdb489402368b2742ec49656b8d4397e5538c4b413e0b0a37cb10746547",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 39.411,
+   "kbit_used_mean": 47.489,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.4386,
+   "age_hist": [
+    74,
+    91,
+    50,
+    13
+   ],
+   "n_tail_packets": 10
   },
   {
    "method": "kf_max",
@@ -1232,11 +3013,22 @@
     "scene_13": 0.5373,
     "scene_15": 0.5215
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 38.79,
    "pred": "dets\\kf_max\\rand_loss0.2_s1\\results_nusc.json",
-   "sha256": "764f30c30b9706bb404a9f010b4877b87bb440a8369d224fdc36bb613d7cbcc2"
+   "sha256": "764f30c30b9706bb404a9f010b4877b87bb440a8369d224fdc36bb613d7cbcc2",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 33.111,
+   "kbit_used_mean": 38.804,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.4386,
+   "age_hist": [
+    74,
+    91,
+    50,
+    13
+   ],
+   "n_tail_packets": 10
   },
   {
    "method": "kf_nor",
@@ -1254,11 +3046,22 @@
     "scene_13": 0.5967,
     "scene_15": 0.5784
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 38.79,
    "pred": "dets\\kf_nor\\rand_loss0.2_s1\\results_nusc.json",
-   "sha256": "25432185bb19f4c94939bcbdd5d231064e22789afb780f499660af60661672b2"
+   "sha256": "25432185bb19f4c94939bcbdd5d231064e22789afb780f499660af60661672b2",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 33.111,
+   "kbit_used_mean": 38.804,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.05,
+   "frac_cached": 0.4386,
+   "age_hist": [
+    74,
+    91,
+    50,
+    13
+   ],
+   "n_tail_packets": 10
   },
   {
    "method": "box_max",
@@ -1276,11 +3079,22 @@
     "scene_13": 0.4603,
     "scene_15": 0.4868
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 46.78,
    "pred": "dets\\box_max\\rand_loss0.2_s2\\results_nusc.json",
-   "sha256": "e69eae9e70c2ecdada90f70b85f68cd4a59f31cf01b3e88a44d03e59c81d388b"
+   "sha256": "e69eae9e70c2ecdada90f70b85f68cd4a59f31cf01b3e88a44d03e59c81d388b",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 39.114,
+   "kbit_used_mean": 46.795,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0708,
+   "frac_cached": 0.4305,
+   "age_hist": [
+    89,
+    80,
+    40,
+    14
+   ],
+   "n_tail_packets": 8
   },
   {
    "method": "box_nor",
@@ -1298,11 +3112,22 @@
     "scene_13": 0.5476,
     "scene_15": 0.5771
    },
-   "kbit_tx_mean": 49.61,
-   "kbit_tx_p95": 58.74,
-   "kbit_rx_mean": 46.78,
    "pred": "dets\\box_nor\\rand_loss0.2_s2\\results_nusc.json",
-   "sha256": "7ecd0eb4679d427d07d19d56196697a020a3d6f766beb7e97f1a815014d421f6"
+   "sha256": "7ecd0eb4679d427d07d19d56196697a020a3d6f766beb7e97f1a815014d421f6",
+   "kbit_tx_mean": 49.624,
+   "kbit_tx_useful_mean": 49.609,
+   "kbit_rx_arrived_mean": 39.114,
+   "kbit_used_mean": 46.795,
+   "kbit_tx_p95": 58.748,
+   "frac_no_msg": 0.0708,
+   "frac_cached": 0.4305,
+   "age_hist": [
+    89,
+    80,
+    40,
+    14
+   ],
+   "n_tail_packets": 8
   },
   {
    "method": "kf_max",
@@ -1320,11 +3145,22 @@
     "scene_13": 0.5207,
     "scene_15": 0.526
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 38.31,
    "pred": "dets\\kf_max\\rand_loss0.2_s2\\results_nusc.json",
-   "sha256": "22711287468bab4c0862a5cdfde9681589345d51ba6e88a2bf10e2ce8cd8abaf"
+   "sha256": "22711287468bab4c0862a5cdfde9681589345d51ba6e88a2bf10e2ce8cd8abaf",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 32.303,
+   "kbit_used_mean": 38.327,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0708,
+   "frac_cached": 0.4305,
+   "age_hist": [
+    89,
+    80,
+    40,
+    14
+   ],
+   "n_tail_packets": 8
   },
   {
    "method": "kf_nor",
@@ -1342,11 +3178,22 @@
     "scene_13": 0.583,
     "scene_15": 0.5886
    },
-   "kbit_tx_mean": 41.07,
-   "kbit_tx_p95": 51.61,
-   "kbit_rx_mean": 38.31,
    "pred": "dets\\kf_nor\\rand_loss0.2_s2\\results_nusc.json",
-   "sha256": "056fe016d45079ad6d67249d74f63be6bc96e25d94deb2f1a3cc212997efe446"
+   "sha256": "056fe016d45079ad6d67249d74f63be6bc96e25d94deb2f1a3cc212997efe446",
+   "kbit_tx_mean": 41.083,
+   "kbit_tx_useful_mean": 41.069,
+   "kbit_rx_arrived_mean": 32.303,
+   "kbit_used_mean": 38.327,
+   "kbit_tx_p95": 51.621,
+   "frac_no_msg": 0.0708,
+   "frac_cached": 0.4305,
+   "age_hist": [
+    89,
+    80,
+    40,
+    14
+   ],
+   "n_tail_packets": 8
   }
  ]
 }

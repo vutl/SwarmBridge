@@ -1,6 +1,7 @@
 # Protocol đánh giá UAV3D v1 (khóa trước khi chạy thí nghiệm mới)
 
-Trạng thái: **bản nháp, chờ Codex review**. Khi chốt, gắn git tag `uav3d-protocol-v1`.
+Trạng thái: **v1.1 (bản nháp, chờ Codex review)**. Khi chốt, gắn git tag `uav3d-protocol-v1.1`.
+Các thay đổi so với v1 ghi ở mục 10; các mục 3 và 9 đã sửa theo code thực tế.
 Mọi thay đổi sau khi đã xem kết quả test phải ghi thành protocol v2, không sửa đè.
 
 Nguồn các yêu cầu:
@@ -32,11 +33,19 @@ Nguồn các yêu cầu:
 
 ## 3. Message, codec và bit
 - **Mọi message phải đi qua round-trip codec trước khi bên nhận dùng.**
-  - Box: lượng tử theo đúng 85 bit/box như định nghĩa trong `fusion.py`, giải mã lại rồi mới gộp.
+  - Box: bitstream thật `proto/boxcodec.py`, **87 bit/box** (dx, dy 13 bit ±204.8 m vì helper phát hiện xe tới ~125 m
+    từ chính nó; con số 85 bit cũ của `fusion.py` không còn dùng), giải mã lại rồi mới gộp. Phần mở rộng track
+    (ID 10 bit + 3 log-variance 6 bit = +28 bit) có trong codec nhưng **chưa nhánh nào dùng**; nhánh `kf` hiện tại là
+    "detection đã lọc Kalman kèm vận tốc", không phải truyền track-state đầy đủ.
   - Feature: q8 theo từng kênh (min/max của từng kênh gửi kèm).
   - FP16 dense chỉ là **tham chiếu trên**, không phải một phương án truyền.
-- **Bit = payload + 96 bit header** cho mỗi helper có gửi. Không gửi gì thì 0 bit, không tính header.
-- **Báo bit/frame** theo trung bình và p95.
+- **Header 132 bit** (version, sender, send_frame, count, vị trí sender 3 × float32) cho mỗi packet. Không gửi thì 0 bit.
+- **Bit báo cáo = 8 × số byte đã đóng gói** (có padding). Báo thêm bit hữu ích không padding.
+- **Ba loại bit, không được trộn:** `tx` (mọi packet đã phát, kể cả mất), `rx_arrived` (packet đến qua kênh trong frame
+  đó, mỗi packet đếm một lần tại frame đến, kể cả packet về sau bị packet mới thay), `used` (message bên nhận dùng
+  trong frame, kể cả đọc lại từ cache). Packet đến sau frame cuối episode chỉ tính vào `tx` và đếm riêng.
+- **Báo bit/frame** theo trung bình và p95, kèm tỷ lệ link không có message, phân bố tuổi message được dùng và tỷ lệ
+  dùng lại từ cache.
 - **Phép so box và feature** chỉ được kết luận khi cùng ngân sách bit: có đường chất lượng theo bit, hoặc ít nhất có feature nén thưa/q4 ở mức bit gần với box. Chưa có đường đó thì không được viết "X lần rẻ hơn" như một kết luận.
 
 ## 4. Hậu xử lý
@@ -74,9 +83,30 @@ Nguồn các yêu cầu:
 
 ## 9. Việc phải xong trước khi chạy GPU
 - [ ] Sửa khởi động lạnh (mục 2) trong `train_fusion.py`, `ft_tools.py`, `box_stress.py`, `feat_exp.py`, `train_separate.py`.
-- [ ] Tracker dùng dt = 0.2 s.
-- [ ] Codec round-trip cho box (85 bit) và feature (q8) nằm trong đường chấm.
+- [x] Tracker dùng dt = 0.2 s (`TRACK_DT=0.2`; AMOTA không đổi với file vận tốc 0).
+- [x] Codec round-trip cho box (87 bit) nằm trong đường chấm. [ ] Feature q8 có đếm byte.
 - [ ] Warp có xoay, kèm kiểm thử ở mục 6.
 - [ ] Dump lại box helper ở cap 500 từ cùng decoder ego cho mọi nhánh box.
-- [ ] Script chấm in mAP + AMOTA + sha256 cho mỗi file prediction và báo theo scene.
+- [x] Script chấm in mAP + AMOTA + sha256 cho mỗi file prediction và báo theo scene (box_proto + track_run).
+- [x] Ledger packet nhân quả có hash; unit test (`proto/test_proto.py`, 71 check).
+- [ ] Manifest/params/hash cho mỗi lần chạy; quét ngưỡng tracker; baseline không lọc trước.
 - [ ] Codex review diff của các bản sửa trên.
+
+## 10. Thay đổi trong v1.1 (sau review của Codex và ChatGPT về kết quả box)
+1. **Ưu tiên thay đổi.** Thí nghiệm gating ở mục 8 hoãn lại. Thứ tự: (a) ablation Kalman bốn nhánh và kế toán bit;
+   (b) chọn message dưới ngân sách bit; (c) đo khoảng cách tới oracle chẩn đoán. Không mở thêm mạng mới.
+2. **Ablation Kalman (KF-0 / KF-V / KF-P / KF-PV).** Cùng tracker phía gửi, cùng tập message, codec, ledger và cap.
+   Chỉ khác: có dự báo vị trí theo tuổi hay không; có giữ vận tốc khi đưa vào tracker bên nhận hay không (tắt vận tốc
+   sau khi đã dự báo, ngay trước tracker). So sync với trễ bên trong cùng một nhánh đo tác động của trễ; nhánh P so với
+   nhánh 0 mới đo tác dụng của dự báo.
+3. **Kiểm tra bão hòa vận tốc.** Nhánh chẩn đoán `kfw_nor` dùng codec vận tốc 9 bit ±25.6 m/s (89 bit/box), giữ mọi thứ
+   khác. Không phải phương án truyền.
+4. **So kf với box** không được quy cho một nguyên nhân duy nhất: hai nhánh còn khác nhau ở làm mượt vị trí, MIN_HITS,
+   tập track và số box.
+5. **Oracle.** Mọi oracle phải ghi rõ biết gì (GT/kết quả task tương lai, kênh tương lai, trạng thái bên nhận) và là
+   oracle một bước hay cả episode. Greedy/beam dùng GT gọi là "best-found diagnostic", không gọi là cận trên.
+   Khoảng cách oracle–heuristic chỉ cho biết còn dư địa; trước RL/MARL phải thử utility estimator, bandit hoặc planning
+   đơn giản. MARL chỉ khi đã định nghĩa agent phân tán với observation/action riêng.
+6. **Kênh.** Ledger hiện tại có trễ ngoại sinh, không phụ thuộc kích thước message hay hành động. Pilot ngân sách bước 1
+   chỉ kiểm tra *chọn nội dung* ở tuổi message ngoại sinh; nghiên cứu *lập lịch* cần hàng đợi có thời gian phục vụ phụ
+   thuộc payload và tốc độ link (bước 2).

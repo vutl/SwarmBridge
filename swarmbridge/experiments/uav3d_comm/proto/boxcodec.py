@@ -34,18 +34,26 @@ BOX_SPEC = [  # (field, bits, lo, step)
     ("yaw", 8, -math.pi, 2 * math.pi / 256), ("score", 7, 0.0, 1.0 / 127),
     ("vx", 8, -12.8, 0.1), ("vy", 8, -12.8, 0.1),
 ]
+# Diagnostic only (Codex review of box results): same codec with a wider velocity range, to measure the effect of
+# velocity saturation. vx, vy 9 bit each over [-25.6, 25.6) m/s, step 0.1 -> 89 bit/box. Not a protocol message.
+WIDE_VEL_SPEC = [f if f[0] not in ("vx", "vy") else (f[0], 9, -25.6, 0.1) for f in BOX_SPEC]
 TRACK_SPEC = [("tid", 10, 0.0, 1.0), ("lvx", 6, -8.0, 0.1875), ("lvy", 6, -8.0, 0.1875), ("lvyaw", 6, -8.0, 0.1875)]
 BOX_BITS = sum(b for _, b, _, _ in BOX_SPEC)              # 87
 TRACK_BITS = sum(b for _, b, _, _ in TRACK_SPEC)          # 28
 MAX_COUNT = (1 << 12) - 1
 
 
-def packet_bits(n, track=False):
-    return HEADER_BITS + n * (BOX_BITS + (TRACK_BITS if track else 0))
+def _box_spec(wide_vel):
+    return WIDE_VEL_SPEC if wide_vel else BOX_SPEC
 
 
-def packet_bytes(n, track=False):
-    return (packet_bits(n, track) + 7) // 8
+def packet_bits(n, track=False, wide_vel=False):
+    box = sum(b for _, b, _, _ in _box_spec(wide_vel))
+    return HEADER_BITS + n * (box + (TRACK_BITS if track else 0))
+
+
+def packet_bytes(n, track=False, wide_vel=False):
+    return (packet_bits(n, track, wide_vel) + 7) // 8
 
 
 class _Writer:
@@ -89,7 +97,7 @@ def _quant(x, bits, lo, step, wrap=False):
     return np.clip(q, 0, top), sat
 
 
-def encode(sender, send_frame, sender_pos, boxes, track=False):
+def encode(sender, send_frame, sender_pos, boxes, track=False, wide_vel=False):
     """boxes: dict of arrays xy (N,2) global, z (N,), size (N,3) [w,l,h], yaw (N,), score (N,), vel (N,2)
     [+ tid (N,), logvar (N,3) if track]. Returns (bytes, stats) with stats = {'bits', 'bytes', 'n', 'saturated'}."""
     n = len(boxes["score"])
@@ -98,11 +106,11 @@ def encode(sender, send_frame, sender_pos, boxes, track=False):
     w.put(VERSION, 4); w.put(sender, 4); w.put(send_frame, 16); w.put(n, 12)
     for c in sender_pos[:3]:
         w.put(_f32_bits(c), 32)
-    pos32 =np.array([_bits_f32(_f32_bits(c)) for c in sender_pos[:2]])  # receiver sees the float32 value
+    pos32 = np.array([_bits_f32(_f32_bits(c)) for c in sender_pos[:2]])  # receiver sees the float32 value
     vals = {"dx": boxes["xy"][:, 0] - pos32[0], "dy": boxes["xy"][:, 1] - pos32[1], "z": boxes["z"],
             "w": boxes["size"][:, 0], "l": boxes["size"][:, 1], "h": boxes["size"][:, 2],
             "yaw": boxes["yaw"], "score": boxes["score"], "vx": boxes["vel"][:, 0], "vy": boxes["vel"][:, 1]}
-    spec = list(BOX_SPEC)
+    spec = list(_box_spec(wide_vel))
     if track:
         vals.update({"tid": np.mod(boxes["tid"], 1024), "lvx": boxes["logvar"][:, 0], "lvy": boxes["logvar"][:, 1],
                      "lvyaw": boxes["logvar"][:, 2]})
@@ -118,13 +126,13 @@ def encode(sender, send_frame, sender_pos, boxes, track=False):
                   "saturated": {f: int(s.sum()) for f, s in sat.items() if s.any()}}
 
 
-def decode(data, track=False):
+def decode(data, track=False, wide_vel=False):
     """-> (header dict, boxes dict in the same layout as encode's input, global xy)."""
     r = _Reader(data)
     ver, sender, send_frame, n = r.get(4), r.get(4), r.get(16), r.get(12)
     assert ver == VERSION
     pos = [_bits_f32(r.get(32)) for _ in range(3)]
-    spec = list(BOX_SPEC) + (TRACK_SPEC if track else [])
+    spec = list(_box_spec(wide_vel)) + (TRACK_SPEC if track else [])
     q = {f: np.zeros(n, np.int64) for f, _, _, _ in spec}
     for i in range(n):
         for f, bits, _, _ in spec:

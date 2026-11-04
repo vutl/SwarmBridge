@@ -114,6 +114,10 @@ def test_codec():
     check("out-of-range dx saturates and is counted", st["saturated"].get("dx") == 1 and d["xy"][0, 0] < pos[0] + 204.8)
     check("velocity saturates and is counted", st["saturated"].get("vx") == 1 and st["saturated"].get("vy") == 1)
     check("yaw wraps (3pi == pi == -pi)", abs(abs(d["yaw"][2]) - math.pi) < 0.03 and "yaw" not in st["saturated"])
+    data, st = BC.encode(1, 0, pos, b, wide_vel=True)
+    h, dw = BC.decode(data, wide_vel=True)
+    check("wide-vel codec: 89 bit/box, 20 m/s not saturated", st["bits"] == BC.HEADER_BITS + 3 * 89 ==
+          BC.packet_bits(3, wide_vel=True) and "vx" not in st["saturated"] and np.abs(dw["vel"][1] - [20, -20]).max() < 0.051)
     b = rand_boxes(rng, 5, pos)
     b["tid"] = np.array([0, 1, 1023, 1024, 77])
     b["logvar"] = rng.uniform(-6, 2, (5, 3))
