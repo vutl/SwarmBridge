@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-04",
+  "repos": [
+    {
+      "repo": "DerrickXuNu/OpenCOOD",
+      "path": "pdf\\GithubModels\\DerrickXuNu__OpenCOOD",
+      "status": "downloaded",
+      "commit": "31ba16025da27ffe4e336f011290dfbc66f9a1f1",
+      "submodules": null
+    },
+    {
+      "repo": "DerrickXuNu/CoBEVT",
+      "path": "pdf\\GithubModels\\DerrickXuNu__CoBEVT",
+      "status": "downloaded",
+      "commit": "ed8fd11e663af74ab30f653cda3317b1a130cf53",
+      "submodules": null
+    },
+    {
+      "repo": "yifanlu0227/CoAlign",
+      "path": "pdf\\GithubModels\\yifanlu0227__CoAlign",
+      "status": "downloaded",
+      "commit": "64d1987affe4fb881c439cc498c30ab01bec67e8",
+      "submodules": null
+    },
+    {
+      "repo": "JonathonLuiten/TrackEval",
+      "path": "pdf\\GithubModels\\JonathonLuiten__TrackEval",
+      "status": "downloaded",
+      "commit": "12c8791b303e0a0b50f753af204249e622d0281a",
+      "submodules": null
+    },
+    {
+      "repo": "mikel-brostrom/boxmot",
+      "path": "pdf\\GithubModels\\mikel-brostrom__boxmot",
+      "status": "downloaded",
+      "commit": "fc8c62ed2e7c5bbaa14b551d6a593e5783bb2441",
+      "submodules": null
+    },
+    {
+      "repo": "ultralytics/ultralytics",
+      "path": "pdf\\GithubModels\\ultralytics__ultralytics",
+      "status": "downloaded",
+      "commit": "8bd7c184bb1683229ea9c50820040dae04ab4e2b",
+      "submodules": null
+    }
+  ]
+}

@@ -1,0 +1,598 @@
+{
+  "date": "2026-11-04",
+  "status": "complete",
+  "sources": [
+    {
+      "id": "fengtt42/U2USim-2",
+      "type": "dataset",
+      "revision": "23323c19edfe408a1fbf79d5a55268b37458923a",
+      "url": "https://huggingface.co/datasets/fengtt42/U2USim-2",
+      "file_count": 58,
+      "total_bytes": 4315631218
+    },
+    {
+      "id": "fengtt42/U2UData_2_Client",
+      "type": "model",
+      "revision": "c447f9d3a6195fd85ac877ec68b30bd317845277",
+      "url": "https://huggingface.co/fengtt42/U2UData_2_Client",
+      "file_count": 24,
+      "total_bytes": 1869921
+    }
+  ],
+  "files": [
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\.gitattributes",
+      "bytes": 4551,
+      "hash": "d2b06150c5ba2cb785ae657b855dd298b86af877",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\.gitignore",
+      "bytes": 277,
+      "hash": "5b20f23ced37e9ac322b4714bf06c2b79933fd36",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\AirDroneClient.py",
+      "bytes": 13536,
+      "hash": "7e7308c370d878430113d4a8a97cfb8ef724e9ef",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\AirDroneClient.pyproj",
+      "bytes": 2196,
+      "hash": "8d110df919f82315b1f64eeb30e4303086f1826d",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\AirDroneClient.pyproj.user",
+      "bytes": 222,
+      "hash": "07dbd5b56ed8d6d71513f511b04ca5de210ca949",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\AirDroneClient.sln",
+      "bytes": 946,
+      "hash": "5b605cdb00d4590b737981061ce7f5d13fa6dfd6",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\CarController.py",
+      "bytes": 2188,
+      "hash": "3279751c57197c5959613b915d6255ca200401cb",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\DroneController.py",
+      "bytes": 9449,
+      "hash": "2bd66bac7f6ad1762df46c901173dc28da67f522",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\FileConverter.py",
+      "bytes": 1045,
+      "hash": "2fb7e4dca026c0ab972e2a4df83ff42fde44c385",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\LICENSE",
+      "bytes": 11357,
+      "hash": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\SeqOutputer.py",
+      "bytes": 1874,
+      "hash": "18a8e622f2e4f05428fd55309e9b93e30bc0aea5",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\__init__.py",
+      "bytes": 87,
+      "hash": "a11c8fe3d0eb738542e91f87cf1309684c367014",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\__pycache__\\__init__.cpython-39.pyc",
+      "bytes": 232,
+      "hash": "573f3dca4b87ff6ca5fc2d253480b30180cb5ecb",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\__pycache__\\client.cpython-39.pyc",
+      "bytes": 78169,
+      "hash": "9449d63215e31906e4b210165fb3269d05c77185",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\__pycache__\\types.cpython-39.pyc",
+      "bytes": 24062,
+      "hash": "eba56cf9ded3431f37493dace714832ed53aa7c9",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\__pycache__\\utils.cpython-39.pyc",
+      "bytes": 5209,
+      "hash": "00faf4e6d61d4c3f5d5244f2335a742b455643e2",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\client.py",
+      "bytes": 76649,
+      "hash": "4f139ac552fc795bd74909d3f407256b50667f16",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\pfm.py",
+      "bytes": 2323,
+      "hash": "6f9f963a8aaee2e6478320dff833a661f25e621f",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\types.py",
+      "bytes": 18961,
+      "hash": "7aef005549402f9c9abd79858c39db0f536acc44",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\airsim\\utils.py",
+      "bytes": 5280,
+      "hash": "7f866d7d0a25a703a6440ba5d6f29582c5f035a2",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\create_ir_segmentation_map.py",
+      "bytes": 7750,
+      "hash": "5d0ca2cb423b6b98b333571eb65cfcb7bb35c4fc",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\pic\\image 1.png",
+      "bytes": 1527157,
+      "hash": "ffd6e69551175f022fea75fdb42ce5649104984493873a9e979f9b799fd1cf24",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\pic\\image 2.png",
+      "bytes": 10358,
+      "hash": "03eb5c936113f16c0aa15a6d54bd384929d818b4fdad73afdbc23d968ef46433",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\pic\\image 3.png",
+      "bytes": 29256,
+      "hash": "45e63fc2fa1751054327d0ff4197131c31b2e55a2fddd20c31bfb98fa66dd69d",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\AirDrone\\pic\\image_1.jpg",
+      "bytes": 40881,
+      "hash": "6ebbfd85f6d487abce274a398135fa11a5a36b2c749157c7d72b4c0dfc5183ca",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\README.md",
+      "bytes": 4911,
+      "hash": "fefd4923778d0da7225b7586b4079de4a0c36ee8",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Linux_version\\Landscape3.sh",
+      "bytes": 283,
+      "hash": "8905d525f7f8841fb9d3b6e1476529c8d337b35b",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Linux_version\\Landscape3\\Binaries\\Linux\\Landscape3-Linux-Shipping",
+      "bytes": 164025472,
+      "hash": "e0afecd849886fd767b556f7f0a1b8c3211e7419e20522e1b197ff21de990150",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Linux_version\\Landscape3\\Content\\Paks\\Landscape3-Linux.pak",
+      "bytes": 1566276852,
+      "hash": "20eb1e3887b8588ad491dd90c517178adfea74e86ea117d02ba31f6d4d6604c3",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Linux_version\\Manifest_NonUFSFiles_Linux.txt",
+      "bytes": 118,
+      "hash": "3ed16c2f32aa09dd6fe225300b6c2478edba64d1",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Linux_version\\Manifest_UFSFiles_Linux.txt",
+      "bytes": 608187,
+      "hash": "ef09adcb8cf990825d99abe5997eaad527269c48",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Engine\\Binaries\\ThirdParty\\DbgHelp\\dbghelp.dll",
+      "bytes": 1885072,
+      "hash": "e728908137ccf8326a1e955656fc8b5b2ee57d130aa7d9fb47d9fea77366ffb4",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Engine\\Binaries\\ThirdParty\\NVIDIA\\NVaftermath\\Win64\\GFSDK_Aftermath_Lib.x64.dll",
+      "bytes": 1881544,
+      "hash": "6c0918fb5d68831c33136805a772e6250c1111a9769240994ce991ed38808870",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Engine\\Binaries\\ThirdParty\\Ogg\\Win64\\VS2015\\libogg_64.dll",
+      "bytes": 65480,
+      "hash": "3981002fd7383bd54a78f801d61fc2d4e4e7ff05",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Engine\\Binaries\\ThirdParty\\Vorbis\\Win64\\VS2015\\libvorbis_64.dll",
+      "bytes": 1730504,
+      "hash": "fd31d4dd32474d5d0ef7d571d70a7907f5a477b2c8dbfbbfc371c5481dfa5419",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Engine\\Binaries\\ThirdParty\\Vorbis\\Win64\\VS2015\\libvorbisfile_64.dll",
+      "bytes": 54216,
+      "hash": "360f9547d3cc89b6bd06b06560cde6b5b3d445f6",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Engine\\Binaries\\ThirdParty\\Windows\\XAudio2_9\\x64\\xaudio2_9redist.dll",
+      "bytes": 863776,
+      "hash": "e34d1250d42d5c8eb368c78d5b179db86a91eaee4443b17c265f53c619aed465",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Engine\\Extras\\Redist\\en-us\\UEPrereqSetup_x64.exe",
+      "bytes": 50596640,
+      "hash": "ef1ac9b2347702667e6a2a280bf2bcd55462882444a7c6981be74ac34df971f0",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3.exe",
+      "bytes": 145920,
+      "hash": "7b75b1f266b9ede2414af4eccf9d67586681e1362263a6ddebd51e77749c1e2b",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\D3D12\\D3D12Core.dll",
+      "bytes": 5508496,
+      "hash": "c6b78379aa99185b0e48e65fd63ed2ec25b5a227f1a74afba4b5d93ae76a4475",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\Landscape3-Win64-Shipping.exe",
+      "bytes": 123694592,
+      "hash": "185b14b41e63ce70920b85a7ecfc109d746207ce737b7c1f4fa8edb2f65e1626",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\OpenImageDenoise.dll",
+      "bytes": 49787744,
+      "hash": "fb216867cd83c061ae446694d540ec0f27ecb35223c9acd0bb4de93d172f69f7",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_atomic-mt-x64.dll",
+      "bytes": 33736,
+      "hash": "a4c6fbe4a2bdd2f994580ef0a55b5e6b2375ea4b",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_chrono-mt-x64.dll",
+      "bytes": 52680,
+      "hash": "9efb62b34f4a5f97d616950147df01bc7f9db767",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_filesystem-mt-x64.dll",
+      "bytes": 157128,
+      "hash": "ec5b976cafea739a8a0c747ccf33225def32e83255b41adeb4d14b8e5e718c0f",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_iostreams-mt-x64.dll",
+      "bytes": 63944,
+      "hash": "d7ebac04d53796752f4b09bd657fd696c9b0b5ed",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_program_options-mt-x64.dll",
+      "bytes": 356808,
+      "hash": "61d48946d97285436840a3ceaac1949e15306b14bfc9d04e15434de23554284d",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_python39-mt-x64.dll",
+      "bytes": 208328,
+      "hash": "5daf42ec764d2b9a624a466b0ecdbdff98306558319b992a308d2b26684ac708",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_regex-mt-x64.dll",
+      "bytes": 244168,
+      "hash": "7bfa1f6e8ba039b129ba920553700684bc97fe16f87906bb3a5d50785fdb5299",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_system-mt-x64.dll",
+      "bytes": 26056,
+      "hash": "7332b7a2d96f81020406b01092b2f148637b39e4",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\boost_thread-mt-x64.dll",
+      "bytes": 92104,
+      "hash": "429385888251388d588df56edf05a0fb814b9131",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\tbb.dll",
+      "bytes": 399816,
+      "hash": "b8219802103894307697677c2fa693d323a2acd66ca6f8b79c08b1cc7fee8b9d",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\tbb.pdb",
+      "bytes": 6230016,
+      "hash": "e2dc5c1533d5dbfe27920c3eb8d9ff051b4c00bcdc205f6fcad8ce17e0b0ac4d",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Binaries\\Win64\\tbb12.dll",
+      "bytes": 309704,
+      "hash": "0c5121c6c5448aac00abb35b020e61e5879d51382ec1c934cd66b21c8f4ceef7",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Landscape3\\Content\\Paks\\Landscape3-Windows.pak",
+      "bytes": 2337838040,
+      "hash": "00d4b82ceb3e4a095401279ccde66097087660e353d8814b9e8b67c6e393f282",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Manifest_NonUFSFiles_Win64.txt",
+      "bytes": 1768,
+      "hash": "3851dc1958904a3d7dc80bc03e2a18d8d4ef62f6",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\U2USim_2_Windows_version\\Manifest_UFSFiles_Win64.txt",
+      "bytes": 608395,
+      "hash": "b5d5270252cf1b8b6a35074590aa1862c926654c",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2USim-2\\settings.json",
+      "bytes": 4705,
+      "hash": "7dc22c4cc6fc78fd061b78ba17f90604c3adf49e",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\.gitattributes",
+      "bytes": 1581,
+      "hash": "af16e3245ecf7c5a1ccc845be18d84785ba84e3e",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\AirDroneClient.py",
+      "bytes": 13536,
+      "hash": "7e7308c370d878430113d4a8a97cfb8ef724e9ef",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\AirDroneClient.pyproj",
+      "bytes": 2196,
+      "hash": "8d110df919f82315b1f64eeb30e4303086f1826d",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\AirDroneClient.pyproj.user",
+      "bytes": 222,
+      "hash": "07dbd5b56ed8d6d71513f511b04ca5de210ca949",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\AirDroneClient.sln",
+      "bytes": 946,
+      "hash": "5b605cdb00d4590b737981061ce7f5d13fa6dfd6",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\DroneController.py",
+      "bytes": 9449,
+      "hash": "2bd66bac7f6ad1762df46c901173dc28da67f522",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\FileConverter.py",
+      "bytes": 1045,
+      "hash": "2fb7e4dca026c0ab972e2a4df83ff42fde44c385",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\LICENSE",
+      "bytes": 11357,
+      "hash": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\README.md",
+      "bytes": 1341,
+      "hash": "e3e1b4d6d5da0c1d41e1f5426c1a6e64f0768e0f",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\SeqOutputer.py",
+      "bytes": 1874,
+      "hash": "18a8e622f2e4f05428fd55309e9b93e30bc0aea5",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\__init__.py",
+      "bytes": 87,
+      "hash": "a11c8fe3d0eb738542e91f87cf1309684c367014",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\__pycache__\\__init__.cpython-39.pyc",
+      "bytes": 232,
+      "hash": "573f3dca4b87ff6ca5fc2d253480b30180cb5ecb",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\__pycache__\\client.cpython-39.pyc",
+      "bytes": 78169,
+      "hash": "9449d63215e31906e4b210165fb3269d05c77185",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\__pycache__\\types.cpython-39.pyc",
+      "bytes": 24062,
+      "hash": "eba56cf9ded3431f37493dace714832ed53aa7c9",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\__pycache__\\utils.cpython-39.pyc",
+      "bytes": 5209,
+      "hash": "00faf4e6d61d4c3f5d5244f2335a742b455643e2",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\client.py",
+      "bytes": 76649,
+      "hash": "4f139ac552fc795bd74909d3f407256b50667f16",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\pfm.py",
+      "bytes": 2323,
+      "hash": "6f9f963a8aaee2e6478320dff833a661f25e621f",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\types.py",
+      "bytes": 18961,
+      "hash": "7aef005549402f9c9abd79858c39db0f536acc44",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\airsim\\utils.py",
+      "bytes": 5280,
+      "hash": "7f866d7d0a25a703a6440ba5d6f29582c5f035a2",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\create_ir_segmentation_map.py",
+      "bytes": 7750,
+      "hash": "5d0ca2cb423b6b98b333571eb65cfcb7bb35c4fc",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\pic\\image 1.png",
+      "bytes": 1527157,
+      "hash": "ffd6e69551175f022fea75fdb42ce5649104984493873a9e979f9b799fd1cf24",
+      "hash_kind": "sha256",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\pic\\image 2.png",
+      "bytes": 10358,
+      "hash": "e4ae82e6ecc2054e7b9ecfd99396257629c664da",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\pic\\image 3.png",
+      "bytes": 29256,
+      "hash": "b91edb7aee3c1316241746e9f5de5f5cc6b3ca53",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    },
+    {
+      "path": "pdf\\GithubModels\\HuggingFace\\fengtt42__U2UData_2_Client\\pic\\image_1.jpg",
+      "bytes": 40881,
+      "hash": "bf0265e30ad3c72a9ad7a6b068985e6dc17f937f",
+      "hash_kind": "sha1",
+      "status": "downloaded_verified"
+    }
+  ]
+}

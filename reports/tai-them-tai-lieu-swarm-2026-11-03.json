@@ -1,0 +1,238 @@
+{
+  "date": "2026-11-03",
+  "papers": [
+    {
+      "title": "UAV3D A Large-scale 3D Perception Benchmark for Unmanned Aerial Vehicles",
+      "file": "pdf\\UAV3D A Large-scale 3D Perception Benchmark for Unmanned Aerial Vehicles.pdf",
+      "attempts": [
+        {
+          "url": "https://arxiv.org/pdf/2410.11125",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://arxiv.org/pdf/2410.11125",
+          "first_page_excerpt": "UA V3D: A Large-scale 3D Perception Benchmark for\nUnmanned Aerial Vehicles\nHui Ye\nDept. of Computer Science\nGeorgia State University\nAtlanta, GA 30303\nhye2@student.gsu.edu\nRajshekhar Sunderraman\nDept. of Computer Science\nGeorgia State University\nAtlanta, GA 30303\nrsunderraman@gsu.edu\nShihao Ji∗\nSchool of Computing\nUniversity of Connecticut\nStorrs, CT 06269\nshihao.ji@uconn.edu\nAbstract\nUnmanned Aerial Vehicles (UA Vs), equipped with cameras, are employed in nu-\nmerous applications, including aeri"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 17,
+      "bytes": 7933941,
+      "sha256": "7e40857de7950548616928bb9a29b27e633ed8d57b39813112d914dd4109987d",
+      "source": "https://arxiv.org/pdf/2410.11125"
+    },
+    {
+      "title": "Drones Help Drones A Collaborative Framework for Multi-Drone Object Trajectory Prediction and Beyond",
+      "file": "pdf\\Drones Help Drones A Collaborative Framework for Multi-Drone Object Trajectory Prediction and Beyond.pdf",
+      "attempts": [
+        {
+          "url": "https://papers.nips.cc/paper_files/paper/2024/file/76b878f34e43c5faeba770c840bec394-Paper-Conference.pdf",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://papers.nips.cc/paper_files/paper/2024/file/76b878f34e43c5faeba770c840bec394-Paper-Conference.pdf",
+          "first_page_excerpt": "Drones Help Drones: A Collaborative Framework for\nMulti-Drone Object Trajectory Prediction and Beyond\nZhechao Wang1,2, Peirui Cheng1, Mingxin Chen1,2, Pengju Tian1,2, Zhirui Wang1∗\nXinming Li1, Xue Yang3, Xian Sun1,2\n1Key Laboratory of Network Information System Technology,\nAerospace Information Research Institute, Chinese Academy of Sciences\n2University of Chinese Academy of Sciences 3Shanghai AI Laboratory\n{wangzhechao21, chenmingxin22, tianpengju22}@mails.ucas.ac.cn\nyangxue@pjlab.org.cn\n{chen"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 25,
+      "bytes": 29379529,
+      "sha256": "ef7305bf072c4c77d0026c546b0c192ca0d3b01de158bc4f22cc4d6deb0c09ff",
+      "source": "https://papers.nips.cc/paper_files/paper/2024/file/76b878f34e43c5faeba770c840bec394-Paper-Conference.pdf"
+    },
+    {
+      "title": "U2UData Plus A Scalable Swarm UAVs Autonomous Flight Dataset for Embodied Long-horizon Tasks",
+      "file": "pdf\\U2UData Plus A Scalable Swarm UAVs Autonomous Flight Dataset for Embodied Long-horizon Tasks.pdf",
+      "attempts": [
+        {
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/download/37158/41120",
+          "status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "final_url": "https://ojs.aaai.org/index.php/AAAI/article/download/37158/41120",
+          "error": "Response is not a PDF"
+        },
+        {
+          "url": "https://arxiv.org/pdf/2509.00055",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://arxiv.org/pdf/2509.00055",
+          "first_page_excerpt": "U2UData+: A Scalable Swarm UA Vs Autonomous Flight Dataset\nfor Embodied Long-horizon Tasks\nTongtong Feng1, Xin Wang1*, Feilin Han2, Leping Zhang2, Wenwu Zhu1*\n1Department of Computer Science and Technology, BNRist, Tsinghua University, China\n2School of Intelligent Imagery Engineering, Beijing Film Academy, China\n{fengtongtong, xin wang, wwzhu}@tsinghua.edu.cn,{hanfeilin, zhangleping}@bfa.edu.cn\nAbstract\nSwarm UA V autonomous flight for Embodied Long-Horizon\n(ELH) tasks is crucial for advancing t"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 9,
+      "bytes": 4619622,
+      "sha256": "874ac0cda75830a7245b16b39b20a9f2cbe52df4995406022b0af411cc1965f7",
+      "source": "https://arxiv.org/pdf/2509.00055"
+    },
+    {
+      "title": "M3OT A Multi-Drone Multi-Modality Dataset for Multi-Object Tracking",
+      "file": "pdf\\M3OT A Multi-Drone Multi-Modality Dataset for Multi-Object Tracking.pdf",
+      "attempts": [
+        {
+          "url": "https://www.nature.com/articles/s41597-025-06204-0.pdf",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://www.nature.com/articles/s41597-025-06204-0.pdf",
+          "first_page_excerpt": "1Scientific  Data |         (2025) 12:1927  | https://doi.org/10.1038/s41597-025-06204-0\nwww.nature.com/scientificdata\nM3OT: A Multi-Drone Multi-\nModality dataset for Multi-Object \nTracking\nZhihao Nie1, Luyi Xue1, Zhenyu Fang1 ✉, Jinchang Ren2, Yufeng Wei3 & Jiangbin Zheng1\nWe provide a dataset for object detection and tracking in aerial imagery, namely “M3OT”. M3OT is \na multi-modality vehicle detection and tracking dataset acquired by two Unmanned Aerial Vehicles \n(UAVs) in a high-altitude reg"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 10,
+      "bytes": 2488297,
+      "sha256": "bebfc7717bdc61db89cf478a8096327f229c63bbe12adafd8a953fdf8e4cd06f",
+      "source": "https://www.nature.com/articles/s41597-025-06204-0.pdf"
+    },
+    {
+      "title": "Confidence-Calibrated Semantic Resource Allocation for Multi-UAV Low-Altitude Networks",
+      "file": "pdf\\Confidence-Calibrated Semantic Resource Allocation for Multi-UAV Low-Altitude Networks.pdf",
+      "attempts": [
+        {
+          "url": "https://link.springer.com/content/pdf/10.1186/s13638-026-02655-0.pdf",
+          "status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "final_url": "https://link.springer.com/content/pdf/10.1186/s13638-026-02655-0.pdf",
+          "error": "Response is not a PDF"
+        },
+        {
+          "url": "https://link.springer.com/content/pdf/10.1186/s13638-026-02655-0.pdf",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://link.springer.com/content/pdf/10.1186/s13638-026-02655-0.pdf",
+          "first_page_excerpt": "Confidence‑calibrated semantic resource \nallocation for multi‑UAV low‑altitude networks\nWei Zheng1,2*, Jun Li1 and Yang Zuo1,2 \n1 Introduction\nLow-altitude intelligent networks are becoming a fundamental platform for unmanned \naerial vehicle (UAV)-enabled remote sensing, emergency response, and urban super -\nvision. In such scenarios, multiple UAVs often collaborate to observe a target area and \nupload perception results to an edge server for global situational awareness [1]. Com -\npared with si"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 28,
+      "bytes": 2585826,
+      "sha256": "396efed7283b7fcbd53f40e4f9557ff6bb2173e192e2cbaa098291e226ec945c",
+      "source": "https://link.springer.com/content/pdf/10.1186/s13638-026-02655-0.pdf"
+    },
+    {
+      "title": "Joint Optimization of Adaptive Semantic Compression and Resource Allocation for Semantic-Enabled UAV Communications",
+      "file": "pdf\\Joint Optimization of Adaptive Semantic Compression and Resource Allocation for Semantic-Enabled UAV Communications.pdf",
+      "attempts": [
+        {
+          "url": "https://link.springer.com/content/pdf/10.1186/s13638-026-02637-2.pdf",
+          "status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "final_url": "https://link.springer.com/content/pdf/10.1186/s13638-026-02637-2.pdf",
+          "error": "Response is not a PDF"
+        },
+        {
+          "url": "https://link.springer.com/content/pdf/10.1186/s13638-026-02637-2.pdf",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://link.springer.com/content/pdf/10.1186/s13638-026-02637-2.pdf",
+          "first_page_excerpt": "Open Access\n© The Author(s) 2026. Open Access  This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 \nInternational License, which permits any non-commercial use, sharing, distribution and reproduction in any medium or format, as long \nas you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if you \nmodified the licensed material. You do not have permission under this licence to s"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 18,
+      "bytes": 2458043,
+      "sha256": "4bd3375f50baad13f52ec13ef304e579963e66b06eecc2f8d0254ad6d85a7b16",
+      "source": "https://link.springer.com/content/pdf/10.1186/s13638-026-02637-2.pdf"
+    },
+    {
+      "title": "How2comm Communication-Efficient and Collaboration-Pragmatic Multi-Agent Perception",
+      "file": "pdf\\How2comm Communication-Efficient and Collaboration-Pragmatic Multi-Agent Perception.pdf",
+      "attempts": [
+        {
+          "url": "https://proceedings.nips.cc/paper_files/paper/2023/file/4f31327e046913c7238d5b671f5d820e-Paper-Conference.pdf",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://proceedings.nips.cc/paper_files/paper/2023/file/4f31327e046913c7238d5b671f5d820e-Paper-Conference.pdf",
+          "first_page_excerpt": "How2comm: Communication-Efficient and\nCollaboration-Pragmatic Multi-Agent Perception\nDingkang Yang1,2† Kun Yang1† Yuzheng Wang1 Jing Liu1\nZhi Xu1 Rongbin Yin5 Peng Zhai1,2∗ Lihua Zhang1,2,3,4∗\n1Academy for Engineering and Technology, Fudan University\n2Cognition and Intelligent Technology Laboratory (CIT Lab)\n3Engineering Research Center of AI and Robotics, Ministry of Education\n4AI and Unmanned Systems Engineering Research Center of Jilin Province\n5FAW (Nanjing) Technology Development Company Lt"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 14,
+      "bytes": 1514449,
+      "sha256": "44833baf4b9f41b8c4c50899b23a93fa8a0432ecb8ceb6be77f15d0023706ec2",
+      "source": "https://proceedings.nips.cc/paper_files/paper/2023/file/4f31327e046913c7238d5b671f5d820e-Paper-Conference.pdf"
+    },
+    {
+      "title": "Collaboration Helps Camera Overtake LiDAR in 3D Detection",
+      "file": "pdf\\Collaboration Helps Camera Overtake LiDAR in 3D Detection.pdf",
+      "attempts": [
+        {
+          "url": "https://openaccess.thecvf.com/content/CVPR2023/papers/Hu_Collaboration_Helps_Camera_Overtake_LiDAR_in_3D_Detection_CVPR_2023_paper.pdf",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://openaccess.thecvf.com/content/CVPR2023/papers/Hu_Collaboration_Helps_Camera_Overtake_LiDAR_in_3D_Detection_CVPR_2023_paper.pdf",
+          "first_page_excerpt": "Collaboration Helps Camera Overtake LiDAR in 3D Detection\nYue Hu1 Yifan Lu1 Runsheng Xu2 Weidi Xie1,3 Siheng Chen1,3* Yanfeng Wang3,1\n1Cooperative Medianet Innovation Center, Shanghai Jiao Tong University\n2University of California, Los Angeles 3Shanghai AI Laboratory\n1{18671129361, yifan lu, weidi, sihengc, wangyanfeng }@sjtu.edu.cn 2{rxx3386}@ucla.edu\nAbstract\nCamera-only 3D detection provides an economical so-\nlution with a simple configuration for localizing objects\nin 3D space compared to Li"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 10,
+      "bytes": 5687914,
+      "sha256": "2619498a4564696e7de57ada0d7abc6fcd14f9c9b2c400a567ad047e0220213b",
+      "source": "https://openaccess.thecvf.com/content/CVPR2023/papers/Hu_Collaboration_Helps_Camera_Overtake_LiDAR_in_3D_Detection_CVPR_2023_paper.pdf"
+    },
+    {
+      "title": "U2UData A Large-scale Cooperative Perception Dataset for Swarm UAVs Autonomous Flight",
+      "file": "pdf\\U2UData A Large-scale Cooperative Perception Dataset for Swarm UAVs Autonomous Flight.pdf",
+      "attempts": [
+        {
+          "url": "https://arxiv.org/pdf/2408.00606",
+          "status": 200,
+          "content_type": "application/pdf",
+          "final_url": "https://arxiv.org/pdf/2408.00606",
+          "first_page_excerpt": "U2UData: A Large-scale Cooperative Perception Dataset for\nSwarm UA Vs Autonomous Flight\nTongtong Feng\nDepartment of Computer Science and\nTechnology, Tsinghua University\nBeijing, China\nfengtongtong@tsinghua.edu.cn\nXin Wang∗\nDepartment of Computer Science and\nTechnology, BNRist, Tsinghua\nUniversity, Beijing, China\nxin_wang@tsinghua.edu.cn\nFeilin Han\nDepartment of Film and Television\nTechnology, Beijing Film Academy\nBeijing, China\nhanfeilin@bfa.edu.cn\nLeping Zhang\nDepartment of Film and Television\n"
+        }
+      ],
+      "status": "downloaded",
+      "pages": 9,
+      "bytes": 39948928,
+      "sha256": "efdec87d2f63e395d8ecb1c4b737823bca6514db7687b853636638d1654a642a",
+      "source": "https://arxiv.org/pdf/2408.00606"
+    },
+    {
+      "title": "Goal-Oriented Semantic Twinning-Enabled Collaborative Target Tracking in Communication-Constrained Satellite-UAV Networks",
+      "file": "pdf\\Goal-Oriented Semantic Twinning-Enabled Collaborative Target Tracking in Communication-Constrained Satellite-UAV Networks.pdf",
+      "attempts": [
+        {
+          "url": "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=11551345",
+          "status": 418,
+          "content_type": "text/html",
+          "final_url": "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=11551345",
+          "error": "418 Client Error: Unknown Code for url: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=11551345"
+        },
+        {
+          "url": "https://ieeexplore.ieee.org/ielx7/7755/4358975/11551345.pdf",
+          "status": 418,
+          "content_type": "text/html",
+          "final_url": "https://ieeexplore.ieee.org/ielx7/7755/4358975/11551345.pdf",
+          "error": "418 Client Error: Unknown Code for url: https://ieeexplore.ieee.org/ielx7/7755/4358975/11551345.pdf"
+        },
+        {
+          "url": "https://doi.org/10.1109/TMC.2026.3700322",
+          "status": 202,
+          "content_type": "text/html; charset=UTF-8",
+          "final_url": "https://ieeexplore.ieee.org/document/11551345/",
+          "error": "Response is not a PDF"
+        }
+      ],
+      "status": "unavailable"
+    },
+    {
+      "title": "Relay-Aware Semantic Resource Allocation for Multi-Hop UAV Swarm Systems",
+      "file": "pdf\\Relay-Aware Semantic Resource Allocation for Multi-Hop UAV Swarm Systems.pdf",
+      "attempts": [
+        {
+          "url": "https://www.sciencedirect.com/science/article/pii/S1874490726001114/pdfft?isDTMRedir=true&download=true",
+          "status": 403,
+          "content_type": "text/html; charset=UTF-8",
+          "final_url": "https://www.sciencedirect.com/science/article/pii/S1874490726001114/pdfft?isDTMRedir=true&download=true",
+          "error": "403 Client Error: Forbidden for url: https://www.sciencedirect.com/science/article/pii/S1874490726001114/pdfft?isDTMRedir=true&download=true"
+        },
+        {
+          "url": "https://doi.org/10.1016/j.phycom.2026.103102",
+          "status": 200,
+          "content_type": "text/html;charset=UTF-8",
+          "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S1874490726001114",
+          "error": "Response is not a PDF"
+        }
+      ],
+      "status": "unavailable"
+    }
+  ],
+  "completed_date": "2026-11-04"
+}

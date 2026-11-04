@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-04",
+  "repos": [
+    {
+      "repo": "huiyegit/UAV3D",
+      "path": "pdf\\GithubModels\\huiyegit__UAV3D",
+      "url": "https://github.com/huiyegit/UAV3D",
+      "status": "downloaded",
+      "commit": "5cee0e94971e9c23754ea7066d24a4f846704709",
+      "python_files": 1620,
+      "submodules": null
+    },
+    {
+      "repo": "WangzcBruce/DHD",
+      "path": "pdf\\GithubModels\\WangzcBruce__DHD",
+      "url": "https://github.com/WangzcBruce/DHD",
+      "status": "downloaded",
+      "commit": "27c2e6b27905bfa2e8a3608bf3dcdefb79c3007b",
+      "python_files": 25,
+      "submodules": null
+    },
+    {
+      "repo": "M3OT/M3OT",
+      "path": "pdf\\GithubModels\\M3OT__M3OT",
+      "url": "https://github.com/M3OT/M3OT",
+      "status": "downloaded",
+      "commit": "c56a75c60a03703756f96813c53b51d7ad353ca8",
+      "python_files": 2,
+      "submodules": null
+    },
+    {
+      "repo": "ydk122024/How2comm",
+      "path": "pdf\\GithubModels\\ydk122024__How2comm",
+      "url": "https://github.com/ydk122024/How2comm",
+      "status": "downloaded",
+      "commit": "8d357abdcb265ed4db5e4c6d9ee5400ea5799abe",
+      "python_files": 68,
+      "submodules": null
+    },
+    {
+      "repo": "fengtt42/U2UData",
+      "path": "pdf\\GithubModels\\fengtt42__U2UData",
+      "url": "https://github.com/fengtt42/U2UData",
+      "status": "downloaded",
+      "commit": "237d2c659e72ac80ab78033ca9e0b94f43cb64b9",
+      "python_files": 137,
+      "submodules": null
+    },
+    {
+      "repo": "fengtt42/U2UData-2",
+      "path": "pdf\\GithubModels\\fengtt42__U2UData-2",
+      "url": "https://github.com/fengtt42/U2UData-2",
+      "status": "downloaded",
+      "commit": "b7db055eddc9d0bbaab186c458cd1fc0584ea9e7",
+      "python_files": 0,
+      "submodules": null
+    },
+    {
+      "repo": "MediaBrain-SJTU/CoCa3D",
+      "path": "pdf\\GithubModels\\MediaBrain-SJTU__CoCa3D",
+      "url": "https://github.com/MediaBrain-SJTU/CoCa3D",
+      "status": "downloaded",
+      "commit": "b39e5846bcd32dcf7cfed600fa126cff81f6dd36",
+      "python_files": 209,
+      "submodules": null
+    },
+    {
+      "repo": "PhyllisH/CodeFilling",
+      "path": "pdf\\GithubModels\\PhyllisH__CodeFilling",
+      "url": "https://github.com/PhyllisH/CodeFilling",
+      "status": "downloaded",
+      "commit": "57f83ccc7d8457da74f06424811c130c3020e19e",
+      "python_files": 471,
+      "submodules": null
+    },
+    {
+      "repo": "Xu2729/CoSDH",
+      "path": "pdf\\GithubModels\\Xu2729__CoSDH",
+      "url": "https://github.com/Xu2729/CoSDH",
+      "status": "downloaded",
+      "commit": "b270b69fe133c0c1ca2044ad072cd77fc21863fb",
+      "python_files": 191,
+      "submodules": null
+    },
+    {
+      "repo": "buaa-colalab/CoGMP",
+      "path": "pdf\\GithubModels\\buaa-colalab__CoGMP",
+      "url": "https://github.com/buaa-colalab/CoGMP",
+      "status": "downloaded",
+      "commit": "2e62bdb7c6d09056e6fe3787cae21a20d9507221",
+      "python_files": 72,
+      "submodules": null
+    }
+  ]
+}

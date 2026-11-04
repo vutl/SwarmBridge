@@ -1,0 +1,30 @@
+[
+  {
+    "paper": "GOST",
+    "url": "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=11551345",
+    "http_status": 418,
+    "content_type": "text/html",
+    "downloaded": false
+  },
+  {
+    "paper": "Relay",
+    "url": "https://www.sciencedirect.com/science/article/pii/S1874490726001114/pdfft?isDTMRedir=true&download=true",
+    "http_status": 403,
+    "content_type": "text/html; charset=UTF-8",
+    "downloaded": false
+  },
+  {
+    "paper": "Posterior-Mamba",
+    "url": "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=11458732",
+    "http_status": 418,
+    "content_type": "text/html",
+    "downloaded": false
+  },
+  {
+    "paper": "FOFE-MMAPPO",
+    "url": "https://www.sciencedirect.com/science/article/pii/S0952197626002617/pdfft?isDTMRedir=true&download=true",
+    "http_status": 403,
+    "content_type": "text/html; charset=UTF-8",
+    "downloaded": false
+  }
+]
