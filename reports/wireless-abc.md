@@ -114,7 +114,28 @@ tổng dữ liệu mới 4.6 GB). Code và checkpoint của tác giả, Tester c
 | QuaDRiGa LoS: ta / công bố | −7.80 / −7.56 | −9.29 / −9.01 | −10.79 / −10.45 | −13.09 / −12.76 | −16.23 / −15.95 | −19.56 / −19.29 | −22.92 / −22.67 | −26.19 / −26.01 | −30.28 / −30.18 | −35.32 / −35.23 | −40.07 / −40.01 |
 
 Pipeline, chuẩn hóa và NMSE khớp: 3GPP lệch ≤ 0.08 dB; QuaDRiGa lệch 0.06–0.34 dB, cùng chiều (tập con 1 024 mẫu dễ hơn
-một chút). Chưa tái lập phần huấn luyện; chưa tái lập paper SB-ISAC (A0 thứ hai) — để sau A1 nếu còn ngân sách.
+một chút). Chưa tái lập phần huấn luyện.
+
+## A0b — dựng lại thiết lập paper SB-ISAC (WCL 2025) để kiểm tuyên bố chính
+
+`a0_sbisac.py`, `runs/wireless_abc/a0_sbisac/` (GPU 20 phút). Kênh sensing tổng hợp như paper: ULA N = 32 hai phía,
+L = 3 path, LS = H + nhiễu (pilot trực giao), 7 500 train / 2 500 test, một model mỗi SNR. **Cùng một CNN** (4 lớp, 64
+kênh, miền góc) cho: hồi quy thường; bridge huấn luyện kiểu Brownian/VE, suy luận ODE **1 bước** từ LS (như paper);
+bridge ngẫu nhiên 10 bước (như bài TCCN). 6 000 bước, 3 seed. NMSE (dB, test):
+
+| SNR | LS | LMMSE | hồi quy | bridge 1 bước | bridge 10 bước ngẫu nhiên | bridge 1 bước − hồi quy | seed bridge tốt hơn |
+|---|---|---|---|---|---|---|---|
+| −10 | +10.00 | −0.72 | −7.33 | −7.48 | −7.60 | −0.15 | 3/3 |
+| −5 | +5.00 | −1.67 | −11.25 | −11.03 | −10.80 | +0.21 | 0/3 |
+| 0 | 0.00 | −3.45 | −14.33 | −14.22 | −12.50 | +0.11 | 0/3 |
+| +5 | −5.00 | −6.37 | −17.71 | −17.31 | −13.27 | +0.40 | 0/3 |
+| +10 | −10.00 | −10.40 | −21.44 | −19.73 | −13.58 | +1.72 | 0/3 |
+
+Paper báo DSB hơn UNet cùng kiến trúc 0.7–2 dB. Trong bản dựng lại, **hồi quy thường tốt hơn bridge 1 bước** ở mọi SNR ≥
+−5 dB (0.1–1.7 dB); bridge chỉ hơn 0.15 dB ở −10 dB; bridge ngẫu nhiên 10 bước kém rõ ở SNR cao. LS = −SNR (kiểm tra
+đúng). LMMSE yếu như trong paper (góc ngẫu nhiên đều → hiệp phương sai gần đẳng hướng). **Giới hạn:** mạng nhỏ hơn (paper:
+UNet + attention); phân bố góc/hệ số path và lịch nhiễu VE không được paper nêu đủ → "chưa lặp lại được trong bản dựng
+lại", không phải bác bỏ paper.
 
 ## Mốc 1 — trace kênh (xong)
 
@@ -273,11 +294,11 @@ tốt nhất ≥ oracle → **không mở RL** (cùng kết luận). Beam GPS k�
 
 | câu hỏi | kết quả | quyết định |
 |---|---|---|
-| A: cần mô hình sinh/SB? | Không: SB 0/18 gate; hồi quy ≈ flow ≈ bridge; uncertainty sai coverage > 5 điểm | Dừng SB cho CSI trong cấu hình này; B/C dùng LMMSE/hồi quy |
+| A: cần mô hình sinh/SB? | Không: SB 0/18 gate (0/6 khi huấn luyện 15k bước); hồi quy ≈ flow ≈ bridge; uncertainty sai coverage > 5 điểm; trong thiết lập của paper SB-ISAC, hồi quy cùng mạng thắng bridge 1 bước ở SNR ≥ −5 dB | Dừng SB cho CSI trong cấu hình này; B/C dùng LMMSE/hồi quy |
 | B: hợp tác trực tuyến có lợi? | Có, **chỉ ở vùng chưa có bản đồ** (Munich +10% rate / −25% outage; Étoile +25% / −14%); 0 ở vùng đã có bản đồ; vượt message tráo; lặp lại ở 2 cảnh; fusion học được không thêm gì | Hướng có điều kiện: "bầy UAV tự dựng bản đồ góc khi chưa có khảo sát". Cần thêm fusion học được (còn khoảng cách tới oracle), nhiều cảnh, chi phí bit chặt hơn |
 | C: cần Deep RL cho beam/pilot? | Không: quét 20 ms ≈ oracle (Munich Δ 0.002 AMOTA; Étoile heuristic tốt nhất ≥ oracle) | Không mở PPO. Nếu tiếp C, đổi biến quyết định sang vị trí/relay (vùng phủ) |
 
-Tài nguyên đã dùng: GPU 31 phút (A1) + 15 phút (A1 hội tụ) + 10 phút (B attention); dữ liệu mới 4.6 GB (Fesl) + 54 MB trace; env 5.4 GB (không tính vào dữ liệu).
+Tài nguyên đã dùng: GPU 31 phút (A1) + 15 phút (A1 hội tụ) + 10 phút (B attention) + 20 phút (A0b) ≈ 1 giờ 16 phút / trần 8 giờ; dữ liệu mới 4.6 GB (Fesl) + 240 MB trace (Munich + Étoile); env 5.4 GB (không tính vào dữ liệu).
 
 ### Việc tiếp theo (đề xuất, chờ người dùng/Codex)
 
