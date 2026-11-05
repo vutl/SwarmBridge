@@ -1,0 +1,202 @@
+data {'n_total': 96480, 'dropped_frac': 0.3516, 'scale': 3.2708549476610127e-06, 'n_train': 38034, 'n_dev': 11767, 'n_test': 12761, 'test_all': 19296, 'test_deep_frac': 0.3387, 'n_dev_eval': 8000, 'n_test_eval': 8000, 'n_test_all_eval': 8000, 'test_all_deep_frac': 0.3387, 'device': 'cuda', 'S': 64, 'S_analytic': 512}
+seed 0: gmm fit 34s
+seed 0 dft Np=4
+  trained 6 models in 40s
+  dev dft Np=4 snr=-5 done
+  dev dft Np=4 snr=+5 done
+  dev dft Np=4 snr=+15 done
+  test dft Np=4 snr=-5 done
+  test dft Np=4 snr=+5 done
+  test dft Np=4 snr=+15 done
+  test_all dft Np=4 snr=-5 done
+  test_all dft Np=4 snr=+5 done
+  test_all dft Np=4 snr=+15 done
+seed 0 dft Np=8
+  trained 6 models in 48s
+  dev dft Np=8 snr=-5 done
+  dev dft Np=8 snr=+5 done
+  dev dft Np=8 snr=+15 done
+  test dft Np=8 snr=-5 done
+  test dft Np=8 snr=+5 done
+  test dft Np=8 snr=+15 done
+  test_all dft Np=8 snr=-5 done
+  test_all dft Np=8 snr=+5 done
+  test_all dft Np=8 snr=+15 done
+seed 0 dft Np=16
+  trained 6 models in 51s
+  dev dft Np=16 snr=-5 done
+  dev dft Np=16 snr=+5 done
+  dev dft Np=16 snr=+15 done
+  test dft Np=16 snr=-5 done
+  test dft Np=16 snr=+5 done
+  test dft Np=16 snr=+15 done
+  test_all dft Np=16 snr=-5 done
+  test_all dft Np=16 snr=+5 done
+  test_all dft Np=16 snr=+15 done
+seed 0 random Np=4
+  trained 6 models in 48s
+  dev random Np=4 snr=-5 done
+  dev random Np=4 snr=+5 done
+  dev random Np=4 snr=+15 done
+  test random Np=4 snr=-5 done
+  test random Np=4 snr=+5 done
+  test random Np=4 snr=+15 done
+  test_all random Np=4 snr=-5 done
+  test_all random Np=4 snr=+5 done
+  test_all random Np=4 snr=+15 done
+seed 0 random Np=8
+  trained 6 models in 46s
+  dev random Np=8 snr=-5 done
+  dev random Np=8 snr=+5 done
+  dev random Np=8 snr=+15 done
+  test random Np=8 snr=-5 done
+  test random Np=8 snr=+5 done
+  test random Np=8 snr=+15 done
+  test_all random Np=8 snr=-5 done
+  test_all random Np=8 snr=+5 done
+  test_all random Np=8 snr=+15 done
+seed 0 random Np=16
+  trained 6 models in 49s
+  dev random Np=16 snr=-5 done
+  dev random Np=16 snr=+5 done
+  dev random Np=16 snr=+15 done
+  test random Np=16 snr=-5 done
+  test random Np=16 snr=+5 done
+  test random Np=16 snr=+15 done
+  test_all random Np=16 snr=-5 done
+  test_all random Np=16 snr=+5 done
+  test_all random Np=16 snr=+15 done
+seed 1: gmm fit 49s
+seed 1 dft Np=4
+  trained 6 models in 51s
+  dev dft Np=4 snr=-5 done
+  dev dft Np=4 snr=+5 done
+  dev dft Np=4 snr=+15 done
+  test dft Np=4 snr=-5 done
+  test dft Np=4 snr=+5 done
+  test dft Np=4 snr=+15 done
+  test_all dft Np=4 snr=-5 done
+  test_all dft Np=4 snr=+5 done
+  test_all dft Np=4 snr=+15 done
+seed 1 dft Np=8
+  trained 6 models in 44s
+  dev dft Np=8 snr=-5 done
+  dev dft Np=8 snr=+5 done
+  dev dft Np=8 snr=+15 done
+  test dft Np=8 snr=-5 done
+  test dft Np=8 snr=+5 done
+  test dft Np=8 snr=+15 done
+  test_all dft Np=8 snr=-5 done
+  test_all dft Np=8 snr=+5 done
+  test_all dft Np=8 snr=+15 done
+seed 1 dft Np=16
+  trained 6 models in 44s
+  dev dft Np=16 snr=-5 done
+  dev dft Np=16 snr=+5 done
+  dev dft Np=16 snr=+15 done
+  test dft Np=16 snr=-5 done
+  test dft Np=16 snr=+5 done
+  test dft Np=16 snr=+15 done
+  test_all dft Np=16 snr=-5 done
+  test_all dft Np=16 snr=+5 done
+  test_all dft Np=16 snr=+15 done
+seed 1 random Np=4
+  trained 6 models in 40s
+  dev random Np=4 snr=-5 done
+  dev random Np=4 snr=+5 done
+  dev random Np=4 snr=+15 done
+  test random Np=4 snr=-5 done
+  test random Np=4 snr=+5 done
+  test random Np=4 snr=+15 done
+  test_all random Np=4 snr=-5 done
+  test_all random Np=4 snr=+5 done
+  test_all random Np=4 snr=+15 done
+seed 1 random Np=8
+  trained 6 models in 38s
+  dev random Np=8 snr=-5 done
+  dev random Np=8 snr=+5 done
+  dev random Np=8 snr=+15 done
+  test random Np=8 snr=-5 done
+  test random Np=8 snr=+5 done
+  test random Np=8 snr=+15 done
+  test_all random Np=8 snr=-5 done
+  test_all random Np=8 snr=+5 done
+  test_all random Np=8 snr=+15 done
+seed 1 random Np=16
+  trained 6 models in 39s
+  dev random Np=16 snr=-5 done
+  dev random Np=16 snr=+5 done
+  dev random Np=16 snr=+15 done
+  test random Np=16 snr=-5 done
+  test random Np=16 snr=+5 done
+  test random Np=16 snr=+15 done
+  test_all random Np=16 snr=-5 done
+  test_all random Np=16 snr=+5 done
+  test_all random Np=16 snr=+15 done
+seed 2: gmm fit 34s
+seed 2 dft Np=4
+  trained 6 models in 43s
+  dev dft Np=4 snr=-5 done
+  dev dft Np=4 snr=+5 done
+  dev dft Np=4 snr=+15 done
+  test dft Np=4 snr=-5 done
+  test dft Np=4 snr=+5 done
+  test dft Np=4 snr=+15 done
+  test_all dft Np=4 snr=-5 done
+  test_all dft Np=4 snr=+5 done
+  test_all dft Np=4 snr=+15 done
+seed 2 dft Np=8
+  trained 6 models in 42s
+  dev dft Np=8 snr=-5 done
+  dev dft Np=8 snr=+5 done
+  dev dft Np=8 snr=+15 done
+  test dft Np=8 snr=-5 done
+  test dft Np=8 snr=+5 done
+  test dft Np=8 snr=+15 done
+  test_all dft Np=8 snr=-5 done
+  test_all dft Np=8 snr=+5 done
+  test_all dft Np=8 snr=+15 done
+seed 2 dft Np=16
+  trained 6 models in 45s
+  dev dft Np=16 snr=-5 done
+  dev dft Np=16 snr=+5 done
+  dev dft Np=16 snr=+15 done
+  test dft Np=16 snr=-5 done
+  test dft Np=16 snr=+5 done
+  test dft Np=16 snr=+15 done
+  test_all dft Np=16 snr=-5 done
+  test_all dft Np=16 snr=+5 done
+  test_all dft Np=16 snr=+15 done
+seed 2 random Np=4
+  trained 6 models in 39s
+  dev random Np=4 snr=-5 done
+  dev random Np=4 snr=+5 done
+  dev random Np=4 snr=+15 done
+  test random Np=4 snr=-5 done
+  test random Np=4 snr=+5 done
+  test random Np=4 snr=+15 done
+  test_all random Np=4 snr=-5 done
+  test_all random Np=4 snr=+5 done
+  test_all random Np=4 snr=+15 done
+seed 2 random Np=8
+  trained 6 models in 38s
+  dev random Np=8 snr=-5 done
+  dev random Np=8 snr=+5 done
+  dev random Np=8 snr=+15 done
+  test random Np=8 snr=-5 done
+  test random Np=8 snr=+5 done
+  test random Np=8 snr=+15 done
+  test_all random Np=8 snr=-5 done
+  test_all random Np=8 snr=+5 done
+  test_all random Np=8 snr=+15 done
+seed 2 random Np=16
+  trained 6 models in 37s
+  dev random Np=16 snr=-5 done
+  dev random Np=16 snr=+5 done
+  dev random Np=16 snr=+15 done
+  test random Np=16 snr=-5 done
+  test random Np=16 snr=+5 done
+  test random Np=16 snr=+15 done
+  test_all random Np=16 snr=-5 done
+  test_all random Np=16 snr=+5 done
+  test_all random Np=16 snr=+15 done

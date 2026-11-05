@@ -11,6 +11,8 @@ xuống; (3) B dùng ước lượng độ chính xác đầy đủ nhưng tính
 mục **"Vòng sửa theo audit"** cuối tài liệu; các mục đêm qua giữ nguyên để đối chiếu nhưng **không còn là kết luận**.
 A0b là "thử nghiệm bridge tự dựng (Brownian, σ = 1)", **không** phải tái lập recipe VE-DSB của paper.
 
+**Tóm tắt sau audit (05/11 chiều):** A — SB 0/18 cả trên link lọc lẫn toàn bộ link, GMM đã sửa là baseline mạnh; B — hợp tác so với bản đồ + lịch sử riêng: +1.3…+2.5% rate / +3.5…+6.6% outage, ổn định nhưng gate 0/6; C — greedy hơn round-robin 0.011 AMOTA, causal cách oracle 0.008, chưa có cận trên thật. Xem cuối tài liệu.
+
 Tóm tắt cũ (05/11 sáng, đã bị thay): A — SB không qua gate (0/18); B — hợp tác có lợi chỉ ở vùng chưa có bản đồ; C — quét beam 20 ms ≈ oracle, không mở RL.
 
 ## Mốc 0 — audit và các điểm thiết kế phải chốt trước khi code
@@ -395,3 +397,53 @@ AMOTA UAV3D (3 seed; 'all_age0' = không kênh, như v1):
 3. Planner chẩn đoán (least-laxity) **kém** greedy → nó không phải cận trên; chưa có cận trên thật cho bài toán lập lịch.
    Vì vậy: "chưa có bằng chứng cần PPO cho beam + lập lịch trong cấu hình này", **không** phải "RL không có đất".
 4. Mất mát lớn nhất vẫn là vùng phủ và tuổi message: ngay cả gửi đủ với trễ 1 frame đã mất 0.059 AMOTA so với tuổi 0.
+
+### A1 v2 — GMM đã sửa, coverage đúng, toàn bộ link (`runs/wireless_abc/a1_v2/`, `summary_{test,test_all,test_deep}.md`)
+
+Cùng trace, cùng seed và cùng 3000 bước như v1. Chọn rule/NFE trên dev, đọc trên test. GPU ≈ 2 giờ 25 phút.
+
+1. **Gate SB: 0/18** trên test lọc link (như v1) và **0/18 trên toàn bộ link** của episode test, không lọc theo kênh
+   thật. Bridge thua hoặc hòa phương pháp mạnh nhất khác ở mọi cấu hình. Ở SNR 15 dB, Np ≥ 8, bridge thua rõ về outage
+   (random Np = 16: 0.193 so với GMM 0.150, tức −28%).
+2. **GMM sau khi sửa là baseline mạnh.** Ví dụ random, Np = 4, 15 dB: 4.80 / 0.300 (v1, có lỗi) thành 7.77 / 0.203 (v2),
+   tốt nhất về outage. Baseline cổ điển mạnh hơn làm khoảng cách với SB lớn thêm, không thu hẹp. Số của các mô hình học
+   (hồi quy, flow, bridge) gần như không đổi so với v1.
+3. **Toàn bộ link:** 33.9% mẫu link trong episode test có công suất thấp hơn trung vị hơn 40 dB (link "sâu": NLoS sâu hoặc
+   không có đường truyền). Trên các link này, ngay cả beam DFT tốt nhất với CSI hoàn hảo cũng chỉ đạt 4·10⁻⁵ … 4·10⁻³
+   bit/s/Hz, outage 100%. **Không bộ ước lượng kênh nào cứu được chúng**; đây là bài toán vùng phủ (vị trí/relay/độ cao),
+   không phải bài toán ước lượng. Bảng test_deep chỉ để ghi nhận: chênh lệch phần trăm giữa các rate ≈ 0 không có nghĩa,
+   và `summarize.py` không tính gate khi rate genie < 0.01.
+4. **Calibration** (Np = 4, test lọc link; khoảng 80% / 95% của gain mỗi beam; danh định 0.80 / 0.95):
+
+   | phương pháp | v1 (16 mẫu, GMM lỗi) | v2 (64 mẫu; LMMSE/GMM 512 mẫu posterior chính xác) |
+   |---|---|---|
+   | LMMSE (hiệp phương sai toàn cục) | 0.24–0.31 / 0.35–0.42 | 0.28–0.35 / 0.48–0.54 |
+   | GMM | 0.20–0.47 / 0.31–0.60 | 0.64–0.67 / 0.81–0.83 |
+   | Gauss dị phương sai | 0.20–0.57 / 0.32–0.67 | 0.22–0.61 / 0.42–0.73 |
+   | flow @8 | 0.47–0.66 / 0.61–0.74 | 0.52–0.70 / 0.69–0.79 |
+   | bridge @8 | 0.42–0.68 / 0.56–0.78 | 0.46–0.73 / 0.64–0.83 |
+   | DDPM @8 (chưa hội tụ) | 0.27–0.36 / 0.45–0.50 | 0.34–0.42 / 0.60–0.62 |
+
+   Một phần coverage thấp của v1 là do evaluator (16 mẫu): ở mức 95%, các phương pháp lấy mẫu tăng khoảng 0.05–0.15. Sau
+   khi sửa, mọi phương pháp vẫn **thiếu coverage** ở mức 95%: GMM và bridge@8 tốt nhất vẫn thiếu khoảng 0.12, LMMSE
+   thiếu khoảng 0.45. Kết luận "chưa dùng uncertainty cho quyết định rủi ro"
+   vẫn giữ. bridge@1 / bridge0 là ước lượng điểm, không có coverage. Trên toàn bộ link coverage còn thấp hơn, vì link sâu
+   nằm ngoài phân phối train.
+
+### Bảng quyết định sau vòng audit (thay bảng đêm qua; dev/feasibility, chỉ Munich trừ khi ghi khác)
+
+| câu hỏi | kết quả sau sửa | phát biểu được phép |
+|---|---|---|
+| A: SB cho CSI / chọn beam | 0/18 trên link lọc và 0/18 trên toàn bộ link; GMM đã sửa và hồi quy mạnh ngang hoặc hơn; mọi phương pháp thiếu coverage; link sâu (34%) không cứu được bằng ước lượng | "Chưa thấy lợi thế của SB trong benchmark hiện tại (ULA 16, DFT 16 beam, Np 4–16, 3000 bước)." **Không** nói "SB vô ích cho CSI". |
+| B: hợp tác trực tuyến | So với baseline mạnh nhất (bản đồ + lịch sử riêng): +1.3…+2.5% rate, +3.5…+6.6% outage, cùng chiều 3 seed ở 6/6 cấu hình; gate 0/6; giữ được với codec 152 bit, mất gói 30%, gửi thưa 5 lần; vùng không có bản đồ +6% / −11%; bản đồ 25% hoặc không bản đồ: ≈ 0, trong khi oracle còn xa | "Tín hiệu hợp tác nhỏ nhưng ổn định sau chi phí; chưa qua gate. Dư địa nằm ở **gửi gì** (biểu diễn message), không ở fusion." |
+| C: RL cho beam + lập lịch | Lập lịch greedy hơn round-robin +0.011 AMOTA; heuristic causal tốt nhất cách đối chứng biết kênh tốt nhất 0.008; planner chẩn đoán kém greedy nên chưa có cận trên thật; trễ 1 frame mất 0.059 | "Chưa có bằng chứng cần PPO cho beam + lập lịch trong cấu hình này; greedy đã lấy phần lớn." **Không** nói "RL không có đất". |
+
+Tài nguyên tổng: GPU ≈ 1 giờ 16 phút (đêm) + 2 giờ 25 phút (A1 v2) ≈ 3 giờ 41 phút / trần 8 giờ. Dữ liệu mới 4.6 GB + 240 MB
+(không đổi). Theo Codex: chưa thêm cảnh mới, chưa huấn luyện SB thêm, chưa mở PPO.
+
+Câu hỏi mở cho vòng sau (chờ người dùng quyết):
+1. B — biểu diễn message: gửi gì để chuyển được phần thông tin mà oracle cho thấy là có (ví dụ hướng/gain beam tốt nhất
+   đã lọc, hệ số hiệp phương sai rút gọn, hay bằng chứng đã chọn theo độ bất định)? Đây là chỗ SemCom nối vào.
+2. C — cận trên lập lịch thật (ví dụ quy hoạch nguyên/DP trên cửa sổ 200 ms với kênh biết trước), trước khi bàn đến RL.
+3. Vùng phủ — 34% mẫu link là link sâu mà không ước lượng nào cứu được; nếu có RL thì biến quyết định nên là vị trí/độ
+   cao/relay, không phải beam.

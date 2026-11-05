@@ -15,7 +15,8 @@ from pathlib import Path
 import numpy as np
 
 
-def a1(path):
+def a1(path, test_split="test"):
+    """test_split: test (truth-filtered links), test_all (every link of test episodes), test_deep (deep links only)."""
     d = json.loads(Path(path).read_text())
     rows = d["rows"]
     print("A1 data:", d["info"], "steps", d["steps"])
@@ -31,7 +32,7 @@ def a1(path):
     for proto, n_p, snr in configs:
         per_seed = []
         for s in seeds:
-            dev, te = by[("dev", proto, n_p, snr, s)], by[("test", proto, n_p, snr, s)]
+            dev, te = by[("dev", proto, n_p, snr, s)], by[(test_split, proto, n_p, snr, s)]
             if not dev or not te:
                 continue
             tidx = {(r["method"], r["rule"], r["nfe"]): r for r in te}
@@ -57,9 +58,12 @@ def a1(path):
         mr = lambda k, i: np.mean([p[i][k] for p in per_seed])
         print(f"| {proto} | {n_p} | {snr:+d} | {names_o} | {mr('rate', 0):.3f} | {mr('outage', 0):.3f} | {names_b} | "
               f"{mr('rate', 1):.3f} | {mr('outage', 1):.3f} | {np.mean(dr):+.1f} | {np.mean(do):+.1f} | {same} |")
+        genie = float(np.mean([o["rate"] + o["regret"] for o, _ in per_seed]))   # best DFT beam with perfect CSI
         gate = (np.mean(dr) >= 5 and all(x > 0 for x in dr)) or (np.mean(do) >= 10 and all(x > 0 for x in do))
-        out.append(dict(proto=proto, n_p=n_p, snr_db=snr, d_rate_pct=dr, d_out_pct=do, gate=bool(gate)))
-    print("\nA1 gate passed in", sum(o["gate"] for o in out), "of", len(out), "configs")
+        gate = gate and genie >= 0.01     # % differences between ~0 rates are meaningless (deep links: genie ~ 0)
+        out.append(dict(proto=proto, n_p=n_p, snr_db=snr, d_rate_pct=dr, d_out_pct=do, gate=bool(gate), genie=genie))
+    print(f"\nA1 gate ({test_split}) passed in", sum(o["gate"] for o in out), "of", len(out), "configs")
+    print("genie (best DFT beam, perfect CSI) rate per config:", " ".join(f"{o['genie']:.3g}" for o in out))
     # method table (test, mean over seeds, best rule/NFE per method chosen on dev)
     print("\n| proto | Np | SNR | " + " | ".join(["ls", "sweep", "lmmse", "omp", "gmm", "map", "gauss", "ddpm", "flow", "bridge", "bridge0"]) + " |")
     print("|---|---|---|" + "---|" * 11)
@@ -69,7 +73,7 @@ def a1(path):
             vals = []
             for s in seeds:
                 dev = [r for r in by[("dev", proto, n_p, snr, s)] if r["method"] == meth]
-                te = {(r["rule"], r["nfe"]): r for r in by[("test", proto, n_p, snr, s)] if r["method"] == meth}
+                te = {(r["rule"], r["nfe"]): r for r in by[(test_split, proto, n_p, snr, s)] if r["method"] == meth}
                 if dev:
                     c = max(dev, key=lambda r: r["rate"])
                     vals.append((te[(c["rule"], c["nfe"])]["rate"], te[(c["rule"], c["nfe"])]["outage"]))
@@ -82,8 +86,8 @@ def a1(path):
             continue
         line = []
         for meth, nfe in [("lmmse", 0), ("gmm", 0), ("gauss", 0), ("ddpm", 8), ("flow", 8), ("bridge", 8), ("bridge", 1), ("bridge0", 8)]:
-            rs = [r for s in seeds for r in by[("test", proto, n_p, snr, s)]
-                  if r["method"] == meth and r["rule"] == "egain" and r["nfe"] == nfe]
+            rs = [r for s in seeds for r in by[(test_split, proto, n_p, snr, s)]
+                  if r["method"] == meth and r["rule"] == "egain" and r["nfe"] == nfe and "cov80" in r]
             if rs:
                 line.append(f"{meth}{'' if nfe == 0 else '@' + str(nfe)} {np.mean([r['cov80'] for r in rs]):.2f}/"
                             f"{np.mean([r['cov95'] for r in rs]):.2f} nmse {np.mean([r['nmse_db'] for r in rs]):+.1f}")
