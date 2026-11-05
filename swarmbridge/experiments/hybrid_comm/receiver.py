@@ -52,12 +52,23 @@ class ReceiverData:
             while len(self.packet_cache) > 64: self.packet_cache.popitem(last=False)
         return self.packet_cache[key]
 
-    def build(self, ctx, with_tiles=True):
+    def build(self, ctx, with_tiles=True, profile=None):
         token, count = ctx["token"], ctx["k"]
         ego, metas = self.ego(token)
         device = self.device
+        def transfer(value, **kwargs):
+            if profile is None:
+                return value.to(device=device, **kwargs)
+            # Synchronous wall time of these exact copies; no disk I/O here.
+            cuda = str(device).startswith("cuda")
+            if cuda: torch.cuda.synchronize(device)
+            start = time.perf_counter()
+            result = value.to(device=device, **kwargs)
+            if cuda: torch.cuda.synchronize(device)
+            profile["transfer_wall_ms"] = profile.get("transfer_wall_ms", 0.0) + 1000 * (time.perf_counter() - start)
+            return result
         x = torch.zeros(CHANNELS, GRID, GRID, device=device)
-        x[:80] = ego.to(device=device, dtype=torch.float32)
+        x[:80] = transfer(ego, dtype=torch.float32)
         pose = self.geo["poses"][token]
         num = torch.zeros_like(x[:80]); den = torch.zeros_like(x[0]); age_num = torch.zeros_like(den)
         boxes = np.zeros((8, GRID, GRID), np.float32)
@@ -87,8 +98,8 @@ class ReceiverData:
             bits += len(packet) * 8
             _, idx, tl = TC.decode(packet)
             dense, mask = TC.scatter(idx, tl)
-            f = torch.from_numpy(dense).to(device)
-            m = torch.from_numpy(mask).to(device)
+            f = transfer(torch.from_numpy(dense))
+            m = transfer(torch.from_numpy(mask))
             spose = self.geo["poses"][src]
             f, m = warp_grid(f, spose, pose), warp_grid(m, spose, pose)
             num += f
@@ -98,9 +109,9 @@ class ReceiverData:
             x[80:160] = num / den.clamp_min(1)[None]
             x[168] = den.clamp(max=1)
             x[170] = age_num / den.clamp_min(1)
-        x[160:168] = torch.from_numpy(boxes).to(device)
-        x[169] = torch.from_numpy((scores > 0).astype(np.float32)).to(device)
-        x[171] = torch.from_numpy(box_age).to(device)
+        x[160:168] = transfer(torch.from_numpy(boxes))
+        x[169] = transfer(torch.from_numpy((scores > 0).astype(np.float32)))
+        x[171] = transfer(torch.from_numpy(box_age))
         return x, metas, bits
 
 

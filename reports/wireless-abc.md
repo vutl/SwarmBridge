@@ -559,17 +559,19 @@ Con số "nhiễu ±0.01" trước đây không có phép ước lượng hỗ t
 
 **Đọc kết quả.**
 1. *Lợi ích từ fine-tune* (box thích nghi so với M1 cũ) là **âm**: 0.596 so với 0.701 AMOTA. Receiver học được kém hơn
-   cách ghép box thủ công khoảng 0.10 AMOTA. Box được raster vào lưới BEV rồi đi qua decoder thì mất thông tin, so với ghép
-   trực tiếp danh sách box. Loss validation tăng sau epoch 0 cho thấy lượt train này chưa tốt.
+   cách ghép box thủ công khoảng 0.10 AMOTA. Raster box vào lưới BEV có thể làm mất thông tin, nhưng chưa có ablation
+   chứng minh đây là nguyên nhân. Kiến trúc, lịch train và lượng dữ liệu cũng có thể ảnh hưởng. Loss validation thấp
+   nhất sau epoch đầu chỉ cho thấy train lâu hơn trong lịch hiện tại không cải thiện loss đó.
 2. *Phần lợi riêng của tile* (joint so với box, cùng receiver): M1 ≈ 0 (kiểm tra đối chứng: không có tile thì hai arm
    bằng nhau); **M2 +0.038; M3 +0.065 AMOTA, dương ở cả 3 scene**. Như vậy tile có mang thông tin bổ sung thật. Nhưng mức
    tuyệt đối vẫn dưới đối chứng thủ công.
 3. Cổng (≥ +0.01 so với đối chứng mạnh nhất, dương ở ≥ 2/3 scene): joint M2 −0.067, joint M3 −0.040, M2 hiệu chỉnh −0.010
    (chỉ dương ở scene 15), M3 hiệu chỉnh −0.028. **Không qua, nên không dựng wireless.**
-4. Tuổi 1 frame không làm giảm (M2 0.634 → 0.636; M1 box 0.596 → 0.610). Trong khoảng 200–400 ms, dữ liệu cũ hơn một
-   frame cũng dùng được.
-5. Latency (đã warm-up, đo riêng): chuẩn bị input cho M2/M3 (giải mã, scatter, warp, chép sang GPU) p50 63–92 ms, p95
-   88–117 ms; decoder receiver p50 15–23 ms. Code input chưa tối ưu, nhưng ở mức hiện tại thì vượt deadline 50 ms.
+4. Với hai receiver này, tuổi 1 frame không làm AMOTA gộp thấp hơn (M2 0.634 → 0.636; M1 box 0.596 → 0.610).
+   Đây chưa phải bằng chứng tổng quát rằng message trễ không gây hại; cold start còn làm lượng message sử dụng khác nhau.
+5. Timing inference cũ: chuẩn bị input M2/M3 p50 63–92 ms, p95 88–117 ms; decoder p50 15–23 ms.
+   **Phần input còn gồm đọc cache BEV và packet từ đĩa.** Không được diễn giải nó là latency xử lý thuần hoặc
+   bằng chứng về deadline end-to-end. Phép đo riêng dưới đây tách thời gian chép CPU–GPU và bỏ đọc đĩa.
 6. Phần nào chưa đủ: **receiver** (học kém hơn ghép thủ công). Còn thông tin bổ sung thì có (mục 2). Cách chọn tile
    (objectness so với ngẫu nhiên) chưa được chấm riêng trên dev. Một seed train và 3 scene dev chỉ là bằng chứng feasibility.
 
@@ -580,3 +582,27 @@ chỉ còn đáng làm khi có receiver mạnh hơn hẳn (ngoài phạm vi pilo
 
 Tài nguyên lượt này: GPU 21.4 phút (prepare + train 14.3 + inference 2.6). Tổng pilot hybrid ≈ 26 phút; còn ≈ 3 giờ 49
 phút. Dữ liệu mới 1.9 GB ngoài git (message nhị phân, checkpoint).
+
+### Codex xác nhận artifact và đính chính timing (06/11)
+
+Đã kiểm tra lại 13 test và 60 cặp hash prediction/input tracking (15 phương án × gộp và ba scene), cùng `dt=0.2`.
+Training và kết quả Claude chạy nốt được giữ nguyên; không chạy thêm ghép late-fusion, train hoặc wireless.
+
+`bash scripts/hybrid_comm/run_matched.sh profile` đo đúng input builder hiện tại, dữ liệu validation đã ở RAM,
+3 lượt warm-up và 12 mẫu mỗi mode. Profiling có đồng bộ CUDA; assert input trùng hoàn toàn với nhánh không profiling.
+
+| Mode | Chuẩn bị input p50 / p95 (ms) | Chép CPU→GPU và cast ego p50 / p95 (ms) |
+|---|---:|---:|
+| Không helper | 4.56 / 26.05 | 3.66 / 6.42 |
+| M1 | 9.50 / 12.34 | 3.99 / 5.00 |
+| M2 | 48.31 / 51.98 | 20.01 / 25.70 |
+| M3 | 42.05 / 45.97 | 17.66 / 21.48 |
+
+Nguồn: `runs/hybrid_comm/codex_m2/input_profile.json`. Đây là microbenchmark trên ba frame validation, chưa gồm encoder,
+encode bên gửi, radio hoặc decoder receiver. Không cộng các percentile giữa công đoạn, không suy ra M3 nhanh hơn M2
+một cách tổng quát và chưa tuyên bố đạt/trượt deadline end-to-end. Microbenchmark mất thêm 17,1 giây, không thêm training;
+tổng các phase GPU được ghi nhận tăng từ 21,4 lên 21,7 phút.
+
+**Quyết định giữ nguyên:** dùng M1 + NMS làm baseline hiện tại; dừng mở wireless hybrid và PPO vì không đạt gate.
+Lợi ích tile trong cặp receiver yếu là tín hiệu feasibility, chưa chứng minh lợi ích so với pipeline box mạnh.
+Nếu mở thí nghiệm mới sau này, cần giả thuyết và đối chứng riêng; chưa có kết luận receiver là nút thắt duy nhất.

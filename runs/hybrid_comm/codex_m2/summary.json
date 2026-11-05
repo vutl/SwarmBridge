@@ -915,15 +915,98 @@
       "p95": 2684868.8
     }
   },
+  "input_profile": {
+    "validation_tokens": [
+      "ca2d93b2c01f42d4a0e8727a1c1d0649",
+      "82ab716a29fe43839cbed63fe954b0ec",
+      "d39eb49f550b4fa381d35233c1f73952"
+    ],
+    "modes": {
+      "none": {
+        "samples": 12,
+        "resident_build_wall_ms": {
+          "p50": 4.557650999998941,
+          "p95": 26.047197799999434
+        },
+        "cpu_to_gpu_copy_and_ego_cast_wall_ms": {
+          "p50": 3.6571589999994103,
+          "p95": 6.420276699997804
+        },
+        "other_build_work_wall_ms": {
+          "p50": 0.9004919999995309,
+          "p95": 19.75282380000018
+        }
+      },
+      "m1": {
+        "samples": 12,
+        "resident_build_wall_ms": {
+          "p50": 9.50416999999959,
+          "p95": 12.344741600000653
+        },
+        "cpu_to_gpu_copy_and_ego_cast_wall_ms": {
+          "p50": 3.9948390000006384,
+          "p95": 4.995894199997508
+        },
+        "other_build_work_wall_ms": {
+          "p50": 5.978551999998416,
+          "p95": 7.714117800001397
+        }
+      },
+      "m2": {
+        "samples": 12,
+        "resident_build_wall_ms": {
+          "p50": 48.31314800000008,
+          "p95": 51.97956344999941
+        },
+        "cpu_to_gpu_copy_and_ego_cast_wall_ms": {
+          "p50": 20.01468200000467,
+          "p95": 25.6968991000031
+        },
+        "other_build_work_wall_ms": {
+          "p50": 26.516264999999706,
+          "p95": 29.895678699998204
+        }
+      },
+      "m3": {
+        "samples": 12,
+        "resident_build_wall_ms": {
+          "p50": 42.047370500000625,
+          "p95": 45.973039050000786
+        },
+        "cpu_to_gpu_copy_and_ego_cast_wall_ms": {
+          "p50": 17.66030800000351,
+          "p95": 21.48014455000009
+        },
+        "other_build_work_wall_ms": {
+          "p50": 24.457318999997923,
+          "p95": 26.156096700002784
+        }
+      }
+    },
+    "warmup_per_mode": 3,
+    "gpu_job_seconds": 17.105538922,
+    "limitations": [
+      "Resident bytes and ego BEV: disk I/O excluded; no encoder, sender encoding, radio or receiver decoder.",
+      "Synchronized copies include ego fp16-to-fp32 conversion; other work includes decode, scatter, allocation, warp and assembly.",
+      "Twelve measurements over three validation frames per mode; implementation microbenchmark, not an end-to-end deadline test."
+    ],
+    "source_hashes": {
+      "receiver.py": "74ee59a04ca914f942a3b4db101188540b0345902727ffa8a9975ae4799caa33",
+      "profile_inputs.py": "dea9824c125769c6e55da596f4d5265b669f11932589f7802f02e073ac443888"
+    }
+  },
   "resource": {
-    "successful_gpu_phase_seconds": 1283.0993912519998,
-    "artifact_bytes": 1920515741,
+    "successful_gpu_phase_seconds": 1300.2049301739999,
+    "artifact_bytes": 1920550912,
+    "input_microbenchmark_seconds": 17.105538922,
     "adaptation_envelope_seconds": 2700
   },
   "limits": [
     "One training seed; three previously-used dev scenes.",
     "Initial decoder had seen the 17 non-dev scenes before the new split.",
     "Ideal message arrivals at age 0/1; not a wireless result.",
-    "Dense diagnostic is a reference, not a bound or achievable sparse quality."
+    "Dense diagnostic is a reference, not a bound or achievable sparse quality.",
+    "Inference input timings include offline BEV/packet disk reads, not just decoding and transfer.",
+    "Resident input microbenchmark separates copy time but excludes encoder, sender encoding, radio and receiver decoder; no end-to-end latency claim."
   ]
 }

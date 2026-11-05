@@ -1,0 +1,17 @@
+{
+  "verified_at_utc": "2026-11-05T15:37:02.411400+00:00",
+  "prediction_tracking_pairs": 60,
+  "methods": 15,
+  "checkpoint_hashes": {
+    "box": "6aa4ff0d7fc91fb49641b6b71773ce47666e4c99f1a55e9fb0b43c53144cd796",
+    "joint": "2b048f773ff4602486cb4b172699d71aa2e56e674ff9aba3c337838679f0e577"
+  },
+  "schedule_canonical_json_sha256": "1ef1d19aecad6275c9f08d4204f126e49b534f05ce3a7986ae2e7b4bc90951d0",
+  "legacy_predictions_verified": 10,
+  "tests": {
+    "passed": 13,
+    "command": "pytest test_core.py test_receiver.py test_tilecodec.py -q -p no:cacheprovider"
+  },
+  "new_training": false,
+  "new_wireless": false
+}

@@ -71,4 +71,21 @@ Gate baseline: **m1_same_nms**. Wireless gate: **False**.
   "open_wireless": false
 }
 
-Successful GPU phases: 21.4 min; paired adaptation: 14.3 min.
+Prepare/train/infer GPU phases: 21.4 min; paired adaptation: 14.3 min.
+
+Resident-input microbenchmark (disk excluded; 12 samples/mode; not end-to-end):
+
+| Mode | Build p50/p95 ms | CPU to GPU + ego cast p50/p95 ms |
+|---|---:|---:|
+| none | 4.56 / 26.05 | 3.66 / 6.42 |
+| m1 | 9.50 / 12.34 | 3.99 / 5.00 |
+| m2 | 48.31 / 51.98 | 20.01 / 25.70 |
+| m3 | 42.05 / 45.97 | 17.66 / 21.48 |
+
+Limitations:
+- One training seed; three previously-used dev scenes.
+- Initial decoder had seen the 17 non-dev scenes before the new split.
+- Ideal message arrivals at age 0/1; not a wireless result.
+- Dense diagnostic is a reference, not a bound or achievable sparse quality.
+- Inference input timings include offline BEV/packet disk reads, not just decoding and transfer.
+- Resident input microbenchmark separates copy time but excludes encoder, sender encoding, radio and receiver decoder; no end-to-end latency claim.
