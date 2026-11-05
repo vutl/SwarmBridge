@@ -70,3 +70,7 @@ Thumbs.db
 /runs/wireless_abc/**/*.npy
 /runs/wireless_abc/**/*.npz
 /runs/wireless_abc/**/*.pt
+# hybrid object-feature pilot: predictions / tracker outputs are reproducible from cached BEV + scripts; sha256 kept in summaries
+/runs/hybrid_comm/**/results_nusc.json
+/runs/hybrid_comm/**/tracking_result.json
+/runs/hybrid_comm/m0_smoke/

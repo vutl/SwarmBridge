@@ -1,0 +1,16 @@
+{
+ "det_path": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/m0/hybrid_nms/kf_nor+tiles_obj_64/results_nusc.json",
+ "det_sha256": "beec18452ce7b4a9102b57373d5d23a3cb90b7eef6b0a0150c56f553805807c7",
+ "dt": "0.2",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}

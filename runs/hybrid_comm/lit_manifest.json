@@ -1,0 +1,137 @@
+{
+ "date": "2026-11-05",
+ "papers": [
+  {
+   "name": "JSAC hybrid bit/generative SemCom (Huang et al.)",
+   "arxiv": "2412.05647v3",
+   "url": "https://arxiv.org/abs/2412.05647v3",
+   "file": "pdf/Deep Reinforcement Learning-Based Resource Allocation for Hybrid Bit and Generative Semantic Communications in Space-Air-Ground Integrated Networks.pdf",
+   "bytes": 2529066,
+   "sha256": "9cc7d9814b2d5ec75fd92a2c2d2d86af2382eaa010799457c236c86eb2dcfdac",
+   "valid_pdf": true,
+   "note": "already in library"
+  },
+  {
+   "name": "CoSDH",
+   "arxiv": "2503.03430v1",
+   "url": "https://arxiv.org/abs/2503.03430v1",
+   "file": "pdf/CoSDH Communication-Efficient Collaborative Perception via Supply-Demand Awareness and Intermediate-Late Hybridization.pdf",
+   "bytes": 4211064,
+   "sha256": "37775e038e958681f16ef8401355ac3ce1c314a25cee877ba84b43daa948cdad",
+   "valid_pdf": true,
+   "note": "already in library"
+  },
+  {
+   "name": "GOSC",
+   "arxiv": "2609.39477v1",
+   "url": "https://arxiv.org/abs/2609.39477v1",
+   "file": "pdf/Resource-Efficient Semantic Communication for Heterogeneous Agentic Teams.pdf",
+   "bytes": 292744,
+   "sha256": "e99130b27965bc4b6c06ccca8fc2dd9a3fd8b2dd5f6880964b6e0a4003c01923",
+   "valid_pdf": true,
+   "note": "already in library"
+  },
+  {
+   "name": "HyComm",
+   "arxiv": "2508.07092v1",
+   "url": "https://arxiv.org/abs/2508.07092v1",
+   "file": "pdf/HyComm Communication-Efficient Multi-Agent 3D Detection via Hybrid Collaboration.pdf",
+   "bytes": 17157084,
+   "sha256": "e914ef0afbcbafd6725f79a46000305307fc0b5e3269d5278001e8ea850a3d8e",
+   "valid_pdf": true,
+   "note": "downloaded 2026-11-05"
+  },
+  {
+   "name": "LIF",
+   "arxiv": "2504.21774v2",
+   "url": "https://arxiv.org/abs/2504.21774v2",
+   "file": "pdf/LIF Is Intermediate Fusion All You Need for UAV-based Collaborative Perception.pdf",
+   "bytes": 3433721,
+   "sha256": "96bdd63834a880b3fe38e3a3e83f48903e6d33ec1099e0a80c7a7c876d2b8925",
+   "valid_pdf": true,
+   "note": "downloaded 2026-11-05"
+  },
+  {
+   "name": "DeepSense 6G",
+   "arxiv": "2211.09769v2",
+   "url": "https://arxiv.org/abs/2211.09769v2",
+   "file": "pdf/DeepSense 6G A Large-Scale Real-World Multi-Modal Sensing and Communication Dataset.pdf",
+   "bytes": 3885960,
+   "sha256": "1dced2fe12b13a07c9269873dac90cce7a0a89916be20f7bfa6c6ce3ada01f59",
+   "valid_pdf": true,
+   "note": "downloaded 2026-11-05 (paper only, no dataset)"
+  },
+  {
+   "name": "HMS-SCP",
+   "arxiv": "2608.14603v2",
+   "url": "https://arxiv.org/abs/2608.14603v2",
+   "file": "pdf/HMS-SCP Task-Oriented Multi-Scale Semantic Communication for V2X Cooperative Perception.pdf",
+   "bytes": 7528335,
+   "sha256": "650e86c4fa51ece7b7e962cc0305989801c707cba90ebfc3fd7935d9e6637124",
+   "valid_pdf": true,
+   "note": "downloaded 2026-11-05"
+  },
+  {
+   "name": "HARQ cooperative perception (Sheng et al.)",
+   "arxiv": "2409.09042",
+   "url": "https://arxiv.org/abs/2409.09042",
+   "file": "pdf/Semantic Communication for Cooperative Perception using HARQ.pdf",
+   "bytes": 12547753,
+   "sha256": "154ddc098c4cef628f2181a686462c6ea917821bce5f2bf5285c6ca29280aee3",
+   "valid_pdf": true,
+   "note": "downloaded 2026-11-05 (cited by SComCP; closest to 'enhancement')"
+  },
+  {
+   "name": "DRL user scheduling for collaborative perception",
+   "arxiv": "2502.10456",
+   "url": "https://arxiv.org/abs/2502.10456",
+   "file": "pdf/Deep Reinforcement Learning-Based User Scheduling for Collaborative Perception.pdf",
+   "bytes": 6566130,
+   "sha256": "f8886372227f9279167c0897e6c04639dc540f274a96e5057b627c9858941220",
+   "valid_pdf": true,
+   "note": "downloaded 2026-11-05 (closest to 'yield airtime')"
+  },
+  {
+   "name": "CoDS",
+   "arxiv": null,
+   "url": null,
+   "file": "pdf/CoDS Collaborative Perception via Digital Semantic Communication.pdf",
+   "bytes": 975250,
+   "sha256": "1f74095b3adbcf25fe21d9c61535085129e79393f3f05060a44a9a2d6855838d",
+   "valid_pdf": true,
+   "note": "already in library"
+  },
+  {
+   "name": "SComCP",
+   "arxiv": null,
+   "url": null,
+   "file": "pdf/SComCP Task-Oriented Semantic Communication for Collaborative Perception.pdf",
+   "bytes": 1689443,
+   "sha256": "4d0287a1ed6d8ac1488f6f76929fa2d982d85cf4635ad004b4b1bf6ca6f9dc0a",
+   "valid_pdf": true,
+   "note": "already in library"
+  }
+ ],
+ "repos": [
+  {
+   "repo": "https://github.com/uestchjw/LIF",
+   "dir": "pdf/GithubModels/uestchjw__LIF",
+   "commit": "805cd11cb02bb374b1811d2e8c46da71c1afbd21",
+   "commit_date": "2025-07-06T17:08:42+08:00",
+   "clone": "--depth 1, GIT_LFS_SKIP_SMUDGE=1, no datasets/checkpoints",
+   "note": "official LIF/UAV3D codebase; BoBEV/VPE fusion code NOT found in the clone"
+  },
+  {
+   "repo": "https://github.com/frezazadeh/gosc-agentic-teams",
+   "dir": "pdf/GithubModels/frezazadeh__gosc-agentic-teams",
+   "commit": "387b49389385b51c275dc5a22ec1672087edda1d",
+   "commit_date": "2026-09-30T10:03:38+02:00",
+   "clone": "--depth 1, GIT_LFS_SKIP_SMUDGE=1, no datasets/checkpoints",
+   "note": "official GOSC code (first author)"
+  }
+ ],
+ "unverified": [
+  "Executive summary.pdf (ChatGPT): used only as suggestions. Not used as evidence: 'BridgeCodec NeurIPS 2022 (Mamba)' (impossible date), 'DiffCP ICCV 2023 NVIDIA' (DiffCP is a 2024 arXiv paper, already in pdf/), 'Song et al. 2026 (hypothetical)', 'Cheng TWC 2025', 'Dhillon CVPR 2024', 'Andrews JSAC 2023', 'Xiong NeurIPS 2026', 'Mao CVPR 2023 GNN channel', 'Alkhateeb IoT-J 2024 hybrid SemCom on DeepSense speech' - no identifiers given, not verified.",
+  "No author code found for JSAC, HyComm, HMS-SCP (arXiv pages and GitHub search, 2026-11-05)."
+ ]
+}

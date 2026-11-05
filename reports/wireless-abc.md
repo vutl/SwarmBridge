@@ -447,3 +447,74 @@ Câu hỏi mở cho vòng sau (chờ người dùng quyết):
 2. C — cận trên lập lịch thật (ví dụ quy hoạch nguyên/DP trên cửa sổ 200 ms với kênh biết trước), trước khi bàn đến RL.
 3. Vùng phủ — 34% mẫu link là link sâu mà không ước lượng nào cứu được; nếu có RL thì biến quyết định nên là vị trí/độ
    cao/relay, không phải beam.
+
+
+## Hybrid object–feature pilot (05/11 tối) — mốc 0 và cổng 1, phần receiver (chưa có wireless)
+
+Plan: "SwarmBridge: Hybrid Object–Feature Communication cho multi-UAV tracking". Đã đóng vòng A/B/C; các artifact cũ giữ
+nguyên. Code nằm trong `swarmbridge/experiments/hybrid_comm/`, kết quả trong `runs/hybrid_comm/`. File dự đoán không đưa vào
+git vì tái tạo được từ cache BEV; SHA-256 của chúng có trong `det_summary.json`, `track_summary.json` và `hybrid_merge.json`.
+
+### Mốc 0 — tài liệu và provenance (`runs/hybrid_comm/lit_manifest.json`)
+- Đã xác minh 11 bài (arXiv ID, phiên bản, SHA-256, đều là PDF hợp lệ). Bài mới tải: HyComm (2508.07092), LIF
+  (2504.21774), DeepSense 6G (2211.09769), HMS-SCP (2608.14603), HARQ cho cooperative perception (2409.09042), DRL lập lịch
+  user cho collaborative perception (2502.10456). Bài đã có sẵn: JSAC (2412.05647), CoSDH, GOSC (2609.39477), CoDS, SComCP.
+- Code chính thức đã clone nông, không kéo dataset/checkpoint: LIF (`uestchjw/LIF`, 805cd11c) và GOSC
+  (`frezazadeh/gosc-agentic-teams`, 387b4938). Không tìm thấy code của JSAC, HyComm, HMS-SCP. Trong bản clone LIF không có
+  code BoBEV/VPE.
+- `Executive summary.pdf` (ChatGPT) chỉ dùng làm gợi ý. Không dùng làm bằng chứng các mục không có định danh hoặc sai, ví
+  dụ "BridgeCodec NeurIPS 2022 (Mamba)", "DiffCP ICCV 2023", "Song et al. (hypothetical)".
+
+**Đối chiếu novelty (đọc full text):**
+
+| Công trình | Đã có | Hệ quả |
+|---|---|---|
+| JSAC (Huang et al.) | Chọn mode bằng DRL (DSAC, một agent), có deadline D_max 2–11 s, thời gian tính toán semantic 1.33 s; state chứa CSI thật; các mode độc lập, không lũy tiến (base+enhancement chỉ ghi là future work) | Chọn mode có deadline không còn mới |
+| GOSC (Rezazadeh et al.) | Gửi/hoãn theo giá trị − giá (knapsack Lagrange); có điều kiện theo tri thức của bên nhận; có option dùng AoI; uplink chung điều phối bằng giá (nhường airtime); chỉ dùng SNR trung bình | Quyết định "nhường airtime" và tính causal đã có; mọi baseline phải gồm một quy tắc kiểu GOSC |
+| CoSDH | Box + feature, gửi theo cung–cầu, ngưỡng cố định | Hybrid box+feature và gửi theo nhu cầu đã có |
+| HyComm | Box trước, rồi điểm thô theo độ bất định của bên gửi, xếp theo ngân sách | Thứ tự "gọn trước, bằng chứng sau" đã có |
+| LIF | Box từ UAV fusion vào BEV trên **UAV3D**: 0.718 mAP, gần early fusion 0.720; yêu cầu theo độ bất định của bên nhận | Box trên UAV3D đã rất mạnh ở mức detection |
+| HMS-SCP, CoDS, SComCP | Feature đa tỉ lệ / bitstream digital LDPC / JSCC, đều trên một link, kênh AWGN/Rayleigh, chấm bằng AP | Codec feature theo kênh đã có |
+
+Phần còn có thể mới (giả thuyết, chưa tuyên bố): bitstream lũy tiến với box là lớp 0 và tile là lớp bổ sung xuyên frame;
+quyết định gửi mới / bổ sung cho nội dung đã gửi / nhường airtime, có điều kiện theo trạng thái tracker dựng từ dữ liệu đã
+nhận; deadline cỡ ms trên trace ray-tracing; chấm bằng AMOTA/ID switch. Cần đọc kỹ 2409.09042 (HARQ) và 2502.10456 (lập lịch
+DRL) trước khi tuyên bố phần "bổ sung" và "nhường airtime". Về cơ chế, lập lịch base/enhancement theo deadline là
+streaming lũy tiến tối ưu R-D cổ điển (Chou–Miao).
+
+### Codec (`tilecodec.py`, 6/6 test: round-trip, prefix, gói bị cắt, kênh hằng/bão hòa, pooling)
+Tile 8×8 ô (6.4 m), 80 kênh, q8 theo kênh với tham số fp16. Byte gồm header, qparams, rồi lần lượt (index, tile). M2 đúng
+là prefix byte của M3. Kích thước: **M2 = 658 kbit, M3 = 2.63 Mbit, 256 tile = 10.5 Mbit**; M1 (KF-PV) khoảng 10 kbit.
+Thời gian (p50 / p95): điểm tile của bên gửi 8.2 / 9.4 ms, encode 14 / 17 ms, decode 1.8 / 5.7 ms, decoder BEV 9.7 / 11.4 ms.
+
+### Cổng 1, phần receiver — 3 scene dev, mọi message tới đủ, tuổi 0 (`m0_receiver.py`, `hybrid_merge.py`)
+Tile được xếp hạng theo objectness của detector cục bộ bên gửi (`obj`), đối chứng bằng norm feature (`norm`); top-64 của
+hai cách chỉ trùng 36%. Receiver feature là decoder `fusion/feat_s1` (trung bình có mask); nhánh box là M1 KF-PV đồng bộ.
+
+| receiver / message | mAP | AMOTA | ID switch |
+|---|---|---|---|
+| ego qua decoder feature | 0.428 | 0.472 | 46 |
+| M1 box noisy-OR (không vận tốc) | 0.665 | 0.594 | 57 |
+| **M1 KF-PV** | 0.649 | **0.690** | 29 |
+| chỉ 64 tile `obj`, không box | 0.563 | 0.688 | 50 |
+| M1 + 16 tile (M2), NMS-max | 0.651 | 0.706 | 44 |
+| M1 + 64 tile (M3), NMS-max | 0.657 | 0.705 | 67 |
+| M1 + 256 tile, NMS-max | 0.663 | 0.701 | 46 |
+| M1 + feature đủ trong vùng 64 / 256 tile (chẩn đoán) | 0.661 / 0.665 | 0.716 / 0.708 | 42 / 41 |
+| **feature đầy đủ (float / q8), không box** | 0.688 / 0.689 | **0.761** | 43 |
+
+1. Codec đúng (q8 không mất gì). Xếp tile theo `obj` tốt hơn `norm` ở mọi K.
+2. **Receiver chưa hỗ trợ input thưa.** Decoder feature chỉ có ego cho 0.428 mAP, kém decoder ego chuyên dụng (0.512),
+   vì decoder được train trên trung bình của 5 UAV. Chia vùng (feature trong tile, box ngoài tile) **kém hơn M1**
+   (0.49–0.51 mAP), vì thang score của hai nhánh lệch nhau: box có trung vị 0.66, nhiều detection ≈ 1; feature có trung vị
+   0.41. Gộp rồi NMS-max chữa được phần lớn, nhưng kéo feature đầy đủ từ 0.688 xuống 0.665 mAP.
+3. Ở mức detection, M2/M3 chỉ thêm ≤ 0.012 mAP so với M1. **Ở mức tracking, trần của lớp feature lớn: feature đầy đủ hơn
+   M1 +0.071 AMOTA**; M2 +0.016; M3 +0.015. Nhiễu trên 60 frame vào khoảng ±0.01 (256 tile < 64 tile), nên +0.016 chỉ ở
+   ngưỡng. ID switch tăng khi ghép (29 → 44–67).
+4. Kết luận cổng 1 theo quy tắc của plan: **chưa kết luận — receiver còn hạn chế** (input thưa và quy tắc ghép). Lớp
+   feature không vô ích: trần tracking là +0.07 AMOTA, đổi lại tốn khoảng 4000× bit. Việc hợp lý tiếp theo là **mốc 2**
+   (plan cho phép tối đa 45 phút GPU, 3 epoch, 1 seed, chọn trên validation): một receiver nhận cùng lúc feature thưa
+   (train với tập tile ngẫu nhiên), bản đồ box KF và kênh mask, để bỏ quy tắc ghép thủ công. Chưa dựng wireless, chưa mở RL.
+
+GPU đã dùng cho pilot này ≈ 5 phút (2 lượt receiver 60 frame + smoke). Ngân sách còn ≈ 4 giờ 14 phút. Dữ liệu mới: PDF
+53 MB, repo 677 MB, dự đoán 195 MB (ngoài git).

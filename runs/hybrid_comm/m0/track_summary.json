@@ -1,0 +1,82 @@
+{
+ "feat_dense": {
+  "amota": 0.7608,
+  "amotp": 0.6636,
+  "ids": 43.0,
+  "recall": 0.7494,
+  "det_sha256": "4a14d8d6b6c477b056f3062f3561ababa97c7682e23b7741f3b49d1667451ded",
+  "dt": "0.2"
+ },
+ "feat_ego": {
+  "amota": 0.4723,
+  "amotp": 1.0696,
+  "ids": 46.0,
+  "recall": 0.4962,
+  "det_sha256": "dfc02189bd15145da75ed524a8e72f87adaf0371a2d8bc709ece68263a837033",
+  "dt": "0.2"
+ },
+ "m1_box_nor": {
+  "amota": 0.594,
+  "amotp": 0.7452,
+  "ids": 57.0,
+  "recall": 0.5741,
+  "det_sha256": "374e0f527895dc24b7c6f7bd8864f0532688e991478577daa6ce71b3de4fe2ec",
+  "dt": "0.2"
+ },
+ "m1_kf_nor": {
+  "amota": 0.69,
+  "amotp": 0.6805,
+  "ids": 29.0,
+  "recall": 0.6394,
+  "det_sha256": "ead39bee366be26a79e0fa0614a04d777f9a091fb08531aa3fea3efdf62476c7",
+  "dt": "0.2"
+ },
+ "m256_densein_nms": {
+  "amota": 0.7082,
+  "amotp": 0.6363,
+  "ids": 41.0,
+  "recall": 0.6637,
+  "det_sha256": "2afa9c1103f575f81d341ccd561a4bf15d3fe92cd547c0ec6d9f514fe16bcbf6",
+  "dt": "0.2"
+ },
+ "m256_nms": {
+  "amota": 0.7009,
+  "amotp": 0.6405,
+  "ids": 46.0,
+  "recall": 0.6648,
+  "det_sha256": "de013fc2823b2622e8c19bd9569066bb3c3e0ce6aed555970f646a27377bca99",
+  "dt": "0.2"
+ },
+ "m2_nms": {
+  "amota": 0.7057,
+  "amotp": 0.6768,
+  "ids": 44.0,
+  "recall": 0.666,
+  "det_sha256": "afc249bd9f0034e9269fb1a97075c20193bdde5e6fcd99dc7baf461da7500114",
+  "dt": "0.2"
+ },
+ "m3_densein_nms": {
+  "amota": 0.7156,
+  "amotp": 0.6701,
+  "ids": 42.0,
+  "recall": 0.6632,
+  "det_sha256": "d02381836db06cc3089b5f30ae510885cf8f92a076665609bb2d02a39dd4d866",
+  "dt": "0.2"
+ },
+ "m3_nms": {
+  "amota": 0.7047,
+  "amotp": 0.6801,
+  "ids": 67.0,
+  "recall": 0.7158,
+  "det_sha256": "beec18452ce7b4a9102b57373d5d23a3cb90b7eef6b0a0150c56f553805807c7",
+  "dt": "0.2"
+ },
+ "tiles_obj_64_featonly": {
+  "amota": 0.6884,
+  "amotp": 0.848,
+  "ids": 50.0,
+  "recall": 0.6752,
+  "det_sha256": "bb0a6bab3140bfdf57a84f97656ddf99397cc00bd83d10d4225b0ec4b745fcdf",
+  "dt": "0.2"
+ }
+}
