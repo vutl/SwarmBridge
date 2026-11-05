@@ -1,0 +1,16 @@
+{
+ "det_path": "C:/Users/USER/Documents/SwarmBridge\\runs/uav3d_proto/wireless_c2_lat0.05\\dets\\gps-rr\\m1\\results_nusc.json",
+ "det_sha256": "46d171f7be4d4384f47f7683a5652cb23da7c825db138bcaafbcce2952fe24eb",
+ "dt": "0.2",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}

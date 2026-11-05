@@ -1,0 +1,16 @@
+{
+ "det_path": "C:/Users/USER/Documents/SwarmBridge\\runs/uav3d_proto/wireless_c2_lat0.0\\dets\\ssb20avg-greedy\\m2\\results_nusc.json",
+ "det_sha256": "498e4be85e4b6933c74a2ab15ea4f36555820359c1b8163566589c35ff802597",
+ "dt": "0.2",
+ "scenes": [
+  "scene_11",
+  "scene_13",
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 0
+}

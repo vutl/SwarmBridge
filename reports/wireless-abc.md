@@ -320,3 +320,78 @@ Tài nguyên đã dùng: GPU 31 phút (A1) + 15 phút (A1 hội tụ) + 10 phút
 2. C: nếu muốn tiếp, câu hỏi đúng là **vị trí/relay** cho vùng NLoS (oracle beam vẫn mất 0.058 AMOTA), không phải beam.
 3. A: chỉ quay lại SB nếu có chế độ posterior đa đỉnh thật (pilot rất ít + lượng tử ADC thô) và đã sửa calibration; hiện
    chưa có lý do.
+
+
+## Vòng sửa theo audit (05/11 trưa) — kết quả thay cho các mục đêm qua
+
+### Sửa và kiểm thử
+- GMM: bước covariance dùng E[d dᴴ] (trước: liên hợp ngược). Test mới khôi phục covariance phức đã biết, kể cả dấu phần ảo.
+- Coverage: mô hình lấy mẫu dùng S = 64 mẫu (trước 16); LMMSE/GMM dùng 512 mẫu posterior chính xác. Test mới: với
+  posterior Gaussian biết trước, khoảng 80% / 95% đạt danh định (±0.02); 16 mẫu cho coverage 95% thấp hơn rõ — tức một
+  phần "coverage thấp" đêm qua là lỗi evaluator.
+- A1 thêm đánh giá **toàn bộ link** của episode test (không lọc theo kênh thật) và tách riêng link sâu (deep NLoS).
+- B v2 (`b_coop2.py`): codec thật — gửi Np phép đo pilot lượng tử 8 bit + scale float16 + vị trí + thời gian + chỉ số
+  nhiễu = **152 bit/message** (Np = 4); bên nhận giải mã và tự dựng lại ước lượng LMMSE từ bản đồ chung tại vị trí người
+  gửi với nhiễu đã cộng nhiễu lượng tử (test round-trip). Baseline mới **own** = bản đồ + lịch sử ước lượng của chính UAV
+  (cùng bán kính / tuổi / trọng số). Có mất gói, chu kỳ gửi và mức phủ bản đồ.
+- C v2 (`c_feas2.py`, `c_track2.py`): phí quét cho mọi chính sách có quét; payload là kích thước gói codec thật của từng
+  helper/frame (trung bình 10.27 kbit, tối đa 15.36 kbit); message chỉ dùng được sau khi truyền xong (hạn chót fusion
+  LAT = 0 hoặc 50 ms sau mốc frame); thêm lập lịch greedy và planner chẩn đoán biết tương lai.
+- Test: 18/18 qua (thêm GMM covariance, evaluator coverage, codec round-trip).
+
+### B v2 — Munich, Np = 4 (`runs/wireless_abc/b2/`, `b2_summ.py`)
+
+Bay đoàn, test, 3 seed (rate / outage; trọng số trộn chọn trên dev):
+
+| pilot | SNR | map | own (map + lịch sử riêng) | coop | shuffle | oracle | coop vs own: Δrate | Δoutage |
+|---|---|---|---|---|---|---|---|---|
+| dft | −5 | 2.57 / 0.287 | 2.59 / 0.285 | 2.62 / 0.275 | 2.59 / 0.285 | 2.81 / 0.234 | +1.3% | +3.5% |
+| dft | +5 | 4.88 / 0.247 | 5.08 / 0.221 | 5.16 / 0.211 | 5.08 / 0.221 | 5.39 / 0.193 | +1.5% | +4.2% |
+| dft | +15 | 7.52 / 0.171 | 7.75 / 0.159 | 7.88 / 0.150 | 7.75 / 0.159 | 8.16 / 0.137 | +1.6% | +5.7% |
+| random | −5 | 2.39 / 0.366 | 2.63 / 0.290 | 2.70 / 0.271 | 2.63 / 0.290 | 2.85 / 0.235 | +2.5% | +6.6% |
+| random | +5 | 5.00 / 0.257 | 5.19 / 0.233 | 5.28 / 0.221 | 5.19 / 0.233 | 5.46 / 0.194 | +1.7% | +4.9% |
+| random | +15 | 7.69 / 0.178 | 7.85 / 0.168 | 7.96 / 0.162 | 7.85 / 0.168 | 8.23 / 0.138 | +1.5% | +3.5% |
+
+1. **Phần lớn lợi ích "hợp tác" đêm qua là lợi ích của bộ nhớ:** baseline own (lịch sử của chính UAV) đã lấy phần lớn.
+   Coop vs own còn +1.3…+2.5% rate, +3.5…+6.6% outage, cùng chiều cả 3 seed ở 6/6 cấu hình; gate B (≥ 5% rate hoặc
+   ≥ 10% outage) **0/6**. Shuffle = own (lợi ích còn lại đến từ đúng thông tin).
+2. Sau codec thật (152 bit/message, ~13.6 message dùng cho mỗi quyết định, ~1.5 kbit/s mỗi UAV ở 10 Hz) lợi ích vẫn còn;
+   bền với mất gói 30% (+1.6% / +4.6%) và gửi thưa 5 lần (+1.1% / +2.8%).
+3. Vùng bản đồ không phủ (bay đoàn, gộp): own 4.38 / 0.299 → coop 4.64 / 0.267 (+6% rate, −11% outage); oracle 5.30 /
+   0.180. Ở vùng có bản đồ: không thêm gì.
+4. **Khi bản đồ chỉ phủ 25% hoặc không có bản đồ, hợp tác ≈ own** (random 5 dB: 4.44 vs 4.42; 4.18 vs 4.18), dù oracle
+   vẫn cao hơn nhiều (5.20; 5.11). Giải thích: lịch sử và message hữu ích chủ yếu khi chúng được tạo ở chỗ vừa có bản đồ
+   (UAV mang ước lượng tốt từ vài mét trước vào vùng chưa phủ); ước lượng từ 4 pilot với prior toàn cục quá nhiễu để dựng
+   hiệp phương sai. **Thông tin có tồn tại (oracle) nhưng message hiện tại (4 phép đo nhiễu) quá yếu để chuyển nó** —
+   đây chính là câu hỏi "gửi gì" của SemCom, chưa được giải.
+5. Kết luận B sau sửa: tín hiệu hợp tác **nhỏ nhưng ổn định** sau chi phí; chưa qua gate; dư địa lớn nằm ở biểu diễn
+   message, không ở fusion (attention đêm qua cũng không hơn).
+
+### C v2 — Munich (`runs/wireless_abc/c2/`, `runs/uav3d_proto/wireless_c2_lat*/`)
+
+Giao đúng hạn trên 24 episode test (payload thật, phí quét cho mọi chính sách): oracle-rr 0.689, ssb20-rr 0.685,
+ssb20avg-rr 0.681, ssb200-rr 0.637, gps-rr 0.632, stale-rr 0.573; **oracle-greedy 0.712**, oracle-plan 0.707,
+**ssb20avg-greedy 0.693**, ssb20avg-plan 0.697.
+
+AMOTA UAV3D (3 seed; 'all_age0' = không kênh, như v1):
+
+| chính sách (beam-lịch) | giao (ánh xạ) | AMOTA, LAT = 50 ms | AMOTA, LAT = 0 |
+|---|---|---|---|
+| gửi đủ, tuổi 0 | 1.000 | 0.690 | 0.690 |
+| gửi đủ, tuổi 1 | 1.000 | 0.631 | 0.631 |
+| oracle-greedy (chẩn đoán) | 0.589 | **0.629** ±0.020 | 0.582 |
+| oracle-plan (chẩn đoán) | 0.574 | 0.617 | 0.578 |
+| oracle-rr | 0.544 | 0.612 | 0.573 |
+| ssb20avg-greedy (causal) | 0.556 | **0.621** ±0.022 | 0.579 |
+| ssb20avg-rr | 0.531 | 0.610 | 0.570 |
+| ssb20-rr (v1) | 0.539 | 0.607 | 0.574 |
+| ssb200-rr | 0.469 | 0.593 | 0.557 |
+| gps-rr | 0.472 | 0.595 | 0.559 |
+| stale-rr | 0.415 | 0.565 | 0.529 |
+
+1. Sửa thời điểm nhận làm mọi số thấp hơn v1 (v1 cho message tuổi 0); thứ tự chính sách beam không đổi.
+2. **Lập lịch có giá trị:** greedy hơn round-robin +0.011 AMOTA (causal) và +0.017 (oracle beam). Heuristic causal mạnh
+   nhất (ssb20avg-greedy, 0.621) cách đối chứng biết kênh tốt nhất (oracle-greedy, 0.629) **0.008** < 0.01.
+3. Planner chẩn đoán (least-laxity) **kém** greedy → nó không phải cận trên; chưa có cận trên thật cho bài toán lập lịch.
+   Vì vậy: "chưa có bằng chứng cần PPO cho beam + lập lịch trong cấu hình này", **không** phải "RL không có đất".
+4. Mất mát lớn nhất vẫn là vùng phủ và tuổi message: ngay cả gửi đủ với trễ 1 frame đã mất 0.059 AMOTA so với tuổi 0.
