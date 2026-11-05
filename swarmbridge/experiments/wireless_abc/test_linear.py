@@ -167,3 +167,57 @@ def test_batch_estimators_match_reference():
         assert np.allclose(M[i], m0) and np.allclose(P, P0)
         w, m, Pc = gmm_posterior(y, W, 1.0, 0.2, [0.3, 0.7], ms, Cs)
         assert np.allclose(Wk[i], w) and np.allclose(Mk[i], m) and np.allclose(Pk, Pc)
+
+
+def test_gmm_fit_recovers_complex_covariance():
+    """Codex audit 05/11: the EM covariance step must estimate E[d d^H] (not its conjugate). One component, known C."""
+    import a1_bench as B
+    rng = np.random.default_rng(12)
+    C = rand_cov(rng, 4)
+    C[0, 1], C[1, 0] = C[0, 1] + 0.8j, C[1, 0] - 0.8j                # strong imaginary off-diagonal
+    C = C @ C.conj().T / 4 + 0.1 * np.eye(4)                           # keep it Hermitian PD
+    X = sample_cn(rng, np.zeros(4), C, 40000)
+    pis, mus, covs = B.fit_gmm(X, K=1, iters=5, seed=0)
+    emp = X.T @ X.conj() / len(X)
+    assert np.allclose(covs[0], emp, atol=0.05 * np.abs(C).max())
+    assert np.sign(covs[0][0, 1].imag) == np.sign(C[0, 1].imag)
+
+
+def test_coverage_evaluator_on_known_posterior():
+    """Exact-posterior intervals reach nominal coverage with S_ANALYTIC samples; 16 samples under-cover (finite-sample
+    bias of empirical quantiles) - so low coverage measured with 16 samples was partly an evaluator artefact."""
+    import a1_bench as B
+    rng = np.random.default_rng(13)
+    mu, C = crandn(rng, N) * 0.3, rand_cov(rng, N, rank=4)
+    W = pilot_beams(N, 4, "random", rng)
+    A = W.conj().T
+    H = sample_cn(rng, mu, C, 3000)
+    Y = H @ A.T + np.sqrt(0.1) * crandn(rng, 3000, 4)
+    M, P = B.batch_lmmse(Y, A, 0.1, mu, C)
+    cov = B.coverage_exact(np.random.default_rng(1), H, M, P)
+    assert abs(cov["cov80"] - 0.80) < 0.02 and abs(cov["cov95"] - 0.95) < 0.015
+    Hs16 = B.analytic_samples(np.random.default_rng(2), M, P, n_s=16)
+    G16 = np.abs(Hs16 @ dft_codebook(N).conj()) ** 2
+    c16 = B.coverage(G16, H)
+    assert c16["cov95"] < cov["cov95"] - 0.03                       # documented bias with 16 samples
+
+
+def test_b2_codec_roundtrip():
+    """B v2 message codec: 8-bit quantisation error <= Delta/2 per real component (float16 scale), exact bit count,
+    and receiver-side reconstruction with the inflated noise equals the sender's LMMSE when quantisation is negligible."""
+    import b_coop2 as B2
+    rng = np.random.default_rng(14)
+    for _ in range(200):
+        y = crandn(rng, 4) * rng.uniform(0.01, 100)
+        yq, d = B2.quantise(y)
+        s = max(np.abs(y.real).max(), np.abs(y.imag).max())
+        assert np.all(np.abs(yq.real - y.real) <= d / 2 + 2e-3 * s) and np.all(np.abs(yq.imag - y.imag) <= d / 2 + 2e-3 * s)
+    assert B2.msg_bits(4) == 16 * 4 + 16 + 48 + 16 + 8
+    C = rand_cov(rng, N)
+    W = pilot_beams(N, 4, "random", rng)
+    h = sample_cn(rng, np.zeros(N), C, 1)[0]
+    y = h @ W.conj() + np.sqrt(0.01) * crandn(rng, 4)
+    yq, d = B2.quantise(y)
+    m_tx = lmmse(y, W, 1.0, 0.01, np.zeros(N), C)[0]
+    m_rx = lmmse(yq, W, 1.0, 0.01 + 2 * d ** 2 / 12, np.zeros(N), C)[0]
+    assert np.linalg.norm(m_rx - m_tx) / np.linalg.norm(m_tx) < 0.05

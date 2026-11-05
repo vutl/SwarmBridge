@@ -13,5 +13,10 @@ case "$1" in
   b_et) $PY b_coop.py "$R/data/wireless_abc/trace_etoile" "$R/runs/wireless_abc/b_etoile" --seeds 0 1 2 ;;
   c_et) $PY c_feas.py "$R/data/wireless_abc/trace_etoile" "$R/runs/wireless_abc/c_etoile" --first_ep 96 ;;
   a0b) $PY ../uav3d_comm/gpulock_run.py "$R" -- $PY a0_sbisac.py "$R/runs/wireless_abc/a0_sbisac" --device cuda ;;
+  a1v2) $PY ../uav3d_comm/gpulock_run.py "$R" -- $PY a1_bench.py "$T" "$R/runs/wireless_abc/a1_v2" --seeds 0 1 2 --device cuda ;;
+  b2) $PY b_coop2.py "$T" "$R/runs/wireless_abc/b2" --seeds 0 1 2 ;;
+  b2_et) $PY b_coop2.py "$R/data/wireless_abc/trace_etoile" "$R/runs/wireless_abc/b2_etoile" --seeds 0 1 2 ;;
+  c2) $PY c_feas2.py "$T" "$R/runs/wireless_abc/c2/payload_munich.json" "$R/runs/wireless_abc/c2" --first_ep 96 ;;
+  c2_et) $PY c_feas2.py "$R/data/wireless_abc/trace_etoile" "$R/runs/wireless_abc/c2/payload_munich.json" "$R/runs/wireless_abc/c2_etoile" --first_ep 96 ;;
   c)  $PY c_feas.py "$T" "$R/runs/wireless_abc/c" --first_ep 96 ;;
 esac

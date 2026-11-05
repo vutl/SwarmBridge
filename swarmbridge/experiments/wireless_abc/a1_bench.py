@@ -40,7 +40,9 @@ FLOOR_DB = 40.0
 SNRS_DB = [-5, 5, 15]
 NPS = [4, 8, 16]
 PROTOS = ["dft", "random"]
-S = 16
+S = 64              # samples per decision for sampled methods (was 16: biased interval coverage)
+S_ANALYTIC = 512    # exact posterior samples for LMMSE / GMM coverage
+EVAL_ALL = None
 NFES = [1, 4, 8]
 STEPS = 3000
 REPS = 2
@@ -62,6 +64,9 @@ def load_traces(tdir):
 
 
 def split(H, ep, n_ep):
+    """Train / dev / test ('usable' links: true power > median - FLOOR_DB, a scope choice that uses the truth, so it is
+    applied to TRAINING and to the 'usable' evaluation only) plus test_all: every test-episode sample including deep
+    NLoS / no-path links, with a deep flag (evaluation of the full distribution; no truth-based selection)."""
     a, b = int(0.6 * n_ep), int(0.8 * n_ep)
     tr, dv, te = ep < a, (ep >= a) & (ep < b), ep >= b
     p = np.sum(np.abs(H) ** 2, 1)
@@ -70,8 +75,9 @@ def split(H, ep, n_ep):
     scale = np.sqrt(med / N)
     Hn = H / scale
     info = dict(n_total=len(H), dropped_frac=round(float(1 - keep.mean()), 4), scale=float(scale),
-                n_train=int((tr & keep).sum()), n_dev=int((dv & keep).sum()), n_test=int((te & keep).sum()))
-    return Hn[tr & keep], Hn[dv & keep], Hn[te & keep], info
+                n_train=int((tr & keep).sum()), n_dev=int((dv & keep).sum()), n_test=int((te & keep).sum()),
+                test_all=int(te.sum()), test_deep_frac=round(float(1 - keep[te].mean()), 4))
+    return Hn[tr & keep], Hn[dv & keep], Hn[te & keep], info, Hn[te], ~keep[te]
 
 
 # ----------------------------------------------------------------------------- classical estimators
@@ -100,7 +106,7 @@ def fit_gmm(X, K=32, iters=60, seed=0):
         mu = (R.T @ X) / Nk[:, None]
         for k in range(K):
             D = X - mu[k]
-            covs[k] = (D.conj().T * R[:, k]) @ D / Nk[k] + reg * np.eye(d)
+            covs[k] = (D.T * R[:, k]) @ D.conj() / Nk[k] + reg * np.eye(d)      # E[d d^H] (fixed 05/11: was conj)
     return pis, mu, covs
 
 
@@ -280,6 +286,19 @@ def coverage(Gs, H):
     return out
 
 
+def coverage_exact(rng, H, M, P, Wk=None, chunk=500):
+    """Interval coverage for an analytic posterior using S_ANALYTIC exact samples, chunked over samples."""
+    hits = {"cov80": 0.0, "cov95": 0.0}
+    for i in range(0, len(H), chunk):
+        sl = slice(i, i + chunk)
+        Hs = analytic_samples(rng, M[sl], P, None if Wk is None else Wk[sl], n_s=S_ANALYTIC)
+        G = np.abs(Hs @ Lc.dft_codebook(N).conj()) ** 2
+        c = coverage(G, H[sl])
+        for k in hits:
+            hits[k] += c[k] * len(H[sl])
+    return {k: v / len(H) for k, v in hits.items()}
+
+
 def energy_score(Hs, H, nmax=2000):
     X = np.concatenate([Hs.real, Hs.imag], -1)[:, :nmax]
     x = np.concatenate([H.real, H.imag], -1)[:nmax]
@@ -292,15 +311,16 @@ def nmse_db(Hhat, H):
     return float(10 * np.log10(np.sum(np.abs(Hhat - H) ** 2) / np.sum(np.abs(H) ** 2)))
 
 
-def analytic_samples(rng, M, P, Wk=None):
-    """Draw S posterior samples from Gaussian (M (n,N), P (N,N)) or GMM (Wk (n,K), M (n,K,N), P (K,N,N))."""
+def analytic_samples(rng, M, P, Wk=None, n_s=None):
+    """Draw n_s (default S) posterior samples from Gaussian (M (n,N), P (N,N)) or GMM (Wk (n,K), M (n,K,N), P (K,N,N))."""
+    n_s = n_s or S
     if Wk is None:
         L = np.linalg.cholesky(P + 1e-9 * np.eye(N))
-        return M[None] + Lc.crandn(rng, S, len(M), N) @ L.T
+        return M[None] + Lc.crandn(rng, n_s, len(M), N) @ L.T
     Ls = np.linalg.cholesky(P + 1e-9 * np.eye(N))
     n = len(M)
-    out = np.empty((S, n, N), complex)
-    for s in range(S):
+    out = np.empty((n_s, n, N), complex)
+    for s in range(n_s):
         u = rng.random(n)[:, None]
         k = (np.cumsum(Wk, 1) < u).sum(1).clip(max=Wk.shape[1] - 1)
         z = Lc.crandn(rng, n, N)
@@ -344,7 +364,8 @@ def run(Htr, Hdv, Hte, proto, n_p, seed, gmm, rows, log):
         models[kind] = m
     log(f"  trained 6 models in {time.time() - t0:.0f}s")
     # ---- evaluate on dev and test at each SNR
-    for split_name, Hs_ in (("dev", Hdv), ("test", Hte)):
+    Hall, deep = EVAL_ALL
+    for split_name, Hs_ in (("dev", Hdv), ("test", Hte), ("test_all", Hall)):
         for sdb in SNRS_DB:
             snr, nv = 10 ** (sdb / 10), 10 ** (-sdb / 10)
             ge = np.random.default_rng([seed, 11, n_p, sdb + 100, split_name == "test"])
@@ -357,6 +378,9 @@ def run(Htr, Hdv, Hte, proto, n_p, seed, gmm, rows, log):
                 if secs is not None:
                     r["ms_per_sample"] = round(1000 * secs / len(Hs_), 4)
                 rows.append(r)
+                if split_name == "test_all":            # deep-NLoS subset of the same decisions (no extra info used)
+                    rows.append(dict(base, split="test_deep", method=method, rule=rule, nfe=nfe, n=int(deep.sum()),
+                                     **outcomes(Hs_[deep], beams[deep], snr)))
 
             F = Lc.dft_codebook(N)
             # LS
@@ -372,9 +396,8 @@ def run(Htr, Hdv, Hte, proto, n_p, seed, gmm, rows, log):
             secs = time.time() - t1
             add("lmmse", "mean", Ml, np.argmax(np.abs(Ml @ F.conj()), 1), secs=secs)
             Hs_l = analytic_samples(ge, Ml, Pl)
-            be, bo, G = decide_from_samples(Hs_l, snr)
             gain_exact = np.real(np.einsum("nb,nm,mb->b", F.conj(), Pl, F))[None] + np.abs(Ml @ F.conj()) ** 2
-            ext = dict(**coverage(G, Hs_), es=energy_score(Hs_l, Hs_))
+            ext = dict(**coverage_exact(ge, Hs_, Ml, Pl), es=energy_score(Hs_l, Hs_))
             add("lmmse", "egain", Ml, np.argmax(gain_exact, 1), extra=ext)
             v = np.real(np.einsum("nb,nm,mb->b", F.conj(), Pl, F))[None]
             mu_b = np.abs(Ml @ F.conj()) ** 2
@@ -395,8 +418,7 @@ def run(Htr, Hdv, Hte, proto, n_p, seed, gmm, rows, log):
             eg = np.einsum("nk,nkb->nb", Wk, mk + vk[None])
             po = np.einsum("nk,nkb->nb", Wk, ncx2.cdf(2 * (GAMMA / snr) / vk[None], df=2, nc=2 * mk / vk[None]))
             Hs_g = analytic_samples(ge, Mk, Pk, Wk)
-            _, _, G = decide_from_samples(Hs_g, snr)
-            ext = dict(**coverage(G, Hs_), es=energy_score(Hs_g, Hs_))
+            ext = dict(**coverage_exact(ge, Hs_, Mk, Pk, Wk), es=energy_score(Hs_g, Hs_))
             add("gmm", "egain", Mg, np.argmax(eg, 1), extra=ext)
             add("gmm", "outage", Mg, np.argmin(po - 1e-9 * eg, 1), extra=ext)
             # learned
@@ -444,11 +466,16 @@ def main():
         logf.write(s + "\n")
         logf.flush()
     H, ep, n_ep = load_traces(args.trace)
-    Htr, Hdv, Hte, info = split(H, ep, n_ep)
+    Htr, Hdv, Hte, info, Hall, deep = split(H, ep, n_ep)
     sub = np.random.default_rng(123)
     Hdv = Hdv[np.sort(sub.permutation(len(Hdv))[:NEVAL])]
     Hte = Hte[np.sort(sub.permutation(len(Hte))[:NEVAL])]
-    info.update(n_dev_eval=len(Hdv), n_test_eval=len(Hte), device=DEV)
+    ia = np.sort(sub.permutation(len(Hall))[:NEVAL])
+    Hall, deep = Hall[ia], deep[ia]
+    info.update(n_dev_eval=len(Hdv), n_test_eval=len(Hte), n_test_all_eval=len(Hall),
+                test_all_deep_frac=round(float(deep.mean()), 4), device=DEV, S=S, S_analytic=S_ANALYTIC)
+    global EVAL_ALL
+    EVAL_ALL = (Hall, deep)
     log(f"data {info}")
     rows = []
     res_path = out / "a1_results.json"

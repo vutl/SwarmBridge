@@ -3,7 +3,15 @@
 Plan gốc: plan pilot của Codex (05/11), dựa trên `reports/ke-hoach-proposal-abc-2026-11-04.md`. Phạm vi: feasibility/dev,
 tối đa 10 GB dữ liệu mới, 8 giờ GPU, một job GPU tại một thời điểm (khóa chung Windows–WSL).
 
-**Tóm tắt (05/11 sáng):** A — SB không qua gate (0/18); B — hợp tác có lợi chỉ ở vùng chưa có bản đồ (qua 6/12 cấu hình bay đoàn); C — quét beam 20 ms ≈ oracle (Δ 0.002 AMOTA), không mở RL. Chi tiết và bảng quyết định ở cuối.
+**ĐÍNH CHÍNH (05/11 trưa, sau audit của Codex và ChatGPT):** vòng đêm có lỗi implementation và kết luận diễn đạt quá rộng.
+Lỗi: (1) bước covariance của GMM bị liên hợp ngược (GMM trong A1 không hợp lệ); (2) coverage đo bằng 16 mẫu bị lệch
+xuống; (3) B dùng ước lượng độ chính xác đầy đủ nhưng tính bit như gửi pilot lượng tử, và thiếu baseline local có bộ nhớ;
+(4) C chỉ tính phí quét cho `ssb20`, dùng payload cố định và cho receiver dùng message ngay tại frame phát (delay 0);
+(5) "oracle" của C chỉ là oracle chọn beam dưới lịch round-robin, không phải cận trên của bài toán. Kết quả sau sửa nằm ở
+mục **"Vòng sửa theo audit"** cuối tài liệu; các mục đêm qua giữ nguyên để đối chiếu nhưng **không còn là kết luận**.
+A0b là "thử nghiệm bridge tự dựng (Brownian, σ = 1)", **không** phải tái lập recipe VE-DSB của paper.
+
+Tóm tắt cũ (05/11 sáng, đã bị thay): A — SB không qua gate (0/18); B — hợp tác có lợi chỉ ở vùng chưa có bản đồ; C — quét beam 20 ms ≈ oracle, không mở RL.
 
 ## Mốc 0 — audit và các điểm thiết kế phải chốt trước khi code
 
@@ -116,7 +124,11 @@ tổng dữ liệu mới 4.6 GB). Code và checkpoint của tác giả, Tester c
 Pipeline, chuẩn hóa và NMSE khớp: 3GPP lệch ≤ 0.08 dB; QuaDRiGa lệch 0.06–0.34 dB, cùng chiều (tập con 1 024 mẫu dễ hơn
 một chút). Chưa tái lập phần huấn luyện.
 
-## A0b — dựng lại thiết lập paper SB-ISAC (WCL 2025) để kiểm tuyên bố chính
+## A0b — thử nghiệm bridge tự dựng trên thiết lập kênh của paper SB-ISAC (không phải tái lập recipe)
+
+Lưu ý (audit): bridge ở đây là nội suy Brownian với σ = 1 và sampler tự viết, **không** phải lịch VE (c = 2.6, k = 0.4)
+và bộ tích phân mũ của paper WCL, cũng không phải recipe đầy đủ của bài TCCN. Kết quả chỉ nói: recipe tự dựng này chưa
+thắng hồi quy cùng mạng.
 
 `a0_sbisac.py`, `runs/wireless_abc/a0_sbisac/` (GPU 20 phút). Kênh sensing tổng hợp như paper: ULA N = 32 hai phía,
 L = 3 path, LS = H + nhiễu (pilot trực giao), 7 500 train / 2 500 test, một model mỗi SNR. **Cùng một CNN** (4 lớp, 64

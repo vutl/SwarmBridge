@@ -1,0 +1,100 @@
+{
+ "sign_calibration": {
+  "1.0": 0.9982394366197183,
+  "-1.0": 0.12323943661971831
+ },
+ "step": 0.01,
+ "payload": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/wireless_abc/c2/payload_munich.json",
+ "combos": {
+  "oracle-rr": {
+   "frames": 9600,
+   "delivered": 6616,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1924,
+   "airtime_sweep": 0.0,
+   "deliv_frac": 0.6892,
+   "nlos_frac": 0.3921
+  },
+  "ssb20-rr": {
+   "frames": 9600,
+   "delivered": 6577,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1885,
+   "airtime_sweep": 10.217634559998997,
+   "deliv_frac": 0.6851,
+   "nlos_frac": 0.3841
+  },
+  "ssb20avg-rr": {
+   "frames": 9600,
+   "delivered": 6538,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1849,
+   "airtime_sweep": 10.262784639998948,
+   "deliv_frac": 0.681,
+   "nlos_frac": 0.3768
+  },
+  "ssb200-rr": {
+   "frames": 9600,
+   "delivered": 6112,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1423,
+   "airtime_sweep": 1.371648000000068,
+   "deliv_frac": 0.6367,
+   "nlos_frac": 0.29
+  },
+  "gps-rr": {
+   "frames": 9600,
+   "delivered": 6062,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1373,
+   "airtime_sweep": 0.0,
+   "deliv_frac": 0.6315,
+   "nlos_frac": 0.2798
+  },
+  "stale-rr": {
+   "frames": 9600,
+   "delivered": 5498,
+   "nlos_frames": 4907,
+   "nlos_deliv": 887,
+   "airtime_sweep": 0.013716480000000017,
+   "deliv_frac": 0.5727,
+   "nlos_frac": 0.1808
+  },
+  "oracle-greedy": {
+   "frames": 9600,
+   "delivered": 6831,
+   "nlos_frames": 4907,
+   "nlos_deliv": 2138,
+   "airtime_sweep": 0.0,
+   "deliv_frac": 0.7116,
+   "nlos_frac": 0.4357
+  },
+  "oracle-plan": {
+   "frames": 9600,
+   "delivered": 6790,
+   "nlos_frames": 4907,
+   "nlos_deliv": 2137,
+   "airtime_sweep": 0.0,
+   "deliv_frac": 0.7073,
+   "nlos_frac": 0.4355
+  },
+  "ssb20avg-greedy": {
+   "frames": 9600,
+   "delivered": 6655,
+   "nlos_frames": 4907,
+   "nlos_deliv": 1963,
+   "airtime_sweep": 10.258212479998953,
+   "deliv_frac": 0.6932,
+   "nlos_frac": 0.4
+  },
+  "ssb20avg-plan": {
+   "frames": 9600,
+   "delivered": 6695,
+   "nlos_frames": 4907,
+   "nlos_deliv": 2049,
+   "airtime_sweep": 10.271357439998939,
+   "deliv_frac": 0.6974,
+   "nlos_frac": 0.4176
+  }
+ }
+}
