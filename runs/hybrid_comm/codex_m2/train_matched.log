@@ -1,0 +1,35 @@
+GPU lock acquired
+2026-11-05 23:12:28,912 - mmdet - WARNING - No pre-trained weights for SwinTransformer, training start from scratch
+load checkpoint from local path: /mnt/c/Users/USER/Documents/SwarmBridge/external/uav3d_ckpt/lowerbound.pth
+BENCHMARK 1.8506020379999768 steps/epoch 260
+TRAIN 0 0 loss {'box': 0.491, 'joint': 0.491} s 20.8
+/home/uservutl/envs/uav3d/lib/python3.8/site-packages/torch/functional.py:445: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at  ../aten/src/ATen/native/TensorShape.cpp:2157.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+TRAIN 0 40 loss {'box': 0.56, 'joint': 0.559} s 48.5
+TRAIN 0 80 loss {'box': 0.569, 'joint': 0.566} s 73.6
+TRAIN 0 120 loss {'box': 0.557, 'joint': 0.553} s 104.0
+TRAIN 0 160 loss {'box': 0.557, 'joint': 0.552} s 133.2
+TRAIN 0 200 loss {'box': 0.56, 'joint': 0.555} s 160.0
+TRAIN 0 240 loss {'box': 0.556, 'joint': 0.552} s 187.0
+VALIDATION 0 {'box': 0.5416252955794334, 'joint': 0.5326367554565271} s 325.3
+TRAIN 1 0 loss {'box': 0.439, 'joint': 0.423} s 326.2
+TRAIN 1 40 loss {'box': 0.512, 'joint': 0.508} s 352.5
+TRAIN 1 80 loss {'box': 0.512, 'joint': 0.509} s 377.3
+TRAIN 1 120 loss {'box': 0.515, 'joint': 0.511} s 400.0
+TRAIN 1 160 loss {'box': 0.519, 'joint': 0.515} s 426.5
+TRAIN 1 200 loss {'box': 0.519, 'joint': 0.515} s 450.9
+TRAIN 1 240 loss {'box': 0.522, 'joint': 0.517} s 475.9
+VALIDATION 1 {'box': 0.5667788263410329, 'joint': 0.5589754036317269} s 599.2
+TRAIN 2 0 loss {'box': 0.439, 'joint': 0.428} s 599.9
+TRAIN 2 40 loss {'box': 0.494, 'joint': 0.492} s 623.6
+TRAIN 2 80 loss {'box': 0.498, 'joint': 0.498} s 648.9
+TRAIN 2 120 loss {'box': 0.491, 'joint': 0.488} s 671.4
+TRAIN 2 160 loss {'box': 0.492, 'joint': 0.49} s 695.3
+TRAIN 2 200 loss {'box': 0.495, 'joint': 0.492} s 717.7
+TRAIN 2 240 loss {'box': 0.498, 'joint': 0.495} s 741.8
+VALIDATION 2 {'box': 0.5618528157472611, 'joint': 0.5485554222017527} s 859.2
+MATCHED_DONE {"schedule_hash": "1ef1d19aecad6275c9f08d4204f126e49b534f05ce3a7986ae2e7b4bc90951d0", "history": [{"epoch": 0, "validation": {"box": 0.5416252955794334, "joint": 0.5326367554565271}, "seconds": 323.596210572}, {"epoch": 1, "validation": {"box": 0.5667788263410329, "joint": 0.5589754036317269}, "seconds": 597.490583241}, {"epoch": 2, "validation": {"box": 0.5618528157472611, "joint": 0.5485554222017527}, "seconds": 857.799238895}], "best_validation": {"box": 0.5416252955794334, "joint": 0.5326367554565271}, "steps_per_epoch": 260, "epochs_completed": 3, "steps_per_arm": 780, "gpu_job_seconds": 859.201416195, "status": "complete", "seed": 0, "checkpoint_hashes": {"box": "6aa4ff0d7fc91fb49641b6b71773ce47666e4c99f1a55e9fb0b43c53144cd796", "joint": "2b048f773ff4602486cb4b172699d71aa2e56e674ff9aba3c337838679f0e577"}, "initialization_sha": "cef73d2f899e0d50367506cd54808333ca0902ce995733172889473f2a42067d", "peak_vram_bytes": 700887040}
+GPU lock released
+GPU lock acquired
+SKIP matched training already completed
+GPU lock released

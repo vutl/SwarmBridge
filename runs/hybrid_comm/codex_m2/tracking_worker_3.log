@@ -1,0 +1,45 @@
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK box_none__scene_15 sha=6312327b4c7a dt=0.2 amota=0.533 amotp=0.898 mota=0.437 motp=0.601 recall=0.524 ids=22.000 frag=21.000 tid=0.653 lgd=0.951
+TRACK_DONE box_none__scene_15 {'amota': 0.5331549406485967, 'ids': 22.0, 'seconds': 40.494071292, 'sha256': '6312327b4c7a551dc8fc2aa510a9be703b2361a8cda0ec40513a44f2e788c146'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK box_m1__scene_15 sha=35cb891fc4e1 dt=0.2 amota=0.588 amotp=0.827 mota=0.464 motp=0.559 recall=0.540 ids=11.000 frag=13.000 tid=0.562 lgd=0.875
+TRACK_DONE box_m1__scene_15 {'amota': 0.5884311544764154, 'ids': 11.0, 'seconds': 39.44446115100004, 'sha256': '35cb891fc4e1102ebd233da3518ac164686a0301ce86a813d39f6f5df1900ec6'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK box_m1_age1__scene_15 sha=e9fbcf658bc6 dt=0.2 amota=0.603 amotp=0.791 mota=0.466 motp=0.569 recall=0.571 ids=20.000 frag=13.000 tid=0.567 lgd=0.753
+TRACK_DONE box_m1_age1__scene_15 {'amota': 0.6026793243099321, 'ids': 20.0, 'seconds': 40.11938457100001, 'sha256': 'e9fbcf658bc6f1d99b0a4ecd5da3fe98f040d0799280b789e7c7622ff50e8b36'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK joint_none__scene_15 sha=1aaa85d5601f dt=0.2 amota=0.522 amotp=0.928 mota=0.440 motp=0.596 recall=0.525 ids=18.000 frag=21.000 tid=0.701 lgd=0.979
+TRACK_DONE joint_none__scene_15 {'amota': 0.5218223848961104, 'ids': 18.0, 'seconds': 35.88860000400001, 'sha256': '1aaa85d5601f8e71609dfa192cc47b1309d3b66f2ebe724ab7d38e91c1953e89'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK joint_m1__scene_15 sha=9a9db6591f90 dt=0.2 amota=0.597 amotp=0.823 mota=0.465 motp=0.557 recall=0.567 ids=21.000 frag=17.000 tid=0.493 lgd=0.895
+TRACK_DONE joint_m1__scene_15 {'amota': 0.5974275677777691, 'ids': 21.0, 'seconds': 36.305234189999965, 'sha256': '9a9db6591f900a696c7ec4ef03683f374250621273bc222c4a4539afd57767f4'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK joint_m1_age1__scene_15 sha=c2d024e781da dt=0.2 amota=0.602 amotp=0.826 mota=0.457 motp=0.604 recall=0.651 ids=36.000 frag=21.000 tid=0.630 lgd=1.049
+TRACK_DONE joint_m1_age1__scene_15 {'amota': 0.6021492651079241, 'ids': 36.0, 'seconds': 37.335920902000055, 'sha256': 'c2d024e781dabc37a52396709ac2824c528552ec95f02cc87afc027ae573ea52'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK joint_m2__scene_15 sha=fa3596a7bee3 dt=0.2 amota=0.639 amotp=0.790 mota=0.502 motp=0.583 recall=0.600 ids=16.000 frag=18.000 tid=0.759 lgd=1.259
+TRACK_DONE joint_m2__scene_15 {'amota': 0.6394613871147391, 'ids': 16.0, 'seconds': 39.47939480800005, 'sha256': 'fa3596a7bee377487c8b53e7ea88d52efc2bb997da4bae29cd10f945f7d4c594'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK joint_m3__scene_15 sha=2b186fcb912a dt=0.2 amota=0.668 amotp=0.775 mota=0.507 motp=0.560 recall=0.594 ids=11.000 frag=16.000 tid=0.469 lgd=0.950
+TRACK_DONE joint_m3__scene_15 {'amota': 0.6679021972861298, 'ids': 11.0, 'seconds': 40.72870218100002, 'sha256': '2b186fcb912a368d3ce2ac25a441e66e2bdecb8c31129e7df1954a731bedd679'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK joint_m2_age1__scene_15 sha=317d6fa70b93 dt=0.2 amota=0.630 amotp=0.781 mota=0.494 motp=0.581 recall=0.631 ids=21.000 frag=23.000 tid=0.643 lgd=1.269
+TRACK_DONE joint_m2_age1__scene_15 {'amota': 0.6295293096510777, 'ids': 21.0, 'seconds': 38.66521504800005, 'sha256': '317d6fa70b93b4ae3dddad8c4e2688e53d84e06e7f5eac065f43595549351cb0'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK kf_baseline__scene_15 sha=f1be0568f258 dt=0.2 amota=0.630 amotp=0.712 mota=0.499 motp=0.493 recall=0.600 ids=10.000 frag=12.000 tid=0.623 lgd=1.086
+TRACK_DONE kf_baseline__scene_15 {'amota': 0.6302599364721727, 'ids': 10.0, 'seconds': 41.56425554000009, 'sha256': 'f1be0568f25814d57c5e28d84ea5fa25a6fe54379de763e4236018559d07a40c'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK calibrated_m2__scene_15 sha=ec79349d4fff dt=0.2 amota=0.667 amotp=0.734 mota=0.554 motp=0.533 recall=0.639 ids=10.000 frag=13.000 tid=0.459 lgd=1.012
+TRACK_DONE calibrated_m2__scene_15 {'amota': 0.6666850302287923, 'ids': 10.0, 'seconds': 39.950636194000026, 'sha256': 'ec79349d4fffb78186132834a65b49bebd08383a1533f315e3b711d38a7d095a'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK calibrated_m3__scene_15 sha=97238ad8ab49 dt=0.2 amota=0.657 amotp=0.727 mota=0.527 motp=0.506 recall=0.642 ids=13.000 frag=9.000 tid=0.391 lgd=0.971
+TRACK_DONE calibrated_m3__scene_15 {'amota': 0.6574146614714552, 'ids': 13.0, 'seconds': 40.67103434400008, 'sha256': '97238ad8ab493ff84a27c2fe7335d525f6360a9332ef6bef53a0153f046cbba1'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK m1_same_nms__scene_15 sha=179b2b78efd1 dt=0.2 amota=0.659 amotp=0.708 mota=0.512 motp=0.467 recall=0.565 ids=3.000 frag=7.000 tid=0.608 lgd=1.000
+TRACK_DONE m1_same_nms__scene_15 {'amota': 0.6591913372052692, 'ids': 3.0, 'seconds': 38.94395632800001, 'sha256': '179b2b78efd10ad61d7e3c22ec0e13d986d2d512ba01c5358378853117c8a811'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK feat_dense_q8__scene_15 sha=fd56bd6c53e7 dt=0.2 amota=0.740 amotp=0.673 mota=0.623 motp=0.527 recall=0.716 ids=13.000 frag=26.000 tid=0.176 lgd=0.745
+TRACK_DONE feat_dense_q8__scene_15 {'amota': 0.7397033831575687, 'ids': 13.0, 'seconds': 35.572411234000015, 'sha256': 'fd56bd6c53e7497e3f0730b54f07caa9613d4f00b804009d82da18829ec9b0cc'}
+Use hungarian: False
+  0%|          | 0/20 [00:00<?, ?it/s]                                      TRACK feat_dense_float__scene_15 sha=4a14d8d6b6c4 dt=0.2 amota=0.728 amotp=0.676 mota=0.613 motp=0.528 recall=0.719 ids=16.000 frag=23.000 tid=0.184 lgd=0.805
+TRACK_DONE feat_dense_float__scene_15 {'amota': 0.7278308063154, 'ids': 16.0, 'seconds': 37.767679213000065, 'sha256': '4a14d8d6b6c477b056f3062f3561ababa97c7682e23b7741f3b49d1667451ded'}

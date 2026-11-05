@@ -72,21 +72,13 @@ def main():
     res = {v: [] for v in variants}
     prof = {k: [] for k in ("score_ms", "encode_ms", "decode_ms", "decoder_ms", "overlap64")}
     nbytes = {}
-    # axis convention between ego-frame box coordinates and BEV grid indices (same check as train_fusion.py):
-    # mean ego feature norm at GT-box cells relative to the map mean, under both conventions
+    # Fixed by the pooling coordinate order and metadata, never by dev labels.
     half, cell = 102.4, 0.8
-    score = {"xy": [], "yx": []}
-    for info in dataset.data_infos[:10]:
-        nrm = torch.load(os.path.join(args.bev_held, info["token"] + ".pt"))["bev"][0].float().norm(dim=0)
-        for ax in ("xy", "yx"):
-            v = []
-            for b in info["gt_boxes"]:
-                ix, iy = int((b[0] + half) // cell), int((b[1] + half) // cell)
-                if 0 <= ix < tc.G and 0 <= iy < tc.G:
-                    v.append(float(nrm[ix, iy] if ax == "xy" else nrm[iy, ix]))
-            score[ax].append(np.mean(v) / float(nrm.mean()))
-    axis = max(score, key=lambda a: np.mean(score[a]))
-    print("AXIS", {k: round(float(np.mean(v)), 3) for k, v in score.items()}, "->", axis, flush=True)
+    axis = "xy"
+    for info in dataset.data_infos:
+        assert np.allclose(info["ego2global_rotation"], [1, 0, 0, 0])
+        assert np.allclose(info["lidar2ego_rotation"], [1, 0, 0, 0])
+    print("AXIS xy (pooling coordinates; identity pose rotations)", flush=True)
     sent = {}     # token -> rank -> helper -> top-256 tile ids (rank order); prefixes give M2 / M3
 
     def sync():

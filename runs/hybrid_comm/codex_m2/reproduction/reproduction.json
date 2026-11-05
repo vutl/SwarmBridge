@@ -1,0 +1,149 @@
+{
+  "m2_nms": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/reproduction/m2_nms/results_nusc.json",
+    "sha256": "afc249bd9f0034e9269fb1a97075c20193bdde5e6fcd99dc7baf461da7500114",
+    "ap_0.5": 0.29755343488866615,
+    "ap_1.0": 0.6354972970374606,
+    "ap_2.0": 0.8047955315703551,
+    "ap_4.0": 0.8680634602515458,
+    "mAP": 0.6514774309370068,
+    "n_gt": 6162,
+    "per_scene": {
+      "scene_11": 0.6608512636406212,
+      "scene_13": 0.6531163919313063,
+      "scene_15": 0.6409463260239108
+    },
+    "expected_sha256": "afc249bd9f0034e9269fb1a97075c20193bdde5e6fcd99dc7baf461da7500114",
+    "hash_match": true
+  },
+  "m2_densein_nms": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/reproduction/m2_densein_nms/results_nusc.json",
+    "sha256": "eeaeec45c262afc0bc8583d57ac34e235a671468dbc1fd5a29ff591ab299e9c0",
+    "ap_0.5": 0.2999241941540999,
+    "ap_1.0": 0.6412193733512238,
+    "ap_2.0": 0.80607480529897,
+    "ap_4.0": 0.869185561814522,
+    "mAP": 0.6541009836547039,
+    "n_gt": 6162,
+    "per_scene": {
+      "scene_11": 0.6627581976712529,
+      "scene_13": 0.6551248048450664,
+      "scene_15": 0.6435850532456127
+    }
+  },
+  "m3_nms": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/reproduction/m3_nms/results_nusc.json",
+    "sha256": "beec18452ce7b4a9102b57373d5d23a3cb90b7eef6b0a0150c56f553805807c7",
+    "ap_0.5": 0.29841928624833086,
+    "ap_1.0": 0.6407572082347581,
+    "ap_2.0": 0.8125746794172224,
+    "ap_4.0": 0.8759380750387877,
+    "mAP": 0.6569223122347747,
+    "n_gt": 6162,
+    "per_scene": {
+      "scene_11": 0.6655864508656042,
+      "scene_13": 0.6577097060995525,
+      "scene_15": 0.6474115572946266
+    },
+    "expected_sha256": "beec18452ce7b4a9102b57373d5d23a3cb90b7eef6b0a0150c56f553805807c7",
+    "hash_match": true
+  },
+  "m3_densein_nms": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/reproduction/m3_densein_nms/results_nusc.json",
+    "sha256": "d02381836db06cc3089b5f30ae510885cf8f92a076665609bb2d02a39dd4d866",
+    "ap_0.5": 0.30252686930066447,
+    "ap_1.0": 0.6488046944321239,
+    "ap_2.0": 0.8145702262279715,
+    "ap_4.0": 0.8773276277783053,
+    "mAP": 0.6608073544347663,
+    "n_gt": 6162,
+    "per_scene": {
+      "scene_11": 0.6697607282585599,
+      "scene_13": 0.6615018594417279,
+      "scene_15": 0.6499083912976275
+    },
+    "expected_sha256": "d02381836db06cc3089b5f30ae510885cf8f92a076665609bb2d02a39dd4d866",
+    "hash_match": true
+  },
+  "m256_nms": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/reproduction/m256_nms/results_nusc.json",
+    "sha256": "de013fc2823b2622e8c19bd9569066bb3c3e0ce6aed555970f646a27377bca99",
+    "ap_0.5": 0.29954335977519364,
+    "ap_1.0": 0.6488611347745863,
+    "ap_2.0": 0.8221051172160875,
+    "ap_4.0": 0.8809641817302595,
+    "mAP": 0.6628684483740317,
+    "n_gt": 6162,
+    "per_scene": {
+      "scene_11": 0.6704479274650801,
+      "scene_13": 0.6634888571940445,
+      "scene_15": 0.6526938163064822
+    },
+    "expected_sha256": "de013fc2823b2622e8c19bd9569066bb3c3e0ce6aed555970f646a27377bca99",
+    "hash_match": true
+  },
+  "m256_densein_nms": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/reproduction/m256_densein_nms/results_nusc.json",
+    "sha256": "2afa9c1103f575f81d341ccd561a4bf15d3fe92cd547c0ec6d9f514fe16bcbf6",
+    "ap_0.5": 0.3028430092891833,
+    "ap_1.0": 0.6520747110145253,
+    "ap_2.0": 0.8229063761853654,
+    "ap_4.0": 0.8817104426382121,
+    "mAP": 0.6648836347818214,
+    "n_gt": 6162,
+    "per_scene": {
+      "scene_11": 0.6739914126543547,
+      "scene_13": 0.6638342544555748,
+      "scene_15": 0.6547942460652743
+    },
+    "expected_sha256": "2afa9c1103f575f81d341ccd561a4bf15d3fe92cd547c0ec6d9f514fe16bcbf6",
+    "hash_match": true
+  },
+  "m1_same_nms": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/reproduction/m1_same_nms/results_nusc.json",
+    "sha256": "179b2b78efd10ad61d7e3c22ec0e13d986d2d512ba01c5358378853117c8a811",
+    "ap_0.5": 0.29679722918080753,
+    "ap_1.0": 0.6320706338887383,
+    "ap_2.0": 0.8006919929070955,
+    "ap_4.0": 0.8638217023890015,
+    "mAP": 0.6483453895914106,
+    "n_gt": 6162,
+    "per_scene": {
+      "scene_11": 0.657215784192801,
+      "scene_13": 0.6498553915263541,
+      "scene_15": 0.6367147950205969
+    }
+  },
+  "m1_kf_nor": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/uav3d_proto/box/dets/kf_nor/sync_s0/results_nusc.json",
+    "sha256": "ead39bee366be26a79e0fa0614a04d777f9a091fb08531aa3fea3efdf62476c7",
+    "ap_0.5": 0.29735531850818947,
+    "ap_1.0": 0.6354992990642636,
+    "ap_2.0": 0.7992766657569483,
+    "ap_4.0": 0.8620221503467178,
+    "mAP": 0.6485383584190298,
+    "n_gt": 6162,
+    "hash_match": true
+  },
+  "feat_dense": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/m0/feat_dense/results_nusc.json",
+    "sha256": "4a14d8d6b6c477b056f3062f3561ababa97c7682e23b7741f3b49d1667451ded",
+    "ap_0.5": 0.32312083078720616,
+    "ap_1.0": 0.6671180663276811,
+    "ap_2.0": 0.8522993656335751,
+    "ap_4.0": 0.9111036707425233,
+    "mAP": 0.6884104833727465,
+    "n_gt": 6162,
+    "hash_match": true
+  },
+  "feat_dense_q8": {
+    "pred": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/m0/feat_dense_q8/results_nusc.json",
+    "sha256": "fd56bd6c53e7497e3f0730b54f07caa9613d4f00b804009d82da18829ec9b0cc",
+    "ap_0.5": 0.32293869020661287,
+    "ap_1.0": 0.6674817384563259,
+    "ap_2.0": 0.852723998148577,
+    "ap_4.0": 0.9111981358102441,
+    "mAP": 0.68858564065544,
+    "n_gt": 6162
+  }
+}

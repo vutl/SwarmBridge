@@ -1,0 +1,138 @@
+.............                                                            [100%]
+=============================== warnings summary ===============================
+test_core.py::test_warp_translation_rotation
+  /home/uservutl/envs/wireless-abc/lib/python3.12/site-packages/torch/functional.py:505: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /pytorch/aten/src/ATen/native/TensorShape.cpp:4382.)
+    return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+13 passed, 1 warning in 2.74s
+{
+  "m2_nms": {
+    "mAP": 0.6514774309370068,
+    "hash_match": true
+  },
+  "m2_densein_nms": {
+    "mAP": 0.6541009836547039
+  },
+  "m3_nms": {
+    "mAP": 0.6569223122347747,
+    "hash_match": true
+  },
+  "m3_densein_nms": {
+    "mAP": 0.6608073544347663,
+    "hash_match": true
+  },
+  "m256_nms": {
+    "mAP": 0.6628684483740317,
+    "hash_match": true
+  },
+  "m256_densein_nms": {
+    "mAP": 0.6648836347818214,
+    "hash_match": true
+  },
+  "m1_same_nms": {
+    "mAP": 0.6483453895914106
+  },
+  "m1_kf_nor": {
+    "mAP": 0.6485383584190298,
+    "hash_match": true
+  },
+  "feat_dense": {
+    "mAP": 0.6884104833727465,
+    "hash_match": true
+  },
+  "feat_dense_q8": {
+    "mAP": 0.68858564065544
+  }
+}
+GPU lock acquired
+SKIP prepared
+GPU lock released
+GPU lock acquired
+SKIP matched training already completed
+GPU lock released
+GPU lock acquired
+SKIP inference
+GPU lock released
+{
+  "16": {
+    "box": {
+      "a": 1.2467701717076156,
+      "b": -2.3081948525153613,
+      "n": 16995,
+      "positive_fraction": 0.37458075904677846,
+      "loss": 0.2842252463832366
+    },
+    "feature": {
+      "a": 2.465359438632155,
+      "b": 1.4139562809938155,
+      "n": 3148,
+      "positive_fraction": 0.9526683608640406,
+      "loss": 0.07568026705649364
+    }
+  },
+  "64": {
+    "box": {
+      "a": 1.2467701717076156,
+      "b": -2.3081948525153613,
+      "n": 16995,
+      "positive_fraction": 0.37458075904677846,
+      "loss": 0.2842252463832366
+    },
+    "feature": {
+      "a": 2.1759542999727737,
+      "b": 0.4920080905198305,
+      "n": 9000,
+      "positive_fraction": 0.6362222222222222,
+      "loss": 0.31423580250448985
+    }
+  }
+}
+{
+  "baseline": "m1_same_nms",
+  "threshold": 0.01,
+  "required_positive_scenes": 2,
+  "candidates": {
+    "joint_m2": {
+      "delta_amota": -0.06729637328665905,
+      "per_scene_delta": {
+        "scene_11": -0.04062093080818663,
+        "scene_13": -0.14288214423116097,
+        "scene_15": -0.019729950090530135
+      },
+      "ids_delta": 16.0,
+      "pass_gate": false
+    },
+    "joint_m3": {
+      "delta_amota": -0.039751279270873296,
+      "per_scene_delta": {
+        "scene_11": -0.036472815659778446,
+        "scene_13": -0.08386611458987181,
+        "scene_15": 0.008710860080860527
+      },
+      "ids_delta": 8.0,
+      "pass_gate": false
+    },
+    "calibrated_m2": {
+      "delta_amota": -0.009585618389425843,
+      "per_scene_delta": {
+        "scene_11": -0.0004330836372723468,
+        "scene_13": -0.03604484483589454,
+        "scene_15": 0.007493693023523096
+      },
+      "ids_delta": 9.0,
+      "pass_gate": false
+    },
+    "calibrated_m3": {
+      "delta_amota": -0.027570080425055155,
+      "per_scene_delta": {
+        "scene_11": -0.023389370876145232,
+        "scene_13": -0.05538646291830829,
+        "scene_15": -0.0017766757338140149
+      },
+      "ids_delta": 4.0,
+      "pass_gate": false
+    }
+  },
+  "open_wireless": false
+}

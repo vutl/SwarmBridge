@@ -1,0 +1,14 @@
+{
+ "det_path": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/box_m1_age1/results_nusc.json",
+ "det_sha256": "e9fbcf658bc6f1d99b0a4ecd5da3fe98f040d0799280b789e7c7622ff50e8b36",
+ "dt": "0.2",
+ "scenes": [
+  "scene_15"
+ ],
+ "tracker": {
+  "type": "PubTracker",
+  "max_age": 3,
+  "hungarian": false
+ },
+ "extra_tokens_ignored": 40
+}

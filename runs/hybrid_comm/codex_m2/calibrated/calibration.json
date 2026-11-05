@@ -1,0 +1,51 @@
+{
+  "parameters": {
+    "16": {
+      "box": {
+        "a": 1.2467701717076156,
+        "b": -2.3081948525153613,
+        "n": 16995,
+        "positive_fraction": 0.37458075904677846,
+        "loss": 0.2842252463832366
+      },
+      "feature": {
+        "a": 2.465359438632155,
+        "b": 1.4139562809938155,
+        "n": 3148,
+        "positive_fraction": 0.9526683608640406,
+        "loss": 0.07568026705649364
+      }
+    },
+    "64": {
+      "box": {
+        "a": 1.2467701717076156,
+        "b": -2.3081948525153613,
+        "n": 16995,
+        "positive_fraction": 0.37458075904677846,
+        "loss": 0.2842252463832366
+      },
+      "feature": {
+        "a": 2.1759542999727737,
+        "b": 0.4920080905198305,
+        "n": 9000,
+        "positive_fraction": 0.6362222222222222,
+        "loss": 0.31423580250448985
+      }
+    }
+  },
+  "validation_scenes": [
+    "scene_17",
+    "scene_08",
+    "scene_19",
+    "scene_01"
+  ],
+  "predictions": {
+    "calibrated_m2": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/calibrated/m2/results_nusc.json",
+    "calibrated_m3": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/calibrated/m3/results_nusc.json"
+  },
+  "hashes": {
+    "calibrated_m2": "ec79349d4fffb78186132834a65b49bebd08383a1533f315e3b711d38a7d095a",
+    "calibrated_m3": "97238ad8ab493ff84a27c2fe7335d525f6360a9332ef6bef53a0153f046cbba1"
+  },
+  "protocol": "Platt, class correctness at 2m, monotone slope >= 0, fixed 2m NMS. No dev fitting."
+}

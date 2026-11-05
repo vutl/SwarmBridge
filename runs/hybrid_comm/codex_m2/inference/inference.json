@@ -1,0 +1,240 @@
+{
+  "checkpoint_hashes": {
+    "box": "6aa4ff0d7fc91fb49641b6b71773ce47666e4c99f1a55e9fb0b43c53144cd796",
+    "joint": "2b048f773ff4602486cb4b172699d71aa2e56e674ff9aba3c337838679f0e577"
+  },
+  "predictions": {
+    "val/box_none": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/box_none/results_nusc.json",
+    "val/box_m1": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/box_m1/results_nusc.json",
+    "dev/box_none": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/box_none/results_nusc.json",
+    "dev/box_m1": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/box_m1/results_nusc.json",
+    "dev/box_m1_age1": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/box_m1_age1/results_nusc.json",
+    "val/joint_none": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/joint_none/results_nusc.json",
+    "val/joint_m1": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/joint_m1/results_nusc.json",
+    "val/joint_m2": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/joint_m2/results_nusc.json",
+    "val/joint_m3": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/joint_m3/results_nusc.json",
+    "dev/joint_none": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_none/results_nusc.json",
+    "dev/joint_m1": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m1/results_nusc.json",
+    "dev/joint_m1_age1": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m1_age1/results_nusc.json",
+    "dev/joint_m2": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m2/results_nusc.json",
+    "dev/joint_m3": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m3/results_nusc.json",
+    "dev/joint_m2_age1": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m2_age1/results_nusc.json",
+    "val/legacy_tiles_16": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/legacy_tiles_16/results_nusc.json",
+    "val/legacy_tiles_64": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/legacy_tiles_64/results_nusc.json",
+    "val/kf_baseline": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/val/kf_baseline/results_nusc.json",
+    "dev/kf_baseline": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/kf_baseline/results_nusc.json"
+  },
+  "timings": {
+    "val/box_none": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 36.97169750000029,
+        "p95": 245.89876440000526
+      },
+      "receiver_decode_ms": {
+        "p50": 16.717419500004382,
+        "p95": 60.884834550000015
+      }
+    },
+    "val/box_m1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 89.22228999999504,
+        "p95": 193.8440861000031
+      },
+      "receiver_decode_ms": {
+        "p50": 17.470616499998926,
+        "p95": 57.19121299999159
+      }
+    },
+    "dev/box_none": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 24.037041999996234,
+        "p95": 34.70342725000747
+      },
+      "receiver_decode_ms": {
+        "p50": 11.674539000004813,
+        "p95": 12.858214549998337
+      }
+    },
+    "dev/box_m1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 85.93708200000094,
+        "p95": 143.95392895000185
+      },
+      "receiver_decode_ms": {
+        "p50": 23.11056599999972,
+        "p95": 54.64449204999439
+      }
+    },
+    "dev/box_m1_age1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 46.721315500001026,
+        "p95": 131.27432649999943
+      },
+      "receiver_decode_ms": {
+        "p50": 18.415116500001716,
+        "p95": 22.090479199995627
+      }
+    },
+    "val/joint_none": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 19.815907999998217,
+        "p95": 27.32168405000905
+      },
+      "receiver_decode_ms": {
+        "p50": 11.150049999990586,
+        "p95": 12.325642949988946
+      }
+    },
+    "val/joint_m1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 38.138458000005926,
+        "p95": 143.99262090000272
+      },
+      "receiver_decode_ms": {
+        "p50": 18.14409400000727,
+        "p95": 20.207065300000693
+      }
+    },
+    "val/joint_m2": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 93.91154050000239,
+        "p95": 136.95899144999117
+      },
+      "receiver_decode_ms": {
+        "p50": 19.366365500005145,
+        "p95": 42.22430364999353
+      }
+    },
+    "val/joint_m3": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 87.65622999999323,
+        "p95": 142.82626069998514
+      },
+      "receiver_decode_ms": {
+        "p50": 19.532381999979975,
+        "p95": 51.325760300011325
+      }
+    },
+    "dev/joint_none": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 34.16637050000304,
+        "p95": 70.27265019999048
+      },
+      "receiver_decode_ms": {
+        "p50": 21.37415600000736,
+        "p95": 27.697292449997235
+      }
+    },
+    "dev/joint_m1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 47.55337249999059,
+        "p95": 77.75457684998331
+      },
+      "receiver_decode_ms": {
+        "p50": 15.477809999993042,
+        "p95": 20.07946334999104
+      }
+    },
+    "dev/joint_m1_age1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 29.363165000006575,
+        "p95": 37.60913119998861
+      },
+      "receiver_decode_ms": {
+        "p50": 12.942248000001655,
+        "p95": 28.060430100003938
+      }
+    },
+    "dev/joint_m2": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 91.53984649999813,
+        "p95": 116.78597850000611
+      },
+      "receiver_decode_ms": {
+        "p50": 22.6790070000078,
+        "p95": 28.211614449995153
+      }
+    },
+    "dev/joint_m3": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 62.9155865000115,
+        "p95": 87.97363079998775
+      },
+      "receiver_decode_ms": {
+        "p50": 14.531547000004252,
+        "p95": 33.41279029999096
+      }
+    },
+    "dev/joint_m2_age1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 63.45037550001109,
+        "p95": 89.36172674999055
+      },
+      "receiver_decode_ms": {
+        "p50": 14.610943500002804,
+        "p95": 16.665122900002398
+      }
+    }
+  },
+  "payload_bits": {
+    "box_none": {
+      "mean": 0.0,
+      "p95": 0.0
+    },
+    "box_m1": {
+      "mean": 41082.666666666664,
+      "p95": 51620.8
+    },
+    "box_m1_age1": {
+      "mean": 39505.73333333333,
+      "p95": 51620.8
+    },
+    "joint_none": {
+      "mean": 0.0,
+      "p95": 0.0
+    },
+    "joint_m1": {
+      "mean": 41082.666666666664,
+      "p95": 51620.8
+    },
+    "joint_m1_age1": {
+      "mean": 39505.73333333333,
+      "p95": 51620.8
+    },
+    "joint_m2": {
+      "mean": 2674330.6666666665,
+      "p95": 2684868.8
+    },
+    "joint_m3": {
+      "mean": 10541722.666666666,
+      "p95": 10552260.8
+    },
+    "joint_m2_age1": {
+      "mean": 2541091.3333333335,
+      "p95": 2684868.8
+    }
+  },
+  "gpu_job_seconds": 158.377315114,
+  "peak_vram_bytes": 336027136,
+  "hashes": {
+    "val/box_none": "40c56f45cf762ca6be03612eb0bb7be5b5867be42da8e99a17922482471e3583",
+    "val/box_m1": "e2fc66279214dc9bd832b2b323904e6c12db3e415c99e421ef86f4c80d041be3",
+    "dev/box_none": "6312327b4c7a551dc8fc2aa510a9be703b2361a8cda0ec40513a44f2e788c146",
+    "dev/box_m1": "35cb891fc4e1102ebd233da3518ac164686a0301ce86a813d39f6f5df1900ec6",
+    "dev/box_m1_age1": "e9fbcf658bc6f1d99b0a4ecd5da3fe98f040d0799280b789e7c7622ff50e8b36",
+    "val/joint_none": "da07a2769bd7f86d4e42d5eb438163445e608a301c7bfecade07f71428cd64be",
+    "val/joint_m1": "4ffea60b0bdc5edb3dcb6c656497ba5db929ad0e812f02c846fdcc48a3a798d5",
+    "val/joint_m2": "2400db9694e70120839ae4a8d859aa037b9840120ff917e890d558abf2e49705",
+    "val/joint_m3": "f708617637359ec97b520968b0d6f900fe802212ace914dd51dbd8ae88f337eb",
+    "dev/joint_none": "1aaa85d5601f8e71609dfa192cc47b1309d3b66f2ebe724ab7d38e91c1953e89",
+    "dev/joint_m1": "9a9db6591f900a696c7ec4ef03683f374250621273bc222c4a4539afd57767f4",
+    "dev/joint_m1_age1": "c2d024e781dabc37a52396709ac2824c528552ec95f02cc87afc027ae573ea52",
+    "dev/joint_m2": "fa3596a7bee377487c8b53e7ea88d52efc2bb997da4bae29cd10f945f7d4c594",
+    "dev/joint_m3": "2b186fcb912a368d3ce2ac25a441e66e2bdecb8c31129e7df1954a731bedd679",
+    "dev/joint_m2_age1": "317d6fa70b93b4ae3dddad8c4e2688e53d84e06e7f5eac065f43595549351cb0",
+    "val/legacy_tiles_16": "ecef2f0421cd1476417d27973b103f0d86af42376380b6bac957f006fe02cea6",
+    "val/legacy_tiles_64": "c2b9020a713d3026c69e6090327e76034138cd03d28023d660d03fa164ddd0d4",
+    "val/kf_baseline": "09fa98e142c016ab3f143221930c97cce09ea9cd7fbc815c5e6f78d2264fd88b",
+    "dev/kf_baseline": "f1be0568f25814d57c5e28d84ea5fa25a6fe54379de763e4236018559d07a40c"
+  }
+}

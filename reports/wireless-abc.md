@@ -518,3 +518,65 @@ hai cách chỉ trùng 36%. Receiver feature là decoder `fusion/feat_s1` (trung
 
 GPU đã dùng cho pilot này ≈ 5 phút (2 lượt receiver 60 frame + smoke). Ngân sách còn ≈ 4 giờ 14 phút. Dữ liệu mới: PDF
 53 MB, repo 677 MB, dự đoán 195 MB (ngoài git).
+
+## Mốc 2 — receiver thích nghi có đối chứng (05–06/11 đêm; Codex triển khai, Claude chạy nốt) — cổng wireless: **không qua**
+Thư mục `runs/hybrid_comm/codex_m2/` (`summary.md`, `summary.json`, hash của prediction/checkpoint/input tracking).
+Tái lập bằng một lệnh: `bash scripts/hybrid_comm/run_codex.sh` (có resume; các bước đã xong được bỏ qua).
+
+**Sửa trước khi train (trả lời audit của Codex và ChatGPT):**
+- Phép ghép NMS-max đã đưa vào code (`core.nms_max`, `reproduce.py`). Prediction M2/M3/densein tái tạo **khớp hash** với
+  artifact cũ.
+- Bỏ việc chọn trục `xy`/`yx` bằng GT dev. Trục được cố định theo BEV pooling, và cả 400 frame có rotation trong metadata
+  bằng identity (đã assert). `core.py` có phép biến đổi SE(2) tổng quát (`warp_grid`, `cells`) kèm test. Giả định vẫn còn:
+  cache helper đã được chiếu sẵn vào grid UAV0 (`prepared/geometry.json`); đây chưa phải encoder phân tán độc lập.
+- Split cố định (seed 20261105): 13 scene train, 4 validation (`scene_17/08/19/01`), dev 11/13/15 giữ nguyên. Checkpoint
+  được chọn bằng loss validation. Lưu ý: decoder khởi tạo đã từng được fine-tune trên cả 17 scene non-dev.
+- 13/13 test pass (codec, hình học, receiver).
+
+**Thiết kế.** Hai receiver, cùng khởi tạo (decoder ego), cùng lịch dữ liệu, seed 0, 260 bước/epoch, 3 epoch, AdamW 2e-4.
+Input có 172 kênh: ego, helper, 8 kênh thuộc tính box, mask và tuổi; mọi thứ được giải mã từ byte thật. Arm **box** luôn có
+kênh feature bằng 0. Arm **joint** nhận thêm tile (0/16/64, phần lớn theo objectness, 20% ngẫu nhiên). Tuổi message là
+0/1/2 frame với xác suất 0,6/0,3/0,1. Loss validation thấp nhất ở **epoch 0** cho cả hai arm (box 0,542; joint 0,533) và
+tăng sau đó. Đối chứng CPU: hiệu chỉnh Platt confidence của hai nhánh **chỉ trên validation**, rồi NMS 2 m cố định.
+
+| Phương pháp (dev, 60 frame) | bit/frame (4 helper) | mAP | AMOTA | IDS | s11 / s13 / s15 |
+|---|---|---|---|---|---|
+| box thích nghi, không helper | 0 | 0.512 | 0.542 | 69 | 0.589 / 0.496 / 0.533 |
+| box thích nghi, M1 | 41 k | 0.554 | 0.596 | 41 | 0.640 / 0.554 / 0.588 |
+| joint thích nghi, M1 | 41 k | 0.554 | 0.597 | 48 | 0.647 / 0.548 / 0.597 |
+| joint thích nghi, M2 | 2.67 M | 0.573 | 0.634 | 60 | 0.685 / 0.567 / 0.639 |
+| joint thích nghi, M3 | 10.5 M | 0.589 | 0.661 | 52 | 0.689 / 0.626 / 0.668 |
+| joint, M2 tuổi 1 frame | 2.54 M | 0.570 | 0.636 | 68 | 0.675 / 0.596 / 0.630 |
+| KF baseline (cùng packet, noisy-OR) | 41 k | 0.648 | 0.692 | 31 | 0.727 / 0.704 / 0.630 |
+| **M1 + cùng NMS (đối chứng mạnh nhất)** | 41 k | 0.648 | **0.701** | 44 | 0.726 / 0.710 / 0.659 |
+| M2 hiệu chỉnh trên validation + NMS | 2.67 M | 0.638 | 0.692 | 53 | 0.725 / 0.674 / 0.667 |
+| M3 hiệu chỉnh trên validation + NMS | 10.5 M | 0.650 | 0.674 | 48 | 0.702 / 0.654 / 0.657 |
+| feature đầy đủ q8 / float (chẩn đoán, không phải cận trên) | ~168 M (q8) | 0.689 / 0.688 | 0.763 / 0.761 | 49 / 43 | |
+
+**Đính chính số cũ.** Khi áp **cùng phép NMS** lên M1, AMOTA tăng từ 0.690 lên 0.701 dù mAP không đổi. Vì vậy phần
+"M2 +0.016 so với M1" báo ở mục trước **phần lớn là do NMS, không do tile**: M2 cũ (0.706) chỉ hơn M1 cùng NMS **+0.005**.
+Con số "nhiễu ±0.01" trước đây không có phép ước lượng hỗ trợ, nên tôi rút lại. Cũng không gọi 0.761 là cận trên.
+
+**Đọc kết quả.**
+1. *Lợi ích từ fine-tune* (box thích nghi so với M1 cũ) là **âm**: 0.596 so với 0.701 AMOTA. Receiver học được kém hơn
+   cách ghép box thủ công khoảng 0.10 AMOTA. Box được raster vào lưới BEV rồi đi qua decoder thì mất thông tin, so với ghép
+   trực tiếp danh sách box. Loss validation tăng sau epoch 0 cho thấy lượt train này chưa tốt.
+2. *Phần lợi riêng của tile* (joint so với box, cùng receiver): M1 ≈ 0 (kiểm tra đối chứng: không có tile thì hai arm
+   bằng nhau); **M2 +0.038; M3 +0.065 AMOTA, dương ở cả 3 scene**. Như vậy tile có mang thông tin bổ sung thật. Nhưng mức
+   tuyệt đối vẫn dưới đối chứng thủ công.
+3. Cổng (≥ +0.01 so với đối chứng mạnh nhất, dương ở ≥ 2/3 scene): joint M2 −0.067, joint M3 −0.040, M2 hiệu chỉnh −0.010
+   (chỉ dương ở scene 15), M3 hiệu chỉnh −0.028. **Không qua, nên không dựng wireless.**
+4. Tuổi 1 frame không làm giảm (M2 0.634 → 0.636; M1 box 0.596 → 0.610). Trong khoảng 200–400 ms, dữ liệu cũ hơn một
+   frame cũng dùng được.
+5. Latency (đã warm-up, đo riêng): chuẩn bị input cho M2/M3 (giải mã, scatter, warp, chép sang GPU) p50 63–92 ms, p95
+   88–117 ms; decoder receiver p50 15–23 ms. Code input chưa tối ưu, nhưng ở mức hiện tại thì vượt deadline 50 ms.
+6. Phần nào chưa đủ: **receiver** (học kém hơn ghép thủ công). Còn thông tin bổ sung thì có (mục 2). Cách chọn tile
+   (objectness so với ngẫu nhiên) chưa được chấm riêng trên dev. Một seed train và 3 scene dev chỉ là bằng chứng feasibility.
+
+**Thí nghiệm khác, được định nghĩa rõ (chưa chạy, chờ quyết định):** giữ nguyên nhánh box thủ công (M1 + NMS, 0.701),
+chỉ dùng receiver joint làm *nguồn bằng chứng trong vùng tile*. Ghép detection joint-M2/M3 với box M1 bằng hiệu chỉnh Platt
+fit trên validation, chỉ chạy CPU, không train lại. Nếu vẫn không đạt +0.01 so với 0.701 thì giữ box-only, và hướng hybrid
+chỉ còn đáng làm khi có receiver mạnh hơn hẳn (ngoài phạm vi pilot).
+
+Tài nguyên lượt này: GPU 21.4 phút (prepare + train 14.3 + inference 2.6). Tổng pilot hybrid ≈ 26 phút; còn ≈ 3 giờ 49
+phút. Dữ liệu mới 1.9 GB ngoài git (message nhị phân, checkpoint).

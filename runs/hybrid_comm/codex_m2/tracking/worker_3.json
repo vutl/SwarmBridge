@@ -1,0 +1,92 @@
+{
+  "box_none__scene_15": {
+    "amota": 0.5331549406485967,
+    "ids": 22.0,
+    "seconds": 40.494071292,
+    "sha256": "6312327b4c7a551dc8fc2aa510a9be703b2361a8cda0ec40513a44f2e788c146"
+  },
+  "box_m1__scene_15": {
+    "amota": 0.5884311544764154,
+    "ids": 11.0,
+    "seconds": 39.44446115100004,
+    "sha256": "35cb891fc4e1102ebd233da3518ac164686a0301ce86a813d39f6f5df1900ec6"
+  },
+  "box_m1_age1__scene_15": {
+    "amota": 0.6026793243099321,
+    "ids": 20.0,
+    "seconds": 40.11938457100001,
+    "sha256": "e9fbcf658bc6f1d99b0a4ecd5da3fe98f040d0799280b789e7c7622ff50e8b36"
+  },
+  "joint_none__scene_15": {
+    "amota": 0.5218223848961104,
+    "ids": 18.0,
+    "seconds": 35.88860000400001,
+    "sha256": "1aaa85d5601f8e71609dfa192cc47b1309d3b66f2ebe724ab7d38e91c1953e89"
+  },
+  "joint_m1__scene_15": {
+    "amota": 0.5974275677777691,
+    "ids": 21.0,
+    "seconds": 36.305234189999965,
+    "sha256": "9a9db6591f900a696c7ec4ef03683f374250621273bc222c4a4539afd57767f4"
+  },
+  "joint_m1_age1__scene_15": {
+    "amota": 0.6021492651079241,
+    "ids": 36.0,
+    "seconds": 37.335920902000055,
+    "sha256": "c2d024e781dabc37a52396709ac2824c528552ec95f02cc87afc027ae573ea52"
+  },
+  "joint_m2__scene_15": {
+    "amota": 0.6394613871147391,
+    "ids": 16.0,
+    "seconds": 39.47939480800005,
+    "sha256": "fa3596a7bee377487c8b53e7ea88d52efc2bb997da4bae29cd10f945f7d4c594"
+  },
+  "joint_m3__scene_15": {
+    "amota": 0.6679021972861298,
+    "ids": 11.0,
+    "seconds": 40.72870218100002,
+    "sha256": "2b186fcb912a368d3ce2ac25a441e66e2bdecb8c31129e7df1954a731bedd679"
+  },
+  "joint_m2_age1__scene_15": {
+    "amota": 0.6295293096510777,
+    "ids": 21.0,
+    "seconds": 38.66521504800005,
+    "sha256": "317d6fa70b93b4ae3dddad8c4e2688e53d84e06e7f5eac065f43595549351cb0"
+  },
+  "kf_baseline__scene_15": {
+    "amota": 0.6302599364721727,
+    "ids": 10.0,
+    "seconds": 41.56425554000009,
+    "sha256": "f1be0568f25814d57c5e28d84ea5fa25a6fe54379de763e4236018559d07a40c"
+  },
+  "calibrated_m2__scene_15": {
+    "amota": 0.6666850302287923,
+    "ids": 10.0,
+    "seconds": 39.950636194000026,
+    "sha256": "ec79349d4fffb78186132834a65b49bebd08383a1533f315e3b711d38a7d095a"
+  },
+  "calibrated_m3__scene_15": {
+    "amota": 0.6574146614714552,
+    "ids": 13.0,
+    "seconds": 40.67103434400008,
+    "sha256": "97238ad8ab493ff84a27c2fe7335d525f6360a9332ef6bef53a0153f046cbba1"
+  },
+  "m1_same_nms__scene_15": {
+    "amota": 0.6591913372052692,
+    "ids": 3.0,
+    "seconds": 38.94395632800001,
+    "sha256": "179b2b78efd10ad61d7e3c22ec0e13d986d2d512ba01c5358378853117c8a811"
+  },
+  "feat_dense_q8__scene_15": {
+    "amota": 0.7397033831575687,
+    "ids": 13.0,
+    "seconds": 35.572411234000015,
+    "sha256": "fd56bd6c53e7497e3f0730b54f07caa9613d4f00b804009d82da18829ec9b0cc"
+  },
+  "feat_dense_float__scene_15": {
+    "amota": 0.7278308063154,
+    "ids": 16.0,
+    "seconds": 37.767679213000065,
+    "sha256": "4a14d8d6b6c477b056f3062f3561ababa97c7682e23b7741f3b49d1667451ded"
+  }
+}

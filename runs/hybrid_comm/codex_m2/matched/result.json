@@ -1,0 +1,45 @@
+{
+  "schedule_hash": "1ef1d19aecad6275c9f08d4204f126e49b534f05ce3a7986ae2e7b4bc90951d0",
+  "history": [
+    {
+      "epoch": 0,
+      "validation": {
+        "box": 0.5416252955794334,
+        "joint": 0.5326367554565271
+      },
+      "seconds": 323.596210572
+    },
+    {
+      "epoch": 1,
+      "validation": {
+        "box": 0.5667788263410329,
+        "joint": 0.5589754036317269
+      },
+      "seconds": 597.490583241
+    },
+    {
+      "epoch": 2,
+      "validation": {
+        "box": 0.5618528157472611,
+        "joint": 0.5485554222017527
+      },
+      "seconds": 857.799238895
+    }
+  ],
+  "best_validation": {
+    "box": 0.5416252955794334,
+    "joint": 0.5326367554565271
+  },
+  "steps_per_epoch": 260,
+  "epochs_completed": 3,
+  "steps_per_arm": 780,
+  "gpu_job_seconds": 859.201416195,
+  "status": "complete",
+  "seed": 0,
+  "checkpoint_hashes": {
+    "box": "6aa4ff0d7fc91fb49641b6b71773ce47666e4c99f1a55e9fb0b43c53144cd796",
+    "joint": "2b048f773ff4602486cb4b172699d71aa2e56e674ff9aba3c337838679f0e577"
+  },
+  "initialization_sha": "cef73d2f899e0d50367506cd54808333ca0902ce995733172889473f2a42067d",
+  "peak_vram_bytes": 700887040
+}

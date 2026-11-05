@@ -1,0 +1,11 @@
+{
+  "probe_seconds": [
+    1.5569981279999752,
+    0.29360391000000163
+  ],
+  "pair_s": 1.8506020379999768,
+  "steps_per_epoch": 260,
+  "budget_seconds": 2700,
+  "channels": 172,
+  "peak_vram_bytes": 427606528
+}

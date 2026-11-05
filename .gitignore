@@ -74,3 +74,6 @@ Thumbs.db
 /runs/hybrid_comm/**/results_nusc.json
 /runs/hybrid_comm/**/tracking_result.json
 /runs/hybrid_comm/m0_smoke/
+/runs/hybrid_comm/codex_m2/prepared/tiles/
+/runs/hybrid_comm/codex_m2/prepared/boxes/
+/runs/hybrid_comm/codex_m2/**/*.tmp

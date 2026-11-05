@@ -1,0 +1,929 @@
+{
+  "rows": {
+    "box_none": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/box_none/results_nusc.json",
+      "sha256": "6312327b4c7a551dc8fc2aa510a9be703b2361a8cda0ec40513a44f2e788c146",
+      "detection": {
+        "ap_0.5": 0.13576624228098214,
+        "ap_1.0": 0.430431129347133,
+        "ap_2.0": 0.6779213711516927,
+        "ap_4.0": 0.8026377106372852,
+        "mAP": 0.5116891133542733,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.5886383009881447,
+          "ids": 23.0,
+          "recall": 0.6166666666666667,
+          "amotp": 0.8809028381013373,
+          "mAP": 0.5410896674748054
+        },
+        "scene_13": {
+          "amota": 0.49617357875908386,
+          "ids": 14.0,
+          "recall": 0.4983863531581374,
+          "amotp": 1.0037581540450398,
+          "mAP": 0.4769168521206373
+        },
+        "scene_15": {
+          "amota": 0.5331549406485967,
+          "ids": 22.0,
+          "recall": 0.5235546038543897,
+          "amotp": 0.8976589883096325,
+          "mAP": 0.5189909599527702
+        }
+      },
+      "tracking": {
+        "amota": 0.5420921543386008,
+        "ids": 69.0,
+        "recall": 0.5727554179566563,
+        "amotp": 0.9356440716076854,
+        "mAP": 0.5116891133542733
+      }
+    },
+    "box_m1": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/box_m1/results_nusc.json",
+      "sha256": "35cb891fc4e1102ebd233da3518ac164686a0301ce86a813d39f6f5df1900ec6",
+      "detection": {
+        "ap_0.5": 0.16462837003959171,
+        "ap_1.0": 0.48307195470952624,
+        "ap_2.0": 0.7283636734847317,
+        "ap_4.0": 0.8402070997185678,
+        "mAP": 0.5540677744881044,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.6404702733142646,
+          "ids": 9.0,
+          "recall": 0.6085714285714285,
+          "amotp": 0.8277600454800268,
+          "mAP": 0.5760292185224677
+        },
+        "scene_13": {
+          "amota": 0.5538744893503404,
+          "ids": 22.0,
+          "recall": 0.6242508068234209,
+          "amotp": 0.9383914014241711,
+          "mAP": 0.516991326638177
+        },
+        "scene_15": {
+          "amota": 0.5884311544764154,
+          "ids": 11.0,
+          "recall": 0.5396145610278372,
+          "amotp": 0.8267999669474202,
+          "mAP": 0.5741676532280139
+        }
+      },
+      "tracking": {
+        "amota": 0.5960184496234546,
+        "ids": 41.0,
+        "recall": 0.5877464559230895,
+        "amotp": 0.8748299963040129,
+        "mAP": 0.5540677744881044
+      }
+    },
+    "box_m1_age1": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/box_m1_age1/results_nusc.json",
+      "sha256": "e9fbcf658bc6f1d99b0a4ecd5da3fe98f040d0799280b789e7c7622ff50e8b36",
+      "detection": {
+        "ap_0.5": 0.1645573434157743,
+        "ap_1.0": 0.48332716500994866,
+        "ap_2.0": 0.7322772409640622,
+        "ap_4.0": 0.8454159419164413,
+        "mAP": 0.5563944228265566,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.6570296214902245,
+          "ids": 11.0,
+          "recall": 0.6766666666666666,
+          "amotp": 0.8289315779537848,
+          "mAP": 0.5759583884278028
+        },
+        "scene_13": {
+          "amota": 0.5614934526962825,
+          "ids": 17.0,
+          "recall": 0.5707699400645458,
+          "amotp": 0.945333297249484,
+          "mAP": 0.5223287628809286
+        },
+        "scene_15": {
+          "amota": 0.6026793243099321,
+          "ids": 20.0,
+          "recall": 0.5706638115631691,
+          "amotp": 0.7913167500796815,
+          "mAP": 0.5715066066458719
+        }
+      },
+      "tracking": {
+        "amota": 0.6095557856144053,
+        "ids": 66.0,
+        "recall": 0.6408668730650154,
+        "amotp": 0.8440144476328507,
+        "mAP": 0.5563944228265566
+      }
+    },
+    "joint_none": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_none/results_nusc.json",
+      "sha256": "1aaa85d5601f8e71609dfa192cc47b1309d3b66f2ebe724ab7d38e91c1953e89",
+      "detection": {
+        "ap_0.5": 0.1408021439897973,
+        "ap_1.0": 0.43198826513587174,
+        "ap_2.0": 0.6776384664794223,
+        "ap_4.0": 0.80252407391288,
+        "mAP": 0.5132382373794928,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.5965485284007673,
+          "ids": 23.0,
+          "recall": 0.6104761904761905,
+          "amotp": 0.8742035654079074,
+          "mAP": 0.5422203666458395
+        },
+        "scene_13": {
+          "amota": 0.4888332905147522,
+          "ids": 24.0,
+          "recall": 0.5587828492392808,
+          "amotp": 1.0026746715800752,
+          "mAP": 0.47526856309275245
+        },
+        "scene_15": {
+          "amota": 0.5218223848961104,
+          "ids": 18.0,
+          "recall": 0.5246252676659529,
+          "amotp": 0.9283549099995959,
+          "mAP": 0.523916167557246
+        }
+      },
+      "tracking": {
+        "amota": 0.5376422457734609,
+        "ids": 59.0,
+        "recall": 0.5435880723480528,
+        "amotp": 0.9338148513522775,
+        "mAP": 0.5132382373794928
+      }
+    },
+    "joint_m1": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m1/results_nusc.json",
+      "sha256": "9a9db6591f900a696c7ec4ef03683f374250621273bc222c4a4539afd57767f4",
+      "detection": {
+        "ap_0.5": 0.16898292571651108,
+        "ap_1.0": 0.48050128646397305,
+        "ap_2.0": 0.7270493524023222,
+        "ap_4.0": 0.837854769204809,
+        "mAP": 0.5535970834469038,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.6468535573242521,
+          "ids": 13.0,
+          "recall": 0.6295238095238095,
+          "amotp": 0.8207324924097673,
+          "mAP": 0.5799990697897088
+        },
+        "scene_13": {
+          "amota": 0.5475589325042745,
+          "ids": 13.0,
+          "recall": 0.549562010142923,
+          "amotp": 0.941931004250306,
+          "mAP": 0.5156047600293794
+        },
+        "scene_15": {
+          "amota": 0.5974275677777691,
+          "ids": 21.0,
+          "recall": 0.566916488222698,
+          "amotp": 0.8231404046572546,
+          "mAP": 0.5708548115352947
+        }
+      },
+      "tracking": {
+        "amota": 0.5971413107203198,
+        "ids": 48.0,
+        "recall": 0.5888870783770572,
+        "amotp": 0.8719074594917139,
+        "mAP": 0.5535970834469038
+      }
+    },
+    "joint_m1_age1": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m1_age1/results_nusc.json",
+      "sha256": "c2d024e781dabc37a52396709ac2824c528552ec95f02cc87afc027ae573ea52",
+      "detection": {
+        "ap_0.5": 0.16607769245751658,
+        "ap_1.0": 0.4810193631127064,
+        "ap_2.0": 0.7262867836793878,
+        "ap_4.0": 0.8377662624389748,
+        "mAP": 0.5527875254221464,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.6468552284667426,
+          "ids": 9.0,
+          "recall": 0.6542857142857142,
+          "amotp": 0.8273574402547114,
+          "mAP": 0.5780488345848058
+        },
+        "scene_13": {
+          "amota": 0.5556716227513598,
+          "ids": 23.0,
+          "recall": 0.6196403872752421,
+          "amotp": 0.9491294670586752,
+          "mAP": 0.517796574817705
+        },
+        "scene_15": {
+          "amota": 0.6021492651079241,
+          "ids": 36.0,
+          "recall": 0.6514989293361885,
+          "amotp": 0.826495976090472,
+          "mAP": 0.5653709688424357
+        }
+      },
+      "tracking": {
+        "amota": 0.6036549051827084,
+        "ids": 56.0,
+        "recall": 0.6149584487534626,
+        "amotp": 0.878356977852303,
+        "mAP": 0.5527875254221464
+      }
+    },
+    "joint_m2": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m2/results_nusc.json",
+      "sha256": "fa3596a7bee377487c8b53e7ea88d52efc2bb997da4bae29cd10f945f7d4c594",
+      "detection": {
+        "ap_0.5": 0.17755510559894325,
+        "ap_1.0": 0.5059803994521336,
+        "ap_2.0": 0.7524676888625041,
+        "ap_4.0": 0.8575310306675509,
+        "mAP": 0.573383556145283,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.6848627638746563,
+          "ids": 12.0,
+          "recall": 0.6528571428571428,
+          "amotp": 0.8116733957049558,
+          "mAP": 0.5943873065894851
+        },
+        "scene_13": {
+          "amota": 0.566736778668232,
+          "ids": 27.0,
+          "recall": 0.6196403872752421,
+          "amotp": 0.8985867126112597,
+          "mAP": 0.5377933843531192
+        },
+        "scene_15": {
+          "amota": 0.6394613871147391,
+          "ids": 16.0,
+          "recall": 0.6001070663811563,
+          "amotp": 0.7895756742392881,
+          "mAP": 0.5917012891073916
+        }
+      },
+      "tracking": {
+        "amota": 0.6338033473281219,
+        "ids": 60.0,
+        "recall": 0.63858562815708,
+        "amotp": 0.8315265992714753,
+        "mAP": 0.573383556145283
+      }
+    },
+    "joint_m3": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m3/results_nusc.json",
+      "sha256": "2b186fcb912a368d3ce2ac25a441e66e2bdecb8c31129e7df1954a731bedd679",
+      "detection": {
+        "ap_0.5": 0.1853824697675183,
+        "ap_1.0": 0.5279171281292858,
+        "ap_2.0": 0.7726302156560397,
+        "ap_4.0": 0.8694205909339985,
+        "mAP": 0.5888376011217106,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.6890108790230645,
+          "ids": 12.0,
+          "recall": 0.6247619047619047,
+          "amotp": 0.7769283289520021,
+          "mAP": 0.6092357838616412
+        },
+        "scene_13": {
+          "amota": 0.6257528083095212,
+          "ids": 24.0,
+          "recall": 0.6394651913324112,
+          "amotp": 0.8932305460466423,
+          "mAP": 0.5531541421969947
+        },
+        "scene_15": {
+          "amota": 0.6679021972861298,
+          "ids": 11.0,
+          "recall": 0.5936830835117773,
+          "amotp": 0.7750936728280295,
+          "mAP": 0.6077683822710009
+        }
+      },
+      "tracking": {
+        "amota": 0.6613484413439077,
+        "ids": 52.0,
+        "recall": 0.6369561675085547,
+        "amotp": 0.8246651435413286,
+        "mAP": 0.5888376011217106
+      }
+    },
+    "joint_m2_age1": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/joint_m2_age1/results_nusc.json",
+      "sha256": "317d6fa70b93b4ae3dddad8c4e2688e53d84e06e7f5eac065f43595549351cb0",
+      "detection": {
+        "ap_0.5": 0.1705339042703885,
+        "ap_1.0": 0.5017526616775405,
+        "ap_2.0": 0.7516483588365653,
+        "ap_4.0": 0.8572026025523922,
+        "mAP": 0.5702843818342216,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.6749876070228481,
+          "ids": 15.0,
+          "recall": 0.6819047619047619,
+          "amotp": 0.8176628142335917,
+          "mAP": 0.5965383916851255
+        },
+        "scene_13": {
+          "amota": 0.5955034127326738,
+          "ids": 20.0,
+          "recall": 0.62010142923006,
+          "amotp": 0.9036665671985176,
+          "mAP": 0.5341125496886536
+        },
+        "scene_15": {
+          "amota": 0.6295293096510777,
+          "ids": 21.0,
+          "recall": 0.6311563169164882,
+          "amotp": 0.7808964324767337,
+          "mAP": 0.5824497031280075
+        }
+      },
+      "tracking": {
+        "amota": 0.6354660812420778,
+        "ids": 68.0,
+        "recall": 0.6635163760795176,
+        "amotp": 0.8342584127851553,
+        "mAP": 0.5702843818342216
+      }
+    },
+    "kf_baseline": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/inference/dev/kf_baseline/results_nusc.json",
+      "sha256": "f1be0568f25814d57c5e28d84ea5fa25a6fe54379de763e4236018559d07a40c",
+      "detection": {
+        "ap_0.5": 0.29721874941630777,
+        "ap_1.0": 0.6353684624495861,
+        "ap_2.0": 0.7993096726126797,
+        "ap_4.0": 0.8619017967534968,
+        "mAP": 0.6484496703080176,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.7269155352117078,
+          "ids": 22.0,
+          "recall": 0.7161904761904762,
+          "amotp": 0.6705715094224146,
+          "mAP": 0.6579868390780828
+        },
+        "scene_13": {
+          "amota": 0.7040188655228988,
+          "ids": 12.0,
+          "recall": 0.6643614568925772,
+          "amotp": 0.6953990344089355,
+          "mAP": 0.6494907785738951
+        },
+        "scene_15": {
+          "amota": 0.6302599364721727,
+          "ids": 10.0,
+          "recall": 0.5995717344753747,
+          "amotp": 0.711522389985212,
+          "mAP": 0.6367218350590237
+        }
+      },
+      "tracking": {
+        "amota": 0.6916465469165908,
+        "ids": 31.0,
+        "recall": 0.6384226820922275,
+        "amotp": 0.6803295969370003,
+        "mAP": 0.6484496703080176
+      }
+    },
+    "calibrated_m2": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/calibrated/m2/results_nusc.json",
+      "sha256": "ec79349d4fffb78186132834a65b49bebd08383a1533f315e3b711d38a7d095a",
+      "detection": {
+        "ap_0.5": 0.2700503215120408,
+        "ap_1.0": 0.6035671080605723,
+        "ap_2.0": 0.8061373977180931,
+        "ap_4.0": 0.8708101587617045,
+        "mAP": 0.6376412465131027,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.7250506110455706,
+          "ids": 18.0,
+          "recall": 0.6819047619047619,
+          "amotp": 0.6793535517646546,
+          "mAP": 0.6534166590162781
+        },
+        "scene_13": {
+          "amota": 0.6735740780634984,
+          "ids": 36.0,
+          "recall": 0.7173812816966344,
+          "amotp": 0.7518226941245466,
+          "mAP": 0.6360344811866994
+        },
+        "scene_15": {
+          "amota": 0.6666850302287923,
+          "ids": 10.0,
+          "recall": 0.639186295503212,
+          "amotp": 0.7337788269447862,
+          "mAP": 0.6221511907430133
+        }
+      },
+      "tracking": {
+        "amota": 0.6915141022253551,
+        "ids": 53.0,
+        "recall": 0.6618869154309923,
+        "amotp": 0.7316957843452968,
+        "mAP": 0.6376412465131027
+      }
+    },
+    "calibrated_m3": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/calibrated/m3/results_nusc.json",
+      "sha256": "97238ad8ab493ff84a27c2fe7335d525f6360a9332ef6bef53a0153f046cbba1",
+      "detection": {
+        "ap_0.5": 0.2759283805417367,
+        "ap_1.0": 0.6131476872183408,
+        "ap_2.0": 0.823172771158507,
+        "ap_4.0": 0.8887749911905949,
+        "mAP": 0.6502559575272948,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.7020943238066977,
+          "ids": 13.0,
+          "recall": 0.680952380952381,
+          "amotp": 0.7184114751547488,
+          "mAP": 0.6652132518666825
+        },
+        "scene_13": {
+          "amota": 0.6542324599810847,
+          "ids": 21.0,
+          "recall": 0.6749654218533887,
+          "amotp": 0.7595671800997839,
+          "mAP": 0.6414325187558687
+        },
+        "scene_15": {
+          "amota": 0.6574146614714552,
+          "ids": 13.0,
+          "recall": 0.6423982869379015,
+          "amotp": 0.7270916860903714,
+          "mAP": 0.6427736755654342
+        }
+      },
+      "tracking": {
+        "amota": 0.6735296401897258,
+        "ids": 48.0,
+        "recall": 0.662701645755255,
+        "amotp": 0.7328402510627305,
+        "mAP": 0.6502559575272948
+      }
+    },
+    "m1_same_nms": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/codex_m2/reproduction/m1_same_nms/results_nusc.json",
+      "sha256": "179b2b78efd10ad61d7e3c22ec0e13d986d2d512ba01c5358378853117c8a811",
+      "detection": {
+        "ap_0.5": 0.29679722918080753,
+        "ap_1.0": 0.6320706338887383,
+        "ap_2.0": 0.8006919929070955,
+        "ap_4.0": 0.8638217023890015,
+        "mAP": 0.6483453895914106,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.7254836946828429,
+          "ids": 23.0,
+          "recall": 0.7138095238095238,
+          "amotp": 0.672825409423596,
+          "mAP": 0.657215784192801
+        },
+        "scene_13": {
+          "amota": 0.709618922899393,
+          "ids": 23.0,
+          "recall": 0.7372060857538036,
+          "amotp": 0.6951970635939486,
+          "mAP": 0.6498553915263541
+        },
+        "scene_15": {
+          "amota": 0.6591913372052692,
+          "ids": 3.0,
+          "recall": 0.5653104925053534,
+          "amotp": 0.7080741665633941,
+          "mAP": 0.6367147950205969
+        }
+      },
+      "tracking": {
+        "amota": 0.701099720614781,
+        "ids": 44.0,
+        "recall": 0.6646569985334854,
+        "amotp": 0.6799333834575372,
+        "mAP": 0.6483453895914106
+      }
+    },
+    "feat_dense_q8": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/m0/feat_dense_q8/results_nusc.json",
+      "sha256": "fd56bd6c53e7497e3f0730b54f07caa9613d4f00b804009d82da18829ec9b0cc",
+      "detection": {
+        "ap_0.5": 0.32293869020661287,
+        "ap_1.0": 0.6674817384563259,
+        "ap_2.0": 0.852723998148577,
+        "ap_4.0": 0.9111981358102441,
+        "mAP": 0.68858564065544,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.7831044614746339,
+          "ids": 16.0,
+          "recall": 0.7661904761904762,
+          "amotp": 0.6160748234761446,
+          "mAP": 0.7138974671208762
+        },
+        "scene_13": {
+          "amota": 0.7578179681970639,
+          "ids": 24.0,
+          "recall": 0.7736284001844168,
+          "amotp": 0.6744767723593064,
+          "mAP": 0.6738074874993354
+        },
+        "scene_15": {
+          "amota": 0.7397033831575687,
+          "ids": 13.0,
+          "recall": 0.7162740899357601,
+          "amotp": 0.6729668005355189,
+          "mAP": 0.6752285575313974
+        }
+      },
+      "tracking": {
+        "amota": 0.7628696311368687,
+        "ids": 49.0,
+        "recall": 0.749388952256803,
+        "amotp": 0.6625000494071741,
+        "mAP": 0.68858564065544
+      }
+    },
+    "feat_dense_float": {
+      "prediction": "/mnt/c/Users/USER/Documents/SwarmBridge/runs/hybrid_comm/m0/feat_dense/results_nusc.json",
+      "sha256": "4a14d8d6b6c477b056f3062f3561ababa97c7682e23b7741f3b49d1667451ded",
+      "detection": {
+        "ap_0.5": 0.32312083078720616,
+        "ap_1.0": 0.6671180663276811,
+        "ap_2.0": 0.8522993656335751,
+        "ap_4.0": 0.9111036707425233,
+        "mAP": 0.6884104833727465,
+        "n_gt": 6162
+      },
+      "per_scene": {
+        "scene_11": {
+          "amota": 0.7831910813317472,
+          "ids": 13.0,
+          "recall": 0.7633333333333333,
+          "amotp": 0.6152596154805747,
+          "mAP": 0.7119779242573714
+        },
+        "scene_13": {
+          "amota": 0.7601460855396472,
+          "ids": 16.0,
+          "recall": 0.7736284001844168,
+          "amotp": 0.677104754419616,
+          "mAP": 0.6745689487964763
+        },
+        "scene_15": {
+          "amota": 0.7278308063154,
+          "ids": 16.0,
+          "recall": 0.7194860813704497,
+          "amotp": 0.675665076314075,
+          "mAP": 0.6745346558820164
+        }
+      },
+      "tracking": {
+        "amota": 0.7608061125660127,
+        "ids": 43.0,
+        "recall": 0.749388952256803,
+        "amotp": 0.6636359275950692,
+        "mAP": 0.6884104833727465
+      }
+    }
+  },
+  "gate": {
+    "baseline": "m1_same_nms",
+    "threshold": 0.01,
+    "required_positive_scenes": 2,
+    "candidates": {
+      "joint_m2": {
+        "delta_amota": -0.06729637328665905,
+        "per_scene_delta": {
+          "scene_11": -0.04062093080818663,
+          "scene_13": -0.14288214423116097,
+          "scene_15": -0.019729950090530135
+        },
+        "ids_delta": 16.0,
+        "pass_gate": false
+      },
+      "joint_m3": {
+        "delta_amota": -0.039751279270873296,
+        "per_scene_delta": {
+          "scene_11": -0.036472815659778446,
+          "scene_13": -0.08386611458987181,
+          "scene_15": 0.008710860080860527
+        },
+        "ids_delta": 8.0,
+        "pass_gate": false
+      },
+      "calibrated_m2": {
+        "delta_amota": -0.009585618389425843,
+        "per_scene_delta": {
+          "scene_11": -0.0004330836372723468,
+          "scene_13": -0.03604484483589454,
+          "scene_15": 0.007493693023523096
+        },
+        "ids_delta": 9.0,
+        "pass_gate": false
+      },
+      "calibrated_m3": {
+        "delta_amota": -0.027570080425055155,
+        "per_scene_delta": {
+          "scene_11": -0.023389370876145232,
+          "scene_13": -0.05538646291830829,
+          "scene_15": -0.0017766757338140149
+        },
+        "ids_delta": 4.0,
+        "pass_gate": false
+      }
+    },
+    "open_wireless": false
+  },
+  "best_calibrated_control": "calibrated_m2",
+  "training": {
+    "schedule_hash": "1ef1d19aecad6275c9f08d4204f126e49b534f05ce3a7986ae2e7b4bc90951d0",
+    "history": [
+      {
+        "epoch": 0,
+        "validation": {
+          "box": 0.5416252955794334,
+          "joint": 0.5326367554565271
+        },
+        "seconds": 323.596210572
+      },
+      {
+        "epoch": 1,
+        "validation": {
+          "box": 0.5667788263410329,
+          "joint": 0.5589754036317269
+        },
+        "seconds": 597.490583241
+      },
+      {
+        "epoch": 2,
+        "validation": {
+          "box": 0.5618528157472611,
+          "joint": 0.5485554222017527
+        },
+        "seconds": 857.799238895
+      }
+    ],
+    "best_validation": {
+      "box": 0.5416252955794334,
+      "joint": 0.5326367554565271
+    },
+    "steps_per_epoch": 260,
+    "epochs_completed": 3,
+    "steps_per_arm": 780,
+    "gpu_job_seconds": 859.201416195,
+    "status": "complete",
+    "seed": 0,
+    "checkpoint_hashes": {
+      "box": "6aa4ff0d7fc91fb49641b6b71773ce47666e4c99f1a55e9fb0b43c53144cd796",
+      "joint": "2b048f773ff4602486cb4b172699d71aa2e56e674ff9aba3c337838679f0e577"
+    },
+    "initialization_sha": "cef73d2f899e0d50367506cd54808333ca0902ce995733172889473f2a42067d",
+    "peak_vram_bytes": 700887040
+  },
+  "timings": {
+    "val/box_none": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 36.97169750000029,
+        "p95": 245.89876440000526
+      },
+      "receiver_decode_ms": {
+        "p50": 16.717419500004382,
+        "p95": 60.884834550000015
+      }
+    },
+    "val/box_m1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 89.22228999999504,
+        "p95": 193.8440861000031
+      },
+      "receiver_decode_ms": {
+        "p50": 17.470616499998926,
+        "p95": 57.19121299999159
+      }
+    },
+    "dev/box_none": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 24.037041999996234,
+        "p95": 34.70342725000747
+      },
+      "receiver_decode_ms": {
+        "p50": 11.674539000004813,
+        "p95": 12.858214549998337
+      }
+    },
+    "dev/box_m1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 85.93708200000094,
+        "p95": 143.95392895000185
+      },
+      "receiver_decode_ms": {
+        "p50": 23.11056599999972,
+        "p95": 54.64449204999439
+      }
+    },
+    "dev/box_m1_age1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 46.721315500001026,
+        "p95": 131.27432649999943
+      },
+      "receiver_decode_ms": {
+        "p50": 18.415116500001716,
+        "p95": 22.090479199995627
+      }
+    },
+    "val/joint_none": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 19.815907999998217,
+        "p95": 27.32168405000905
+      },
+      "receiver_decode_ms": {
+        "p50": 11.150049999990586,
+        "p95": 12.325642949988946
+      }
+    },
+    "val/joint_m1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 38.138458000005926,
+        "p95": 143.99262090000272
+      },
+      "receiver_decode_ms": {
+        "p50": 18.14409400000727,
+        "p95": 20.207065300000693
+      }
+    },
+    "val/joint_m2": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 93.91154050000239,
+        "p95": 136.95899144999117
+      },
+      "receiver_decode_ms": {
+        "p50": 19.366365500005145,
+        "p95": 42.22430364999353
+      }
+    },
+    "val/joint_m3": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 87.65622999999323,
+        "p95": 142.82626069998514
+      },
+      "receiver_decode_ms": {
+        "p50": 19.532381999979975,
+        "p95": 51.325760300011325
+      }
+    },
+    "dev/joint_none": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 34.16637050000304,
+        "p95": 70.27265019999048
+      },
+      "receiver_decode_ms": {
+        "p50": 21.37415600000736,
+        "p95": 27.697292449997235
+      }
+    },
+    "dev/joint_m1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 47.55337249999059,
+        "p95": 77.75457684998331
+      },
+      "receiver_decode_ms": {
+        "p50": 15.477809999993042,
+        "p95": 20.07946334999104
+      }
+    },
+    "dev/joint_m1_age1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 29.363165000006575,
+        "p95": 37.60913119998861
+      },
+      "receiver_decode_ms": {
+        "p50": 12.942248000001655,
+        "p95": 28.060430100003938
+      }
+    },
+    "dev/joint_m2": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 91.53984649999813,
+        "p95": 116.78597850000611
+      },
+      "receiver_decode_ms": {
+        "p50": 22.6790070000078,
+        "p95": 28.211614449995153
+      }
+    },
+    "dev/joint_m3": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 62.9155865000115,
+        "p95": 87.97363079998775
+      },
+      "receiver_decode_ms": {
+        "p50": 14.531547000004252,
+        "p95": 33.41279029999096
+      }
+    },
+    "dev/joint_m2_age1": {
+      "input_decode_scatter_and_transfer_ms": {
+        "p50": 63.45037550001109,
+        "p95": 89.36172674999055
+      },
+      "receiver_decode_ms": {
+        "p50": 14.610943500002804,
+        "p95": 16.665122900002398
+      }
+    }
+  },
+  "payload_bits": {
+    "box_none": {
+      "mean": 0.0,
+      "p95": 0.0
+    },
+    "box_m1": {
+      "mean": 41082.666666666664,
+      "p95": 51620.8
+    },
+    "box_m1_age1": {
+      "mean": 39505.73333333333,
+      "p95": 51620.8
+    },
+    "joint_none": {
+      "mean": 0.0,
+      "p95": 0.0
+    },
+    "joint_m1": {
+      "mean": 41082.666666666664,
+      "p95": 51620.8
+    },
+    "joint_m1_age1": {
+      "mean": 39505.73333333333,
+      "p95": 51620.8
+    },
+    "joint_m2": {
+      "mean": 2674330.6666666665,
+      "p95": 2684868.8
+    },
+    "joint_m3": {
+      "mean": 10541722.666666666,
+      "p95": 10552260.8
+    },
+    "joint_m2_age1": {
+      "mean": 2541091.3333333335,
+      "p95": 2684868.8
+    }
+  },
+  "resource": {
+    "successful_gpu_phase_seconds": 1283.0993912519998,
+    "artifact_bytes": 1920515741,
+    "adaptation_envelope_seconds": 2700
+  },
+  "limits": [
+    "One training seed; three previously-used dev scenes.",
+    "Initial decoder had seen the 17 non-dev scenes before the new split.",
+    "Ideal message arrivals at age 0/1; not a wireless result.",
+    "Dense diagnostic is a reference, not a bound or achievable sparse quality."
+  ]
+}
