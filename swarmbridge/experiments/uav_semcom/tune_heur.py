@@ -1,9 +1,8 @@
 """Fair-baseline check for A3: tune the heuristic family on TRAIN images + train episode seeds, pick the best member
 by mean episode return (the quantity PPO maximises), then compare it with a trained PPO on the shared TEST seeds.
 
-Family: greedy (head-only / queue-aware mode choice) x pacing threshold q_thr in {none, 0..5}, plus rate-aware
-pacing on predicted queue drain time tau in {0.5..6} s, plus channel-matched staggered surveys (at most M UAVs
-surveying at once; start order idx / near / far; optional pacing).
+Family (env v2): every fixed mode, per-image greedy (with / without BS detour), queue pacing q_thr in {0..5}, and
+channel-matched staggered surveys (start order idx / near / far; optional pacing).
 Usage: python tune_heur.py OUT_JSON --profiles ... --cpu-file ... --modes ... --cfg JSON --ppo-eval EVAL.json
 """
 import argparse
@@ -18,40 +17,25 @@ import policies as P
 G = {}
 
 
-def family():
-    out = []
-    for qa in (False, True):
-        out.append(("greedy" + ("_qa" if qa else "_img"), None, qa))
-        for q in range(6):
-            out.append((f"paced_q{q}" + ("_qa" if qa else ""), q, qa))
-    for tau in (0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0):
-        out.append((f"pacedT{tau}", ("T", tau), False))
+def family(modes):
+    out = [f"fixed_{m}" for m in modes] + ["greedy", "greedy_detour"] + [f"paced_q{q}" for q in range(6)]
     for order in ("idx", "near", "far"):
-        for q in (None, 0, 1, 2, 3):
-            out.append((f"stag_{order}" + ("" if q is None else f"_q{q}"), ("S", order, q), False))
+        out += [f"stag_{order}"] + [f"stag_{order}_q{q}" for q in (0, 1, 2, 3)]
     return out
 
 
-def make(spec):
-    _, q, qa = spec
-    if isinstance(q, tuple) and q[0] == "S":
-        return P.staggered(q[2], q[1])
-    if isinstance(q, tuple):
-        return P.paced_time(q[1])
-    return P.greedy(True, queue_aware=qa) if q is None else P.paced(q, True, queue_aware=qa)
-
-
 def run(args):
-    spec, which, seeds = args
+    name, which, seeds = args
     pool = G["tr"] if which == "train" else G["te"]
-    pol = make(spec)
-    return spec[0], which, [P.run_episode(E.UavSemcomEnv(G["table"], pool, G["cfg"]), pol, s) for s in seeds]
+    pol = P.from_name(name, G["modes"])
+    return name, which, [P.run_episode(E.UavSemcomEnv(G["table"], pool, G["cfg"]), pol, s) for s in seeds]
 
 
 def init(profiles, modes, cpu_file, cfg):
     G["table"] = E.ModeTable(profiles, modes, cpu_file)
     G["tr"], G["te"] = G["table"].split()
     G["cfg"] = cfg
+    G["modes"] = list(modes)
 
 
 def ci(a, b):
@@ -77,7 +61,7 @@ def main():
     assert ev["cfg"] == cfg, (ev["cfg"], cfg)
     test_seeds = ev["seeds"]
     train_seeds = list(range(args.n_tune))   # disjoint from test seeds 1000+
-    jobs = [(s, w, train_seeds if w == "train" else test_seeds) for s in family() for w in ("train", "test")]
+    jobs = [(s, w, train_seeds if w == "train" else test_seeds) for s in family(modes) for w in ("train", "test")]
     with Pool(args.procs, initializer=init, initargs=(args.profiles, modes, args.cpu_file, cfg)) as pool:
         res = pool.map(run, jobs)
     tab = {}

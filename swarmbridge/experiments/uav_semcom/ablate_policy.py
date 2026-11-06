@@ -16,17 +16,6 @@ import gym_env as G
 import policies as P
 
 
-def heur_from_name(n):
-    if n.startswith("stag_"):
-        parts = n.split("_")
-        return P.staggered(int(parts[2][1:]) if len(parts) > 2 else None, parts[1])
-    if n.startswith("pacedT"):
-        return P.paced_time(float(n[6:]))
-    if n.startswith("paced_q"):
-        return P.paced(int(n[7]), True, queue_aware=n.endswith("_qa"))
-    return P.greedy(True, queue_aware=n == "greedy_qa")
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("model")
@@ -43,13 +32,12 @@ def main():
     _, te = table.split()
     model = PPO.load(args.model, device="cpu")
     g = G.GymUavSemcom(table, te, cfg, seed=0)
-    K, per = g.core.c["K"], g._per
-    heur = heur_from_name(args.heur)
+    heur = P.from_name(args.heur, args.modes.split(","))
 
     def mixed(src):   # src = (move, chpow, mode) each 'P' or 'H'
         def pol(env):
             a, _ = model.predict(env.obs(), deterministic=True)
-            pa = [tuple(int(x) for x in row) for row in np.asarray(a).reshape(K, per)]
+            pa = G.decode_action(env, a)
             ha = heur(env)
             out = []
             for p, h in zip(pa, ha):

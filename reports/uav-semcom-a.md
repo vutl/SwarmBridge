@@ -81,6 +81,8 @@ Giới hạn của A1:
 
 ## 2. A2 — môi trường (topology khớp dữ liệu)
 
+> Mục này mô tả env **v1**. v1 có lỗi (mục 3.2). Env **v2** và MDP đầy đủ ở **mục 4**.
+
 UAV tự chụp ảnh nên topology là **camera trên UAV → encoder trên UAV → kênh không đối đất → BS mặt đất**. Không có vệ tinh, relay hay NOMA.
 
 Code ở `swarmbridge/experiments/uav_semcom/env.py`, có 4 test. Các cơ chế trong môi trường:
@@ -104,6 +106,8 @@ Code ở `swarmbridge/experiments/uav_semcom/env.py`, có 4 test. Các cơ chế
   - Delay gồm cả thời gian encode trên UAV (CPU) và decode ở BS.
 
 ## 3. A3 — PPO và baseline trên cùng môi trường (seed train 0, 30 episode test, ảnh test chưa từng thấy)
+
+> **KHÔNG CÒN HIỆU LỰC.** Mọi kết quả ở mục 3 và 3.1 chạy trên env v1, vốn có lỗi "1 ảnh/slot" (mục 3.2). PPO chưa được train lại trên env v2.
 
 PPO (SB3): 1 controller tập trung, action space MultiDiscrete, MLP 256×256, 3 triệu bước, khoảng 26 phút trên CPU.
 
@@ -138,6 +142,8 @@ Heuristic `paced_q0` làm đúng việc đó: chọn mode greedy, nhưng đứng
 
 
 ### 3.1 Thêm seed, thêm chi phí thời gian, và baseline được tinh chỉnh (2026-11-06)
+
+> **KHÔNG CÒN HIỆU LỰC** (env v1, xem 3.2).
 
 Lần chạy mới:
 - 2 seed PPO nữa ở w_time = 0.
@@ -247,3 +253,205 @@ Như vậy nút thắt là **số slot**, không phải số bit. Greedy bay 20 
 - Công suất phát không có trade-off: năng lượng phát khoảng 0,2 W × 0,2 s, không đáng kể.
 - Không có action masking.
 - Quan sát chứa bits/PSNR của mọi mode cho ảnh đầu hàng đợi. UAV có thể tự tính được, vì nó giữ ảnh gốc, nhưng phải encode và decode đủ 14 mode, và chi phí đó đang không được tính. Phải khai báo rõ đây là giả định.
+
+## 4. A2 v2 — sửa simulator (Bước 1) và system model + MDP (Bước 2), 2026-11-07
+
+**Trạng thái:**
+- Env v2 đã viết xong và có 19 unit test, tất cả đều qua.
+- Phân tích chế độ tải đã xong.
+- Đã chạy kiểm tra các heuristic, không học gì.
+- **PPO chưa được train lại**, chờ review mục này.
+
+Code: `swarmbridge/experiments/uav_semcom/` — `env.py` (môi trường), `gym_env.py` (wrapper và action mask), `policies.py` (heuristic), `test_env.py`, `regime.py`, `sanity_v2.py`, `regime_native_probe.py`.
+
+Kết quả: `runs/uav_semcom/regime_v2.md`, `runs/uav_semcom/v2_sanity/`, `runs/uav_semcom/regime_native_probe.jsonl`.
+
+### 4.1 Lỗi đã sửa và test tương ứng
+
+| # | Lỗi | Cách sửa trong v2 | Test kiểm tra |
+|---|---|---|---|
+| 1 | Mỗi UAV chỉ phục vụ được 1 ảnh/slot (v1) | Bộ phát phục vụ hàng đợi FIFO liên tục trong slot; encoder chạy song song với bộ phát (encoder nối tiếp → bộ phát nối tiếp) | `test_several_images_per_slot`, `test_bits_time_energy_conservation` |
+| 2 | Bản sửa thử `check_multipkt.py` dùng mode của ảnh đầu cho cả các ảnh sau trong cùng slot (ChatGPT phát hiện) | **Một quyết định mode ứng với đúng một ảnh**: action có một vector mode, mỗi phần tử cho một ảnh đang chờ | `test_mode_vector_applies_per_image`, `test_mode_vector_length_enforced` |
+| 3 | Gain nhiễu lấy một mẫu fading khác | Mỗi UAV một gain mỗi slot, dùng cả cho link riêng lẫn khi gây nhiễu | `test_interference_uses_same_gain_as_own_link` |
+| 4 | Một RNG chung, nên các chính sách khác nhau gặp kịch bản khác nhau | Danh sách ảnh (ảnh, deadline, Qmin theo UAV × waypoint × ảnh) và biến ngẫu nhiên fading (theo slot × UAV) được rút trước lúc reset, từ các stream riêng | `test_scenario_independent_of_policy` |
+| 5 | Năng lượng phát tính p × cả phần còn lại của slot; UAV tiêu năng lượng tới 200 s | Năng lượng phát = p × thời gian phát thực; hết sortie (khảo sát xong và hàng đợi rỗng) thì UAV ngừng tiêu năng lượng và ngừng chịu phí thời gian | `test_bits_time_energy_conservation`, `test_no_energy_after_sortie_end` |
+| 6 | Ảnh quá hạn vẫn được phát tới cuối slot | Deadline là **hạn cứng**: hết hạn (kể cả thời gian decode) thì ảnh bị bỏ ngay, không tốn thêm thời gian phát | `test_deadline_expiry_spends_no_airtime` |
+| 7 | Ngân sách thông tin lệch: PPO không thấy thời gian; bit/PSNR mặc định là oracle | Observation có thời gian, quãng đường khảo sát còn lại và chi tiết hàng đợi. Mức thông tin về mode chọn bằng cấu hình `mode_info` (oracle / predicted / mean); heuristic đọc qua đúng hàm `env.mode_info` đó | `test_observation_contains_time_and_remaining_path`, `test_mode_info_levels` |
+| 8 | Không có action mask | `GymUavSemcom.action_masks()` | `test_action_masks_shape` |
+| 9 | Không có giới hạn vùng bay và pin | `area_radius` 3 km (cứng), `battery_j` (cứng; với nhiệm vụ này không bao giờ chạm, xem 4.6) | (chạy trong mọi test episode) |
+
+Ghi chú: bảng 3.2 (fixed avif_80 > greedy) chạy bằng `check_multipkt.py`, nên dính lỗi #2. Không dùng bảng đó để đánh giá cách chọn mode.
+
+### 4.2 System model
+
+- **Thực thể.**
+  - 1 BS ở gốc toạ độ, cao 25 m.
+  - K UAV bay ở độ cao cố định H. Mỗi UAV có một khu khảo sát riêng, cách BS 1–2,5 km: W = 6 waypoint kiểu lawn-mower, xuất phát cách hàng đầu tiên 1,5 khoảng waypoint.
+  - Các khu nằm cách nhau ít nhất khoảng 60° theo góc. Va chạm không được mô hình hoá.
+- **Dữ liệu.**
+  - Tới mỗi waypoint, UAV chụp L = 4 ảnh. Mỗi ảnh là một ảnh VisDrone-DET-val đã tiền xử lý như A1: thu cạnh ngắn về 512, cắt giữa 512×512.
+  - **Phạm vi:** ảnh được rút ngẫu nhiên từ tập test; nội dung ảnh **không** phụ thuộc vị trí UAV. Đây là mô phỏng tải giao ảnh, **không** phải bài toán active sensing.
+  - Ảnh 512² là bản thu nhỏ rồi cắt của một khung, không phải một tile ở độ phân giải gốc. Con số "4 ảnh / waypoint" là giả định.
+- **Trên UAV.** Một encoder nối tiếp, mã hoá từng ảnh một. Độ trễ encode đo ở A1:
+  - codec Pillow và learned codec: CPU i5-14400F;
+  - caption BLIP và các mode sinh: GPU RTX 3070, mạnh hơn nhiều so với máy trên UAV (giả định cần review).
+- **Link.**
+  - Uplink UAV → BS, M kênh trực giao, mỗi kênh B/M.
+  - Fading khối theo slot. SINR có nhiễu đồng kênh. Tốc độ Shannon (mã hoá lý tưởng, không có lỗi gói).
+  - Bộ điều khiển chỉ biết CSI thống kê (theo vị trí), không biết fading của slot.
+- **BS.** Giải mã. Độ trễ decode đo ở A1; decoder sinh chạy trên RTX 3070.
+
+### 4.3 Thời gian và thời điểm quyết định
+
+- Slot dt = 1 s, horizon T = 200 s. Episode kết thúc khi mọi sortie xong hoặc t = T.
+- **Theo slot** (áp dụng cho cả slot): hướng bay, kênh, mức công suất.
+- **Theo ảnh**:
+  - Mode được chọn **đúng một lần cho mỗi ảnh**, ở thời điểm quyết định đầu tiên sau khi chụp.
+  - Phần tử i của vector mode áp cho ảnh thứ i chưa có mode, theo thứ tự chụp.
+  - Mỗi lần quyết định có tối đa L ảnh đang chờ, vì khoảng waypoint 120 m > 2·(15 + 20) m. Điều này có `assert` trong code.
+- Vị trí dùng để tính kênh là vị trí đầu slot (UAV coi như đứng yên trong slot, như Si et al.). Bay và chụp được cập nhật cuối slot.
+
+### 4.4 MDP
+
+**Trạng thái đầy đủ s_t** (`UavSemcomEnv`, `UAV`, `Task`):
+- Thời gian t.
+- Mỗi UAV k:
+  - vị trí x_k và chỉ số waypoint tiếp theo (danh sách waypoint cố định trong episode);
+  - hàng đợi các ảnh (t_cap, Dmax, Qmin, ảnh, mode, thời điểm encode xong, số bit còn lại);
+  - thời điểm encoder rảnh E_k, năng lượng đã dùng, cờ sortie còn chạy.
+- Phần ngoại sinh: các ảnh sẽ chụp ở những waypoint sau, và các biến ngẫu nhiên fading.
+
+**Observation o_t** (`env.obs()`, 514 chiều; là thứ bộ điều khiển thật sự biết):
+- Toàn cục: t/T.
+- Mỗi UAV:
+  - còn chạy hay không; vị trí; vector tới waypoint kế;
+  - tỉ lệ waypoint còn lại; quãng đường khảo sát còn lại;
+  - SNR kỳ vọng tại vị trí; năng lượng đã dùng;
+  - độ dài hàng đợi; thời gian encoder còn bận.
+- Mỗi ảnh trong 6 ảnh đầu hàng đợi: slack tới deadline, Qmin, đã có mode chưa, số bit (chính xác nếu đã encode xong, nếu chưa thì lấy theo `mode_info`), thời gian còn lại tới khi encode xong.
+- Mỗi ảnh đang chờ quyết định mode (tối đa L): slack, Qmin, và **bit, PSNR của từng mode theo `mode_info`**.
+- Bộ điều khiển **không** thấy: ảnh tương lai, fading của slot, và bit/PSNR thật (trừ khi `mode_info = oracle`).
+
+Ba mức `mode_info` (`ModeTable.fit_info`, `predict`):
+- **oracle**: bảng đo của chính ảnh đó. Đây là giả định "biết trên mức triển khai được": UAV giữ ảnh gốc nên tính được, nhưng phải encode và decode đủ 14 mode; chi phí đó không được tính.
+- **predicted**: UAV encode thử bằng avif_5 (tốn khoảng 0,04 s, **có tính** vào thời gian encoder). Sau đó dự đoán log bit và PSNR của từng mode bằng hồi quy tuyến tính fit trên ảnh train. Trên ảnh test: R² của log bit khoảng 0,6–0,9 với AVIF, CompressAI và thumbnail; R² của PSNR khoảng 0,6–0,8; sai số tuyệt đối PSNR 0,5–1,7 dB (bảng trong `regime_v2.md`).
+- **mean**: trung bình theo mode trên ảnh train, không có thông tin riêng từng ảnh.
+
+**Action a_t** (`step`, `gym_env.decode_action`). Với mỗi UAV k:
+
+$$a_t^k = \big(m_k \in \{0..10\},\; c_k \in \{0..M\},\; \ell_k \in \{0,1,2\},\; (\mu_{k,1},\dots,\mu_{k,L}) \in \{0..13\}^L\big)$$
+
+- m: hover, 8 hướng ở v_max, hành động vĩ mô "tới waypoint kế", hành động vĩ mô "về BS".
+- c: kênh (0 = im lặng). ℓ: mức công suất p ∈ {0,02; 0,08; 0,2} W. μ: mode cho từng ảnh đang chờ.
+- MultiDiscrete gồm 21 thành phần. Mask loại bỏ: hành động khi UAV đã hết sortie; macro 9 khi đã khảo sát xong; kênh khi hàng đợi rỗng; các μ thừa.
+
+**Chuyển trạng thái** (`step`, các bước (1)–(7) theo đúng thứ tự trong code):
+1. Ảnh i chờ mode nhận μ_i.
+   - Encode bắt đầu ở e_i = max(t, E_k), xong ở r_i = e_i + τ_probe + τ_enc(μ_i); sau đó E_k ← r_i.
+   - Payload b_i = bits(ảnh, μ_i), lấy từ bảng đo.
+2. Gain của slot.
+   - LoS với xác suất P_LoS(θ) (Al-Hourani): β_L |h|², h ~ Rician(K).
+   - Ngược lại: β_N X, X ~ Exp(1). β gồm FSPL cộng excess loss η.
+3. Phát trong slot.
+   - Tập UAV đang phát TX = {k : c_k > 0, ảnh đầu hàng đợi encode xong trước t + dt}.
+   - $R_k = \frac{B}{M}\log_2\!\big(1 + \frac{p_k g_k}{N_0 B/M + \sum_{j\in TX, j\ne k, c_j=c_k} p_j g_j}\big)$. Nhiễu tính cho cả slot (giả định bảo thủ).
+   - Ảnh được phát theo FIFO, ảnh i bắt đầu ở max(lúc ảnh trước phát xong, r_i).
+   - Giao xong ở thời điểm end: delay D_i = end + τ_dec − t_cap.
+4. Hết hạn: nếu end + τ_dec > t_cap + Dmax thì ảnh bị bỏ ngay ở thời điểm đó.
+5. Bay.
+   - x ← x + Δ với |Δ| ≤ v_max·dt, rồi kẹp trong bán kính 3 km.
+   - Năng lượng: E += P_prop(|v|)·dt + p·airtime (P_prop theo Zeng 2019).
+   - Cách waypoint kế ≤ 15 + v_max·dt/2 m thì chụp L ảnh mới, t_cap = t + dt.
+6. Khảo sát xong và hàng đợi rỗng thì sortie kết thúc. Hết pin thì sortie bị huỷ, các ảnh còn lại tính thất bại.
+7. Trừ chi phí năng lượng và thời gian.
+
+**Reward:**
+
+$$r_t = \sum_{i \in \text{xong trong slot}} U_i \;-\; w_E\,E_{\text{slot}}[\text{kJ}] \;-\; w_T\,dt\cdot\#\{\text{UAV còn sortie}\}$$
+
+trong đó $U_i = \xi_q\,\mathrm{clip}\big(\frac{Q_i - Q_{\min}}{15}, -1, 1\big) + \xi_d \frac{\max(D_{\max} - D_i, 0)}{D_{\max}} - \mathbb{1}[\text{vi phạm}]$.
+- Ảnh bị bỏ, hoặc waypoint chưa chụp khi hết horizon: −1 mỗi ảnh.
+- Mục tiêu: max E[Σ_t r_t] (episode hữu hạn; PPO dùng γ = 0,99).
+
+### 4.5 Ràng buộc
+
+| loại | ràng buộc | thực thi |
+|---|---|---|
+| cứng | tốc độ ≤ v_max | step (5) |
+| cứng | trong bán kính 3 km quanh BS | step (5) |
+| cứng | công suất ∈ {0,02; 0,08; 0,2} W ≤ p_max | không gian action |
+| cứng | mỗi UAV ≤ 1 kênh; M kênh, tổng băng thông B | không gian action, công thức tốc độ |
+| cứng | encoder nối tiếp; bộ phát FIFO; bộ phát không chạy trước khi encode xong | step (1), (3) |
+| cứng | deadline: ảnh quá hạn bị bỏ, coi như thất bại | step (3), (4) |
+| cứng | pin: hết pin thì huỷ sortie | step (6) |
+| mềm (phạt) | PSNR ≥ Qmin: vi phạm bị −1 trong U_i (cách của Huang/Li) | `utility` |
+| mềm | năng lượng (w_E), thời gian nhiệm vụ (w_T) | step (7) |
+| không mô hình | tránh va chạm, vùng cấm bay, lỗi gói / truyền lại, ngưỡng SINR, ngân sách tính toán / nhiệt, tổng công suất nhiều UAV, chặng bay về | — |
+
+### 4.6 Nguồn tham số
+
+| tham số | giá trị | loại | nguồn / ghi chú |
+|---|---|---|---|
+| K UAV, M kênh | 3, 2 | giả định | Huang dùng N = 3 UAV |
+| B_total | 1 MHz | **giả định** | các paper dùng: Si 5 MHz, Huang 10 MHz, Li 20 MHz, Truong 100 MHz |
+| fc | 2,4 GHz | giả định | |
+| nhiễu | −174 dBm/Hz + NF 7 dB | chuẩn / giả định NF | |
+| p_max | 0,2 W | paper | Huang: UAV phát 0,2 W |
+| LoS đô thị (a, b, η_LoS, η_NLoS) | 9,61; 0,16; 1 dB; 20 dB | paper | Al-Hourani et al. 2014 |
+| Rician K | 10 dB | paper | Li |
+| H | 100 m | giả định | dưới giới hạn 120 m; Huang và Li dùng 45–70 m |
+| v_max, dt | 20 m/s, 1 s | paper | Li (Huang, Si: 10 m/s) |
+| công suất đẩy | Zeng 2019, hover 168,5 W | paper | |
+| pin | 1,97 MJ (2 × 274 Wh) | giả định | một pin UAV thương mại; nhiệm vụ chỉ dùng 20–30 kJ nên **không bao giờ chạm** |
+| khu khảo sát, waypoint | 1–2,5 km; 6 waypoint cách 120 m; 4 ảnh/waypoint | giả định | |
+| Dmax | U(4, 12) s | giả định | gần Huang U(2, 11); Li U(0,5, 2) |
+| Qmin | U(22, 30) dB | giả định | Huang U(10, 30); Li U(10, 25) |
+| ξ_q, ξ_d | 0,5; 0,5 | paper | Huang |
+| q_span, w_E, w_T | 15 dB; 0,02/kJ; 0 hoặc 0,3/s | giả định | trọng số thiết kế |
+| bit, PSNR, τ_enc, τ_dec theo ảnh × mode | đo | **đo** | A1: 100 ảnh VisDrone 512²; CPU i5-14400F (codec), RTX 3070 (BLIP, SD-Turbo) |
+
+### 4.7 Chế độ tải (offered load / service capacity)
+
+Đầy đủ ở `runs/uav_semcom/regime_v2.md`.
+
+Khi bay khảo sát hết tốc độ, mỗi UAV tạo L / (120 m / 20 m/s) = 0,67 ảnh/s; cả 3 UAV là 2 ảnh/s. Tốc độ mỗi kênh (công suất max, không nhiễu) có trung vị 2,25 Mb/s (p10 1,81).
+
+| | ρ_link của mode chất lượng cao nhất (mbt q8 / avif_80, ~0,42 Mbit) |
+|---|---|
+| env hiện tại (1 MHz) | 0,18–0,19, thời gian phát 0,19 s/ảnh |
+| băng thông của Si / Huang / Li (5 / 10 / 20 MHz) | 0,07 / 0,05 / 0,04 |
+| khung gốc VisDrone (đo trên 20 ảnh, đa số 960×540 và 1360×765; avif_80 ≈ 1,0 Mbit, 44 dB), 1 khung/waypoint | 0,11 |
+| tải encoder (mbt q8, CPU) | ρ_enc 0,16 |
+| số UAV trên 2 kênh để mbt q8 làm đầy link | K ≈ 16 |
+
+Các paper có trade-off về bit vì payload của họ lớn so với băng thông:
+- Huang và Li: ảnh gốc 3,5 MB với 10–20 MHz.
+- Truong: ảnh 2K **không nén** với 100 MHz; truyền không nén mất 2,4 s.
+
+**Kiểm tra heuristic trên v2** (`runs/uav_semcom/v2_sanity/sanity_v2.md`, 30 seed test, không học):
+- Với w_T = 0, các chính sách tốt đạt tỉ lệ đạt yêu cầu ≈ 1,00 và PSNR ≈ 41 dB:
+  - greedy theo ảnh +61,2;
+  - fixed mbt q8 +60,6;
+  - paced / staggered +62,8 / +63,6. Chờ chỉ làm giảm thành phần delay (1,7 → 1,2 s).
+- Với w_T = 0,3: greedy +25,4 là tốt nhất; chờ hay chia lượt gây hại (+16,6).
+- Mức thông tin oracle / predicted / mean chỉ đổi return dưới 0,5.
+
+**Đọc kết quả.** Với payload đã đo và tham số link có nguồn, việc giao ảnh tĩnh của 3 UAV **không bị giới hạn bởi băng thông**. Hệ quả:
+- Chọn mode rút về "lấy mode chất lượng cao nhất", gần như không cần biết thông tin riêng từng ảnh.
+- Bay, kênh và công suất còn rất ít thứ để tối ưu.
+
+Đây là tính chất của kịch bản (chế độ tải), không phải kết luận về RL hay về SemCom.
+
+### 4.8 Những điểm cần quyết khi review (trước khi train lại PPO)
+
+Đây là các lựa chọn kịch bản cho **cùng hệ thống**, không phải hướng mới:
+
+1. **Chế độ tải.** Giữ nguyên, hay chọn một kịch bản có tải cao vì lý do vật lý? Mỗi phương án đều phải đo hoặc có nguồn, không chỉnh để RL thắng:
+   - nhiều UAV dùng chung ít kênh hơn, tức K/M lớn;
+   - tần suất chụp theo yêu cầu chồng ảnh của photogrammetry, với khung gốc (phải đo đủ mode ở độ phân giải gốc);
+   - khoảng cách xa hơn (BVLOS).
+2. **Mức thông tin chính:** oracle (cận trên) hay predicted (triển khai được), hay báo cáo cả hai.
+3. **Qmin và deadline:** giữ phạt mềm như Huang/Li, hay chuyển sang CMDP với ràng buộc cứng.
+4. **Trọng số w_E, w_T:** cố định, hay quét để vẽ Pareto.
+5. **Độ trễ mode sinh** đo trên RTX 3070: giữ kèm ghi chú, đo lại trên thiết bị nhúng, hay loại khỏi tập mode trên UAV.
+6. **Thời điểm chọn mode:** ngay sau khi chụp (hiện tại), hay ngay trước khi encode (late binding).

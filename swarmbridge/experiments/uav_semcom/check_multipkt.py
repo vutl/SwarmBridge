@@ -1,4 +1,4 @@
-"""Check: does the one-image-per-UAV-per-slot cap drive the A3 story? MultiPkt env keeps serving the queue inside the
+"""[env v1 only - subclasses the v1 step(); run against commit 1c85cfda] Check: does the one-image-per-UAV-per-slot cap drive the A3 story? MultiPkt env keeps serving the queue inside the
 slot (next image is encoded right after the previous one is sent, same mode as the action's mode if it has none)."""
 import sys, math, json, numpy as np
 sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))

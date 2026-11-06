@@ -30,11 +30,7 @@ def rollout(core, act_fn, seed):
             log["qlen"].append(len(u.queue))
         prev = [u.wp_i for u in core.uavs]
         pos0 = [u.pos.copy() for u in core.uavs]
-        heads = [u.queue[0] if u.queue and u.queue[0].mode < 0 else None for u in core.uavs]
         _, _, done = core.step(acts)
-        for h in heads:
-            if h is not None and h.mode >= 0:
-                log["modes"][core.tab.modes[h.mode]] += 1
         for k, u in enumerate(core.uavs):
             log["speed"].append(float(np.linalg.norm(u.pos - pos0[k])))
             log["dist_bs"].append(float(np.linalg.norm(u.pos[:2] - np.array(core.c["bs"][:2]))))
@@ -44,6 +40,9 @@ def rollout(core, act_fn, seed):
                 log["cap_t"].append(core.t)
     m = core.metrics()
     fin = [tk for tk in core.finished if np.isfinite(tk.delay)]
+    for tk in core.tasks:
+        if tk.mode >= 0:
+            log["modes"][core.tab.modes[tk.mode]] += 1
     return dict(metrics=m, moves=dict(log["moves"]), ch=dict(log["ch"]), pw=dict(log["pw"]),
                 modes=dict(log["modes"]), mean_q=float(np.mean(log["qlen"])),
                 last_capture=float(max(log["cap_t"]) if log["cap_t"] else -1),
@@ -62,20 +61,19 @@ def main():
     ap.add_argument("--modes", required=True)
     ap.add_argument("--cfg", default="{}")
     ap.add_argument("--n", type=int, default=10)
-    ap.add_argument("--heur", default="greedy_img", help="greedy_img or paced_qN")
+    ap.add_argument("--heur", default="greedy", help="heuristic name, see policies.from_name")
     args = ap.parse_args()
     cfg = json.loads(args.cfg)
     table = E.ModeTable(args.profiles, args.modes.split(","), args.cpu_file)
     tr, te = table.split()
     model = PPO.load(args.model, device="cpu")
     g = G.GymUavSemcom(table, te, cfg, seed=0)
-    K, per = g.core.c["K"], g._per
 
     def ppo_act(core):
         a, _ = model.predict(core.obs(), deterministic=True)
-        return [tuple(int(x) for x in row) for row in np.asarray(a).reshape(K, per)]
+        return G.decode_action(core, a)
 
-    heur = P.greedy(True) if args.heur == "greedy_img" else P.paced(int(args.heur.split("_q")[1]))
+    heur = P.from_name(args.heur, args.modes.split(","))
     res = {"ppo": [], args.heur: []}
     for s in range(1000, 1000 + args.n):
         res["ppo"].append(rollout(E.UavSemcomEnv(table, te, cfg), ppo_act, s))

@@ -78,8 +78,8 @@ def main():
         print(f"STEP {done_steps} util {rec['util']:+.3f} ok {rec['ok']:.2f} {rec['sec']:.0f}s", flush=True)
     model.save(out / f"ppo_s{args.seed}")
     res = {"ppo": evaluate_rl(model, table, te, cfg, seeds)}
-    pols = [P.fixed(j) for j in range(len(modes))] + [P.greedy(True), P.greedy(False), P.greedy(True, True)] + \
-        [P.paced(q) for q in (0, 1, 2, 4)] + [P.paced(0, False)]
+    pols = [P.fixed(j) for j in range(len(modes))] + [P.greedy(), P.greedy(detour=True)] + \
+        [P.paced(q) for q in (0, 1, 2, 4)] + [P.staggered(None, "idx"), P.staggered(0, "far")]
     for p in pols:
         name = p.__name__ if not p.__name__.startswith("fixed") else "fixed_" + modes[int(p.__name__.split("_")[1])]
         res[name] = [P.run_episode(E.UavSemcomEnv(table, te, cfg), p, s) for s in seeds]

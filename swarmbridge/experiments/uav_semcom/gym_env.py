@@ -1,8 +1,17 @@
-"""Gymnasium wrapper: centralised MultiDiscrete action (per UAV: move 9, channel M+1, power levels, mode)."""
+"""Gymnasium wrapper (env v2): centralised MultiDiscrete action. Per UAV:
+[move (11), channel (M+1), power level (P), mode of pending image 1 (n_modes), ..., mode of pending image L].
+action_masks() gives the valid entries per sub-action (for maskable policy-gradient methods)."""
 import gymnasium as gym
 import numpy as np
 
 import env as E
+
+
+def decode_action(core, action):
+    """Flat MultiDiscrete vector -> list of per-UAV (move, channel, power, modes) tuples."""
+    c, L = core.c, core.L
+    a = np.asarray(action).reshape(c["K"], 3 + L)
+    return [(int(r[0]), int(r[1]), int(r[2]), tuple(int(x) for x in r[3:])) for r in a]
 
 
 class GymUavSemcom(gym.Env):
@@ -11,9 +20,8 @@ class GymUavSemcom(gym.Env):
     def __init__(self, table, pool, cfg=None, seed=0, seeds=None):
         self.core = E.UavSemcomEnv(table, pool, cfg, seed)
         c = self.core.c
-        per = [E.UavSemcomEnv.N_MOVE, c["M"] + 1, len(c["p_levels"]), self.core.n_modes]
-        self.action_space = gym.spaces.MultiDiscrete(per * c["K"])
-        self._per = len(per)
+        self.per = [E.UavSemcomEnv.N_MOVE, c["M"] + 1, len(c["p_levels"])] + [self.core.n_modes] * self.core.L
+        self.action_space = gym.spaces.MultiDiscrete(self.per * c["K"])
         obs = self.core.reset(seed)
         self.observation_space = gym.spaces.Box(-np.inf, np.inf, shape=obs.shape, dtype=np.float32)
         self._rng = np.random.default_rng(seed)
@@ -29,7 +37,25 @@ class GymUavSemcom(gym.Env):
         return self.core.reset(s), {}
 
     def step(self, action):
-        a = np.asarray(action).reshape(self.core.c["K"], self._per)
-        obs, r, done = self.core.step([tuple(int(x) for x in row) for row in a])
+        obs, r, done = self.core.step(decode_action(self.core, action))
         info = self.core.metrics() if done else {}
         return obs, float(r), done, False, info
+
+    def action_masks(self):
+        """Valid sub-actions: inactive UAV -> only (hover, silent, power 0, mode 0); survey done -> no macro 9;
+        mode entries beyond the number of images awaiting a decision -> only mode 0; empty queue -> silent."""
+        core, out = self.core, []
+        for u in core.uavs:
+            n_pend = sum(1 for tk in u.queue if tk.mode < 0)
+            for j, n in enumerate(self.per):
+                m = np.ones(n, dtype=bool)
+                if not u.active:
+                    m[1:] = False
+                elif j == 0 and u.wp_i >= len(u.wps):
+                    m[9] = False
+                elif j == 1 and not u.queue:
+                    m[1:] = False
+                elif j >= 3 and (j - 3) >= n_pend:
+                    m[1:] = False
+                out.append(m)
+        return np.concatenate(out)
