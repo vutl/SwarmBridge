@@ -57,9 +57,30 @@ def fixed(m):
     return pol
 
 
-def greedy(per_image=True, detour=False):
+def queue_util(env, u, m, rate):
+    """Predicted utility of the whole own queue if the head uses mode m and every later image then picks its own
+    greedy-best mode, served in order (encode-then-send, as in the env) at the expected rate. Accounts for the waiting
+    a slow / large head mode imposes on the images behind it, which the head-only greedy ignores."""
+    tab = env.tab
+    h = u.queue[0]
+    cur = max(env.t, h.t_cap) + tab.enc_s[m] + tab.bits[h.img, m] / rate
+    tot = env.utility(h, tab.psnr[h.img, m], cur + tab.dec_s[m] - h.t_cap)[0]
+    for tk in u.queue[1:]:
+        best, best_end = -9.0, None
+        for m2 in range(env.n_modes):
+            end = max(cur, tk.t_cap) + tab.enc_s[m2] + tab.bits[tk.img, m2] / rate
+            v = env.utility(tk, tab.psnr[tk.img, m2], end + tab.dec_s[m2] - tk.t_cap)[0]
+            if v > best:
+                best, best_end = v, end
+        tot += best
+        cur = best_end
+    return tot
+
+
+def greedy(per_image=True, detour=False, queue_aware=False):
     """Per head image, pick the mode with the best predicted utility at the current expected rate (rate shared by
-    the queue: divided by the number of UAVs competing for the M channels)."""
+    the queue: divided by the number of UAVs competing for the M channels). queue_aware: maximise the predicted
+    utility of the whole own queue instead of the head alone."""
     def pol(env):
         ch = assign_channels(env)
         n_busy = sum(1 for u in env.uavs if u.queue)
@@ -72,7 +93,9 @@ def greedy(per_image=True, detour=False):
             if u.queue:
                 h = u.queue[0]
                 r = expected_rate(env, k) * share
-                if per_image:
+                if queue_aware:
+                    us = [queue_util(env, u, m, r) for m in range(env.n_modes)]
+                elif per_image:
                     us = [predicted_util(env, k, h, m, rate=r) for m in range(env.n_modes)]
                 else:
                     us = [predicted_util(env, k, h, m, mb, mq, rate=r) for m in range(env.n_modes)]
@@ -81,15 +104,15 @@ def greedy(per_image=True, detour=False):
                     mv = 10   # macro: toward the BS
             acts.append((mv, ch[k], len(env.c["p_levels"]) - 1, md))
         return acts
-    pol.__name__ = f"greedy{'_img' if per_image else '_mean'}{'_detour' if detour else ''}"
+    pol.__name__ = f"greedy{'_qa' if queue_aware else ('_img' if per_image else '_mean')}{'_detour' if detour else ''}"
     return pol
 
 
-def paced(q_thr=0, per_image=True):
+def paced(q_thr=0, per_image=True, queue_aware=False):
     """Greedy mode + queue-aware pacing: hover at the current position (do not fly on to the next waypoint) while the
     own queue holds more than q_thr images, so captures never outrun the link. Uses the slack in the mission time
     exactly like a learned policy can; costs nothing in this environment unless a mission-time penalty is set."""
-    base = greedy(per_image)
+    base = greedy(per_image, queue_aware=queue_aware)
 
     def pol(env):
         acts = base(env)
@@ -105,7 +128,7 @@ def paced(q_thr=0, per_image=True):
                 mv = 0
             out.append((mv, ch, pl, md))
         return out
-    pol.__name__ = f"paced_q{q_thr}{'' if per_image else '_mean'}"
+    pol.__name__ = f"paced_q{q_thr}{'' if per_image else '_mean'}{'_qa' if queue_aware else ''}"
     return pol
 
 
@@ -118,3 +141,78 @@ def run_episode(env, pol, seed):
     m = env.metrics()
     m["return"] = tot
     return m
+
+
+def paced_time(tau, queue_aware=False):
+    """Rate-aware pacing: hover while the predicted time to drain the own queue (encode + send each queued image in
+    its greedy mode at the current expected, channel-shared rate) exceeds tau seconds. Unlike paced(q_thr), a UAV far
+    from the BS (slow link) waits more than a nearby one."""
+    base = greedy(True, queue_aware=queue_aware)
+
+    def pol(env):
+        acts = base(env)
+        n_busy = sum(1 for u in env.uavs if u.queue)
+        share = min(1.0, env.c["M"] / max(n_busy, 1))
+        out = []
+        for k, (mv, ch, pl, md) in enumerate(acts):
+            u = env.uavs[k]
+            if u.queue and u.wp_i < len(u.wps):
+                r = expected_rate(env, k) * share
+                tab = env.tab
+                backlog = 0.0
+                for i, tk in enumerate(u.queue):
+                    m = md if i == 0 and tk.mode < 0 else (tk.mode if tk.mode >= 0 else
+                                                          int(np.argmax([predicted_util(env, k, tk, j, rate=r)
+                                                                         for j in range(env.n_modes)])))
+                    if i == 0 and tk.mode >= 0:
+                        backlog += max(tk.ready - env.t, 0) + tk.rem_bits / r
+                    else:
+                        backlog += tab.enc_s[m] + tab.bits[tk.img, m] / r
+                time_left = env.c["T"] - env.t
+                wps_left = len(u.wps) - u.wp_i
+                need = sum(np.linalg.norm(u.wps[i] - (u.wps[i - 1] if i > u.wp_i else u.pos))
+                           for i in range(u.wp_i, len(u.wps))) / env.c["v_max"] + 2 * wps_left
+                if backlog > tau and time_left > need + 5:
+                    mv = 0
+            out.append((mv, ch, pl, md))
+        return out
+    pol.__name__ = f"pacedT{tau}{'_qa' if queue_aware else ''}"
+    return pol
+
+
+def staggered(q_thr=None, order="idx"):
+    """Channel-matched survey scheduling (the rule PPO was found to learn): at most M UAVs (one per channel) run their
+    survey at a time; the others hover at their start point and begin only when an active UAV has captured its last
+    waypoint AND emptied its queue. Active UAVs fly the mission at full speed (q_thr=None) or with queue pacing.
+    order: which UAVs start first - 'idx' (index), 'near' / 'far' (expected link gain at the start position)."""
+    base = greedy(True) if q_thr is None else paced(q_thr)
+
+    def pol(env):
+        acts = base(env)
+        K, M = len(env.uavs), env.c["M"]
+        if order == "idx":
+            rank = list(range(K))
+        else:
+            gains = [env.expected_gain(u.wps[0]) for u in env.uavs]
+            rank = sorted(range(K), key=lambda k: -gains[k] if order == "near" else gains[k])
+        started = [u.wp_i > 0 for u in env.uavs]
+        busy = [(u.wp_i > 0 and (u.wp_i < len(u.wps) or len(u.queue) > 0)) for u in env.uavs]
+        n_busy = sum(busy)
+        allowed = set(k for k in range(K) if started[k])
+        for k in rank:   # admit not-yet-started UAVs in rank order while fewer than M are busy
+            if not started[k] and n_busy < M:
+                allowed.add(k)
+                n_busy += 1
+        out = []
+        for k, (mv, ch, pl, md) in enumerate(acts):
+            u = env.uavs[k]
+            if k not in allowed:
+                time_left = env.c["T"] - env.t
+                need = sum(np.linalg.norm(u.wps[i] - (u.wps[i - 1] if i > 0 else u.pos))
+                           for i in range(len(u.wps))) / env.c["v_max"] + 2 * len(u.wps)
+                if time_left > need + 10:
+                    mv = 0
+            out.append((mv, ch, pl, md))
+        return out
+    pol.__name__ = f"stag_{order}" + ("" if q_thr is None else f"_q{q_thr}")
+    return pol

@@ -136,4 +136,73 @@ Heuristic `paced_q0` làm đúng việc đó: chọn mode greedy, nhưng đứng
 3. Thông tin riêng từng ảnh chỉ thêm khoảng +0,006.
 4. Lợi thế này tồn tại vì môi trường **không tính chi phí thời gian nhiệm vụ**: 200 s cho một nhiệm vụ khoảng 40 s. Si et al. tối thiểu hoá chính thời gian này.
 
-Đang chạy: chi phí thời gian nhiệm vụ w_time ∈ {0,1; 0,3} (reward −w_time mỗi giây mỗi UAV chưa xong nhiệm vụ), và thêm 2 seed PPO ở w_time = 0.
+
+### 3.1 Thêm seed, thêm chi phí thời gian, và baseline được tinh chỉnh (2026-11-06)
+
+Lần chạy mới:
+- 2 seed PPO nữa ở w_time = 0.
+- PPO với chi phí thời gian nhiệm vụ w_time = 0,1 và 0,3 (reward −w_time mỗi giây, mỗi UAV chưa chụp xong).
+- Mỗi lần 3 triệu bước, chỉ CPU.
+
+So sánh bằng **return của episode**, chính là đại lượng PPO tối đa hoá: tổng utility, trừ năng lượng, trừ thời gian.
+
+**Baseline công bằng.** Họ heuristic được tinh chỉnh trên **ảnh train và 30 seed train** (0..29, không trùng seed test 1000..1029). Chọn thành viên có return train cao nhất, rồi so với PPO trên 30 seed test. Họ heuristic gồm:
+- greedy theo ảnh, hoặc greedy *biết hàng đợi* (tối đa utility cả hàng đợi, không chỉ ảnh đầu);
+- điều nhịp theo ngưỡng hàng đợi q ∈ {0..5};
+- điều nhịp theo thời gian xả hàng đợi dự đoán τ ∈ {0,5..6} s, có tính tốc độ link;
+- **chia lượt theo số kênh** (`staggered`, thêm sau khi phân tích PPO, xem bên dưới).
+
+Code: `tune_heur.py`, `ablate_policy.py`, `policies.py`. Kết quả: `runs/uav_semcom/a3_*/tune.json`, `ablate.json`.
+
+**Bước 1. Chỉ dùng họ điều nhịp (chưa có `staggered`).** PPO vẫn hơn ở cả 3 cấu hình:
+
+| cấu hình | heuristic tốt nhất (chọn trên train) | PPO − heuristic, return [KTC 95%] | PPO − heuristic, utility |
+|---|---|---|---|
+| w_time 0, seed 1 | pacedT0.5 | +2,77 [+1,30, +4,24] | +0,039 |
+| w_time 0,1 | paced_q2_qa | +3,93 [+2,50, +5,36] | +0,042 |
+| w_time 0,3 | paced_q3_qa | +3,18 [+1,30, +5,07] | +0,060 |
+
+Greedy biết hàng đợi không giúp gì (chênh dưới 0,01).
+
+**Bước 2. Tách thành phần (ablation).** Mỗi phần hành động {di chuyển, kênh + công suất, mode} lấy từ PPO (P) hoặc từ heuristic (H). Đo trên 30 seed test:
+
+| di chuyển / kênh+công suất / mode | w_time 0,3 (H = paced_q3) | w_time 0, seed 1 (H = paced_q0) |
+|---|---|---|
+| PPP (PPO) | +2,23 | +45,05 |
+| **PHH** | **+2,74** | **+46,04** |
+| HPP | −0,33 | +41,46 |
+| HHH (heuristic) | −0,26 | +42,90 |
+
+Toàn bộ lợi thế nằm ở **di chuyển**. Mode và kênh của PPO còn kém greedy một chút: PHH tốt hơn PPP.
+
+**Bước 3. PPO di chuyển thế nào.** Thời điểm chụp waypoint (giây) của 3 UAV, seed 1000, PPO seed 1:
+- PPO: UAV 1 và 2 chụp ở `[10, 15, 21, 26, 31, 37]`, bay hết tốc độ; UAV 0 **chờ ở điểm xuất phát** rồi chụp ở `[42, 52, 58, 64, 69, 75]`.
+- paced_q0: cả 3 UAV cùng chụp ở khoảng `[10, 20, 31, 40, 50, 60]`.
+
+Hệ quả:
+- P(có hơn M = 2 UAV cùng có hàng đợi): PPO 0,1–1,8%, heuristic 5–8%.
+- P(một UAV khác chụp trong vòng 3 s): PPO 0,68–0,72, heuristic 0,93–0,98.
+
+PPO học được luật: **chỉ M UAV khảo sát cùng lúc, mỗi UAV gần như có một kênh riêng; UAV thứ K chờ tới lượt.** Đây là luật phối hợp truy cập kênh nhiều UAV (K = 3 > M = 2). Nó không phải lựa chọn semantic.
+
+**Bước 4. Viết luật đó thành heuristic (`staggered`).**
+- Tối đa M UAV "đang bận", tức đã bắt đầu và chưa (chụp xong và xả xong hàng đợi).
+- UAV chưa tới lượt đứng chờ, nhưng chỉ khi vẫn còn đủ thời gian cho cả nhiệm vụ.
+- Thứ tự vào lượt: idx / near / far. Có thể kèm điều nhịp q.
+
+Tinh chỉnh trên train như trên:
+
+| cấu hình | heuristic chọn trên train | return heuristic | return PPO | PPO − heuristic [KTC 95%] |
+|---|---|---|---|---|
+| w_time 0, seed 1 | stag_far_q0 | +46,75 | +45,05 | −1,71 [−2,94, −0,47] |
+| w_time 0, seed 2 | stag_far_q0 | +46,75 | +44,80 | −1,96 [−3,31, −0,61] |
+| w_time 0,1 | stag_idx | +31,20 | +29,94 | −1,25 [−2,47, −0,04] |
+| w_time 0,3 | stag_idx | +1,34 | +2,23 | +0,89 [−0,30, +2,08] (không có ý nghĩa) |
+
+**Kết luận A3 trên phiên bản môi trường này:**
+1. Heuristic chia lượt (khoảng 30 dòng, tinh chỉnh 1 tham số rời rạc trên train) **bằng hoặc hơn** PPO ở cả 4 lần chạy. Lợi thế của PPO đã được giải thích hết.
+2. PPO có ích như một **công cụ khám phá**: nó tìm ra luật chia lượt, mà luật này không có trong họ heuristic ban đầu. Nhưng ở đây nó không phải lời giải tốt nhất.
+3. Phần semantic (chọn mode) **không** là nơi tạo khác biệt:
+   - greedy theo ảnh đã đủ;
+   - mode sinh (caption + diffusion) không bao giờ được chọn, vì với utility tính theo PSNR chúng bị AVIF / learned codec áp đảo ở mọi bitrate (bảng A1).
+4. Hệ quả cho hướng A: muốn mode semantic có vai trò thì thước đo chất lượng phải là **nhiệm vụ của người nhận**, không phải PSNR. Ví dụ: phát hiện hoặc đếm đối tượng trên ảnh nhận được (VisDrone có nhãn box). Lúc đó mới biết mode sinh có lúc nào đáng chọn hay không. Ngoài ra, phối hợp truy cập nhiều UAV (K > M) là cơ chế thật của môi trường này và đáng giữ.
