@@ -1,0 +1,26 @@
+{
+  "images": 216,
+  "filename_groups": 30,
+  "model_cpu_inference_calls": 864,
+  "warmup_calls": 12,
+  "model_training_steps": 0,
+  "GPU_inference_calls": 0,
+  "holdout_scored": false,
+  "tests_passed": 10,
+  "source_hashes": {
+    "measurements.json": "1d4112dd064bb806fbecaf65426b82a4bc45811be89cffeb5c383cd39bfc30c1",
+    "quality.json": "f88e4f8ade86575199de1989999ffb38d90e5697f3fd2f3fc7081b9d31980f89",
+    "config.json": "74fdd907eb63a3e3eb3fa83b3aff7900cab9f288aa35473ef0f67faf9a8d497f",
+    "analysis_registration.json": "641248648ee356ad7b4c6e737c6e87ab74467e81101e7a9bba6db9d4b740d048",
+    "paired_inputs.json": "461d5695a2ad8cfe224dc374f7ecd48a241e4110ab9283041d3624c26bd70a8e",
+    "timing_samples.json": "0476ce8dfba7c3107505b1bbb01ad1cd144b485e412a0f391d2b58a5079d17ef",
+    "paired_cpu.py": "4ad3980d019593e7d9826ca4de1fff398f21ea8a0da9957a7c3dfbb3bf95ab85",
+    "analyze_paired.py": "a5f0d38df5a547367e79d9becb2fdb97fa7e8d93922efbce0acb2c606b9516aa"
+  },
+  "derived_output_hashes": {
+    "summary.json": "95be2501cd17ee17fbe16e8e8ac0250030353f4ec654b3b85c3dbb313664bed5",
+    "timing_frontier.json": "6b11ebe121301b54d5981366238bf760a843e40cbda3f04f931d643c5dc83438",
+    "group_frontier.json": "2bb488d65be9f205727eb9b7436b952277ed8a463603db96c01a445e3dc20075",
+    "energy_frontier.json": "5ff45d5af645e639de73e52465b9598b97b5f527ff3ca998f436e937c617829c"
+  }
+}

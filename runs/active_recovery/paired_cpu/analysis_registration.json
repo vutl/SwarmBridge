@@ -1,0 +1,30 @@
+{
+  "recorded_at_utc": "2026-11-06T03:12:28.178807+00:00",
+  "measurement_in_progress": true,
+  "prior_dev_quality_already_seen": true,
+  "blind_preregistration": false,
+  "primary_modes": [
+    "nano_boxes",
+    "large_boxes",
+    "large_jpeg70"
+  ],
+  "diagnostic_mode": "large_original",
+  "frontier_objectives": [
+    "maximize mean delivered F1",
+    "minimize p50 stage-summed completion latency"
+  ],
+  "stable_tradeoff_rule": "JPEG nondominated for at least 2/3 filename groups, two adjacent tested goodputs at an original 2/5/10s deadline, native measured timings, no artificial compute cap",
+  "original_deadlines_s": [
+    2,
+    5,
+    10
+  ],
+  "exploratory_deadlines_s": [
+    0.1,
+    0.25,
+    0.5,
+    1
+  ],
+  "hypothesis_testing": "Descriptive development assessment; pointwise group-bootstrap intervals are not grid-wide confirmatory p-values.",
+  "analysis_source_sha256": "b487a3bada235b1c7f43dc0e9a13da045bbebf5dce26521866b3cc2eee039868"
+}

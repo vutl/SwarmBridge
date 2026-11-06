@@ -1,0 +1,632 @@
+{
+  "images": 216,
+  "groups": 30,
+  "repeats": 2,
+  "stage_summary": {
+    "nano_boxes": {
+      "mean_F1": 0.462464951824881,
+      "mean_bits": 11962.666666666666,
+      "onboard_compute_ms_p50_p95": [
+        97.13847399993547,
+        112.14310162501516
+      ],
+      "receiver_compute_ms_p50_p95": [
+        0.04695149999633941,
+        0.1362394999775418
+      ],
+      "detector_only_ms_p50_p95": [
+        78.04715799998618,
+        90.5412278749873
+      ]
+    },
+    "large_boxes": {
+      "mean_F1": 0.5607714964924305,
+      "mean_bits": 4955.259259259259,
+      "onboard_compute_ms_p50_p95": [
+        1123.0251865,
+        1190.7060303750159
+      ],
+      "receiver_compute_ms_p50_p95": [
+        0.025451250003527548,
+        0.04870487501662524
+      ],
+      "detector_only_ms_p50_p95": [
+        1106.759548499987,
+        1168.0263900000123
+      ]
+    },
+    "large_jpeg70": {
+      "mean_F1": 0.535689936233005,
+      "mean_bits": 1006918.074074074,
+      "onboard_compute_ms_p50_p95": [
+        18.876295000000543,
+        25.36204987500068
+      ],
+      "receiver_compute_ms_p50_p95": [
+        45.41844350000179,
+        46.960136374997184
+      ]
+    },
+    "large_original": {
+      "mean_F1": 0.5607819509646317,
+      "mean_bits": 1275877.6296296297,
+      "onboard_compute_ms_p50_p95": [
+        0.0,
+        0.0
+      ],
+      "receiver_compute_ms_p50_p95": [
+        59.633722999997914,
+        70.91399112499607
+      ]
+    }
+  },
+  "repeat_drift": {
+    "nano_boxes": {
+      "median_absolute_relative_difference": 0.12942884279473488,
+      "p95_absolute_relative_difference": 0.31747589924040703
+    },
+    "large_boxes": {
+      "median_absolute_relative_difference": 0.04623323977677388,
+      "p95_absolute_relative_difference": 0.13605649425390734
+    }
+  },
+  "cpu_quality_repeat_drift": {
+    "nano_boxes": {
+      "max_abs_F1_change": 0.0,
+      "mean_F1_change": 0.0
+    },
+    "large_boxes": {
+      "max_abs_F1_change": 0.0,
+      "mean_F1_change": 0.0
+    }
+  },
+  "reference_3Mbps_2s": {
+    "nano_boxes": {
+      "mean_F1": 0.462464951824881,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 0.12131034800001793,
+      "latency_p95_s": 0.14058232158334483,
+      "mean_normalized_energy_radio_s": 0.10117473169444308,
+      "mean_compute_s": 0.09678842058333197
+    },
+    "large_boxes": {
+      "mean_F1": 0.5607714964924305,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 1.1450403175000088,
+      "latency_p95_s": 1.2120415283750101,
+      "mean_normalized_energy_radio_s": 1.1266996154945976,
+      "mean_compute_s": 1.124882687099536
+    },
+    "large_jpeg70": {
+      "mean_F1": 0.535689936233005,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 0.4569116078333291,
+      "latency_p95_s": 0.6532722491666605,
+      "mean_normalized_energy_radio_s": 0.38562855140586433,
+      "mean_compute_s": 0.016425257578703802
+    },
+    "large_original": {
+      "mean_F1": 0.5607819509646317,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 0.5343857545833364,
+      "latency_p95_s": 0.8507109768333334,
+      "mean_normalized_energy_radio_s": 0.46782179753086417,
+      "mean_compute_s": 0.0
+    }
+  },
+  "paired_cluster_intervals": {
+    "nano_boxes": {
+      "Q70_minus_mode_F1": {
+        "mean": 0.07322498440812389,
+        "pointwise_cluster_bootstrap95": [
+          0.034211442268363076,
+          0.111729542979681
+        ],
+        "groups": 30
+      },
+      "Q70_minus_mode_latency_s": {
+        "mean": 0.3297352911859574,
+        "pointwise_cluster_bootstrap95": [
+          0.2734244180625351,
+          0.3763548498578232
+        ],
+        "groups": 30
+      }
+    },
+    "large_boxes": {
+      "Q70_minus_mode_F1": {
+        "mean": -0.02508156025942551,
+        "pointwise_cluster_bootstrap95": [
+          -0.03225851106951513,
+          -0.016931655596429857
+        ],
+        "groups": 30
+      },
+      "Q70_minus_mode_latency_s": {
+        "mean": -0.6957601691882702,
+        "pointwise_cluster_bootstrap95": [
+          -0.7518766253486374,
+          -0.6521612442753812
+        ],
+        "groups": 30
+      }
+    }
+  },
+  "original_grid_stable_tradeoff": true,
+  "repeat_stability": [
+    {
+      "repeat": 0,
+      "stable": true,
+      "cells": [
+        {
+          "rate_mbps": 1.5,
+          "deadline_s": 2,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 1.5,
+          "deadline_s": 5,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 1.5,
+          "deadline_s": 10,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 3,
+          "deadline_s": 2,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 3,
+          "deadline_s": 5,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 3,
+          "deadline_s": 10,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 10,
+          "deadline_s": 2,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 10,
+          "deadline_s": 5,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 10,
+          "deadline_s": 10,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 30,
+          "deadline_s": 2,
+          "group_fraction": 0.9
+        },
+        {
+          "rate_mbps": 30,
+          "deadline_s": 5,
+          "group_fraction": 0.9
+        },
+        {
+          "rate_mbps": 30,
+          "deadline_s": 10,
+          "group_fraction": 0.9
+        },
+        {
+          "rate_mbps": 100,
+          "deadline_s": 2,
+          "group_fraction": 1.0
+        },
+        {
+          "rate_mbps": 100,
+          "deadline_s": 5,
+          "group_fraction": 1.0
+        },
+        {
+          "rate_mbps": 100,
+          "deadline_s": 10,
+          "group_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "repeat": 1,
+      "stable": true,
+      "cells": [
+        {
+          "rate_mbps": 1.5,
+          "deadline_s": 2,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 1.5,
+          "deadline_s": 5,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 1.5,
+          "deadline_s": 10,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 3,
+          "deadline_s": 2,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 3,
+          "deadline_s": 5,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 3,
+          "deadline_s": 10,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 10,
+          "deadline_s": 2,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 10,
+          "deadline_s": 5,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 10,
+          "deadline_s": 10,
+          "group_fraction": 0.6666666666666666
+        },
+        {
+          "rate_mbps": 30,
+          "deadline_s": 2,
+          "group_fraction": 0.8666666666666667
+        },
+        {
+          "rate_mbps": 30,
+          "deadline_s": 5,
+          "group_fraction": 0.8666666666666667
+        },
+        {
+          "rate_mbps": 30,
+          "deadline_s": 10,
+          "group_fraction": 0.8666666666666667
+        },
+        {
+          "rate_mbps": 100,
+          "deadline_s": 2,
+          "group_fraction": 1.0
+        },
+        {
+          "rate_mbps": 100,
+          "deadline_s": 5,
+          "group_fraction": 1.0
+        },
+        {
+          "rate_mbps": 100,
+          "deadline_s": 10,
+          "group_fraction": 1.0
+        }
+      ]
+    }
+  ],
+  "extended_frontier_with_original_file": [
+    {
+      "rate_mbps": 0.1,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": true,
+        "large_boxes": true,
+        "large_jpeg70": false,
+        "large_original": false
+      }
+    },
+    {
+      "rate_mbps": 0.3,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": true,
+        "large_boxes": true,
+        "large_jpeg70": false,
+        "large_original": false
+      }
+    },
+    {
+      "rate_mbps": 0.5,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": true,
+        "large_boxes": true,
+        "large_jpeg70": false,
+        "large_original": false
+      }
+    },
+    {
+      "rate_mbps": 1,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": true,
+        "large_boxes": true,
+        "large_jpeg70": false,
+        "large_original": false
+      }
+    },
+    {
+      "rate_mbps": 1.5,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": true,
+        "large_boxes": true,
+        "large_jpeg70": true,
+        "large_original": false
+      }
+    },
+    {
+      "rate_mbps": 3,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": true,
+        "large_boxes": false,
+        "large_jpeg70": true,
+        "large_original": true
+      }
+    },
+    {
+      "rate_mbps": 10,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": true,
+        "large_boxes": false,
+        "large_jpeg70": true,
+        "large_original": true
+      }
+    },
+    {
+      "rate_mbps": 30,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": true,
+        "large_boxes": false,
+        "large_jpeg70": true,
+        "large_original": true
+      }
+    },
+    {
+      "rate_mbps": 100,
+      "deadline_s": 2,
+      "nondominated": {
+        "nano_boxes": false,
+        "large_boxes": false,
+        "large_jpeg70": false,
+        "large_original": true
+      }
+    }
+  ],
+  "F1_pruned_box_optimistic_control": {
+    "note": "Prune decoded confidence <0.25, same F1 by definition; zero serialization cost favors box controls, not an additional timing measurement",
+    "stable_cells": [
+      {
+        "rate_mbps": 1.5,
+        "deadline_s": 2,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 1.5,
+        "deadline_s": 5,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 1.5,
+        "deadline_s": 10,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 3,
+        "deadline_s": 2,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 3,
+        "deadline_s": 5,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 3,
+        "deadline_s": 10,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 10,
+        "deadline_s": 2,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 10,
+        "deadline_s": 5,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 10,
+        "deadline_s": 10,
+        "group_fraction": 0.6666666666666666
+      },
+      {
+        "rate_mbps": 30,
+        "deadline_s": 2,
+        "group_fraction": 0.9
+      },
+      {
+        "rate_mbps": 30,
+        "deadline_s": 5,
+        "group_fraction": 0.9
+      },
+      {
+        "rate_mbps": 30,
+        "deadline_s": 10,
+        "group_fraction": 0.9
+      },
+      {
+        "rate_mbps": 100,
+        "deadline_s": 2,
+        "group_fraction": 1.0
+      },
+      {
+        "rate_mbps": 100,
+        "deadline_s": 5,
+        "group_fraction": 1.0
+      },
+      {
+        "rate_mbps": 100,
+        "deadline_s": 10,
+        "group_fraction": 1.0
+      }
+    ]
+  },
+  "original_grid_stable_cells": [
+    {
+      "rate_mbps": 1.5,
+      "deadline_s": 2,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 1.5,
+      "deadline_s": 5,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 1.5,
+      "deadline_s": 10,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 3,
+      "deadline_s": 2,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 3,
+      "deadline_s": 5,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 3,
+      "deadline_s": 10,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 10,
+      "deadline_s": 2,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 10,
+      "deadline_s": 5,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 10,
+      "deadline_s": 10,
+      "group_fraction_JPEG_nondominated": 0.6666666666666666
+    },
+    {
+      "rate_mbps": 30,
+      "deadline_s": 2,
+      "group_fraction_JPEG_nondominated": 0.9333333333333333
+    },
+    {
+      "rate_mbps": 30,
+      "deadline_s": 5,
+      "group_fraction_JPEG_nondominated": 0.9333333333333333
+    },
+    {
+      "rate_mbps": 30,
+      "deadline_s": 10,
+      "group_fraction_JPEG_nondominated": 0.9333333333333333
+    },
+    {
+      "rate_mbps": 100,
+      "deadline_s": 2,
+      "group_fraction_JPEG_nondominated": 1.0
+    },
+    {
+      "rate_mbps": 100,
+      "deadline_s": 5,
+      "group_fraction_JPEG_nondominated": 1.0
+    },
+    {
+      "rate_mbps": 100,
+      "deadline_s": 10,
+      "group_fraction_JPEG_nondominated": 1.0
+    }
+  ],
+  "exploratory_task_gain_cells": [
+    {
+      "rate_mbps": 3,
+      "deadline_s": 1
+    },
+    {
+      "rate_mbps": 10,
+      "deadline_s": 0.5
+    },
+    {
+      "rate_mbps": 10,
+      "deadline_s": 1
+    },
+    {
+      "rate_mbps": 30,
+      "deadline_s": 0.25
+    },
+    {
+      "rate_mbps": 30,
+      "deadline_s": 0.5
+    },
+    {
+      "rate_mbps": 30,
+      "deadline_s": 1
+    },
+    {
+      "rate_mbps": 100,
+      "deadline_s": 0.1
+    },
+    {
+      "rate_mbps": 100,
+      "deadline_s": 0.25
+    },
+    {
+      "rate_mbps": 100,
+      "deadline_s": 0.5
+    },
+    {
+      "rate_mbps": 100,
+      "deadline_s": 1
+    }
+  ],
+  "limits": [
+    "216 dev images and two CPU repeats; this is not an onboard device/power measurement.",
+    "CPU results are rescored; receiver GPU predictions/timing are reused and immutable. No new GPU inference.",
+    "Latency is a sum of separately measured stages plus assumed constant goodput/overhead, not a network end-to-end measurement.",
+    "Image source is already stored JPEG; camera encoding, sensing and disk I/O are outside the starting point.",
+    "CPU four threads on workstation; no claimed embedded equivalence or guaranteed thermal/power behavior.",
+    "Filename groups are sequence proxies, not verified independent flights.",
+    "Frontier uses mean F1 and p50 latency; group-wise results, p95 and deadline delivery are reported separately.",
+    "Cluster CIs are pointwise descriptive on reused dev, not grid-wide significance tests or a blind test.",
+    "Shorter deadlines and imposed compute budgets remain exploratory. Primary stability uses native timings and original 2/5/10s deadlines.",
+    "Power ratios unchanged from sensitivity; no measured joules and no claim of semantic recovery or RL benefit."
+  ],
+  "verdict": "Stable conditional tradeoff on workstation reference",
+  "gate_A_deployment_status": "inconclusive_without_onboard_compute_power_and_radio_target",
+  "new_GPU_inference": 0,
+  "training_steps": 0,
+  "source_hashes": {
+    "measurements.json": "1d4112dd064bb806fbecaf65426b82a4bc45811be89cffeb5c383cd39bfc30c1",
+    "quality.json": "f88e4f8ade86575199de1989999ffb38d90e5697f3fd2f3fc7081b9d31980f89",
+    "summary.json": "5c14104f6e4c88cc0f0308897a2033ac2020fb9393bf83af3adc3c0fb9027552"
+  }
+}

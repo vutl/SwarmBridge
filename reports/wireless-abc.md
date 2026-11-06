@@ -770,3 +770,60 @@ bản đồ ở [offloading/summary.md](../runs/active_recovery/offloading/summa
 chưa chứng minh correction có ích, chưa mô phỏng mobility và chưa có lý do mở RL. Proxy timings còn thiếu resize,
 serialization box, queue và các phí vô tuyến đo thật; overhead chỉ là tham số sensitivity. Ngân sách tính toán/năng
 lượng UAV độc lập và điều kiện kênh vẫn là phần cần xác định trước khi chấp nhận Gate A cho hệ thống cụ thể.
+
+## Gate A — paired CPU đầy đủ trên 216 ảnh, 30 nhóm (06/11/2026)
+
+**Đã chạy phép đo mới, không còn gán timing của tám ảnh cho cả tập.** Hai detector đóng băng chạy CPU trên từng ảnh
+dev, hai lượt theo thứ tự đảo ngược: **864 inference CPU, thêm 12 lượt warm-up**, khoảng **10,0 phút CPU**; không train,
+không GPU inference mới, không mở 168 ảnh holdout. Cùng split, checkpoint, resolution và evaluator của Gate A.
+Artifact chính: [paired_cpu/summary.md](../runs/active_recovery/paired_cpu/summary.md),
+[timing từng ảnh](../runs/active_recovery/paired_cpu/timing_samples.json),
+[frontier](../runs/active_recovery/paired_cpu/paired_frontier.png).
+
+### Phép đo và điểm xuất phát
+
+- Điểm xuất phát là JPEG gốc đã lưu ở UAV. I/O đĩa, chụp ảnh và JPEG camera ban đầu không nằm trong thời gian dịch vụ.
+- Đã đo riêng source decode, resize, chuyển BGR, CPU inference, box serialize/deserialize, JPEG encode/decode.
+  Receiver GPU của phương án offload dùng lại timing và prediction đã đo trên **cùng từng ảnh**; không chạy thêm GPU.
+- CPU local predictions được chấm lại; F1 giữa hai lượt không thay đổi. Timing detector giữa hai lượt chênh tương đối
+  tuyệt đối trung vị **12,9% nano / 4,6% large**, p95 **31,7% / 13,6%**. Không coi các timing là hằng số phần cứng UAV.
+- Timing dưới đây là tổng các công đoạn đã đo cộng service link giả định: goodput **3 Mbps**, overhead byte **10%**,
+  fixed latency **20 ms**, deadline **2 s**. Không phải đo end-to-end trên mạng hoặc phần cứng UAV thực.
+
+| Phương án, toàn bộ 216 ảnh dev | Mean F1 | Tổng latency p50 / p95 (s) | Giao đúng hạn |
+|---|---:|---:|---:|
+| Nano local → box | 0.4625 | 0.121 / 0.141 | 100% |
+| Large local → box | 0.5608 | 1.145 / 1.212 | 100% |
+| JPEG Q70 → large tại trạm | 0.5357 | 0.457 / 0.653 | 100% |
+| JPEG gốc → large tại trạm (đối chứng thêm) | 0.5608 | 0.534 / 0.851 | 100% |
+
+Q70 so với large local: nhanh hơn **0.688 s theo chênh hai trung vị**, đổi lại **−0.0251 mean F1**. So với nano,
+Q70 thêm **+0.0732 F1** nhưng chậm hơn. Đây là đánh đổi, không phải chiến thắng tuyệt đối hoặc cơ chế SemCom mới.
+
+### Độ rộng và độ ổn định theo nhóm
+
+Tiêu chí mô tả được ghi lại trong lúc measurement đang chạy: Q70 không bị hai box baseline đồng thời vượt về mean
+F1 giao đúng hạn và latency trung vị ở ít nhất 2/3 nhóm, tại hai goodput lân cận và một deadline gốc, **không áp
+compute cap nhân tạo hoặc làm CPU chậm đi**. Đây là development assessment, không phải blind preregistration.
+
+- Với 1.5/3/10 Mbps và deadline 2/5/10 s, Q70 không bị thống trị ở **20/30 nhóm** so với hai box baseline. 30 Mbps:
+  **28/30 nhóm**. Kiểm tra từng lượt CPU độc lập đều tìm được miền đáp ứng tiêu chí, không chỉ median của hai lượt.
+- Đối chứng box mạnh hơn cho metric F1: bỏ toàn bộ score dưới 0.25 và giả sử serialize/deserialize miễn phí. Q70 vẫn
+  giữ miền **20/30 nhóm tại 1.5/3/10 Mbps**. Đây là bound ưu ái box, không phải phép đo mới; không tuyên bố AP giữ nguyên.
+- Bootstrap theo 30 nhóm tại điểm cố định 3 Mbps/2 s: Q70−nano về mean F1 **+0.0732**, CI95% **[+0.0342,+0.1117]**;
+  Q70−large **−0.0251**, CI95% **[−0.0323,−0.0169]**. Chênh **mean** latency Q70−large **−0.6958 s**, CI95%
+  **[−0.7519,−0.6522]**. Các CI là pointwise/descriptive trên dev, không phải kiểm định toàn bộ grid hoặc chênh median.
+- Giữ JPEG gốc làm đối chứng thứ tư. Trên bảng gộp tại 100 Mbps, JPEG gốc thống trị các phương án còn lại trong
+  mô hình F1/latency này. Không dùng kết quả ba mode để tuyên bố Q70 tốt hơn mọi codec đơn giản.
+- Các cell deadline dưới 2 s và compute cap vẫn là thăm dò; chưa dùng làm bằng chứng độc lập cho yêu cầu tác vụ mới.
+- Power ratios, energy budgets và platform horizon giữ nguyên bản sensitivity trước; **chưa có watt/joule đo thật**.
+
+**Chốt bước paired:** đã thấy một miền trade-off đủ rộng qua nhiều nhóm và lặp lại được trên CPU workstation tham chiếu.
+Giữ offloading làm ứng viên có điều kiện, không đổi dataset hoặc train thêm detector. Chưa xác nhận triển khai trên UAV,
+chưa xác lập novelty và **chưa mở patch/correction, mobility hoặc RL trong lượt này**. Phép thử correction tiếp theo,
+nếu được thực hiện, phải vượt truyền lại, progressive JPEG và ảnh gốc ở cùng bit, feedback và chi phí xử lý.
+
+Nhóm filename chỉ là proxy sequence, chưa bảo đảm độc lập theo flight; receiver GPU timing là số đo cũ; queue và kênh
+thay đổi chưa được mô phỏng. Những giới hạn này không biến mất khi tăng số ảnh CPU.
+Tái lập measurement: `bash scripts/active_recovery/run_paired_cpu.sh`; phân tích:
+`python swarmbridge/experiments/active_recovery/analyze_paired.py REPO`. Các công đoạn có resume, model cũ giữ nguyên.

@@ -1,3 +1,5 @@
+> Updated evidence: [paired CPU on all 216 dev images / 30 groups](../paired_cpu/summary.md). The tables below preserve the earlier eight-sample sensitivity analysis.
+
 # Offloading: conditional feasibility from existing results
 
 No new inference, GPU, training, data or channel trace. Gate A is **inconclusive for deployment**, not proof that offloading is useless.

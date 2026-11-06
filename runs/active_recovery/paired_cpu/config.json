@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-06",
+  "split_sha256": "7beffc6f629e417f5e10bdd677313235cded5f46f927c58d20369bd431bd22db",
+  "weights": {
+    "yolov8n.pt": "f59b3d833e2ff32e194b5bb8e08d211dc7c5bdf144b90d2c8412c47ccfc83b36",
+    "yolov8l.pt": "64c9115303f6a25575f82200d1b22ec409fa6bd7d08d0313884fc20d919478cd"
+  },
+  "repeats": 2,
+  "threads": 4,
+  "interop_threads": 1,
+  "options": {
+    "imgsz": 1280,
+    "conf": 0.01,
+    "iou": 0.7,
+    "max_det": 500,
+    "classes": [
+      2,
+      5,
+      7
+    ],
+    "batch": 1,
+    "device": "cpu",
+    "quantize": null,
+    "verbose": false
+  },
+  "seed": 20261106,
+  "sample_count": 216,
+  "group_count": 30,
+  "starting_point": "original source JPEG already stored at UAV",
+  "exclude": "disk I/O, model loading, warmups, sensing/camera JPEG encoding, radio and power",
+  "old_GPU_predictions_preserved": true,
+  "holdout_scored": false,
+  "environment": {
+    "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "torch": "2.12.1+cu130",
+    "cpu": "model name\t: Intel(R) Core(TM) i5-14400F"
+  }
+}

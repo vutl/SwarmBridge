@@ -88,3 +88,8 @@ Thumbs.db
 /runs/active_recovery/gate_a/large_jpeg*.json
 /runs/active_recovery/offloading/timing_sweep.csv
 /runs/active_recovery/offloading/energy_sweep.json
+/runs/active_recovery/paired_cpu/raw/
+/runs/active_recovery/paired_cpu/measurements.json
+/runs/active_recovery/paired_cpu/timing_frontier.json
+/runs/active_recovery/paired_cpu/group_frontier.json
+/runs/active_recovery/paired_cpu/energy_frontier.json

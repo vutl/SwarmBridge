@@ -1,0 +1,10 @@
+{
+  "seconds": 601.959343044,
+  "inference_calls": 864,
+  "cpu_only": true,
+  "gpu_seconds": 0,
+  "training_steps": 0,
+  "dev_images": 216,
+  "groups": 30,
+  "holdout_scored": false
+}

@@ -1,0 +1,42 @@
+{
+  "source_config_sha256": "74fdd907eb63a3e3eb3fa83b3aff7900cab9f288aa35473ef0f67faf9a8d497f",
+  "rate_mbps": [
+    0.1,
+    0.3,
+    0.5,
+    1,
+    1.5,
+    3,
+    10,
+    30,
+    100
+  ],
+  "deadlines_s": [
+    0.1,
+    0.25,
+    0.5,
+    1,
+    2,
+    5,
+    10
+  ],
+  "original_deadlines_s": [
+    2,
+    5,
+    10
+  ],
+  "compute_budgets_s": [
+    0.05,
+    0.1,
+    0.5,
+    2,
+    null
+  ],
+  "overhead_fraction": 0.1,
+  "common_s": 0.02,
+  "group_stability_fraction": 0.6666666666666666,
+  "original_grid_consecutive_rates_required": 2,
+  "note": "Development sensitivity, not preregistered independent hardware validation; native CPU timing first, no artificial slowdown in primary frontier.",
+  "energy_assumptions_source": "runs/active_recovery/offloading/config.json",
+  "no_new_GPU_or_training": true
+}
