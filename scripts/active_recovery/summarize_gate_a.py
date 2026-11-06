@@ -22,10 +22,11 @@ def main():
     b=r['scores']['large_boxes'];full=r['scores']['large_original'];q=r['scores']['large_jpeg70']
     lines += ['',f"Box từ cùng model large so với ảnh gốc: ΔF1 = **{b['mean_image_F1']-full['mean_image_F1']:+.6f}**, "
               f"payload nhỏ hơn **{full['payload_bits_mean']/b['payload_bits_mean']:.1f}×**; so JPEG Q70 nhỏ hơn **{q['payload_bits_mean']/b['payload_bits_mean']:.1f}×**.", '',
-              '**Cổng A chưa qua.** Trong kịch bản UAV chạy được model large, gửi box gần như giữ nguyên kết quả nhưng ít bit hơn rất nhiều. '
-              'Nếu chỉ cho UAV chạy nano, phải biện minh bằng compute/energy thực tế; chưa có ngân sách onboard độc lập nên chưa thể xác nhận nhu cầu offloading.', '',
-              '**Quyết định:** dừng mở correction, mobility hoặc RL cho bộ ba này. Không train tiếp để cứu kết quả. '
-              'Kết quả không bác bỏ UAV mobility/SemCom nói chung; nó kiểm tra đúng tác vụ detection và codec đã chọn.', '',
+              '**Cổng A: chưa kết luận về triển khai.** Khi bỏ chi phí tính toán ra khỏi so sánh, gửi box từ cùng model giữ chất lượng và ít bit hơn. '
+              'Điều này không chứng minh offloading ảnh vô ích: CPU tham chiếu chạy large chậm hơn GPU tại trạm. Cần so đủ compute, truyền và deadline.', '',
+              '**Quyết định sau đính chính:** chưa mở correction, mobility hoặc RL. Giữ offloading là ứng viên có điều kiện; '
+              'không coi bộ ba đã thất bại. Phân tích không inference mới nằm ở [offloading/summary.md](../offloading/summary.md). '
+              'Năng lượng và compute onboard thực tế vẫn chưa được xác nhận.', '',
               'Các giới hạn:',
               '- Ba lớp car/bus/truck, AP từ COCOeval với maxDets500 và spatial ignored-region filter theo toolkit VisDrone; không phải điểm leaderboard 10 lớp.',
               '- Group là prefix filename, chưa xác minh độc lập hoàn toàn theo chuyến bay. Split đã ghi trước metric; 168 ảnh holdout chưa được chấm.',
@@ -39,8 +40,14 @@ def main():
     (OUT/'summary.md').write_text(text,encoding='utf-8')
     report=ROOT/'reports/wireless-abc.md';old=report.read_text(encoding='utf-8')
     marker='\n## Pilot ảnh thật — cổng A đã chạy (06/11/2026)\n'
-    if marker in old:old=old.split(marker)[0]
-    report.write_text(old+marker+'\n'+text.replace('# Pilot ảnh thật — cổng A (06/11/2026)\n','',1),encoding='utf-8')
+    if marker in old:
+        before,section=old.split(marker,1)
+        end=section.find('\n## ')
+        after=section[end:] if end>=0 else ''
+        old=before
+    else:after=''
+    report_text=text.replace('# Pilot ảnh thật — cổng A (06/11/2026)\n','',1).replace('(../offloading/summary.md)','(../runs/active_recovery/offloading/summary.md)')
+    report.write_text(old+marker+'\n'+report_text+after,encoding='utf-8')
     print(text)
 
 

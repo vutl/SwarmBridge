@@ -1,0 +1,340 @@
+{
+  "status": "offloading_has_a_conditional_feasible_region; real_onboard_feasibility_unresolved",
+  "mean_payload_median_timing_ideal_Q70_break_even_mbps": 0.9736999621312099,
+  "boundaries": {
+    "large_original": {
+      "ideal_per_image_rate_mbps_p50": 1.1937983568889443,
+      "ideal_per_image_rate_mbps_p90": 1.7711220385686968,
+      "payload_overhead10pct_rate_mbps_p50": 1.3131781925778387,
+      "finite_fraction": 1.0
+    },
+    "large_jpeg70": {
+      "ideal_per_image_rate_mbps_p50": 0.9801744876671366,
+      "ideal_per_image_rate_mbps_p90": 1.3800825007977,
+      "payload_overhead10pct_rate_mbps_p50": 1.0781919364338504,
+      "finite_fraction": 1.0
+    }
+  },
+  "energy_compute_to_radio_power_threshold_at3Mbps_no_platform_baseline": {
+    "large_original": 0.43395007983918676,
+    "large_jpeg70": 0.34364962829835105
+  },
+  "examples": [
+    {
+      "label": "CPU reference, original deadlines",
+      "rate_mbps": 3,
+      "deadline_s": 2,
+      "compute_budget_s": null,
+      "results": {
+        "nano_boxes": {
+          "mean_F1": 0.46247555702850096,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.1093115140000016,
+          "latency_p95_s": 0.11535344733333493,
+          "mean_normalized_energy_radio_s": 0.08938008066666825,
+          "mean_compute_s": 0.08499511400000159
+        },
+        "large_boxes": {
+          "mean_F1": 0.5607819509646317,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 1.0957315913333285,
+          "latency_p95_s": 1.0977401913333285,
+          "mean_normalized_energy_radio_s": 1.075684386395057,
+          "mean_compute_s": 1.0738674579999952
+        },
+        "large_original": {
+          "mean_F1": 0.5607819509646317,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.5142129438333349,
+          "latency_p95_s": 0.8306124643333335,
+          "mean_normalized_energy_radio_s": 0.46782179753086417,
+          "mean_compute_s": 0.0
+        },
+        "large_jpeg10": {
+          "mean_F1": 0.25135948968652316,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.1607673309999936,
+          "latency_p95_s": 0.2044171260833319,
+          "mean_normalized_energy_radio_s": 0.10054138141512328,
+          "mean_compute_s": 0.003469980180555365
+        },
+        "large_jpeg70": {
+          "mean_F1": 0.535689936233005,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.43775792116665746,
+          "latency_p95_s": 0.6315947334166601,
+          "mean_normalized_energy_radio_s": 0.373998257114198,
+          "mean_compute_s": 0.004794963287037443
+        }
+      }
+    },
+    {
+      "label": "CPU reference, exploratory 0.5s",
+      "rate_mbps": 3,
+      "deadline_s": 0.5,
+      "compute_budget_s": null,
+      "results": {
+        "nano_boxes": {
+          "mean_F1": 0.46247555702850096,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.1093115140000016,
+          "latency_p95_s": 0.11535344733333493,
+          "mean_normalized_energy_radio_s": 0.08938008066666825,
+          "mean_compute_s": 0.08499511400000159
+        },
+        "large_boxes": {
+          "mean_F1": 0.0,
+          "delivery_fraction": 0.0,
+          "latency_p50_s": 1.0957315913333285,
+          "latency_p95_s": 1.0977401913333285,
+          "mean_normalized_energy_radio_s": 1.075684386395057,
+          "mean_compute_s": 1.0738674579999952
+        },
+        "large_original": {
+          "mean_F1": 0.25240779242073585,
+          "delivery_fraction": 0.48148148148148145,
+          "latency_p50_s": 0.5142129438333349,
+          "latency_p95_s": 0.8306124643333335,
+          "mean_normalized_energy_radio_s": 0.46782179753086417,
+          "mean_compute_s": 0.0
+        },
+        "large_jpeg10": {
+          "mean_F1": 0.25135948968652316,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.1607673309999936,
+          "latency_p95_s": 0.2044171260833319,
+          "mean_normalized_energy_radio_s": 0.10054138141512328,
+          "mean_compute_s": 0.003469980180555365
+        },
+        "large_jpeg70": {
+          "mean_F1": 0.3616989087044879,
+          "delivery_fraction": 0.6851851851851852,
+          "latency_p50_s": 0.43775792116665746,
+          "latency_p95_s": 0.6315947334166601,
+          "mean_normalized_energy_radio_s": 0.373998257114198,
+          "mean_compute_s": 0.004794963287037443
+        }
+      }
+    },
+    {
+      "label": "CPU reference, exploratory 0.5s, faster link",
+      "rate_mbps": 10,
+      "deadline_s": 0.5,
+      "compute_budget_s": null,
+      "results": {
+        "nano_boxes": {
+          "mean_F1": 0.46247555702850096,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.10629003400000159,
+          "latency_p95_s": 0.1081026140000016,
+          "mean_normalized_energy_radio_s": 0.0863106040000016,
+          "mean_compute_s": 0.08499511400000159
+        },
+        "large_boxes": {
+          "mean_F1": 0.0,
+          "delivery_fraction": 0.0,
+          "latency_p50_s": 1.094426697999995,
+          "latency_p95_s": 1.0950292779999953,
+          "mean_normalized_energy_radio_s": 1.0744125365185138,
+          "mean_compute_s": 1.0738674579999952
+        },
+        "large_original": {
+          "mean_F1": 0.5607819509646317,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.19597297050000162,
+          "latency_p95_s": 0.30337381749999925,
+          "mean_normalized_energy_radio_s": 0.14034653925925925,
+          "mean_compute_s": 0.0
+        },
+        "large_jpeg10": {
+          "mean_F1": 0.25135948968652316,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.09251461499999897,
+          "latency_p95_s": 0.10582420449999352,
+          "mean_normalized_energy_radio_s": 0.03259140055092574,
+          "mean_compute_s": 0.003469980180555365
+        },
+        "large_jpeg70": {
+          "mean_F1": 0.535689936233005,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.17655441449999076,
+          "latency_p95_s": 0.23578444674999338,
+          "mean_normalized_energy_radio_s": 0.11555595143518559,
+          "mean_compute_s": 0.004794963287037443
+        }
+      }
+    },
+    {
+      "label": "CPU reference, 100ms compute allowance",
+      "rate_mbps": 3,
+      "deadline_s": 2,
+      "compute_budget_s": 0.1,
+      "results": {
+        "nano_boxes": {
+          "mean_F1": 0.46247555702850096,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.1093115140000016,
+          "latency_p95_s": 0.11535344733333493,
+          "mean_normalized_energy_radio_s": 0.08938008066666825,
+          "mean_compute_s": 0.08499511400000159
+        },
+        "large_boxes": {
+          "mean_F1": 0.0,
+          "delivery_fraction": 0.0,
+          "latency_p50_s": 1.0957315913333285,
+          "latency_p95_s": 1.0977401913333285,
+          "mean_normalized_energy_radio_s": 1.075684386395057,
+          "mean_compute_s": 1.0738674579999952
+        },
+        "large_original": {
+          "mean_F1": 0.5607819509646317,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.5142129438333349,
+          "latency_p95_s": 0.8306124643333335,
+          "mean_normalized_energy_radio_s": 0.46782179753086417,
+          "mean_compute_s": 0.0
+        },
+        "large_jpeg10": {
+          "mean_F1": 0.25135948968652316,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.1607673309999936,
+          "latency_p95_s": 0.2044171260833319,
+          "mean_normalized_energy_radio_s": 0.10054138141512328,
+          "mean_compute_s": 0.003469980180555365
+        },
+        "large_jpeg70": {
+          "mean_F1": 0.535689936233005,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.43775792116665746,
+          "latency_p95_s": 0.6315947334166601,
+          "mean_normalized_energy_radio_s": 0.373998257114198,
+          "mean_compute_s": 0.004794963287037443
+        }
+      }
+    },
+    {
+      "label": "GPU onboard reference",
+      "rate_mbps": 3,
+      "deadline_s": 2,
+      "compute_budget_s": null,
+      "results": {
+        "nano_boxes": {
+          "mean_F1": 0.46247555702850096,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.036297419499999525,
+          "latency_p95_s": 0.044355890666665544,
+          "mean_normalized_energy_radio_s": 0.016425272083333383,
+          "mean_compute_s": 0.012040305416666716
+        },
+        "large_boxes": {
+          "mean_F1": 0.5607819509646317,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.06168629900000302,
+          "latency_p95_s": 0.06407586408333366,
+          "mean_normalized_energy_radio_s": 0.0417452904691356,
+          "mean_compute_s": 0.039928362074073874
+        },
+        "large_original": {
+          "mean_F1": 0.5607819509646317,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.5142129438333349,
+          "latency_p95_s": 0.8306124643333335,
+          "mean_normalized_energy_radio_s": 0.46782179753086417,
+          "mean_compute_s": 0.0
+        },
+        "large_jpeg10": {
+          "mean_F1": 0.25135948968652316,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.1607673309999936,
+          "latency_p95_s": 0.2044171260833319,
+          "mean_normalized_energy_radio_s": 0.10054138141512328,
+          "mean_compute_s": 0.003469980180555365
+        },
+        "large_jpeg70": {
+          "mean_F1": 0.535689936233005,
+          "delivery_fraction": 1.0,
+          "latency_p50_s": 0.43775792116665746,
+          "latency_p95_s": 0.6315947334166601,
+          "mean_normalized_energy_radio_s": 0.373998257114198,
+          "mean_compute_s": 0.004794963287037443
+        }
+      }
+    }
+  ],
+  "paired8_at3Mbps_2s": {
+    "nano_boxes": {
+      "mean_F1": 0.5235284849043842,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 0.11106294816666726,
+      "latency_p95_s": 0.11736456784999448,
+      "mean_normalized_energy_radio_s": 0.08890753958333172,
+      "mean_compute_s": 0.0821187062499984
+    },
+    "large_boxes": {
+      "mean_F1": 0.7026678146732495,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 1.095860657999995,
+      "latency_p95_s": 1.1812621583666678,
+      "mean_normalized_energy_radio_s": 1.0935191884999989,
+      "mean_compute_s": 1.091525988499999
+    },
+    "large_original": {
+      "mean_F1": 0.7026678146732495,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 1.2510439246666687,
+      "latency_p95_s": 1.4231757536166647,
+      "mean_normalized_energy_radio_s": 1.2131790000000002,
+      "mean_compute_s": 0.0
+    },
+    "large_jpeg10": {
+      "mean_F1": 0.4177543548955032,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 0.197209699333335,
+      "latency_p95_s": 0.22060199586666468,
+      "mean_normalized_energy_radio_s": 0.14185409062499815,
+      "mean_compute_s": 0.005776390624998129
+    },
+    "large_jpeg70": {
+      "mean_F1": 0.662173032663975,
+      "delivery_fraction": 1.0,
+      "latency_p50_s": 0.6139374870000058,
+      "latency_p95_s": 0.6812940657500051,
+      "mean_normalized_energy_radio_s": 0.5605963722083361,
+      "mean_compute_s": 0.005884338875002726
+    }
+  },
+  "paired_cpu_images": [
+    "0000001_02999_d_0000005.jpg",
+    "0000001_03499_d_0000006.jpg",
+    "0000001_03999_d_0000007.jpg",
+    "0000001_04527_d_0000008.jpg",
+    "0000001_05249_d_0000009.jpg",
+    "0000001_05499_d_0000010.jpg",
+    "0000001_05999_d_0000011.jpg",
+    "0000001_07999_d_0000012.jpg"
+  ],
+  "paired_cpu_groups": [
+    "0000001"
+  ],
+  "source_hashes": {
+    "summary.json": "5c14104f6e4c88cc0f0308897a2033ac2020fb9393bf83af3adc3c0fb9027552",
+    "yolov8l.pt.cpu.json": "14eace85680aabb66135a2cae6df7795c66a5ef8a5c54a9ae28f2a042f4acfe3",
+    "yolov8n.pt.cpu.json": "e42a494671e6bfb9e366c4609e41535edbe864315980d613b60cf712823d2b32"
+  },
+  "analysis_seconds": 7.316682349999979,
+  "inference_runs": 0,
+  "gpu_seconds": 0,
+  "limits": [
+    "No new detector, hardware, channel or energy measurement.",
+    "Dev216 CPU scenarios assign median from eight CPU samples; not 216 paired CPU measurements.",
+    "Paired8 contains only one filename group; cannot support flight/generalization statistics.",
+    "JPEG encode+decode charged to UAV together, conservative; source-file stat I/O excluded.",
+    "Resize, box serialization timing, response, queue, beam/pilot and protocol overhead not independently measured; nuisance overhead is assumed.",
+    "Effective goodput is not PHY bitrate; no mobility or channel policy simulated.",
+    "Incremental power ratios are sensitivity parameters; no measured joules or full-system energy claim.",
+    "Energy is required energy of a completed attempt; failed/deadline-truncated attempt consumption is not modeled. Platform duration is separately swept as until-result vs fixed 2s.",
+    "Best fixed diagnostics use dev labels for offline assessment, not online mode selection.",
+    "Exploratory short deadlines and compute caps are not original-protocol or blind test evidence.",
+    "No correction, semantic recovery, mobility advantage or RL necessity established."
+  ]
+}

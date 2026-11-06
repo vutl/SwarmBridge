@@ -723,9 +723,9 @@ Không dùng các số này làm latency hoặc năng lượng của phần cứ
 
 Box từ cùng model large so với ảnh gốc: ΔF1 = **+0.000000**, payload nhỏ hơn **257.5×**; so JPEG Q70 nhỏ hơn **203.2×**.
 
-**Cổng A chưa qua.** Trong kịch bản UAV chạy được model large, gửi box gần như giữ nguyên kết quả nhưng ít bit hơn rất nhiều. Nếu chỉ cho UAV chạy nano, phải biện minh bằng compute/energy thực tế; chưa có ngân sách onboard độc lập nên chưa thể xác nhận nhu cầu offloading.
+**Cổng A: chưa kết luận về triển khai.** Khi bỏ chi phí tính toán ra khỏi so sánh, gửi box từ cùng model giữ chất lượng và ít bit hơn. Điều này không chứng minh offloading ảnh vô ích: CPU tham chiếu chạy large chậm hơn GPU tại trạm. Cần so đủ compute, truyền và deadline.
 
-**Quyết định:** dừng mở correction, mobility hoặc RL cho bộ ba này. Không train tiếp để cứu kết quả. Kết quả không bác bỏ UAV mobility/SemCom nói chung; nó kiểm tra đúng tác vụ detection và codec đã chọn.
+**Quyết định sau đính chính:** chưa mở correction, mobility hoặc RL. Giữ offloading là ứng viên có điều kiện; không coi bộ ba đã thất bại. Phân tích không inference mới nằm ở [offloading/summary.md](../runs/active_recovery/offloading/summary.md). Năng lượng và compute onboard thực tế vẫn chưa được xác nhận.
 
 Các giới hạn:
 - Ba lớp car/bus/truck, AP từ COCOeval với maxDets500 và spatial ignored-region filter theo toolkit VisDrone; không phải điểm leaderboard 10 lớp.
@@ -737,3 +737,36 @@ Job giữ khóa chung mất 1.93 phút (gồm CPU benchmark và chấm), peak VR
 
 Tái lập: `bash scripts/active_recovery/run_gate_a.sh` trong WSL; từng mode và benchmark CPU có resume.
 Dataset/checkpoint: `assets.json`; split/config/prediction hash: thư mục này.
+
+## Đính chính Gate A và miền khả thi offloading (06/11/2026)
+
+**Kết luận “dừng bộ ba” trước đó quá sớm. Gate A chưa kết luận về triển khai.** Hai phương án cùng YOLOv8l có F1
+bằng nhau là đối chứng vị trí tính toán, chưa phải một cơ chế SemCom mới. Ít bit hơn không đồng nghĩa luôn tốt hơn:
+large CPU tham chiếu mất khoảng 1.074 s, còn large GPU tại trạm khoảng 0.040 s. Không cần đổi dataset hay train lại.
+
+Đã phân tích bằng CPU từ các prediction/timing cũ, **0 inference mới, 0 GPU**, không mở holdout. Cấu hình, sweep và
+bản đồ ở [offloading/summary.md](../runs/active_recovery/offloading/summary.md), tái lập bằng
+`python swarmbridge/experiments/active_recovery/feasibility.py REPO` trong env `active-recovery`.
+
+- Phép xấp xỉ mean payload / median timing cho JPEG Q70 hòa thời gian với local large ở **0.974 Mbps**, nếu chưa tính
+  overhead. Khi dùng payload và timing từng ảnh, ngưỡng trung vị khoảng **0.980 Mbps**, p90 **1.380 Mbps**; cộng 10%
+  byte overhead đưa ngưỡng trung vị lên **1.078 Mbps**. Đây là effective goodput, không phải bitrate PHY bảo đảm.
+- Với CPU median được gán cho 216 ảnh, goodput 3 Mbps, deadline 2 s, overhead byte 10% và fixed latency 20 ms:
+  local large p50 **1.096 s**, ảnh gốc về trạm **0.514 s**, JPEG Q70 **0.438 s**. F1 tương ứng **0.5608/0.5608/0.5357**.
+  Đây là sensitivity scenario, không phải 216 phép đo CPU ghép đôi.
+- Kiểm tra trên **đúng 8 ảnh có timing CPU**: local large **1.096 s**, ảnh gốc **1.251 s**, Q70 **0.614 s** (p50).
+  Mean F1 trên tám ảnh tương ứng **0.7027/0.7027/0.6622**. Tám ảnh cùng một nhóm filename; không suy tổng quát nhiều
+  chuyến bay. Ví dụ này cho thấy payload biến thiên có thể đảo kết luận về tốc độ của gửi ảnh gốc.
+- Nếu onboard có hiệu năng GPU giống workstation tham chiếu, local large p50 tổng chỉ **0.062 s** ở 3 Mbps: lợi thế
+  offloading về thời gian biến mất. Không được chọn giả định onboard yếu chỉ để tạo kết quả dương.
+- Sweep budget compute và deadline được công bố đầy đủ. Deadline 2/5/10 s là protocol gốc; các mức ngắn hơn là
+  **thăm dò sau khi có kết quả**, không phải blind evidence. F1 khi quá deadline/compute budget được đặt 0 vì receiver
+  chưa có kết quả cũ. Không dùng F1 thật để chọn hành động online.
+- Năng lượng chỉ là sensitivity theo tỷ số công suất tăng thêm `Pcompute/Pradio` và platform baseline. Ở 3 Mbps,
+  bỏ platform baseline, Q70 cần ít năng lượng UAV hơn local large trong mô hình khi tỷ số này **>0.344**; ảnh gốc
+  **>0.434**. Chưa đo watt/joule thực. Đã tách giả định platform hoạt động tới khi có kết quả với hoạt động hết 2 s.
+
+**Phạm vi kết luận:** có miền điều kiện để giữ offloading làm ứng viên. Chưa xác nhận miền đó trên phần cứng UAV,
+chưa chứng minh correction có ích, chưa mô phỏng mobility và chưa có lý do mở RL. Proxy timings còn thiếu resize,
+serialization box, queue và các phí vô tuyến đo thật; overhead chỉ là tham số sensitivity. Ngân sách tính toán/năng
+lượng UAV độc lập và điều kiện kênh vẫn là phần cần xác định trước khi chấp nhận Gate A cho hệ thống cụ thể.

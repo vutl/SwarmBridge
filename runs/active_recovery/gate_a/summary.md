@@ -20,9 +20,9 @@ Không dùng các số này làm latency hoặc năng lượng của phần cứ
 
 Box từ cùng model large so với ảnh gốc: ΔF1 = **+0.000000**, payload nhỏ hơn **257.5×**; so JPEG Q70 nhỏ hơn **203.2×**.
 
-**Cổng A chưa qua.** Trong kịch bản UAV chạy được model large, gửi box gần như giữ nguyên kết quả nhưng ít bit hơn rất nhiều. Nếu chỉ cho UAV chạy nano, phải biện minh bằng compute/energy thực tế; chưa có ngân sách onboard độc lập nên chưa thể xác nhận nhu cầu offloading.
+**Cổng A: chưa kết luận về triển khai.** Khi bỏ chi phí tính toán ra khỏi so sánh, gửi box từ cùng model giữ chất lượng và ít bit hơn. Điều này không chứng minh offloading ảnh vô ích: CPU tham chiếu chạy large chậm hơn GPU tại trạm. Cần so đủ compute, truyền và deadline.
 
-**Quyết định:** dừng mở correction, mobility hoặc RL cho bộ ba này. Không train tiếp để cứu kết quả. Kết quả không bác bỏ UAV mobility/SemCom nói chung; nó kiểm tra đúng tác vụ detection và codec đã chọn.
+**Quyết định sau đính chính:** chưa mở correction, mobility hoặc RL. Giữ offloading là ứng viên có điều kiện; không coi bộ ba đã thất bại. Phân tích không inference mới nằm ở [offloading/summary.md](../offloading/summary.md). Năng lượng và compute onboard thực tế vẫn chưa được xác nhận.
 
 Các giới hạn:
 - Ba lớp car/bus/truck, AP từ COCOeval với maxDets500 và spatial ignored-region filter theo toolkit VisDrone; không phải điểm leaderboard 10 lớp.

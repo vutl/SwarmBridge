@@ -1,0 +1,14 @@
+{
+  "timing_scenarios_rows": 42525,
+  "energy_scenarios_rows": 2520,
+  "tests_passed": 8,
+  "inference_runs": 0,
+  "gpu_seconds": 0,
+  "source_inputs_verified": true,
+  "files": {
+    "timing_sweep.csv": "a95d372a152d7dbcfc120d422dde3a557fbb8aef489f28dc004362819c8c40ed",
+    "energy_sweep.json": "5c9b3a58f9464075548400cfce797fd292df0230c070105803a5652c7f491078",
+    "config.json": "22f434c6b9ccda9a125363f880126c591ba3a7916457b116a37c049d40309315",
+    "feasibility.py": "195d12add8754f7badecfdada304dded18532c2a2d1add3a1218efded286f359"
+  }
+}

@@ -86,3 +86,5 @@ Thumbs.db
 /runs/active_recovery/gate_a/large_boxes.json
 /runs/active_recovery/gate_a/large_original.json
 /runs/active_recovery/gate_a/large_jpeg*.json
+/runs/active_recovery/offloading/timing_sweep.csv
+/runs/active_recovery/offloading/energy_sweep.json

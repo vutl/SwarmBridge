@@ -1,0 +1,78 @@
+{
+  "kind": "conditional sensitivity, not an onboard experiment",
+  "rate_mbps": [
+    0.1,
+    0.3,
+    0.5,
+    1,
+    1.5,
+    3,
+    10,
+    30,
+    100
+  ],
+  "deadlines_s": [
+    0.1,
+    0.25,
+    0.5,
+    1,
+    2,
+    5,
+    10
+  ],
+  "original_protocol_deadlines_s": [
+    2,
+    5,
+    10
+  ],
+  "additional_deadlines_are_exploratory": true,
+  "compute_budgets_s": [
+    0.05,
+    0.1,
+    0.5,
+    2,
+    null
+  ],
+  "latency_multipliers": [
+    0.25,
+    1,
+    4
+  ],
+  "extra_offload_s": [
+    0,
+    0.02,
+    0.1
+  ],
+  "payload_overhead_fraction": 0.1,
+  "common_latency_s": 0.02,
+  "energy": {
+    "compute_to_radio_power": [
+      0.25,
+      1,
+      4,
+      16
+    ],
+    "idle_to_radio_power": [
+      0,
+      25,
+      75
+    ],
+    "normalized_budgets_radio_s": [
+      0.1,
+      0.5,
+      1,
+      2,
+      5,
+      10,
+      null
+    ],
+    "platform_horizons": [
+      "until_result",
+      "fixed_2s_mission"
+    ],
+    "definition": "E_UAV/Pradio = (Pcompute/Pradio)*t_compute + t_tx + (Pbaseline/Pradio)*t_until_result; incremental powers, station excluded",
+    "note": "Power ratios and budgets are arbitrary sensitivity coordinates, not measured watts or joules."
+  },
+  "timestamp": "2026-11-06",
+  "gpu_or_inference_runs": 0
+}

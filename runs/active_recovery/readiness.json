@@ -1,6 +1,6 @@
 {
   "date": "2026-11-06",
-  "status": "gate_A_executed_on_real_data_not_passed",
+  "status": "gate_A_inconclusive_with_conditional_offloading_region",
   "protocol_sha256": "7f7c86c71d3239c33e8acedcacaa04e4f6c799ce07e74c77b7110e872ffdcde4",
   "assets_at_proposed_paths": {
     "visdrone": true,
@@ -68,5 +68,6 @@
   "gate_A_summary": "runs/active_recovery/gate_a/summary.json",
   "gpu_lock_job_wall_seconds": 115.76723271300001,
   "wsl_active_recovery_environment_created": true,
-  "historical_protocol_preparation_gpu_seconds": 0
+  "historical_protocol_preparation_gpu_seconds": 0,
+  "offloading_analysis": "runs/active_recovery/offloading/summary.json"
 }
