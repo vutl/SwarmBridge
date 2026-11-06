@@ -129,3 +129,41 @@ task tương lai. 16 ô "đủ", 30 seed test, ~31 phút CPU.
 **Hệ quả cho hướng nghiên cứu:** đưa RL vào bài toán chọn mode kiểu Huang không có cơ sở từ phép thử này. Nếu đi tiếp
 theo Huang, phần "thật sự cần quyết định theo thời gian" phải được tạo ra có chủ đích (băng thông khan hiếm, nhiều
 task tranh tài nguyên, di chuyển UAV làm đổi kênh tương lai) và kiểm lại bằng cùng phép thử này trước khi train.
+
+## Kiểm tra UAVBench (metadata + file câu hỏi, không tải ảnh; `runs/huang_step0/uavbench_audit/`)
+Mục đích: xem ý tưởng "late-binding" (bên nhận chọn câu hỏi sau khi dữ liệu đến) có dataset UAV dùng được không — cùng
+phép thử đã loại FloodNet.
+
+Nguồn đã xác minh:
+- UAVBench: arXiv 2603.14336 (Zhan & Yuan, 2026); HuggingFace `ZhanYang-nwpu/UAVBench` (Apache-2.0); repo chỉ có JSON
+  (dạng hội thoại LLaVA) trỏ tới ảnh của khoảng 20 dataset gốc — ảnh không được host, giấy phép từng nguồn chưa kiểm.
+- UAVIT-1M: `ZhanYang-nwpu/UAVIT-1M` (CC-BY-4.0), 1 240 666 dòng (xác nhận qua API).
+- Theo paper, câu hỏi **được sinh từ nhãn** (đếm từ box, so sánh từ diện tích mask, có/không, thời tiết, độ cao từ
+  metadata) rồi diễn đạt lại bằng LLM.
+
+Các tập kiểu hỏi–đáp của UAVBench (58 MB JSON, 141 846 mục):
+
+| Loại | Số mục | % | Câu khác nhau / mẫu | Đáp án đa số đúng |
+|---|---|---|---|---|
+| Đếm | 62 537 | 44.1 | 14 / 1 | 0.28 |
+| Độ cao bay | 22 238 | 15.7 | 399 cách diễn đạt | 0.07–0.43 |
+| Thời tiết / ngày–đêm | 19 221 | 13.6 | 88 | 0.44 |
+| Màu của xe trong khung | 18 698 | 13.2 | 4 mẫu | 0.33 |
+| Có/không (hiện diện) | 7 847 | 5.5 | 232 / 8 | 0.59 |
+| So sánh diện tích | 3 606 | 2.5 | 273 / 21 | 0.50 |
+| Grounding (định vị bằng câu mô tả) | 7 699 | 5.4 | 1 014 | – |
+
+- Trung bình 1.8–1.9 câu hỏi mỗi ảnh. Đếm hỏi 14 lớp, có/không hỏi 33 lớp.
+- Grounding: 91% câu mô tả nêu màu; chỉ khoảng 8% có quan hệ với vật khác. Quan hệ không gian, chữ (OCR) và suy luận mở
+  mỗi loại chỉ khoảng 0–1%.
+
+Ước lượng bằng luật từ khoá (thô) — một bản tóm tắt nhỏ tính trên UAV trả lời được bao nhiêu:
+danh sách object (lớp, box, số lượng, màu) + nhãn cảnh ≈ 65%; thêm độ cao từ telemetry ≈ 80%; thêm nhãn thời tiết
+≈ 94%; thêm tỉ lệ diện tích theo lớp (khoảng 8 số) ≈ 99%. Cần ảnh thật sự: khoảng 0.5–1%.
+UAVIT-1M (mẫu 1 480 dòng qua API) dùng cùng các bộ sinh câu hỏi cộng với câu hỏi FloodNet; phần phong phú hơn duy nhất là
+VQA vùng của UAV123 (~7.7%, chỉ có trong tập train).
+
+**Kết luận: UAVBench lặp lại đúng kiểu thất bại của FloodNet** — câu hỏi sinh từ nhãn nên bản tóm tắt vài chục byte trả
+lời gần hết. **Loại** làm testbed cho "late-binding". Ứng viên còn lại (chưa kiểm tra độ đa dạng): VRSBench
+(arXiv 2406.12384, ảnh vệ tinh, hỏi–đáp mở do GPT sinh + người duyệt), UAVQA-Bench (arXiv 2608.11738, 1.5k câu),
+ERA-QA (arXiv 2504.09583, câu hỏi mở do người viết, rất nhỏ). RSVQA cũng sinh câu hỏi theo mẫu.

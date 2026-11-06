@@ -1,0 +1,675 @@
+{
+ "vqa": {
+  "files": {
+   "vqa_altitu.json": 16592,
+   "vqa_altituint_Estima.json": 2823,
+   "vqa_altituone_Estima.json": 2823,
+   "vqa_compa.json": 3606,
+   "vqa_pres.json": 7847,
+   "vqa_weath.json": 14239,
+   "vqa_weathUAVDTS.json": 4982
+  },
+  "n_qa": 52912,
+  "n_images": 28113,
+  "q_per_image": {
+   "1": 13321,
+   "2": 14069,
+   "11": 65,
+   "13": 76,
+   "14": 12,
+   "15": 165,
+   "16": 12,
+   "17": 349,
+   "18": 4,
+   "19": 6,
+   "21": 9,
+   "22": 2
+  },
+  "q_per_image_mean": 1.88,
+  "unique_questions": 793,
+  "templates_after_num_box_norm": 793,
+  "types": {
+   "altitude(metadata)": {
+    "n": 22238,
+    "frac": 0.4203,
+    "answer_vocab": 276,
+    "majority": "no",
+    "majority_acc": 0.3188,
+    "unique_q": 226,
+    "top_answers": [
+     [
+      "no",
+      7089
+     ],
+     [
+      "yes",
+      5525
+     ],
+     [
+      "low altitude",
+      1780
+     ],
+     [
+      "medium altitude",
+      1012
+     ],
+     [
+      "20",
+      662
+     ],
+     [
+      "below 30m",
+      541
+     ],
+     [
+      "29",
+      384
+     ],
+     [
+      "12",
+      349
+     ]
+    ],
+    "examples": [
+     "Is the altitude low? (low altitude (< 30m), medium altitude (> 30m and < 70m), and high altitude (> 70m))",
+     "Is this drone flying above 70 meters?",
+     "Are we seeing a medium-altitude perspective? (low altitude (< 30m), medium altitude (> 30m and < 70m), and high altitude (> 70m))",
+     "What altitude range was this filmed at?",
+     "Is it medium-altitude? (low altitude (< 30m), medium altitude (> 30m and < 70m), and high altitude (> 70m))",
+     "Is the altitude high? (low altitude (< 30m), medium altitude (> 30m and < 70m), and high altitude (> 70m))"
+    ]
+   },
+   "weather/illumination": {
+    "n": 17395,
+    "frac": 0.3288,
+    "answer_vocab": 13,
+    "majority": "no",
+    "majority_acc": 0.4355,
+    "unique_q": 54,
+    "top_answers": [
+     [
+      "no",
+      7575
+     ],
+     [
+      "yes",
+      6834
+     ],
+     [
+      "night",
+      641
+     ],
+     [
+      "daytime",
+      321
+     ],
+     [
+      "daylight",
+      300
+     ],
+     [
+      "day",
+      293
+     ],
+     [
+      "hazy",
+      284
+     ],
+     [
+      "nighttime",
+      277
+     ]
+    ],
+    "examples": [
+     "What weather condition is shown here?",
+     "Is the scene hazy?",
+     "What's the weather condition?",
+     "Does the drone need fog lights?",
+     "Is mist visible in this image?",
+     "How would you describe the weather in this shot?"
+    ]
+   },
+   "existence/yes-no": {
+    "n": 8940,
+    "frac": 0.169,
+    "answer_vocab": 2,
+    "majority": "no",
+    "majority_acc": 0.6013,
+    "unique_q": 237,
+    "top_answers": [
+     [
+      "no",
+      5376
+     ],
+     [
+      "yes",
+      3564
+     ]
+    ],
+    "examples": [
+     "Does this image contain person?",
+     "Is there a bike?",
+     "Is the image containing car?",
+     "Are there any drone visible in the image?",
+     "Is there a boat in the image?",
+     "Is the image containing animal?"
+    ]
+   },
+   "area comparison": {
+    "n": 3606,
+    "frac": 0.0682,
+    "answer_vocab": 2,
+    "majority": "yes",
+    "majority_acc": 0.5,
+    "unique_q": 273,
+    "top_answers": [
+     [
+      "yes",
+      1803
+     ],
+     [
+      "no",
+      1803
+     ]
+    ],
+    "examples": [
+     "Is there more wall than water body in terms of area?",
+     "Are wall and water body similar in area?",
+     "Is the area of road smaller than that of roof?",
+     "Is the area of road and roof about the same size?",
+     "Is the area of the road larger than the area of the water body?",
+     "Is there less road than water body in terms of area?"
+    ]
+   },
+   "other": {
+    "n": 733,
+    "frac": 0.0139,
+    "answer_vocab": 3,
+    "majority": "night",
+    "majority_acc": 0.4284,
+    "unique_q": 3,
+    "top_answers": [
+     [
+      "night",
+      314
+     ],
+     [
+      "daylight",
+      311
+     ],
+     [
+      "fog",
+      108
+     ]
+    ],
+    "examples": [
+     "What obstructs the view here?",
+     "What's the atmospheric condition here?",
+     "What time is it?"
+    ]
+   }
+  }
+ },
+ "rvqa": {
+  "files": {
+   "rvqa_UAVDTS.json": 18698
+  },
+  "n_qa": 18698,
+  "n_images": 18698,
+  "q_per_image": {
+   "1": 18698
+  },
+  "q_per_image_mean": 1.0,
+  "unique_questions": 14088,
+  "templates_after_num_box_norm": 4,
+  "types": {
+   "color/attribute": {
+    "n": 18698,
+    "frac": 1.0,
+    "answer_vocab": 9,
+    "majority": "white",
+    "majority_acc": 0.3309,
+    "unique_q": 14088,
+    "top_answers": [
+     [
+      "white",
+      6187
+     ],
+     [
+      "black",
+      4652
+     ],
+     [
+      "red",
+      3640
+     ],
+     [
+      "silver",
+      2320
+     ],
+     [
+      "blue",
+      598
+     ],
+     [
+      "brown",
+      594
+     ],
+     [
+      "cyan",
+      259
+     ],
+     [
+      "white and blue",
+      251
+     ]
+    ],
+    "examples": [
+     "What color is the car {<565><464><611><550>}?",
+     "What color is the car {<563><462><607><551>}?",
+     "What color is the car {<562><462><608><551>}?",
+     "What color is the car {<562><462><610><551>}?",
+     "What color is the car {<562><464><611><553>}?",
+     "What color is the car {<560><464><610><553>}?"
+    ]
+   }
+  }
+ },
+ "count": {
+  "files": {
+   "count_AUAIR.json": 4638,
+   "count_DroneVehicle.json": 15157,
+   "count_HazyDet.json": 3798,
+   "count_HazyDethazy.json": 3798,
+   "count_RDDTS.json": 1037,
+   "count_UAVDTM.json": 26406,
+   "count_VisDrone.json": 7703
+  },
+  "n_qa": 62537,
+  "n_images": 34181,
+  "q_per_image": {
+   "1": 15844,
+   "2": 11826,
+   "3": 4943,
+   "4": 668,
+   "5": 328,
+   "6": 260,
+   "7": 191,
+   "8": 88,
+   "9": 31,
+   "10": 2
+  },
+  "q_per_image_mean": 1.83,
+  "unique_questions": 14,
+  "templates_after_num_box_norm": 14,
+  "types": {
+   "counting": {
+    "n": 62537,
+    "frac": 1.0,
+    "answer_vocab": 173,
+    "majority": "1",
+    "majority_acc": 0.2771,
+    "unique_q": 14,
+    "top_answers": [
+     [
+      "1",
+      17327
+     ],
+     [
+      "2",
+      6902
+     ],
+     [
+      "3",
+      4141
+     ],
+     [
+      "4",
+      2626
+     ],
+     [
+      "5",
+      1971
+     ],
+     [
+      "9",
+      1956
+     ],
+     [
+      "7",
+      1773
+     ],
+     [
+      "10",
+      1708
+     ]
+    ],
+    "examples": [
+     "Count the number of car.",
+     "Count the number of human.",
+     "Count the number of van.",
+     "Count the number of truck.",
+     "Count the number of bicycle.",
+     "Count the number of trailer."
+    ]
+   }
+  }
+ },
+ "vg": {
+  "files": {
+   "vg_RefDrone.json": 1148,
+   "vg_UAVDTS.json": 6551
+  },
+  "n_qa": 7699,
+  "n_images": 7383,
+  "q_per_image": {
+   "1": 7118,
+   "2": 217,
+   "3": 45,
+   "4": 3
+  },
+  "q_per_image_mean": 1.04,
+  "unique_questions": 1014,
+  "templates_after_num_box_norm": 1014,
+  "types": {
+   "grounding(referring expr)": {
+    "n": 7699,
+    "frac": 1.0,
+    "answer_vocab": 6485,
+    "majority": "{<555><611><571><672>}",
+    "majority_acc": 0.0019,
+    "unique_q": 1014,
+    "top_answers": [
+     [
+      "{<555><611><571><672>}",
+      15
+     ],
+     [
+      "{<448><331><466><355>}",
+      13
+     ],
+     [
+      "{<526><172><536><196>}",
+      10
+     ],
+     [
+      "{<546><346><555><368>}",
+      9
+     ],
+     [
+      "{<473><325><487><348>}",
+      9
+     ],
+     [
+      "{<522><340><531><362>}",
+      9
+     ],
+     [
+      "{<436><512><531><588>}",
+      8
+     ],
+     [
+      "{<620><722><635><783>}",
+      7
+     ]
+    ],
+    "examples": [
+     "give me the location of <p>The white van parked on the left side of the road.</p>.",
+     "give me the location of <p>The van is positioned near the middle section of the image.</p>.",
+     "give me the location of <p>The blue van is located on right sides of the road.</p>.",
+     "give me the location of <p>The car near the center-left corner of the image.</p>.",
+     "give me the location of <p>The car in the bottom right quadrant of the image.</p>.",
+     "give me the location of <p>The bus is located in the middle of the street.</p>."
+    ]
+   }
+  }
+ },
+ "object_vocab": {
+  "count": [
+   "awning-tricycle",
+   "bicycle",
+   "bus",
+   "car",
+   "freight car",
+   "human",
+   "motor",
+   "motorbike",
+   "pedestrian",
+   "people",
+   "trailer",
+   "tricycle",
+   "truck",
+   "van"
+  ],
+  "pres": [
+   "animal",
+   "baseball field",
+   "basketball court",
+   "bike",
+   "bird",
+   "boat",
+   "bridge",
+   "car",
+   "construction",
+   "drone",
+   "fish",
+   "giraffe",
+   "harbor",
+   "obstacle",
+   "person",
+   "plane",
+   "railroad",
+   "road",
+   "roof",
+   "roundabout",
+   "ship",
+   "sky",
+   "soccer field",
+   "storage tank",
+   "supermarket",
+   "swimming pool",
+   "temple",
+   "tennis court",
+   "vegetation",
+   "vehicle",
+   "wall",
+   "water body",
+   "whale",
+   "you see the animal",
+   "you see the baseball field",
+   "you see the basketball court",
+   "you see the bike",
+   "you see the boat",
+   "you see the car",
+   "you see the construction",
+   "you see the drone",
+   "you see the fish",
+   "you see the obstacle",
+   "you see the person",
+   "you see the plane",
+   "you see the railroad",
+   "you see the road",
+   "you see the roof",
+   "you see the roundabout",
+   "you see the ship",
+   "you see the sky",
+   "you see the soccer field",
+   "you see the storage tank",
+   "you see the supermarket",
+   "you see the temple",
+   "you see the tennis court",
+   "you see the vegetation",
+   "you see the vehicle",
+   "you see the wall",
+   "you see the water body",
+   "you see the whale"
+  ],
+  "rvqa": []
+ },
+ "all_type_counts": {
+  "count|counting": 62537,
+  "vqa|altitude(metadata)": 22238,
+  "rvqa|color/attribute": 18698,
+  "vqa|weather/illumination": 17395,
+  "vqa|existence/yes-no": 8940,
+  "vg|grounding(referring expr)": 7699,
+  "vqa|area comparison": 3606,
+  "vqa|other": 733
+ },
+ "all_total": 141846,
+ "vg_features": {
+  "has_color": 0.9092,
+  "has_abs_position": 0.0761,
+  "has_relation_to_other_obj": 0.0791,
+  "has_action_state": 0.0212,
+  "has_ordinal_or_size": 0.0004
+ },
+ "per_file": {
+  "vqa_altitu.json": {
+   "n": 16592,
+   "imgs": 16592,
+   "uq": 53,
+   "tpl_norm": 53,
+   "ans_vocab": 8,
+   "maj_acc": 0.4273
+  },
+  "vqa_altituint_Estima.json": {
+   "n": 2823,
+   "imgs": 2823,
+   "uq": 173,
+   "tpl_norm": 173,
+   "ans_vocab": 29,
+   "maj_acc": 0.2345
+  },
+  "vqa_altituone_Estima.json": {
+   "n": 2823,
+   "imgs": 2823,
+   "uq": 173,
+   "tpl_norm": 173,
+   "ans_vocab": 239,
+   "maj_acc": 0.0662
+  },
+  "vqa_compa.json": {
+   "n": 3606,
+   "imgs": 658,
+   "uq": 273,
+   "tpl_norm": 21,
+   "ans_vocab": 2,
+   "maj_acc": 0.5
+  },
+  "vqa_pres.json": {
+   "n": 7847,
+   "imgs": 723,
+   "uq": 232,
+   "tpl_norm": 8,
+   "ans_vocab": 2,
+   "maj_acc": 0.5863
+  },
+  "vqa_weath.json": {
+   "n": 14239,
+   "imgs": 14239,
+   "uq": 62,
+   "tpl_norm": 62,
+   "ans_vocab": 13,
+   "maj_acc": 0.4338
+  },
+  "vqa_weathUAVDTS.json": {
+   "n": 4982,
+   "imgs": 4982,
+   "uq": 26,
+   "tpl_norm": 26,
+   "ans_vocab": 7,
+   "maj_acc": 0.4362
+  },
+  "rvqa_UAVDTS.json": {
+   "n": 18698,
+   "imgs": 18698,
+   "uq": 14088,
+   "tpl_norm": 1,
+   "ans_vocab": 9,
+   "maj_acc": 0.3309
+  },
+  "count_AUAIR.json": {
+   "n": 4638,
+   "imgs": 2823,
+   "uq": 8,
+   "tpl_norm": 1,
+   "ans_vocab": 28,
+   "maj_acc": 0.5492
+  },
+  "count_DroneVehicle.json": {
+   "n": 15157,
+   "imgs": 8734,
+   "uq": 5,
+   "tpl_norm": 1,
+   "ans_vocab": 132,
+   "maj_acc": 0.2735
+  },
+  "count_HazyDet.json": {
+   "n": 3798,
+   "imgs": 2000,
+   "uq": 3,
+   "tpl_norm": 1,
+   "ans_vocab": 117,
+   "maj_acc": 0.2159
+  },
+  "count_HazyDethazy.json": {
+   "n": 3798,
+   "imgs": 2000,
+   "uq": 3,
+   "tpl_norm": 1,
+   "ans_vocab": 117,
+   "maj_acc": 0.2159
+  },
+  "count_RDDTS.json": {
+   "n": 1037,
+   "imgs": 600,
+   "uq": 3,
+   "tpl_norm": 1,
+   "ans_vocab": 109,
+   "maj_acc": 0.2295
+  },
+  "count_UAVDTM.json": {
+   "n": 26406,
+   "imgs": 16415,
+   "uq": 3,
+   "tpl_norm": 1,
+   "ans_vocab": 92,
+   "maj_acc": 0.2593
+  },
+  "count_VisDrone.json": {
+   "n": 7703,
+   "imgs": 1609,
+   "uq": 10,
+   "tpl_norm": 1,
+   "ans_vocab": 125,
+   "maj_acc": 0.248
+  },
+  "vg_RefDrone.json": {
+   "n": 1148,
+   "imgs": 832,
+   "uq": 976,
+   "tpl_norm": 781,
+   "ans_vocab": 1146,
+   "maj_acc": 0.0017
+  },
+  "vg_UAVDTS.json": {
+   "n": 6551,
+   "imgs": 6551,
+   "uq": 38,
+   "tpl_norm": 32,
+   "ans_vocab": 5339,
+   "maj_acc": 0.0023
+  }
+ },
+ "vg_n": 7699,
+ "vg_unique": 1014,
+ "vg_examples": [
+  "give me the location of <p>The white van parked on the left side of the road.</p>.",
+  "give me the location of <p>The van is positioned near the middle section of the image.</p>.",
+  "give me the location of <p>The blue van is located on right sides of the road.</p>.",
+  "give me the location of <p>a cyan bus</p>.",
+  "give me the location of <p>a cyan bus</p>.",
+  "give me the location of <p>a cyan bus</p>."
+ ]
+}
