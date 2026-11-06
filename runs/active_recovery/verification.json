@@ -1,0 +1,14 @@
+{
+  "prediction_files_verified": 5,
+  "dev_images": 216,
+  "calibration_images": 164,
+  "holdout_images": 168,
+  "holdout_scored": false,
+  "tests_passed": 4,
+  "source_hashes": {
+    "swarmbridge/experiments/active_recovery/core.py": "c768794bbfdf4da2e50ff191ba2df7851e66cd3732278fc81e009725fbf1c158",
+    "swarmbridge/experiments/active_recovery/run_gate_a.py": "f458ac9d4bbcb3154dcfa3c558a45dcb554bdf7f58de9597d19cca49e1a0c326",
+    "scripts/active_recovery/acquire.py": "79d4077bc1898fda69d8adc287f9c1559061e3ba9ce098650edd9a0fb529a1cd"
+  },
+  "geometry_note": "All 216 dev images have exact isotropic resize factors (no dimension rounding); per-axis scale handling added for other inputs without changing measured predictions."
+}

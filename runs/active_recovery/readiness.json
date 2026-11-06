@@ -1,11 +1,11 @@
 {
   "date": "2026-11-06",
-  "status": "not_ready_to_run",
+  "status": "gate_A_executed_on_real_data_not_passed",
   "protocol_sha256": "7f7c86c71d3239c33e8acedcacaa04e4f6c799ce07e74c77b7110e872ffdcde4",
   "assets_at_proposed_paths": {
-    "visdrone": false,
-    "yolov8n": false,
-    "yolov8l": false,
+    "visdrone": true,
+    "yolov8n": true,
+    "yolov8l": true,
     "local_i2sb_checkpoint_directory": false,
     "uav3d_mini_rgb_has_files": false
   },
@@ -52,15 +52,11 @@
     }
   },
   "smoke_scope": "Synthetic image, full-message CPU encode/decode only; no real-data quality, partial decoding, detector, neural codec, channel or energy validated.",
-  "gpu_seconds_this_preparation": 0,
-  "new_dataset_or_checkpoint_downloaded": false,
+  "new_dataset_or_checkpoint_downloaded": true,
   "unresolved": [
-    "Acquire dataset and record archive/image provenance and license",
-    "Acquire official weights and record version and SHA-256",
-    "Validate class mapping and ignored-region evaluator",
-    "Create group split manifest before scoring",
-    "Declare a defensible onboard compute budget and measurement device",
-    "Validate progressive JPEG scan-prefix decoding before claiming progressive delivery"
+    "Actual UAV onboard compute/power budget remains unknown.",
+    "Filename grouping is a sequence proxy, not verified flight independence.",
+    "Progressive scan delivery, correction, generative receiver and mobility are not run."
   ],
   "wsl_wireless_abc_module_discovery": {
     "sionna.rt": true,
@@ -68,5 +64,9 @@
     "PIL": true,
     "ultralytics": false
   },
-  "environment_modified": false
+  "environment_modified": false,
+  "gate_A_summary": "runs/active_recovery/gate_a/summary.json",
+  "gpu_lock_job_wall_seconds": 115.76723271300001,
+  "wsl_active_recovery_environment_created": true,
+  "historical_protocol_preparation_gpu_seconds": 0
 }

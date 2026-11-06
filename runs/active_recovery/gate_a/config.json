@@ -1,0 +1,27 @@
+{
+  "split_sha256": "7beffc6f629e417f5e10bdd677313235cded5f46f927c58d20369bd431bd22db",
+  "inference": {
+    "imgsz": 1280,
+    "conf": 0.01,
+    "iou": 0.7,
+    "max_det": 500,
+    "classes": [
+      2,
+      5,
+      7
+    ],
+    "batch": 1,
+    "half": false
+  },
+  "cpu_threads": 4,
+  "cpu_samples": 8,
+  "onboard_budget": "unknown; workstation CPU and GPU are reference scenarios, not measured UAV hardware",
+  "phases": [
+    "nano_boxes",
+    "large_boxes",
+    "large_original",
+    "large_jpeg10",
+    "large_jpeg70"
+  ],
+  "holdout_evaluated": false
+}

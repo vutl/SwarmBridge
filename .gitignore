@@ -77,3 +77,12 @@ Thumbs.db
 /runs/hybrid_comm/codex_m2/prepared/tiles/
 /runs/hybrid_comm/codex_m2/prepared/boxes/
 /runs/hybrid_comm/codex_m2/**/*.tmp
+
+# Active-recovery pilot: immutable source assets and reproducible per-image packets.
+/data/visdrone/
+/external/active_recovery/
+/runs/active_recovery/gate_a/packets/
+/runs/active_recovery/gate_a/nano_boxes.json
+/runs/active_recovery/gate_a/large_boxes.json
+/runs/active_recovery/gate_a/large_original.json
+/runs/active_recovery/gate_a/large_jpeg*.json
