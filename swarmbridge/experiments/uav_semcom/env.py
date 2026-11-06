@@ -34,7 +34,7 @@ DEFAULT = dict(
     bs=(0.0, 0.0, 25.0), rician_k_db=10.0, los_a=9.61, los_b=0.16, eta_los_db=1.0, eta_nlos_db=20.0,
     # UAVs and survey mission
     H=100.0, v_max=20.0, dt=1.0, T=200, sector_radius=(1000.0, 2500.0), n_wp=6, tiles_per_wp=4,
-    wp_spacing=120.0, capture_radius=15.0, area_radius=3000.0, battery_j=1.97e6,
+    wp_spacing=120.0, capture_radius=15.0, area_radius=3000.0, battery_j=3.21e5,   # 89.2 Wh (Phantom 4 Pro class, ~2 kg, matches the Zeng model: hover 168 W -> ~32 min)
     # per-image requirements
     deadline=(4.0, 12.0), qmin=(22.0, 30.0),
     # utility and reward weights

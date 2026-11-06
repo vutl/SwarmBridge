@@ -42,20 +42,24 @@ class GymUavSemcom(gym.Env):
         return obs, float(r), done, False, info
 
     def action_masks(self):
-        """Valid sub-actions: inactive UAV -> only (hover, silent, power 0, mode 0); survey done -> no macro 9;
-        mode entries beyond the number of images awaiting a decision -> only mode 0; empty queue -> silent."""
-        core, out = self.core, []
-        for u in core.uavs:
-            n_pend = sum(1 for tk in u.queue if tk.mode < 0)
-            for j, n in enumerate(self.per):
-                m = np.ones(n, dtype=bool)
-                if not u.active:
-                    m[1:] = False
-                elif j == 0 and u.wp_i >= len(u.wps):
-                    m[9] = False
-                elif j == 1 and not u.queue:
-                    m[1:] = False
-                elif j >= 3 and (j - 3) >= n_pend:
-                    m[1:] = False
-                out.append(m)
-        return np.concatenate(out)
+        return action_masks(self.core, self.per)
+
+
+def action_masks(core, per):
+    """Valid sub-actions: inactive UAV -> only (hover, silent, power 0, mode 0); survey done -> no macro 9;
+    mode entries beyond the number of images awaiting a decision -> only mode 0; empty queue -> silent."""
+    out = []
+    for u in core.uavs:
+        n_pend = sum(1 for tk in u.queue if tk.mode < 0)
+        for j, n in enumerate(per):
+            m = np.ones(n, dtype=bool)
+            if not u.active:
+                m[1:] = False
+            elif j == 0 and u.wp_i >= len(u.wps):
+                m[9] = False
+            elif j == 1 and not u.queue:
+                m[1:] = False
+            elif j >= 3 and (j - 3) >= n_pend:
+                m[1:] = False
+            out.append(m)
+    return np.concatenate(out)

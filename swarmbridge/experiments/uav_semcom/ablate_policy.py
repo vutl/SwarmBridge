@@ -9,6 +9,7 @@ import itertools
 import json
 
 import numpy as np
+from sb3_contrib import MaskablePPO
 from stable_baselines3 import PPO
 
 import env as E
@@ -30,13 +31,14 @@ def main():
     cfg = json.loads(args.cfg)
     table = E.ModeTable(args.profiles, args.modes.split(","), args.cpu_file)
     _, te = table.split()
-    model = PPO.load(args.model, device="cpu")
+    algo = MaskablePPO if "MaskablePPO" in open(str(args.model).replace(".zip", "").rsplit("/", 1)[0] + "/algo.txt").read() else PPO
+    model = algo.load(args.model, device="cpu")
     g = G.GymUavSemcom(table, te, cfg, seed=0)
     heur = P.from_name(args.heur, args.modes.split(","))
 
     def mixed(src):   # src = (move, chpow, mode) each 'P' or 'H'
         def pol(env):
-            a, _ = model.predict(env.obs(), deterministic=True)
+            a, _ = model.predict(env.obs(), deterministic=True, **({"action_masks": G.action_masks(env, g.per)} if algo is MaskablePPO else {}))
             pa = G.decode_action(env, a)
             ha = heur(env)
             out = []

@@ -9,6 +9,7 @@ import json
 from collections import Counter
 
 import numpy as np
+from sb3_contrib import MaskablePPO
 from stable_baselines3 import PPO
 
 import env as E
@@ -66,11 +67,12 @@ def main():
     cfg = json.loads(args.cfg)
     table = E.ModeTable(args.profiles, args.modes.split(","), args.cpu_file)
     tr, te = table.split()
-    model = PPO.load(args.model, device="cpu")
+    algo = MaskablePPO if "MaskablePPO" in open(str(args.model).replace(".zip", "").rsplit("/", 1)[0] + "/algo.txt").read() else PPO
+    model = algo.load(args.model, device="cpu")
     g = G.GymUavSemcom(table, te, cfg, seed=0)
 
     def ppo_act(core):
-        a, _ = model.predict(core.obs(), deterministic=True)
+        a, _ = model.predict(core.obs(), deterministic=True, **({"action_masks": G.action_masks(core, g.per)} if algo is MaskablePPO else {}))
         return G.decode_action(core, a)
 
     heur = P.from_name(args.heur, args.modes.split(","))

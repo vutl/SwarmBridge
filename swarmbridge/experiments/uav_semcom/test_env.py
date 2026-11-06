@@ -212,3 +212,23 @@ def test_action_masks_shape(tmp_path):
     g.reset()
     m = g.action_masks()
     assert m.shape == (int(sum(g.action_space.nvec)),) and m.dtype == bool
+
+
+def test_maskable_ppo_consumes_masks(tmp_path):
+    """The masks are not just defined: MaskablePPO must never sample a masked sub-action during learning."""
+    sb3c = pytest.importorskip("sb3_contrib")
+    import gym_env as G
+
+    class Watch(G.GymUavSemcom):
+        violations = 0
+
+        def step(self, action):
+            m = self.action_masks()
+            off = np.concatenate([[0], np.cumsum(self.action_space.nvec)[:-1]])
+            if not all(m[o + a] for o, a in zip(off, np.asarray(action))):
+                Watch.violations += 1
+            return super().step(action)
+    env = Watch(make_table(tmp_path), range(8), seed=0)
+    model = sb3c.MaskablePPO("MlpPolicy", env, n_steps=256, batch_size=64, n_epochs=1, seed=0, device="cpu")
+    model.learn(512)
+    assert Watch.violations == 0

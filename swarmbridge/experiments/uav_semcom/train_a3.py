@@ -1,4 +1,5 @@
-"""A3: train PPO (centralised, MultiDiscrete hybrid action discretised as in Li et al. JSAC 2026) on the A2 environment
+"""A3: train PPO (centralised, MultiDiscrete hybrid action discretised as in Li et al. JSAC 2026; MaskablePPO with the
+env's action masks by default, --no-mask for plain PPO) on the A2 v2 environment
 and evaluate it next to the heuristic baselines on the SAME held-out images and episode seeds.
 
 Train images / test images: 70/30 split of the A1 image set (split seed 0). Train episode seeds random; test seeds
@@ -12,6 +13,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from sb3_contrib import MaskablePPO
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv
 
@@ -33,7 +35,10 @@ def evaluate_rl(model, table, pool, cfg, seeds):
         obs, _ = e.reset()
         done, tot = False, 0.0
         while not done:
-            a, _ = model.predict(obs, deterministic=True)
+            if isinstance(model, MaskablePPO):
+                a, _ = model.predict(obs, deterministic=True, action_masks=e.action_masks())
+            else:
+                a, _ = model.predict(obs, deterministic=True)
             obs, r, done, _, info = e.step(a)
             tot += r
         info["return"] = tot
@@ -52,6 +57,7 @@ def main():
     ap.add_argument("--n-env", type=int, default=6)
     ap.add_argument("--n-test", type=int, default=30)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--no-mask", action="store_true", help="plain PPO without action masking (ablation)")
     args = ap.parse_args()
     torch.set_num_threads(1)
     out = Path(args.out)
@@ -62,7 +68,8 @@ def main():
     tr, te = table.split()
     seeds = list(range(1000, 1000 + args.n_test))
     venv = SubprocVecEnv([make(table, tr, cfg, args.seed * 100 + i) for i in range(args.n_env)])
-    model = PPO("MlpPolicy", venv, n_steps=1024, batch_size=1024, n_epochs=10, gamma=0.99, gae_lambda=0.95,
+    algo = PPO if args.no_mask else MaskablePPO   # MaskablePPO reads env.action_masks() at every rollout step
+    model = algo("MlpPolicy", venv, n_steps=1024, batch_size=1024, n_epochs=10, gamma=0.99, gae_lambda=0.95,
                 learning_rate=3e-4, ent_coef=0.01, policy_kwargs=dict(net_arch=[256, 256]), seed=args.seed, verbose=0, device="cpu")
     t0 = time.time()
     log = []
@@ -77,6 +84,7 @@ def main():
         log.append(rec)
         print(f"STEP {done_steps} util {rec['util']:+.3f} ok {rec['ok']:.2f} {rec['sec']:.0f}s", flush=True)
     model.save(out / f"ppo_s{args.seed}")
+    (out / "algo.txt").write_text(algo.__name__)
     res = {"ppo": evaluate_rl(model, table, te, cfg, seeds)}
     pols = [P.fixed(j) for j in range(len(modes))] + [P.greedy(), P.greedy(detour=True)] + \
         [P.paced(q) for q in (0, 1, 2, 4)] + [P.staggered(None, "idx"), P.staggered(0, "far")]

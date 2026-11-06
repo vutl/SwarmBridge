@@ -402,7 +402,7 @@ trong đó $U_i = \xi_q\,\mathrm{clip}\big(\frac{Q_i - Q_{\min}}{15}, -1, 1\big)
 | H | 100 m | giả định | dưới giới hạn 120 m; Huang và Li dùng 45–70 m |
 | v_max, dt | 20 m/s, 1 s | paper | Li (Huang, Si: 10 m/s) |
 | công suất đẩy | Zeng 2019, hover 168,5 W | paper | |
-| pin | 1,97 MJ (2 × 274 Wh) | giả định | một pin UAV thương mại; nhiệm vụ chỉ dùng 20–30 kJ nên **không bao giờ chạm** |
+| pin | 321 kJ (89,2 Wh) | spec | pin cỡ Phantom 4 Pro (~1,4 kg, cùng hạng ~2 kg với mô hình Zeng: hover 168 W → ~32 phút). Sửa ngày 07/11 từ 1,97 MJ (pin M300, máy bay 6 kg, không khớp mô hình). Nhiệm vụ tham chiếu dùng 21–35 kJ (7–11%) nên **vẫn không chạm**; không thu nhỏ pin cho tới khi nó có tác dụng |
 | khu khảo sát, waypoint | 1–2,5 km; 6 waypoint cách 120 m; 4 ảnh/waypoint | giả định | |
 | Dmax | U(4, 12) s | giả định | gần Huang U(2, 11); Li U(0,5, 2) |
 | Qmin | U(22, 30) dB | giả định | Huang U(10, 30); Li U(10, 25) |
@@ -424,9 +424,9 @@ Khi bay khảo sát hết tốc độ, mỗi UAV tạo L / (120 m / 20 m/s) = 0,
 | tải encoder (mbt q8, CPU) | ρ_enc 0,16 |
 | số UAV trên 2 kênh để mbt q8 làm đầy link | K ≈ 16 |
 
-Các paper có trade-off về bit vì payload của họ lớn so với băng thông:
-- Huang và Li: ảnh gốc 3,5 MB với 10–20 MHz.
-- Truong: ảnh 2K **không nén** với 100 MHz; truyền không nén mất 2,4 s.
+~~Các paper có trade-off về bit vì payload của họ lớn so với băng thông: Huang và Li dùng ảnh gốc 3,5 MB với 10–20 MHz.~~ **Câu này sai, rút lại** (xem 4.9).
+- Hình 5 của Huang cho thấy payload thật sự truyền đi: Mode 1 (JPEG2000) **314 kb** cho một ảnh 512², 32,2 dB. Con số này cùng cỡ với payload của chúng ta.
+- Truong: phương án không nén (UAV-WoSem) mất 2,4 s ở 100 MHz. Đây là baseline của họ, không phải payload của mode nén.
 
 **Kiểm tra heuristic trên v2** (`runs/uav_semcom/v2_sanity/sanity_v2.md`, 30 seed test, không học):
 - Với w_T = 0, các chính sách tốt đạt tỉ lệ đạt yêu cầu ≈ 1,00 và PSNR ≈ 41 dB:
@@ -455,3 +455,57 @@ Các paper có trade-off về bit vì payload của họ lớn so với băng th
 4. **Trọng số w_E, w_T:** cố định, hay quét để vẽ Pareto.
 5. **Độ trễ mode sinh** đo trên RTX 3070: giữ kèm ghi chú, đo lại trên thiết bị nhúng, hay loại khỏi tập mode trên UAV.
 6. **Thời điểm chọn mode:** ngay sau khi chụp (hiện tại), hay ngay trước khi encode (late binding).
+
+### 4.9 Review vòng 1 (ChatGPT, 2026-11-07): đã xử lý gì
+
+**Cấu hình nghiên cứu được chốt cho kịch bản tham chiếu:**
+
+| vấn đề | chốt |
+|---|---|
+| thông tin codec | `predicted` là thiết lập chính; `oracle` là tham chiếu "biết trên mức triển khai được" |
+| deadline / PSNR | deadline là hạn cứng (ảnh quá hạn bị bỏ); PSNR < Qmin bị phạt mềm (như v2) |
+| năng lượng / thời gian | w_E = 0,02/kJ; w_T ∈ {0; 0,3} |
+| độ trễ mode sinh | giữ số đo trên RTX 3070, ghi rõ đây là giả định về thiết bị tính toán, không phải máy tính phổ thông trên UAV |
+| thời điểm chọn mode | mỗi ảnh chọn một lần, ngay sau khi chụp |
+| kịch bản | v2 hiện tại là tham chiếu; **không** tăng K lên 16 chỉ để làm đầy link |
+
+**1. Action mask giờ được dùng thật.**
+- `train_a3.py` dùng `sb3_contrib.MaskablePPO`; `--no-mask` cho PPO thường để làm ablation. Lúc đánh giá cũng truyền mask.
+- Test `test_maskable_ppo_consumes_masks` chạy 512 bước học: MaskablePPO lấy **0** sub-action bị mask. Cùng test đó với PPO thường: vi phạm ở **512/512** bước. Như vậy test đủ nhạy.
+- 20/20 test qua.
+
+**2. Pin.** Giá trị cũ 1,97 MJ là pin của M300 (máy bay 6 kg), không khớp mô hình công suất đẩy của Zeng (hạng ~2 kg, hover 168 W).
+- Đã đổi sang 89,2 Wh = 321 kJ (pin Phantom 4 Pro; với 168 W cho khoảng 32 phút bay).
+- Nhiệm vụ tham chiếu dùng 21–35 kJ (7–11%), nên ràng buộc pin vẫn không chạm. Tôi không thu nhỏ pin để nó có tác dụng.
+- Pin chỉ chạm khi mỗi UAV phải khảo sát khoảng 1,5 km² (khoảng 25 km đường bay ở 10 m/s).
+
+**3. Rút lại câu về payload của Huang.** Hình 5 của Huang ghi kích thước thật sự truyền cho một ảnh 512²:
+
+| mode của Huang | payload | PSNR |
+|---|---|---|
+| Mode 1 (JPEG2000) | 314 kb | 32,2 dB |
+| Mode 2 (text) | 0,376 kb | 11,3 dB |
+| Mode 3 | 0,9 / 8,6 / 33 kb | 16,3 / 18,8 / 23,2 dB |
+
+- Các số này cùng cỡ với payload đo ở A1 (jpeg2000_25: 251 kbit, 30,8 dB; cap_t2i: 0,5 kbit, 9,7 dB).
+- "3,5 MB" chỉ là "kích thước ảnh gốc" trong bảng tham số. Bài không nói rõ con số nào đi vào độ trễ của Mode 1.
+- Vì vậy câu "Huang/Li có trade-off vì payload 3,5 MB" của tôi là không có căn cứ. Huang có trade-off nhờ đâu (link vệ tinh, độ trễ tính toán 1,33 s của các mode semantic so với deadline 2–11 s, …) thì chưa xác định được chỉ từ bài báo.
+
+**4. Kịch bản khảo sát theo yêu cầu thực: tính tải trước khi dựng.**
+
+Nguồn cho từng thông số:
+- Camera cỡ Phantom 4 Pro: FOV chéo 84°, cảm biến 3:2, 20 MP.
+- Ở H = 100 m, footprint là 150 × 100 m (cạnh ngắn dọc theo hướng bay).
+- Chồng ảnh khuyến nghị (Pix4D): 75% theo hướng bay, 60% giữa các tuyến. Từ đó: cứ 25 m chụp một khung, các tuyến cách nhau 60 m.
+- Ở 10 m/s là một khung mỗi 2,5 s; ở 20 m/s là 1,25 s.
+
+Khung được gửi là khung VisDrone ở độ phân giải gốc của dataset. Tập val có 408 ảnh 1360×765, 121 ảnh 960×540, 19 ảnh 1920×1080; trung bình 0,96 MP. Probe đo được avif_80 là 1,16 bpp (44 dB) và avif_50 là 0,59 bpp (36 dB).
+
+| khung gửi đi | payload avif_80 | ρ_link (3 UAV, 2 kênh, 1 MHz) ở 10 m/s | ở 20 m/s |
+|---|---|---|---|
+| khung gốc dataset (~0,96 MP) | ~1,1 Mbit | **0,30** | **0,60** |
+| khung camera đầy đủ 20 MP (*ngoại suy theo bpp, chưa đo*) | ~23 Mbit | ~6 | ~12 |
+
+**Đọc kết quả.** Khảo sát theo yêu cầu chồng ảnh thực, với khung ảnh của chính dataset, cho **tải vừa (ρ 0,3–0,6), chưa phải tải cao**. Tải chỉ cao khi yêu cầu là gửi gần như **toàn bộ độ phân giải camera** gần thời gian thực. Đó là một yêu cầu ứng dụng cần quyết định, không phải tham số để chỉnh; dataset hiện có cũng không có ảnh 20 MP để đo.
+
+**5. Đang chạy.** A3 v2 trên kịch bản tham chiếu: MaskablePPO, seed 0, 2 triệu bước, cho {predicted, oracle} × w_T {0; 0,3}. Baseline dùng chung 30 seed test. Smoke test 200k bước đã chạy hết pipeline (PPO +55,0; greedy +60,9; staggered +63,1 ở 200k bước, chưa hội tụ).
