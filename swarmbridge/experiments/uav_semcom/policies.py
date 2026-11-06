@@ -85,6 +85,30 @@ def greedy(per_image=True, detour=False):
     return pol
 
 
+def paced(q_thr=0, per_image=True):
+    """Greedy mode + queue-aware pacing: hover at the current position (do not fly on to the next waypoint) while the
+    own queue holds more than q_thr images, so captures never outrun the link. Uses the slack in the mission time
+    exactly like a learned policy can; costs nothing in this environment unless a mission-time penalty is set."""
+    base = greedy(per_image)
+
+    def pol(env):
+        acts = base(env)
+        out = []
+        for k, (mv, ch, pl, md) in enumerate(acts):
+            u = env.uavs[k]
+            time_left = env.c["T"] - env.t
+            wps_left = len(u.wps) - u.wp_i
+            # never pace so long that the remaining waypoints become unreachable
+            need = sum(np.linalg.norm(u.wps[i] - (u.wps[i - 1] if i > u.wp_i else u.pos))
+                       for i in range(u.wp_i, len(u.wps))) / env.c["v_max"] + 2 * wps_left
+            if len(u.queue) > q_thr and time_left > need + 5:
+                mv = 0
+            out.append((mv, ch, pl, md))
+        return out
+    pol.__name__ = f"paced_q{q_thr}{'' if per_image else '_mean'}"
+    return pol
+
+
 def run_episode(env, pol, seed):
     env.reset(seed)
     done, tot = False, 0.0

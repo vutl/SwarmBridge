@@ -78,3 +78,62 @@ Giới hạn của A1:
 - Chưa thử các codec diffusion chuyên dụng như PerCo, DiffEIC hay CDC. Chúng có thể thu hẹp khoảng cách ở bitrate cực thấp.
 - Các mode thumbnail được ghi `device=cuda` trong file kết quả, nhưng thực tế chạy trên CPU.
 - Ảnh 512×512, chưa phải độ phân giải gốc.
+
+## 2. A2 — môi trường (topology khớp dữ liệu)
+
+UAV tự chụp ảnh nên topology là **camera trên UAV → encoder trên UAV → kênh không đối đất → BS mặt đất**. Không có vệ tinh, relay hay NOMA.
+
+Code ở `swarmbridge/experiments/uav_semcom/env.py`, có 4 test. Các cơ chế trong môi trường:
+
+- **Nhiệm vụ.**
+  - 3 UAV, mỗi chiếc khảo sát một khu cách BS 1–2,5 km theo 6 waypoint kiểu lawn-mower.
+  - Mỗi waypoint chụp 4 tile 512². Mỗi tile là một ảnh VisDrone thật lấy từ tập test (chia 70/30).
+  - Waypoint không kịp tới trước khi hết episode thì mỗi ảnh của nó tính −1.
+- **Kênh.**
+  - Xác suất LoS theo góc ngẩng (Al-Hourani, đô thị), cộng FSPL và excess loss 1/20 dB.
+  - Fading Rician K=10 dB khi LoS, Rayleigh khi NLoS, rút lại mỗi slot.
+  - 1 MHz chia làm M=2 kênh trực giao cho K=3 UAV; UAV dùng chung kênh thì gây nhiễu cho nhau.
+- **Hành động mỗi UAV mỗi slot (1 s).**
+  - Bay: đứng yên, 8 hướng ở 20 m/s, hoặc 2 hành động vĩ mô "tới waypoint kế" và "về BS".
+  - Kênh: im lặng hoặc 1..M.
+  - Công suất: 3 mức (0,02 / 0,08 / 0,2 W).
+  - Mode cho ảnh đầu hàng đợi: 14 mode lấy từ A1.
+- **Năng lượng.** Công suất đẩy rotary-wing (Zeng et al. 2019) cộng năng lượng phát, có trọng số trong reward.
+- **Utility mỗi ảnh** giống SCE của Huang/Li: ξq·clip((PSNR−Qmin)/15) + ξd·(Dmax−delay)/Dmax, trừ 1 nếu vi phạm.
+  - Qmin ~ U[22,30] dB, Dmax ~ U[4,12] s.
+  - Delay gồm cả thời gian encode trên UAV (CPU) và decode ở BS.
+
+## 3. A3 — PPO và baseline trên cùng môi trường (seed train 0, 30 episode test, ảnh test chưa từng thấy)
+
+PPO (SB3): 1 controller tập trung, action space MultiDiscrete, MLP 256×256, 3 triệu bước, khoảng 26 phút trên CPU.
+
+| chính sách | utility / ảnh | tỉ lệ đạt | ghi chú |
+|---|---|---|---|
+| fixed cap_t2i (≈ Huang M2) | −1.23 | 0.00 | caption chỉ đạt khoảng 10 dB, luôn dưới Qmin |
+| fixed cap_thumb128_i2i | −0.84 | 0.08 | |
+| fixed jpeg2000_25 (≈ Huang M1) | +0.07 | 0.74 | |
+| fixed avif_80 / mbt q5 | +0.31 / +0.30 | 0.78 / 0.84 | |
+| greedy (mode theo từng ảnh) | +0.31 | 0.78 | |
+| **PPO** | **+0.645** | **0.95** | |
+| **paced_q0** (heuristic mới) | **+0.624** | 0.93 | |
+
+**PPO có lợi thế ở đâu.** Phân tích hành vi trên 10 episode (`runs/uav_semcom/a3_s0/analysis.json`):
+- PPO **giãn nhịp nhiệm vụ**: lần chụp cuối ở giây 59,6, so với 37 s của greedy.
+- Nhờ vậy hàng đợi ngắn hơn (0,37 so với 0,58) và độ trễ thấp hơn (3,5 so với 5,2 s).
+- Mode PPO chọn gần như giống greedy (avif_80 hoặc mbt q8).
+
+Heuristic `paced_q0` làm đúng việc đó: chọn mode greedy, nhưng đứng chờ tới khi hàng đợi trống mới bay tiếp, miễn còn đủ thời gian.
+
+| | utility | PPO − chính sách này (khoảng tin cậy 95% ghép cặp, 30 ep) |
+|---|---|---|
+| greedy | +0.308 | +0.336 [+0.310, +0.362] |
+| paced_q0 | +0.624 | +0.020 [+0.001, +0.040] |
+| paced_q0, chọn mode theo bảng trung bình (không theo từng ảnh) | +0.618 | +0.027 [+0.008, +0.045] |
+
+Đọc kết quả:
+1. Cơ chế dài hạn có thật trong môi trường này là **nhịp chụp ↔ hàng đợi**: bay nhanh làm ảnh dồn ứ.
+2. Một heuristic khoảng 20 dòng lấy lại khoảng 94% lợi thế của PPO. PPO còn dư +0,02, có ý nghĩa thống kê nhưng mới có 1 seed train.
+3. Thông tin riêng từng ảnh chỉ thêm khoảng +0,006.
+4. Lợi thế này tồn tại vì môi trường **không tính chi phí thời gian nhiệm vụ**: 200 s cho một nhiệm vụ khoảng 40 s. Si et al. tối thiểu hoá chính thời gian này.
+
+Đang chạy: chi phí thời gian nhiệm vụ w_time ∈ {0,1; 0,3} (reward −w_time mỗi giây mỗi UAV chưa xong nhiệm vụ), và thêm 2 seed PPO ở w_time = 0.

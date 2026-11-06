@@ -29,7 +29,7 @@ DEFAULT = dict(
     H=100.0, v_max=20.0, dt=1.0, T=200, bs=(0.0, 0.0, 25.0), sector_radius=(1000.0, 2500.0), n_wp=6,
     tiles_per_wp=4,
     wp_spacing=120.0, capture_radius=15.0, deadline=(4.0, 12.0), qmin=(22.0, 30.0), q_span=15.0,
-    xi_q=0.5, xi_d=0.5, w_energy=0.02, rician_k_db=10.0, los_a=9.61, los_b=0.16, eta_los_db=1.0,
+    xi_q=0.5, xi_d=0.5, w_energy=0.02, w_time=0.0, rician_k_db=10.0, los_a=9.61, los_b=0.16, eta_los_db=1.0,
     eta_nlos_db=20.0, enc_device="cpu", mobility=True, interference=True, energy=True, per_image_obs=True,
 )
 
@@ -105,6 +105,7 @@ class UAV:
     wp_i: int = 0
     queue: list = field(default_factory=list)
     energy: float = 0.0
+    t_done: float = -1.0   # time the last waypoint was captured
 
 
 class UavSemcomEnv:
@@ -266,6 +267,12 @@ class UavSemcomEnv:
                     self._capture(k)
         if c["energy"]:
             reward -= c["w_energy"] * energy_j / 1000.0
+        # mission-time cost (Si et al. minimise collection time): per UAV per second its survey is unfinished
+        for u in self.uavs:
+            if u.wp_i < len(u.wps):
+                reward -= c["w_time"] * dt
+            elif u.t_done < 0:
+                u.t_done = self.t + dt
         self.t += dt
         done = self.t >= c["T"]
         if done:  # uncaptured waypoints and still-queued tasks fail
@@ -308,4 +315,5 @@ class UavSemcomEnv:
         utils = [tk.util for tk in fin] + [-1.0] * uncaptured   # never-captured images count as failed (-1)
         return dict(mean_util=float(np.sum(utils) / n_total), ok_rate=float(sum(tk.ok for tk in fin) / n_total),
                     energy_kj=float(sum(u.energy for u in self.uavs) / 1000),
-                    captured=float(sum(u.wp_i for u in self.uavs) * self.c["tiles_per_wp"] / n_total))
+                    captured=float(sum(u.wp_i for u in self.uavs) * self.c["tiles_per_wp"] / n_total),
+                    mission_s=float(np.mean([u.t_done if u.t_done >= 0 else self.c["T"] for u in self.uavs])))

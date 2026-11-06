@@ -63,7 +63,7 @@ def main():
     seeds = list(range(1000, 1000 + args.n_test))
     venv = SubprocVecEnv([make(table, tr, cfg, args.seed * 100 + i) for i in range(args.n_env)])
     model = PPO("MlpPolicy", venv, n_steps=1024, batch_size=1024, n_epochs=10, gamma=0.99, gae_lambda=0.95,
-                learning_rate=3e-4, ent_coef=0.01, policy_kwargs=dict(net_arch=[256, 256]), seed=args.seed, verbose=0)
+                learning_rate=3e-4, ent_coef=0.01, policy_kwargs=dict(net_arch=[256, 256]), seed=args.seed, verbose=0, device="cpu")
     t0 = time.time()
     log = []
     chunk = int(2e5)
@@ -78,7 +78,8 @@ def main():
         print(f"STEP {done_steps} util {rec['util']:+.3f} ok {rec['ok']:.2f} {rec['sec']:.0f}s", flush=True)
     model.save(out / f"ppo_s{args.seed}")
     res = {"ppo": evaluate_rl(model, table, te, cfg, seeds)}
-    pols = [P.fixed(j) for j in range(len(modes))] + [P.greedy(True), P.greedy(False), P.greedy(True, True)]
+    pols = [P.fixed(j) for j in range(len(modes))] + [P.greedy(True), P.greedy(False), P.greedy(True, True)] + \
+        [P.paced(q) for q in (0, 1, 2, 4)] + [P.paced(0, False)]
     for p in pols:
         name = p.__name__ if not p.__name__.startswith("fixed") else "fixed_" + modes[int(p.__name__.split("_")[1])]
         res[name] = [P.run_episode(E.UavSemcomEnv(table, te, cfg), p, s) for s in seeds]
@@ -86,7 +87,8 @@ def main():
                                                                  results=res), indent=1))
     for k, v in res.items():
         print(f"{k:28s} util {np.mean([m['mean_util'] for m in v]):+.3f} ok {np.mean([m['ok_rate'] for m in v]):.2f} "
-              f"cap {np.mean([m['captured'] for m in v]):.2f} E {np.mean([m['energy_kj'] for m in v]):.0f}kJ")
+              f"cap {np.mean([m['captured'] for m in v]):.2f} E {np.mean([m['energy_kj'] for m in v]):.0f}kJ "
+              f"mission {np.mean([m['mission_s'] for m in v]):.0f}s return {np.mean([m['return'] for m in v]):+.1f}")
     print("RUN_DONE a3", flush=True)
 
 
