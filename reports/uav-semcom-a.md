@@ -206,3 +206,44 @@ Tinh chỉnh trên train như trên:
    - greedy theo ảnh đã đủ;
    - mode sinh (caption + diffusion) không bao giờ được chọn, vì với utility tính theo PSNR chúng bị AVIF / learned codec áp đảo ở mọi bitrate (bảng A1).
 4. Hệ quả cho hướng A: muốn mode semantic có vai trò thì thước đo chất lượng phải là **nhiệm vụ của người nhận**, không phải PSNR. Ví dụ: phát hiện hoặc đếm đối tượng trên ảnh nhận được (VisDrone có nhãn box). Lúc đó mới biết mode sinh có lúc nào đáng chọn hay không. Ngoài ra, phối hợp truy cập nhiều UAV (K > M) là cơ chế thật của môi trường này và đáng giữ.
+
+### 3.2 ĐÍNH CHÍNH (2026-11-06): kết luận A3 / A3.1 là hệ quả của một lỗi mô phỏng
+
+**Lỗi.** `env.step` phục vụ **tối đa 1 ảnh / UAV / slot 1 s**. Gửi xong ảnh đầu hàng đợi thì phần còn lại của slot bị bỏ phí, và ảnh tiếp theo chỉ bắt đầu encode ở slot sau. ChatGPT phát hiện lỗi này khi đọc code. Tôi đã kiểm tra lại và xác nhận.
+
+Trong khi đó, link thực ra dư rất nhiều. Tốc độ kỳ vọng ở các waypoint là trung vị 2,2 Mb/s (p10 1,8, p90 2,9). Thời gian phát của mode tốt nhất:
+
+| mode | kbit | thời gian phát (s) | PSNR |
+|---|---|---|---|
+| avif_80 | 418 | 0,19 | 40,3 |
+| mbt q8 | 415 | 0,19 | 41,5 |
+| jpeg2000_25 | 251 | 0,11 | 30,8 |
+| avif_5 | 23 | 0,01 | 25,3 |
+
+Như vậy nút thắt là **số slot**, không phải số bit. Greedy bay 20 m/s, cứ khoảng 6 s mỗi UAV chụp 4 ảnh. 3 UAV tạo ra 2 ảnh/s, đúng bằng sức chứa 2 kênh × 1 ảnh/slot, nên hàng đợi tắc.
+
+**Kiểm tra.** `check_multipkt.py` dùng env cho phép phục vụ tiếp hàng đợi trong cùng slot (encode ảnh kế tiếp ngay sau ảnh trước). Lần chạy này cũng lấy gain nhiễu từ đúng mẫu fading của UAV gây nhiễu. Kết quả trên 30 seed test, chỉ heuristic, không train lại:
+
+| chính sách | env cũ: return / ok | env sửa: return / ok | env cũ, w_time 0,3: return | env sửa, w_time 0,3: return |
+|---|---|---|---|---|
+| greedy_img | +20,2 / 0,78 | +48,7 / 0,97 | −12,3 | +16,3 |
+| paced_q0 | +42,9 / 0,93 | +53,3 / 0,99 | −12,5 | +7,5 |
+| paced_q3 | +40,1 / 0,92 | +53,2 / 0,99 | −0,3 | +14,7 |
+| stag_idx | +46,1 / 0,95 | +54,3 / 0,99 | +1,3 | +10,1 |
+| fixed avif_80 | +20,0 / 0,78 | +50,3 / 0,98 | −12,4 | **+17,9** |
+
+**Hệ quả:**
+- Câu chuyện "hàng đợi tắc → điều nhịp → PPO học chia lượt theo số kênh" ở mục 3 và 3.1 là **sản phẩm của lỗi này**, không phải tính chất của hệ thống.
+- Khi đã sửa và có phạt thời gian, một mode cố định (avif_80) là tốt nhất; điều nhịp và chia lượt còn làm hại.
+- Sau khi sửa, môi trường với tham số hiện tại gần như **không còn trade-off**: link dư khoảng 5 lần so với mode chất lượng cao nhất. Vì vậy chọn mode, công suất hay quỹ đạo đều ít quan trọng.
+- Docstring "calibrated so that payloads matter" của `env.py` là sai.
+
+**Các vấn đề khác đã xác nhận trong code** (theo rà soát của ChatGPT, tôi kiểm tra lại từng điểm):
+- PPO không quan sát thời gian `t`, trong khi heuristic dùng `env.t`.
+- Một RNG chung cho cả task và fading, nên các chính sách khác nhau gặp chuỗi ảnh và deadline khác nhau. KTC ghép cặp vẫn hợp lệ thống kê, nhưng mất lợi ích giảm phương sai.
+- Nhiễu dùng một mẫu fading khác với link của chính UAV gây nhiễu.
+- Không có giới hạn pin. Hover 168,5 W, mà 40 s hover chỉ bị phạt khoảng 0,13.
+- UAV tiêu tốn năng lượng tới T = 200 s, nên năng lượng gần như bằng nhau ở mọi chính sách.
+- Công suất phát không có trade-off: năng lượng phát khoảng 0,2 W × 0,2 s, không đáng kể.
+- Không có action masking.
+- Quan sát chứa bits/PSNR của mọi mode cho ảnh đầu hàng đợi. UAV có thể tự tính được, vì nó giữ ảnh gốc, nhưng phải encode và decode đủ 14 mode, và chi phí đó đang không được tính. Phải khai báo rõ đây là giả định.
