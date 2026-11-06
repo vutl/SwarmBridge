@@ -1,3 +1,5 @@
+> Objective check: [maximum delivered F1 with all existing modes](../delivered_objective/summary.md). A latency-quality frontier alone is not a task-utility gain; original 2/5/10s deadlines show no substantive offload F1 gain.
+
 > Updated evidence: [paired CPU on all 216 dev images / 30 groups](../paired_cpu/summary.md). The tables below preserve the earlier eight-sample sensitivity analysis.
 
 # Offloading: conditional feasibility from existing results

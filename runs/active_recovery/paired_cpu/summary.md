@@ -1,3 +1,5 @@
+> Objective check: [maximum delivered F1 with all existing modes](../delivered_objective/summary.md). A latency-quality frontier alone is not a task-utility gain; original 2/5/10s deadlines show no substantive offload F1 gain.
+
 # Gate A: paired CPU across 30 dev groups
 
 216 images, two CPU timing repeats/model/image, 30 filename groups. No training or holdout scoring.

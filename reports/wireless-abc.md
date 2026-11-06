@@ -827,3 +827,51 @@ Nhóm filename chỉ là proxy sequence, chưa bảo đảm độc lập theo fl
 thay đổi chưa được mô phỏng. Những giới hạn này không biến mất khi tăng số ảnh CPU.
 Tái lập measurement: `bash scripts/active_recovery/run_paired_cpu.sh`; phân tích:
 `python swarmbridge/experiments/active_recovery/analyze_paired.py REPO`. Các công đoạn có resume, model cũ giữ nguyên.
+
+## Kiểm tra objective: delivered F1 thay vì chỉ Pareto latency (06/11/2026)
+
+Đã hoàn tất bằng artifact có sẵn: **không inference mới, không train, không GPU, không đổi dataset hoặc deadline gốc**.
+Nguồn và toàn bộ bảng: [delivered_objective/summary.md](../runs/active_recovery/delivered_objective/summary.md),
+[CSV từng mode](../runs/active_recovery/delivered_objective/per_mode.csv),
+[bản đồ](../runs/active_recovery/delivered_objective/delivered_F1.png).
+
+Objective ở mỗi cặp goodput/deadline là **mean F1 giao đúng hạn lớn nhất của một mode cố định** trên tập dev;
+F1 = 0 nếu trễ. Không dùng GT để chọn riêng mode từng ảnh. Completion time p50/p95/mean vẫn báo riêng, không cắt ở
+deadline và không ghép thành reward có trọng số. Sai khác F1 trong **1e-4** được coi là hòa, tránh gọi rounding CPU/GPU
+khoảng 1e-5 là cải thiện. Goodput/overhead vẫn là kịch bản, không phải một phép đo mạng end-to-end.
+
+Luôn có **JPEG gốc**, Q70 và Q10, cùng nano/large-box. Q10 dùng lại prediction cũ và codec timing paired đã đo;
+không có decoder/mô hình mới. Giữ đối chứng box mạnh: lọc score <0.25 không đổi metric F1 và cho serialization miễn phí.
+Đối chứng này chỉ là bound ưu ái box; không khẳng định AP giữ nguyên.
+
+### Kết quả chính
+
+**Deadline gốc 2/5/10 s: không có cải thiện delivered F1 của offloading ngoài rounding** trong 27 tổ hợp goodput/deadline.
+Chênh lệch lớn nhất chỉ **+0.000010 F1**, dưới tolerance. Đây là 27 tổ hợp tham số, **không phải 27 thí nghiệm độc lập**;
+các hàng 2/5/10 s thường trùng nhau vì large local đã hoàn thành toàn bộ ảnh đúng hạn.
+
+| Goodput | Deadline | Box tốt nhất: delivered F1 | Offload tốt nhất: delivered F1 | Mode offload tốt nhất |
+|---|---:|---:|---:|---|
+| 3 Mbps | 2 s (gốc) | 0.5608 | 0.5608 | JPEG gốc; hòa large-box |
+| 3 Mbps | 1 s (exploratory) | 0.4625 | 0.5357 | JPEG Q70 |
+| 10 Mbps | 0.5 s (exploratory) | 0.4625 | 0.5582 | JPEG gốc |
+| 10 Mbps | 0.25 s (exploratory) | 0.4625 | 0.4895 | JPEG Q70 |
+| 30 Mbps | 0.1 s (exploratory) | 0.0141 | 0.2333 | JPEG Q10 |
+
+Tại 3 Mbps/2 s, large-box **1.145 s**, Q70 **0.457 s**, JPEG gốc **0.534 s** (completion time p50).
+Q70 nhanh hơn nhưng F1 **0.5357** vẫn dưới **0.5608**. JPEG gốc đạt gần bằng F1 của large-box và nhanh hơn,
+nhưng không tạo thêm F1 cho objective chỉ yêu cầu hoàn thành trước 2 s. Không suy lợi ích điều khiển chỉ từ thời gian dư.
+
+Trong vùng exploratory có lợi ích nhiệm vụ thật theo mô hình: 3 Mbps/1 s, Q70 thêm **+0.0732 delivered F1** so với
+box tốt nhất và dương ở **22/30 nhóm**. Đây là lý do giữ một giả thuyết deadline ngắn, **chưa phải sửa yêu cầu nhiệm vụ**.
+Bootstrap chọn lại mode cố định tốt nhất trong mỗi family ở từng mẫu nhóm; các CI vẫn là descriptive/pointwise trên dev.
+Không coi chúng là kiểm định toàn grid hoặc blind test.
+
+**Quyết định:** mục tiêu gốc chưa có nền tảng để mở Gate B chỉ vì offloading nhanh hơn. Không viết correction,
+không mở mobility/RL trong lượt này. Giữ miền deadline ngắn ở trạng thái exploratory cho đến khi có yêu cầu nhiệm vụ
+độc lập; không đổi deadline chỉ để tạo kết quả dương. Khi đánh giá correction, JPEG gốc và các chất lượng JPEG trung
+gian/progressive vẫn phải là đối chứng. Chênh Q70→ảnh gốc **0.0251 F1** là khoảng cách tới một reference, không phải
+cận trên toán học của mọi thuật toán phục hồi. Chưa có bằng chứng receiver phát hiện được vùng đối tượng bị bỏ sót.
+
+Tái lập: `python swarmbridge/experiments/active_recovery/delivered_objective.py REPO`. Công suất giả định giữ nguyên;
+phép kiểm tra này không đo hoặc tối ưu năng lượng và không gộp nó vào objective F1.

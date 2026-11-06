@@ -1,0 +1,39 @@
+{
+  "rate_mbps": [
+    0.1,
+    0.3,
+    0.5,
+    1,
+    1.5,
+    3,
+    10,
+    30,
+    100
+  ],
+  "deadline_s": [
+    0.1,
+    0.25,
+    0.5,
+    1,
+    2,
+    5,
+    10
+  ],
+  "original_deadline_s": [
+    2,
+    5,
+    10
+  ],
+  "F1_tie_tolerance": 0.0001,
+  "minimum_descriptive_gain": 0.02,
+  "group_positive_fraction_threshold": 0.6666666666666666,
+  "overhead_fraction": 0.1,
+  "common_s": 0.02,
+  "compute_budget_imposed": false,
+  "weighted_reward": false,
+  "objective": "maximum mean delivered F1 of a fixed mode over the dev set at each rate/deadline",
+  "completion_time": "unclipped stage-summed completion estimate, reported independently",
+  "power_assumptions_changed": false,
+  "original_file_always_included": true,
+  "note": "Development analysis, not blind confirmation. No per-image GT mode selection."
+}

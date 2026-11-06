@@ -1,0 +1,15 @@
+{
+  "source_inputs_verified": true,
+  "cells": 63,
+  "original_deadline_cells": 27,
+  "no_model_inference": true,
+  "GPU_seconds": 0,
+  "tests_passed": 12,
+  "hashes": {
+    "summary.json": "e76a28b76d2696431dd4790760460ee38107615796629aa042a9bb0d74ca44ab",
+    "inputs.json": "95845c278d31dae19c052b5150cd15ea14147f80e3079c67bed1bd0c70cb719e",
+    "group_results.json": "038e0a4311d502fd49d5356ab1400b6fbe8ea124d6017299dac1cfaffef5d2de",
+    "config.json": "a53858fd5469256a7e31c33e820a06cd6fbcee3d6f35ade27dafbdf1cc29a273",
+    "delivered_objective.py": "5d569910fe595ab7dcf27d715892d4471cda17e41c7fa803a57a8ebc54123cc8"
+  }
+}
