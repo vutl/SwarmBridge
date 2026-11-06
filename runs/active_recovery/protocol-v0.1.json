@@ -1,0 +1,99 @@
+{
+  "version": "0.1",
+  "date": "2026-11-06",
+  "status": "candidate_selected_not_ready_to_run",
+  "report": "reports/wireless-abc.md",
+  "hypothesis": "Receiver recovery state can change whether moving or sending more task evidence is worthwhile before a deadline.",
+  "scope": {
+    "uavs": 1,
+    "receivers": 1,
+    "new_observations_while_moving": false,
+    "simultaneous_flight_and_transmission": true,
+    "generative_recovery_claim": false,
+    "novelty_established": false,
+    "gpu_job_authorized_by_this_protocol": false
+  },
+  "task": {
+    "name": "aerial_vehicle_detection",
+    "dataset": "VisDrone2019-DET validation",
+    "dataset_url": "https://github.com/VisDrone/VisDrone-Dataset",
+    "classes": ["car", "bus", "truck"],
+    "visdrone_category_ids": [4, 9, 6],
+    "coco_zero_based_class_ids": [2, 5, 7],
+    "sender_model": "yolov8n.pt",
+    "receiver_model": "yolov8l.pt",
+    "strong_hard_output_control": "yolov8l.pt at sender with measured compute cost",
+    "weights_source": "official Ultralytics COCO pretrained",
+    "weights_sha256": null,
+    "train_detector": false,
+    "imgsz": 1280,
+    "batch_size": 1,
+    "ignored_regions": "preserve official VisDrone evaluation rules; conversion not yet validated",
+    "metrics": ["AP50", "AP50:95", "per_class_recall", "mean_per_image_F1_at_IoU0.5_conf0.25"]
+  },
+  "split": {
+    "seed": 20261106,
+    "unit": "verified_sequence_or_flight_group",
+    "calibration_dev_holdout_group_fractions": [0.2, 0.4, 0.4],
+    "manifest_required_before_metrics": true,
+    "holdout_opened": false,
+    "image_counts": null
+  },
+  "codec": {
+    "library": "Pillow JPEG",
+    "base_quality": 10,
+    "full_quality": 70,
+    "patch_quality": 85,
+    "subsampling": 2,
+    "max_image_long_edge": 1280,
+    "upscale_source": false,
+    "patch_size": 256,
+    "max_patches_per_feedback_round": 3,
+    "request_proxy": "max p*(1-p) of current receiver candidate detections in each unseen tile, confidence floor 0.01, tie by tile id",
+    "progressive_baseline": "JPEG Q70, valid scan boundaries only, partial decoding not yet tested",
+    "messages_and_feedback_must_be_serialized": true,
+    "count_failed_transmissions": true,
+    "receiver_inference_charged_per_update": true,
+    "neural_codec_or_semantic_HARQ_reproduced": false
+  },
+  "gate_A": {
+    "question": "Does evidence beat feasible hard task outputs after charging onboard computation?",
+    "onboard_compute_budget": null,
+    "cannot_pass_without_compute_budget": true,
+    "stop_if_hard_outputs_dominate": true
+  },
+  "gate_B": {
+    "question": "Does receiver-driven correction beat restart, retransmission, progressive JPEG and fixed/random patches at matched resources?",
+    "minimum_mean_F1_gain_at_matched_bits_and_compute": 0.02,
+    "alternative_minimum_bit_saving": 0.2,
+    "alternative_maximum_F1_loss": 0.01,
+    "bootstrap_unit": "sequence",
+    "thresholds_are_pilot_decisions_not_claims_of_statistical_significance": true
+  },
+  "conditional_mobility_stage": {
+    "enabled": false,
+    "requires": ["gate_A", "gate_B"],
+    "scene": "Sionna RT Munich",
+    "link_budget_source": "swarmbridge/experiments/wireless_abc/c_feas.py and c_feas2.py; snapshot required",
+    "frequency_hz": 28000000000,
+    "bandwidth_hz": 100000000,
+    "control_step_s": 0.5,
+    "maximum_speed_m_s": 10,
+    "deadlines_s": [2, 5, 10],
+    "query_channel_at_chosen_positions": true,
+    "integrate_service_along_flight_segment": true,
+    "channel_service_abstraction_is_not_waveform_validation": true,
+    "flight_energy_model": null,
+    "ablation": ["static_no_correction", "static_correction", "mobile_no_correction", "mobile_correction", "controller_without_receiver_recovery_state"],
+    "baselines": ["causal_greedy", "trajectory_first_then_communication", "causal_MPC", "explicitly_privileged_diagnostic_oracle"],
+    "rl_enabled": false
+  },
+  "unresolved_before_any_model_run": [
+    "Acquire dataset and record archive/image provenance and license",
+    "Acquire official weights and record version and SHA-256",
+    "Validate class mapping and ignored-region evaluator",
+    "Create group split manifest before scoring",
+    "Declare a defensible onboard compute budget and measurement device",
+    "Validate progressive JPEG scan-prefix decoding before claiming progressive delivery"
+  ]
+}

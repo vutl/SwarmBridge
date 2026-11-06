@@ -606,3 +606,96 @@ tổng các phase GPU được ghi nhận tăng từ 21,4 lên 21,7 phút.
 **Quyết định giữ nguyên:** dùng M1 + NMS làm baseline hiện tại; dừng mở wireless hybrid và PPO vì không đạt gate.
 Lợi ích tile trong cặp receiver yếu là tín hiệu feasibility, chưa chứng minh lợi ích so với pipeline box mạnh.
 Nếu mở thí nghiệm mới sau này, cần giả thuyết và đối chứng riêng; chưa có kết luận receiver là nút thắt duy nhất.
+
+## Protocol ứng viên mới v0.1 — UAV mang ảnh, điều khiển vị trí và truyền bằng chứng (06/11)
+
+**Trạng thái:** đã chọn tác vụ/dataset/codec để chuẩn bị pilot; **chưa ready-to-run**. Chưa tải VisDrone/checkpoint,
+chưa inference, training, ray tracing mới hoặc RL. Không mở lại hybrid tracking. Cấu hình:
+`runs/active_recovery/protocol-v0.1.json`; kiểm tra tài sản: `runs/active_recovery/readiness.json`.
+Đây là protocol ứng viên có thể bác bỏ, chưa phải novelty hoặc đề tài chính đã được xác lập.
+
+### Bộ ba được chọn
+
+| Thành phần | Lựa chọn và giới hạn |
+|---|---|
+| Tác vụ | Ground station phát hiện **car/bus/truck** trong ảnh UAV đã chụp. UAV không thu ảnh mới khi bay. |
+| Dataset | **VisDrone2019-DET validation** (nguồn tác giả). Dùng ảnh thật và annotation; không lấy prediction làm GT. |
+| Mô hình tác vụ | YOLOv8n ở UAV, YOLOv8l ở trạm, checkpoint COCO chính thức, đóng băng, cùng `imgsz=1280`, batch 1. Khác biệt chất lượng phải đo; không mặc định model lớn hơn luôn tốt hơn trên VisDrone. |
+| Codec | Pillow JPEG: bản cơ sở Q10, toàn ảnh Q70, patch gốc Q85; thêm progressive JPEG Q70 làm đối chứng. Tất cả đi qua bytes encode/decode. |
+
+VisDrone car/bus/truck có ID 4/9/6; COCO có ID 2/5/7 (zero-based). Không tự gộp van vào car.
+Giữ quy tắc ignored region của evaluator VisDrone; chốt conversion/evaluator bằng ví dụ kiểm tay trước khi chấm.
+Resize giữ tỷ lệ, cạnh dài tối đa 1280, không phóng lớn ảnh nhỏ; grid patch 256 pixel trong canvas này, biên được clip.
+Receiver ghép pixel patch vào bản cơ sở rồi chạy lại cùng detector; chưa dùng ghép score của hai detector.
+**Không có decoder generative trong pilot v0.1.** Không gọi JPEG/patch này là generative recovery hay semantic HARQ đã tái lập.
+
+### Khóa dữ liệu và phép đo trước khi chạy
+
+- Chia theo nhóm sequence/flight từ filename và metadata được xác minh, seed `20261106`, tỷ lệ nhóm 20/40/40 cho
+  calibration/dev/holdout. Nếu filename không đủ xác định nhóm, dùng mapping chính thức; chưa rõ thì dừng, không chia
+  ngẫu nhiên từng ảnh. Lưu ID, nhóm và SHA-256 trước khi xem metric. Không hứa số ảnh mỗi split bằng đúng tỷ lệ.
+- Chỉ calibration dùng chọn threshold/proxy; dev dùng gate. Holdout chưa mở cho đến khi khóa phương án. Pilot không train detector.
+- Báo AP50, AP50:95 và recall riêng ba lớp; utility theo ảnh cho controller là F1 ở IoU 0.5, confidence 0.25 cố định.
+  GT chỉ phục vụ chấm/offline diagnostic; không đưa F1 thật vào observation, feedback hay điều kiện dừng online.
+- Đo cả YOLOv8n và YOLOv8l trên ảnh gốc trước. Nếu evaluator/model không có chất lượng đủ để phân biệt các mode,
+  hoặc model trạm không đem lại lợi ích, ghi nhận thất bại của bộ ba; không âm thầm fine-tune hay đổi model trên dev.
+
+### Cổng A — có cần truyền bằng chứng không? Chạy trước mọi bài toán mobility
+
+Đối chứng bắt buộc: (1) UAV chạy nano rồi gửi box; (2) UAV chạy **cùng model large của trạm** rồi gửi box;
+(3) gửi ảnh Q70 để trạm chạy large; (4) gửi bản cơ sở rồi patch. Box phải serialize cả lớp, tọa độ, confidence,
+header và padding; cấm dùng annotation thay cho detector UAV. Đo latency tính toán và payload của cả hai model UAV.
+Không cấm model large ở UAV để tạo lợi thế giả cho offloading. Chỉ được viện dẫn giới hạn onboard khi có thiết bị hoặc
+ngân sách compute độc lập được khai báo và đo. Benchmark CPU/GPU trên máy hiện tại chỉ là số tham chiếu, không phải số đo phần cứng UAV.
+
+**Dừng nhánh truyền ảnh cho tác vụ này** nếu hard output với cấu hình compute khả thi đạt utility tương đương hoặc hơn
+mà rẻ hơn về bit và đúng hạn. Nếu chưa xác định compute onboard, chưa được coi cổng A là qua. Khi đó chưa cần chạy RL.
+
+### Cổng B — correction có lợi riêng ở cùng tài nguyên không?
+
+- So gửi mới Q70, truyền lại, progressive JPEG, bản cơ sở + patch theo thứ tự cố định/random, và patch theo yêu cầu receiver.
+- Request ban đầu: xếp tile theo max `p*(1-p)` của detection hiện tại có center trong tile, lấy tối đa 3 tile chưa nhận mỗi
+  vòng; tie theo tile ID. Đây là proxy chưa hiệu chỉnh, không phải xác suất lỗi thật. Receiver không thấy ảnh gốc.
+  Detector dùng confidence thấp 0.01 để sinh candidate cho proxy; metric vẫn dùng ngưỡng đã khóa. Report nguy cơ bỏ sót
+  vùng không có detection. Không dùng GT để chọn patch hoặc trọng số proxy.
+- Đếm bản cơ sở, patch/header, ACK/request, gói mất, encode/decode và mỗi lần chạy lại detector. Không được cho correction
+  thêm lượt inference miễn phí. Full-image và các baseline được phép giữ output trước đó, không buộc chạy lại vô ích.
+- Progressive JPEG chỉ dùng prefix kết thúc tại scan hợp lệ sau khi đã kiểm decode. Smoke encode/decode cả file không
+  chứng minh mọi prefix đều dùng được; không giả lập ưu thế bằng một đường quality–bits tự đặt.
+- Gate feasibility được đăng ký trước: tăng **>=0.02 mean per-image F1** ở cùng bit/compute, hoặc giảm **>=20% tổng bit**
+  với F1 giảm không quá 0.01, so với đối chứng khả thi mạnh nhất. Báo AP/recall, phân bố paired delta và bootstrap theo
+  sequence. Đây là ngưỡng quyết định pilot, không phải bảo đảm ý nghĩa thống kê hay tiêu chuẩn công bố.
+- Chưa có baseline semantic HARQ tái lập: không tuyên bố correction mới/hơn prior art. Muốn đưa generative recovery
+  thành đóng góp phải bổ sung checkpoint và đối chứng tương ứng trong một protocol khác, trước khi chạy.
+
+### Chỉ sau A/B — cổng C/D cho mobility và quyết định chung
+
+- Một UAV, một BS, bay và truyền **đồng thời**. Episode giữ nguyên ảnh đã chụp. Bắt đầu Munich, 28 GHz, 100 MHz,
+  vị trí BS và link budget lấy từ C2 rồi lưu lại trong config, không đổi để tạo lợi ích. Kịch bản mới là môi trường channel;
+  ảnh VisDrone độc lập với cảnh Munich, không tuyên bố mô phỏng sensing/scene vật lý thống nhất.
+- Bước control 0.5 s, tốc độ tối đa 10 m/s, deadline 2/5/10 s; collision/segment check trước khi hành động. Không teleport.
+  Lấy mẫu nhiều điểm trên đoạn bay khi tích phân service, không dùng riêng SNR tốt tại điểm cuối cho cả slot.
+- Channel ground truth truy vấn/cache theo vị trí đã chọn bằng Sionna RT. Không phát lại rate trace cố định sau khi đổi
+  trajectory. Agent chỉ dùng phép đo kênh đã trả phí, lịch sử, pose, thời gian, ACK và feedback nhận thật. Map hoàn hảo
+  chỉ là diagnostic; nếu MPC được dùng map học sẵn thì policy còn lại được cấp cùng map và cùng chi phí khảo sát.
+- Mô hình `EFF*BW*log2(1+SNR)` của C2 chỉ là **abstraction service rate**, không gọi là waveform/MCS/LDPC đã kiểm chứng.
+  Payload hoàn thành và decode xong mới thay đổi output. Chưa có mô hình công suất động cơ được khóa thì báo quãng
+  đường/thời gian bay, không tự gán joule thực nghiệm; mọi kết luận energy phải chờ power model hoặc measurement.
+- Thiết kế 2x2: đứng yên/bay x không correction/correction; cùng codec/model và tài nguyên. Thêm controller **có/không
+  trạng thái phục hồi receiver** để kiểm chứng thông tin semantic có đổi quyết định, thay vì chỉ thêm lựa chọn truyền.
+- So greedy, trajectory-first rồi communication, MPC nhân quả. State/proxy tương lai của MPC không dùng F1 thật hoặc
+  CSI tương lai; oracle ghi rõ thông tin vượt trội và chỉ là best-found diagnostic nếu chưa chứng minh tối ưu.
+- Giữ cùng điểm xuất phát, image, nhiễu và deadline giữa policy; đăng ký episode trước khi chấm, không chỉ chọn vùng
+  NLoS có lợi cho mobility. Điểm bắt đầu đã LoS là control. Đo trên episode chưa dùng thiết kế; không suy cần RL chỉ từ
+  tương tác dương hoặc MPC hơn greedy. Nếu MPC đã tốt và đủ nhanh, báo nó như nghiệm hợp lý.
+
+**Đầu ra bước chuẩn bị:** protocol và inventory. **Chưa cho phép bước này tự mở training/experiment lớn.** Khi chuẩn bị
+assets tiếp, chốt SHA checkpoint, phiên bản evaluator, split và ngưỡng compute onboard trước inference; nếu thiếu thì
+giữ trạng thái chưa ready-to-run, không lấp bằng utility giả. Ngân sách GPU còn lại chưa bị sử dụng trong lượt này.
+
+Nguồn gốc và giới hạn prior art: [VisDrone tác giả](https://github.com/VisDrone/VisDrone-Dataset),
+[checkpoint YOLOv8](https://docs.ultralytics.com/models/yolov8/),
+[Pillow JPEG](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html),
+[hybrid-action trajectory/SemCom](https://arxiv.org/abs/2309.16713),
+[receiver-driven generative semantic HARQ](https://arxiv.org/abs/2605.09897).
+Các nguồn này xác minh thành phần/prior art, **không xác lập novelty của protocol ứng viên**.

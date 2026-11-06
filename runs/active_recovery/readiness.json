@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-06",
+  "status": "not_ready_to_run",
+  "protocol_sha256": "7f7c86c71d3239c33e8acedcacaa04e4f6c799ce07e74c77b7110e872ffdcde4",
+  "assets_at_proposed_paths": {
+    "visdrone": false,
+    "yolov8n": false,
+    "yolov8l": false,
+    "local_i2sb_checkpoint_directory": false,
+    "uav3d_mini_rgb_has_files": false
+  },
+  "local_ultralytics_source_available": true,
+  "windows_python": "3.12.16",
+  "pillow": "13.0.0",
+  "jpeg_codec": true,
+  "codec_smoke": {
+    "base_jpeg": {
+      "bytes": 2101,
+      "decoded_size": [
+        128,
+        96
+      ],
+      "progressive": false,
+      "sha256": "abbe57c3e74a8d3ba922e3630bdd4203ba60bc01ec09274f884662f7ae2a53aa"
+    },
+    "full_jpeg": {
+      "bytes": 5097,
+      "decoded_size": [
+        128,
+        96
+      ],
+      "progressive": false,
+      "sha256": "7c9060358eee35c0446ca9c4f0255328c2d9a431147721deb72c92015767afeb"
+    },
+    "progressive_jpeg": {
+      "bytes": 4107,
+      "decoded_size": [
+        128,
+        96
+      ],
+      "progressive": true,
+      "sha256": "196efbbc05f16fe640731d2184b3ccc4cd0e7f5acaa428822897779dd224d351"
+    },
+    "patch_jpeg": {
+      "bytes": 6743,
+      "decoded_size": [
+        128,
+        96
+      ],
+      "progressive": false,
+      "sha256": "1bd6eeaf2961f8c7f40511fe967a96cbacf33bc1f64cbc6f02c481c3340ed3df"
+    }
+  },
+  "smoke_scope": "Synthetic image, full-message CPU encode/decode only; no real-data quality, partial decoding, detector, neural codec, channel or energy validated.",
+  "gpu_seconds_this_preparation": 0,
+  "new_dataset_or_checkpoint_downloaded": false,
+  "unresolved": [
+    "Acquire dataset and record archive/image provenance and license",
+    "Acquire official weights and record version and SHA-256",
+    "Validate class mapping and ignored-region evaluator",
+    "Create group split manifest before scoring",
+    "Declare a defensible onboard compute budget and measurement device",
+    "Validate progressive JPEG scan-prefix decoding before claiming progressive delivery"
+  ],
+  "wsl_wireless_abc_module_discovery": {
+    "sionna.rt": true,
+    "gymnasium": true,
+    "PIL": true,
+    "ultralytics": false
+  },
+  "environment_modified": false
+}
