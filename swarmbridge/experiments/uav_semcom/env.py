@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-# Link budget regime (calibrated so that payloads matter; see report): 1 MHz shared by M=2 channels, UAVs surveying
+# Link budget regime (NOTE 2026-11-06: NOT payload-limited, best mode needs ~0.2 s of a 1 s slot; see report 3.2): 1 MHz shared by M=2 channels, UAVs surveying
 # 1-2.5 km from the BS (urban A2G, mostly NLoS at low elevation), each waypoint captures `tiles_per_wp` 512x512 tiles.
 DEFAULT = dict(
     K=3, M=2, B_total=1e6, fc=2.4e9, noise_dbm_hz=-174.0, nf_db=7.0, p_levels=(0.02, 0.08, 0.2),
