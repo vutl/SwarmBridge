@@ -95,3 +95,6 @@ Thumbs.db
 /runs/active_recovery/paired_cpu/energy_frontier.json
 /runs/active_recovery/delivered_objective/group_results.json
 /runs/jsac_reference/figures/
+
+# A1 reconstructed sample images (regenerable)
+/runs/uav_semcom/**/samples/
