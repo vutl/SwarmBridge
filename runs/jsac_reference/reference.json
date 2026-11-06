@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-06",
+  "status": "reference_audited_controller_not_implemented",
+  "purpose": "Bounded paper-inspired UAV control baseline, no novelty claim",
+  "source": {
+    "file": "pdf/Deep Reinforcement Learning-Based Resource Allocation for Hybrid Bit and Generative Semantic Communications in Space-Air-Ground Integrated Networks.pdf",
+    "sha256": "9cc7d9814b2d5ec75fd92a2c2d2d86af2382eaa010799457c236c86eb2dcfdac",
+    "pages": 13,
+    "doi": "10.1109/JSAC.2025.3623157",
+    "arxiv": "2412.05647v3"
+  },
+  "published": {
+    "uavs": 3,
+    "users": 8,
+    "satellites": 5,
+    "tasks": 100,
+    "max_UAV_speed_m_s": 10,
+    "altitude_range_m": [
+      45,
+      60
+    ],
+    "bandwidth_hz": 10000000,
+    "deadline_range_s": [
+      2,
+      11
+    ],
+    "quality_requirement_PSNR_range_db": [
+      10,
+      30
+    ],
+    "objective": "Eq14 normalized reconstruction quality + delay SCE; Eq15 constraints",
+    "modes": [
+      {
+        "name": "mode1_jpeg2000",
+        "reported_payload": 314,
+        "reported_payload_unit": "Kb",
+        "payload_bits": null,
+        "PSNR_db": 32.2,
+        "computation_s": 0.1323,
+        "quality_payload_scope": "Fig5 one illustrative image; not a measured dataset curve",
+        "computation_scope": "Section V fixed reported delay, not this workstation measurement"
+      },
+      {
+        "name": "mode2_text",
+        "reported_payload": 0.376,
+        "reported_payload_unit": "Kb",
+        "payload_bits": null,
+        "PSNR_db": 11.26,
+        "computation_s": 1.33,
+        "quality_payload_scope": "Fig5 one illustrative image; not a measured dataset curve",
+        "computation_scope": "Section V fixed reported delay, not this workstation measurement"
+      },
+      {
+        "name": "mode3_1",
+        "reported_payload": 0.897,
+        "reported_payload_unit": "Kb",
+        "payload_bits": null,
+        "PSNR_db": 16.3,
+        "computation_s": 1.33,
+        "quality_payload_scope": "Fig5 one illustrative image; not a measured dataset curve",
+        "computation_scope": "Section V fixed reported delay, not this workstation measurement"
+      },
+      {
+        "name": "mode3_2",
+        "reported_payload": 8.575,
+        "reported_payload_unit": "Kb",
+        "payload_bits": null,
+        "PSNR_db": 18.8,
+        "computation_s": 1.33,
+        "quality_payload_scope": "Fig5 one illustrative image; not a measured dataset curve",
+        "computation_scope": "Section V fixed reported delay, not this workstation measurement"
+      },
+      {
+        "name": "mode3_3",
+        "reported_payload": 33.151,
+        "reported_payload_unit": "Kb",
+        "payload_bits": null,
+        "PSNR_db": 23.2,
+        "computation_s": 1.33,
+        "quality_payload_scope": "Fig5 one illustrative image; not a measured dataset curve",
+        "computation_scope": "Section V fixed reported delay, not this workstation measurement"
+      }
+    ]
+  },
+  "proposed_reduced_controller": {
+    "source_backhaul": 1,
+    "uavs": 2,
+    "users": 4,
+    "full_satellite_motion_and_ISL": false,
+    "actual_mobility_action": true,
+    "baselines": [
+      "fixed_mode_hover",
+      "nearest_user_EDF",
+      "short_horizon_planner"
+    ],
+    "RL_baseline": "PPO with explicitly discretized actions, not DSAC reproduction",
+    "codec_scope": "published idealized profile until a real semantic codec is independently available"
+  },
+  "blockers_to_full_reproduction": [
+    "Payload Kb bit/byte convention unresolved",
+    "No verified official model/code release from present audit",
+    "VQE/codebook and conditional UNet weights unavailable locally",
+    "Slot duration, arrival parameters, mixed-action mapping and normalization details not fully specified"
+  ],
+  "training_started": false,
+  "GPU_seconds": 0,
+  "scope": "New image delivery reference, not a revised VisDrone objective"
+}

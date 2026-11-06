@@ -875,3 +875,44 @@ cận trên toán học của mọi thuật toán phục hồi. Chưa có bằng
 
 Tái lập: `python swarmbridge/experiments/active_recovery/delivered_objective.py REPO`. Công suất giả định giữ nguyên;
 phép kiểm tra này không đo hoặc tối ưu năng lượng và không gộp nó vào objective F1.
+
+## Công việc tiếp theo — bản điều khiển thu gọn theo JSAC Huang, chưa phải đề xuất mới (06/11)
+
+**Mục tiêu:** có một baseline UAV + RL + lựa chọn mode truyền chạy được trước khi chọn đóng góp nghiên cứu mới.
+Đóng băng VisDrone–YOLO–JPEG với objective cũ. Nhiệm vụ mới được lấy từ bài JSAC, không sửa deadline của pilot cũ:
+giao **ảnh** từ nguồn qua UAV relay tới người dùng. Ground user cần ảnh tái tạo; gửi box/nhãn không hoàn thành cùng dịch vụ.
+
+Đã đọc bản published PDF 13 trang: system model II, framework III, MDP IV, simulation V. Manifest nguồn và các giá trị
+được công bố ở `runs/jsac_reference/reference.json`. Bản full có 5 LEO, 3 UAV, 8 user, 100 task; UAV tối đa 10 m/s,
+cao 45–60 m. Eq.14 SCE dùng cả chất lượng ảnh và delay; Eq.15 còn có ràng buộc chất lượng tối thiểu và deadline.
+Vì vậy thời gian hoàn thành có giá trị trực tiếp trong objective nguồn, khác objective delivered-F1 đã thử.
+
+### Phạm vi bản nhỏ được chọn
+
+1. **Control simulator:** một nguồn ảnh/backhaul, hai UAV relay, bốn user, nhiều yêu cầu có deadline và quality target.
+   UAV thực sự thay đổi vị trí qua action; vị trí đổi channel/service tương lai. Bay và truyền không bị mặc định loại trừ.
+   Queue, lượng bit còn lại, thời gian tính và thời điểm hoàn thành phải được cập nhật nhân quả.
+2. **Mode bank cho bước kiểm tra controller:** dùng profile được paper công bố, gắn nhãn `published illustrative
+   profile`, không gọi là codec/gen model đã chạy. Kiểm hai cách hiểu đơn vị Kb nếu chưa làm rõ; không chọn cách hiểu
+   để tạo chiến thắng. Một ảnh minh họa không đại diện phân bố chất lượng toàn dataset.
+3. **Baselines rồi RL:** hover + mode cố định, nearest-user/EDF greedy và planner ngắn hạn cùng thông tin; PPO có sẵn
+   dùng để kiểm tra pipeline điều khiển, với action rời rạc hóa được ghi rõ. PPO không được gọi là tái lập DSAC hoặc
+   thuật toán mới. Chỉ train sau test movement, queue, deadline và tính reward; smoke training không chứng minh thắng.
+4. **Đầu ra cần thấy:** trajectory hai UAV, log task/mode theo thời gian, tỉ lệ hoàn thành, chất lượng, delay, SCE và
+   reward curve. Báo riêng chất lượng và delay để tránh gain chỉ do normalization/reward. Chưa gắn thêm SB/Mamba.
+
+### Các giới hạn phải giải quyết công khai
+
+- Không tuyên bố tái lập đúng từng số Fig.6–11. Nguồn/tầng vệ tinh đơn giản hóa và PPO là khác biệt implementation.
+- Chưa xác minh được repo/checkpoint chính thức của bài JSAC từ PDF và lượt tìm kiếm hiện tại. Semantic mode thật cần
+  VQE/codebook và UNet được huấn luyện riêng; BLIP-2/VAE/CLIP pretrained không thay thế phần này.
+- Fig.5 ghi payload bằng **Kb** nhưng chưa xác nhận là kbit hay kbyte. Lưu nguyên số và đơn vị; chưa chuyển thành bits
+  như một sự thật đã biết. Mode 1/2/3 PSNR lần lượt là 32.2/11.26/16.3/18.8/23.2 cho đúng ảnh minh họa.
+- Phần thuật toán mô tả return distribution và dẫn Duan et al.; không suy DSAC là MARL/distributed control chỉ từ tên.
+- Slot duration, task-arrival parameter, action mapping, các scale normalization và pipeline neural còn thiếu để tái lập
+  đầy đủ. Những giá trị tự chọn phải gắn nhãn implementation choices và kiểm sensitivity, không nhận là paper cung cấp.
+- Bản nhỏ chỉ phục vụ reproduction/control baseline. Nó chưa kiểm chứng giả thuyết receiver recovery state → mobility,
+  chưa xác lập novelty và không làm thay đổi kết luận âm của VisDrone. Chưa chạy env hoặc train RL trong lượt audit này.
+
+Nguồn chính: [published paper](https://doi.org/10.1109/JSAC.2025.3623157),
+[arXiv v3](https://arxiv.org/abs/2412.05647v3).

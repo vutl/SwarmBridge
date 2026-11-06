@@ -94,3 +94,4 @@ Thumbs.db
 /runs/active_recovery/paired_cpu/group_frontier.json
 /runs/active_recovery/paired_cpu/energy_frontier.json
 /runs/active_recovery/delivered_objective/group_results.json
+/runs/jsac_reference/figures/
