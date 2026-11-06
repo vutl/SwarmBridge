@@ -1,0 +1,4 @@
+type combos per image: [(('Complex_Counting', 'Condition_Recognition', 'Simple_Counting', 'Yes_No'), 512), (('Condition_Recognition',), 457), (('Condition_Recognition', 'Yes_No'), 355), (('Complex_Counting', 'Condition_Recognition', 'Simple_Counting'), 124)]
+overall x road cond: Counter({('non flooded', 'non flooded'): 680, ('flooded', 'flooded'): 154, ('flooded', 'non flooded'): 23, ('flooded', 'flooded,non flooded'): 8, ('non flooded', 'flooded'): 2})
+overall x yesno: Counter({('non flooded', 'nonfl', 'Yes'): 341, ('non flooded', 'fl', 'No'): 339, ('flooded', 'nonfl', 'No'): 80, ('flooded', 'fl', 'Yes'): 76, ('flooded', 'nonfl', 'Yes'): 18, ('flooded', 'fl', 'No'): 11, ('non flooded', 'nonfl', 'No'): 2})
+overall x complex-count kind: Counter({('non flooded', 'nonfl'): 465, ('flooded', 'fl'): 150, ('flooded', 'nonfl'): 76, ('non flooded', 'fl'): 2})

@@ -1,0 +1,1201 @@
+{
+ "leo_uav_link": {
+  "paper": {
+   "noise_dbm": -130.0,
+   "snr_db_zenith": 22.09820237267657,
+   "snr_db_40deg": 18.84831298775104,
+   "mean_rate_mbps_zenith": 65.75402204342542,
+   "mean_rate_mbps_40deg": 55.37159456516813
+  },
+  "thermal": {
+   "noise_dbm": -103.09920865791116,
+   "snr_db_zenith": -4.802588969412276,
+   "snr_db_40deg": -8.052478354337808,
+   "mean_rate_mbps_zenith": 3.811416892935408,
+   "mean_rate_mbps_40deg": 2.0145480943214484
+  }
+ },
+ "outdated_csi_delta_zenith": 0.005583456404928352,
+ "access_time_s": 214.6574421626111,
+ "slant_range_km": {
+  "zenith": 750.0,
+  "elev40": 1090.324403802165
+ },
+ "isl_rate_mbps": {
+  "250km": 19.921898017751705,
+  "375km": 12.16445632791236,
+  "500km": 8.028971302889937
+ },
+ "uav_user_rate_mbps": {
+  "x50m_no_interf": 384.0370552001502,
+  "x50m_2interf": 56.08956003791201,
+  "x200m_no_interf": 353.1624267879443,
+  "x200m_2interf": 32.68849788027313,
+  "x400m_no_interf": 333.8133770711153,
+  "x400m_2interf": 21.81432101301254
+ },
+ "m1_dominance": {
+  "fig5": {
+   "m1_bits": 314000.0,
+   "m1_dominates_above_mbps": 0.5237104450196209
+  },
+  "original": {
+   "m1_bits": 28000000.0,
+   "m1_dominates_above_mbps": 46.75565500542707
+  }
+ },
+ "mode_map": {
+  "fig5": [
+   {
+    "rate_mbps": 0.01,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.801,
+     0.126,
+     0.073
+    ],
+    "greedy_utility": -0.3620448144941172,
+    "best_fixed_mode": "M3_2",
+    "best_fixed_utility": -0.47102902199607083,
+    "satisfied": 0.50975
+   },
+   {
+    "rate_mbps": 0.012589254117941663,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.024,
+     0.872,
+     0.105
+    ],
+    "greedy_utility": -0.3139484092138685,
+    "best_fixed_mode": "M3_2",
+    "best_fixed_utility": -0.4347459730211683,
+    "satisfied": 0.549
+   },
+   {
+    "rate_mbps": 0.01584893192461114,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.014,
+     0.852,
+     0.134
+    ],
+    "greedy_utility": -0.2670330972677493,
+    "best_fixed_mode": "M3_2",
+    "best_fixed_utility": -0.4095104695316859,
+    "satisfied": 0.5805
+   },
+   {
+    "rate_mbps": 0.01995262314968879,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.006,
+     0.844,
+     0.15
+    ],
+    "greedy_utility": -0.23482495744503648,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.36880655787460404,
+    "satisfied": 0.59875
+   },
+   {
+    "rate_mbps": 0.025118864315095822,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.097,
+     0.903
+    ],
+    "greedy_utility": -0.19281646127196725,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.28849103813861554,
+    "satisfied": 0.617
+   },
+   {
+    "rate_mbps": 0.03162277660168379,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.069,
+     0.931
+    ],
+    "greedy_utility": -0.157680578347004,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.22406481868593572,
+    "satisfied": 0.62825
+   },
+   {
+    "rate_mbps": 0.03981071705534969,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.047,
+     0.953
+    ],
+    "greedy_utility": -0.1265263090345522,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.17146380084841956,
+    "satisfied": 0.63975
+   },
+   {
+    "rate_mbps": 0.05011872336272725,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.028,
+     0.972
+    ],
+    "greedy_utility": -0.10283771919040062,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.12914415895074602,
+    "satisfied": 0.64725
+   },
+   {
+    "rate_mbps": 0.0630957344480193,
+    "choice_frac": [
+     0.028,
+     0.0,
+     0.0,
+     0.015,
+     0.957
+    ],
+    "greedy_utility": -0.059376636987740025,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.09752675278687795,
+    "satisfied": 0.6815
+   },
+   {
+    "rate_mbps": 0.07943282347242821,
+    "choice_frac": [
+     0.101,
+     0.0,
+     0.0,
+     0.004,
+     0.894
+    ],
+    "greedy_utility": 0.027927233831680436,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.07220297288061431,
+    "satisfied": 0.75975
+   },
+   {
+    "rate_mbps": 0.1,
+    "choice_frac": [
+     0.674,
+     0.0,
+     0.0,
+     0.0,
+     0.326
+    ],
+    "greedy_utility": 0.11980207065652965,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.056149667129352133,
+    "satisfied": 0.82875
+   },
+   {
+    "rate_mbps": 0.12589254117941662,
+    "choice_frac": [
+     0.776,
+     0.0,
+     0.0,
+     0.0,
+     0.224
+    ],
+    "greedy_utility": 0.22169643819694518,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.01283362297094699,
+    "satisfied": 0.88225
+   },
+   {
+    "rate_mbps": 0.1584893192461114,
+    "choice_frac": [
+     0.85,
+     0.0,
+     0.0,
+     0.0,
+     0.15
+    ],
+    "greedy_utility": 0.30695457748383354,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.1729685861860779,
+    "satisfied": 0.92225
+   },
+   {
+    "rate_mbps": 0.1995262314968879,
+    "choice_frac": [
+     0.906,
+     0.0,
+     0.0,
+     0.0,
+     0.094
+    ],
+    "greedy_utility": 0.37329313032105904,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.2930120541931843,
+    "satisfied": 0.9485
+   },
+   {
+    "rate_mbps": 0.2511886431509582,
+    "choice_frac": [
+     0.958,
+     0.0,
+     0.0,
+     0.0,
+     0.042
+    ],
+    "greedy_utility": 0.4341853775979137,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.3994367267433348,
+    "satisfied": 0.97375
+   },
+   {
+    "rate_mbps": 0.3162277660168379,
+    "choice_frac": [
+     0.994,
+     0.0,
+     0.0,
+     0.0,
+     0.006
+    ],
+    "greedy_utility": 0.4846308111238237,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.4795595749474356,
+    "satisfied": 0.995
+   },
+   {
+    "rate_mbps": 0.3981071705534969,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5093752882018776,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5093752882018776,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 0.5011872336272725,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.524122558437676,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.524122558437676,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 0.630957344480193,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5358367315710794,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5358367315710794,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 0.7943282347242822,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5451416300373904,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5451416300373904,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 1.0,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5525327736104239,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5525327736104239,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 1.2589254117941662,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5584037676373853,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5584037676373853,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 1.584893192461114,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5630672639588984,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5630672639588984,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 1.9952623149688828,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.566771610759609,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.566771610759609,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 2.5118864315095824,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5697140780146241,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5697140780146241,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 3.1622776601683795,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5720513628350341,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5720513628350341,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 3.9810717055349696,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5739079341604784,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5739079341604784,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 5.011872336272725,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5753826611840582,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5753826611840582,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 6.309573444801942,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5765540784973985,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5765540784973985,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 7.943282347242822,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5774845683440296,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5774845683440296,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 10.0,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5782236827013331,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5782236827013331,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 12.589254117941662,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5788107821040291,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5788107821040291,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 15.848931924611142,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5792771317361805,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5792771317361805,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 19.95262314968883,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5796475664162515,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5796475664162515,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 25.118864315095824,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5799418131417531,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5799418131417531,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 31.622776601683793,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.580175541623794,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.580175541623794,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 39.81071705534969,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5803611987563385,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5803611987563385,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 50.118723362727245,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5805086714586964,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5805086714586964,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 63.09573444801943,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5806258131900304,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5806258131900304,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 79.43282347242821,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5807188621746936,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5807188621746936,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 100.0,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5807927736104239,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5807927736104239,
+    "satisfied": 1.0
+   }
+  ],
+  "original": [
+   {
+    "rate_mbps": 0.01,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.801,
+     0.126,
+     0.073
+    ],
+    "greedy_utility": -0.3620448144941172,
+    "best_fixed_mode": "M3_2",
+    "best_fixed_utility": -0.47102902199607083,
+    "satisfied": 0.50975
+   },
+   {
+    "rate_mbps": 0.012589254117941663,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.024,
+     0.872,
+     0.105
+    ],
+    "greedy_utility": -0.3139484092138685,
+    "best_fixed_mode": "M3_2",
+    "best_fixed_utility": -0.4347459730211683,
+    "satisfied": 0.549
+   },
+   {
+    "rate_mbps": 0.01584893192461114,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.014,
+     0.852,
+     0.134
+    ],
+    "greedy_utility": -0.2670330972677493,
+    "best_fixed_mode": "M3_2",
+    "best_fixed_utility": -0.4095104695316859,
+    "satisfied": 0.5805
+   },
+   {
+    "rate_mbps": 0.01995262314968879,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.006,
+     0.844,
+     0.15
+    ],
+    "greedy_utility": -0.23482495744503648,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.36880655787460404,
+    "satisfied": 0.59875
+   },
+   {
+    "rate_mbps": 0.025118864315095822,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.097,
+     0.903
+    ],
+    "greedy_utility": -0.19281646127196725,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.28849103813861554,
+    "satisfied": 0.617
+   },
+   {
+    "rate_mbps": 0.03162277660168379,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.069,
+     0.931
+    ],
+    "greedy_utility": -0.157680578347004,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.22406481868593572,
+    "satisfied": 0.62825
+   },
+   {
+    "rate_mbps": 0.03981071705534969,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.047,
+     0.953
+    ],
+    "greedy_utility": -0.1265263090345522,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.17146380084841956,
+    "satisfied": 0.63975
+   },
+   {
+    "rate_mbps": 0.05011872336272725,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.028,
+     0.972
+    ],
+    "greedy_utility": -0.10283771919040062,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.12914415895074602,
+    "satisfied": 0.64725
+   },
+   {
+    "rate_mbps": 0.0630957344480193,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.015,
+     0.985
+    ],
+    "greedy_utility": -0.08380412991416715,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.09752675278687795,
+    "satisfied": 0.65325
+   },
+   {
+    "rate_mbps": 0.07943282347242821,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.004,
+     0.996
+    ],
+    "greedy_utility": -0.06804918217829534,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.07220297288061431,
+    "satisfied": 0.6585
+   },
+   {
+    "rate_mbps": 0.1,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.056149667129352133,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.056149667129352133,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.12589254117941662,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.049951281046938203,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.049951281046938203,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.1584893192461114,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.04502772797195476,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.04502772797195476,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.1995262314968879,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.041116810749331864,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.041116810749331864,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.2511886431509582,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.03801025877573303,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.03801025877573303,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.3162277660168379,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.03554263683046504,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.03554263683046504,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.3981071705534969,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.03358253504671343,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.03358253504671343,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.5011872336272725,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.03202557085694607,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.03202557085694607,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.630957344480193,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.030788830240559267,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.030788830240559267,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 0.7943282347242822,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.0298064522499329,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.0298064522499329,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 1.0,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.0290261216748067,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.0290261216748067,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 1.2589254117941662,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.028406283066565292,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.028406283066565292,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 1.584893192461114,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.02791392775906695,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.02791392775906695,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 1.9952623149688828,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.02752283603680465,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.02752283603680465,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 2.5118864315095824,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.02721218083944478,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.02721218083944478,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 3.1622776601683795,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.026965418644917985,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.026965418644917985,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 3.9810717055349696,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.026769408466542813,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.026769408466542813,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 5.011872336272725,
+    "choice_frac": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "greedy_utility": -0.02661371204756608,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.02661371204756608,
+    "satisfied": 0.66225
+   },
+   {
+    "rate_mbps": 6.309573444801942,
+    "choice_frac": [
+     0.066,
+     0.0,
+     0.0,
+     0.0,
+     0.934
+    ],
+    "greedy_utility": 0.031124957400115526,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.026490037985927393,
+    "satisfied": 0.72875
+   },
+   {
+    "rate_mbps": 7.943282347242822,
+    "choice_frac": [
+     0.136,
+     0.0,
+     0.0,
+     0.0,
+     0.864
+    ],
+    "greedy_utility": 0.10247109829493876,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.026391800186864756,
+    "satisfied": 0.798
+   },
+   {
+    "rate_mbps": 10.0,
+    "choice_frac": [
+     0.729,
+     0.0,
+     0.0,
+     0.0,
+     0.271
+    ],
+    "greedy_utility": 0.1791953852051296,
+    "best_fixed_mode": "M3_3",
+    "best_fixed_utility": -0.026313767129352142,
+    "satisfied": 0.85675
+   },
+   {
+    "rate_mbps": 12.589254117941662,
+    "choice_frac": [
+     0.813,
+     0.0,
+     0.0,
+     0.0,
+     0.187
+    ],
+    "greedy_utility": 0.26905099526867393,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.09488558658969756,
+    "satisfied": 0.90275
+   },
+   {
+    "rate_mbps": 15.848931924611142,
+    "choice_frac": [
+     0.878,
+     0.0,
+     0.0,
+     0.0,
+     0.122
+    ],
+    "greedy_utility": 0.34265501211842714,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.2337209041063748,
+    "satisfied": 0.9355
+   },
+   {
+    "rate_mbps": 19.95262314968883,
+    "choice_frac": [
+     0.934,
+     0.0,
+     0.0,
+     0.0,
+     0.066
+    ],
+    "greedy_utility": 0.40542227066480085,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.34900329595984575,
+    "satisfied": 0.96125
+   },
+   {
+    "rate_mbps": 25.118864315095824,
+    "choice_frac": [
+     0.978,
+     0.0,
+     0.0,
+     0.0,
+     0.022
+    ],
+    "greedy_utility": 0.4597931243981961,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.44149185746953384,
+    "satisfied": 0.98375
+   },
+   {
+    "rate_mbps": 31.622776601683793,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5005838877152288,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5005838877152288,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 39.81071705534969,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5171393008083619,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5171393008083619,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 50.118723362727245,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5302897328657616,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5302897328657616,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 63.09573444801943,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5407354923477774,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5407354923477774,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 79.43282347242821,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.5490328540374815,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.5490328540374815,
+    "satisfied": 1.0
+   },
+   {
+    "rate_mbps": 100.0,
+    "choice_frac": [
+     1.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "greedy_utility": 0.555623682701333,
+    "best_fixed_mode": "M1_jpeg2000",
+    "best_fixed_utility": 0.555623682701333,
+    "satisfied": 1.0
+   }
+  ]
+ }
+}

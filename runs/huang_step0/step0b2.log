@@ -1,0 +1,31 @@
+EVAL 0/480 39s
+EVAL 60/480 260s
+EVAL 120/480 490s
+EVAL 180/480 712s
+EVAL 240/480 948s
+EVAL 300/480 1172s
+EVAL 360/480 1405s
+EVAL 420/480 1626s
+# Step 0B-2 — closed-loop foresight reference (post-hoc correction)
+
+| noise | M1 payload | λ | best causal | foresight best | foresight − best causal | foresight − matching rollout | gate |
+|---|---|---|---|---|---|---|---|
+| paper | fig5 | 0.5 | rollout_area_h10_s3 0.581 | foresight_all_h10 0.581 | -0.000 [-0.000, +0.000] | +0.000 [-0.000, +0.000] | - |
+| paper | fig5 | 1.0 | rollout_area_h10_s3 0.580 | foresight_area_h10 0.580 | -0.000 [-0.000, +0.000] | -0.000 [-0.000, +0.000] | - |
+| paper | fig5 | 2.0 | rollout_area_h10_s3 0.579 | foresight_area_h10 0.579 | -0.000 [-0.000, +0.000] | -0.000 [-0.000, +0.000] | - |
+| paper | fig5 | 4.0 | rollout_all_h10_s3 0.578 | foresight_all_h10 0.578 | +0.000 [-0.000, +0.000] | +0.000 [-0.000, +0.000] | - |
+| paper | original | 0.5 | greedy_area 0.387 | foresight_area_h10 0.389 | +0.002 [-0.003, +0.008] | +0.008 [+0.002, +0.014] | - |
+| paper | original | 1.0 | rollout_all_h10_s3 0.317 | foresight_area_h10 0.297 | -0.020 [-0.051, +0.012] | -0.004 [-0.024, +0.017] | - |
+| paper | original | 2.0 | greedy_area 0.210 | foresight_area_h10 0.230 | +0.019 [-0.010, +0.048] | +0.097 [-0.047, +0.241] | - |
+| paper | original | 4.0 | rollout_all_h10_s3 0.106 | foresight_all_h10 0.101 | -0.005 [-0.087, +0.077] | -0.005 [-0.087, +0.077] | - |
+| thermal | fig5 | 0.5 | rollout_area_h10_s3 0.512 | foresight_area_h10 0.500 | -0.012 [-0.036, +0.012] | -0.012 [-0.036, +0.012] | - |
+| thermal | fig5 | 1.0 | rollout_area_h10_s3 0.477 | foresight_area_h10 0.470 | -0.007 [-0.039, +0.025] | -0.007 [-0.039, +0.025] | - |
+| thermal | fig5 | 2.0 | rollout_area_h10_s3 0.459 | foresight_all_h10 0.449 | -0.010 [-0.031, +0.010] | -0.003 [-0.025, +0.020] | - |
+| thermal | fig5 | 4.0 | rollout_area_h10_s3 0.389 | foresight_all_h10 0.341 | -0.048 [-0.149, +0.054] | -0.040 [-0.122, +0.043] | - |
+| thermal | original | 0.5 | fixed_M3_3 -0.034 | foresight_all_h10 -0.371 | -0.337 [-0.600, -0.075] | -0.066 [-0.327, +0.195] | - |
+| thermal | original | 1.0 | price_tuned -0.042 | foresight_all_h10 -0.419 | -0.378 [-0.669, -0.086] | -0.149 [-0.419, +0.121] | - |
+| thermal | original | 2.0 | price_tuned -0.061 | foresight_area_h10 -0.219 | -0.157 [-0.284, -0.030] | -0.122 [-0.256, +0.012] | - |
+| thermal | original | 4.0 | price_tuned -0.138 | foresight_area_h10 -0.385 | -0.247 [-0.391, -0.103] | -0.143 [-0.304, +0.018] | - |
+
+Cells passing: 0/16; wall 1838 s, CPU.
+RUN_DONE step0b2

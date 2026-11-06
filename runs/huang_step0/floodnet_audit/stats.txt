@@ -1,0 +1,48 @@
+== train: 4511 QA, 1448 images, keys=['Ground_Truth', 'Image_ID', 'Question', 'Question_Type']
+  per type: {'Condition_Recognition': 2315, 'Complex_Counting': 693, 'Simple_Counting': 636, 'Yes_No': 867}
+  unique questions: 15
+== valid: 1415 QA, 450 images, keys=['Image_ID', 'Question', 'Question_Type']
+  per type: {'Condition_Recognition': 726, 'Simple_Counting': 197, 'Yes_No': 276, 'Complex_Counting': 216}
+  unique questions: 15
+== test: 1429 QA, 450 images, keys=['Image_ID', 'Question', 'Question_Type']
+  per type: {'Condition_Recognition': 728, 'Yes_No': 278, 'Complex_Counting': 222, 'Simple_Counting': 201}
+  unique questions: 15
+
+### Condition_Recognition: n=2315 templates=3
+  [1448] 'What is the overall condition of the given image?'  vocab=2 major=('non flooded', 1247) (0.86)  top5=[('non flooded', 1247), ('flooded', 201)]
+  [452] 'What is the condition of road?'  vocab=3 major=('non flooded', 371) (0.82)  top5=[('non flooded', 371), ('flooded', 76), ('flooded,non flooded', 5)]
+  [415] 'What is the condition of the road in this image?'  vocab=3 major=('non flooded', 332) (0.80)  top5=[('non flooded', 332), ('flooded', 80), ('flooded,non flooded', 3)]
+  TYPE vocab=3 type-majority=('non flooded', 1950) acc=0.842  per-question-majority acc=0.842
+  answers: [('non flooded', 1950), ('flooded', 357), ('flooded,non flooded', 8)]
+
+### Complex_Counting: n=693 templates=6
+  [183] 'How many buildings are non flooded?'  vocab=11 major=('4', 43) (0.23)  top5=[('4', 43), ('3', 42), ('1', 32), ('2', 30), ('6', 14)]
+  [179] 'How many non flooded buildings can be seen in this image?'  vocab=17 major=('3', 44) (0.25)  top5=[('3', 44), ('1', 38), ('2', 30), ('4', 19), ('5', 19)]
+  [179] 'How many buildings are non flooded in this image?'  vocab=11 major=('1', 45) (0.25)  top5=[('1', 45), ('3', 35), ('4', 34), ('2', 31), ('6', 14)]
+  [55] 'How many flooded buildings can be seen in this image?'  vocab=23 major=('16', 7) (0.13)  top5=[('16', 7), ('13', 6), ('4', 5), ('14', 4), ('21', 3)]
+  [49] 'How many buildings are flooded?'  vocab=23 major=('17', 5) (0.10)  top5=[('17', 5), ('9', 4), ('11', 4), ('16', 3), ('14', 3)]
+  [48] 'How many buildings are flooded in this image?'  vocab=21 major=('8', 5) (0.10)  top5=[('8', 5), ('7', 4), ('16', 4), ('11', 3), ('5', 3)]
+  TYPE vocab=35 type-majority=('3', 124) acc=0.179  per-question-majority acc=0.215
+  answers: [('3', 124), ('1', 121), ('4', 105), ('2', 98), ('5', 45), ('6', 37), ('7', 22), ('8', 19), ('16', 14), ('13', 13), ('14', 11), ('9', 10), ('11', 9), ('23', 8), ('15', 6), ('20', 6), ('21', 5), ('17', 5), ('18', 5), ('10', 4), ('24', 4), ('19', 3), ('22', 3), ('12', 2), ('30', 2)]
+
+### Simple_Counting: n=636 templates=4
+  [173] 'How many buildings can be seen in this image?'  vocab=27 major=('4', 32) (0.18)  top5=[('4', 32), ('1', 29), ('2', 25), ('3', 23), ('5', 12)]
+  [169] 'How many buildings are in this image?'  vocab=25 major=('4', 30) (0.18)  top5=[('4', 30), ('1', 30), ('3', 25), ('2', 15), ('6', 13)]
+  [151] 'How many buildings can be seen in the image?'  vocab=22 major=('3', 31) (0.21)  top5=[('3', 31), ('2', 26), ('1', 24), ('4', 16), ('6', 11)]
+  [143] 'How many buildings are in the image?'  vocab=24 major=('3', 30) (0.21)  top5=[('3', 30), ('1', 23), ('4', 18), ('2', 16), ('5', 13)]
+  TYPE vocab=35 type-majority=('3', 109) acc=0.171  per-question-majority acc=0.193
+  answers: [('3', 109), ('1', 106), ('4', 96), ('2', 82), ('5', 40), ('6', 39), ('7', 21), ('13', 13), ('8', 13), ('16', 13), ('14', 11), ('17', 8), ('23', 8), ('18', 7), ('15', 7), ('9', 7), ('10', 6), ('11', 6), ('20', 6), ('19', 5), ('21', 5), ('12', 4), ('24', 4), ('25', 4), ('22', 3)]
+
+### Yes_No: n=867 templates=2
+  [441] 'Is the entire road non flooded?'  vocab=2 major=('Yes', 359) (0.81)  top5=[('Yes', 359), ('No', 82)]
+  [426] 'Is the entire road flooded?'  vocab=2 major=('No', 350) (0.82)  top5=[('No', 350), ('Yes', 76)]
+  TYPE vocab=2 type-majority=('Yes', 435) acc=0.502  per-question-majority acc=0.818
+  answers: [('Yes', 435), ('No', 432)]
+
+Overall per-question-majority acc (train, in-sample) = 0.650
+questions/image dist: [(1, 457), (3, 479), (5, 455), (6, 57)]
+
+Track1 train masks: 398
+  train: VQA images with Track1 train mask = 398/1448; QA pairs on them = 1203
+  valid: VQA images with Track1 train mask = 0/450; QA pairs on them = 0
+  test: VQA images with Track1 train mask = 0/450; QA pairs on them = 0
