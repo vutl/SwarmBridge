@@ -1,0 +1,92 @@
+"""Gymnasium wrapper for the two-timescale env (env_ev.py): ONE policy, two kinds of decision steps.
+
+  slot step  (at every slot start): action = (move, channel, power) per UAV; the mode entry is masked to 0.
+  mode step  (whenever an image's per-mode info becomes available, possibly mid-slot): action = mode of THAT image;
+             all slot entries are masked to 0.
+The observation is the env observation at the decision instant + [is_mode_step] + features of the image being
+decided (UAV one-hot, slack, quality floor, per-mode (bits, PSNR) as known at that instant, its UAV's encoder backlog
+and transmit backlog). Nothing computed after the decision instant enters the observation.
+Action space: MultiDiscrete([11, M+1, P] * K + [n_modes]). Reward of a step = reward accrued until the next decision.
+Note: gamma is applied per decision step (mode steps add steps that take little time); kept as a documented
+approximation.
+"""
+import gymnasium as gym
+import numpy as np
+
+import env_ev as V
+
+
+class GymUavSemcomEv(gym.Env):
+    metadata = {}
+
+    def __init__(self, table, pool, cfg=None, seed=0, seeds=None):
+        self.core = V.UavSemcomEnvEv(table, pool, cfg, seed)
+        c = self.core.c
+        self.K, self.n_modes = c["K"], self.core.n_modes
+        self.slot_nvec = [V.E.UavSemcomEnv.N_MOVE, c["M"] + 1, len(c["p_levels"])]
+        self.action_space = gym.spaces.MultiDiscrete(self.slot_nvec * self.K + [self.n_modes])
+        self._rng = np.random.default_rng(seed)
+        self.seeds, self._ep = seeds, 0
+        self.phase, self.pending = "slot", None
+        self.core.reset(seed)
+        o = self._obs()
+        self.observation_space = gym.spaces.Box(-np.inf, np.inf, shape=o.shape, dtype=np.float32)
+
+    def _obs(self):
+        core = self.core
+        f = np.zeros(1 + self.K + 4 + 2 * self.n_modes, dtype=np.float32)
+        if self.phase == "mode":
+            k, tk = self.pending
+            u = core.uavs[k]
+            b, q = core.mode_info(tk)
+            tx_bits = sum(t.rem_bits for t in u.queue if t.mode >= 0)
+            f[0] = 1.0
+            f[1 + k] = 1.0
+            o = 1 + self.K
+            f[o:o + 4] = [(core.latest_tx_end(tk) - core.t) / 12, tk.qmin / 40, max(u.enc_free - core.t, 0.0),
+                          np.log10(1 + tx_bits) / 7]
+            f[o + 4:o + 4 + self.n_modes] = np.log10(b) / 7
+            f[o + 4 + self.n_modes:] = np.asarray(q) / 40
+        return np.concatenate([core.obs(), f]).astype(np.float32)
+
+    def reset(self, seed=None, options=None):
+        if self.seeds is not None:
+            s = self.seeds[self._ep % len(self.seeds)]
+            self._ep += 1
+        else:
+            s = int(self._rng.integers(0, 2 ** 31)) if seed is None else seed
+        self.core.reset(s)
+        self.phase, self.pending = "slot", None
+        return self._obs(), {}
+
+    def step(self, action):
+        a = np.asarray(action)
+        if self.phase == "slot":
+            self.core.begin_slot([tuple(a[3 * k:3 * k + 3]) for k in range(self.K)])
+        else:
+            self.core.decide(int(a[-1]))
+        ev = self.core.advance()
+        if ev[0] == "mode":
+            self.phase, self.pending, done = "mode", (ev[1], ev[2]), False
+        else:
+            self.phase, self.pending, done = "slot", None, ev[1]
+        r = self.core.pop_reward()
+        return self._obs(), float(r), done, False, (self.core.metrics() if done else {})
+
+    def action_masks(self):
+        core, out = self.core, []
+        for u in core.uavs:
+            for j, n in enumerate(self.slot_nvec):
+                m = np.ones(n, dtype=bool)
+                if self.phase == "mode" or not u.active:
+                    m[1:] = False
+                elif j == 0 and u.wp_i >= len(u.wps):
+                    m[9] = False
+                elif j == 1 and not u.queue:
+                    m[1:] = False
+                out.append(m)
+        mm = np.ones(self.n_modes, dtype=bool)
+        if self.phase == "slot":
+            mm[1:] = False
+        out.append(mm)
+        return np.concatenate(out)
