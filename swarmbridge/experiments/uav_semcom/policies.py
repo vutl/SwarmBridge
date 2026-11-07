@@ -52,12 +52,11 @@ def plan_modes(env, k, rate, select):
             b = tk.rem_bits if tk.ready <= env.t else env.mode_info(tk)[0][tk.mode] - tk.sent_bits
             tx_free = max(tx_free, tk.ready) + max(b, 0.0) / rate
     enc_free = max(env.t, u.enc_free)
-    probe = env.probe_s()
     modes = []
-    for tk in [t for t in u.queue if t.mode < 0]:
+    for tk in env.awaiting(u):
         b_hat, q_hat = env.mode_info(tk)
         m = select(tk, b_hat, q_hat, enc_free, tx_free)
-        enc_free = enc_free + probe + tab.enc_s[m]
+        enc_free = enc_free + tab.enc_s[m]
         tx_free = max(tx_free, enc_free) + b_hat[m] / rate
         modes.append(int(m))
     return tuple(modes + [0] * (env.L - len(modes)))
@@ -65,12 +64,11 @@ def plan_modes(env, k, rate, select):
 
 def greedy_select(env, rate):
     tab = env.tab
-    probe = env.probe_s()
 
     def sel(tk, b_hat, q_hat, enc_free, tx_free):
         best, best_u = 0, -math.inf
         for m in range(env.n_modes):
-            ready = enc_free + probe + tab.enc_s[m]
+            ready = enc_free + tab.enc_s[m]
             end = max(tx_free, ready) + b_hat[m] / rate
             if end > tk.t_cap + tk.dmax - tab.dec_s[m]:     # predicted to miss the deadline -> discarded
                 v = -1.0

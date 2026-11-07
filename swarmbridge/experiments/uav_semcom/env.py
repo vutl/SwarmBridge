@@ -3,6 +3,16 @@
 The system model and MDP (state, observation, action, transition order, reward, constraints, parameter sources) are
 written out in reports/uav-semcom-a.md section 4, with pointers back to the functions here.
 
+v2.1 changes vs v2 (v2 = commit d812c7e7, frozen copy in legacy_env_v2.py):
+  * interference is time-resolved inside the slot: transmission is simulated event by event (an image finishes, an
+    image becomes ready, a deadline passes); between events the rates are constant and a UAV is interfered only by
+    co-channel UAVs that are actually sending at that moment (v2: by every co-channel UAV with something ready
+    in the slot, for the whole slot);
+  * causal 'predicted' mode info: at capture, the probe encode is queued on the UAV encoder; an image can get its
+    mode only at the first decision epoch after its probe has finished (capture -> probe -> prediction -> mode
+    decision -> encode -> transmit). Its time is no longer added to the chosen mode's encode. oracle / mean: info
+    available at capture (unchanged).
+
 v2 changes vs v1 (v1 = commit 1c85cfda; v1 results in report sections 3 / 3.1 are invalid, see 3.2):
   * a slot is no longer capped at one image per UAV: the transmitter serves its FIFO queue continuously inside the
     slot, and the encoder runs in parallel with the transmitter (serial encoder, serial transmitter = tandem queue);
@@ -132,6 +142,7 @@ class Task:
     dmax: float
     qmin: float
     mode: int = -1
+    info_t: float = 0.0           # time from which the controller has the per-mode info and can decide the mode
     enc_start: float = math.nan
     ready: float = math.inf       # time the encoded bitstream is available
     bits: float = 0.0             # payload of the chosen mode
@@ -224,6 +235,10 @@ class UavSemcomEnv:
     def probe_s(self):
         return self.tab.enc_s[self.tab.probe_j] if self.c["mode_info"] == "predicted" else 0.0
 
+    def awaiting(self, u):
+        """Images of UAV u that await a mode decision AND whose per-mode info is available now (capture order)."""
+        return [tk for tk in u.queue if tk.mode < 0 and tk.info_t <= self.t + 1e-9]
+
     # ---------- episode ----------
     def reset(self, seed=None):
         c = self.c
@@ -256,9 +271,8 @@ class UavSemcomEnv:
         self.f_e = r_fade.exponential(size=(n_slots, K))
         self.t, self.slot = 0.0, 0
         self.tasks, self.finished = [], []
-        self.segments = []            # (uav, channel, start, end) transmission intervals, for checks
+        self.segments = []            # (uav, channel, start, end, interference W, rate b/s) piecewise-constant intervals
         self.e_tx = 0.0
-        self.last_tx = {}
         return self.obs()
 
     def utility(self, task, q, delay):
@@ -303,71 +317,83 @@ class UavSemcomEnv:
         acts = [self._parse(a, L) for a in actions]
         n_active = sum(u.active for u in self.uavs)
         reward, e_slot = 0.0, 0.0
-        # (1) every image still without a mode gets the entry of the mode vector at its position (capture order)
+        # (1) every image awaiting a decision (info available) gets the entry of the mode vector at its position
         for k, (mv, ch, pl, modes) in enumerate(acts):
             u = self.uavs[k]
-            pend = [tk for tk in u.queue if tk.mode < 0]
+            pend = self.awaiting(u)
             assert len(pend) <= L
             for i, tk in enumerate(pend):
                 m = modes[i]
                 tk.mode, tk.bits, tk.rem_bits = m, self.tab.bits[tk.img, m], self.tab.bits[tk.img, m]
                 tk.enc_start = max(t0, u.enc_free)
-                tk.ready = tk.enc_start + self.probe_s() + self.tab.enc_s[m]
+                tk.ready = tk.enc_start + self.tab.enc_s[m]
                 u.enc_free = tk.ready
         # (2) one gain per UAV per slot, used for its own link AND when it interferes
         gains = [self.slot_gain(k) for k in range(K)]
-        # (3) transmission: a UAV with a channel and an image ready before the slot ends is on air; interference is
-        # counted for the whole slot (conservative: co-channel UAVs assumed to overlap fully)
+        # (3) transmission, event-driven inside the slot. Between events (an image finishes, an image becomes ready,
+        # a deadline passes, slot end) the set of UAVs actually sending is fixed, so rates are constant; a UAV is
+        # interfered only by co-channel UAVs sending at that same moment.
         tx = {}
         for k, (mv, ch, pl, modes) in enumerate(acts):
             u = self.uavs[k]
-            if u.active and ch > 0 and u.queue and u.queue[0].ready < t1:
+            if u.active and ch > 0 and u.queue:
                 tx[k] = (ch, c["p_levels"][pl])
-        self.last_tx = {}
-        for k, (ch, p) in tx.items():
-            interf = sum(p2 * gains[k2] for k2, (ch2, p2) in tx.items() if k2 != k and ch2 == ch) \
-                if c["interference"] else 0.0
-            rate = c["B_total"] / c["M"] * math.log2(1 + p * gains[k] / (self.noise_w() + interf))
-            self.last_tx[k] = dict(ch=ch, p=p, gain=gains[k], interf=interf, rate=rate)
-            u, cur = self.uavs[k], t0
-            while u.queue:
-                tk = u.queue[0]
-                start = max(cur, tk.ready)
-                if start >= t1:
-                    break
-                lat = self.latest_tx_end(tk)
-                if start >= lat:                       # expired before it could be sent: discard, no airtime
-                    reward += self._drop(tk)
-                    u.queue.pop(0)
+        tau, n_ev = t0, 0
+        while tau < t1 - 1e-12 and tx:
+            n_ev += 1
+            assert n_ev < 10000, "event loop did not terminate"
+            sending, nxt = {}, t1
+            for k in tx:
+                u = self.uavs[k]
+                while u.queue and u.queue[0].mode >= 0 and self.latest_tx_end(u.queue[0]) <= tau + 1e-12:
+                    reward += self._drop(u.queue.pop(0))      # can no longer be on time: discard, no airtime
+                if not u.queue or u.queue[0].mode < 0:
                     continue
-                need = tk.rem_bits / rate if rate > 0 else math.inf
-                delivered = start + need <= min(t1, lat)
-                if delivered:                          # delivered inside this slot
-                    end, sent = start + need, tk.rem_bits
-                elif lat <= t1:                        # deadline hits mid-transmission: stop and discard
-                    end, sent = lat, rate * (lat - start)
-                else:                                  # slot over, continue next slot
-                    end, sent = t1, rate * (t1 - start)
-                if math.isnan(tk.tx_start):
-                    tk.tx_start = start
-                tk.rem_bits -= sent
-                tk.sent_bits += sent
-                tk.airtime += end - start
-                self.segments.append((k, ch, start, end))
-                e = p * (end - start)
+                h = u.queue[0]
+                if h.ready <= tau + 1e-12:
+                    sending[k] = h
+                else:
+                    nxt = min(nxt, h.ready)
+            if not sending:
+                if nxt >= t1 - 1e-12:
+                    break
+                tau = nxt
+                continue
+            rates = {}
+            for k in sending:
+                ch, p = tx[k]
+                interf = sum(tx[j][1] * gains[j] for j in sending if j != k and tx[j][0] == ch) \
+                    if c["interference"] else 0.0
+                rates[k] = (c["B_total"] / c["M"] * math.log2(1 + p * gains[k] / (self.noise_w() + interf)), interf)
+            for k, h in sending.items():
+                r = rates[k][0]
+                nxt = min(nxt, (tau + h.rem_bits / r) if r > 0 else math.inf, self.latest_tx_end(h))
+            nxt = max(nxt, tau)
+            for k, h in sending.items():
+                ch, p = tx[k]
+                r, interf = rates[k]
+                d = nxt - tau
+                fin = r > 0 and tau + h.rem_bits / r <= nxt + 1e-12
+                sent = h.rem_bits if fin else r * d
+                if math.isnan(h.tx_start):
+                    h.tx_start = tau
+                h.rem_bits -= sent
+                h.sent_bits += sent
+                h.airtime += d
+                if d > 0:
+                    self.segments.append((k, ch, tau, nxt, interf, r))
+                e = p * d
                 e_slot += e
                 self.e_tx += e
-                u.energy += e
-                cur = end
-                if delivered:
-                    tk.rem_bits = 0.0
-                    reward += self._finish(tk, end)
-                    u.queue.pop(0)
-                elif lat <= t1:
-                    reward += self._drop(tk)
-                    u.queue.pop(0)
-                else:
-                    break
+                self.uavs[k].energy += e
+                if fin:
+                    h.rem_bits = 0.0
+                    reward += self._finish(h, nxt)
+                    self.uavs[k].queue.pop(0)
+                elif self.latest_tx_end(h) <= nxt + 1e-12:
+                    reward += self._drop(h)
+                    self.uavs[k].queue.pop(0)
+            tau = nxt
         # (4) deadline expiry for every image still waiting (no channel, still encoding, ...)
         for u in self.uavs:
             keep = []
@@ -404,7 +430,10 @@ class UavSemcomEnv:
                 w = u.wp_i
                 for j in range(L):
                     tk = Task(uav=k, wp=w, tile=j, img=int(self.task_img[k, w, j]), t_cap=t1,
-                              dmax=float(self.task_dmax[k, w, j]), qmin=float(self.task_qmin[k, w, j]))
+                              dmax=float(self.task_dmax[k, w, j]), qmin=float(self.task_qmin[k, w, j]), info_t=t1)
+                    if c["mode_info"] == "predicted":      # probe encode queued on the UAV encoder right away
+                        tk.info_t = max(t1, u.enc_free) + self.probe_s()
+                        u.enc_free = tk.info_t
                     u.queue.append(tk)
                     self.tasks.append(tk)
                 u.wp_i += 1
@@ -469,7 +498,7 @@ class UavSemcomEnv:
                         f += [1.0, slack / 12, tk.qmin / 40, 0.0, 0.0, 0.0]
                 else:
                     f += [0.0] * 6
-            pend = [tk for tk in u.queue if tk.mode < 0]
+            pend = self.awaiting(u)
             for i in range(self.L):
                 if i < len(pend):
                     tk = pend[i]
@@ -503,6 +532,6 @@ class UavSemcomEnv:
             captured=float(sum(u.wp_i for u in self.uavs) * L / n_total),
             mission_s=float(np.mean([u.t_done if u.t_done >= 0 else c["T"] for u in self.uavs])),
             makespan_s=float(max(u.t_done if u.t_done >= 0 else c["T"] for u in self.uavs)),
-            airtime_s=float(sum(e - s for _, _, s, e in self.segments)),
+            airtime_s=float(sum(seg[3] - seg[2] for seg in self.segments)),
             battery_out=int(sum(u.battery_out for u in self.uavs)),
         )

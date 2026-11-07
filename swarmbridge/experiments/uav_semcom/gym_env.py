@@ -50,7 +50,7 @@ def action_masks(core, per):
     mode entries beyond the number of images awaiting a decision -> only mode 0; empty queue -> silent."""
     out = []
     for u in core.uavs:
-        n_pend = sum(1 for tk in u.queue if tk.mode < 0)
+        n_pend = len(core.awaiting(u))
         for j, n in enumerate(per):
             m = np.ones(n, dtype=bool)
             if not u.active:

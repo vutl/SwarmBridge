@@ -109,13 +109,13 @@ def test_bits_time_energy_conservation(tmp_path, cfg):
             assert tk.sent_bits <= tk.bits + 1e-6
     # per UAV: transmission intervals never overlap; per channel-slot nothing exceeds the slot
     for k in range(len(env.uavs)):
-        seg = sorted((s, e) for kk, _, s, e in env.segments if kk == k)
+        seg = sorted((g[2], g[3]) for g in env.segments if g[0] == k)
         for (s1, e1), (s2, e2) in zip(seg, seg[1:]):
             assert s2 >= e1 - 1e-9
         for s, e in seg:
             assert math.floor(s + 1e-12) == math.floor(e - 1e-12) or e == pytest.approx(math.ceil(s))
     # transmit energy = sum over segments of power x airtime
-    assert env.e_tx == pytest.approx(sum(env.c["p_levels"][-1] * (e - s) for _, _, s, e in env.segments))
+    assert env.e_tx == pytest.approx(sum(env.c["p_levels"][-1] * (g[3] - g[2]) for g in env.segments))
     # every captured image is accounted exactly once
     assert len(env.finished) == len(env.tasks)
 
@@ -147,22 +147,52 @@ def test_deadline_expiry_spends_no_airtime(tmp_path):
             assert tk.tx_start + tk.airtime <= env.latest_tx_end(tk) + 1e-9
 
 
-# ---------------- v1 error 3: interference sample consistency ----------------
-def test_interference_uses_same_gain_as_own_link(tmp_path):
+# ---------------- v1 error 3 / v2.1: interference consistency and timing ----------------
+def _two_uav_slot(tmp_path, ready1, frac0, frac1):
+    """Two UAVs on the same channel, one pre-encoded image each (mode 0): UAV 0 ready at 0, UAV 1 ready at ready1;
+    payloads = frac x (bits UAV k could send in 1 s alone). Runs one slot; returns env and the stand-alone rates."""
     tab = make_table(tmp_path)
     env = E.UavSemcomEnv(tab, range(8), dict(K=2, M=1))
-
-    def both_on_channel_1(env):
-        return [(9, 1, 2, (2,) * env.L), (9, 1, 2, (2,) * env.L)]
     env.reset(7)
-    for _ in range(60):
-        env.step(both_on_channel_1(env))
-        if len(env.last_tx) == 2:
-            a, b = env.last_tx[0], env.last_tx[1]
-            assert a["interf"] == pytest.approx(b["p"] * b["gain"])
-            assert b["interf"] == pytest.approx(a["p"] * a["gain"])
-            return
-    pytest.fail("never had two co-channel transmitters")
+    g = [env.slot_gain(k) for k in range(2)]
+    c = env.c
+    r_alone = [c["B_total"] / c["M"] * math.log2(1 + c["p_levels"][2] * g[k] / env.noise_w()) for k in range(2)]
+    for k, (rdy, fr) in enumerate([(0.0, frac0), (ready1, frac1)]):
+        b = fr * r_alone[k]
+        env.uavs[k].queue = [E.Task(uav=k, wp=0, tile=0, img=0, t_cap=0.0, dmax=50.0, qmin=0.0, mode=0,
+                                    enc_start=0.0, ready=rdy, bits=b, rem_bits=b)]
+    env.step([(0, 1, 2, (0,) * env.L), (0, 1, 2, (0,) * env.L)])
+    return env, g, r_alone
+
+
+def test_interference_non_overlapping(tmp_path):
+    """UAV 0 sends 0-0.2 s, UAV 1 sends from 0.6 s: no overlap -> neither is interfered (v2 would interfere both
+    for the whole slot)."""
+    env, g, r = _two_uav_slot(tmp_path, ready1=0.6, frac0=0.2, frac1=0.2)
+    segs = env.segments
+    assert {s[0] for s in segs} == {0, 1}
+    assert all(s[4] == 0.0 for s in segs)
+    t0 = [tk for tk in env.finished if tk.uav == 0][0]
+    t1 = [tk for tk in env.finished if tk.uav == 1][0]
+    assert t0.tx_start + t0.airtime == pytest.approx(0.2)
+    assert t1.tx_start == pytest.approx(0.6) and t1.airtime == pytest.approx(0.2)
+
+
+def test_interference_overlapping(tmp_path):
+    """Both ready at 0: while both send, each sees exactly the other's p x gain (same gain draw as the other's own
+    link); once one finishes, the other continues interference-free."""
+    env, g, r = _two_uav_slot(tmp_path, ready1=0.0, frac0=0.3, frac1=0.6)
+    p = env.c["p_levels"][2]
+    both = [s for s in env.segments if s[2] == 0.0]
+    assert len(both) == 2
+    for s in both:
+        assert s[4] == pytest.approx(p * g[1 - s[0]])
+        assert s[5] < r[s[0]]
+    later = [s for s in env.segments if s[2] > 0.0]
+    assert later and all(s[4] == 0.0 for s in later)
+    # segments of one UAV are contiguous and the bits add up
+    for tk in env.finished:
+        assert tk.sent_bits == pytest.approx(tk.bits)
 
 
 # ---------------- v1 error 4: common random numbers across policies ----------------
@@ -232,3 +262,53 @@ def test_maskable_ppo_consumes_masks(tmp_path):
     model = sb3c.MaskablePPO("MlpPolicy", env, n_steps=256, batch_size=64, n_epochs=1, seed=0, device="cpu")
     model.learn(512)
     assert Watch.violations == 0
+
+
+# ---------------- v2.1: causal 'predicted' information ----------------
+def test_predicted_info_is_causal(tmp_path):
+    """capture -> probe (serial on the encoder) -> info available -> mode decision at the next epoch -> encode."""
+    tab = make_table(tmp_path)
+    env = E.UavSemcomEnv(tab, range(8), dict(K=1, M=1, mode_info="predicted", probe_mode="m0"))
+    env.reset(0)
+    while not env.uavs[0].queue:
+        env.step([(9, 0, 2, (0,) * env.L)])
+    u, probe = env.uavs[0], env.probe_s()
+    caps = list(u.queue)
+    t_cap = caps[0].t_cap
+    assert probe > 0
+    for i, tk in enumerate(caps):                      # probes run back to back right after capture
+        assert tk.info_t == pytest.approx(t_cap + (i + 1) * probe)
+    assert env.awaiting(u) == []                        # nothing decidable at the capture instant
+    o = env.obs()
+    blk = 1 + 11 + env.c["q_obs"] * 6                   # start of UAV 0's pending-decision block
+    assert np.all(o[blk:blk + env.L * (3 + 2 * env.n_modes)] == 0)   # no predicted info leaks into the observation
+    env.step([(0, 0, 2, (1,) * env.L)])                 # this epoch: modes cannot be assigned yet
+    assert all(tk.mode < 0 for tk in caps)
+    env.step([(0, 0, 2, (1, 2, 3, 1))])                 # next epoch: probes done -> decided
+    assert [tk.mode for tk in caps] == [1, 2, 3, 1]
+    for tk in caps:
+        assert tk.enc_start >= tk.info_t - 1e-12 and tk.ready == pytest.approx(tk.enc_start + tab.enc_s[tk.mode])
+
+
+def test_oracle_info_available_at_capture(tmp_path):
+    tab = make_table(tmp_path)
+    env = E.UavSemcomEnv(tab, range(8), dict(K=1, M=1))
+    env.reset(0)
+    while not env.uavs[0].queue:
+        env.step([(9, 0, 2, (0,) * env.L)])
+    assert len(env.awaiting(env.uavs[0])) == env.L
+
+
+# ---------------- v2.1 regression against the frozen v2 ----------------
+@pytest.mark.parametrize("cfg", [dict(), dict(interference=False), dict(M=1, K=1), dict(w_time=0.3)])
+def test_regression_vs_v2_without_cochannel(tmp_path, cfg):
+    """With oracle info and no co-channel transmission (the heuristics give each UAV its own channel), v2.1 must
+    reproduce v2 exactly: same deliveries, delays, energy and return."""
+    import legacy_env_v2 as V2
+    tab = make_table(tmp_path)
+    for m in (1, 3):
+        a = P.run_episode(E.UavSemcomEnv(tab, range(8), cfg), P.fixed(m), 9)
+        b = P.run_episode(V2.UavSemcomEnv(tab, range(8), cfg), P.fixed(m), 9)
+        for key in ("return", "mean_util", "ok_rate", "drop_rate", "mean_delay", "energy_kj", "mission_s"):
+            assert a[key] == pytest.approx(b[key], rel=1e-9, abs=1e-9), key
+

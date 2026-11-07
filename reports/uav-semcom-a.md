@@ -551,3 +551,74 @@ Tức là PPO giãn nhịp chụp rất nhẹ, đủ để bớt dồn ảnh mà
 2. Không phạt thời gian: heuristic chia lượt nhỉnh hơn PPO một chút (−0,2 đến −0,4). Có phạt thời gian: PPO hơn heuristic tinh chỉnh khoảng +1,2, với khoảng tin cậy dương ở cả hai mức thông tin. Phần hơn này đến từ việc điều chỉnh nhịp bay mịn, **không** đến từ chọn mode.
 3. Mức thông tin predicted và oracle chỉ chênh khoảng 0,4–0,6 return.
 4. Chỉ có 1 seed train cho mỗi cấu hình. Đây là kết quả của kịch bản tham chiếu, không phải kết luận chung về RL hay SemCom.
+
+## 5. A2 v2.1 — nhiễu theo thời gian thực và thông tin `predicted` có tính nhân quả (2026-11-07)
+
+Đây là bước đầu theo chỉ đạo mới: A2 v2.1 → A3.2 (nhiều seed) → A4 (khung VisDrone gốc, tần suất chụp theo photogrammetry). Kết quả A3 v2 (mục 4.10, commit d812c7e7) vẫn giữ làm tham chiếu.
+
+### 5.1 Thay đổi so với v2
+
+Bản v2 được giữ nguyên trong `legacy_env_v2.py` để chạy regression test.
+
+1. **Nhiễu tính theo thời điểm truyền thật.**
+   - Trong mỗi slot, việc truyền được mô phỏng theo sự kiện: một ảnh phát xong, một ảnh encode xong, hoặc một deadline hết.
+   - Giữa hai sự kiện, tập UAV đang phát là cố định nên tốc độ là hằng số. Một UAV chỉ bị nhiễu bởi các UAV **cùng kênh và đang phát đúng lúc đó**.
+   - v2 thì tính nhiễu từ mọi UAV cùng kênh có ảnh sẵn trong slot, cho cả slot.
+   - Mỗi đoạn truyền ghi lại (UAV, kênh, bắt đầu, kết thúc, nhiễu, tốc độ).
+2. **Thông tin `predicted` có tính nhân quả.**
+   - Ngay khi chụp, probe avif_5 được xếp vào hàng đợi encoder của UAV, các probe chạy nối tiếp nhau.
+   - Một ảnh chỉ được chọn mode ở thời điểm quyết định **đầu tiên sau khi probe của nó xong**: chụp → probe → có dự đoán → chọn mode → encode → phát.
+   - Trước thời điểm đó, observation không chứa dự đoán của ảnh này, và vector mode không áp dụng cho nó.
+   - Thời gian probe không còn bị cộng vào thời gian encode của mode đã chọn.
+   - Với `oracle` và `mean`, thông tin có ngay lúc chụp (không đổi).
+
+Mọi công thức khác giữ nguyên.
+
+### 5.2 Test (27/27 qua)
+
+Test mới:
+- `test_interference_non_overlapping`: UAV A phát 0–0,2 s, UAV B phát từ 0,6 s. Không UAV nào bị nhiễu. (v2 sẽ tính nhiễu cho cả hai suốt cả slot.)
+- `test_interference_overlapping`: hai UAV cùng phát từ 0 s.
+  - Trong lúc cả hai cùng phát, mỗi UAV chịu nhiễu đúng bằng p·g của UAV kia, với cùng mẫu fading mà UAV kia dùng cho link của chính nó.
+  - Khi một UAV phát xong, UAV còn lại phát không nhiễu.
+  - Tổng bit gửi đi khớp payload.
+- `test_predicted_info_is_causal`:
+  - Các probe chạy nối tiếp ngay sau khi chụp (info_t = t_cap + i·τ_probe).
+  - Ngay lúc chụp chưa có ảnh nào được quyết định, và observation không lộ dự đoán.
+  - Ở thời điểm quyết định kế tiếp, mode được gán; encode bắt đầu ≥ info_t.
+- `test_oracle_info_available_at_capture`.
+- `test_regression_vs_v2_without_cochannel` (4 cấu hình × 2 mode): khi thông tin là oracle và không có truyền đồng kênh, v2.1 cho kết quả **trùng khớp** v2 (return, utility, delay, năng lượng, thời gian nhiệm vụ).
+
+Các test cũ được sửa theo định dạng segment mới.
+
+### 5.3 Ảnh hưởng
+
+`check_v21.py` chạy cùng các chính sách trên cả v2 và v2.1, trên 30 seed test, không train lại. PPO ở đây là model A3 v2 đã train trên v2. Kết quả: `runs/uav_semcom/check_v21.json`.
+
+| cấu hình | chính sách | return v2 → v2.1 | delay (s) v2 → v2.1 | tỉ lệ airtime có nhiễu (v2.1) |
+|---|---|---|---|---|
+| oracle, w_T 0,3 | PPO | +26,83 → +26,93 | 1,27 → 1,25 | 7,9% |
+| oracle, w_T 0,3 | greedy / paced_q4 | không đổi | không đổi | 0 |
+| oracle, w_T 0 | PPO | +63,27 → +63,37 | | 4,9% |
+| predicted, w_T 0,3 | PPO | +26,44 → +21,23 | 1,27 → 2,15 | 5,2% |
+| predicted, w_T 0,3 | greedy | +24,92 → +18,30 | 1,81 → 2,72 | 0 |
+| predicted, w_T 0,3 | paced_q4 | +25,23 → +18,47 | 1,75 → 2,69 | 0 |
+| predicted, w_T 0 | PPO / stag_near | +62,67 → +57,88 / +63,20 → +58,53 | 1,32 → 2,27 / 1,27 → 2,21 | 16,4% / 0 |
+
+PPO trừ heuristic tốt nhất (cặp theo seed, KTC 95%):
+
+| cấu hình | trên v2 | trên v2.1 |
+|---|---|---|
+| oracle, w_T 0,3 | +1,19 [+0,86, +1,53] | +1,30 [+0,99, +1,62] |
+| oracle, w_T 0 | −0,22 [−0,45, 0,00] | −0,12 [−0,33, +0,09] |
+| predicted, w_T 0,3 | +1,21 [+0,80, +1,62] | +2,76 [+1,89, +3,63] (*PPO chưa train lại trên v2.1*) |
+| predicted, w_T 0 | −0,52 [−0,73, −0,32] | −0,65 [−0,89, −0,42] |
+
+**Đọc kết quả:**
+1. **Nhiễu theo thời gian thực.** Các heuristic luôn cho mỗi UAV một kênh riêng, nên không bị ảnh hưởng. PPO có dùng chung kênh (5–16% airtime) và được lợi rất ít (+0,1 return). Giả định bảo thủ của v2 **không** phải nguồn gốc lợi thế của PPO, cũng không làm lợi thế đó nhỏ đi đáng kể.
+2. **Probe có tính nhân quả** làm mọi chính sách ở mức `predicted` mất 5–7 return, vì delay tăng khoảng 0,9 s.
+   - Nguyên nhân: probe xong sau thời điểm chụp (khoảng 0,04 s mỗi ảnh), nên quyết định mode phải đợi tới **thời điểm quyết định kế tiếp, tức 1 s sau**.
+   - Đây là hệ quả của việc quyết định theo slot 1 s, không phải giá trị thật của thông tin.
+   - Vì vậy khoảng cách oracle − predicted (khoảng 5 return) hiện chủ yếu đo độ thô của nhịp quyết định.
+   - Nếu muốn so giá trị thông tin cho đúng, cần cho quyết định mode xảy ra ngay khi probe xong (một semi-MDP / quyết định theo sự kiện). Đây là một lựa chọn mô hình cần quyết, chưa làm.
+3. Model PPO cũ (train trên v2) giữ được nhiều hơn heuristic dưới quy tắc mới (+2,76). Nhưng phải train lại trên v2.1 trước khi kết luận (A3.2).
