@@ -508,4 +508,46 @@ Khung được gửi là khung VisDrone ở độ phân giải gốc của datas
 
 **Đọc kết quả.** Khảo sát theo yêu cầu chồng ảnh thực, với khung ảnh của chính dataset, cho **tải vừa (ρ 0,3–0,6), chưa phải tải cao**. Tải chỉ cao khi yêu cầu là gửi gần như **toàn bộ độ phân giải camera** gần thời gian thực. Đó là một yêu cầu ứng dụng cần quyết định, không phải tham số để chỉnh; dataset hiện có cũng không có ảnh 20 MP để đo.
 
-**5. Đang chạy.** A3 v2 trên kịch bản tham chiếu: MaskablePPO, seed 0, 2 triệu bước, cho {predicted, oracle} × w_T {0; 0,3}. Baseline dùng chung 30 seed test. Smoke test 200k bước đã chạy hết pipeline (PPO +55,0; greedy +60,9; staggered +63,1 ở 200k bước, chưa hội tụ).
+**5. Đã chạy xong (xem 4.10).** A3 v2 trên kịch bản tham chiếu: MaskablePPO, seed 0, 2 triệu bước, cho {predicted, oracle} × w_T {0; 0,3}. Baseline dùng chung 30 seed test. Smoke test 200k bước đã chạy hết pipeline (PPO +55,0; greedy +60,9; staggered +63,1 ở 200k bước, chưa hội tụ).
+
+### 4.10 A3 v2 — kết quả trên kịch bản tham chiếu (2026-11-07)
+
+Cấu hình: MaskablePPO, seed 0, 2 triệu bước (khoảng 37 phút mỗi lần, chỉ CPU).
+
+So sánh trên 30 seed test chung. "Heuristic tinh chỉnh" là thành viên của họ heuristic có return cao nhất trên **ảnh train và seed train 0..29**. Họ heuristic gồm: mọi mode cố định, greedy, paced q0..5, staggered (thứ tự idx / near / far, có hoặc không kèm điều nhịp).
+
+Kết quả: `runs/uav_semcom/a3v2_*/{eval_s0,tune,ablate,analysis}.json`.
+
+| mode_info | w_T | PPO | greedy | heuristic tinh chỉnh (tên) | PPO − tinh chỉnh, return [KTC 95%] |
+|---|---|---|---|---|---|
+| predicted | 0 | +62,67 | +60,79 | stag_near_q3 | −0,41 [−0,68, −0,14] |
+| oracle | 0 | +63,27 | +61,23 | stag_near | −0,22 [−0,45, +0,00] |
+| predicted | 0,3 | +26,44 | +24,92 | paced_q4 | **+1,21 [+0,80, +1,62]** |
+| oracle | 0,3 | +26,83 | +25,43 | paced_q4 | **+1,19 [+0,86, +1,53]** |
+
+Mọi chính sách ở đây đều giao 100% ảnh ở khoảng 41 dB.
+
+**Ablation** (predicted, w_T = 0,3; H = paced_q4). Ghép từng phần {di chuyển, kênh + công suất, mode} từ PPO (P) hoặc heuristic (H):
+
+| di chuyển / kênh+công suất / mode | return |
+|---|---|
+| PPP (PPO) | +26,44 |
+| PPH | +26,67 |
+| PHH | +26,56 |
+| HPP | +24,38 |
+| HHH (heuristic) | +25,23 |
+
+Lợi thế nằm ở di chuyển. Kênh, công suất và mode của PPO không hơn heuristic.
+
+**PPO bay khác gì** (10 seed):
+- Gần như luôn bay thẳng tới waypoint; thỉnh thoảng hover hoặc lệch hướng khoảng 1 s.
+- Lần chụp cuối chậm hơn khoảng 1,7 s (39,0 s so với 37,3 s).
+- Nhờ vậy độ trễ trung bình giảm từ 1,75 xuống 1,30 s và hàng đợi ngắn hơn (1,03 so với 1,32 ảnh), ở cùng PSNR (41,0 dB).
+
+Tức là PPO giãn nhịp chụp rất nhẹ, đủ để bớt dồn ảnh mà gần như không kéo dài nhiệm vụ. Heuristic theo ngưỡng hàng đợi không làm được kiểu điều chỉnh mịn như vậy.
+
+**Đọc kết quả:**
+1. Trong kịch bản tham chiếu tải thấp (ρ ≈ 0,19), mọi chính sách đều gần trần. Khác biệt giữa các chính sách chỉ khoảng 1–2 return trên khoảng 60 (≈ 0,02 utility/ảnh).
+2. Không phạt thời gian: heuristic chia lượt nhỉnh hơn PPO một chút (−0,2 đến −0,4). Có phạt thời gian: PPO hơn heuristic tinh chỉnh khoảng +1,2, với khoảng tin cậy dương ở cả hai mức thông tin. Phần hơn này đến từ việc điều chỉnh nhịp bay mịn, **không** đến từ chọn mode.
+3. Mức thông tin predicted và oracle chỉ chênh khoảng 0,4–0,6 return.
+4. Chỉ có 1 seed train cho mỗi cấu hình. Đây là kết quả của kịch bản tham chiếu, không phải kết luận chung về RL hay SemCom.
