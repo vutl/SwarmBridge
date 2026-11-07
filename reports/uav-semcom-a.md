@@ -781,3 +781,85 @@ Phần năng lượng chỉ đóng góp khoảng 0,01 return (w_E = 0,02/kJ). Ph
 2. Phần hơn đến từ **di chuyển** (khoảng +1,0 đến +1,9) và **kênh + công suất** (khoảng +1), **không** đến từ chọn mode.
 3. Đây vẫn là kịch bản tải thấp (ρ ≈ 0,19); mọi chính sách đều giao gần như 100% ảnh. Biên độ khác biệt nhỏ so với tổng return.
 4. Điều khiển theo sự kiện (mục 6) lấy lại khoảng +6 return cho mọi chính sách ở mức predicted. Train PPO trên env hai thang thời gian (`train_ev.py`) là bước tiếp theo trên kịch bản tham chiếu, chạy cùng A4.
+
+## 8. A4 — khảo sát photogrammetry trên ảnh VisDrone gốc (2026-11-07, đang chạy)
+
+So với kịch bản tham chiếu, chỉ **workload** và **bảng mode** thay đổi. Topology (K = 3 UAV, M = 2 kênh, 1 MHz, BS), kênh truyền, encoder/transmitter, deadline (4–12 s), Qmin (22–30 dB), utility, reward và ràng buộc giữ nguyên như v2.1/v2.2. Điều khiển hai thang thời gian như mục 6. Mức thông tin chính là `predicted`, w_T = 0,3.
+
+### 8.1 Bảng mode ở độ phân giải gốc (bước A4.1)
+
+Cùng 100 ảnh VisDrone2019-DET-val như A1, nhưng **không resize**: 1360×765, 960×540 hoặc 1920×1080. Kết quả lưu ở `runs/uav_semcom/a4_native/{a11,a12}/`.
+- Bitstream thật, PSNR/LPIPS trên ảnh gốc.
+- Thời gian encode/decode đo trên GPU RTX 3070. Learned codec đo thêm trên CPU (i5-14400F, 10 ảnh), coi như máy tính trên UAV; CPU không chạy việc khác trong lúc đo.
+- Learned codec: ảnh có cạnh không chia hết cho 64 được pad mép rồi crop lại. Payload ảnh 512² vẫn trùng từng byte với trước.
+- Mode tạo sinh: sinh ở cạnh ngắn 512, giữ tỉ lệ khung hình, rồi resize về kích thước gốc. Thời gian resize tính vào decode.
+
+| mode | kB (gốc) | bpp | PSNR (gốc) | encode (CPU đối với mbt) | kB (512²) | PSNR (512²) |
+|---|---|---|---|---|---|---|
+| avif_5 / 20 / 50 / 80 | 9,2 / 18,9 / 73,0 / 147,2 | 0,08 / 0,16 / 0,62 / 1,26 | 26,0 / 28,3 / 35,4 / 44,3 | 0,07–0,14 s | 2,9 / 5,8 / 20,3 / 53,1 | 25,3 / 27,6 / 33,3 / 40,2 |
+| mbt2018-mean q1 / 3 / 5 / 8 | 14,8 / 35,2 / 75,4 / 172,2 | 0,13 / 0,30 / 0,65 / 1,48 | 28,0 / 31,4 / 35,5 / 42,0 | 0,45 / 0,45 / 0,87 / 0,84 s | 4,5 / 10,9 / 23,1 / 52,8 | 27,4 / 30,9 / 35,1 / 41,5 |
+| jpeg2000 100 / 25 | 28,5 / 114,1 | 0,24 / 0,96 | 26,9 / 31,8 | 0,20 s | 7,8 / 31,4 | 25,9 / 30,7 |
+| thumb64_up / thumb128_up | 1,3 / 3,6 | 0,01 / 0,03 | 21,7 / 23,7 | 0,02–0,03 s | 0,8 / 2,1 | 22,0 / 24,1 |
+| cap_t2i | 0,1 | 0,001 | 9,7 | 0,21 s | 0,1 | 9,7 |
+| cap_thumb64 / 128 i2i | 1,3 / 3,7 | 0,01 / 0,04 | 18,8–21,5 | 0,23–0,24 s | 0,9 / 2,2 | 19,1–21,9 |
+
+- Payload ở độ phân giải gốc lớn gấp khoảng **3 lần** ảnh 512²; số pixel trung bình gấp khoảng 4 lần.
+- Encode của learned codec trên CPU tăng lên 0,45–0,87 s mỗi khung hình.
+- Mode tạo sinh vẫn chỉ cho PSNR 10–22 dB, dưới Qmin, nên hầu như không bao giờ đáng chọn.
+
+### 8.2 Workload và chế độ tải (bước A4.2; chỉ heuristic, 30 seed test; `a4_native/check_a4_wt0.3.json`)
+
+Mỗi UAV bay lawn-mower 4 tuyến × 300 m, chụp **52 khung hình**. Thông số:
+- cách nhau 25 m dọc tuyến (chồng ảnh 75%) và 60 m giữa các tuyến (chồng 60%);
+- camera lớp Phantom 4 Pro ở H = 100 m;
+- khung hình chụp đúng lúc UAV đi qua điểm chụp, kể cả giữa slot.
+
+Tốc độ bay khảo sát là 10 hoặc 20 m/s, tức λ = 0,4 hoặc 0,8 khung hình/s mỗi UAV. Tốc độ kênh ở các điểm chụp: median 2,18 Mb/s (p10 1,84, p90 2,94), công suất tối đa, chưa tính nhiễu.
+
+Mức tải của các mode chất lượng cao: ρ_link = K·λ·bit / (min(K, M)·R), ρ_enc = λ·t_enc.
+
+| | avif_80 | mbt q8 | mbt q5 | avif_50 | jpeg2000_25 |
+|---|---|---|---|---|---|
+| ρ_link ở 10 / 20 m/s | 0,32 / **0,65** | 0,38 / **0,76** | 0,17 / 0,34 | 0,16 / 0,32 | 0,25 / 0,50 |
+| ρ_enc ở 10 / 20 m/s | 0,05 / 0,10 | 0,34 / **0,67** | 0,35 / **0,70** | 0,05 / 0,11 | 0,08 / 0,16 |
+
+Kịch bản tham chiếu có ρ ≈ 0,19. Ở 20 m/s, cả kênh truyền lẫn encoder đều có tải đáng kể.
+
+Return của heuristic (tỉ lệ giao đúng hạn):
+
+| v | policy | oracle | oracle_probe | predicted | mean |
+|---|---|---|---|---|---|
+| 10 | greedy | +3,6 (1,00) | +3,0 | +2,4 | +3,2 |
+| 10 | pacedB1.5 | +4,2 (1,00) | +3,9 | +3,3 | +4,2 |
+| 10 | fixed avif_80 | +3,3 (1,00) | +2,3 | +2,3 | +3,3 |
+| 20 | greedy | +31,8 (0,93) | +32,0 | +25,4 (0,91) | +26,5 |
+| 20 | paced_q4 | +38,0 (0,95) | +36,9 | +31,3 | +32,0 |
+| 20 | pacedB1.5 | **+48,1 (0,99)** | +47,2 | +46,1 | +46,8 |
+| 20 | stag_near | +44,3 (0,99) | +43,8 | +43,4 | +43,8 |
+| 20 | fixed avif_50 | +45,7 (1,00) | +45,1 | +45,1 | +45,7 |
+| 20 | fixed mbt q5 | +34,2 (0,99) | +33,0 | +33,0 | +34,2 |
+
+Return ở 20 m/s cao hơn ở 10 m/s chủ yếu vì nhiệm vụ ngắn hơn (khoảng 77–99 s so với khoảng 146 s), nên phạt thời gian nhỏ hơn. Return giữa hai tốc độ **không** so trực tiếp được với nhau.
+
+**Đọc kết quả:**
+1. **10 m/s vẫn là tải thấp.** Mọi heuristic điều nhịp đều giao gần như 100% ảnh, và thông tin riêng từng ảnh gần như không có giá trị (mean ≈ oracle), giống kịch bản tham chiếu.
+2. **20 m/s là tải cao.**
+   - greedy (chọn mode tốt nhất cho từng ảnh, không điều nhịp) rớt 7–9% ảnh.
+   - Điều nhịp theo backlog (pacedB) hoặc giảm chất lượng cố định (avif_50) tránh được rớt ảnh.
+   - Khác biệt giữa các heuristic lên tới khoảng 20 return, so với khoảng 1–2 ở kịch bản tham chiếu.
+3. **Thông tin riêng từng ảnh có giá trị ở 20 m/s, nhưng chỉ khi điều khiển không điều nhịp.**
+   - Với greedy: oracle − mean ≈ +5. Sai số dự đoán (oracle_probe → predicted) ≈ −6,5, tức với greedy, `predicted` còn kém `mean` khoảng 1.
+   - Với pacedB1.5: oracle − mean ≈ +1,3, sai số dự đoán ≈ −1,2.
+   - Nghĩa là bộ dự đoán tuyến tính từ probe avif_5 (fit trên ảnh train) chưa đủ chính xác ở độ phân giải gốc để policy tham lam tận dụng.
+4. Heuristic dùng ở đây chưa được tinh chỉnh. Việc tinh chỉnh trên seed train (`tune_ev.py`, cùng họ heuristic như A3) chạy trước khi train PPO, và kết quả đó là baseline để so sánh.
+
+### 8.3 Kế hoạch chạy
+
+Đợt 1 (`run_a4_batch.sh`, đang chạy). Heuristic tinh chỉnh trên train ở 20 m/s là **pacedB1.5** (train +50,3, test +46,1). Mỗi tốc độ (20 rồi 10 m/s):
+- tinh chỉnh heuristic trên seed train;
+- MaskablePPO hai thang thời gian, **joint** (RL quyết định cả slot lẫn mode), seed 0, 1, 2, mỗi seed 2M bước;
+- theo dõi trên seed validation 2000..2009, đánh giá cuối một lần trên seed test 1000..1029.
+
+Tổng 6 lần train, mỗi lần khoảng 40 phút.
+
+Đợt 2 (`run_a4_batch2.sh`, tự chạy sau đợt 1; ablation): **chỉ bay** (mode do greedy theo sự kiện quyết định) và **chỉ mode** (slot do heuristic tinh chỉnh quyết định), 3 seed mỗi tốc độ, cùng cấu hình.
