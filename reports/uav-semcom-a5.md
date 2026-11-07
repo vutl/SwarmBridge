@@ -231,5 +231,63 @@ Thành viên được chọn trên train cho từng regime nằm trong `tune/<re
 
 Ở R3, heuristic mạnh T:best = pacedB2+budget1 (xem điều chỉnh ở 0.3).
 
+### 3.2 Heuristic trên tập test (128 ảnh chưa dùng, seed 7000..7099) và test-dev
+
+Δ là chênh lệch theo cặp so với **T:best** (heuristic tinh chỉnh tốt nhất trên train), kèm CI 95%. Bảng đầy đủ: `python a5_summarize.py final`; dữ liệu ở `final/test_heur.json`.
+
+| regime | fixed | greedy | base | budget | reuse | T:best | reuse − T:best | base − T:best | budget − T:best |
+|---|---|---|---|---|---|---|---|---|---|
+| ref | +49,0 | +46,9 | +55,5 | +56,4 | +58,5 | +58,5 | (= reuse) | −3,1 [−4,0; −2,2] | −2,1 [−2,9; −1,3] |
+| K2 | +47,5 | +47,5 | +47,6 | +47,9 | +47,9 | +47,9 | 0 | −0,3 | 0 |
+| K4 | +55,9 | −3,7 | +55,9 | +47,3 | +63,8 | +63,8 | (= reuse) | −8,0 | −16,6 |
+| K5 | +26,8 | −77,9 | +30,0 | +27,6 | +61,2 | +61,2 | (= reuse) | −31,2 | −33,6 |
+| v10 | +5,8 | +5,8 | +6,5 | +6,2 | +6,7 | +6,7 | (= reuse) | −0,2 [−0,4; +0,1] | −0,5 |
+| v15 | +42,2 | +42,3 | +43,1 | +42,3 | +44,5 | +44,5 | (= reuse) | −1,3 | −2,2 |
+| env_suburban | +48,0 | +41,8 | +48,0 | +53,3 | +57,6 | +57,6 | (= reuse) | −9,6 | −4,2 |
+| env_dense | +41,6 | −10,2 | +41,6 | +38,9 | +48,1 | +48,1 | (= reuse) | −6,5 | −9,2 |
+| env_highrise | −57,9 | −209,4 | −57,9 | −59,3 | −35,9 | −35,9 | (= reuse) | −22,0 | −23,4 |
+| fade_k3 | +49,0 | +46,6 | +55,5 | +56,4 | +58,5 | +58,5 | (= reuse) | −3,0 | −2,1 |
+| fade_k0 | +49,0 | +46,6 | +55,6 | +56,4 | +58,8 | +58,8 | (= reuse) | −3,2 | −2,4 |
+| dl_tight | +35,4 | +14,9 | +35,4 | +35,5 | +38,9 | +38,9 | (= reuse) | −3,5 | −3,4 |
+| dl_loose | +54,7 | +63,2 | +67,1 | +67,4 | +68,6 | +68,6 | (= reuse) | −1,5 | −1,2 |
+| q_low | +65,6 | +63,9 | +65,6 | +66,3 | +69,3 | +69,3 | (= reuse) | −3,7 | −3,1 |
+| q_high | +33,3 | +33,3 | +41,6 | +41,7 | +35,2 | +41,7 | **−6,5 [−7,6; −5,3]** | −0,1 | (= budget) |
+| wt0 | +115,0 | +115,0 | +139,3 | +131,3 | +139,3 | +139,3 | 0 | 0 | −8,0 |
+| wt0.1 | +93,0 | +92,3 | +108,4 | +105,7 | +108,4 | +108,4 | 0 | 0 | −2,7 |
+| wt1 | −105,0 | −112,0 | −105,0 | −100,1 | −95,5 | −95,5 | (= reuse) | −9,5 | −4,6 |
+| phy_gap3 | +41,8 | −7,6 | +41,8 | +39,1 | +41,3 | +41,8 | −0,5 [−1,4; +0,5] | (= base) | −2,7 |
+| phy_mcs | +20,3 | −72,3 | +20,3 | +26,7 | +27,4 | +27,4 | (= reuse) | −7,1 | −0,6 [−1,6; +0,4] |
+| phy_mcs_blind | +20,3 | −72,3 | +20,3 | +26,7 | +3,9 | +26,7 | **−22,9 [−25,4; −20,4]** | −6,5 | (= budget) |
+
+- Mọi kết luận của mục 3 (rút ra trên val) đều lặp lại trên test.
+- Hai quy tắc A4 giữ nguyên tham số (greedy+budget1+reuse) gần như luôn ngang với reuse tinh chỉnh lại. Ngoại lệ là những regime mà reuse có hại: q_high còn +27,4, phy_mcs_blind còn −26,4.
+
+**Test-dev** (403 ảnh, video khác, payload nặng hơn khoảng 15%):
+
+| regime | fixed | greedy | base | budget | reuse | T:best | fixed − T:best |
+|---|---|---|---|---|---|---|---|
+| ref | +45,0 | −13,6 | +27,2 | +41,1 | +45,4 | +45,4 | −0,4 |
+| K5 | +30,8 | −172,0 | −1,2 | +7,8 | +40,0 | +40,0 | −9,2 |
+| phy_mcs_blind | +22,0 | −124,1 | +22,0 | +11,9 | −50,6 | +11,9 | **+10,0 [+8,7; +11,4]** |
+
+- Khi ảnh nặng hơn, heuristic điều nhịp tinh chỉnh trên train **mất phần lớn ưu thế**: greedy sụp đổ, và ở ref mode cố định avif_50 bằng với T:best.
+- Ở phy_mcs_blind, T:best (pacedB2+budget1) thua mode cố định mbt q3 tới 10 điểm.
+- Nghĩa là các ngưỡng backlog/budget được tinh chỉnh trên một phân phối ảnh **không bền** khi phân phối đổi. Đây là một chỗ mà một policy thích nghi theo trạng thái (RL, hoặc heuristic tự hiệu chỉnh ngưỡng) *có thể* có lợi. Mục 4 kiểm tra PPO trên test-dev.
+
+**Pareto theo trọng số thời gian** (heuristic T:best của từng w_T, tập test; ok = tỉ lệ ảnh giao đúng hạn):
+
+| w_T | T:best | ok | PSNR (dB) | nhiệm vụ (s) | năng lượng (kJ) | trễ TB (s) |
+|---|---|---|---|---|---|---|
+| 0 | stag_idx_q1 (bay lần lượt) | 0,999 | 44,5 | 115 | 59,9 | 1,39 |
+| 0,1 | stag_near_q2 | 0,999 | 44,5 | 101 | 52,9 | 1,45 |
+| 0,3 (ref) | pacedB1.5+budget1.25+reuse | 0,991 | 42,6 | 76 | 40,6 | 1,80 |
+| 1,0 | greedy+budget1+reuse | 0,992 | 41,0 | 74 | 39,2 | 1,55 |
+| (tham chiếu) | fixed avif_50 | 1,000 | 36,0 | 73 | 39,0 | 1,31 |
+| (tham chiếu) | greedy | 0,961 | 44,4 | 76 | 40,2 | 2,91 |
+
+- Giữ chất lượng tối đa (44,5 dB) mà không rớt ảnh đòi hỏi bay chậm/lần lượt: thêm khoảng 40 s nhiệm vụ và khoảng 50% năng lượng.
+- Trong khi đó, theo mục 2, 42–44 dB và 36 dB khác nhau chỉ khoảng 3–4% AP50.
+- Theo góc nhìn tác vụ, các điểm w_T ≥ 0,3 hợp lý hơn.
+
 ## 4. PPO vs heuristic mạnh
 (chưa chạy)
