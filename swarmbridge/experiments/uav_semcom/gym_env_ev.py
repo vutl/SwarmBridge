@@ -19,8 +19,8 @@ import env_ev as V
 class GymUavSemcomEv(gym.Env):
     metadata = {}
 
-    def __init__(self, table, pool, cfg=None, seed=0, seeds=None):
-        self.core = V.UavSemcomEnvEv(table, pool, cfg, seed)
+    def __init__(self, table, pool, cfg=None, seed=0, seeds=None, core_cls=None):
+        self.core = (core_cls or V.UavSemcomEnvEv)(table, pool, cfg, seed)   # env_survey.UavSurveyEnv for A4
         c = self.core.c
         self.K, self.n_modes = c["K"], self.core.n_modes
         self.slot_nvec = [V.E.UavSemcomEnv.N_MOVE, c["M"] + 1, len(c["p_levels"])]
