@@ -622,3 +622,67 @@ PPO trừ heuristic tốt nhất (cặp theo seed, KTC 95%):
    - Vì vậy khoảng cách oracle − predicted (khoảng 5 return) hiện chủ yếu đo độ thô của nhịp quyết định.
    - Nếu muốn so giá trị thông tin cho đúng, cần cho quyết định mode xảy ra ngay khi probe xong (một semi-MDP / quyết định theo sự kiện). Đây là một lựa chọn mô hình cần quyết, chưa làm.
 3. Model PPO cũ (train trên v2) giữ được nhiều hơn heuristic dưới quy tắc mới (+2,76). Nhưng phải train lại trên v2.1 trước khi kết luận (A3.2).
+
+## 6. A2 v2.2 — điều khiển hai thang thời gian: chọn mode theo sự kiện (2026-11-07)
+
+Đây là lựa chọn đã chốt khi review: **chọn mode ngay khi probe xong**. Bay, kênh và công suất vẫn quyết định theo slot 1 s. Bản v2.1 (`env.py`) được giữ nguyên làm baseline cho các quyết định theo slot; A3.2 đang train trên bản đó. Code mới nằm ở các module riêng nên không đụng vào `env.py` trong lúc train.
+
+### 6.1 Thiết kế
+
+`env_ev.py` (`UavSemcomEnvEv`, kế thừa v2.1):
+- Mỗi slot là một vòng lặp sự kiện theo thời gian liên tục: truyền, encode xong, deadline, thông tin về.
+- Vòng lặp **dừng lại mỗi khi có một ảnh cần quyết định mode**, rồi chạy tiếp sau `decide(m)`. Policy không thấy gì xảy ra sau thời điểm quyết định.
+- API:
+  - `begin_slot([(move, ch, power)])` chỉ nhận phần slot, không nhận mode;
+  - `advance()` trả về `("mode", k, ảnh)` hoặc `("slot", done)`;
+  - `decide(m)` gán mode cho đúng ảnh đang chờ.
+- Encoder FIFO, nối tiếp. Probe được xếp vào hàng đợi ngay lúc chụp, mỗi ảnh một probe, nối tiếp nhau. Lệnh encode theo mode được xếp vào lúc quyết định, sau những việc encoder đang giữ.
+
+Bốn mức thông tin:
+
+| mức | thông tin | có từ lúc nào |
+|---|---|---|
+| `oracle` | chính xác | lúc chụp, không tốn chi phí (cận trên) |
+| `oracle_probe` | chính xác | sau khi probe chạy xong (**tách chi phí thu thập thông tin**) |
+| `predicted` | dự đoán từ probe | sau khi probe chạy xong (triển khai được) |
+| `mean` | trung bình trên ảnh train | lúc chụp |
+
+Vì vậy: oracle → oracle_probe là chi phí thu thập thông tin; oracle_probe → predicted là sai số dự đoán.
+
+**Interface RL** (`gym_env_ev.py`): **một policy, hai loại bước quyết định**.
+- Bước slot ở đầu mỗi slot: action là (hướng bay, kênh, công suất) cho mỗi UAV; phần mode bị mask về 0.
+- Bước mode khi thông tin của một ảnh về, có thể giữa slot: action là mode của **đúng ảnh đó**; phần slot bị mask.
+- Observation = observation của env tại thời điểm quyết định + cờ loại bước + đặc trưng của ảnh đang được quyết định (UAV one-hot, slack, Qmin, bit/PSNR từng mode theo mức thông tin tại thời điểm đó, backlog encoder và backlog phát của UAV đó).
+- Action space: MultiDiscrete([11, M+1, P] × K + [n_modes]). Reward của một bước là phần reward tích luỹ tới quyết định kế tiếp.
+- γ áp dụng theo bước quyết định. Các bước mode gần như không tốn thời gian; đây là một xấp xỉ, đã ghi lại.
+- Vector mode cũ (L phần tử chọn ở đầu slot) không được dùng ở đây, nên không có đường rò rỉ thông tin tương lai.
+
+### 6.2 Test (`test_env_ev.py`, 12 test; cùng `test_env.py` 39/39 qua)
+
+- Mode được quyết định **đúng tại** info_t = t_cap + (i+1)·τ_probe; encode bắt đầu ≥ thời điểm quyết định.
+- Tại mọi thời điểm quyết định, policy chỉ thấy thông tin của những ảnh đã probe xong.
+- Bảo toàn bit, thời gian, năng lượng; deadline; mỗi ảnh được tính đúng một lần. Chạy cho cả 4 mức thông tin.
+- Encoder nối tiếp: các khoảng probe và encode không chồng nhau.
+- **Regression:** với oracle, env theo sự kiện cộng greedy-theo-sự-kiện cho kết quả **trùng khớp** v2.1 cộng greedy theo slot (3 cấu hình).
+- Với mode cố định: quyết định theo sự kiện không bao giờ làm ảnh nào encode hoặc giao muộn hơn, và ảnh đầu mỗi waypoint encode sớm hơn ít nhất 0,5 s.
+- Interface RL:
+  - một episode ngắn chạy đủ, số bước mode bằng đúng số ảnh;
+  - MaskablePPO lấy 0 action bị mask.
+
+### 6.3 Ảnh hưởng (chỉ heuristic, 30 seed test; `runs/uav_semcom/check_v22.json`)
+
+Return (delay trung bình). Phần slot lấy từ heuristic v2; phần mode dùng greedy theo sự kiện.
+
+| w_T | policy | theo slot: oracle | theo slot: predicted | sự kiện: oracle | sự kiện: oracle_probe | sự kiện: predicted | sự kiện: mean |
+|---|---|---|---|---|---|---|---|
+| 0,3 | greedy | +25,43 (1,73 s) | +18,30 (2,72 s) | +25,43 | +24,36 (1,91 s) | +24,36 (1,91 s) | +25,38 (1,73 s) |
+| 0,3 | paced_q4 | +25,63 | +18,47 | +25,63 | +24,61 | +24,56 | +25,51 |
+| 0 | greedy | +61,23 | +54,98 | +61,23 | +60,30 | +60,35 | +61,15 |
+| 0 | stag_near | +63,49 | +58,53 | +63,49 | +62,73 | +62,68 | +63,40 |
+
+**Đọc kết quả:**
+1. Quyết định theo sự kiện lấy lại **+5 đến +6 return** so với quyết định theo slot ở mức predicted. Gần như toàn bộ khoảng mất ở v2.1 là do chờ nhịp quyết định 1 s.
+2. Khoảng cách oracle − predicted còn khoảng 1 return. Phân rã:
+   - **chi phí thu thập (probe): ≈ 0,8–1,1**, vì 4 probe chạy nối tiếp khoảng 0,16 s và encode phải xếp sau chúng;
+   - **sai số dự đoán: ≈ 0** (oracle_probe ≈ predicted).
+3. Mức `mean` (không probe, không có thông tin riêng từng ảnh) ≈ oracle. Trong kịch bản tham chiếu tải thấp, thông tin riêng từng ảnh gần như **không có giá trị**, nên chạy probe còn thiệt hơn không chạy. Đây là một đặc điểm của chế độ tải, không phải kết luận chung. Nó sẽ được kiểm tra lại ở A4, khi tải cao hơn.
