@@ -938,7 +938,7 @@ Phần đóng góp riêng của di chuyển và của chọn mode sẽ được 
 
 **Kiểm chứng thực nghiệm:**
 - Ở bản chỉ-slot, mọi bước RL cách nhau đúng 1 s, nên mục tiêu không đổi.
-- Chạy lại với code mới cho kết quả **trùng từng giá trị** với bản cũ (seed 0 và 1; seed 2: xem 8.7).
+- Chạy lại cả 3 seed với code mới cho kết quả **trùng từng giá trị** với bản cũ, cả trên seed test cũ lẫn seed mới.
 
 Các kết quả trước khi sửa (mục 8.4–8.5, đợt 2 cũ) được giữ làm **sơ bộ** để đối chiếu.
 
@@ -979,14 +979,15 @@ Chênh lệch ghép cặp giữa các bản RL (pooled):
 |---|---|
 | joint − chỉ-mode (đã sửa, cùng 2M bước) | **+0,70 [+0,06, +1,34]** |
 | joint − chỉ-mode (đã sửa, chỉ-mode lấy checkpoint cùng số episode, mục 8.8) | +1,13 [+0,50, +1,75] |
-| joint − chỉ-slot (đã sửa, seed 0; cùng 2M bước / cùng số episode) | +2,69 [+1,52, +3,86] / +3,98 [+2,85, +5,11] |
+| joint − chỉ-slot (đã sửa, cùng 2M bước) | +2,60 [+1,49, +3,71] |
+| joint − chỉ-slot (đã sửa, chỉ-slot lấy checkpoint cùng số episode; chỉ-slot matched +48,31, hơn heuristic +1,40 [+0,67, +2,13]) | +3,46 [+2,36, +4,57] |
 | joint sơ bộ − chỉ-mode sơ bộ | +0,56 [−0,00, +1,11] |
 | joint đã sửa − joint sơ bộ | −0,47 [−0,72, −0,23] |
 
 **Đọc kết quả:**
 1. **Lợi thế so với heuristic tinh chỉnh trước vẫn còn trên seed mới:** joint đã sửa hơn +4,9; bản sơ bộ hơn +5,3, gần như đúng mức +6,0 trên 30 seed test cũ.
 2. **Hầu hết lợi thế nằm ở việc RL chọn mode.** Chỉ-mode (slot do heuristic pacedB1.5 quyết định) đã đạt +4,2. Để RL điều khiển thêm phần slot chỉ cộng +0,7 đến +1,1.
-3. **RL chỉ cho phần slot** (mode theo greedy sự kiện) được +2,3, kém joint 2,7–4,0.
+3. **RL chỉ cho phần slot** (mode theo greedy sự kiện) được +2,3, kém joint 2,6–3,5.
 4. Sửa discount **không** làm thay đổi kết luận. Joint đã sửa kém joint sơ bộ một chút (−0,5); chỉ-mode đã sửa cũng kém bản sơ bộ khoảng 0,6. Như ChatGPT lưu ý, mục tiêu "đúng" hơn không bảo đảm return đánh giá cao hơn. Ở đây chênh lệch nhỏ và ngược chiều với lo ngại "discount sai làm PPO trông tốt hơn".
 5. Chất lượng: mọi bản RL giao đúng hạn ≥ 99,1%. Joint và chỉ-mode đổi PSNR (38–39 dB, vẫn trên Qmin 22–30 dB) lấy thời gian nhiệm vụ ngắn hơn khoảng 5–15 s và năng lượng ít hơn khoảng 2–7 kJ.
 
@@ -996,12 +997,12 @@ Chênh lệch ghép cặp giữa các bản RL (pooled):
 |---|---|---|---|---|---|---|---|
 | joint s0 / s1 / s2 | 7229 / 4514 / 7354 | 0,96M / 1,46M / 0,92M | 2,55M / 2,60M / 2,40M | 0,96M / 1,46M / 0,92M | 1,07M / 0,57M / 1,10M | 0 | 0 |
 | chỉ-mode s0..2 | 12996 | 1,05–1,07M | 3,02–3,06M | 0 | 2,03M | 1,05–1,07M | 0 |
-| chỉ-slot s0 | 14725 | 2,03M | 4,82M | 2,03M | 0 | 0 | 2,25M |
+| chỉ-slot s0 / s1 / s2 | 14725 / 14095 / 15483 | 2,03M | 4,82M (s0) | 2,03M | 0 | 0 | 2,25M (s0) |
 
 - Cùng 2M bước, joint chỉ được khoảng **một nửa số episode** so với chỉ-mode và chỉ-slot.
 - Joint s1 có số episode thấp hơn hẳn (4514): đầu quá trình huấn luyện nó có nhiều episode dài.
-- **Luật so cùng ngân sách**, đặt trước khi đánh giá: lấy checkpoint đầu tiên có số episode ≥ trung bình của joint (6366). Đó là `ckpt_1000000` cho chỉ-mode (6498 episode) và `ckpt_1200000` cho chỉ-slot (7295).
-- Ở cùng ngân sách, joint hơn chỉ-mode +1,1 và hơn chỉ-slot +4,0. Như vậy không có chuyện joint thắng nhờ được train nhiều hơn; ngược lại, joint được ít trải nghiệm hơn.
+- **Luật so cùng ngân sách**, đặt trước khi đánh giá: lấy checkpoint đầu tiên có số episode ≥ trung bình của joint (6366). Đó là `ckpt_1000000` cho chỉ-mode (6498 episode) và `ckpt_1200000` cho chỉ-slot (6862–7908 episode).
+- Ở cùng ngân sách, joint hơn chỉ-mode +1,1 và hơn chỉ-slot +3,5. Như vậy không có chuyện joint thắng nhờ được train nhiều hơn; ngược lại, joint được ít trải nghiệm hơn.
 
 ### 8.9 Đóng góp của từng phần hành động (thay thế trên policy joint đã train)
 
@@ -1069,4 +1070,12 @@ Ghép với cả họ v2 và họ budget, tinh chỉnh trên seed train (`tune_r
    - 30 ảnh test;
    - workload khảo sát là mô phỏng (ảnh VisDrone gán ngẫu nhiên vào điểm chụp, không có orthomosaic);
    - chất lượng chỉ đo bằng PSNR;
-   - ở 10 m/s (tải thấp) PPO ≈ heuristic (mục 8.4).
+   - ở 10 m/s (tải thấp) PPO ≈ heuristic. Đợt 2 cũ (discount theo bước, 30 seed test cũ, so với heuristic tinh chỉnh pacedB2+budget3 +3,16), mỗi bản pooled 3 seed:
+
+     | bản | return | chênh [KTC 95%] |
+     |---|---|---|
+     | joint | +2,83 | −0,33 [±0,49] |
+     | chỉ-slot | +3,27 | +0,11 [±0,50] |
+     | chỉ-mode | +3,07 | −0,09 [±0,11] |
+
+     Khi tải thấp, không có gì để RL học. Chưa chạy lại ở 10 m/s với discount đã sửa.
