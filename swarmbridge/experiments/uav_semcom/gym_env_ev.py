@@ -7,8 +7,10 @@ The observation is the env observation at the decision instant + [is_mode_step] 
 decided (UAV one-hot, slack, quality floor, per-mode (bits, PSNR) as known at that instant, its UAV's encoder backlog
 and transmit backlog). Nothing computed after the decision instant enters the observation.
 Action space: MultiDiscrete([11, M+1, P] * K + [n_modes]). Reward of a step = reward accrued until the next decision.
-Note: gamma is applied per decision step (mode steps add steps that take little time); kept as a documented
-approximation.
+info of every step: dt = env time from this RL decision to the next one (or to the episode end), kind = "slot"/"mode";
+at the episode end also the experience counters ep_* (RL and heuristic decisions of each kind, env time).
+Discounting: stock PPO applies gamma per decision step (A4 batch 1, preliminary); timeppo.TimeMaskablePPO uses dt to
+apply gamma and GAE lambda per second (semi-MDP), the objective used from the A4 corrected runs on.
 """
 import gymnasium as gym
 import numpy as np
@@ -63,6 +65,7 @@ class GymUavSemcomEv(gym.Env):
         self.core.reset(s)
         self.phase, self.pending = "slot", None
         self._done = False
+        self._cnt = dict(ep_rl_slot=0, ep_rl_mode=0, ep_heur_slot=0, ep_heur_mode=0)
         self._run_heuristic_parts()   # reward accrued before the first RL decision is paid out with its first step
         return self._obs(), {}
 
@@ -81,21 +84,29 @@ class GymUavSemcomEv(gym.Env):
         """Resolve decisions owned by a heuristic until the next RL decision (or the episode end)."""
         while not self._done:
             if self.phase == "slot" and self.slot_pol is not None:
+                self._cnt["ep_heur_slot"] += 1
                 self._apply(slot_actions=[a[:3] for a in self.slot_pol(self.core)])
             elif self.phase == "mode" and self.mode_pol is not None:
+                self._cnt["ep_heur_mode"] += 1
                 self._apply(mode=self.mode_pol(self.core, *self.pending))
             else:
                 break
 
     def step(self, action):
         a = np.asarray(action)
+        t0, kind = self.core.t, self.phase
+        self._cnt["ep_rl_" + kind] += 1
         if self.phase == "slot":
             self._apply(slot_actions=[tuple(a[3 * k:3 * k + 3]) for k in range(self.K)])
         else:
             self._apply(mode=int(a[-1]))
         self._run_heuristic_parts()
         r = self.core.pop_reward()
-        return self._obs(), float(r), self._done, False, (self.core.metrics() if self._done else {})
+        info = dict(dt=float(self.core.t - t0), kind=kind)
+        if self._done:
+            info.update(self.core.metrics(), ep_t=float(self.core.t), **self._cnt)
+            info["ep_uav_s"] = info["mission_s"] * self.K
+        return self._obs(), float(r), self._done, False, info
 
     def action_masks(self):
         core, out = self.core, []
