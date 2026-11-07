@@ -863,3 +863,55 @@ Return ở 20 m/s cao hơn ở 10 m/s chủ yếu vì nhiệm vụ ngắn hơn (
 Tổng 6 lần train, mỗi lần khoảng 40 phút.
 
 Đợt 2 (`run_a4_batch2.sh`, tự chạy sau đợt 1; ablation): **chỉ bay** (mode do greedy theo sự kiện quyết định) và **chỉ mode** (slot do heuristic tinh chỉnh quyết định), 3 seed mỗi tốc độ, cùng cấu hình.
+
+### 8.4 Đợt 1: PPO hai thang thời gian, joint (RL quyết định cả slot lẫn mode), 3 seed mỗi tốc độ
+
+Cấu hình: MaskablePPO, 2M bước, `predicted`, w_T = 0,3. Checkpoint cuối cố định; theo dõi trên seed validation; đánh giá trên 30 seed test. Kết quả lưu ở `runs/uav_semcom/a4_native/v{20,10}_joint_s{0,1,2}/`.
+
+**Bổ sung baseline sau khi xem hành vi PPO (ghi rõ để minh bạch):**
+- Phân tích (mục 8.5) cho thấy PPO ở 20 m/s **bay liên tục và hạ mode theo từng ảnh**, thay vì hover chờ như heuristic.
+- Họ heuristic cũ chưa có luật nào làm như vậy. Rút kinh nghiệm A3 (staggered), tôi thêm một họ heuristic mode mới: **`budget_mode(τ)`** (`mode_heur.py`).
+  - Mode policy chọn mode tốt nhất theo đúng tiêu chí của greedy, nhưng chỉ trong số các mode giữ backlog phát ≤ τ giây.
+  - Với τ = ∞ nó **trùng khớp** event-greedy (có test).
+  - Ghép với slot heuristic {greedy, pacedB1.5, pacedB2, pacedB3} và τ ∈ {0,5 … 3}.
+- Họ heuristic được tinh chỉnh trên seed train, **hoàn toàn không dùng** kết quả PPO.
+- Lỗi của tôi trong lúc làm, đã sửa trước khi lấy kết quả: bản đầu của `budget_mode` loại hẳn các mode trễ hạn. Greedy thì cho chúng −1, và −1 có thể tốt hơn một mode kịp hạn nhưng vi phạm Qmin (utility < −1). Test phát hiện ra lỗi này; kết quả tinh chỉnh của bản lỗi đã bỏ.
+
+"Heuristic tinh chỉnh" dưới đây là thành viên tốt nhất **trên train** của họ hợp (họ v2 + họ budget).
+
+| v | heuristic tinh chỉnh (train → test) | PPO s0 / s1 / s2 | trung bình (độ lệch chuẩn giữa các seed) | PPO − tinh chỉnh [KTC 95%] |
+|---|---|---|---|---|
+| 20 | pacedB1.5+budget1.5 (+52,2 → **+46,7**; ok 0,979; 80 s) | +52,89 / +53,19 / +52,06 | **+52,71 (0,59)** | **+6,2 [+4,0, +8,4] / +6,5 [+4,8, +8,2] / +5,4 [+3,3, +7,4]** |
+| 10 | pacedB2+budget3 (+4,4 → **+3,2**) | +2,28 / +2,98 / +3,23 | +2,83 (0,49) | −0,9 [−1,4, −0,3] / −0,2 [−0,8, +0,4] / +0,1 [−0,5, +0,7] |
+
+Ở 20 m/s, nếu chọn heuristic tốt nhất **ngay trên test** (lạc quan cho heuristic): pacedB1.5+budget2 đạt +47,3. PPO vẫn hơn khoảng +5.
+
+Chỉ dùng họ cũ (trước khi thêm budget), tinh chỉnh chọn pacedB1.5 (+46,1), và PPO hơn +6,0 đến +7,1.
+
+### 8.5 PPO làm gì ở 20 m/s (10 seed test; `v20_joint_s*/analysis.json`)
+
+Phân rã return = Σ utility − w_T · (UAV-giây hoạt động) − w_E · năng lượng:
+
+| | PPO (s0 / s1 / s2) | pacedB1.5 (họ cũ) |
+|---|---|---|
+| Σ utility | 120,3 / 120,9 / 118,6 | 128,8 |
+| chi phí thời gian | 66,6 / 66,6 / 66,2 | 80,4 |
+| chi phí năng lượng | 0,8 | 0,9 |
+| thời gian nhiệm vụ | 74 s | 89 s |
+| tỉ lệ giao đúng hạn | 1,00 | 0,99 |
+| mode | avif_50 65–81%, avif_80 19–32%, vài mbt q3/q5 | avif_80 100% |
+| PSNR / dư so với Qmin | 37–38 dB / +11–12 dB | 44,3 dB / +18 dB |
+| slot hover / bay theo tuyến | 4–7 / 2161 | 520 / 2160 |
+| độ trễ | 1,3–1,4 s | 2,4 s |
+
+**Đọc kết quả:**
+- PPO **chấp nhận PSNR thấp hơn** (vẫn trên Qmin khoảng 12 dB), mất khoảng 8 utility, để **bay khảo sát liên tục**, tiết kiệm khoảng 14 chi phí thời gian.
+- Nó không hạ đều: khoảng 20–30% ảnh vẫn được gửi avif_80, có lẽ khi backlog cho phép.
+- Heuristic budget làm cùng ý tưởng nhưng kém hơn: hoặc rớt nhiều ảnh hơn (ok 0,98), hoặc phải bay chậm hơn (80–88 s).
+
+Phần đóng góp riêng của di chuyển và của chọn mode sẽ được tách ra ở đợt 2 (ablation chỉ bay / chỉ mode).
+
+**Đọc kết quả A4 đợt 1:**
+1. **10 m/s (tải thấp):** PPO ≈ heuristic tinh chỉnh, chênh −0,9 đến +0,1. Giống kịch bản tham chiếu: khi tải thấp, gần như không còn gì để học.
+2. **20 m/s (tải cao):** PPO hơn heuristic tinh chỉnh tốt nhất khoảng **+5,4 đến +6,5 return**, KTC dương ở cả 3 seed, độ lệch giữa các seed 0,59. Đây là khoảng cách lớn nhất cho đến nay, và lần đầu tiên **chọn mode theo trạng thái** có vẻ đóng góp đáng kể.
+3. Lợi thế này phụ thuộc vào trọng số thời gian w_T = 0,3: PPO đổi chất lượng ảnh lấy thời gian nhiệm vụ. Với w_T khác, cách đánh đổi đúng sẽ khác. Kết quả này **không** nói rằng PPO cho ảnh tốt hơn.
