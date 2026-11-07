@@ -56,3 +56,48 @@ def test_hover_delays_the_survey(tmp_path):
     a = run(S.UavSurveyEnv(tab, range(8), dict(B_total=4e5)), 2, slot_pol=P.greedy())
     b = run(S.UavSurveyEnv(tab, range(8), dict(B_total=4e5)), 2, slot_pol=P.paced(0))
     assert b["mission_s"] >= a["mission_s"]
+
+
+def test_budget_mode_heuristic(tmp_path):
+    """mode_heur.budget_mode: with an unbounded budget it is exactly event-greedy (same choice at every decision); a tight
+    budget never picks a larger predicted payload than greedy, and every image still gets exactly one mode."""
+    import mode_heur as MH
+    tab = make_table(tmp_path)
+    cfg = dict(mode_info="predicted", probe_mode="m0", B_total=4e5)
+    checked = []
+
+    def spy_inf(env, k, task):
+        m_b, m_g = MH.budget_mode(1e9)(env, k, task), V.greedy_mode(env, k, task)
+        rate = max(P.expected_rate(env, k) * P.channel_share(env), 1.0)
+        u, tab_ = env.uavs[k], env.tab
+        tx_free = env.t
+        for tk in u.queue:
+            if tk is task:
+                break
+            if tk.mode >= 0:
+                bb = tk.rem_bits if tk.ready <= env.t else env.mode_info(tk)[0][tk.mode] - tk.sent_bits
+                tx_free = max(tx_free, tk.ready) + max(bb, 0.0) / rate
+        b_hat, q_hat = env.mode_info(task)
+
+        def value(m):                        # greedy's own criterion (env_ev.greedy_mode / policies.greedy_select)
+            end = max(tx_free, max(env.t, u.enc_free) + tab_.enc_s[m]) + b_hat[m] / rate
+            if end > task.t_cap + task.dmax - tab_.dec_s[m]:
+                return -1.0
+            return env.utility(task, q_hat[m], end + tab_.dec_s[m] - task.t_cap)[0]
+        checked.append(m_b == m_g)          # tau = inf: exactly event-greedy
+        return m_g
+    g = S.UavSurveyEnv(tab, range(8), cfg)
+    run(g, 5, mode_pol=spy_inf)
+    assert checked and all(checked)
+    t = S.UavSurveyEnv(tab, range(8), cfg)
+    calls = []
+
+    def spy(env, k, task):
+        m_t, m_g = MH.budget_mode(0.05)(env, k, task), V.greedy_mode(env, k, task)
+        calls.append((env.mode_info(task)[0][m_t], env.mode_info(task)[0][m_g]))
+        return m_t
+    run(t, 5, mode_pol=spy)
+    assert calls and all(bt <= bg + 1e-9 for bt, bg in calls)
+    assert len(t.decisions) == len(t.tasks) == len({(d[1], d[2]) for d in t.decisions})
+    sp, mp = MH.from_name("pacedB2+budget1.5", None)
+    assert mp.__name__ == "budget1.5"

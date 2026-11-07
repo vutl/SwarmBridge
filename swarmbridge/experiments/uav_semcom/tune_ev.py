@@ -14,7 +14,7 @@ import numpy as np
 import env as E
 import env_ev as V
 import env_survey as SV
-import policies as P
+import mode_heur as MH
 from tune_heur import family
 
 CORES = {"ev": V.UavSemcomEnvEv, "survey": SV.UavSurveyEnv}
@@ -30,11 +30,7 @@ def init(profiles, modes, cpu_file, env, cfg):
 def run(a):
     name, which = a
     pool, seeds = (G["tr"], range(30)) if which == "train" else (G["te"], range(1000, 1030))
-    if name.startswith("fixed_"):
-        j = G["modes"].index(name[6:])
-        sp, mp = P.fixed(j), V.fixed_mode(j)
-    else:
-        sp, mp = P.from_name(name, G["modes"]), V.greedy_mode
+    sp, mp = MH.from_name(name, G["modes"])
     return a, [V.run_episode_ev(G["core"](G["table"], pool, G["cfg"]), sp, mp, s) for s in seeds]
 
 
@@ -47,9 +43,12 @@ def main():
     ap.add_argument("--modes", required=True)
     ap.add_argument("--cfg", default="{}")
     ap.add_argument("--procs", type=int, default=5)
+    ap.add_argument("--family", default="base", choices=["base", "budget"],
+                    help="base: v2 family (tune_heur) + event-greedy modes; budget: slot x budget_mode (mode_heur)")
     args = ap.parse_args()
     modes, cfg = args.modes.split(","), json.loads(args.cfg)
-    jobs = [(n, w) for n in family(modes) for w in ("train", "test")]
+    names = family(modes) if args.family == "base" else MH.family()
+    jobs = [(n, w) for n in names for w in ("train", "test")]
     with Pool(args.procs, initializer=init, initargs=(args.profiles, modes, args.cpu_file, args.env, cfg)) as pool:
         res = pool.map(run, jobs)
     rows = {}
@@ -62,7 +61,7 @@ def main():
                      test_mission=float(np.mean([e["mission_s"] for e in eps])),
                      test_return_all=[e["return"] for e in eps])
     best = max(rows, key=lambda n: rows[n]["train_return"])
-    json.dump(dict(env=args.env, cfg=cfg, tuned=best, rows=rows), open(args.out, "w"), indent=1)
+    json.dump(dict(env=args.env, cfg=cfg, family=args.family, tuned=best, rows=rows), open(args.out, "w"), indent=1)
     for n in sorted(rows, key=lambda n: -rows[n]["train_return"])[:15]:
         r = rows[n]
         print(f"{n:24s} train {r['train_return']:+8.2f}  test {r['test_return']:+8.2f}  ok {r['test_ok']:.3f}  "
