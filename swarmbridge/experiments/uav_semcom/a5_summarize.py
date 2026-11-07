@@ -192,13 +192,20 @@ def fidelity_tables():
         if not d:
             continue
         per = [json.loads(l) for l in open(F / "fidelity" / f"per_image_{pool}.jsonl")]
-        agg = defaultdict(lambda: defaultdict(list))
-        for r in per:
-            for k in ("bytes", "psnr", "agree_f1"):
-                agg[r["mode"]][k].append(r[k])
-            agg[r["mode"]]["tp"].append(r["tp"]); agg[r["mode"]]["n_gt"].append(r["n_gt"])
-            agg[r["mode"]]["tp_s"].append(r["tp_small"]); agg[r["mode"]]["n_s"].append(r["n_small"])
+        man = C.manifest()["images"]
+        order = list(dict.fromkeys(r["image"] for r in per))       # pool order (manifest order)
+        info = {e["name"]: e for e in man}
+        members = {"all": set(order), "test": {n for n in order if info[n]["split"] == "test"},
+                   "in_a4": {n for n in order if info[n]["in_a4"]}, "gen_subset": set(order[:100])}
         for sub, res in d["results"].items():
+            agg = defaultdict(lambda: defaultdict(list))
+            for r in per:
+                if r["image"] not in members[sub]:
+                    continue
+                for k in ("bytes", "psnr", "agree_f1"):
+                    agg[r["mode"]][k].append(r[k])
+                agg[r["mode"]]["tp"].append(r["tp"]); agg[r["mode"]]["n_gt"].append(r["n_gt"])
+                agg[r["mode"]]["tp_s"].append(r["tp_small"]); agg[r["mode"]]["n_s"].append(r["n_small"])
             out += [f"Pool `{pool}`, tập con `{sub}` ({next(iter(res.values()))['n_images']} ảnh):", "",
                     "| mode | kB | PSNR | AP | AP50 | AP_small | AR500 | recall@0.25 | recall nhỏ | F1 so với ảnh gốc |",
                     "|---|---|---|---|---|---|---|---|---|---|"]
