@@ -11,7 +11,10 @@ shared pretrained weights and a shared seed):
 Huang's exact mode-3 models are not public, so this is NOT a reproduction of Huang's modes; it is the closest
 end-to-end pipeline built from public pretrained models whose decoder genuinely accepts both inputs.
 
-Usage: python profile_a12.py VISDRONE_IMAGES_DIR OUT_DIR [--n 100] [--size 512]
+--size 0 = native frames: thumbnails keep the aspect ratio (shorter side S); the generator runs at shorter side 512
+(width rounded to a multiple of 8) and its output is resized to the native frame for scoring; decode time includes
+that resize.
+Usage: python profile_a12.py VISDRONE_IMAGES_DIR OUT_DIR [--n 100] [--size 512] [--thumbs 32,64,128]
 """
 import argparse
 import io
@@ -50,7 +53,9 @@ def main():
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--size", type=int, default=512)
     ap.add_argument("--save-samples", type=int, default=3)
+    ap.add_argument("--thumbs", default=",".join(map(str, THUMBS)))
     args = ap.parse_args()
+    thumbs = tuple(int(x) for x in args.thumbs.split(","))
     from diffusers import AutoPipelineForImage2Image, AutoPipelineForText2Image
     from transformers import BlipForConditionalGeneration, BlipProcessor
     out = Path(args.out)
@@ -65,7 +70,7 @@ def main():
     i2i = AutoPipelineForImage2Image.from_pipe(t2i)
     met = Metrics(dev)
     meta = dict(hardware=hardware(), size=args.size, n=len(files), images=[f.name for f in files],
-                captioner=blip_id, generator=sd_id, steps=STEPS, thumbs=THUMBS, thumb_avif_q=THUMB_Q,
+                captioner=blip_id, generator=sd_id, steps=STEPS, thumbs=thumbs, thumb_avif_q=THUMB_Q,
                 strengths=STRENGTHS, guidance_scale=0.0, seed="per-image index (shared, 0 bits)",
                 note="caption payload = UTF-8 bytes of the caption; thumbnail payload = AVIF file bytes")
     (out / "meta.json").write_text(json.dumps(meta, indent=1))
@@ -84,6 +89,8 @@ def main():
         warm = ii == 0
         idx = max(ii - 1, 0)
         img = load(f, args.size)
+        H, W = img.shape[:2]
+        gh, gw = (args.size, args.size) if args.size else (512, int(round(512 * W / H / 8)) * 8)
         ref_clip = met.clip_embed(img)
         recs = {}
         # --- encoder side: caption ---
@@ -93,26 +100,29 @@ def main():
         cap_b = cap.encode("utf-8")
         # cap_t2i
         sync(); t0 = time.perf_counter()
-        rec = np.asarray(t2i(prompt=cap_b.decode("utf-8"), num_inference_steps=STEPS, guidance_scale=0.0,
-                             height=args.size, width=args.size, generator=gen(idx)).images[0])
+        rec = t2i(prompt=cap_b.decode("utf-8"), num_inference_steps=STEPS, guidance_scale=0.0,
+                  height=gh, width=gw, generator=gen(idx)).images[0]
+        rec = np.asarray(rec if (gh, gw) == (H, W) else rec.resize((W, H), Image.BICUBIC))
         sync(); td = time.perf_counter() - t0
         recs["cap_t2i"] = (len(cap_b), t_cap, td, rec)
-        for S in THUMBS:
+        for S in thumbs:
+            tw, thh = (S, S) if args.size else (max(1, int(round(S * W / H))), S)
             sync(); t0 = time.perf_counter()
-            th = np.asarray(Image.fromarray(img).resize((S, S), Image.LANCZOS))
+            th = np.asarray(Image.fromarray(img).resize((tw, thh), Image.LANCZOS))
             tb = avif_bytes(th, THUMB_Q)
             t_th = time.perf_counter() - t0
             sync(); t0 = time.perf_counter()
             th_dec = Image.open(io.BytesIO(tb)).convert("RGB")
-            up = th_dec.resize((args.size, args.size), Image.BICUBIC)
+            up = th_dec.resize((W, H), Image.BICUBIC)
             t_up = time.perf_counter() - t0
             recs[f"thumb{S}_up"] = (len(tb), t_th, t_up, np.asarray(up))
             for T in STRENGTHS:
                 sync(); t0 = time.perf_counter()
-                th_dec = Image.open(io.BytesIO(tb)).convert("RGB").resize((args.size, args.size), Image.BICUBIC)
-                rec = np.asarray(i2i(prompt=cap_b.decode("utf-8"), image=th_dec, strength=T,
-                                     num_inference_steps=max(STEPS, int(np.ceil(1 / T))), guidance_scale=0.0,
-                                     generator=gen(idx)).images[0])
+                th_dec = Image.open(io.BytesIO(tb)).convert("RGB").resize((gw, gh), Image.BICUBIC)
+                rec = i2i(prompt=cap_b.decode("utf-8"), image=th_dec, strength=T,
+                          num_inference_steps=max(STEPS, int(np.ceil(1 / T))), guidance_scale=0.0,
+                          generator=gen(idx)).images[0]
+                rec = np.asarray(rec if (gh, gw) == (H, W) else rec.resize((W, H), Image.BICUBIC))
                 sync(); td = time.perf_counter() - t0
                 recs[f"cap_thumb{S}_i2i_t{T}"] = (len(cap_b) + len(tb), t_cap + t_th, td, rec)
         if warm:

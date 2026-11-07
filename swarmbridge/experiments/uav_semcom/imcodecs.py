@@ -42,7 +42,10 @@ class PillowCodec:
 
 class CompressAICodec:
     """Pretrained learned image codec from CompressAI (real rANS bitstream via model.compress / decompress).
-    Payload = all entropy-coded strings + a fixed 8-byte header (latent H, W as uint16 + string lengths)."""
+    Payload = all entropy-coded strings + header (latent H, W as uint16, string count, string lengths). Images whose
+    sides are not multiples of 64 (native-resolution frames) are edge-padded before coding; then the count byte's
+    high bit is set and the original H, W (2 x uint16) follow, and the decoder crops. 64-aligned images (the 512^2
+    A1 set) are coded exactly as before (byte-identical payloads)."""
 
     def __init__(self, arch, quality, device="cuda"):
         from compressai.zoo import image_models
@@ -58,23 +61,35 @@ class CompressAICodec:
 
     @torch.no_grad()
     def encode(self, img):
-        x = torch.from_numpy(img).permute(2, 0, 1).float().div(255).unsqueeze(0).to(self.device)
+        H, W = img.shape[:2]
+        ph, pw = (-H) % 64, (-W) % 64
+        if ph or pw:
+            img = np.pad(img, ((0, ph), (0, pw), (0, 0)), mode="edge")
+        x = torch.from_numpy(np.ascontiguousarray(img)).permute(2, 0, 1).float().div(255).unsqueeze(0).to(self.device)
         out = self.net.compress(x)
         strings = [s[0] for s in out["strings"]]
         h, w = out["shape"]
-        head = struct.pack("<HHB", h, w, len(strings)) + b"".join(struct.pack("<I", len(s)) for s in strings)
+        n = len(strings) | (0x80 if (ph or pw) else 0)
+        head = struct.pack("<HHB", h, w, n) + b"".join(struct.pack("<I", len(s)) for s in strings)
+        if ph or pw:
+            head += struct.pack("<HH", H, W)
         return head + b"".join(strings)
 
     @torch.no_grad()
     def decode(self, data):
         h, w, n = struct.unpack("<HHB", data[:5])
+        padded, n = bool(n & 0x80), n & 0x7F
         lens = struct.unpack("<" + "I" * n, data[5:5 + 4 * n])
         pos, strings = 5 + 4 * n, []
+        if padded:
+            H, W = struct.unpack("<HH", data[pos:pos + 4])
+            pos += 4
         for L in lens:
             strings.append([data[pos:pos + L]])
             pos += L
         x = self.net.decompress(strings, (h, w))["x_hat"].clamp(0, 1)
-        return (x[0].permute(1, 2, 0).cpu().numpy() * 255).round().astype(np.uint8)
+        rec = (x[0].permute(1, 2, 0).cpu().numpy() * 255).round().astype(np.uint8)
+        return rec[:H, :W] if padded else rec
 
     def header_bytes(self):
         return 5 + 4 * 2

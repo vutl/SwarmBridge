@@ -25,7 +25,10 @@ from metrics import Metrics
 
 
 def load(path, size):
+    """size > 0: Lanczos resize of the shorter side to size, centre crop size x size (A1). size == 0: native frame."""
     im = Image.open(path).convert("RGB")
+    if size == 0:
+        return np.asarray(im)
     w, h = im.size
     s = size / min(w, h)
     im = im.resize((max(size, round(w * s)), max(size, round(h * s))), Image.LANCZOS)
@@ -68,15 +71,22 @@ def main():
     ap.add_argument("--size", type=int, default=512)
     ap.add_argument("--cpu-learned", type=int, default=10)
     ap.add_argument("--save-samples", type=int, default=3)
+    ap.add_argument("--modes", default="", help="comma list of mode names to profile (default: all)")
     args = ap.parse_args()
     out = Path(args.out)
     (out / "samples").mkdir(parents=True, exist_ok=True)
     files = sorted(p for p in Path(args.images).iterdir() if p.suffix.lower() in (".jpg", ".png"))[::5][:args.n]
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     modes = C.default_modes(dev)
+    if args.modes:
+        keep = set(args.modes.split(","))
+        modes = [m for m in modes if m.name in keep]
+        assert len(modes) == len(keep), "unknown mode name"
     met = Metrics(dev)
     meta = dict(hardware=hardware(), size=args.size, n=len(files), images=[f.name for f in files],
-                modes=[m.name for m in modes], preprocessing=f"Lanczos resize shorter side to {args.size}, centre crop")
+                modes=[m.name for m in modes],
+                preprocessing="native resolution (no resize)" if args.size == 0 else
+                f"Lanczos resize shorter side to {args.size}, centre crop")
     (out / "meta.json").write_text(json.dumps(meta, indent=1))
     rows = open(out / "profile.jsonl", "w")
     t_start = time.time()
