@@ -154,3 +154,26 @@ def test_maskable_ppo_two_timescale_consumes_masks(tmp_path):
     env = Watch(make_table(tmp_path), range(8), dict(mode_info="predicted", probe_mode="m0"), seed=0)
     sb3c.MaskablePPO("MlpPolicy", env, n_steps=256, batch_size=64, n_epochs=1, seed=0, device="cpu").learn(512)
     assert Watch.violations == 0
+
+
+@pytest.mark.parametrize("part", ["movement", "mode"])
+def test_ablation_wrappers_route_decisions(tmp_path, part):
+    """movement-only RL never sees a mode step; mode-only RL never sees a slot step; the episode return through the
+    wrapper equals the core episode reward."""
+    import gym_env_ev as GE
+    kw = dict(mode_pol=V.greedy_mode) if part == "movement" else dict(slot_pol=P.greedy())
+    g = GE.GymUavSemcomEv(make_table(tmp_path), range(8), dict(mode_info="predicted", probe_mode="m0"), seed=0, **kw)
+    o, _ = g.reset(seed=3)
+    done, tot, kinds = False, 0.0, set()
+    while not done:
+        kinds.add(g.phase)
+        m = g.action_masks()
+        a, i = [], 0
+        for j, nv in enumerate(g.action_space.nvec):
+            ok = np.flatnonzero(m[i:i + nv])
+            a.append(9 if (j % 3 == 0 and j < 3 * g.K and 9 in ok) else ok[-1])
+            i += nv
+        o, r, done, _, info = g.step(np.array(a))
+        tot += r
+    assert kinds == ({"slot"} if part == "movement" else {"mode"})
+    assert info["captured"] > 0

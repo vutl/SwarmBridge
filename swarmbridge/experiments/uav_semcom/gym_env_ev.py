@@ -19,7 +19,12 @@ import env_ev as V
 class GymUavSemcomEv(gym.Env):
     metadata = {}
 
-    def __init__(self, table, pool, cfg=None, seed=0, seeds=None, core_cls=None):
+    def __init__(self, table, pool, cfg=None, seed=0, seeds=None, core_cls=None, slot_pol=None, mode_pol=None):
+        """slot_pol / mode_pol (ablations): if given, that kind of decision is taken by the heuristic inside the
+        wrapper and the RL policy only sees the other kind (movement-only RL: mode_pol=env_ev.greedy_mode;
+        mode-only RL: slot_pol=<v2 heuristic>)."""
+        assert not (slot_pol and mode_pol), "at least one decision kind must be left to the RL policy"
+        self.slot_pol, self.mode_pol = slot_pol, mode_pol
         self.core = (core_cls or V.UavSemcomEnvEv)(table, pool, cfg, seed)   # env_survey.UavSurveyEnv for A4
         c = self.core.c
         self.K, self.n_modes = c["K"], self.core.n_modes
@@ -57,21 +62,40 @@ class GymUavSemcomEv(gym.Env):
             s = int(self._rng.integers(0, 2 ** 31)) if seed is None else seed
         self.core.reset(s)
         self.phase, self.pending = "slot", None
+        self._done = False
+        self._run_heuristic_parts()   # reward accrued before the first RL decision is paid out with its first step
         return self._obs(), {}
+
+    def _apply(self, slot_actions=None, mode=None):
+        if slot_actions is not None:
+            self.core.begin_slot(slot_actions)
+        else:
+            self.core.decide(mode)
+        ev = self.core.advance()
+        if ev[0] == "mode":
+            self.phase, self.pending = "mode", (ev[1], ev[2])
+        else:
+            self.phase, self.pending, self._done = "slot", None, ev[1]
+
+    def _run_heuristic_parts(self):
+        """Resolve decisions owned by a heuristic until the next RL decision (or the episode end)."""
+        while not self._done:
+            if self.phase == "slot" and self.slot_pol is not None:
+                self._apply(slot_actions=[a[:3] for a in self.slot_pol(self.core)])
+            elif self.phase == "mode" and self.mode_pol is not None:
+                self._apply(mode=self.mode_pol(self.core, *self.pending))
+            else:
+                break
 
     def step(self, action):
         a = np.asarray(action)
         if self.phase == "slot":
-            self.core.begin_slot([tuple(a[3 * k:3 * k + 3]) for k in range(self.K)])
+            self._apply(slot_actions=[tuple(a[3 * k:3 * k + 3]) for k in range(self.K)])
         else:
-            self.core.decide(int(a[-1]))
-        ev = self.core.advance()
-        if ev[0] == "mode":
-            self.phase, self.pending, done = "mode", (ev[1], ev[2]), False
-        else:
-            self.phase, self.pending, done = "slot", None, ev[1]
+            self._apply(mode=int(a[-1]))
+        self._run_heuristic_parts()
         r = self.core.pop_reward()
-        return self._obs(), float(r), done, False, (self.core.metrics() if done else {})
+        return self._obs(), float(r), self._done, False, (self.core.metrics() if self._done else {})
 
     def action_masks(self):
         core, out = self.core, []
