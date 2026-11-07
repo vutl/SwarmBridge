@@ -43,11 +43,11 @@ def main():
     ap.add_argument("--modes", required=True)
     ap.add_argument("--cfg", default="{}")
     ap.add_argument("--procs", type=int, default=5)
-    ap.add_argument("--family", default="base", choices=["base", "budget"],
-                    help="base: v2 family (tune_heur) + event-greedy modes; budget: slot x budget_mode (mode_heur)")
+    ap.add_argument("--family", default="base", choices=["base", "budget", "reuse"],
+                    help="base: v2 family (tune_heur) + event-greedy modes; budget: slot x budget_mode (mode_heur); reuse: base + budget with channel reuse (mode_heur.reuse, post-hoc diagnostic)")
     args = ap.parse_args()
     modes, cfg = args.modes.split(","), json.loads(args.cfg)
-    names = family(modes) if args.family == "base" else MH.family()
+    names = dict(base=lambda: family(modes), budget=MH.family, reuse=lambda: MH.reuse_family(modes))[args.family]()
     jobs = [(n, w) for n in names for w in ("train", "test")]
     with Pool(args.procs, initializer=init, initargs=(args.profiles, modes, args.cpu_file, args.env, cfg)) as pool:
         res = pool.map(run, jobs)

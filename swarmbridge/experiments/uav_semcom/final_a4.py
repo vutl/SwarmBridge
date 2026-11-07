@@ -93,6 +93,7 @@ def main():
     ap.add_argument("--procs", type=int, default=3)
     ap.add_argument("--no-heur", action="store_true")
     ap.add_argument("--no-mix", action="store_true")
+    ap.add_argument("--heur-family", default="base+budget", choices=["base+budget", "reuse"])
     args = ap.parse_args()
     cfg, modes = json.loads(args.cfg), args.modes.split(",")
     seeds = list(range(args.seed0, args.seed0 + args.n))
@@ -105,7 +106,8 @@ def main():
             else ["PPPP"]
         jobs += [("rl", label, path, part, c, s) for c in combos for s in seeds]
     if not args.no_heur:
-        names = list(dict.fromkeys(family(modes) + MH.family()))
+        names = list(dict.fromkeys(family(modes) + MH.family())) if args.heur_family == "base+budget" \
+            else MH.reuse_family(modes)
         jobs += [("heur", "H:" + n, n, None, "-", s) for n in names for s in seeds]
     with Pool(args.procs, initializer=init, initargs=(args.profiles, modes, args.cpu_file, cfg, args.slot_heur)) as p:
         res = p.map(job, jobs, chunksize=4)

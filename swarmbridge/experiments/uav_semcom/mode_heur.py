@@ -48,8 +48,35 @@ def budget_mode(tau):
     return f
 
 
+def reuse(slot_pol):
+    """POST-HOC diagnostic (designed after the A4 channel analysis showed joint PPO puts all UAVs on air): the base slot
+    policy's channel assignment (M channels to the least-slack UAVs), plus EVERY other active UAV with a queue also
+    transmits, on the channel whose occupants have the least expected received power at the BS (least interference
+    to it). Interference in the env is time-resolved (co-channel UAVs only interfere while both are actually sending),
+    so a shared channel is used alone whenever the other UAV has nothing ready. Power unchanged (max).
+    (A first version that only shared when the instantaneous predicted sum rate rose never shared at all: with both
+    UAVs sending, sharing always lowers the sum rate at these SNRs; it was identical to the base heuristics.)"""
+    def pol(env):
+        acts = [list(a) for a in slot_pol(env)]
+        c = env.c
+        g = [env.expected_gain(u.pos) for u in env.uavs]
+        for k, u in enumerate(env.uavs):
+            if not (u.active and u.queue) or acts[k][1] > 0:
+                continue
+            load = {ch: sum(c["p_levels"][acts[j][2]] * g[j] for j in range(len(env.uavs))
+                            if j != k and acts[j][1] == ch) for ch in range(1, c["M"] + 1)}
+            acts[k][1] = min(load, key=lambda ch: (load[ch], ch))
+        return [tuple(a) for a in acts]
+    pol.__name__ = slot_pol.__name__ + "+reuse"
+    return pol
+
+
 def from_name(name, modes):
-    """'SLOT+budgetTAU' -> (slot policy, mode policy); any other name -> (v2 heuristic, event-greedy / fixed)."""
+    """'SLOT+budgetTAU' -> (slot policy, mode policy); any other name -> (v2 heuristic, event-greedy / fixed);
+    a '+reuse' suffix wraps the slot policy with reuse() (post-hoc diagnostic)."""
+    if name.endswith("+reuse"):
+        sp, mp = from_name(name[:-len("+reuse")], modes)
+        return reuse(sp), mp
     if "+budget" in name:
         slot, tau = name.split("+budget")
         return P.from_name(slot, modes), budget_mode(float(tau))
@@ -62,3 +89,9 @@ def from_name(name, modes):
 def family():
     return [f"{s}+budget{t:g}" for s in ("greedy", "pacedB1.5", "pacedB2", "pacedB3")
             for t in (0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0)]
+
+
+def reuse_family(modes):
+    """Post-hoc diagnostic family: the base (tune_heur) and budget families, each with channel reuse."""
+    from tune_heur import family as base
+    return [n + "+reuse" for n in base(modes) + family() if not n.startswith("fixed_")]

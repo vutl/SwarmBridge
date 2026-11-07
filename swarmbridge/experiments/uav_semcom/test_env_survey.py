@@ -101,3 +101,29 @@ def test_budget_mode_heuristic(tmp_path):
     assert len(t.decisions) == len(t.tasks) == len({(d[1], d[2]) for d in t.decisions})
     sp, mp = MH.from_name("pacedB2+budget1.5", None)
     assert mp.__name__ == "budget1.5"
+
+
+def test_channel_reuse_wrapper(tmp_path):
+    """reuse(): keeps the base policy's assignments; every other active UAV with a queue gets a (shared) channel,
+    never UAVs without a queue; reuse does happen."""
+    import mode_heur as MH
+    env = S.UavSurveyEnv(make_table(tmp_path), range(8), dict(K=3, M=2, v_max=20.0, mode_info="predicted"))
+    base = P.from_name("pacedB1.5")
+    wrapped = MH.reuse(base)
+    n_shared = []
+
+    def sp(e):
+        b, w = base(e), wrapped(e)
+        for k, u in enumerate(e.uavs):
+            if b[k][1] > 0:
+                assert w[k][:3] == b[k][:3]
+            elif u.active and u.queue:
+                assert w[k][1] > 0 and w[k][0] == b[k][0] and w[k][2] == b[k][2]
+            else:
+                assert w[k][1] == 0
+        n_shared.append(sum(w[k][1] > 0 for k in range(3)) > 2)
+        return w
+    run(env, 0, slot_pol=sp)
+    assert any(n_shared)
+    sp2, mp2 = MH.from_name("pacedB1.5+budget1.5+reuse", env.tab.modes)
+    assert sp2.__name__ == "pacedB1.5+reuse" and mp2.__name__ == "budget1.5"

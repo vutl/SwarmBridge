@@ -782,7 +782,7 @@ Phần năng lượng chỉ đóng góp khoảng 0,01 return (w_E = 0,02/kJ). Ph
 3. Đây vẫn là kịch bản tải thấp (ρ ≈ 0,19); mọi chính sách đều giao gần như 100% ảnh. Biên độ khác biệt nhỏ so với tổng return.
 4. Điều khiển theo sự kiện (mục 6) lấy lại khoảng +6 return cho mọi chính sách ở mức predicted. Train PPO trên env hai thang thời gian (`train_ev.py`) là bước tiếp theo trên kịch bản tham chiếu, chạy cùng A4.
 
-## 8. A4 — khảo sát photogrammetry trên ảnh VisDrone gốc (2026-11-07, đang chạy)
+## 8. A4 — khảo sát (survey-driven image delivery) trên ảnh VisDrone gốc (2026-11-07)
 
 So với kịch bản tham chiếu, chỉ **workload** và **bảng mode** thay đổi. Topology (K = 3 UAV, M = 2 kênh, 1 MHz, BS), kênh truyền, encoder/transmitter, deadline (4–12 s), Qmin (22–30 dB), utility, reward và ràng buộc giữ nguyên như v2.1/v2.2. Điều khiển hai thang thời gian như mục 6. Mức thông tin chính là `predicted`, w_T = 0,3.
 
@@ -915,3 +915,158 @@ Phần đóng góp riêng của di chuyển và của chọn mode sẽ được 
 1. **10 m/s (tải thấp):** PPO ≈ heuristic tinh chỉnh, chênh −0,9 đến +0,1. Giống kịch bản tham chiếu: khi tải thấp, gần như không còn gì để học.
 2. **20 m/s (tải cao):** PPO hơn heuristic tinh chỉnh tốt nhất khoảng **+5,4 đến +6,5 return**, KTC dương ở cả 3 seed, độ lệch giữa các seed 0,59. Đây là khoảng cách lớn nhất cho đến nay, và lần đầu tiên **chọn mode theo trạng thái** có vẻ đóng góp đáng kể.
 3. Lợi thế này phụ thuộc vào trọng số thời gian w_T = 0,3: PPO đổi chất lượng ảnh lấy thời gian nhiệm vụ. Với w_T khác, cách đánh đổi đúng sẽ khác. Kết quả này **không** nói rằng PPO cho ảnh tốt hơn.
+
+### 8.6 Sửa mục tiêu huấn luyện: discount theo thời gian thực (semi-MDP)
+
+**Vấn đề** (ChatGPT chỉ ra; trước đó tôi chỉ ghi là "xấp xỉ" ở mục 6.1 mà chưa xử lý):
+- PPO chuẩn nhân γ = 0,99 sau **mỗi bước quyết định**. Ở môi trường hai thang thời gian, bước mode có thể cách nhau gần 0 s, còn bước slot cách nhau 1 s.
+- Hậu quả: tầm nhìn hiệu dụng phụ thuộc vào số quyết định trong episode, không phụ thuộc thời gian thật.
+- Ba bản joint, chỉ-slot và chỉ-mode có số bước khác nhau, nên thực chất đang tối ưu ba mục tiêu khác nhau.
+
+**Sửa** (`timeppo.py`, `train_ev.py --time-discount`):
+- Wrapper trả về `info["dt"]`, là thời gian mô phỏng từ quyết định RL này tới quyết định RL kế tiếp.
+- `TimeMaskablePPO` đưa Δt vào rollout buffer. GAE dùng γ^Δt và (γλ)^Δt (γ = 0,99/s, λ = 0,95/s):
+  δ_t = r_t + γ^Δt·(1−d_t)·V(s_{t+1}) − V(s_t),  A_t = δ_t + (γλ)^Δt·(1−d_t)·A_{t+1}.
+- Đã kiểm tra: trong sb3-contrib 2.9.2, `collect_rollouts` gọi `_update_info_buffer` ngay trước `rollout_buffer.add`. Bản override chuyển Δt qua đường này, và buffer báo lỗi nếu không nhận được Δt, nên không thể âm thầm quay về discount theo bước.
+
+**Test** (`test_timeppo.py`, 10 test; tổng 59/59 qua):
+- Δt = 1 s cho kết quả trùng **từng bit** với GAE chuẩn.
+- Khớp với bản cài thuần Python khi có kết thúc episode và Δt riêng từng env; vectorized cho kết quả bằng chạy từng env riêng.
+- Ba quyết định cùng thời điểm (Δt = 0) cho cùng advantage như một quyết định gộp: không thêm discount, không thêm suy giảm λ. PPO chuẩn thì có.
+- Không bootstrap qua ranh giới episode.
+- Đầu-cuối: buffer nhận đúng chuỗi Δt của từng env, kể cả khi env tự reset.
+
+**Kiểm chứng thực nghiệm:**
+- Ở bản chỉ-slot, mọi bước RL cách nhau đúng 1 s, nên mục tiêu không đổi.
+- Chạy lại với code mới cho kết quả **trùng từng giá trị** với bản cũ (seed 0 và 1; seed 2: xem 8.7).
+
+Các kết quả trước khi sửa (mục 8.4–8.5, đợt 2 cũ) được giữ làm **sơ bộ** để đối chiếu.
+
+**Tên gọi:** bản trước gọi là "movement-only" thực ra RL điều khiển cả bay, kênh và công suất (mọi quyết định theo slot). Từ đây gọi là **chỉ-slot**.
+
+### 8.7 Xác nhận trên seed test mới 5000..5099 (n = 100; `a4_native/final/`)
+
+**Vì sao cần seed mới:** họ heuristic `budget_mode` được nghĩ ra **sau** khi xem hành vi PPO trên seed test 1000..1029, nên bộ test cũ đã phần nào tham gia vào quá trình nghiên cứu.
+
+Seed 5000..5099 chưa từng dùng ở bất kỳ bước nào:
+- train/tinh chỉnh dùng 0..29;
+- validation dùng 2000..2009;
+- test cũ dùng 1000..1029.
+
+Baseline được chốt **trước** khi chạy seed mới, đều là tinh chỉnh trên train:
+- `pacedB1.5` (họ v2);
+- `pacedB1.5+budget1.5` (họ v2 + budget).
+
+Ngoài ra có báo cáo thêm heuristic tốt nhất **chọn trên chính seed mới**, `pacedB1.5+budget2`. Cách chọn này lạc quan cho heuristic.
+
+**Giới hạn:** seed mới tạo kịch bản mới (vị trí khu khảo sát, kênh truyền, cách gán ảnh), nhưng ảnh vẫn rút từ **cùng 30 ảnh test**.
+
+Return, chất lượng và chênh lệch ghép cặp so với heuristic tinh chỉnh (KTC 95%, t với 99 bậc tự do). "pooled" là trung bình của 3 policy (3 seed huấn luyện) trên từng kịch bản.
+
+| policy | return | ok | PSNR dB | nhiệm vụ s | năng lượng kJ | trễ s | Δ vs pacedB1.5+budget1.5 | Δ vs tốt nhất trên test |
+|---|---|---|---|---|---|---|---|---|
+| heuristic tinh chỉnh pacedB1.5+budget1.5 | +46,91 | 0,979 | 41,9 | 80,2 | 42,5 | 2,26 | — | −0,11 [−0,87, +0,66] |
+| heuristic tinh chỉnh họ v2 pacedB1.5 | +46,17 | 0,989 | 44,3 | 89,9 | 47,4 | 2,43 | −0,74 [−1,63, +0,15] | −0,85 [−1,50, −0,20] |
+| **joint, đã sửa** (s0/s1/s2: +52,36 / +50,68 / +52,27) | **+51,77** | 0,999 | 38,2 | 74,7 | 39,9 | 1,49 | **+4,86 [+3,67, +6,06]** | +4,75 [+3,44, +6,07] |
+| **chỉ-mode, đã sửa** (+50,89 / +50,91 / +51,41) | **+51,07** | 0,998 | 39,2 | 76,8 | 40,8 | 1,78 | **+4,16 [+3,33, +4,99]** | +4,05 [+3,12, +4,98] |
+| **chỉ-slot, đã sửa** (+49,08 / +48,09 / +50,35) | **+49,17** | 0,991 | 44,3 | 88,3 | 47,0 | 2,21 | **+2,27 [+1,57, +2,97]** | +2,16 [+1,43, +2,89] |
+| joint, sơ bộ (+52,60 / +52,71 / +51,42) | +52,24 | 0,999 | 37,8 | 74,0 | 39,4 | 1,42 | +5,34 [+4,15, +6,52] | +5,23 [+3,93, +6,53] |
+| chỉ-mode, sơ bộ (+52,40 / +51,35 / +51,31) | +51,69 | 0,997 | 39,4 | 77,3 | 41,1 | 1,79 | +4,78 [+3,98, +5,58] | +4,67 [+3,75, +5,59] |
+
+Chênh lệch ghép cặp giữa các bản RL (pooled):
+
+| so sánh | Δ return [KTC 95%] |
+|---|---|
+| joint − chỉ-mode (đã sửa, cùng 2M bước) | **+0,70 [+0,06, +1,34]** |
+| joint − chỉ-mode (đã sửa, chỉ-mode lấy checkpoint cùng số episode, mục 8.8) | +1,13 [+0,50, +1,75] |
+| joint − chỉ-slot (đã sửa, seed 0; cùng 2M bước / cùng số episode) | +2,69 [+1,52, +3,86] / +3,98 [+2,85, +5,11] |
+| joint sơ bộ − chỉ-mode sơ bộ | +0,56 [−0,00, +1,11] |
+| joint đã sửa − joint sơ bộ | −0,47 [−0,72, −0,23] |
+
+**Đọc kết quả:**
+1. **Lợi thế so với heuristic tinh chỉnh trước vẫn còn trên seed mới:** joint đã sửa hơn +4,9; bản sơ bộ hơn +5,3, gần như đúng mức +6,0 trên 30 seed test cũ.
+2. **Hầu hết lợi thế nằm ở việc RL chọn mode.** Chỉ-mode (slot do heuristic pacedB1.5 quyết định) đã đạt +4,2. Để RL điều khiển thêm phần slot chỉ cộng +0,7 đến +1,1.
+3. **RL chỉ cho phần slot** (mode theo greedy sự kiện) được +2,3, kém joint 2,7–4,0.
+4. Sửa discount **không** làm thay đổi kết luận. Joint đã sửa kém joint sơ bộ một chút (−0,5); chỉ-mode đã sửa cũng kém bản sơ bộ khoảng 0,6. Như ChatGPT lưu ý, mục tiêu "đúng" hơn không bảo đảm return đánh giá cao hơn. Ở đây chênh lệch nhỏ và ngược chiều với lo ngại "discount sai làm PPO trông tốt hơn".
+5. Chất lượng: mọi bản RL giao đúng hạn ≥ 99,1%. Joint và chỉ-mode đổi PSNR (38–39 dB, vẫn trên Qmin 22–30 dB) lấy thời gian nhiệm vụ ngắn hơn khoảng 5–15 s và năng lượng ít hơn khoảng 2–7 kJ.
+
+### 8.8 Ngân sách trải nghiệm khi huấn luyện (2M bước PPO mỗi run, các run đã sửa)
+
+| run | episode | env-giây | UAV-giây | bước RL slot | bước RL mode | quyết định slot do heuristic | quyết định mode do heuristic |
+|---|---|---|---|---|---|---|---|
+| joint s0 / s1 / s2 | 7229 / 4514 / 7354 | 0,96M / 1,46M / 0,92M | 2,55M / 2,60M / 2,40M | 0,96M / 1,46M / 0,92M | 1,07M / 0,57M / 1,10M | 0 | 0 |
+| chỉ-mode s0..2 | 12996 | 1,05–1,07M | 3,02–3,06M | 0 | 2,03M | 1,05–1,07M | 0 |
+| chỉ-slot s0 | 14725 | 2,03M | 4,82M | 2,03M | 0 | 0 | 2,25M |
+
+- Cùng 2M bước, joint chỉ được khoảng **một nửa số episode** so với chỉ-mode và chỉ-slot.
+- Joint s1 có số episode thấp hơn hẳn (4514): đầu quá trình huấn luyện nó có nhiều episode dài.
+- **Luật so cùng ngân sách**, đặt trước khi đánh giá: lấy checkpoint đầu tiên có số episode ≥ trung bình của joint (6366). Đó là `ckpt_1000000` cho chỉ-mode (6498 episode) và `ckpt_1200000` cho chỉ-slot (7295).
+- Ở cùng ngân sách, joint hơn chỉ-mode +1,1 và hơn chỉ-slot +4,0. Như vậy không có chuyện joint thắng nhờ được train nhiều hơn; ngược lại, joint được ít trải nghiệm hơn.
+
+### 8.9 Đóng góp của từng phần hành động (thay thế trên policy joint đã train)
+
+Cách làm: lần lượt thay {di chuyển, kênh, công suất, mode} của policy joint bằng hành động của heuristic (slot từ pacedB1.5, mode từ greedy sự kiện), không train lại, đo trên seed mới. Δ là so với PPO nguyên bản, pooled 3 seed.
+
+| thay bằng heuristic | joint sơ bộ | joint đã sửa |
+|---|---|---|
+| di chuyển | +0,39 [+0,21, +0,58] | +0,12 [−0,11, +0,35] |
+| kênh | **−4,59** [−4,99, −4,19] | **−5,18** [−5,62, −4,74] |
+| công suất | +0,01 [−0,08, +0,10] | +0,13 [+0,01, +0,26] |
+| mode | **−7,98** [−9,86, −6,10] | **−8,88** [−10,69, −7,06] |
+| toàn bộ (= heuristic pacedB1.5) | −6,08 | −5,60 |
+
+- **Di chuyển và công suất của PPO không đóng góp gì.** Thay bằng heuristic không mất gì, thậm chí nhỉnh hơn một chút. PPO gần như luôn phát công suất tối đa, giống heuristic.
+- Hai phần quan trọng là **mode** và **kênh**.
+- Lưu ý: khi thay một phần, policy rơi ra khỏi phân phối trạng thái nó đã học, nên các con số này chỉ nên đọc là chỉ dấu. Ví dụ: thay mode mất −8,9, nhiều hơn mức mất toàn bộ.
+
+**PPO dùng kênh khác heuristic ở đâu** (`channel_a4.py`, joint sơ bộ s0, 20 seed test cũ, 1391 slot có hàng đợi):
+- Khi cả 3 UAV đều có ảnh chờ mà chỉ có 2 kênh (869 slot):
+  - heuristic chỉ cấp kênh cho 2 UAV có slack nhỏ nhất, UAV thứ 3 chờ;
+  - PPO cho **cả 3 cùng phát** trong 859/869 slot, hai UAV dùng chung một kênh.
+- Môi trường tính nhiễu theo thời gian trong slot: hai UAV chung kênh chỉ gây nhiễu khi cả hai **đang thật sự gửi**. Khi một UAV gửi xong giữa slot, hoặc ảnh của nó còn đang encode, UAV kia dùng kênh một mình. Phân kênh cố định cả slot của heuristic bỏ phí khoảng trống này.
+
+### 8.10 Kiểm tra hậu kiểm: heuristic có dùng lại kênh (thiết kế sau khi xem PPO; ghi rõ)
+
+Câu hỏi: nếu cho heuristic dùng lại kênh, nó lấy lại được bao nhiêu lợi thế của RL?
+
+**Cách làm:** thêm `mode_heur.reuse(slot_pol)` (có test):
+- giữ phân kênh của heuristic;
+- mọi UAV còn lại có hàng đợi cũng phát, trên kênh có tổng công suất thu dự đoán của các UAV đang chiếm nhỏ nhất.
+
+Ghép với cả họ v2 và họ budget, tinh chỉnh trên seed train (`tune_reuse_v20_wt0.3.json`), đánh giá trên seed mới.
+
+**Lỗi trong quá trình (ghi để minh bạch):** bản đầu chỉ cho phát chung khi tổng tốc độ **tức thời** dự đoán tăng. Ở SNR này tiêu chí đó luôn âm, nên bản đầu không bao giờ dùng lại kênh và cho kết quả trùng hệt họ gốc. Kết quả của bản đầu đã bỏ.
+
+| | return | ok | PSNR | nhiệm vụ s | Δ [KTC 95%] |
+|---|---|---|---|---|---|
+| reuse tinh chỉnh trên train: `greedy+budget1+reuse` | **+51,28** | 0,989 | 39,4 | 73,6 | vs pacedB1.5+budget1.5: **+4,37 [+3,15, +5,60]** |
+| joint đã sửa − reuse | | | | | **+0,49 [−0,02, +0,99]** |
+| chỉ-mode đã sửa − reuse | | | | | −0,21 [−0,99, +0,56] |
+| joint sơ bộ − reuse | | | | | +0,96 [+0,44, +1,48] |
+
+**Đọc kết quả:**
+- Hai luật đơn giản rút ra từ hành vi của PPO, gộp lại, lấy lại gần hết lợi thế:
+  1. **cho mọi UAV có ảnh chờ cùng phát, dùng chung kênh nếu cần**;
+  2. **chọn mode tốt nhất trong số các mode giữ backlog phát ≤ 1 s**.
+- Phần slot của heuristic là greedy: bay liên tục, không hover chờ.
+- Joint PPO đã sửa chỉ còn hơn khoảng +0,5, và KTC chạm 0.
+- Heuristic này được thiết kế **sau khi** xem PPO. Đây không phải baseline độc lập, mà là cách diễn giải PPO đã học được gì. Nó là kiểm tra để biết lợi thế của RL nằm ở đâu.
+
+### 8.11 Kết luận A4 (20 m/s, w_T = 0,3)
+
+1. **Kết quả được xác nhận:** trên 100 kịch bản mới, PPO hai thang thời gian (sửa discount, 3 seed) hơn các heuristic được chốt trước khoảng **+4,9 return**:
+   - giao đúng hạn 99,9%;
+   - nhiệm vụ ngắn hơn khoảng 5 s so với pacedB1.5+budget1.5 và khoảng 15 s so với pacedB1.5;
+   - PSNR thấp hơn (38 so với 42–44 dB), vẫn trên Qmin.
+2. **Nguồn lợi thế** (ablation huấn luyện và ablation thay thế cho cùng một bức tranh):
+   - chủ yếu từ **chọn mode theo trạng thái hàng đợi**: chỉ-mode +4,2;
+   - phần còn lại từ **cho cả 3 UAV cùng phát khi chỉ có 2 kênh**;
+   - di chuyển và công suất do RL quyết định không đóng góp.
+3. **Lợi ích của phối hợp joint so với chỉ-mode nhỏ:** +0,7 cùng số bước, +1,1 cùng số episode. Có thật về thống kê nhưng nhỏ.
+4. **RL ở đây chủ yếu đóng vai trò công cụ khám phá.** Hai luật đơn giản rút ra từ hành vi PPO (reuse kênh và giới hạn backlog khi chọn mode) đạt +51,3, chỉ kém PPO khoảng 0,5. Nói trung thực: kết quả hiện tại **chưa chứng minh** cần RL lúc vận hành ở cấu hình này. Kết quả chứng minh rằng mode nén thích nghi theo hàng đợi và phát chung kênh khi rảnh là hai cơ chế mang lại lợi ích, và RL tìm ra chúng mà không cần ai gợi ý.
+5. **Giới hạn:**
+   - một cấu hình (K = 3, M = 2, 1 MHz, 20 m/s, w_T = 0,3);
+   - 30 ảnh test;
+   - workload khảo sát là mô phỏng (ảnh VisDrone gán ngẫu nhiên vào điểm chụp, không có orthomosaic);
+   - chất lượng chỉ đo bằng PSNR;
+   - ở 10 m/s (tải thấp) PPO ≈ heuristic (mục 8.4).
