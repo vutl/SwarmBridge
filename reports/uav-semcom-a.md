@@ -686,3 +686,98 @@ Return (delay trung bình). Phần slot lấy từ heuristic v2; phần mode dù
    - **chi phí thu thập (probe): ≈ 0,8–1,1**, vì 4 probe chạy nối tiếp khoảng 0,16 s và encode phải xếp sau chúng;
    - **sai số dự đoán: ≈ 0** (oracle_probe ≈ predicted).
 3. Mức `mean` (không probe, không có thông tin riêng từng ảnh) ≈ oracle. Trong kịch bản tham chiếu tải thấp, thông tin riêng từng ảnh gần như **không có giá trị**, nên chạy probe còn thiệt hơn không chạy. Đây là một đặc điểm của chế độ tải, không phải kết luận chung. Nó sẽ được kiểm tra lại ở A4, khi tải cao hơn.
+
+## 7. A3.2 — 3 seed huấn luyện trên v2.1, điều khiển theo slot (2026-11-07)
+
+Đây là baseline cho điều khiển theo slot: env v2.1 (`env.py`, không đổi trong lúc train), mode chọn ở đầu slot, mức thông tin `predicted`, w_T = 0,3.
+
+Cấu hình train:
+- MaskablePPO, 2 triệu bước mỗi seed, seed huấn luyện 0, 1, 2 (khoảng 37 phút mỗi seed, chỉ CPU);
+- checkpoint cuối cùng được cố định từ trước, không chọn theo kết quả.
+
+Lưu ý: `train_a3.py` theo dõi tiến trình train trên 10 seed đầu của tập test, nhưng không dùng kết quả đó để chọn hay dừng gì. Script mới `train_ev.py` theo dõi trên seed validation riêng (2000..2009).
+
+Heuristic được tinh chỉnh trên ảnh train và seed train 0..29. Họ heuristic gồm:
+- mọi mode cố định, greedy, greedy_detour;
+- paced q0..5;
+- staggered (idx / near / far, có hoặc không kèm điều nhịp);
+- **pacedB τ ∈ {0,25 … 4}**: điều nhịp theo backlog tính bằng giây, mịn hơn ngưỡng số ảnh.
+
+Chọn trên train, thành viên tốt nhất là **pacedB1.5**.
+
+Kết quả lưu ở `runs/uav_semcom/a32_predicted_wt0.3_s{0,1,2}/{eval_s*,tune,ablate,analysis}.json`. Script: `scripts/uav_semcom/{run,tune,ablate,analyze}_a32.sh`.
+
+### 7.1 Return trên 30 seed test chung
+
+| policy | seed 0 | seed 1 | seed 2 | trung bình (độ lệch chuẩn giữa các seed) |
+|---|---|---|---|---|
+| **PPO** | +21,26 | +21,28 | +21,10 | **+21,21 (0,10)** |
+| pacedB1.5 (tinh chỉnh) | +18,54 | (giống) | (giống) | +18,54 |
+| greedy_detour | +18,57 | | | |
+| paced_q4 | +18,47 | | | |
+| greedy | +18,30 | | | |
+| pacedB2 / pacedB1 / pacedB0,5 | +18,21 / +11,10 / +8,88 | | | |
+| fixed avif_80 (mode cố định tốt nhất) | +17,68 | | | |
+| fixed mbt2018-mean_q8 | +17,47 | | | |
+
+Heuristic không phụ thuộc seed huấn luyện, nên chỉ có một giá trị.
+
+PPO − heuristic tinh chỉnh, cặp trên seed test [KTC 95%]:
+
+| seed huấn luyện | Δ return | Δ utility/ảnh | Δ thời gian nhiệm vụ |
+|---|---|---|---|
+| 0 | **+2,72 [+1,69, +3,75]** | +0,021 | −1,4 s |
+| 1 | **+2,74 [+1,82, +3,65]** | +0,021 | −1,3 s |
+| 2 | **+2,56 [+1,52, +3,60]** | +0,017 | −1,4 s |
+
+Ba lần train cho kết quả gần như giống nhau. Độ lệch chuẩn giữa các seed là 0,10 return, nhỏ hơn nhiều so với độ rộng KTC trên seed test (khoảng ±1). Cả ba đều hội tụ ở khoảng 1M bước (utility theo dõi được 0,79 → 0,81).
+
+Mọi chính sách đều giao khoảng 99–100% ảnh, PSNR khoảng 41 dB.
+
+### 7.2 Ablation thành phần hành động (H = pacedB1.5)
+
+| di chuyển / kênh+công suất / mode | seed 0 | seed 1 | seed 2 | trung bình |
+|---|---|---|---|---|
+| PPP (PPO) | +21,26 | +21,28 | +21,10 | +21,21 |
+| PPH | +21,38 | +21,32 | +21,14 | +21,28 |
+| PHP | +20,36 | +20,10 | +19,49 | +19,99 |
+| PHH | +20,47 | +20,20 | +19,56 | +20,08 |
+| HPP | +19,78 | +19,95 | +19,77 | +19,83 |
+| HPH | +19,88 | +20,05 | +20,06 | +20,00 |
+| HHP | +18,71 | +18,71 | +18,43 | +18,62 |
+| HHH (heuristic) | +18,54 | +18,54 | +18,54 | +18,54 |
+
+Mỗi thành phần, so cặp trên seed test (seed 0 / 1 / 2):
+- **Di chuyển** (PHH − HHH): +1,9 ± 1,0 / +1,7 ± 1,0 / +1,0 ± 1,1.
+- **Kênh + công suất** khi di chuyển là của PPO (PPH − PHH): +0,9 ± 0,4 / +1,1 ± 0,6 / +1,6 ± 0,5. Khi di chuyển là của heuristic (HPP − HHH): +1,2 đến +1,4.
+- **Mode**: PPH ≥ PPP ở cả 3 seed. Mode của PPO **không** hơn mode của heuristic.
+
+Khác với A3 v2 (mục 4.10), lần này kênh + công suất của PPO cũng đóng góp khoảng +1 return.
+
+Giả thuyết, **chưa kiểm chứng riêng**: v2.1 tính nhiễu theo thời gian thực, nên hai UAV có thể phát chung một kênh trong lúc một UAV có độ lợi kênh yếu. Heuristic không bao giờ dùng chung kênh; PPO A3 v2 có dùng (5–16% airtime, mục 5.3). PPO cũng thỉnh thoảng hạ công suất (khoảng 10% số slot có phát).
+
+### 7.3 PPO làm gì khác (10 seed test, mỗi seed huấn luyện)
+
+| | PPO (s0 / s1 / s2) | pacedB1.5 |
+|---|---|---|
+| tốc độ trung bình | 19,2 / 19,1 / 19,2 m/s | 16,7 m/s |
+| số slot hover / đi theo hướng la bàn (1–8) | 51 / 58 / 48 hover; 10–14% slot theo hướng la bàn | 219 hover, 0 hướng la bàn |
+| lần chụp cuối | 39,0 / 39,6 / 38,5 s | 40,6 s |
+| độ trễ trung bình | 2,24 s | 2,50 s |
+| PSNR | 41,1–41,2 dB | 40,97 dB |
+| tỉ lệ mbt q8 / avif_80 | 538:182 / 515:205 / 470:249 | 402:318 |
+| năng lượng | 21,9 kJ | 22,5 kJ |
+
+**Đọc kết quả:**
+- pacedB1.5 điều nhịp bằng cách **hover** chờ hàng đợi vơi.
+- PPO gần như không hover. Thay vào đó, đôi khi nó **bay lệch hướng** 1–2 slot, vẫn chậm lại tương đương mà không đứng yên. Theo mô hình Zeng, bay ở tốc độ vừa phải tốn ít công suất hơn hover, nên năng lượng thấp hơn khoảng 0,6 kJ.
+- PPO vẫn chụp xong sớm hơn heuristic, độ trễ ngắn hơn, và nhờ hàng đợi thoáng hơn nên dùng mbt q8 (PSNR cao hơn) nhiều hơn.
+
+Phần năng lượng chỉ đóng góp khoảng 0,01 return (w_E = 0,02/kJ). Phần hơn chủ yếu là utility: +0,02 × 120 ảnh ≈ +2,5.
+
+### 7.4 Kết luận A3.2 (kịch bản tham chiếu, điều khiển theo slot)
+
+1. Với 3 seed huấn luyện, PPO hơn heuristic tinh chỉnh tốt nhất (kể cả heuristic điều nhịp mịn hơn là pacedB) khoảng **+2,6 đến +2,7 return**, tức +0,02 utility/ảnh. KTC dương ở cả 3 seed; độ lệch giữa các seed nhỏ (0,10).
+2. Phần hơn đến từ **di chuyển** (khoảng +1,0 đến +1,9) và **kênh + công suất** (khoảng +1), **không** đến từ chọn mode.
+3. Đây vẫn là kịch bản tải thấp (ρ ≈ 0,19); mọi chính sách đều giao gần như 100% ảnh. Biên độ khác biệt nhỏ so với tổng return.
+4. Điều khiển theo sự kiện (mục 6) lấy lại khoảng +6 return cho mọi chính sách ở mức predicted. Train PPO trên env hai thang thời gian (`train_ev.py`) là bước tiếp theo trên kịch bản tham chiếu, chạy cùng A4.
