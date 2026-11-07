@@ -312,3 +312,13 @@ def test_regression_vs_v2_without_cochannel(tmp_path, cfg):
         for key in ("return", "mean_util", "ok_rate", "drop_rate", "mean_delay", "energy_kj", "mission_s"):
             assert a[key] == pytest.approx(b[key], rel=1e-9, abs=1e-9), key
 
+
+
+def test_paced_backlog_runs_and_paces(tmp_path):
+    """The backlog-time pacing heuristic is causal under 'predicted' info and hovers more for a smaller tau."""
+    tab = make_table(tmp_path)
+    cfg = dict(mode_info="predicted", probe_mode="m0", B_total=2e5)
+    a = P.run_episode(E.UavSemcomEnv(tab, range(8), cfg), P.paced_backlog(0.25), 3)
+    b = P.run_episode(E.UavSemcomEnv(tab, range(8), cfg), P.paced_backlog(50.0), 3)
+    assert a["mission_s"] >= b["mission_s"]
+    assert P.from_name("pacedB0.25").__name__ == "pacedB0.25"

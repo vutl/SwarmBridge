@@ -163,10 +163,55 @@ def staggered(q_thr=None, order="idx"):
     return pol
 
 
+def backlog_s(env, k, rate):
+    """Predicted time (s) until UAV k's whole queue is sent at `rate`: images already decided (exact payload once
+    encoded, else as known), then the undecided ones in their greedy mode (info as known; images whose probe is not
+    done yet are costed with the train-mean table) through the serial encoder."""
+    u, tab = env.uavs[k], env.tab
+    tx_free = env.t
+    for tk in u.queue:
+        if tk.mode >= 0:
+            b = tk.rem_bits if tk.ready <= env.t else env.mode_info(tk)[0][tk.mode] - tk.sent_bits
+            tx_free = max(tx_free, tk.ready) + max(b, 0.0) / rate
+    enc_free = max(env.t, u.enc_free)
+    sel = greedy_select(env, rate)
+    for tk in u.queue:
+        if tk.mode < 0:
+            known = tk.info_t <= env.t + 1e-9
+            b_hat, q_hat = env.mode_info(tk) if known else (tab.mean_bits, tab.mean_psnr)
+            start = max(enc_free, tk.info_t)
+            m = sel(tk, b_hat, q_hat, start, tx_free)
+            enc_free = start + tab.enc_s[m]
+            tx_free = max(tx_free, enc_free) + b_hat[m] / rate
+    return tx_free - env.t
+
+
+def paced_backlog(tau):
+    """Finer pacing than a queue-length threshold: greedy modes, and hover (do not fly on to the next waypoint)
+    while the predicted time to drain the own queue exceeds tau seconds, as long as the survey stays feasible."""
+    base = greedy()
+
+    def pol(env):
+        out = []
+        share = channel_share(env)
+        for k, (mv, ch, pl, md) in enumerate(base(env)):
+            u = env.uavs[k]
+            if u.wp_i < len(u.wps) and u.queue and env.c["T"] - env.t > _time_to_finish(env, u) + 5:
+                r = max(expected_rate(env, k) * share, 1.0)
+                if backlog_s(env, k, r) > tau:
+                    mv = 0
+            out.append((mv, ch, pl, md))
+        return out
+    pol.__name__ = f"pacedB{tau:g}"
+    return pol
+
+
 def from_name(name, modes=None):
     """Rebuild a heuristic from its __name__ (fixed_<mode name> needs the mode list)."""
     if name.startswith("fixed_"):
         return fixed(modes.index(name[len("fixed_"):]))
+    if name.startswith("pacedB"):
+        return paced_backlog(float(name[len("pacedB"):]))
     if name.startswith("stag_"):
         parts = name.split("_")
         return staggered(int(parts[2][1:]) if len(parts) > 2 else None, parts[1])

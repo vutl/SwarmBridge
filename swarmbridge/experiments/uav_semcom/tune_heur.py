@@ -21,6 +21,7 @@ def family(modes):
     out = [f"fixed_{m}" for m in modes] + ["greedy", "greedy_detour"] + [f"paced_q{q}" for q in range(6)]
     for order in ("idx", "near", "far"):
         out += [f"stag_{order}"] + [f"stag_{order}_q{q}" for q in (0, 1, 2, 3)]
+    out += [f"pacedB{tau:g}" for tau in (0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0)]   # finer, backlog-time pacing
     return out
 
 
