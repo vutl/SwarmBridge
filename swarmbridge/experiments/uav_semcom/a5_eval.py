@@ -14,7 +14,7 @@
                                      over move/channel/power/mode, P = PPO, H = heuristic) says H; HEUR may be
                                      T:FAMILY. Zero-shot use of a model trained elsewhere is allowed only when its
                                      observation / action shapes match (asserted).
-Per episode: the metrics, and (in a separate .deliv.json.gz) every delivered image as (manifest index, mode, ok)
+Per episode: the metrics, and (in a separate .deliv.json.gz) every finished frame as (manifest index, mode, ok)
 for the A5.2 task-fidelity join.
 Usage:
   python a5_eval.py tune --regimes ref,K5 [--procs 6]
@@ -74,7 +74,8 @@ def resolve(regime, name):
 
 
 def deliveries(core):
-    return [[int(G["man_idx"][tk.img]), int(tk.mode), int(tk.ok)] for tk in core.finished if not tk.dropped]
+    """Every finished frame (delivered or dropped): (manifest index, mode or -1, ok)."""
+    return [[int(G["man_idx"][tk.img]), int(tk.mode), int(tk.ok)] for tk in core.finished]
 
 
 def heur_episode(regime, pool, name, seed):
