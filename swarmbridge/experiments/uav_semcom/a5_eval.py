@@ -6,7 +6,7 @@
           family's tuned heuristic (chosen before any validation / test / PPO result of that regime is seen).
   eval  : policies on a pool (val | test | testdev) and seeds, paired (same seeds for every policy). Policy specs:
             H:NAME[@INFO]            heuristic by name (mode_heur.from_name), optionally with another mode_info
-            T:FAMILY[@INFO]          the tuned member of FAMILY (base | budget | reuse | fixed) for that regime
+            T:FAMILY[@INFO]          the tuned member of FAMILY (base | budget | reuse | fixed | best) for that regime
             P:LABEL=PATH:PART:HEUR:COMBO
                                      a PPO model (PART = joint | mode | movement as trained); HEUR = heuristic
                                      name whose slot part drives mode-only RL's slots (and movement-only RL's modes
@@ -51,7 +51,11 @@ def tune_path(regime):
 
 
 def tuned(regime, fam):
+    """Tuned member of a family; 'best' = the best tuned member over the base / budget / reuse families (train return,
+    the 'strong heuristic' of a regime; = reuse wherever channel reuse helps)."""
     d = json.loads(tune_path(regime).read_text())
+    if fam == "best":
+        return max((d["tuned"][f] for f in ("base", "budget", "reuse")), key=lambda n: d["rows"][n]["return"])
     return d["tuned"][fam]
 
 

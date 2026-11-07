@@ -35,6 +35,12 @@ Quyết định chỉ dựa trên heuristic trên **val**; không có PPO nào t
 - Mỗi regime train **joint** và **mode-only**, 3 seed (0, 1, 2).
 - Ở mode-only, slot do phần slot của heuristic reuse đã tinh chỉnh cho regime đó quyết định.
 - Checkpoint được lưu mỗi 2·10⁵ bước. Checkpoint dùng cho test là checkpoint có **return val cao nhất** (nếu bằng nhau thì lấy checkpoint sớm hơn). Checkpoint cuối cũng được báo cáo.
+- **Điều chỉnh (2026-11-08 00:05, trước khi có bất kỳ kết quả PPO nào):** quy tắc chọn đưa ra R3 = `phy_mcs_blind`. Ở regime này họ reuse lại là họ heuristic tinh chỉnh **tệ nhất** (train −16,6, trong khi budget +15,0). Nếu giữ nguyên quy tắc, mode-only RL sẽ bị buộc chạy trên một luật slot kém. Vì ý định của quy tắc là "heuristic mạnh nhất", tôi đổi thành **T:best** = thành viên tinh chỉnh tốt nhất trên train trong ba họ base / budget / reuse. T:best được dùng ở ba chỗ:
+  - phần slot của mode-only RL;
+  - baseline tham chiếu;
+  - heuristic thay thế khi làm action replacement.
+
+  Ở ref và K5, T:best trùng với reuse tinh chỉnh, nên không có gì thay đổi. Ở `phy_mcs_blind`, T:best = pacedB2+budget1. Lúc đổi, chỉ có run ref joint s0 đang chạy (mới vài phút, joint không dùng heuristic); run đó bị dừng và chạy lại từ đầu.
 - Thứ tự chạy: seed 0 của mọi (regime, phần), rồi seed 1, rồi seed 2.
 - Nếu đường học (learning curve) val vẫn còn tăng rõ ở 2M bước, tôi sẽ ghi lại. Tôi không tự động tăng số bước.
 

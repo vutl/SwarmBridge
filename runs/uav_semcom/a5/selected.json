@@ -1,0 +1,106 @@
+{
+ "rule": "reports/uav-semcom-a5.md section 0.2",
+ "R1": "ref",
+ "R2": "K5",
+ "R3": "phy_mcs_blind",
+ "candidates": [
+  {
+   "regime": "phy_mcs_blind",
+   "reuse_gain": -19.103769903193847,
+   "adapt": -12.145919820364558,
+   "control": 91.62168763111305,
+   "eligible": true
+  },
+  {
+   "regime": "q_high",
+   "reuse_gain": -8.804347679069075,
+   "adapt": -6.403533134035257,
+   "control": 2.4008145450338176,
+   "eligible": true
+  },
+  {
+   "regime": "phy_gap3",
+   "reuse_gain": -0.9112615833903632,
+   "adapt": -0.9112615833903632,
+   "control": 39.90133992625947,
+   "eligible": true
+  },
+  {
+   "regime": "v10",
+   "reuse_gain": -0.35746332515151824,
+   "adapt": -0.15489679779242227,
+   "control": 0.19529996426419682,
+   "eligible": false
+  },
+  {
+   "regime": "phy_mcs",
+   "reuse_gain": 0.5895297450615047,
+   "adapt": 7.5473798278907935,
+   "control": 92.21121737617455,
+   "eligible": true
+  },
+  {
+   "regime": "v15",
+   "reuse_gain": 0.5976614545162136,
+   "adapt": 1.198820109266265,
+   "control": 1.117628921624096,
+   "eligible": false
+  },
+  {
+   "regime": "dl_loose",
+   "reuse_gain": 0.6734306960790661,
+   "adapt": 13.166009991715967,
+   "control": 2.034431707396905,
+   "eligible": true
+  },
+  {
+   "regime": "fade_k3",
+   "reuse_gain": 0.8645955698414838,
+   "adapt": 9.043184541993433,
+   "control": 4.775612618474305,
+   "eligible": true
+  },
+  {
+   "regime": "fade_k0",
+   "reuse_gain": 1.7366864669973623,
+   "adapt": 9.849110844905994,
+   "control": 5.528530276694546,
+   "eligible": true
+  },
+  {
+   "regime": "q_low",
+   "reuse_gain": 2.541381222688429,
+   "adapt": 3.0615957412649095,
+   "control": 4.3524615465320124,
+   "eligible": true
+  },
+  {
+   "regime": "env_suburban",
+   "reuse_gain": 3.114396776684899,
+   "adapt": 9.231746843136463,
+   "control": 9.28853384860136,
+   "eligible": true
+  },
+  {
+   "regime": "dl_tight",
+   "reuse_gain": 3.178119590123927,
+   "adapt": 4.223607544707129,
+   "control": 17.904709671569787,
+   "eligible": true
+  },
+  {
+   "regime": "env_dense",
+   "reuse_gain": 6.325976475014606,
+   "adapt": 6.325976475014606,
+   "control": 48.301400680966324,
+   "eligible": true
+  },
+  {
+   "regime": "env_highrise",
+   "reuse_gain": 17.963447654761744,
+   "adapt": 17.963447654761744,
+   "control": 191.53268143659398,
+   "eligible": true
+  }
+ ]
+}

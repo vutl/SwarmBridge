@@ -23,7 +23,7 @@ except ImportError:   # pragma: no cover
         return 1.984 if n >= 100 else 2.01
 
 POL_LABEL = {"T:fixed": "fixed (tuned)", "H:greedy": "greedy", "T:base": "base (tuned)", "T:budget": "budget (tuned)",
-             "T:reuse": "**reuse (tuned)**", "H:pacedB1.5+budget1.5": "A4 pacedB1.5+budget1.5",
+             "T:reuse": "reuse (tuned)", "T:best": "**best tuned**", "H:pacedB1.5+budget1.5": "A4 pacedB1.5+budget1.5",
              "H:greedy+budget1+reuse": "A4 greedy+budget1+reuse", "T:reuse@oracle": "reuse (tuned) + oracle info"}
 F = C.A5
 
@@ -47,12 +47,13 @@ def sweep():
     if not d:
         return "(sweep chưa có)\n"
     sel = load(F / "selected.json")
-    out = ["| regime | " + " | ".join(POL_LABEL[p] for p in POL_LABEL) + " | reuse: ok / PSNR / nhiệm vụ |",
-           "|---" * (len(POL_LABEL) + 2) + "|"]
+    cols = [p for p in POL_LABEL if p in next(iter(d["results"].values()))]
+    out = ["| regime | " + " | ".join(POL_LABEL[p] for p in cols) + " | reuse: ok / PSNR / nhiệm vụ |",
+           "|---" * (len(cols) + 2) + "|"]
     for r, v in d["results"].items():
         m = {p: arr(v[p]).mean() for p in POL_LABEL if p in v}
         best = max(m[p] for p in ("T:fixed", "T:base", "T:budget", "T:reuse"))
-        cells = [(f"**{m[p]:+.1f}**" if abs(m[p] - best) < 1e-9 else f"{m[p]:+.1f}") for p in POL_LABEL]
+        cells = [(f"**{m[p]:+.1f}**" if abs(m[p] - best) < 1e-9 else f"{m[p]:+.1f}") for p in POL_LABEL if p in m]
         ru = v["T:reuse"]
         out.append(f"| {r} | " + " | ".join(cells) +
                    f" | {arr(ru, 'ok_rate').mean():.3f} / {np.nanmean(arr(ru, 'mean_psnr')):.1f} / "
@@ -75,13 +76,15 @@ def final_heur(name="test_heur.json"):
     d = load(F / "final" / name)
     if not d:
         return f"({name} chưa có)\n"
-    out = [f"Pool `{d['pool']}`, n = {len(d['seeds'])} seed. Return trung bình; Δ = policy − reuse (tuned), CI 95% theo cặp.", "",
-           "| regime | fixed | greedy | base | budget | **reuse** | A4 pacedB+budget | A4 greedy+budget1+reuse | reuse+oracle | base − reuse | budget − reuse |",
-           "|---" * 11 + "|"]
+    cols = [p for p in POL_LABEL if p in next(iter(d["results"].values()))]
+    out = [f"Pool `{d['pool']}`, n = {len(d['seeds'])} seed. Return trung bình; Δ = policy − best tuned (T:best), CI 95% theo cặp.", "",
+           "| regime | " + " | ".join(POL_LABEL[p] for p in cols) + " | reuse − best | base − best | budget − best | T:best = |",
+           "|---" * (len(cols) + 5) + "|"]
     for r, v in d["results"].items():
-        ref = arr(v["T:reuse"])
-        cells = [f"{arr(v[p]).mean():+.1f}" for p in POL_LABEL]
-        out.append(f"| {r} | " + " | ".join(cells) + f" | {ci(arr(v['T:base']) - ref)} | {ci(arr(v['T:budget']) - ref)} |")
+        ref = arr(v["T:best"])
+        cells = [f"{arr(v[p]).mean():+.1f}" for p in cols]
+        out.append(f"| {r} | " + " | ".join(cells) + f" | {ci(arr(v['T:reuse']) - ref)} | {ci(arr(v['T:base']) - ref)} | "
+                   f"{ci(arr(v['T:budget']) - ref)} | {d['resolved'][r]['T:best']} |")
     return "\n".join(out) + "\n"
 
 
@@ -92,15 +95,15 @@ def ppo(regime):
         return f"({regime}: PPO chưa đánh giá)\n"
     H = th["results"][regime]
     P = tp["results"][regime]
-    ref = arr(H["T:reuse"])
+    ref = arr(H["T:best"])
     groups = defaultdict(list)
     for spec, eps in P.items():
         label = spec[2:].split("=")[0]
         kind = label.rsplit("_s", 1)[0]
         groups[kind].append(eps)
-    out = [f"**{regime}** (pool test, n = {len(ref)}; heuristic mạnh = {th['resolved'][regime]['T:reuse']}, "
+    out = [f"**{regime}** (pool test, n = {len(ref)}; heuristic mạnh T:best = {th['resolved'][regime]['T:best']}, "
            f"return {ref.mean():+.2f})", "",
-           "| policy | return | Δ vs reuse (gộp 3 seed) | Δ từng seed | ok | PSNR | nhiệm vụ (s) | năng lượng (kJ) |",
+           "| policy | return | Δ vs T:best (gộp 3 seed) | Δ từng seed | ok | PSNR | nhiệm vụ (s) | năng lượng (kJ) |",
            "|---|---|---|---|---|---|---|---|"]
     for kind in ("joint_best", "joint_last", "mode_best", "mode_last"):
         if kind not in groups:
@@ -113,9 +116,9 @@ def ppo(regime):
         mi = np.mean([arr(e, "mission_s").mean() for e in runs])
         en = np.mean([arr(e, "energy_kj").mean() for e in runs])
         out.append(f"| PPO {kind} | {R.mean():+.2f} | {ci(R - ref)} | {per} | {ok:.3f} | {ps:.1f} | {mi:.0f} | {en:.1f} |")
-    for p in ("T:base", "T:budget", "T:reuse", "H:greedy+budget1+reuse"):
+    for p in ("T:base", "T:budget", "T:reuse", "T:best", "H:greedy+budget1+reuse"):
         e = H[p]
-        out.append(f"| {POL_LABEL[p]} | {arr(e).mean():+.2f} | {ci(arr(e) - ref) if p != 'T:reuse' else '—'} | | "
+        out.append(f"| {POL_LABEL[p]} | {arr(e).mean():+.2f} | {ci(arr(e) - ref) if p != 'T:best' else '—'} | | "
                    f"{arr(e, 'ok_rate').mean():.3f} | {np.nanmean(arr(e, 'mean_psnr')):.1f} | "
                    f"{arr(e, 'mission_s').mean():.0f} | {arr(e, 'energy_kj').mean():.1f} |")
     if "joint_best" in groups and "mode_best" in groups:
@@ -159,7 +162,7 @@ def replace(regime):
         label = spec[2:].split("=")[0]
         s, combo = int(label.split("_s")[1][0]), label.rsplit("_", 1)[1]
         rows[combo].append(arr(eps) - base[s])
-    out = ["Thay phần hành động của PPO joint (best-val) bằng phần tương ứng của heuristic reuse tinh chỉnh "
+    out = ["Thay phần hành động của PPO joint (best-val) bằng phần tương ứng của heuristic mạnh T:best "
            "(thứ tự: move, channel, power, mode; H = heuristic). Δ so với PPPP, gộp 3 seed:", "",
            "| combo | Δ return |", "|---|---|"]
     for combo in sorted(rows, key=lambda c: (c.count("H"), c)):
@@ -172,10 +175,10 @@ def zeroshot():
     th = load(F / "final" / "test_heur.json")
     if not (d and th):
         return "(zero-shot chưa có)\n"
-    out = ["| regime | A4 joint (3 model, gộp) | A4 mode-only | reuse (tuned) | joint − reuse | mode − reuse |",
+    out = ["| regime | A4 joint (3 model, gộp) | A4 mode-only | best tuned | joint − best | mode − best |",
            "|---|---|---|---|---|---|"]
     for r, v in d["results"].items():
-        ref = arr(th["results"][r]["T:reuse"])
+        ref = arr(th["results"][r]["T:best"])
         J = np.mean([arr(e) for k, e in v.items() if "a4_joint" in k], 0)
         M = np.mean([arr(e) for k, e in v.items() if "a4_mode" in k], 0)
         out.append(f"| {r} | {J.mean():+.2f} | {M.mean():+.2f} | {ref.mean():+.2f} | {ci(J - ref)} | {ci(M - ref)} |")

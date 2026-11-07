@@ -9,7 +9,7 @@ Same network, PPO hyper-parameters, 6 parallel envs and 2M decision steps as the
   * no test evaluation here (a5_eval.py evaluates the selected checkpoints on the test pools, paired with the
     heuristics).
   --rl-part joint | mode | movement; --heur NAME | T:FAMILY: for mode-only RL its slot part drives the slots
-  (A5: the slot part of the regime's tuned reuse heuristic), for movement-only RL its mode part drives the modes.
+  (A5: the slot part of the regime's best tuned heuristic, T:best), for movement-only RL its mode part drives the modes.
 Usage: python a5_train.py OUT --regime ref --rl-part joint --seed 0 [--heur T:reuse] [--steps 2e6]
 """
 import argparse
@@ -41,7 +41,7 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--regime", required=True)
     ap.add_argument("--rl-part", default="joint", choices=["joint", "movement", "mode"])
-    ap.add_argument("--heur", default="T:reuse")
+    ap.add_argument("--heur", default="T:best")
     ap.add_argument("--steps", type=float, default=2e6)
     ap.add_argument("--n-env", type=int, default=6)
     ap.add_argument("--seed", type=int, default=0)

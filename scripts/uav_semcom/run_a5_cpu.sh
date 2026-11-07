@@ -2,7 +2,7 @@
 # A5 CPU queue (resumable; each stage skipped if its output exists):
 #   tests -> heuristic tuning on the train pool for every regime -> validation sweep (heuristics only) ->
 #   pre-registered regime selection (a5_select.py) -> PPO training (joint + mode-only, seeds 0, 1, 2 in that order
-#   across the selected regimes). Final test evaluation is a separate step (run_a5_final.sh).
+#   across the selected regimes; mode-only slots = slot part of the regime's best tuned heuristic, T:best). Final test evaluation is a separate step (run_a5_final.sh).
 REPO=/mnt/c/Users/USER/Documents/SwarmBridge
 PY=/home/uservutl/envs/semcom-a/bin/python
 A5=$REPO/runs/uav_semcom/a5
@@ -30,7 +30,7 @@ for s in 0 1 2; do
     for part in joint mode; do
       N=${r}_${part}_s$s; O=$W/$N
       if [ -f $A5/train/$N/train.json ]; then continue; fi
-      $PY a5_train.py $O --regime $r --rl-part $part --seed $s --heur T:reuse > $O.log 2>&1 || { echo "TRAIN FAILED $N"; exit 1; }
+      $PY a5_train.py $O --regime $r --rl-part $part --seed $s --heur T:best > $O.log 2>&1 || { echo "TRAIN FAILED $N"; exit 1; }
       mkdir -p $A5/train/$N; cp $O/train.json $A5/train/$N/
       echo "$N $(tail -n 2 $O.log | head -n 1) $(date)"
     done
