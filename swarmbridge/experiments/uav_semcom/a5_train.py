@@ -46,6 +46,8 @@ def main():
     ap.add_argument("--n-env", type=int, default=6)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--eval-every", type=float, default=2e5)
+    ap.add_argument("--resume", default="", help="run dir: continue its last checkpoint (extended-training "
+                    "experiment); episodes use env seeds offset by +50 so the start of training is not replayed")
     args = ap.parse_args()
     torch.set_num_threads(1)
     out = Path(args.out)
@@ -55,13 +57,21 @@ def main():
     heur = AE.tuned(args.regime, args.heur[2:]) if args.heur.startswith("T:") else args.heur
     sp, mp = MH.from_name(heur, C.MODES)
     kw = dict(joint={}, mode=dict(slot_pol=sp), movement=dict(mode_pol=mp))[args.rl_part]
-    venv = SubprocVecEnv([make(table, pools["train"], cfg, args.seed * 100 + i, kw) for i in range(args.n_env)])
+    off = 50 if args.resume else 0
+    venv = SubprocVecEnv([make(table, pools["train"], cfg, args.seed * 100 + off + i, kw) for i in range(args.n_env)])
     model = timeppo.TimeMaskablePPO("MlpPolicy", venv, n_steps=1024, batch_size=1024, n_epochs=10, gamma=0.99,
                                     gae_lambda=0.95, learning_rate=3e-4, ent_coef=0.01,
                                     policy_kwargs=dict(net_arch=[256, 256]), seed=args.seed, verbose=0, device="cpu")
     meta = dict(regime=args.regime, cfg=cfg, rl_part=args.rl_part, heur=heur, seed=args.seed, steps=args.steps,
                 val_seeds=C.PPO_VAL_SEEDS, val_pool="val", train_pool="train", time_discount=True)
     t0, log, done_steps, exp = time.time(), [], 0, Experience()
+    if args.resume:
+        prev = json.loads((Path(args.resume) / "train.json").read_text())
+        done_steps = prev["last_steps"]
+        log = prev["log"]
+        exp.c.update(log[-1]["experience"])
+        model = timeppo.TimeMaskablePPO.load(Path(args.resume) / f"ckpt_{done_steps}.zip", env=venv, device="cpu")
+        meta["resumed_from"] = dict(dir=args.resume, steps=done_steps)
     while done_steps < args.steps:
         model.learn(int(args.eval_every), reset_num_timesteps=False, callback=exp)
         done_steps += int(args.eval_every)
