@@ -33,7 +33,8 @@ def assign_channels(env):
 def expected_rate(env, k, p_level=-1):
     c = env.c
     g = env.expected_gain(env.uavs[k].pos)
-    return c["B_total"] / c["M"] * math.log2(1 + c["p_levels"][p_level] * g / env.noise_w())
+    sig = c["p_levels"][p_level] * g
+    return env.link_rate(sig, env.noise_w(), 0.0, sig / env.noise_w())
 
 
 def channel_share(env):

@@ -55,7 +55,14 @@ DEFAULT = dict(
     q_obs=6,
     # mechanism switches (ablation)
     mobility=True, interference=True, energy=True,
+    # PHY abstraction (A5 sensitivity; see UavSemcomEnv.link_rate): shannon | gap | mcs | mcs_blind
+    phy="shannon", phy_gap_db=0.0, phy_bler=0.1,
 )
+# LTE 4-bit CQI table (3GPP TS 36.213, Table 7.2.3-1): spectral efficiency (bit/s/Hz) of CQI 1..15, and the SINR (dB)
+# at which each reaches ~10 % BLER on AWGN -- approximate values widely used in system-level studies; ASSUMED here.
+CQI_EFF = (0.1523, 0.2344, 0.3770, 0.6016, 0.8770, 1.1758, 1.4766, 1.9141, 2.4063, 2.7305, 3.3223, 3.9023, 4.5234,
+           5.1152, 5.5547)
+CQI_THR_DB = (-6.7, -4.7, -2.3, 0.2, 2.4, 4.3, 5.9, 8.1, 10.3, 11.7, 14.1, 16.3, 18.7, 21.0, 22.7)
 
 
 def propulsion_power(v):
@@ -108,6 +115,17 @@ class ModeTable:
         tr, te = np.sort(idx[:n]), np.sort(idx[n:])
         self.fit_info(tr, probe_mode)
         return tr, te
+
+    def split_manifest(self, manifest, probe_mode="avif_5"):
+        """A5: pools from the manifest's fixed split (a5_data.py) -> {split: sorted image indices}; the controller-side
+        knowledge is fitted on the 'train' split only. Images of the table absent from the manifest are in no pool."""
+        sp = {e["name"]: e["split"] for e in json.load(open(manifest))["images"]}
+        out = {}
+        for i, im in enumerate(self.images):
+            out.setdefault(sp.get(im, "none"), []).append(i)
+        out = {k: np.array(v) for k, v in out.items()}
+        self.fit_info(out["train"], probe_mode)
+        return out
 
     def fit_info(self, train_idx, probe_mode="avif_5"):
         """'mean': per-mode train means. 'predicted': per-mode linear fit of log(bits) and PSNR on log(bits of a cheap
@@ -221,6 +239,35 @@ class UavSemcomEnv:
     def noise_w(self):
         c = self.c
         return 10 ** ((c["noise_dbm_hz"] + c["nf_db"] - 30) / 10) * c["B_total"] / c["M"]
+
+    def link_rate(self, sig, noise, interf, snr_free):
+        """Rate (bit/s) of one link on one channel (bandwidth B_total / M) at received power `sig`, noise `noise` and
+        co-channel interference `interf` (A5 PHY sensitivity; default unchanged):
+          shannon   : B/M log2(1 + SINR)                                    (A2-A4, ideal capacity)
+          gap       : B/M log2(1 + SINR / Gamma), Gamma = phy_gap_db        (SNR-gap model of practical coding)
+          mcs       : LTE 4-bit CQI table (3GPP TS 36.213 Tab. 7.2.3-1 efficiencies), the highest CQI whose SINR
+                      threshold (approx. 10 % BLER, AWGN; ASSUMED literature values) the SINR reaches, x (1 - phy_bler);
+                      0 below the lowest threshold. Link adaptation follows the actual SINR (genie).
+          mcs_blind : as mcs, but the CQI is chosen from the interference-free SNR `snr_free` (link adaptation unaware
+                      of co-channel interference); if the actual SINR is below that CQI's threshold the block fails
+                      (rate 0). Stress test for co-channel reuse."""
+        c = self.c
+        phy = c["phy"]
+        if phy == "shannon":
+            return c["B_total"] / c["M"] * math.log2(1 + sig / (noise + interf))
+        sinr = sig / (noise + interf)
+        if phy == "gap":
+            return c["B_total"] / c["M"] * math.log2(1 + sinr / 10 ** (c["phy_gap_db"] / 10))
+        sinr_db = 10 * math.log10(max(sinr, 1e-30))
+        if phy == "mcs":
+            i = int(np.searchsorted(CQI_THR_DB, sinr_db, side="right"))
+            return c["B_total"] / c["M"] * (CQI_EFF[i - 1] * (1 - c["phy_bler"]) if i else 0.0)
+        if phy == "mcs_blind":
+            i = int(np.searchsorted(CQI_THR_DB, 10 * math.log10(max(snr_free, 1e-30)), side="right"))
+            if i == 0 or sinr_db < CQI_THR_DB[i - 1]:
+                return 0.0
+            return c["B_total"] / c["M"] * CQI_EFF[i - 1] * (1 - c["phy_bler"])
+        raise ValueError(phy)
 
     # ---------- controller knowledge ----------
     def mode_info(self, task):
@@ -364,7 +411,7 @@ class UavSemcomEnv:
                 ch, p = tx[k]
                 interf = sum(tx[j][1] * gains[j] for j in sending if j != k and tx[j][0] == ch) \
                     if c["interference"] else 0.0
-                rates[k] = (c["B_total"] / c["M"] * math.log2(1 + p * gains[k] / (self.noise_w() + interf)), interf)
+                rates[k] = (self.link_rate(p * gains[k], self.noise_w(), interf, p * gains[k] / self.noise_w()), interf)
             for k, h in sending.items():
                 r = rates[k][0]
                 nxt = min(nxt, (tau + h.rem_bits / r) if r > 0 else math.inf, self.latest_tx_end(h))

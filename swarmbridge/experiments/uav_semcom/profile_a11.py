@@ -72,10 +72,13 @@ def main():
     ap.add_argument("--cpu-learned", type=int, default=10)
     ap.add_argument("--save-samples", type=int, default=3)
     ap.add_argument("--modes", default="", help="comma list of mode names to profile (default: all)")
+    ap.add_argument("--names", default="", help="file with image names (overrides the every-5th rule)")
     args = ap.parse_args()
     out = Path(args.out)
     (out / "samples").mkdir(parents=True, exist_ok=True)
     files = sorted(p for p in Path(args.images).iterdir() if p.suffix.lower() in (".jpg", ".png"))[::5][:args.n]
+    if args.names:   # A5: explicit image list (one file name per line), in that order
+        files = [Path(args.images) / n for n in Path(args.names).read_text().split()]
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     modes = C.default_modes(dev)
     if args.modes:

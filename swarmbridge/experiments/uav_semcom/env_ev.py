@@ -134,7 +134,7 @@ class UavSemcomEnvEv(E.UavSemcomEnv):
                 ch, p = tx[k]
                 interf = sum(tx[j][1] * gains[j] for j in sending if j != k and tx[j][0] == ch) \
                     if c["interference"] else 0.0
-                rates[k] = (c["B_total"] / c["M"] * math.log2(1 + p * gains[k] / (self.noise_w() + interf)), interf)
+                rates[k] = (self.link_rate(p * gains[k], self.noise_w(), interf, p * gains[k] / self.noise_w()), interf)
                 h = sending[k]
                 r = rates[k][0]
                 nxt = min(nxt, (tau + h.rem_bits / r) if r > 0 else math.inf, self.latest_tx_end(h))

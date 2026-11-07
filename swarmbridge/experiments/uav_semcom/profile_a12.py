@@ -54,6 +54,7 @@ def main():
     ap.add_argument("--size", type=int, default=512)
     ap.add_argument("--save-samples", type=int, default=3)
     ap.add_argument("--thumbs", default=",".join(map(str, THUMBS)))
+    ap.add_argument("--names", default="", help="file with image names (overrides the every-5th rule)")
     args = ap.parse_args()
     thumbs = tuple(int(x) for x in args.thumbs.split(","))
     from diffusers import AutoPipelineForImage2Image, AutoPipelineForText2Image
@@ -62,6 +63,8 @@ def main():
     (out / "samples").mkdir(parents=True, exist_ok=True)
     dev = "cuda"
     files = sorted(p for p in Path(args.images).iterdir() if p.suffix.lower() in (".jpg", ".png"))[::5][:args.n]
+    if args.names:   # A5: explicit image list (one file name per line), in that order
+        files = [Path(args.images) / n for n in Path(args.names).read_text().split()]
     blip_id, sd_id = "Salesforce/blip-image-captioning-large", "stabilityai/sd-turbo"
     proc = BlipProcessor.from_pretrained(blip_id)
     blip = BlipForConditionalGeneration.from_pretrained(blip_id, torch_dtype=torch.float16).to(dev).eval()
