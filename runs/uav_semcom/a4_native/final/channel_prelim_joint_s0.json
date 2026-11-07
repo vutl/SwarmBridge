@@ -1,0 +1,32 @@
+{
+ "cfg": {
+  "mode_info": "predicted",
+  "v_max": 20,
+  "w_time": 0.3
+ },
+ "model": "/home/uservutl/work/a4_v20_joint_s0/ppo_s0.zip",
+ "counts": {
+  "slots_with_queue": 1391,
+  "n_cand=3": 869,
+  "n_cand=3_ppo_on=3": 859,
+  "ppo_shared_channel": 860,
+  "ppo_idle_while_queue": 0,
+  "same_set_as_heur": 527,
+  "ppo_power_max": 3461,
+  "ppo_tx_uav_slots": 3503,
+  "contended_heur_off_gainrank1": 292,
+  "contended": 869,
+  "contended_heur_off_gainrank2": 261,
+  "n_cand=1": 138,
+  "n_cand=1_ppo_on=1": 138,
+  "n_cand=2": 384,
+  "n_cand=2_ppo_on=2": 384,
+  "contended_heur_off_gainrank0": 316,
+  "n_cand=3_ppo_on=2": 10,
+  "contended_ppo_off_gainrank0": 4,
+  "contended_ppo_off_slackrank2": 5,
+  "contended_ppo_off_slackrank1": 5,
+  "contended_ppo_off_gainrank1": 2,
+  "contended_ppo_off_gainrank2": 4
+ }
+}
