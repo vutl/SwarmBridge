@@ -162,7 +162,7 @@ def replace(regime):
         label = spec[2:].split("=")[0]
         s, combo = int(label.split("_s")[1][0]), label.rsplit("_", 1)[1]
         rows[combo].append(arr(eps) - base[s])
-    out = ["Thay phần hành động của PPO joint (best-val) bằng phần tương ứng của heuristic mạnh T:best "
+    out = [f"**{regime}** — thay phần hành động của PPO joint (best-val) bằng phần tương ứng của heuristic mạnh T:best "
            "(thứ tự: move, channel, power, mode; H = heuristic). Δ so với PPPP, gộp 3 seed:", "",
            "| combo | Δ return |", "|---|---|"]
     for combo in sorted(rows, key=lambda c: (c.count("H"), c)):
@@ -259,6 +259,22 @@ def fidelity_join(evals):
     return "\n".join(out) + "\n"
 
 
+def posthoc(regime, pool):
+    """PPO (best-val, 3 seeds averaged) vs the heuristic that is best ON THIS POOL (chosen after seeing it; favours
+    the heuristics, a robustness check only)."""
+    th = load(F / "final" / f"{pool}_heur.json")
+    tp = load(F / "final" / f"{pool}_ppo_{regime}.json")
+    if not (th and tp):
+        return ""
+    H, P = th["results"][regime], tp["results"][regime]
+    b = max(H, key=lambda p: arr(H[p]).mean())
+    cells = []
+    for kind in ("joint_best", "mode_best"):
+        R = np.mean([arr(e) for k, e in P.items() if k[2:].split("=")[0].rsplit("_s", 1)[0] == kind], 0)
+        cells.append(f"{kind} {ci(R - arr(H[b]))}")
+    return f"| {pool} | {regime} | {b} ({th['resolved'][regime][b]}) {arr(H[b]).mean():+.2f} | " + " | ".join(cells) + " |"
+
+
 def main():
     secs = sys.argv[1:] or ["sweep", "final", "ppo", "replace", "zeroshot", "fidelity"]
     sel = load(F / "selected.json")
@@ -275,6 +291,12 @@ def main():
                 print(ppo(r))
                 print(ppo(r, "testdev"))
                 print(experience(r))
+        elif s == "posthoc":
+            print("| pool | regime | heuristic tốt nhất chọn sau | PPO joint − nó | PPO mode-only − nó |")
+            print("|---|---|---|---|---|")
+            for pool in ("test", "testdev"):
+                for r in regs:
+                    print(posthoc(r, pool))
         elif s == "long":
             print(ppo("K5", ppo_file="test_ppo_K5_long.json"))
             print(experience("K5", ("joint_long",)))
