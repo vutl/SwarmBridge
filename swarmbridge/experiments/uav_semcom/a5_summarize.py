@@ -88,11 +88,11 @@ def final_heur(name="test_heur.json"):
     return "\n".join(out) + "\n"
 
 
-def ppo(regime):
-    th = load(F / "final" / "test_heur.json")
-    tp = load(F / "final" / f"test_ppo_{regime}.json")
+def ppo(regime, pool="test", ppo_file=None):
+    th = load(F / "final" / f"{pool}_heur.json")
+    tp = load(F / "final" / (ppo_file or f"{pool}_ppo_{regime}.json"))
     if not (th and tp):
-        return f"({regime}: PPO chưa đánh giá)\n"
+        return f"({regime}/{pool}: PPO chưa đánh giá)\n"
     H = th["results"][regime]
     P = tp["results"][regime]
     ref = arr(H["T:best"])
@@ -101,11 +101,11 @@ def ppo(regime):
         label = spec[2:].split("=")[0]
         kind = label.rsplit("_s", 1)[0]
         groups[kind].append(eps)
-    out = [f"**{regime}** (pool test, n = {len(ref)}; heuristic mạnh T:best = {th['resolved'][regime]['T:best']}, "
+    out = [f"**{regime}** (pool {pool}, n = {len(ref)}; heuristic mạnh T:best = {th['resolved'][regime]['T:best']}, "
            f"return {ref.mean():+.2f})", "",
            "| policy | return | Δ vs T:best (gộp 3 seed) | Δ từng seed | ok | PSNR | nhiệm vụ (s) | năng lượng (kJ) |",
            "|---|---|---|---|---|---|---|---|"]
-    for kind in ("joint_best", "joint_last", "mode_best", "mode_last"):
+    for kind in ("joint_best", "joint_last", "mode_best", "mode_last", "joint_long_best", "joint_long_last"):
         if kind not in groups:
             continue
         runs = groups[kind]
@@ -116,7 +116,7 @@ def ppo(regime):
         mi = np.mean([arr(e, "mission_s").mean() for e in runs])
         en = np.mean([arr(e, "energy_kj").mean() for e in runs])
         out.append(f"| PPO {kind} | {R.mean():+.2f} | {ci(R - ref)} | {per} | {ok:.3f} | {ps:.1f} | {mi:.0f} | {en:.1f} |")
-    for p in ("T:base", "T:budget", "T:reuse", "T:best", "H:greedy+budget1+reuse"):
+    for p in ("T:fixed", "H:greedy", "T:base", "T:budget", "T:reuse", "T:best", "H:greedy+budget1+reuse"):
         e = H[p]
         out.append(f"| {POL_LABEL[p]} | {arr(e).mean():+.2f} | {ci(arr(e) - ref) if p != 'T:best' else '—'} | | "
                    f"{arr(e, 'ok_rate').mean():.3f} | {np.nanmean(arr(e, 'mean_psnr')):.1f} | "
@@ -128,10 +128,10 @@ def ppo(regime):
     return "\n".join(out) + "\n"
 
 
-def experience(regime):
+def experience(regime, parts=("joint", "mode")):
     out = ["| run | best-val step | val return (best / last) | episodes | env-giây | RL slot / mode decisions |",
            "|---|---|---|---|---|---|"]
-    for part in ("joint", "mode"):
+    for part in parts:
         for s in (0, 1, 2):
             d = load(F / "train" / f"{regime}_{part}_s{s}" / "train.json")
             if not d:
@@ -142,7 +142,7 @@ def experience(regime):
             out.append(f"| {part} s{s} | {d['best_steps']:,} | {b['val_return']:+.2f} / {log[-1]['val_return']:+.2f} | "
                        f"{ex.get('episodes', 0):,} | {ex.get('env_s', 0):,.0f} | {ex.get('rl_slot', 0):,} / {ex.get('rl_mode', 0):,} |")
     curves = []
-    for part in ("joint", "mode"):
+    for part in parts:
         for s in (0, 1, 2):
             d = load(F / "train" / f"{regime}_{part}_s{s}" / "train.json")
             if d:
@@ -273,7 +273,11 @@ def main():
         elif s == "ppo":
             for r in regs:
                 print(ppo(r))
+                print(ppo(r, "testdev"))
                 print(experience(r))
+        elif s == "long":
+            print(ppo("K5", ppo_file="test_ppo_K5_long.json"))
+            print(experience("K5", ("joint_long",)))
         elif s == "replace":
             for r in regs:
                 print(replace(r))

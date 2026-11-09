@@ -23,6 +23,7 @@ Usage:
 import argparse
 import gzip
 import json
+import time
 from multiprocessing import Pool
 
 import numpy as np
@@ -60,6 +61,10 @@ def tuned(regime, fam):
 
 
 def init(testdev):
+    # one torch thread per worker: with the default (several intra-op threads per process) N worker processes
+    # oversubscribe the CPU and small-batch PPO inference slows down by an order of magnitude (A5 final eval, 11-09)
+    import torch
+    torch.set_num_threads(1)
     G["table"], G["pools"] = C.load_table(testdev)
     man = {e["name"]: i for i, e in enumerate(C.manifest()["images"])}
     G["man_idx"] = np.array([man.get(n, -1) for n in G["table"].images])
@@ -166,8 +171,13 @@ def run_eval(args):
         assert set(seeds) <= set(C.TEST_SEEDS)
     specs = args.policies.split(",")
     jobs = [(r, args.pool, sp, s) for r in regimes for sp in specs for s in seeds]
+    res, t0 = [], time.time()
     with Pool(args.procs, initializer=init, initargs=(args.pool == "testdev",)) as p:
-        res = p.map(job, jobs, chunksize=args.chunk)
+        for i, x in enumerate(p.imap(job, jobs, chunksize=args.chunk)):
+            res.append(x)
+            if (i + 1) % max(len(jobs) // 20, 1) == 0:
+                el = time.time() - t0
+                print(f"progress {i + 1}/{len(jobs)} {el:.0f}s eta {el / (i + 1) * (len(jobs) - i - 1):.0f}s", flush=True)
     out, dl = {}, {}
     for (r, spec, s), m, d in res:
         out.setdefault(r, {}).setdefault(spec, []).append(m)
