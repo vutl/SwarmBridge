@@ -1,0 +1,32 @@
+progress 60/1200 5s eta 93s
+progress 120/1200 8s eta 75s
+progress 180/1200 12s eta 68s
+progress 240/1200 15s eta 59s
+progress 300/1200 17s eta 52s
+progress 360/1200 20s eta 47s
+progress 420/1200 23s eta 43s
+progress 480/1200 27s eta 40s
+progress 540/1200 31s eta 38s
+progress 600/1200 35s eta 35s
+progress 660/1200 38s eta 31s
+progress 720/1200 41s eta 28s
+progress 780/1200 44s eta 24s
+progress 840/1200 48s eta 21s
+progress 900/1200 52s eta 17s
+progress 960/1200 56s eta 14s
+progress 1020/1200 59s eta 10s
+progress 1080/1200 62s eta 7s
+progress 1140/1200 65s eta 3s
+progress 1200/1200 68s eta 0s
+ref            P:joint_best_s0=/home/uservutl/work/a5/ref_joint_s0/ckpt_200 (P:joint_best_s0=/home/uservu) return   +56.86  ok 0.999  psnr 38.6  mission 74s
+ref            P:joint_last_s0=/home/uservutl/work/a5/ref_joint_s0/ckpt_200 (P:joint_last_s0=/home/uservu) return   +56.86  ok 0.999  psnr 38.6  mission 74s
+ref            P:mode_best_s0=/home/uservutl/work/a5/ref_mode_s0/ckpt_16000 (P:mode_best_s0=/home/uservut) return   +58.18  ok 0.999  psnr 39.6  mission 74s
+ref            P:mode_last_s0=/home/uservutl/work/a5/ref_mode_s0/ckpt_20000 (P:mode_last_s0=/home/uservut) return   +56.11  ok 0.999  psnr 38.2  mission 74s
+ref            P:joint_best_s1=/home/uservutl/work/a5/ref_joint_s1/ckpt_180 (P:joint_best_s1=/home/uservu) return   +58.13  ok 0.999  psnr 39.6  mission 74s
+ref            P:joint_last_s1=/home/uservutl/work/a5/ref_joint_s1/ckpt_200 (P:joint_last_s1=/home/uservu) return   +56.63  ok 1.000  psnr 38.8  mission 74s
+ref            P:mode_best_s1=/home/uservutl/work/a5/ref_mode_s1/ckpt_18000 (P:mode_best_s1=/home/uservut) return   +58.43  ok 0.999  psnr 39.6  mission 74s
+ref            P:mode_last_s1=/home/uservutl/work/a5/ref_mode_s1/ckpt_20000 (P:mode_last_s1=/home/uservut) return   +57.92  ok 0.999  psnr 39.0  mission 74s
+ref            P:joint_best_s2=/home/uservutl/work/a5/ref_joint_s2/ckpt_100 (P:joint_best_s2=/home/uservu) return   +58.04  ok 0.999  psnr 40.6  mission 76s
+ref            P:joint_last_s2=/home/uservutl/work/a5/ref_joint_s2/ckpt_200 (P:joint_last_s2=/home/uservu) return   +58.90  ok 0.999  psnr 40.8  mission 76s
+ref            P:mode_best_s2=/home/uservutl/work/a5/ref_mode_s2/ckpt_14000 (P:mode_best_s2=/home/uservut) return   +58.64  ok 0.998  psnr 40.4  mission 75s
+ref            P:mode_last_s2=/home/uservutl/work/a5/ref_mode_s2/ckpt_20000 (P:mode_last_s2=/home/uservut) return   +58.17  ok 0.999  psnr 39.4  mission 74s

@@ -1,0 +1,32 @@
+progress 60/1200 11s eta 203s
+progress 120/1200 20s eta 180s
+progress 180/1200 30s eta 168s
+progress 240/1200 38s eta 151s
+progress 300/1200 45s eta 134s
+progress 360/1200 51s eta 120s
+progress 420/1200 59s eta 110s
+progress 480/1200 69s eta 103s
+progress 540/1200 78s eta 95s
+progress 600/1200 87s eta 87s
+progress 660/1200 94s eta 77s
+progress 720/1200 101s eta 67s
+progress 780/1200 107s eta 58s
+progress 840/1200 115s eta 49s
+progress 900/1200 124s eta 41s
+progress 960/1200 133s eta 33s
+progress 1020/1200 141s eta 25s
+progress 1080/1200 147s eta 16s
+progress 1140/1200 154s eta 8s
+progress 1200/1200 160s eta 0s
+K5             P:joint_best_s0=/home/uservutl/work/a5/K5_joint_s0/ckpt_2000 (P:joint_best_s0=/home/uservu) return   +62.18  ok 0.997  psnr 37.3  mission 89s
+K5             P:joint_last_s0=/home/uservutl/work/a5/K5_joint_s0/ckpt_2000 (P:joint_last_s0=/home/uservu) return   +62.18  ok 0.997  psnr 37.3  mission 89s
+K5             P:mode_best_s0=/home/uservutl/work/a5/K5_mode_s0/ckpt_120000 (P:mode_best_s0=/home/uservut) return   +65.51  ok 0.990  psnr 34.9  mission 75s
+K5             P:mode_last_s0=/home/uservutl/work/a5/K5_mode_s0/ckpt_200000 (P:mode_last_s0=/home/uservut) return   +61.41  ok 0.986  psnr 34.3  mission 74s
+K5             P:joint_best_s1=/home/uservutl/work/a5/K5_joint_s1/ckpt_1000 (P:joint_best_s1=/home/uservu) return   +64.33  ok 0.999  psnr 37.5  mission 89s
+K5             P:joint_last_s1=/home/uservutl/work/a5/K5_joint_s1/ckpt_2000 (P:joint_last_s1=/home/uservu) return   +61.03  ok 0.997  psnr 37.6  mission 91s
+K5             P:mode_best_s1=/home/uservutl/work/a5/K5_mode_s1/ckpt_100000 (P:mode_best_s1=/home/uservut) return   +61.69  ok 0.988  psnr 34.2  mission 74s
+K5             P:mode_last_s1=/home/uservutl/work/a5/K5_mode_s1/ckpt_200000 (P:mode_last_s1=/home/uservut) return   +56.23  ok 0.982  psnr 33.4  mission 74s
+K5             P:joint_best_s2=/home/uservutl/work/a5/K5_joint_s2/ckpt_1800 (P:joint_best_s2=/home/uservu) return   +63.59  ok 0.998  psnr 37.1  mission 87s
+K5             P:joint_last_s2=/home/uservutl/work/a5/K5_joint_s2/ckpt_2000 (P:joint_last_s2=/home/uservu) return   +63.63  ok 0.996  psnr 36.9  mission 85s
+K5             P:mode_best_s2=/home/uservutl/work/a5/K5_mode_s2/ckpt_100000 (P:mode_best_s2=/home/uservut) return   +65.72  ok 0.992  psnr 34.8  mission 74s
+K5             P:mode_last_s2=/home/uservutl/work/a5/K5_mode_s2/ckpt_200000 (P:mode_last_s2=/home/uservut) return   +62.37  ok 0.987  psnr 34.3  mission 74s

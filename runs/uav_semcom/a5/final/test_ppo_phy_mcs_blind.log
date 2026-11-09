@@ -1,0 +1,32 @@
+progress 60/1200 6s eta 115s
+progress 120/1200 11s eta 96s
+progress 180/1200 15s eta 85s
+progress 240/1200 18s eta 73s
+progress 300/1200 21s eta 63s
+progress 360/1200 24s eta 55s
+progress 420/1200 27s eta 51s
+progress 480/1200 32s eta 49s
+progress 540/1200 37s eta 46s
+progress 600/1200 42s eta 42s
+progress 660/1200 45s eta 37s
+progress 720/1200 48s eta 32s
+progress 780/1200 51s eta 27s
+progress 840/1200 55s eta 24s
+progress 900/1200 60s eta 20s
+progress 960/1200 65s eta 16s
+progress 1020/1200 69s eta 12s
+progress 1080/1200 72s eta 8s
+progress 1140/1200 75s eta 4s
+progress 1200/1200 78s eta 0s
+phy_mcs_blind  P:joint_best_s0=/home/uservutl/work/a5/phy_mcs_blind_joint_s (P:joint_best_s0=/home/uservu) return   +21.79  ok 0.989  psnr 35.6  mission 96s
+phy_mcs_blind  P:joint_last_s0=/home/uservutl/work/a5/phy_mcs_blind_joint_s (P:joint_last_s0=/home/uservu) return   +20.29  ok 0.984  psnr 35.3  mission 94s
+phy_mcs_blind  P:mode_best_s0=/home/uservutl/work/a5/phy_mcs_blind_mode_s0/ (P:mode_best_s0=/home/uservut) return   +31.00  ok 0.989  psnr 35.1  mission 78s
+phy_mcs_blind  P:mode_last_s0=/home/uservutl/work/a5/phy_mcs_blind_mode_s0/ (P:mode_last_s0=/home/uservut) return   +28.81  ok 0.984  psnr 33.9  mission 76s
+phy_mcs_blind  P:joint_best_s1=/home/uservutl/work/a5/phy_mcs_blind_joint_s (P:joint_best_s1=/home/uservu) return   +21.35  ok 0.995  psnr 35.8  mission 99s
+phy_mcs_blind  P:joint_last_s1=/home/uservutl/work/a5/phy_mcs_blind_joint_s (P:joint_last_s1=/home/uservu) return   +21.03  ok 0.993  psnr 35.7  mission 98s
+phy_mcs_blind  P:mode_best_s1=/home/uservutl/work/a5/phy_mcs_blind_mode_s1/ (P:mode_best_s1=/home/uservut) return   +31.09  ok 0.989  psnr 35.2  mission 78s
+phy_mcs_blind  P:mode_last_s1=/home/uservutl/work/a5/phy_mcs_blind_mode_s1/ (P:mode_last_s1=/home/uservut) return   +29.83  ok 0.984  psnr 34.2  mission 76s
+phy_mcs_blind  P:joint_best_s2=/home/uservutl/work/a5/phy_mcs_blind_joint_s (P:joint_best_s2=/home/uservu) return   +20.49  ok 0.994  psnr 35.6  mission 99s
+phy_mcs_blind  P:joint_last_s2=/home/uservutl/work/a5/phy_mcs_blind_joint_s (P:joint_last_s2=/home/uservu) return   +20.49  ok 0.994  psnr 35.6  mission 99s
+phy_mcs_blind  P:mode_best_s2=/home/uservutl/work/a5/phy_mcs_blind_mode_s2/ (P:mode_best_s2=/home/uservut) return   +31.13  ok 0.988  psnr 34.7  mission 77s
+phy_mcs_blind  P:mode_last_s2=/home/uservutl/work/a5/phy_mcs_blind_mode_s2/ (P:mode_last_s2=/home/uservut) return   +31.34  ok 0.987  psnr 34.8  mission 77s

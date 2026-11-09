@@ -71,6 +71,8 @@ def main():
         log = prev["log"]
         exp.c.update(log[-1]["experience"])
         model = timeppo.TimeMaskablePPO.load(Path(args.resume) / f"ckpt_{done_steps}.zip", env=venv, device="cpu")
+        assert isinstance(model.rollout_buffer, timeppo.TimeRolloutBuffer)
+        model._last_obs = None          # saved obs belong to the old envs: force a reset of the new ones
         meta["resumed_from"] = dict(dir=args.resume, steps=done_steps)
     while done_steps < args.steps:
         model.learn(int(args.eval_every), reset_num_timesteps=False, callback=exp)

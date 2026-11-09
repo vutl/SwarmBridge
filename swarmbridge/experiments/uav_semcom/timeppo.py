@@ -61,6 +61,11 @@ class TimeMaskablePPO(MaskablePPO):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("rollout_buffer_class", TimeRolloutBuffer)
         super().__init__(*args, **kwargs)
+        # .load() constructs with _init_setup_model=False (no buffer yet); _setup_model below checks the buffer then
+
+    def _setup_model(self):
+        self.rollout_buffer_class = TimeRolloutBuffer
+        super()._setup_model()
         assert isinstance(self.rollout_buffer, TimeRolloutBuffer)
 
     def _update_info_buffer(self, infos, dones=None):

@@ -1,0 +1,65 @@
+progress 225/4500 37s eta 697s
+progress 450/4500 69s eta 622s
+progress 675/4500 103s eta 586s
+progress 900/4500 135s eta 540s
+progress 1125/4500 168s eta 503s
+progress 1350/4500 198s eta 461s
+progress 1575/4500 230s eta 427s
+progress 1800/4500 265s eta 398s
+progress 2025/4500 298s eta 365s
+progress 2250/4500 332s eta 332s
+progress 2475/4500 363s eta 297s
+progress 2700/4500 395s eta 264s
+progress 2925/4500 427s eta 230s
+progress 3150/4500 462s eta 198s
+progress 3375/4500 497s eta 166s
+progress 3600/4500 533s eta 133s
+progress 3825/4500 567s eta 100s
+progress 4050/4500 599s eta 67s
+progress 4275/4500 632s eta 33s
+progress 4500/4500 663s eta 0s
+K5             P:joint_best_s0_PPPH=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_PPPH=/home/u) return   +64.06  ok 0.988  psnr 40.4  mission 93s
+K5             P:joint_best_s0_PPHP=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_PPHP=/home/u) return   +62.65  ok 0.997  psnr 37.3  mission 89s
+K5             P:joint_best_s0_PHPP=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_PHPP=/home/u) return   +60.39  ok 0.997  psnr 37.4  mission 90s
+K5             P:joint_best_s0_HPPP=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_HPPP=/home/u) return   +62.73  ok 0.985  psnr 35.3  mission 75s
+K5             P:joint_best_s0_PPHH=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_PPHH=/home/u) return   +64.93  ok 0.989  psnr 40.4  mission 92s
+K5             P:joint_best_s0_PHPH=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_PHPH=/home/u) return   +61.34  ok 0.987  psnr 40.5  mission 94s
+K5             P:joint_best_s0_HPPH=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_HPPH=/home/u) return   +57.39  ok 0.964  psnr 36.7  mission 76s
+K5             P:joint_best_s0_PHHP=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_PHHP=/home/u) return   +61.07  ok 0.997  psnr 37.4  mission 90s
+K5             P:joint_best_s0_HPHP=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_HPHP=/home/u) return   +64.87  ok 0.986  psnr 35.3  mission 75s
+K5             P:joint_best_s0_HHPP=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_HHPP=/home/u) return   +60.72  ok 0.983  psnr 35.2  mission 76s
+K5             P:joint_best_s0_PHHH=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_PHHH=/home/u) return   +61.95  ok 0.986  psnr 40.6  mission 94s
+K5             P:joint_best_s0_HPHH=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_HPHH=/home/u) return   +60.92  ok 0.969  psnr 36.9  mission 75s
+K5             P:joint_best_s0_HHPH=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_HHPH=/home/u) return   +58.82  ok 0.966  psnr 36.9  mission 76s
+K5             P:joint_best_s0_HHHP=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_HHHP=/home/u) return   +63.20  ok 0.984  psnr 35.3  mission 75s
+K5             P:joint_best_s0_HHHH=/home/uservutl/work/a5/K5_joint_s0/ckpt (P:joint_best_s0_HHHH=/home/u) return   +61.18  ok 0.967  psnr 37.1  mission 76s
+K5             P:joint_best_s1_PPPH=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_PPPH=/home/u) return   +63.91  ok 0.987  psnr 39.9  mission 91s
+K5             P:joint_best_s1_PPHP=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_PPHP=/home/u) return   +64.83  ok 0.999  psnr 37.5  mission 89s
+K5             P:joint_best_s1_PHPP=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_PHPP=/home/u) return   +62.55  ok 0.998  psnr 37.6  mission 89s
+K5             P:joint_best_s1_HPPP=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_HPPP=/home/u) return   +66.29  ok 0.994  psnr 35.6  mission 76s
+K5             P:joint_best_s1_PPHH=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_PPHH=/home/u) return   +64.70  ok 0.988  psnr 40.0  mission 91s
+K5             P:joint_best_s1_PHPH=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_PHPH=/home/u) return   +62.25  ok 0.986  psnr 40.0  mission 92s
+K5             P:joint_best_s1_HPPH=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_HPPH=/home/u) return   +58.80  ok 0.966  psnr 36.8  mission 76s
+K5             P:joint_best_s1_PHHP=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_PHHP=/home/u) return   +63.28  ok 0.999  psnr 37.6  mission 89s
+K5             P:joint_best_s1_HPHP=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_HPHP=/home/u) return   +67.75  ok 0.995  psnr 35.6  mission 76s
+K5             P:joint_best_s1_HHPP=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_HHPP=/home/u) return   +64.50  ok 0.992  psnr 35.5  mission 76s
+K5             P:joint_best_s1_PHHH=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_PHHH=/home/u) return   +62.81  ok 0.985  psnr 40.0  mission 91s
+K5             P:joint_best_s1_HPHH=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_HPHH=/home/u) return   +61.06  ok 0.968  psnr 37.0  mission 75s
+K5             P:joint_best_s1_HHPH=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_HHPH=/home/u) return   +59.42  ok 0.967  psnr 36.9  mission 76s
+K5             P:joint_best_s1_HHHP=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_HHHP=/home/u) return   +66.90  ok 0.993  psnr 35.5  mission 75s
+K5             P:joint_best_s1_HHHH=/home/uservutl/work/a5/K5_joint_s1/ckpt (P:joint_best_s1_HHHH=/home/u) return   +61.18  ok 0.967  psnr 37.1  mission 76s
+K5             P:joint_best_s2_PPPH=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_PPPH=/home/u) return   +63.52  ok 0.986  psnr 39.8  mission 90s
+K5             P:joint_best_s2_PPHP=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_PPHP=/home/u) return   +64.47  ok 0.998  psnr 37.1  mission 87s
+K5             P:joint_best_s2_PHPP=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_PHPP=/home/u) return   +62.58  ok 0.997  psnr 37.1  mission 87s
+K5             P:joint_best_s2_HPPP=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_HPPP=/home/u) return   +64.00  ok 0.992  psnr 35.3  mission 75s
+K5             P:joint_best_s2_PPHH=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_PPHH=/home/u) return   +64.40  ok 0.986  psnr 39.9  mission 90s
+K5             P:joint_best_s2_PHPH=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_PHPH=/home/u) return   +63.09  ok 0.985  psnr 39.9  mission 90s
+K5             P:joint_best_s2_HPPH=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_HPPH=/home/u) return   +58.38  ok 0.966  psnr 36.7  mission 76s
+K5             P:joint_best_s2_PHHP=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_PHHP=/home/u) return   +62.92  ok 0.996  psnr 37.1  mission 87s
+K5             P:joint_best_s2_HPHP=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_HPHP=/home/u) return   +65.34  ok 0.993  psnr 35.3  mission 75s
+K5             P:joint_best_s2_HHPP=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_HHPP=/home/u) return   +64.20  ok 0.992  psnr 35.3  mission 76s
+K5             P:joint_best_s2_PHHH=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_PHHH=/home/u) return   +63.34  ok 0.984  psnr 39.9  mission 90s
+K5             P:joint_best_s2_HPHH=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_HPHH=/home/u) return   +59.48  ok 0.967  psnr 36.8  mission 76s
+K5             P:joint_best_s2_HHPH=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_HHPH=/home/u) return   +60.27  ok 0.967  psnr 37.0  mission 76s
+K5             P:joint_best_s2_HHHP=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_HHHP=/home/u) return   +65.36  ok 0.992  psnr 35.3  mission 75s
+K5             P:joint_best_s2_HHHH=/home/uservutl/work/a5/K5_joint_s2/ckpt (P:joint_best_s2_HHHH=/home/u) return   +61.18  ok 0.967  psnr 37.1  mission 76s

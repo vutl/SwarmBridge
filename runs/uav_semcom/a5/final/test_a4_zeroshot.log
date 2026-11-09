@@ -1,0 +1,128 @@
+progress 540/10800 31s eta 595s
+progress 1080/10800 65s eta 588s
+progress 1620/10800 95s eta 541s
+progress 2160/10800 125s eta 502s
+progress 2700/10800 155s eta 466s
+progress 3240/10800 189s eta 441s
+progress 3780/10800 223s eta 415s
+progress 4320/10800 253s eta 379s
+progress 4860/10800 282s eta 344s
+progress 5400/10800 310s eta 310s
+progress 5940/10800 339s eta 278s
+progress 6480/10800 368s eta 246s
+progress 7020/10800 397s eta 214s
+progress 7560/10800 426s eta 182s
+progress 8100/10800 456s eta 152s
+progress 8640/10800 485s eta 121s
+progress 9180/10800 517s eta 91s
+progress 9720/10800 550s eta 61s
+progress 10260/10800 582s eta 31s
+progress 10800/10800 614s eta 0s
+ref            P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +58.01  ok 0.999  psnr 39.6  mission 74s
+ref            P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +57.93  ok 0.998  psnr 41.2  mission 77s
+ref            P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +55.85  ok 0.999  psnr 38.4  mission 74s
+ref            P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +57.71  ok 0.998  psnr 40.3  mission 76s
+ref            P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +58.16  ok 0.999  psnr 39.8  mission 75s
+ref            P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +57.95  ok 0.999  psnr 40.4  mission 76s
+v10            P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return    -0.02  ok 1.000  psnr 41.6  mission 145s
+v10            P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return    +5.77  ok 1.000  psnr 43.6  mission 145s
+v10            P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return    -6.87  ok 1.000  psnr 38.7  mission 145s
+v10            P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return    +4.70  ok 1.000  psnr 42.9  mission 145s
+v10            P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return    -2.06  ok 1.000  psnr 40.5  mission 145s
+v10            P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return    +2.95  ok 1.000  psnr 42.1  mission 145s
+v15            P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +40.24  ok 0.999  psnr 40.8  mission 97s
+v15            P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +42.71  ok 0.999  psnr 42.4  mission 99s
+v15            P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +35.44  ok 0.999  psnr 38.7  mission 97s
+v15            P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +42.07  ok 1.000  psnr 41.5  mission 98s
+v15            P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +38.64  ok 1.000  psnr 39.9  mission 97s
+v15            P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +41.31  ok 0.999  psnr 41.3  mission 99s
+env_suburban   P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +56.79  ok 0.999  psnr 39.5  mission 75s
+env_suburban   P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +55.59  ok 0.994  psnr 41.1  mission 76s
+env_suburban   P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +54.65  ok 0.999  psnr 38.4  mission 74s
+env_suburban   P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +56.18  ok 0.997  psnr 40.5  mission 75s
+env_suburban   P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +57.30  ok 0.999  psnr 39.9  mission 75s
+env_suburban   P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +56.48  ok 0.998  psnr 40.6  mission 75s
+env_dense      P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +47.02  ok 0.996  psnr 38.3  mission 77s
+env_dense      P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +41.27  ok 0.987  psnr 40.0  mission 81s
+env_dense      P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +46.46  ok 0.994  psnr 37.9  mission 76s
+env_dense      P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +44.43  ok 0.992  psnr 39.3  mission 79s
+env_dense      P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +46.18  ok 0.993  psnr 39.5  mission 79s
+env_dense      P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +44.09  ok 0.993  psnr 39.3  mission 79s
+env_highrise   P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return  -164.97  ok 0.545  psnr 35.5  mission 153s
+env_highrise   P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return  -205.79  ok 0.498  psnr 36.7  mission 184s
+env_highrise   P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return  -150.60  ok 0.550  psnr 35.0  mission 138s
+env_highrise   P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return  -196.91  ok 0.516  psnr 36.9  mission 179s
+env_highrise   P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return  -209.76  ok 0.372  psnr 39.0  mission 160s
+env_highrise   P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return  -174.44  ok 0.561  psnr 35.8  mission 163s
+fade_k3        P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +57.98  ok 0.999  psnr 39.6  mission 74s
+fade_k3        P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +57.91  ok 0.998  psnr 41.2  mission 77s
+fade_k3        P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +55.86  ok 0.999  psnr 38.4  mission 74s
+fade_k3        P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +57.70  ok 0.998  psnr 40.3  mission 76s
+fade_k3        P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +58.16  ok 0.999  psnr 39.8  mission 75s
+fade_k3        P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +57.93  ok 0.999  psnr 40.4  mission 76s
+fade_k0        P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +57.92  ok 0.999  psnr 39.6  mission 74s
+fade_k0        P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +57.95  ok 0.998  psnr 41.2  mission 77s
+fade_k0        P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +55.85  ok 0.999  psnr 38.4  mission 74s
+fade_k0        P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +57.64  ok 0.998  psnr 40.3  mission 76s
+fade_k0        P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +58.12  ok 0.999  psnr 39.8  mission 75s
+fade_k0        P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +57.91  ok 0.999  psnr 40.4  mission 76s
+dl_tight       P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +38.56  ok 0.974  psnr 39.5  mission 74s
+dl_tight       P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +37.37  ok 0.969  psnr 40.8  mission 75s
+dl_tight       P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +39.50  ok 0.984  psnr 38.2  mission 74s
+dl_tight       P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +38.32  ok 0.973  psnr 40.5  mission 75s
+dl_tight       P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +40.34  ok 0.983  psnr 38.9  mission 74s
+dl_tight       P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +37.95  ok 0.972  psnr 40.6  mission 75s
+dl_loose       P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +65.01  ok 0.999  psnr 39.9  mission 75s
+dl_loose       P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +66.10  ok 0.999  psnr 42.1  mission 78s
+dl_loose       P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +63.22  ok 0.999  psnr 39.0  mission 74s
+dl_loose       P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +64.65  ok 1.000  psnr 40.2  mission 76s
+dl_loose       P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +67.25  ok 0.999  psnr 41.1  mission 76s
+dl_loose       P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +64.88  ok 1.000  psnr 40.2  mission 76s
+q_low          P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +67.62  ok 0.999  psnr 39.5  mission 74s
+q_low          P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +65.61  ok 0.999  psnr 40.3  mission 75s
+q_low          P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +67.82  ok 1.000  psnr 38.3  mission 74s
+q_low          P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +66.89  ok 0.999  psnr 38.9  mission 74s
+q_low          P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +67.98  ok 1.000  psnr 39.2  mission 74s
+q_low          P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +66.67  ok 0.999  psnr 38.8  mission 74s
+q_high         P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +24.24  ok 0.929  psnr 39.8  mission 74s
+q_high         P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +36.72  ok 0.976  psnr 42.6  mission 79s
+q_high         P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +16.44  ok 0.908  psnr 38.6  mission 74s
+q_high         P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +36.84  ok 0.974  psnr 42.4  mission 78s
+q_high         P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +29.74  ok 0.948  psnr 40.7  mission 76s
+q_high         P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +36.83  ok 0.973  psnr 42.4  mission 78s
+wt0            P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return  +124.73  ok 0.999  psnr 39.6  mission 74s
+wt0            P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return  +126.87  ok 0.998  psnr 41.2  mission 77s
+wt0            P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return  +122.25  ok 0.999  psnr 38.4  mission 74s
+wt0            P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return  +125.72  ok 0.998  psnr 40.3  mission 76s
+wt0            P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return  +125.50  ok 0.999  psnr 39.8  mission 75s
+wt0            P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return  +125.98  ok 0.999  psnr 40.4  mission 76s
+wt0.1          P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return  +102.49  ok 0.999  psnr 39.6  mission 74s
+wt0.1          P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return  +103.89  ok 0.998  psnr 41.2  mission 77s
+wt0.1          P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return  +100.12  ok 0.999  psnr 38.4  mission 74s
+wt0.1          P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return  +103.05  ok 0.998  psnr 40.3  mission 76s
+wt0.1          P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return  +103.05  ok 0.999  psnr 39.8  mission 75s
+wt0.1          P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return  +103.30  ok 0.999  psnr 40.4  mission 76s
+wt1            P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   -97.70  ok 0.999  psnr 39.6  mission 74s
+wt1            P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return  -102.93  ok 0.998  psnr 41.2  mission 77s
+wt1            P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   -99.08  ok 0.999  psnr 38.4  mission 74s
+wt1            P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return  -100.99  ok 0.998  psnr 40.3  mission 76s
+wt1            P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   -98.96  ok 0.999  psnr 39.8  mission 75s
+wt1            P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return  -100.77  ok 0.999  psnr 40.4  mission 76s
+phy_gap3       P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +43.75  ok 0.994  psnr 38.1  mission 78s
+phy_gap3       P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +41.75  ok 0.991  psnr 40.5  mission 84s
+phy_gap3       P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +42.42  ok 0.989  psnr 37.9  mission 77s
+phy_gap3       P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +44.16  ok 0.994  psnr 39.6  mission 81s
+phy_gap3       P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +41.90  ok 0.989  psnr 39.6  mission 81s
+phy_gap3       P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +43.82  ok 0.994  psnr 39.7  mission 82s
+phy_mcs        P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return   +24.09  ok 0.975  psnr 37.3  mission 85s
+phy_mcs        P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +18.91  ok 0.981  psnr 40.3  mission 100s
+phy_mcs        P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   +20.96  ok 0.961  psnr 37.1  mission 82s
+phy_mcs        P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +24.16  ok 0.985  psnr 39.3  mission 95s
+phy_mcs        P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   +12.17  ok 0.949  psnr 39.7  mission 94s
+phy_mcs        P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +23.17  ok 0.984  psnr 39.4  mission 95s
+phy_mcs_blind  P:a4_joint_s0=/home/uservutl/work/a4td_v20_joint_s0/ppo_s0.z (P:a4_joint_s0=/home/uservutl) return    -5.38  ok 0.927  psnr 37.1  mission 98s
+phy_mcs_blind  P:a4_mode_s0=/home/uservutl/work/a4td_v20_mode_s0/ppo_s0.zip (P:a4_mode_s0=/home/uservutl/) return   +18.91  ok 0.981  psnr 40.3  mission 100s
+phy_mcs_blind  P:a4_joint_s1=/home/uservutl/work/a4td_v20_joint_s1/ppo_s1.z (P:a4_joint_s1=/home/uservutl) return   -28.94  ok 0.831  psnr 37.0  mission 95s
+phy_mcs_blind  P:a4_mode_s1=/home/uservutl/work/a4td_v20_mode_s1/ppo_s1.zip (P:a4_mode_s1=/home/uservutl/) return   +24.16  ok 0.985  psnr 39.3  mission 95s
+phy_mcs_blind  P:a4_joint_s2=/home/uservutl/work/a4td_v20_joint_s2/ppo_s2.z (P:a4_joint_s2=/home/uservutl) return   -12.01  ok 0.898  psnr 40.0  mission 104s
+phy_mcs_blind  P:a4_mode_s2=/home/uservutl/work/a4td_v20_mode_s2/ppo_s2.zip (P:a4_mode_s2=/home/uservutl/) return   +23.17  ok 0.984  psnr 39.4  mission 95s
