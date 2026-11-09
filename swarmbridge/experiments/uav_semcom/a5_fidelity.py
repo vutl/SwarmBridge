@@ -138,6 +138,8 @@ def main():
     ap.add_argument("--weights", required=True)
     ap.add_argument("--gen", type=int, default=0)
     ap.add_argument("--n", type=int, default=0, help="first N images only (smoke test)")
+    ap.add_argument("--save-dets", default="", help="(A6.0-L1, optional) also save every detection (conf >= 0.01, "
+                    "per mode: image idx, x, y, w, h, score, category) to this .npz, for policy-level AP")
     args = ap.parse_args()
     from ultralytics import YOLO
     out = Path(args.out)
@@ -233,6 +235,9 @@ def main():
         if ii % 20 == 0:
             print(f"IMG {ii}/{len(sel)} {time.time() - t0:.0f}s", flush=True)
     fo.close()
+    if args.save_dets:
+        np.savez_compressed(args.save_dets, images=np.array(images),
+                            **{m: np.concatenate(d).astype(np.float32) for m, d in dets.items()})
     splits = {e["name"]: e["split"] for e in man}
     subsets = {"all": set(images)}
     if args.pool == "val":
