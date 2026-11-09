@@ -1,0 +1,202 @@
+{
+ "regime": "phy_mcs_blind",
+ "cfg": {
+  "mode_info": "predicted",
+  "v_max": 20.0,
+  "w_time": 0.3,
+  "phy": "mcs_blind"
+ },
+ "rl_part": "mode",
+ "heur": "pacedB2+budget1",
+ "seed": 0,
+ "steps": 2000000.0,
+ "val_seeds": [
+  3000,
+  3001,
+  3002,
+  3003,
+  3004,
+  3005,
+  3006,
+  3007,
+  3008,
+  3009,
+  3010,
+  3011,
+  3012,
+  3013,
+  3014,
+  3015,
+  3016,
+  3017,
+  3018,
+  3019
+ ],
+ "val_pool": "val",
+ "train_pool": "train",
+ "time_discount": true,
+ "log": [
+  {
+   "steps": 200000,
+   "sec": 167.5392243862152,
+   "val_return": 37.96266429737779,
+   "val_ok": 0.9948717948717951,
+   "experience": {
+    "rl_steps_mode": 202752,
+    "episodes": 1296,
+    "env_s": 115722.0,
+    "uav_s": 325951.0,
+    "rl_slot": 0,
+    "rl_mode": 202176,
+    "heur_slot": 115722,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 400000,
+   "sec": 326.0389516353607,
+   "val_return": 39.18835039942421,
+   "val_ok": 0.9961538461538464,
+   "experience": {
+    "rl_steps_mode": 405504,
+    "episodes": 2598,
+    "env_s": 227673.0,
+    "uav_s": 643674.0,
+    "rl_slot": 0,
+    "rl_mode": 405288,
+    "heur_slot": 227673,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 600000,
+   "sec": 479.567355632782,
+   "val_return": 38.81798689232899,
+   "val_ok": 0.9971153846153846,
+   "experience": {
+    "rl_steps_mode": 608256,
+    "episodes": 3894,
+    "env_s": 336408.0,
+    "uav_s": 954290.0,
+    "rl_slot": 0,
+    "rl_mode": 607464,
+    "heur_slot": 336408,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 800000,
+   "sec": 632.3179306983948,
+   "val_return": 39.165170596877104,
+   "val_ok": 0.9971153846153846,
+   "experience": {
+    "rl_steps_mode": 811008,
+    "episodes": 5196,
+    "env_s": 442586.0,
+    "uav_s": 1260512.0,
+    "rl_slot": 0,
+    "rl_mode": 810576,
+    "heur_slot": 442586,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1000000,
+   "sec": 786.121945142746,
+   "val_return": 38.43398076356458,
+   "val_ok": 0.9967948717948719,
+   "experience": {
+    "rl_steps_mode": 1013760,
+    "episodes": 6498,
+    "env_s": 548836.0,
+    "uav_s": 1566990.0,
+    "rl_slot": 0,
+    "rl_mode": 1013688,
+    "heur_slot": 548836,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1200000,
+   "sec": 938.5699846744537,
+   "val_return": 38.66556521541547,
+   "val_ok": 0.9964743589743591,
+   "experience": {
+    "rl_steps_mode": 1216512,
+    "episodes": 7794,
+    "env_s": 655424.0,
+    "uav_s": 1873358.0,
+    "rl_slot": 0,
+    "rl_mode": 1215864,
+    "heur_slot": 655424,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1400000,
+   "sec": 1091.2245526313782,
+   "val_return": 38.02851541930521,
+   "val_ok": 0.9971153846153846,
+   "experience": {
+    "rl_steps_mode": 1419264,
+    "episodes": 9096,
+    "env_s": 761465.0,
+    "uav_s": 2179076.0,
+    "rl_slot": 0,
+    "rl_mode": 1418976,
+    "heur_slot": 761465,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1600000,
+   "sec": 1244.1401672363281,
+   "val_return": 36.585546191700296,
+   "val_ok": 0.9974358974358974,
+   "experience": {
+    "rl_steps_mode": 1622016,
+    "episodes": 10392,
+    "env_s": 865836.0,
+    "uav_s": 2481156.0,
+    "rl_slot": 0,
+    "rl_mode": 1621152,
+    "heur_slot": 865836,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1800000,
+   "sec": 1396.5863754749298,
+   "val_return": 37.90500362845523,
+   "val_ok": 0.9961538461538462,
+   "experience": {
+    "rl_steps_mode": 1824768,
+    "episodes": 11694,
+    "env_s": 970703.0,
+    "uav_s": 2784600.0,
+    "rl_slot": 0,
+    "rl_mode": 1824264,
+    "heur_slot": 970703,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 2000000,
+   "sec": 1548.939953327179,
+   "val_return": 37.448561849021374,
+   "val_ok": 0.9971153846153846,
+   "experience": {
+    "rl_steps_mode": 2027520,
+    "episodes": 12996,
+    "env_s": 1075265.0,
+    "uav_s": 3087246.0,
+    "rl_slot": 0,
+    "rl_mode": 2027376,
+    "heur_slot": 1075265,
+    "heur_mode": 0
+   }
+  }
+ ],
+ "best_steps": 400000,
+ "last_steps": 2000000
+}

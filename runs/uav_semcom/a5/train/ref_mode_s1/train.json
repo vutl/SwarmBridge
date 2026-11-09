@@ -1,0 +1,201 @@
+{
+ "regime": "ref",
+ "cfg": {
+  "mode_info": "predicted",
+  "v_max": 20.0,
+  "w_time": 0.3
+ },
+ "rl_part": "mode",
+ "heur": "pacedB1.5+budget1.25+reuse",
+ "seed": 1,
+ "steps": 2000000.0,
+ "val_seeds": [
+  3000,
+  3001,
+  3002,
+  3003,
+  3004,
+  3005,
+  3006,
+  3007,
+  3008,
+  3009,
+  3010,
+  3011,
+  3012,
+  3013,
+  3014,
+  3015,
+  3016,
+  3017,
+  3018,
+  3019
+ ],
+ "val_pool": "val",
+ "train_pool": "train",
+ "time_discount": true,
+ "log": [
+  {
+   "steps": 200000,
+   "sec": 149.77320218086243,
+   "val_return": 59.691187373244716,
+   "val_ok": 0.9993589743589745,
+   "experience": {
+    "rl_steps_mode": 202752,
+    "episodes": 1296,
+    "env_s": 104866.0,
+    "uav_s": 299814.0,
+    "rl_slot": 0,
+    "rl_mode": 202176,
+    "heur_slot": 104866,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 400000,
+   "sec": 299.91655683517456,
+   "val_return": 59.442039155141266,
+   "val_ok": 0.9993589743589745,
+   "experience": {
+    "rl_steps_mode": 405504,
+    "episodes": 2598,
+    "env_s": 209761.0,
+    "uav_s": 599580.0,
+    "rl_slot": 0,
+    "rl_mode": 405288,
+    "heur_slot": 209761,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 600000,
+   "sec": 450.15243649482727,
+   "val_return": 60.12085144689115,
+   "val_ok": 0.9990384615384617,
+   "experience": {
+    "rl_steps_mode": 608256,
+    "episodes": 3894,
+    "env_s": 313623.0,
+    "uav_s": 896375.0,
+    "rl_slot": 0,
+    "rl_mode": 607464,
+    "heur_slot": 313623,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 800000,
+   "sec": 600.879369020462,
+   "val_return": 60.74689822195118,
+   "val_ok": 0.998717948717949,
+   "experience": {
+    "rl_steps_mode": 811008,
+    "episodes": 5196,
+    "env_s": 416951.0,
+    "uav_s": 1193228.0,
+    "rl_slot": 0,
+    "rl_mode": 810576,
+    "heur_slot": 416951,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1000000,
+   "sec": 751.9259572029114,
+   "val_return": 60.924046356900156,
+   "val_ok": 0.9996794871794872,
+   "experience": {
+    "rl_steps_mode": 1013760,
+    "episodes": 6498,
+    "env_s": 521067.0,
+    "uav_s": 1491644.0,
+    "rl_slot": 0,
+    "rl_mode": 1013688,
+    "heur_slot": 521067,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1200000,
+   "sec": 902.4926929473877,
+   "val_return": 60.868458417897344,
+   "val_ok": 0.9996794871794872,
+   "experience": {
+    "rl_steps_mode": 1216512,
+    "episodes": 7794,
+    "env_s": 621905.0,
+    "uav_s": 1784616.0,
+    "rl_slot": 0,
+    "rl_mode": 1215864,
+    "heur_slot": 621905,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1400000,
+   "sec": 1052.731249332428,
+   "val_return": 61.84086154716759,
+   "val_ok": 0.9990384615384617,
+   "experience": {
+    "rl_steps_mode": 1419264,
+    "episodes": 9096,
+    "env_s": 724273.0,
+    "uav_s": 2080545.0,
+    "rl_slot": 0,
+    "rl_mode": 1418976,
+    "heur_slot": 724273,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1600000,
+   "sec": 1202.9624316692352,
+   "val_return": 60.714059862305554,
+   "val_ok": 0.9996794871794872,
+   "experience": {
+    "rl_steps_mode": 1622016,
+    "episodes": 10392,
+    "env_s": 825738.0,
+    "uav_s": 2374526.0,
+    "rl_slot": 0,
+    "rl_mode": 1621152,
+    "heur_slot": 825738,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1800000,
+   "sec": 1354.6853430271149,
+   "val_return": 62.24769459147278,
+   "val_ok": 0.9993589743589745,
+   "experience": {
+    "rl_steps_mode": 1824768,
+    "episodes": 11694,
+    "env_s": 927325.0,
+    "uav_s": 2669430.0,
+    "rl_slot": 0,
+    "rl_mode": 1824264,
+    "heur_slot": 927325,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 2000000,
+   "sec": 1505.5156795978546,
+   "val_return": 62.12745646245613,
+   "val_ok": 0.9996794871794872,
+   "experience": {
+    "rl_steps_mode": 2027520,
+    "episodes": 12996,
+    "env_s": 1028538.0,
+    "uav_s": 2963764.0,
+    "rl_slot": 0,
+    "rl_mode": 2027376,
+    "heur_slot": 1028538,
+    "heur_mode": 0
+   }
+  }
+ ],
+ "best_steps": 1800000,
+ "last_steps": 2000000
+}

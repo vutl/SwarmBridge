@@ -1,0 +1,211 @@
+{
+ "regime": "ref",
+ "cfg": {
+  "mode_info": "predicted",
+  "v_max": 20.0,
+  "w_time": 0.3
+ },
+ "rl_part": "joint",
+ "heur": "pacedB1.5+budget1.25+reuse",
+ "seed": 2,
+ "steps": 2000000.0,
+ "val_seeds": [
+  3000,
+  3001,
+  3002,
+  3003,
+  3004,
+  3005,
+  3006,
+  3007,
+  3008,
+  3009,
+  3010,
+  3011,
+  3012,
+  3013,
+  3014,
+  3015,
+  3016,
+  3017,
+  3018,
+  3019
+ ],
+ "val_pool": "val",
+ "train_pool": "train",
+ "time_discount": true,
+ "log": [
+  {
+   "steps": 200000,
+   "sec": 178.1792390346527,
+   "val_return": -206.94499427376746,
+   "val_ok": 0.6080128205128206,
+   "experience": {
+    "rl_steps_slot": 198840,
+    "rl_steps_mode": 3912,
+    "episodes": 330,
+    "env_s": 198000.0,
+    "uav_s": 593806.0,
+    "rl_slot": 198000,
+    "rl_mode": 3795,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 400000,
+   "sec": 339.55826449394226,
+   "val_return": 54.72757009599445,
+   "val_ok": 0.9884615384615387,
+   "experience": {
+    "rl_steps_slot": 345270,
+    "rl_steps_mode": 60234,
+    "episodes": 753,
+    "env_s": 344939.0,
+    "uav_s": 906408.0,
+    "rl_slot": 344939,
+    "rl_mode": 59870,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 600000,
+   "sec": 483.1099169254303,
+   "val_return": 60.5323070617986,
+   "val_ok": 0.9961538461538464,
+   "experience": {
+    "rl_steps_slot": 438759,
+    "rl_steps_mode": 169497,
+    "episodes": 1453,
+    "env_s": 438473.0,
+    "uav_s": 1122462.0,
+    "rl_slot": 438473,
+    "rl_mode": 169070,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 800000,
+   "sec": 627.6195368766785,
+   "val_return": 61.96048615259703,
+   "val_ok": 0.9977564102564103,
+   "experience": {
+    "rl_steps_slot": 522286,
+    "rl_steps_mode": 288722,
+    "episodes": 2217,
+    "env_s": 522012.0,
+    "uav_s": 1330301.0,
+    "rl_slot": 522012,
+    "rl_mode": 288254,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1000000,
+   "sec": 771.166583776474,
+   "val_return": 63.403902359768004,
+   "val_ok": 0.9993589743589745,
+   "experience": {
+    "rl_steps_slot": 600944,
+    "rl_steps_mode": 412816,
+    "episodes": 3012,
+    "env_s": 600653.0,
+    "uav_s": 1534349.0,
+    "rl_slot": 600653,
+    "rl_mode": 412274,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1200000,
+   "sec": 915.4996657371521,
+   "val_return": 62.89495250851593,
+   "val_ok": 0.9993589743589745,
+   "experience": {
+    "rl_steps_slot": 674072,
+    "rl_steps_mode": 542440,
+    "episodes": 3843,
+    "env_s": 673797.0,
+    "uav_s": 1735553.0,
+    "rl_slot": 673797,
+    "rl_mode": 541910,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1400000,
+   "sec": 1060.607408285141,
+   "val_return": 63.10916326214656,
+   "val_ok": 0.9996794871794872,
+   "experience": {
+    "rl_steps_slot": 745557,
+    "rl_steps_mode": 673707,
+    "episodes": 4684,
+    "env_s": 745250.0,
+    "uav_s": 1934851.0,
+    "rl_slot": 745250,
+    "rl_mode": 673106,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1600000,
+   "sec": 1204.9314150810242,
+   "val_return": 63.15475339066796,
+   "val_ok": 0.9996794871794872,
+   "experience": {
+    "rl_steps_slot": 816639,
+    "rl_steps_mode": 805377,
+    "episodes": 5529,
+    "env_s": 816404.0,
+    "uav_s": 2134800.0,
+    "rl_slot": 816404,
+    "rl_mode": 804926,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1800000,
+   "sec": 1349.189079284668,
+   "val_return": 62.54443791529583,
+   "val_ok": 0.9996794871794872,
+   "experience": {
+    "rl_steps_slot": 887345,
+    "rl_steps_mode": 937423,
+    "episodes": 6376,
+    "env_s": 887153.0,
+    "uav_s": 2333957.0,
+    "rl_slot": 887153,
+    "rl_mode": 937058,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 2000000,
+   "sec": 1493.703420639038,
+   "val_return": 63.090214596501426,
+   "val_ok": 1.0,
+   "experience": {
+    "rl_steps_slot": 961025,
+    "rl_steps_mode": 1066495,
+    "episodes": 7203,
+    "env_s": 960793.0,
+    "uav_s": 2533923.0,
+    "rl_slot": 960793,
+    "rl_mode": 1066070,
+    "heur_slot": 0,
+    "heur_mode": 0
+   }
+  }
+ ],
+ "best_steps": 1000000,
+ "last_steps": 2000000
+}
