@@ -130,7 +130,7 @@ Tương tự nếu Δ < 0. Kết luận được báo cáo nguyên trạng, kể
 
 **Cách hiểu:**
 - Heuristic A5 đã được tinh chỉnh ngưỡng trên train, nên đã hấp thụ phần lớn sai lệch giữa mô hình tốc độ và thực tế dưới dạng ngưỡng cố định.
-- Ước lượng trực tuyến chỉ thêm nhiễu: hệ số AIMD tăng sau mỗi lần trễ làm heuristic chọn mode nhẹ hơn (PSNR thấp hơn khoảng 1 dB ở ref) mà không cải thiện tỉ lệ đúng hạn.
+- Ước lượng trực tuyến dường như chỉ thêm nhiễu: ở ref, SC cho PSNR thấp hơn 1,4 dB mà tỉ lệ đúng hạn không tăng. Giả thuyết (**chưa kiểm chứng** bằng ablation từng thành phần ρ, ρ_b, s) là hệ số an toàn AIMD tăng sau mỗi lần trễ làm heuristic chọn mode nhẹ hơn mức cần.
 - Tức là khoảng cách giữa PPO và heuristic **không** đến từ việc heuristic thiếu hiệu chỉnh trực tuyến các đại lượng đó.
 
 ## 4. PPO so với H* (giả thuyết chính H1), ba mức độ bất định
