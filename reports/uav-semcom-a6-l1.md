@@ -68,7 +68,7 @@ Nhãn **không** bao giờ vào quan sát của policy.
 - **AP50 chuẩn COCO** trên toàn bộ khung đã chụp; khung không giao được tính như không có detection;
 - tổng bit gửi, tỉ lệ đúng hạn, năng lượng, thời gian nhiệm vụ.
 
-**So sánh chính** (theo cặp; CI theo seed môi trường, cộng cluster bootstrap theo video với B = 50 như A5.5 0.4):
+**So sánh chính** (theo cặp; CI theo seed môi trường, cộng cluster bootstrap theo video với B = 50 như A5.5 0.4; seed của bản bootstrap là 30000 + 20b + i, ghi thêm trước khi chạy):
 1. PPO task − PPO PSNR: recall, AP50, bit, đúng hạn;
 2. T:best_task − T:best: cùng các chỉ số;
 3. PPO task − T:best_task: return tác vụ, recall.
