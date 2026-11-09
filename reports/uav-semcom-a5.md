@@ -401,7 +401,34 @@ So với T:best của từng regime trên tập test (A4 joint / mode-only, mỗ
 Policy A4 **không tổng quát** sang regime khác. Phần mode-only hỏng ít hơn joint, vì slot vẫn do heuristic điều khiển. Muốn dùng một policy duy nhất cho nhiều regime thì phải train với ngẫu nhiên hoá regime và cho regime vào quan sát. A5 không làm điều này.
 
 ### 4.6 Train K5 joint kéo dài lên 5M bước (thí nghiệm phụ, quyết định sau khi thấy đường học s0)
-(đang chạy; sẽ bổ sung)
+
+**Lý do.** Quyết định lúc 2026-11-08 02:00, khi đường học val của K5 joint s0 vẫn còn tăng ở 2M. Thí nghiệm này không thuộc quy tắc định trước.
+
+**Cách làm.**
+- 3 seed joint được train tiếp từ checkpoint 2M lên 5M, với env seed mới (`a5_train.py --resume`).
+- Checkpoint chọn bằng cùng quy tắc best-val, trên toàn bộ log 0–5M.
+- Đánh giá trên cùng 100 seed test.
+
+**Kết quả trên val.** Đỉnh val ở 4,4M / 1,0M / 3,8M bước (seed 1 vẫn giữ checkpoint 1M cũ). Val tốt nhất +74,9 / +73,2 / +75,3, so với +71,5 / +73,2 / +73,8 ở 2M.
+
+**Kết quả trên test (K5):**
+
+| so sánh | Δ return |
+|---|---|
+| joint 5M (best-val) − T:best | **+3,49 [+2,59; +4,40]** (từng seed +3,72 / +3,15 / +3,60) |
+| joint 5M − joint 2M | +1,30 [+0,98; +1,62] |
+| joint 5M − heuristic A4 greedy+budget1+reuse (tốt nhất chọn sau) | +1,50 [+0,64; +2,36] |
+| joint 5M − mode-only 2M | +0,36 [−0,29; +1,01] |
+| joint 5M, checkpoint cuối − T:best | +1,73 [+0,77; +2,69] |
+
+**Recall detector khi giao:** 0,974 / 0,974 / 0,969 so với gửi ảnh gốc, ngang joint 2M (0,972) và cao hơn T:best (0,931).
+
+- **Train lâu hơn giúp joint ở K5:** +1,3. Joint 5M giờ ngang mode-only 2M và hơn mọi heuristic +1,5, kể cả heuristic chọn sau.
+- **Nhưng:**
+  1. Phải tốn 2,5 lần kinh nghiệm: khoảng 11,7k episode, 2,2M giây mô phỏng mỗi run.
+  2. Checkpoint cuối kém hơn best-val 1,8, tức đường học vẫn dao động. Chọn checkpoint theo val tiếp tục là cần thiết.
+  3. Mode-only không được train lâu hơn, nên so sánh joint 5M với mode-only 2M chưa cân bằng.
+- Kết luận ở mục 5 không đổi về hướng. Riêng ở K5, joint không còn thua mode-only khi được train đủ lâu.
 
 ### 4.7 Task fidelity của những gì policy giao được
 
@@ -434,7 +461,7 @@ Policy A4 **không tổng quát** sang regime khác. Phần mode-only hỏng ít
    - Nếu viết bài về reuse thì phải nói rõ điều kiện này.
 3. **RL thêm gì so với heuristic mạnh:**
    - **Mode-only RL trên luật slot tốt** là cấu hình duy nhất có lợi nhất quán: +3,1 (K5) và +4,3 (phy_mcs_blind) trên test; lợi lớn hơn khi ảnh đổi phân phối (+12,3 ở K5 test-dev). Không có lợi ở ref.
-   - **Joint RL** không thay được luật slot: thua ở phy_mcs_blind, ngang hoặc hơn ít ở K5. Phần kênh nó học được tốt, nhưng phần mode thì kém.
+   - **Joint RL** không thay được luật slot ở phy_mcs_blind (thua). Ở K5, sau 2M bước nó hơn T:best ít, ngang heuristic A4. Kéo lên 5M bước (mục 4.6) thì hơn mọi heuristic +1,5 và ngang mode-only, nhưng tốn 2,5 lần kinh nghiệm. Phần kênh nó học được tốt, nhưng phần mode thì kém.
    - **Phần lớn ưu thế của RL ở K5 biến mất** khi so với heuristic A4 không tinh chỉnh lại (còn +1,1 cho mode-only). Phần còn lại đáng kể là ở phy_mcs_blind và khi đổi phân phối ảnh.
 4. **Theo tác vụ** (recall của detector), PPO tốt hơn hoặc ngang heuristic ở cả 6 cặp (regime, pool), chủ yếu vì rớt ít khung hơn.
 
