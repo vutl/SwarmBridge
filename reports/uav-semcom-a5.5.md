@@ -198,3 +198,18 @@ Return tuyệt đối của H* (seed 8000..8099):
 - 3 model huấn luyện là quá ít để ước lượng phân phối theo seed huấn luyện: mức 3 chỉ lấy mẫu lại 3 giá trị.
 - B = 50 cho biên CI có sai số Monte Carlo khoảng ±0,3 ở các Δ cỡ vài đơn vị.
 - Test và test-dev là các khung của cùng những video mà A5 đã xem kết quả, nên đây không phải một tập ảnh mới hoàn toàn.
+
+## 6. Kiểm tra lại task fidelity của A5.2 (quy tắc 0.6)
+
+Đo lại toàn bộ (ảnh, mode) bằng cùng detector và codec (bước GPU của A6.0-L1, `runs/uav_semcom/a6l1/fidelity/`). Bảng do `a55_summarize.py fid` tạo.
+
+| pool | cặp (ảnh, mode) của A5.2 | có trong lần đo mới | bytes, n_gt, TP, n_det trùng | max ΔTP | max ΔPSNR | cặp mới (mode sinh ảnh trên mọi ảnh) |
+|---|---|---|---|---|---|---|
+| val | 7424 | 7424 | 7424/7424 | 0 | 0 | 1344 |
+| test-dev | 5239 | 5239 | 5239/5239 | 0 | 0 | 1209 |
+
+- AP50 COCO của mọi mode trên tập con `all` (và `test`, `in_a4` ở val) trùng với A5.2 tới mọi chữ số đã lưu.
+- Tập con `gen_subset` khác nhau vì định nghĩa khác: ở A5.2 là 100 ảnh, ở lần đo mới là toàn bộ ảnh. Đây không phải sai lệch đo.
+- Test đơn vị cho phép ghép (class-aware, IoU 0,5, vùng ignore) và test "AP50 theo policy tái tạo COCOeval" đều qua (`test_a6l1.py`, 7/7).
+
+**Kết luận:** phép đo task fidelity của A5.2 tái lập chính xác (tất định), nên kết quả detector-recall trong A5 không bị ảnh hưởng.
