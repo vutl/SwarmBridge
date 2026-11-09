@@ -1,0 +1,3 @@
+21dd82f8d29d7d20ee44de8ec7a6f868e77277a98f045b428ff0323bea535829  /home/uservutl/work/a5_det/yolo11s_visdrone_960/weights/best.pt
+44e976aec50db1660b9390a9830ae0a783f070012fb09de25be0d19b5f3a00af  /home/uservutl/work/a6l1/dets_val.npz
+39ff6e6d4da3789a812deec0147b86b58d60a2f9243b22183e80ff4ad7b791a8  /home/uservutl/work/a6l1/dets_testdev.npz

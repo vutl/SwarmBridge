@@ -1,0 +1,29 @@
+progress 45/900 1s eta 20s
+progress 90/900 2s eta 14s
+progress 135/900 2s eta 11s
+progress 180/900 2s eta 9s
+progress 225/900 2s eta 7s
+progress 270/900 3s eta 7s
+progress 315/900 3s eta 6s
+progress 360/900 4s eta 6s
+progress 405/900 4s eta 5s
+progress 450/900 5s eta 5s
+progress 495/900 5s eta 4s
+progress 540/900 6s eta 4s
+progress 585/900 6s eta 3s
+progress 630/900 7s eta 3s
+progress 675/900 7s eta 2s
+progress 720/900 8s eta 2s
+progress 765/900 8s eta 1s
+progress 810/900 9s eta 1s
+progress 855/900 9s eta 0s
+progress 900/900 9s eta 0s
+ref            T5:best                                            (pacedB1.5+budget1.25+reuse    ) return   +45.42  ok 0.982
+ref            T:SC                                               (sc:greedy+budget1.25+reuse    ) return   +45.65  ok 0.978
+ref            T:HSTAR                                            (pacedB1.5+budget1.25+reuse    ) return   +45.42  ok 0.982
+K5             T5:best                                            (pacedB2+budget1+reuse         ) return   +40.03  ok 0.930
+K5             T:SC                                               (sc:pacedB3+budget1+reuse      ) return   +39.08  ok 0.923
+K5             T:HSTAR                                            (sc:pacedB3+budget1+reuse      ) return   +39.08  ok 0.923
+phy_mcs_blind  T5:best                                            (pacedB2+budget1               ) return   +11.94  ok 0.903
+phy_mcs_blind  T:SC                                               (sc:pacedB3+budget1.5          ) return   +12.34  ok 0.917
+phy_mcs_blind  T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +12.34  ok 0.917

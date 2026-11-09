@@ -1,0 +1,34 @@
+progress 70/1400 1s eta 23s
+progress 140/1400 2s eta 15s
+progress 210/1400 2s eta 12s
+progress 280/1400 3s eta 11s
+progress 350/1400 3s eta 10s
+progress 420/1400 4s eta 9s
+progress 490/1400 4s eta 8s
+progress 560/1400 5s eta 7s
+progress 630/1400 6s eta 7s
+progress 700/1400 6s eta 6s
+progress 770/1400 7s eta 5s
+progress 840/1400 10s eta 7s
+progress 910/1400 13s eta 7s
+progress 980/1400 17s eta 7s
+progress 1050/1400 20s eta 7s
+progress 1120/1400 24s eta 6s
+progress 1190/1400 27s eta 5s
+progress 1260/1400 31s eta 3s
+progress 1330/1400 34s eta 2s
+progress 1400/1400 38s eta 0s
+phy_mcs_blind  T6:best                                      (fixed_mbt2018-mean_q3       ) R_task  +28.89 R_psnr  +22.99 ok 0.992 recall 0.464 small 0.336 fp/deliv 10.9 Mbit 49.7 psnr 32.5
+phy_mcs_blind  T6:tv                                        (tv:greedy+budget3           ) R_task  +23.13 R_psnr  +27.16 ok 0.984 recall 0.480 small 0.354 fp/deliv 11.6 Mbit 78.1 psnr 34.9
+phy_mcs_blind  T6:reuse                                     (pacedB1.5+budget0.5+reuse   ) R_task   -8.37 R_psnr  -23.64 ok 0.778 recall 0.300 small 0.206 fp/deliv 10.5 Mbit 28.1 psnr 29.1
+phy_mcs_blind  T6:budget                                    (pacedB2+budget1             ) R_task  +13.92 R_psnr  +14.85 ok 0.911 recall 0.423 small 0.317 fp/deliv 11.4 Mbit 70.2 psnr 34.0
+phy_mcs_blind  T6:fixed                                     (fixed_mbt2018-mean_q3       ) R_task  +28.89 R_psnr  +22.99 ok 0.992 recall 0.464 small 0.336 fp/deliv 10.9 Mbit 49.7 psnr 32.5
+phy_mcs_blind  T5:best                                      (pacedB2+budget1             ) R_task  +13.92 R_psnr  +14.85 ok 0.911 recall 0.423 small 0.317 fp/deliv 11.4 Mbit 70.2 psnr 34.0
+phy_mcs_blind  T5:fixed                                     (fixed_mbt2018-mean_q3       ) R_task  +28.89 R_psnr  +22.99 ok 0.992 recall 0.464 small 0.336 fp/deliv 10.9 Mbit 49.7 psnr 32.5
+phy_mcs_blind  H:greedy+budget1+reuse                       (greedy+budget1+reuse        ) R_task  -28.29 R_psnr  -32.38 ok 0.756 recall 0.334 small 0.248 fp/deliv 11.0 Mbit 49.1 psnr 31.8
+phy_mcs_blind  P:task_best_s0=/home/uservutl/work/a6l1/phy_ (P:task_best_s0=/home/uservut) R_task  +28.73 R_psnr  +22.98 ok 0.991 recall 0.463 small 0.335 fp/deliv 10.9 Mbit 50.4 psnr 32.6
+phy_mcs_blind  P:psnr_best_s0=/home/uservutl/work/a5/phy_mc (P:psnr_best_s0=/home/uservut) R_task  +15.09 R_psnr  +21.14 ok 0.985 recall 0.483 small 0.356 fp/deliv 11.8 Mbit 90.4 psnr 35.2
+phy_mcs_blind  P:task_best_s1=/home/uservutl/work/a6l1/phy_ (P:task_best_s1=/home/uservut) R_task  +28.62 R_psnr  +22.77 ok 0.989 recall 0.462 small 0.334 fp/deliv 10.9 Mbit 50.0 psnr 32.5
+phy_mcs_blind  P:psnr_best_s1=/home/uservutl/work/a5/phy_mc (P:psnr_best_s1=/home/uservut) R_task  +15.34 R_psnr  +21.47 ok 0.985 recall 0.483 small 0.356 fp/deliv 11.8 Mbit 90.4 psnr 35.2
+phy_mcs_blind  P:task_best_s2=/home/uservutl/work/a6l1/phy_ (P:task_best_s2=/home/uservut) R_task  +28.39 R_psnr  +22.54 ok 0.988 recall 0.461 small 0.333 fp/deliv 10.9 Mbit 50.1 psnr 32.5
+phy_mcs_blind  P:psnr_best_s2=/home/uservutl/work/a5/phy_mc (P:psnr_best_s2=/home/uservut) R_task  +21.04 R_psnr  +24.45 ok 0.989 recall 0.480 small 0.352 fp/deliv 11.5 Mbit 81.2 psnr 34.6

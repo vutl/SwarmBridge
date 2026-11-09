@@ -1,0 +1,34 @@
+progress 70/1400 1s eta 22s
+progress 140/1400 2s eta 14s
+progress 210/1400 2s eta 12s
+progress 280/1400 3s eta 10s
+progress 350/1400 3s eta 9s
+progress 420/1400 4s eta 8s
+progress 490/1400 4s eta 7s
+progress 560/1400 5s eta 7s
+progress 630/1400 5s eta 6s
+progress 700/1400 5s eta 5s
+progress 770/1400 6s eta 5s
+progress 840/1400 9s eta 6s
+progress 910/1400 13s eta 7s
+progress 980/1400 16s eta 7s
+progress 1050/1400 19s eta 6s
+progress 1120/1400 22s eta 6s
+progress 1190/1400 26s eta 5s
+progress 1260/1400 29s eta 3s
+progress 1330/1400 32s eta 2s
+progress 1400/1400 36s eta 0s
+ref            T6:best                                      (fixed_avif_50               ) R_task  +35.12 R_psnr  +46.33 ok 0.997 recall 0.498 small 0.369 fp/deliv 12.1 Mbit 109.4 psnr 36.4
+ref            T6:tv                                        (tv:greedy+budget1.25+reuse  ) R_task  +36.48 R_psnr  +49.28 ok 0.995 recall 0.497 small 0.369 fp/deliv 12.0 Mbit 117.0 psnr 37.5
+ref            T6:reuse                                     (greedy+budget0.75+reuse     ) R_task  +28.95 R_psnr  +35.95 ok 0.932 recall 0.445 small 0.337 fp/deliv 11.9 Mbit 89.7 psnr 35.7
+ref            T6:budget                                    (pacedB1.5+budget0.75        ) R_task  +26.81 R_psnr  +33.50 ok 0.932 recall 0.445 small 0.335 fp/deliv 11.8 Mbit 89.7 psnr 35.7
+ref            T6:fixed                                     (fixed_avif_50               ) R_task  +35.12 R_psnr  +46.33 ok 0.997 recall 0.498 small 0.369 fp/deliv 12.1 Mbit 109.4 psnr 36.4
+ref            T5:best                                      (pacedB1.5+budget1.25+reuse  ) R_task  +25.67 R_psnr  +46.28 ok 0.982 recall 0.493 small 0.368 fp/deliv 12.0 Mbit 155.7 psnr 40.4
+ref            T5:fixed                                     (fixed_avif_50               ) R_task  +35.12 R_psnr  +46.33 ok 0.997 recall 0.498 small 0.369 fp/deliv 12.1 Mbit 109.4 psnr 36.4
+ref            H:greedy+budget1+reuse                       (greedy+budget1+reuse        ) R_task  +32.74 R_psnr  +47.02 ok 0.977 recall 0.485 small 0.365 fp/deliv 12.0 Mbit 124.6 psnr 38.4
+ref            P:task_best_s0=/home/uservutl/work/a6l1/ref_ (P:task_best_s0=/home/uservut) R_task  +35.39 R_psnr  +46.27 ok 0.998 recall 0.498 small 0.369 fp/deliv 12.1 Mbit 108.4 psnr 36.3
+ref            P:psnr_best_s0=/home/uservutl/work/a5/ref_mo (P:psnr_best_s0=/home/uservut) R_task  +32.35 R_psnr  +49.57 ok 0.997 recall 0.501 small 0.373 fp/deliv 12.1 Mbit 137.5 psnr 38.5
+ref            P:task_best_s1=/home/uservutl/work/a6l1/ref_ (P:task_best_s1=/home/uservut) R_task  +35.17 R_psnr  +46.35 ok 0.997 recall 0.498 small 0.369 fp/deliv 12.1 Mbit 109.3 psnr 36.4
+ref            P:psnr_best_s1=/home/uservutl/work/a5/ref_mo (P:psnr_best_s1=/home/uservut) R_task  +32.38 R_psnr  +49.78 ok 0.997 recall 0.502 small 0.373 fp/deliv 12.1 Mbit 137.6 psnr 38.6
+ref            P:task_best_s2=/home/uservutl/work/a6l1/ref_ (P:task_best_s2=/home/uservut) R_task  +35.80 R_psnr  +46.06 ok 0.998 recall 0.497 small 0.368 fp/deliv 12.1 Mbit 106.1 psnr 36.2
+ref            P:psnr_best_s2=/home/uservutl/work/a5/ref_mo (P:psnr_best_s2=/home/uservut) R_task  +29.72 R_psnr  +48.50 ok 0.994 recall 0.502 small 0.374 fp/deliv 12.2 Mbit 145.7 psnr 39.1

@@ -1,0 +1,44 @@
+progress 120/2400 2s eta 31s
+progress 240/2400 3s eta 24s
+progress 360/2400 4s eta 20s
+progress 480/2400 5s eta 18s
+progress 600/2400 5s eta 16s
+progress 720/2400 6s eta 15s
+progress 840/2400 7s eta 13s
+progress 960/2400 8s eta 12s
+progress 1080/2400 10s eta 12s
+progress 1200/2400 12s eta 12s
+progress 1320/2400 13s eta 11s
+progress 1440/2400 15s eta 10s
+progress 1560/2400 16s eta 9s
+progress 1680/2400 17s eta 7s
+progress 1800/2400 17s eta 6s
+progress 1920/2400 18s eta 5s
+progress 2040/2400 20s eta 3s
+progress 2160/2400 21s eta 2s
+progress 2280/2400 22s eta 1s
+progress 2400/2400 22s eta 0s
+ref            T5:fixed                                           (fixed_avif_50                 ) return   +45.12  ok 0.996
+ref            T5:base                                            (pacedB1.5                     ) return   +29.05  ok 0.981
+ref            T5:budget                                          (pacedB1.5+budget1.5           ) return   +41.43  ok 0.975
+ref            T5:reuse                                           (pacedB1.5+budget1.25+reuse    ) return   +45.93  ok 0.981
+ref            T5:best                                            (pacedB1.5+budget1.25+reuse    ) return   +45.93  ok 0.981
+ref            T:SC                                               (sc:greedy+budget1.25+reuse    ) return   +46.18  ok 0.979
+ref            T:HSTAR                                            (pacedB1.5+budget1.25+reuse    ) return   +45.93  ok 0.981
+ref            H:greedy+budget1+reuse                             (greedy+budget1+reuse          ) return   +46.43  ok 0.976
+K5             T5:fixed                                           (fixed_mbt2018-mean_q3         ) return   +30.41  ok 0.988
+K5             T5:base                                            (stag_near_q3                  ) return    -0.59  ok 0.976
+K5             T5:budget                                          (pacedB1.5+budget1.25          ) return    +9.23  ok 0.917
+K5             T5:reuse                                           (pacedB2+budget1+reuse         ) return   +41.47  ok 0.933
+K5             T5:best                                            (pacedB2+budget1+reuse         ) return   +41.47  ok 0.933
+K5             T:SC                                               (sc:pacedB3+budget1+reuse      ) return   +40.61  ok 0.928
+K5             T:HSTAR                                            (sc:pacedB3+budget1+reuse      ) return   +40.61  ok 0.928
+K5             H:greedy+budget1+reuse                             (greedy+budget1+reuse          ) return   +41.94  ok 0.929
+phy_mcs_blind  T5:fixed                                           (fixed_mbt2018-mean_q3         ) return   +21.94  ok 0.991
+phy_mcs_blind  T5:base                                            (fixed_mbt2018-mean_q3         ) return   +21.94  ok 0.991
+phy_mcs_blind  T5:budget                                          (pacedB2+budget1               ) return   +13.52  ok 0.907
+phy_mcs_blind  T5:reuse                                           (stag_near_q2+reuse            ) return   -48.63  ok 0.860
+phy_mcs_blind  T5:best                                            (pacedB2+budget1               ) return   +13.52  ok 0.907
+phy_mcs_blind  T:SC                                               (sc:pacedB3+budget1.5          ) return   +13.14  ok 0.917
+phy_mcs_blind  T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +13.14  ok 0.917
+phy_mcs_blind  H:greedy+budget1+reuse                             (greedy+budget1+reuse          ) return   -32.66  ok 0.755

@@ -1,0 +1,83 @@
+progress 315/6300 3s eta 48s
+progress 630/6300 4s eta 39s
+progress 945/6300 7s eta 42s
+progress 1260/6300 11s eta 46s
+progress 1575/6300 14s eta 43s
+progress 1890/6300 17s eta 40s
+progress 2205/6300 19s eta 36s
+progress 2520/6300 21s eta 32s
+progress 2835/6300 23s eta 29s
+progress 3150/6300 26s eta 26s
+progress 3465/6300 28s eta 23s
+progress 3780/6300 30s eta 20s
+progress 4095/6300 33s eta 18s
+progress 4410/6300 35s eta 15s
+progress 4725/6300 38s eta 13s
+progress 5040/6300 40s eta 10s
+progress 5355/6300 43s eta 8s
+progress 5670/6300 44s eta 5s
+progress 5985/6300 47s eta 2s
+progress 6300/6300 50s eta 0s
+ref            T5:best                                            (pacedB1.5+budget1.25+reuse    ) return   +58.55  ok 0.991
+ref            T:SC                                               (sc:greedy+budget1.25+reuse    ) return   +58.35  ok 0.990
+ref            T:HSTAR                                            (pacedB1.5+budget1.25+reuse    ) return   +58.55  ok 0.991
+K2             T5:best                                            (greedy+budget1.25             ) return   +47.94  ok 0.999
+K2             T:SC                                               (sc:pacedB2+budget1.25         ) return   +47.79  ok 0.999
+K2             T:HSTAR                                            (greedy+budget1.25             ) return   +47.94  ok 0.999
+K4             T5:best                                            (greedy+budget1+reuse          ) return   +63.83  ok 0.983
+K4             T:SC                                               (sc:pacedB3+budget1+reuse      ) return   +63.80  ok 0.983
+K4             T:HSTAR                                            (greedy+budget1+reuse          ) return   +63.83  ok 0.983
+K5             T5:best                                            (pacedB2+budget1+reuse         ) return   +61.18  ok 0.967
+K5             T:SC                                               (sc:pacedB3+budget1+reuse      ) return   +62.26  ok 0.967
+K5             T:HSTAR                                            (sc:pacedB3+budget1+reuse      ) return   +62.26  ok 0.967
+v10            T5:best                                            (pacedB1.5+budget1.5+reuse     ) return    +6.66  ok 0.999
+v10            T:SC                                               (sc:pacedB2+budget2+reuse      ) return    +6.50  ok 0.999
+v10            T:HSTAR                                            (pacedB1.5+budget1.5+reuse     ) return    +6.66  ok 0.999
+v15            T5:best                                            (pacedB1.5+budget1.25+reuse    ) return   +44.46  ok 0.998
+v15            T:SC                                               (sc:pacedB2+budget2+reuse      ) return   +44.18  ok 0.997
+v15            T:HSTAR                                            (pacedB1.5+budget1.25+reuse    ) return   +44.46  ok 0.998
+env_suburban   T5:best                                            (greedy+budget1+reuse          ) return   +57.57  ok 0.989
+env_suburban   T:SC                                               (sc:greedy+budget1+reuse       ) return   +57.17  ok 0.989
+env_suburban   T:HSTAR                                            (greedy+budget1+reuse          ) return   +57.57  ok 0.989
+env_dense      T5:best                                            (greedy+budget1+reuse          ) return   +48.09  ok 0.983
+env_dense      T:SC                                               (sc:greedy+budget1+reuse       ) return   +47.54  ok 0.981
+env_dense      T:HSTAR                                            (greedy+budget1+reuse          ) return   +48.09  ok 0.983
+env_highrise   T5:best                                            (greedy+budget0.75+reuse       ) return   -35.91  ok 0.752
+env_highrise   T:SC                                               (sc:greedy+budget0.75+reuse    ) return   -37.79  ok 0.737
+env_highrise   T:HSTAR                                            (greedy+budget0.75+reuse       ) return   -35.91  ok 0.752
+fade_k3        T5:best                                            (pacedB1.5+budget1.25+reuse    ) return   +58.51  ok 0.991
+fade_k3        T:SC                                               (sc:greedy+budget1.25+reuse    ) return   +58.29  ok 0.990
+fade_k3        T:HSTAR                                            (pacedB1.5+budget1.25+reuse    ) return   +58.51  ok 0.991
+fade_k0        T5:best                                            (greedy+budget1+reuse          ) return   +58.80  ok 0.992
+fade_k0        T:SC                                               (sc:greedy+budget1.25+reuse    ) return   +58.17  ok 0.990
+fade_k0        T:HSTAR                                            (greedy+budget1+reuse          ) return   +58.80  ok 0.992
+dl_tight       T5:best                                            (pacedB1.5+budget0.75+reuse    ) return   +38.89  ok 0.970
+dl_tight       T:SC                                               (sc:greedy+budget1+reuse       ) return   +37.81  ok 0.965
+dl_tight       T:HSTAR                                            (pacedB1.5+budget0.75+reuse    ) return   +38.89  ok 0.970
+dl_loose       T5:best                                            (pacedB1.5+budget1.5+reuse     ) return   +68.62  ok 0.998
+dl_loose       T:SC                                               (sc:pacedB2+budget2+reuse      ) return   +67.55  ok 0.996
+dl_loose       T:HSTAR                                            (pacedB1.5+budget1.5+reuse     ) return   +68.62  ok 0.998
+q_low          T5:best                                            (greedy+budget1+reuse          ) return   +69.33  ok 0.999
+q_low          T:SC                                               (sc:greedy+budget1+reuse       ) return   +69.24  ok 0.999
+q_low          T:HSTAR                                            (greedy+budget1+reuse          ) return   +69.33  ok 0.999
+q_high         T5:best                                            (pacedB1.5+budget3             ) return   +41.67  ok 0.994
+q_high         T:SC                                               (sc:pacedB2+budget3+reuse      ) return   +41.19  ok 0.986
+q_high         T:HSTAR                                            (pacedB1.5+budget3             ) return   +41.67  ok 0.994
+wt0            T5:best                                            (stag_idx_q1                   ) return  +139.35  ok 0.999
+wt0            T:SC                                               (sc:pacedB1.5+budget3          ) return  +134.09  ok 0.998
+wt0            T:HSTAR                                            (stag_idx_q1                   ) return  +139.35  ok 0.999
+wt0.1          T5:best                                            (stag_near_q2                  ) return  +108.37  ok 0.999
+wt0.1          T:SC                                               (sc:pacedB1.5+budget3+reuse    ) return  +107.75  ok 0.995
+wt0.1          T:HSTAR                                            (stag_near_q2                  ) return  +108.37  ok 0.999
+wt1            T5:best                                            (greedy+budget1+reuse          ) return   -95.54  ok 0.992
+wt1            T:SC                                               (sc:greedy+budget1.25+reuse    ) return   -96.20  ok 0.990
+wt1            T:HSTAR                                            (greedy+budget1+reuse          ) return   -95.54  ok 0.992
+phy_gap3       T5:best                                            (fixed_avif_50                 ) return   +41.80  ok 0.995
+phy_gap3       T:SC                                               (sc:greedy+budget1+reuse       ) return   +41.36  ok 0.971
+phy_gap3       T:HSTAR                                            (fixed_avif_50                 ) return   +41.80  ok 0.995
+phy_mcs        T5:best                                            (pacedB2+budget1+reuse         ) return   +27.36  ok 0.952
+phy_mcs        T:SC                                               (sc:pacedB3+budget1.5          ) return   +25.07  ok 0.946
+phy_mcs        T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +25.07  ok 0.946
+phy_mcs_blind  T5:best                                            (pacedB2+budget1               ) return   +26.74  ok 0.950
+phy_mcs_blind  T:SC                                               (sc:pacedB3+budget1.5          ) return   +25.07  ok 0.946
+phy_mcs_blind  T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +25.07  ok 0.946

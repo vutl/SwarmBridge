@@ -98,3 +98,6 @@ Thumbs.db
 
 # A1 reconstructed sample images (regenerable)
 /runs/uav_semcom/**/samples/
+
+# A6.0-L1 decision-state dumps (21 MB, sha256 in runs/uav_semcom/a6l1/final/dec_sha256.txt)
+runs/uav_semcom/a6l1/final/*.dec.json.gz

@@ -1,0 +1,23 @@
+progress 846/16920 6s eta 121s
+progress 1692/16920 14s eta 127s
+progress 2538/16920 22s eta 127s
+progress 3384/16920 30s eta 120s
+progress 4230/16920 37s eta 111s
+progress 5076/16920 43s eta 99s
+progress 5922/16920 50s eta 92s
+progress 6768/16920 63s eta 94s
+progress 7614/16920 77s eta 94s
+progress 8460/16920 92s eta 92s
+progress 9306/16920 106s eta 87s
+progress 10152/16920 117s eta 78s
+progress 10998/16920 128s eta 69s
+progress 11844/16920 136s eta 58s
+progress 12690/16920 146s eta 49s
+progress 13536/16920 155s eta 39s
+progress 14382/16920 167s eta 30s
+progress 15228/16920 178s eta 20s
+progress 16074/16920 185s eta 10s
+progress 16920/16920 194s eta 0s
+ref best_task fixed_avif_50 +69.17 base=fixed_avif_50(+69.17) budget=pacedB1.5+budget0.75(+62.67) reuse=greedy+budget0.75+reuse(+67.36) tv=tv:greedy+budget1.25+reuse(+69.17) fixed=fixed_avif_50(+69.17)
+K5 best_task tv:greedy+budget1+reuse +96.70 base=fixed_mbt2018-mean_q3(+91.56) budget=pacedB2+budget1(+57.20) reuse=greedy+budget1+reuse(+92.02) tv=tv:greedy+budget1+reuse(+96.70) fixed=fixed_mbt2018-mean_q3(+91.56)
+phy_mcs_blind best_task fixed_mbt2018-mean_q3 +57.38 base=fixed_mbt2018-mean_q3(+57.38) budget=pacedB2+budget1(+43.81) reuse=pacedB1.5+budget0.5+reuse(+14.99) tv=tv:greedy+budget3(+52.52) fixed=fixed_mbt2018-mean_q3(+57.38)

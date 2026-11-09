@@ -1,0 +1,41 @@
+progress 1764/35280 12s eta 229s
+progress 3528/35280 20s eta 177s
+progress 5292/35280 35s eta 199s
+progress 7056/35280 55s eta 221s
+progress 8820/35280 70s eta 210s
+progress 10584/35280 83s eta 195s
+progress 12348/35280 97s eta 180s
+progress 14112/35280 110s eta 165s
+progress 15876/35280 123s eta 151s
+progress 17640/35280 136s eta 136s
+progress 19404/35280 148s eta 121s
+progress 21168/35280 160s eta 107s
+progress 22932/35280 172s eta 93s
+progress 24696/35280 185s eta 79s
+progress 26460/35280 198s eta 66s
+progress 28224/35280 213s eta 53s
+progress 29988/35280 226s eta 40s
+progress 31752/35280 238s eta 26s
+progress 33516/35280 255s eta 13s
+progress 35280/35280 269s eta 0s
+ref            T:SC=sc:greedy+budget1.25+reuse (+50.54)  A5 T:best=pacedB1.5+budget1.25+reuse (+50.86)  H*=pacedB1.5+budget1.25+reuse
+K2             T:SC=sc:pacedB2+budget1.25 (+45.92)  A5 T:best=greedy+budget1.25 (+46.27)  H*=greedy+budget1.25
+K4             T:SC=sc:pacedB3+budget1+reuse (+50.14)  A5 T:best=greedy+budget1+reuse (+50.50)  H*=greedy+budget1+reuse
+K5             T:SC=sc:pacedB3+budget1+reuse (+43.30)  A5 T:best=pacedB2+budget1+reuse (+42.51)  H*=sc:pacedB3+budget1+reuse
+v10            T:SC=sc:pacedB2+budget2+reuse (+2.99)  A5 T:best=pacedB1.5+budget1.5+reuse (+3.43)  H*=pacedB1.5+budget1.5+reuse
+v15            T:SC=sc:pacedB2+budget2+reuse (+37.47)  A5 T:best=pacedB1.5+budget1.25+reuse (+37.87)  H*=pacedB1.5+budget1.25+reuse
+env_suburban   T:SC=sc:greedy+budget1+reuse (+49.50)  A5 T:best=greedy+budget1+reuse (+49.73)  H*=greedy+budget1+reuse
+env_dense      T:SC=sc:greedy+budget1+reuse (+38.95)  A5 T:best=greedy+budget1+reuse (+39.30)  H*=greedy+budget1+reuse
+env_highrise   T:SC=sc:greedy+budget0.75+reuse (-55.71)  A5 T:best=greedy+budget0.75+reuse (-52.38)  H*=greedy+budget0.75+reuse
+fade_k3        T:SC=sc:greedy+budget1.25+reuse (+50.47)  A5 T:best=pacedB1.5+budget1.25+reuse (+50.84)  H*=pacedB1.5+budget1.25+reuse
+fade_k0        T:SC=sc:greedy+budget1.25+reuse (+50.37)  A5 T:best=greedy+budget1+reuse (+50.71)  H*=greedy+budget1+reuse
+dl_tight       T:SC=sc:greedy+budget1+reuse (+30.21)  A5 T:best=pacedB1.5+budget0.75+reuse (+30.74)  H*=pacedB1.5+budget0.75+reuse
+dl_loose       T:SC=sc:pacedB2+budget2+reuse (+61.04)  A5 T:best=pacedB1.5+budget1.5+reuse (+61.65)  H*=pacedB1.5+budget1.5+reuse
+q_low          T:SC=sc:greedy+budget1+reuse (+64.75)  A5 T:best=greedy+budget1+reuse (+64.87)  H*=greedy+budget1+reuse
+q_high         T:SC=sc:pacedB2+budget3+reuse (+29.28)  A5 T:best=pacedB1.5+budget3 (+30.72)  H*=pacedB1.5+budget3
+wt0            T:SC=sc:pacedB1.5+budget3 (+132.02)  A5 T:best=stag_idx_q1 (+137.39)  H*=stag_idx_q1
+wt0.1          T:SC=sc:pacedB1.5+budget3+reuse (+102.12)  A5 T:best=stag_near_q2 (+105.02)  H*=stag_near_q2
+wt1            T:SC=sc:greedy+budget1.25+reuse (-103.86)  A5 T:best=greedy+budget1+reuse (-103.59)  H*=greedy+budget1+reuse
+phy_gap3       T:SC=sc:greedy+budget1+reuse (+31.95)  A5 T:best=fixed_avif_50 (+34.61)  H*=fixed_avif_50
+phy_mcs        T:SC=sc:pacedB3+budget1.5 (+16.55)  A5 T:best=pacedB2+budget1+reuse (+16.02)  H*=sc:pacedB3+budget1.5
+phy_mcs_blind  T:SC=sc:pacedB3+budget1.5 (+16.55)  A5 T:best=pacedB2+budget1 (+14.98)  H*=sc:pacedB3+budget1.5

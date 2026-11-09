@@ -1,0 +1,29 @@
+progress 45/900 8s eta 146s
+progress 90/900 14s eta 122s
+progress 135/900 22s eta 123s
+progress 180/900 30s eta 119s
+progress 225/900 39s eta 116s
+progress 270/900 46s eta 108s
+progress 315/900 54s eta 100s
+progress 360/900 60s eta 90s
+progress 405/900 66s eta 81s
+progress 450/900 74s eta 74s
+progress 495/900 83s eta 68s
+progress 540/900 91s eta 61s
+progress 585/900 100s eta 54s
+progress 630/900 105s eta 45s
+progress 675/900 111s eta 37s
+progress 720/900 118s eta 30s
+progress 765/900 127s eta 22s
+progress 810/900 134s eta 15s
+progress 855/900 143s eta 8s
+progress 900/900 151s eta 0s
+K5             P:mode_best_s0=/home/uservutl/work/a5/K5_mode_s0/c (P:mode_best_s0=/home/uservutl/) return   +65.79  ok 0.992
+K5             P:joint_best_s0=/home/uservutl/work/a5/K5_joint_s0 (P:joint_best_s0=/home/uservutl) return   +62.05  ok 0.997
+K5             P:joint_long_best_s0=/home/uservutl/work/a5/K5_joi (P:joint_long_best_s0=/home/use) return   +65.31  ok 0.997
+K5             P:mode_best_s1=/home/uservutl/work/a5/K5_mode_s1/c (P:mode_best_s1=/home/uservutl/) return   +60.77  ok 0.986
+K5             P:joint_best_s1=/home/uservutl/work/a5/K5_joint_s1 (P:joint_best_s1=/home/uservutl) return   +63.97  ok 0.999
+K5             P:joint_long_best_s1=/home/uservutl/work/a5/K5_joi (P:joint_long_best_s1=/home/use) return   +63.97  ok 0.999
+K5             P:mode_best_s2=/home/uservutl/work/a5/K5_mode_s2/c (P:mode_best_s2=/home/uservutl/) return   +65.49  ok 0.991
+K5             P:joint_best_s2=/home/uservutl/work/a5/K5_joint_s2 (P:joint_best_s2=/home/uservutl) return   +63.13  ok 0.997
+K5             P:joint_long_best_s2=/home/uservutl/work/a5/K5_joi (P:joint_long_best_s2=/home/use) return   +64.24  ok 0.996
