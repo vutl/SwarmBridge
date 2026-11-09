@@ -69,7 +69,8 @@ Với mỗi regime, H* là thành viên có return **train** cao nhất trong {T
 2. **+ theo video (cluster bootstrap có mô phỏng lại):**
    - B = 50 bản: mỗi bản lấy mẫu có hoàn lại các **chuỗi video** của pool (test: 28 chuỗi; test-dev: 49 chuỗi);
    - pool ảnh của bản đó = mọi khung của các chuỗi được chọn, giữ đúng số lần lặp;
-   - chạy mọi policy trên 20 seed môi trường riêng của bản (8100 + 20b + i), lấy Δ trung bình của bản.
+   - chạy mọi policy trên 20 seed môi trường riêng của bản, lấy Δ trung bình của bản.
+   - Seed của bản: ban đầu ghi là 8100 + 20b + i. **Điều chỉnh trước khi chạy:** với B = 50, dải đó lên tới 9099, đè lên seed 9000..9099 dành cho A6.0-L1. Vì vậy đổi thành 20000 + 20b + i.
 3. **+ theo seed huấn luyện (bootstrap phân tầng):**
    - như (2), nhưng trong mỗi bản lấy thêm mẫu có hoàn lại 3 model PPO trong 3 model.
 
