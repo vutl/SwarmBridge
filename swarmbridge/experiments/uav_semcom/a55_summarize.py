@@ -180,10 +180,46 @@ def expl():
     sc_table("expl_testdev_heur_7000.json", "Khám phá: T:SC − A5 T:best, pool test-dev, seed A5 7000..7099")
 
 
+def fid():
+    """0.6: re-measured task fidelity (runs/uav_semcom/a6l1/fidelity) vs the A5.2 rows (runs/uav_semcom/a5/fidelity)."""
+    old_d, new_d = REPO / "runs/uav_semcom/a5/fidelity", REPO / "runs/uav_semcom/a6l1/fidelity"
+    print("### 0.6 Đo lại task fidelity so với A5.2\n")
+    print("| pool | cặp (ảnh, mode) A5.2 | có trong lần đo mới | bytes trùng | n_gt trùng | TP trùng | n_det trùng |"
+          " max abs ΔTP | max abs ΔPSNR | cặp mới không có ở A5.2 |")
+    print("|---|---|---|---|---|---|---|---|---|---|")
+    for pool in ["val", "testdev"]:
+        po, pn = old_d / f"per_image_{pool}.jsonl", new_d / f"per_image_{pool}.jsonl"
+        if not (po.exists() and pn.exists()):
+            continue
+        rd = lambda p: {(e["image"], e["mode"]): e for e in map(json.loads, open(p))}
+        o, n = rd(po), rd(pn)
+        com = [k for k in o if k in n]
+        eq = lambda f: sum(o[k][f] == n[k][f] for k in com)
+        dtp = max((abs(o[k]["tp"] - n[k]["tp"]) for k in com), default=0)
+        dps = max((abs(o[k]["psnr"] - n[k]["psnr"]) for k in com if np.isfinite(o[k]["psnr"])), default=0)
+        print(f"| {pool} | {len(o)} | {len(com)} | {eq('bytes')} | {eq('n_gt')} | {eq('tp')} | {eq('n_det')} | {dtp} |"
+              f" {dps:.3g} | {len(set(n) - set(o))} |")
+    print()
+    print("| pool | tập con | mode | AP50 A5.2 | AP50 đo lại |")
+    print("|---|---|---|---|---|")
+    for pool in ["val", "testdev"]:
+        po, pn = old_d / f"coco_{pool}.json", new_d / f"coco_{pool}.json"
+        if not (po.exists() and pn.exists()):
+            continue
+        o, n = json.loads(po.read_text())["results"], json.loads(pn.read_text())["results"]
+        for sub in o:
+            for m in o[sub]:
+                if m in n.get(sub, {}):
+                    a, b = o[sub][m]["AP50"], n[sub][m]["AP50"]
+                    if abs(a - b) > 1e-9 or m in ("original", "avif_5", "cap_t2i"):
+                        print(f"| {pool} | {sub} | {m} | {a:.4f} | {b:.4f} |")
+    print()
+
+
 def main():
-    secs = sys.argv[1:] or ["tune", "main", "seeds", "sc", "expl"]
+    secs = sys.argv[1:] or ["tune", "main", "seeds", "sc", "expl", "fid"]
     for s in secs:
-        {"tune": tune_table, "main": main_table, "seeds": seeds_table, "sc": sc_table, "expl": expl}[s]()
+        {"tune": tune_table, "main": main_table, "seeds": seeds_table, "sc": sc_table, "expl": expl, "fid": fid}[s]()
 
 
 if __name__ == "__main__":
