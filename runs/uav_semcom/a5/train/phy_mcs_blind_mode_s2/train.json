@@ -1,0 +1,202 @@
+{
+ "regime": "phy_mcs_blind",
+ "cfg": {
+  "mode_info": "predicted",
+  "v_max": 20.0,
+  "w_time": 0.3,
+  "phy": "mcs_blind"
+ },
+ "rl_part": "mode",
+ "heur": "pacedB2+budget1",
+ "seed": 2,
+ "steps": 2000000.0,
+ "val_seeds": [
+  3000,
+  3001,
+  3002,
+  3003,
+  3004,
+  3005,
+  3006,
+  3007,
+  3008,
+  3009,
+  3010,
+  3011,
+  3012,
+  3013,
+  3014,
+  3015,
+  3016,
+  3017,
+  3018,
+  3019
+ ],
+ "val_pool": "val",
+ "train_pool": "train",
+ "time_discount": true,
+ "log": [
+  {
+   "steps": 200000,
+   "sec": 165.97876596450806,
+   "val_return": 36.87667342909761,
+   "val_ok": 0.9971153846153846,
+   "experience": {
+    "rl_steps_mode": 202752,
+    "episodes": 1296,
+    "env_s": 113320.0,
+    "uav_s": 320745.0,
+    "rl_slot": 0,
+    "rl_mode": 202176,
+    "heur_slot": 113320,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 400000,
+   "sec": 322.89381074905396,
+   "val_return": 37.71354438185544,
+   "val_ok": 0.9974358974358974,
+   "experience": {
+    "rl_steps_mode": 405504,
+    "episodes": 2598,
+    "env_s": 219604.0,
+    "uav_s": 626763.0,
+    "rl_slot": 0,
+    "rl_mode": 405288,
+    "heur_slot": 219604,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 600000,
+   "sec": 473.8067879676819,
+   "val_return": 39.79104922663173,
+   "val_ok": 0.9967948717948719,
+   "experience": {
+    "rl_steps_mode": 608256,
+    "episodes": 3894,
+    "env_s": 326642.0,
+    "uav_s": 933995.0,
+    "rl_slot": 0,
+    "rl_mode": 607464,
+    "heur_slot": 326642,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 800000,
+   "sec": 630.3818981647491,
+   "val_return": 39.47758982904682,
+   "val_ok": 0.9980769230769232,
+   "experience": {
+    "rl_steps_mode": 811008,
+    "episodes": 5196,
+    "env_s": 434204.0,
+    "uav_s": 1242758.0,
+    "rl_slot": 0,
+    "rl_mode": 810576,
+    "heur_slot": 434204,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1000000,
+   "sec": 780.9842896461487,
+   "val_return": 39.1065925919073,
+   "val_ok": 0.9977564102564103,
+   "experience": {
+    "rl_steps_mode": 1013760,
+    "episodes": 6498,
+    "env_s": 540400.0,
+    "uav_s": 1548724.0,
+    "rl_slot": 0,
+    "rl_mode": 1013688,
+    "heur_slot": 540400,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1200000,
+   "sec": 931.9125306606293,
+   "val_return": 37.93046283570662,
+   "val_ok": 0.9971153846153846,
+   "experience": {
+    "rl_steps_mode": 1216512,
+    "episodes": 7794,
+    "env_s": 645608.0,
+    "uav_s": 1852480.0,
+    "rl_slot": 0,
+    "rl_mode": 1215864,
+    "heur_slot": 645608,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1400000,
+   "sec": 1083.7272453308105,
+   "val_return": 39.174170493060345,
+   "val_ok": 0.9974358974358974,
+   "experience": {
+    "rl_steps_mode": 1419264,
+    "episodes": 9096,
+    "env_s": 751432.0,
+    "uav_s": 2157878.0,
+    "rl_slot": 0,
+    "rl_mode": 1418976,
+    "heur_slot": 751432,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1600000,
+   "sec": 1232.3919911384583,
+   "val_return": 36.72542780890463,
+   "val_ok": 0.9971153846153846,
+   "experience": {
+    "rl_steps_mode": 1622016,
+    "episodes": 10392,
+    "env_s": 855774.0,
+    "uav_s": 2459676.0,
+    "rl_slot": 0,
+    "rl_mode": 1621152,
+    "heur_slot": 855774,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1800000,
+   "sec": 1380.9414386749268,
+   "val_return": 37.75910270840156,
+   "val_ok": 0.9967948717948719,
+   "experience": {
+    "rl_steps_mode": 1824768,
+    "episodes": 11694,
+    "env_s": 959894.0,
+    "uav_s": 2761593.0,
+    "rl_slot": 0,
+    "rl_mode": 1824264,
+    "heur_slot": 959894,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 2000000,
+   "sec": 1530.4271664619446,
+   "val_return": 39.366957700429296,
+   "val_ok": 0.9977564102564103,
+   "experience": {
+    "rl_steps_mode": 2027520,
+    "episodes": 12996,
+    "env_s": 1066435.0,
+    "uav_s": 3068620.0,
+    "rl_slot": 0,
+    "rl_mode": 2027376,
+    "heur_slot": 1066435,
+    "heur_mode": 0
+   }
+  }
+ ],
+ "best_steps": 600000,
+ "last_steps": 2000000
+}
