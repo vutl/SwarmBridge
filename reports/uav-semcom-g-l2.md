@@ -330,3 +330,21 @@ Mọi báo cáo từ nay báo **hai** chỉ số riêng:
 - **recall_ontime** (mọi khung giao đúng hạn).
 
 Số "+2,43 điểm recall" của PPO task so với T:best_task ở K5 test-dev (L1) **không** được dùng làm bằng chứng PPO giao nhiều thông tin hơn. Theo recall_ontime, hiệu đó là −0,23 điểm (kiểm toán L1, mục 5).
+
+## 8. Bổ sung 12/11: baseline của cổng G-L2 có thành phần hindsight
+
+**Lỗi.** Phát hiện khi rà `g2_predict.py` theo phản biện.
+- Predictor G-L2 chọn hỗn hợp λ **trên val** rồi chấm ở bit thực tế của nó.
+- Baseline BL (F / MX / RV / CB) lại được chấm bằng bao lồi dựng từ TP và bit **của pool test**: `Baselines.at` → `Fam.at` → `hull_at`.
+- Phép so ở mục 4 vì vậy lệch về phía baseline.
+
+**Kiểm lại** (`r1a_vallocked.py`, mục `gl2` trong `runs/uav_semcom/r1a/vallocked.json`). Predictor được so với RV_true chạy bằng bộ điều khiển online, khoá trên val, chỉ dùng bit đã gửi, nhắm đúng bit thực tế của predictor (lệch ≤ 0,01 Mbit, trừ test avif_80: 0,90 so với 0,99).
+
+| Pool | Δ (predictor − RV_true_online), điểm |
+|---|---|
+| test | −0,21 / +0,27 / −0,40 |
+| test-dev | +0,44 / −0,95 / −1,54 |
+
+Ba giá trị mỗi dòng ứng với ba mức bit, theo thứ tự trong mục 4. Theo đường bao cũ, các Δ này là −0,17..−1,67.
+
+**Kết luận:** không ô nào đạt điều kiện 1 (Δ ≥ +1 trên cả hai pool), nên **FAIL giữ nguyên**. Nhưng lời "predictor thấp hơn RV ở 6/6 ô" (mục 7) phải sửa thành **"predictor ngang baseline triển khai được (±1,5 điểm), không ô nào ≥ +1"**.

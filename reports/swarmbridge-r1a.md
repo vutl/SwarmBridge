@@ -130,6 +130,10 @@ Cả hai mức YOLO11n đều chạy ≥ 5 lần/s (≈ 20 và 38 lần/s).
 
 Recall (điểm) ở ngân sách B. Δ_B = họ − RV_probe(B); CI cluster bootstrap theo video, B = 2000. Ngoặc ở các cột recall nhỏ / FP / AP50 là giá trị của RV_probe.
 
+> **Sửa cách gọi (12/11, sau phản biện):** RV_probe ở bảng này **không hoàn toàn triển khai được**. Phần dự đoán payload và luật chọn mode theo λ là nhân quả: probe AVIF-5, bảng fit trên train. Nhưng các thành viên λ, trọng số trộn và điểm vận hành khớp B được chọn trên bao lồi dựng từ TP và bit **của chính pool đang chấm**, và còn dựng lại trong từng mẫu bootstrap.
+>
+> Từ đây đường này gọi là **RV_probe_posthoc_envelope**, chỉ dùng làm tham chiếu offline. Số trong bảng giữ nguyên vì đó là kết quả đã đăng ký trước. Phép so với baseline khoá trên val ở mục 7.3.
+
 | pool | B | RV_probe (ảnh) | họ: cấu hình | recall | **Δ_B** [CI] | Mbit thực | recall nhỏ | FP/khung | AP50 | ms UAV / BS |
 |---|---|---|---|---|---|---|---|---|---|---|
 | test | 0,08 | 42,9 | TOK: u960, τ 0,25 | 52,2 | **+9,2** [+6,4; +12,1] | 0,003 | 39,9 (29,2) | 17,7 (12,2) | 28,2 (26,7) | 50 / 0 |
@@ -275,3 +279,55 @@ Ngoặc ở cột AP50: RV_probe thực thi ở **bit thực tế của họ**. 
 - Ngưỡng FP khoá trên val với 84 ảnh.
 - Hiệu chỉnh là logistic đơn giản theo nguồn.
 - Không thử detector UAV khác.
+
+### 7.3 Baseline ảnh khoá trên val (KHÁM PHÁ, 12/11; thay đường bao post-hoc)
+
+**Vì sao cần.** `Fam.at()` → `hull_at()` dựng bao lồi rate–recall trên TP và bit **của pool đang chấm**. Như vậy việc chọn λ, trọng số trộn và điểm vận hành của RV_probe ở mục 2 và 7.1 dùng kết quả test (xem ghi chú ở mục 2).
+
+**Hai baseline triển khai được** (code `r1a_vallocked.py`, kết quả `runs/uav_semcom/r1a/vallocked.json`):
+- **RV_locked(T).** Bộ dự đoán payload và μ fit trên train. Trên **val**, bao lồi của họ λ cho hai thành viên và trọng số khớp bit trung bình T. Luật đó (chỉ số λ, trọng số, seed hiện thực hoá) áp nguyên lên test / test-dev. Bit thực tế trên test có thể lệch khỏi T, giống các cấu hình không phải ảnh đã khoá trên val.
+- **RV_online(T).** Cùng luật theo từng ảnh, argmax μ_m − λ_t·b̂_i(m). λ_t do một bộ điều khiển tích phân chỉnh, chỉ dùng số bit **đã gửi** trước khung t: log λ_t = log λ_0 + κ·Σ_{s<t}(b_s − T)/T. λ_0 lấy từ RV_locked trên val; κ chọn trên val (recall val lớn nhất với bit val ≤ 1,02 T). Ảnh đi theo thứ tự tên (chuỗi, khung).
+- **CI bootstrap theo video:** chính sách giữ **cố định**, không dựng lại bao trong từng mẫu.
+- **Họ không phải ảnh:** dùng nguyên cấu hình đã chọn trên val. TP từng ảnh dựng lại đúng như `r1a_eval.py` (đã assert khớp recall mục 2).
+
+**Kết quả** (recall, điểm; Mbit/khung):
+
+| pool | B | họ: recall @ Mbit thực | RV_posthoc tại B | RV_locked(B): recall @ Mbit | Δ so với RV_locked(B) [CI] | RV_online(bit thực của họ): recall / AP50 | **Δ so với RV_online(bit thực)** [CI] | AP50 của họ (hiệu chỉnh) |
+|---|---|---|---|---|---|---|---|---|
+| test | 0,08 | HYB 55,1 @ 0,069 | 42,9 | 43,7 @ 0,086 | +11,4 [+8,5; +14,3] | 38,1 / 23,7 | **+17,0** [+14,2; +20,5] | 31,9 |
+| test-dev | 0,08 | HYB 47,5 @ 0,099 | 27,4 | 29,2 @ 0,086 | +18,3 [+14,2; +24,9] | 31,4 / 20,3 | **+16,1** [+11,7; +20,2] | 27,2 |
+| test | 0,08 | TOK 52,2 @ 0,003 | 42,9 | 43,7 @ 0,086 | +8,5 [+5,5; +11,4] | (ảnh vô dụng ở 3 kbit) | — | 28,4 |
+| test-dev | 0,08 | TOK 45,3 @ 0,002 | 27,4 | 29,2 @ 0,086 | +16,1 [+11,6; +22,6] | — | — | 24,2 |
+| test | 0,3 | HYB 61,1 @ 0,250 | 58,4 | 58,6 @ 0,341 | +2,5 [+1,5; +3,4] | 56,3 / 40,3 | **+4,8** [+3,4; +6,5] | 41,2 |
+| test-dev | 0,3 | HYB 51,8 @ 0,323 | 46,7 | 46,9 @ 0,339 | +4,9 [+3,9; +5,5] | 47,1 / 32,0 | **+4,7** [+3,0; +5,8] | 32,6 |
+| test | 1,2 | ROI 63,8 @ 0,636 | 61,1 | 60,8 @ 1,176 | +3,0 [+2,1; +3,8] | 61,0 / **43,7** | **+2,8** [+1,9; +3,7] | 41,0 |
+| test-dev | 1,2 | ROI 54,2 @ 0,727 | 51,5 | 51,6 @ **1,477** | +2,6 [+1,2; +3,4] | 50,5 / **34,9** | **+3,8** [+2,7; +4,5] | 33,6 |
+
+**Recall ở cùng FP.** Ngưỡng của mỗi họ vẫn đặt trên val như mục 7.1. So với ảnh khoá trên val, ở cùng bit thực:
+
+| pool | Họ | Họ: recall (FP/khung) | Ảnh khoá trên val: recall (FP/khung) |
+|---|---|---|---|
+| test | HYB 0,08 | 48,6 (12,1) | 43,7 (12,2) |
+| test-dev | HYB 0,08 | 42,3 (9,2) | 29,2 (7,7) |
+| test | HYB 0,3 | 57,8 (15,5) | 58,6 (15,7) |
+| test-dev | HYB 0,3 | 48,9 (12,2) | 46,9 (11,2) |
+| test | ROI | 54,6 (17,3) | RV_online ở 0,633 Mbit: 61,0 (16,3) |
+| test-dev | ROI | 46,2 (12,3) | RV_online ở 0,727 Mbit: 50,5 (12,3) |
+
+**Đọc kết quả:**
+1. **Hindsight của đường bao cũ nhỏ so với các hiệu ứng.**
+   - Ở đúng bit mục tiêu, RV_online thấp hơn đường bao post-hoc 0,4–1,6 điểm recall (0,08: 41,6 so với 42,9 trên test, 26,9 so với 27,4 trên test-dev; 0,3: 58,0 so với 58,4, 46,3 so với 46,7).
+   - RV_locked khớp bit kém hơn: vượt T tới +14% ở 0,3 và **+23% ở 1,2 trên test-dev** (1,477 Mbit).
+   - Như vậy chính baseline ảnh triển khai được cũng vi phạm ngân sách khi khoá trên val. Đó là một lý do nữa để luôn so ở **bit thực tế**.
+2. **Mọi kết luận của mục 7.2 giữ nguyên khi thay đường bao bằng baseline triển khai được:**
+   - ở ~0,08 Mbit, HYB / TOK hơn ảnh rất xa;
+   - ở ~0,3, HYB hơn ở recall (+4,7..+4,8) và ngang ở AP50 / recall cùng FP;
+   - ở ≥ 0,6, ảnh hơn ROI ở AP50 (+2,7 / +1,3) và ở recall cùng FP (+4 đến +6).
+
+   Độ lớn các Δ thay đổi ≤ 1,1 điểm so với mục 7.1.
+3. **Phân loại bằng chứng:**
+   - **Xác nhận (đăng ký trước):** chỉ có kết quả mục 2–3 với baseline như đã đăng ký (nay biết là đường bao post-hoc) và kết luận INCONCLUSIVE.
+   - **Khám phá:** toàn bộ mục 7.1–7.3, gồm các con số so với RV_locked / RV_online.
+
+   Muốn dùng làm kết luận định lượng thì phải lặp lại với baseline khoá trước trên dữ liệu mới. Ví dụ: VID test-dev, sau khi khoá R1b.
+4. **Không mang ngưỡng 0,3 Mbit/ảnh sang R1b.** Họ ảnh ở đây là ảnh nén độc lập. Với codec liên khung, đường rate–accuracy phải đo lại.
