@@ -1,5 +1,5 @@
 #!/bin/bash
-# A6.0-L1 method audit (reports/uav-semcom-a6-l1-audit.md section 0), CPU only, no PPO training. Resumable.
+# A6.0-L1 method audit (reports/archive/uav-semcom-a/uav-semcom-a6-l1-audit.md section 0), CPU only, no PPO training. Resumable.
 REPO=/mnt/c/Users/USER/Documents/SwarmBridge
 PY=/home/uservutl/envs/semcom-a/bin/python
 O=$REPO/runs/uav_semcom/a6l1/audit

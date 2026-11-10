@@ -1,4 +1,4 @@
-"""A5.5 checks (pre-registered, reports/uav-semcom-a5.5.md 0.1): (a) with calibration off the rebuilt heuristics act
+"""A5.5 checks (pre-registered, reports/archive/uav-semcom-a/uav-semcom-a5.5.md 0.1): (a) with calibration off the rebuilt heuristics act
 exactly as the A5 ones; (b) the self-calibrating heuristic is causal (changing the future does not change the present
 action); (c) a sanity check of the calibration. Uses the real A5 mode table (skipped if absent)."""
 import copy

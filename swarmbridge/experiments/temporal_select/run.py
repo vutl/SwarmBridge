@@ -1,4 +1,4 @@
-"""Temporal block-selection pilot (protocol: reports/review-block-selection-proposal-2026-11-03.md).
+"""Temporal block-selection pilot (protocol: reports/archive/sb-town3/review-block-selection-proposal-2026-11-03.md).
 
 python -m swarmbridge.experiments.temporal_select.run --split val
 python -m swarmbridge.experiments.temporal_select.run --split test

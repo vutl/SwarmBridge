@@ -1,4 +1,4 @@
-"""A6.0-L1 method audit (pre-registered: reports/uav-semcom-a6-l1-audit.md section 0). No PPO training.
+"""A6.0-L1 method audit (pre-registered: reports/archive/uav-semcom-a/uav-semcom-a6-l1-audit.md section 0). No PPO training.
 
   tune --regimes ..             every L1 heuristic family under the task reward of each audit config (xi_q in
                                 {0.5, 1, 2, 4} x Qmin on/off), train pool, seeds 0..29 -> audit/tune/<regime>_<cfg>.json

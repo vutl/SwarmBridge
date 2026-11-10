@@ -1,6 +1,6 @@
 # SwarmBridge hướng A — Kiểm toán phương pháp A6.0-L1 (bước 1 của đợt G-L2)
 
-Ngày 10/11/2026. Báo cáo L1 gốc (`reports/uav-semcom-a6-l1.md`) **giữ nguyên**, không sửa số nào. Báo cáo này kiểm tra ba điểm phương pháp mà người review nêu, rồi nói kết luận nào của L1 còn đứng.
+Ngày 10/11/2026. Báo cáo L1 gốc (`reports/archive/uav-semcom-a/uav-semcom-a6-l1.md`) **giữ nguyên**, không sửa số nào. Báo cáo này kiểm tra ba điểm phương pháp mà người review nêu, rồi nói kết luận nào của L1 còn đứng.
 
 **Không train PPO trong đợt này.** Mọi phép đo dùng các model PPO đã có (A5 mode-only và L1), heuristic, và simulator A5 sẵn có.
 

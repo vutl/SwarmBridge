@@ -1,8 +1,8 @@
 # Repo bổ sung ngày 04/11/2026
 
-**Cập nhật sau yêu cầu “Tải hết”:** đã tải thêm đầy đủ snapshot U2USim-2 Windows/Linux và AirDrone client từ Hugging Face: **82 file, 4.317.501.139 byte**, tất cả được kiểm tra theo SHA-256 của LFS hoặc Git blob SHA-1 do nguồn công bố. Xem [manifest gói đầy đủ](swarm-packages-2026-11-04.json). Các mục bên dưới mô tả đợt clone GitHub ban đầu; simulator/client không còn ở trạng thái chưa tải.
+**Cập nhật sau yêu cầu “Tải hết”:** đã tải thêm đầy đủ snapshot U2USim-2 Windows/Linux và AirDrone client từ Hugging Face: **82 file, 4.317.501.139 byte**, tất cả được kiểm tra theo SHA-256 của LFS hoặc Git blob SHA-1 do nguồn công bố. Xem [manifest gói đầy đủ](../../metadata/swarm-packages-2026-11-04.json). Các mục bên dưới mô tả đợt clone GitHub ban đầu; simulator/client không còn ở trạng thái chưa tải.
 
-Đợt đầu đã tải 10 repo chính thức còn thiếu vào `pdf/GithubModels/`. Các repo được clone nông; chưa cài dependency hoặc chạy thí nghiệm. Đợt đầu không tải dataset, checkpoint hoặc simulator binaries từ các đường dẫn ngoài; simulator/client được bổ sung ở cập nhật phía trên. Git LFS smudge được tắt cho thao tác clone; đã kiểm tra 10 repo trong bảng và không phát hiện con trỏ LFS chưa tải. Không repo nào trong bảng khai báo `.gitmodules` ở gốc. [Manifest và commit đầy đủ](github-swarm-downloads-2026-11-04.json).
+Đợt đầu đã tải 10 repo chính thức còn thiếu vào `pdf/GithubModels/`. Các repo được clone nông; chưa cài dependency hoặc chạy thí nghiệm. Đợt đầu không tải dataset, checkpoint hoặc simulator binaries từ các đường dẫn ngoài; simulator/client được bổ sung ở cập nhật phía trên. Git LFS smudge được tắt cho thao tác clone; đã kiểm tra 10 repo trong bảng và không phát hiện con trỏ LFS chưa tải. Không repo nào trong bảng khai báo `.gitmodules` ở gốc. [Manifest và commit đầy đủ](../../metadata/github-swarm-downloads-2026-11-04.json).
 
 | Repo | Thư mục | Commit |
 |---|---|---|
@@ -26,13 +26,13 @@
 - [BoxMOT](https://github.com/mikel-brostrom/boxmot) → `mikel-brostrom__boxmot`
 - [Ultralytics](https://github.com/ultralytics/ultralytics) → `ultralytics__ultralytics`
 
-Tất cả nằm trong `pdf/GithubModels/`. Xem [manifest repo hỗ trợ](swarm-support-repos-2026-11-04.json) để biết commit cụ thể.
+Tất cả nằm trong `pdf/GithubModels/`. Xem [manifest repo hỗ trợ](../../metadata/swarm-support-repos-2026-11-04.json) để biết commit cụ thể.
 
 ## Phạm vi tải bổ sung
 
 Đã tải trọn 82 file của hai snapshot Hugging Face công khai ở revision được ghi trong manifest, gồm cả file `.pak`, executable Windows/Linux, client và tài liệu. Không thực thi binary, cài dependency hoặc chạy huấn luyện. Dataset ghi sẵn `fengtt42/U2UData-2` là gói riêng khoảng 61,8 GB theo API tại thời điểm khảo sát, chưa tải trong đợt hoàn tất mã nguồn/simulator này; các dataset và checkpoint liên kết ngoài khác cũng chưa được tải.
 
-Đã thử lại bốn PDF còn thiếu: GOST và Posterior-Mamba vẫn bị IEEE trả HTTP 418; Relay-aware semantic resource allocation và FOFE-MMAPPO vẫn bị ScienceDirect trả HTTP 403. Xem [nhật ký thử lại](paper-download-retry-2026-11-04.json).
+Đã thử lại bốn PDF còn thiếu: GOST và Posterior-Mamba vẫn bị IEEE trả HTTP 418; Relay-aware semantic resource allocation và FOFE-MMAPPO vẫn bị ScienceDirect trả HTTP 403. Xem [nhật ký thử lại](../../metadata/paper-download-retry-2026-11-04.json).
 
 ## Những giới hạn đã kiểm tra
 

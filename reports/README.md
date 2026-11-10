@@ -1,0 +1,38 @@
+# SwarmBridge: báo cáo
+
+Cập nhật 10/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng đang làm**. Các giai đoạn trước nằm trong [archive/](archive/README.md).
+
+## Hướng hiện tại: semantic communication cho UAV (VisDrone), đi từ R0 đến R1b
+
+Đọc theo thứ tự:
+
+| # | Tài liệu | Nội dung | Trạng thái |
+|---|---|---|---|
+| 1 | [uav-semcom-g-l2.md](uav-semcom-g-l2.md) | Cổng G-L2: dự đoán lợi ích theo từng ảnh | **FAIL** (mục 8: vẫn FAIL sau khi sửa baseline) |
+| 2 | [novelty-audit-g-l2-2026-11-10.md](novelty-audit-g-l2-2026-11-10.md) | Kiểm tra novelty sau G-L2 | xong |
+| 3 | [swarmbridge-next-scenario-r0.md](swarmbridge-next-scenario-r0.md) | R0: chọn kịch bản tiếp theo (chọn C) | xong |
+| 4 | [swarmbridge-r1a.md](swarmbridge-r1a.md) | R1a: token / hybrid / ROI so với ảnh, theo ngân sách bit | **INCONCLUSIVE** (đã đăng ký trước); mục 7 là khám phá |
+| 5 | [swarmbridge-r1b-design.md](swarmbridge-r1b-design.md) | Thiết kế R1b v3: ablation thông tin phản hồi, các cổng H1 / H2 / H3, pilot R1b-0a | chờ duyệt và chờ trả lời về ASR |
+| 6 | [visdrone-vid-data-audit.md](visdrone-vid-data-audit.md) | Kiểm toán VisDrone-VID: rò rỉ DET, cổng G7 | xong |
+
+- Ghi chú nền của R0: [r0-notes/](r0-notes/).
+- Hình: [figures/](figures/).
+- Kết quả số: `runs/uav_semcom/`.
+- Code: `swarmbridge/experiments/uav_semcom/`.
+
+## Không thuộc nhánh này
+
+- [wireless-abc.md](wireless-abc.md): tổng hợp hướng A/B/C ngày 06/11. Để nguyên ở đây vì `runs/active_recovery/protocol-v0.1.json` (nhánh Active Semantic Recovery do Codex làm) tham chiếu đúng đường dẫn này.
+
+## Lưu trữ
+
+| Thư mục | Giai đoạn |
+|---|---|
+| [archive/uav-semcom-a/](archive/README.md#uav-semcom-a) | UAV-SemCom A, A5, A5.5, A6-L1 cùng các kiểm toán, trước G-L2 |
+| [archive/huang-abc/](archive/README.md#huang-abc) | Huang JSAC bước 0, kế hoạch proposal A/B/C |
+| [archive/uav3d/](archive/README.md#uav3d) | UAV3D (đóng băng từ 04/11) |
+| [archive/sb-town3/](archive/README.md#sb-town3) | SB-decoder / Town3 |
+| [archive/tai-lieu/](archive/README.md#tai-lieu) | Paper, repo, prior art |
+| [metadata/](metadata/README.md) | JSON kiểm toán, manifest; bảng chuyển đường dẫn [04/11](metadata/report-moves-2026-11-04.json) và [10/11](metadata/report-moves-2026-11-10.json) |
+
+Báo cáo trong archive có thể chứa kết luận đã bị sửa ở báo cáo sau. Khi viết báo cáo mới, ưu tiên cập nhật tài liệu hiện hành thay vì tạo thêm một file review cho mỗi lượt trao đổi.

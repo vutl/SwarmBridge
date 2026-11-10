@@ -1,6 +1,6 @@
 # Kiểm toán prior-art cho G-L2: bộ dự đoán rẻ trên UAV chọn mode codec theo từng ảnh
 
-Ngày: 2026-11-10. Bổ sung cho `reports/novelty-audit-a5-l1-2026-11-10.md`, vốn chỉ xét PDF trong `pdf/`. Lần này tra web (arXiv, Semantic Scholar API, trang tác giả, bản PDF mở). Không đọc `runs/active_recovery/` hay bất cứ gì của UAV3D.
+Ngày: 2026-11-10. Bổ sung cho `reports/archive/uav-semcom-a/novelty-audit-a5-l1-2026-11-10.md`, vốn chỉ xét PDF trong `pdf/`. Lần này tra web (arXiv, Semantic Scholar API, trang tác giả, bản PDF mở). Không đọc `runs/active_recovery/` hay bất cứ gì của UAV3D.
 
 ## 0. Kết luận ngắn
 

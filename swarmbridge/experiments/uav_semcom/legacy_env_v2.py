@@ -2,7 +2,7 @@
 A2 v2: multi-UAV image delivery environment (UAV camera -> UAV encoder -> air-to-ground link -> ground BS).
 
 The system model and MDP (state, observation, action, transition order, reward, constraints, parameter sources) are
-written out in reports/uav-semcom-a.md section 4, with pointers back to the functions here.
+written out in reports/archive/uav-semcom-a/uav-semcom-a.md section 4, with pointers back to the functions here.
 
 v2 changes vs v1 (v1 = commit 1c85cfda; v1 results in report sections 3 / 3.1 are invalid, see 3.2):
   * a slot is no longer capped at one image per UAV: the transmitter serves its FIFO queue continuously inside the

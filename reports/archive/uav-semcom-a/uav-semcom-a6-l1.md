@@ -306,7 +306,7 @@ Nếu không có, chọn mode theo tác vụ trong hệ này chỉ là chọn m�
   - ngược lại → dừng nhánh "task-aware mode selection".
 
 **Phương án song song, không cần thí nghiệm mới:** viết A5 + A5.5 + L1 thành một kết quả về **phương pháp đánh giá**: "RL so với heuristic mạnh dưới bất định theo video, và reward PSNR so với reward tác vụ".
-- Novelty audit (`reports/novelty-audit-a5-l1-2026-11-10.md`) đánh giá phần này ở mức trung bình.
+- Novelty audit (`reports/archive/uav-semcom-a/novelty-audit-a5-l1-2026-11-10.md`) đánh giá phần này ở mức trung bình.
 - Khoảng trống rõ nhất là chưa ai cho thấy reward tác vụ đổi lựa chọn mode trên cùng hệ thống. L1 cho thấy điều đó, cùng với giới hạn của nó.
 
 **Không đề xuất lúc này:** relay, MARL, CARLA hay UAV3D. Chúng không giải quyết câu hỏi tín hiệu dự đoán ở trên.

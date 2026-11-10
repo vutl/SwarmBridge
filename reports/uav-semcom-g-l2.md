@@ -4,7 +4,7 @@ Ngày 10/11/2026. Đây là phép thử **offline** (feasibility gate), không p
 - Không train PPO, SAC hay MARL.
 - Không dựng simulator mới, không đụng relay, CARLA, UAV3D hay Active Recovery.
 - A5, A5.5, L1 giữ nguyên.
-- Phần kiểm toán L1 ở `reports/uav-semcom-a6-l1-audit.md`; phần đối chiếu tài liệu ở `reports/novelty-audit-g-l2-2026-11-10.md`.
+- Phần kiểm toán L1 ở `reports/archive/uav-semcom-a/uav-semcom-a6-l1-audit.md`; phần đối chiếu tài liệu ở `reports/novelty-audit-g-l2-2026-11-10.md`.
 
 ## 0. Bài toán, giả thuyết và quy tắc định trước (commit trước mọi phép đo của G-L2)
 

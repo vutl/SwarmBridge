@@ -1,4 +1,4 @@
-"""A5: apply the pre-registered regime-selection rule (reports/uav-semcom-a5.md section 0.2) to the VALIDATION sweep.
+"""A5: apply the pre-registered regime-selection rule (reports/archive/uav-semcom-a/uav-semcom-a5.md section 0.2) to the VALIDATION sweep.
 Heuristics only (no PPO result exists or is read).
   R1 = ref, R2 = K5;
   R3 = among regimes not in {ref, K*, wt*} with non-trivial control (best tuned - greedy >= 2 on val), the one where the
@@ -28,7 +28,7 @@ def main():
     pick = cand[0]
     if len(cand) > 1 and cand[1]["reuse_gain"] - cand[0]["reuse_gain"] < 0.5:
         pick = max(cand[:2], key=lambda x: x["adapt"])
-    out = dict(rule="reports/uav-semcom-a5.md section 0.2", R1="ref", R2="K5", R3=pick["regime"],
+    out = dict(rule="reports/archive/uav-semcom-a/uav-semcom-a5.md section 0.2", R1="ref", R2="K5", R3=pick["regime"],
                candidates=sorted(rows, key=lambda x: x["reuse_gain"]))
     json.dump(out, open(sys.argv[2], "w"), indent=1)
     for x in out["candidates"]:

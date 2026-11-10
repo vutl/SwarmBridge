@@ -1,5 +1,5 @@
 #!/bin/bash
-# A6.0-L1 CPU queue (reports/uav-semcom-a6-l1.md section 0). Waits for the GPU fidelity stage and the A5.5 queue.
+# A6.0-L1 CPU queue (reports/archive/uav-semcom-a/uav-semcom-a6-l1.md section 0). Waits for the GPU fidelity stage and the A5.5 queue.
 # Resumable: every output is skipped if present.
 #   1. tests (no skips allowed); 2. tune all heuristic families under the task reward (train, 3 regimes);
 #   3. PPO mode-only, task reward, 3 seeds x 3 regimes (2M steps, best-val by task return);

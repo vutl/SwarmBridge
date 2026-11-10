@@ -1,0 +1,98 @@
+[
+  {
+    "id": "S1",
+    "title": "Resource-Efficient Semantic Communication for Heterogeneous Agentic Teams",
+    "urls": [
+      "https://arxiv.org/pdf/2609.39477"
+    ],
+    "status": "downloaded",
+    "file": "pdf\\Resource-Efficient Semantic Communication for Heterogeneous Agentic Teams.pdf",
+    "source": "https://arxiv.org/pdf/2609.39477",
+    "pages": 13,
+    "sha256": "e99130b27965bc4b6c06ccca8fc2dd9a3fd8b2dd5f6880964b6e0a4003c01923"
+  },
+  {
+    "id": "S2",
+    "title": "CoSDH Communication-Efficient Collaborative Perception via Supply-Demand Awareness and Intermediate-Late Hybridization",
+    "urls": [
+      "https://arxiv.org/pdf/2503.03430"
+    ],
+    "status": "downloaded",
+    "file": "pdf\\CoSDH Communication-Efficient Collaborative Perception via Supply-Demand Awareness and Intermediate-Late Hybridization.pdf",
+    "source": "https://arxiv.org/pdf/2503.03430",
+    "pages": 13,
+    "sha256": "37775e038e958681f16ef8401355ac3ce1c314a25cee877ba84b43daa948cdad"
+  },
+  {
+    "id": "S3",
+    "title": "Generative Map Priors for Collaborative BEV Semantic Segmentation",
+    "urls": [
+      "https://openaccess.thecvf.com/content/CVPR2025/papers/Fu_Generative_Map_Priors_for_Collaborative_BEV_Semantic_Segmentation_CVPR_2025_paper.pdf"
+    ],
+    "status": "downloaded",
+    "file": "pdf\\Generative Map Priors for Collaborative BEV Semantic Segmentation.pdf",
+    "source": "https://openaccess.thecvf.com/content/CVPR2025/papers/Fu_Generative_Map_Priors_for_Collaborative_BEV_Semantic_Segmentation_CVPR_2025_paper.pdf",
+    "pages": 10,
+    "sha256": "436e6bd3822c03ce3ef66e67fbc1af9b216b572856505a5561df211304dacd85"
+  },
+  {
+    "id": "S4",
+    "title": "SComCP Task-Oriented Semantic Communication for Collaborative Perception",
+    "urls": [
+      "https://arxiv.org/pdf/2507.00895"
+    ],
+    "status": "downloaded",
+    "file": "pdf\\SComCP Task-Oriented Semantic Communication for Collaborative Perception.pdf",
+    "source": "https://arxiv.org/pdf/2507.00895",
+    "pages": 13,
+    "sha256": "4d0287a1ed6d8ac1488f6f76929fa2d982d85cf4635ad004b4b1bf6ca6f9dc0a"
+  },
+  {
+    "id": "S5",
+    "title": "CoDS Collaborative Perception via Digital Semantic Communication",
+    "urls": [
+      "https://arxiv.org/pdf/2512.22513"
+    ],
+    "status": "downloaded",
+    "file": "pdf\\CoDS Collaborative Perception via Digital Semantic Communication.pdf",
+    "source": "https://arxiv.org/pdf/2512.22513",
+    "pages": 13,
+    "sha256": "1f74095b3adbcf25fe21d9c61535085129e79393f3f05060a44a9a2d6855838d"
+  },
+  {
+    "id": "S6",
+    "title": "Conditional Simulation Using Diffusion Schrodinger Bridges",
+    "urls": [
+      "https://arxiv.org/pdf/2202.13460"
+    ],
+    "status": "downloaded",
+    "file": "pdf\\Conditional Simulation Using Diffusion Schrodinger Bridges.pdf",
+    "source": "https://arxiv.org/pdf/2202.13460",
+    "pages": 29,
+    "sha256": "22aa28ca69c5ec58e228c621416bda93bbb084a1368aee7c55742079c195f05f"
+  },
+  {
+    "id": "S7",
+    "title": "Data Assimilation The Schrodinger Perspective",
+    "urls": [
+      "https://arxiv.org/pdf/1807.08351"
+    ],
+    "status": "downloaded",
+    "file": "pdf\\Data Assimilation The Schrodinger Perspective.pdf",
+    "source": "https://arxiv.org/pdf/1807.08351",
+    "pages": 53,
+    "sha256": "b970b2e13b1fe123723b245ed831938321ab520c8cb828cbbdd7a7d140b1575c"
+  },
+  {
+    "id": "S8",
+    "title": "BridgeTwist Twisting Schrodinger Bridges for Training-Free Conditional Sampling",
+    "urls": [
+      "https://arxiv.org/pdf/2610.18658"
+    ],
+    "status": "downloaded",
+    "file": "pdf\\BridgeTwist Twisting Schrodinger Bridges for Training-Free Conditional Sampling.pdf",
+    "source": "https://arxiv.org/pdf/2610.18658",
+    "pages": 38,
+    "sha256": "25bf39413c20df6eb8f4c35a651f7b8a0aaef20c1ae654d460807cbd4a058cf8"
+  }
+]

@@ -1,6 +1,6 @@
 # Tài liệu bổ sung từ ba phần trao đổi ChatGPT
 
-Bắt đầu ngày 03/11, hoàn tất ngày 04/11/2026 (Asia/Seoul). Tất cả PDF mới nằm trực tiếp trong `pdf/`. Đã kiểm tra chữ ký PDF, khả năng đọc và tiêu đề ở trang đầu; không lưu HTML dưới tên PDF. Nhật ký URL, phản hồi tải, số trang, kích thước và SHA-256 nằm trong [manifest JSON](tai-them-tai-lieu-swarm-2026-11-03.json).
+Bắt đầu ngày 03/11, hoàn tất ngày 04/11/2026 (Asia/Seoul). Tất cả PDF mới nằm trực tiếp trong `pdf/`. Đã kiểm tra chữ ký PDF, khả năng đọc và tiêu đề ở trang đầu; không lưu HTML dưới tên PDF. Nhật ký URL, phản hồi tải, số trang, kích thước và SHA-256 nằm trong [manifest JSON](../../metadata/tai-them-tai-lieu-swarm-2026-11-03.json).
 
 ## Đã tải mới: 9 bài
 

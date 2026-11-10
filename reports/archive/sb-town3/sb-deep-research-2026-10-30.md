@@ -76,7 +76,7 @@ Tôi bổ sung thí nghiệm CPU với đáp án Gaussian giải tích. Cho post
 
 Monte Carlo 32.768 mẫu khớp gần với đệ quy. Đây là hiện tượng thiếu độ phân tán ở số bước hữu hạn của plug-in sampler, không phải bằng chứng mọi bridge sai. Nó giải thích vì sao cần đo chất lượng posterior trước khi lấy phương sai mẫu làm tín hiệu quyết định. K=8 mẫu chỉ tăng độ chính xác ước lượng phân tán của sampler đó; nó không tự sửa bias do NFE=4. Kết quả Gaussian không được chuyển nguyên xi sang Town3.
 
-Mã tái chạy: [audit_sb_assumptions.py](../scripts/audit_sb_assumptions.py). Số liệu: [sb-audit-checks-2026-10-30.json](sb-audit-checks-2026-10-30.json).
+Mã tái chạy: [audit_sb_assumptions.py](../../../scripts/audit_sb_assumptions.py). Số liệu: [sb-audit-checks-2026-10-30.json](../../metadata/sb-audit-checks-2026-10-30.json).
 
 ```powershell
 .venv\Scripts\python.exe -m scripts.audit_sb_assumptions

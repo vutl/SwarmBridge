@@ -1,7 +1,7 @@
 # Hướng A — UAV image delivery + hybrid bit/semantic modes + DRL
 
 Bắt đầu 2026-11-06. Hướng do người dùng chọn (theo đề xuất ChatGPT): triển khai trực tiếp một framework UAV + SemCom + RL
-trên dữ liệu thật, không thêm vòng "gate" quyết định có nên nghiên cứu. Huang Step 0 (`reports/huang-step0.md`) chỉ
+trên dữ liệu thật, không thêm vòng "gate" quyết định có nên nghiên cứu. Huang Step 0 (`reports/archive/huang-abc/huang-step0.md`) chỉ
 còn là tài liệu tham khảo.
 
 Thứ tự: A1 (bảng mode thật theo từng ảnh) → A2 (môi trường có topology nhất quán) → A3 (RL thật + baseline công bằng).

@@ -1,0 +1,211 @@
+{
+  "date": "2026-11-04",
+  "purpose": "Report organization only; old paths map to preserved source documents.",
+  "moves": [
+    {
+      "old": "reports/bao-cao-tien-do-2026-10-30.md",
+      "new": "reports/archive/sb-town3/bao-cao-tien-do-2026-10-30.md",
+      "sha256_before": "d39757b162ff040326f860a5e636c734b4e03cac20fe469bdf1edc9c4b3ad7af"
+    },
+    {
+      "old": "reports/bo-sung-nguon-nghien-cuu-2026-10-30.json",
+      "new": "reports/metadata/bo-sung-nguon-nghien-cuu-2026-10-30.json",
+      "sha256_before": "e35ed6dc04ce4dca1b0502b11b0e6577e241d9873c36f89981c68da74c1f5665"
+    },
+    {
+      "old": "reports/cerf-review-2026-11-04.md",
+      "new": "reports/archive/tai-lieu/cerf-review-2026-11-04.md",
+      "sha256_before": "eb3891ccdd2d1218d7083c326720be6f1519a6bbfd392593daa498f117cd5647"
+    },
+    {
+      "old": "reports/chatgpt-gop-y-cerf-2026-11-04.md",
+      "new": "reports/archive/tai-lieu/chatgpt-gop-y-cerf-2026-11-04.md",
+      "sha256_before": "c914e657be3bb7db46569edadeba5762777d1f16f6cf0c7bf23469cb5269ae6e"
+    },
+    {
+      "old": "reports/codex-review-proto-box-results-2026-11-04.md",
+      "new": "reports/archive/uav3d/codex-review-proto-box-results-2026-11-04.md",
+      "sha256_before": "c02e9f4d26115026c00278bdb7854d95f79d294c8687fcbce0bdf1142370b9a7"
+    },
+    {
+      "old": "reports/codex-review-uav3d-protocol-v1-2026-11-04.md",
+      "new": "reports/archive/uav3d/codex-review-uav3d-protocol-v1-2026-11-04.md",
+      "sha256_before": "08d1e967333ea7033f774fd3827c6431919b13fcb9ef50488313dcf547546847"
+    },
+    {
+      "old": "reports/codex-uav3d-independent-audit-2026-11-04.md",
+      "new": "reports/archive/uav3d/codex-uav3d-independent-audit-2026-11-04.md",
+      "sha256_before": "edc99ea1cda94c258b9d67f3f3f8f8c4ed8404cf7066c60703f771018ad8e695"
+    },
+    {
+      "old": "reports/danh-sach-tai-lieu-2026-10-30.json",
+      "new": "reports/metadata/danh-sach-tai-lieu-2026-10-30.json",
+      "sha256_before": "cb687675f792c7a9288fcb52cf905855dc9ce11b5fe54aa7b7a017228a041106"
+    },
+    {
+      "old": "reports/github-swarm-downloads-2026-11-04.json",
+      "new": "reports/metadata/github-swarm-downloads-2026-11-04.json",
+      "sha256_before": "11ea3d1c250e566c9fca4b2f5fdf613013971f6f15db0757ad4b273d07e38aec"
+    },
+    {
+      "old": "reports/github-swarm-downloads-2026-11-04.md",
+      "new": "reports/archive/tai-lieu/github-swarm-downloads-2026-11-04.md",
+      "sha256_before": "964a706b918ca210efefeab000f05b0bc2622ef4d8435fab189140418962da5b"
+    },
+    {
+      "old": "reports/literature-evidence-map-2026-10-30.md",
+      "new": "reports/archive/tai-lieu/literature-evidence-map-2026-10-30.md",
+      "sha256_before": "1c1f3c3f8e9891705838def3f405801fa8d97af3e93af5bc155f3a17b4da425b"
+    },
+    {
+      "old": "reports/nguon-tom-tat-dieu-hanh-2026-11-03.md",
+      "new": "reports/archive/tai-lieu/nguon-tom-tat-dieu-hanh-2026-11-03.md",
+      "sha256_before": "fd689b523c33331d798207c29204a16e63d965e874a7e2df5e0decc21ae82195"
+    },
+    {
+      "old": "reports/paper-download-retry-2026-11-04.json",
+      "new": "reports/metadata/paper-download-retry-2026-11-04.json",
+      "sha256_before": "638a3715d25cadca73843bb80831bd57bc4925c713df4b00ece036bb7469998f"
+    },
+    {
+      "old": "reports/prior-art-arrival-aware-2026-11-04.md",
+      "new": "reports/archive/tai-lieu/prior-art-arrival-aware-2026-11-04.md",
+      "sha256_before": "b50269783f59de3860a056abfb9c2052cb074a1c73a37875cd13648301bb942b"
+    },
+    {
+      "old": "reports/review-block-selection-proposal-2026-11-03.md",
+      "new": "reports/archive/sb-town3/review-block-selection-proposal-2026-11-03.md",
+      "sha256_before": "fa81dc8493da0a29ba2cfdf6dba1ae877ce7437ecd1a01d38852d1d3f14aa88a"
+    },
+    {
+      "old": "reports/review-chat-gpt-chat-2026-11-03.md",
+      "new": "reports/archive/sb-town3/review-chat-gpt-chat-2026-11-03.md",
+      "sha256_before": "19ce22529162dcb775e80cd74bca0b514959ad58039fb8b7b45bc525e24cfd3c"
+    },
+    {
+      "old": "reports/review-claude-2026-11-02.md",
+      "new": "reports/archive/sb-town3/review-claude-2026-11-02.md",
+      "sha256_before": "8e6f3df68c1e6908fb865c6b61ba09fe24c0d16afb186b14deb0d1e1c1e75c9e"
+    },
+    {
+      "old": "reports/review-uav3d-plan-2026-11-04.md",
+      "new": "reports/archive/uav3d/review-uav3d-plan-2026-11-04.md",
+      "sha256_before": "c654f8d12e610f5ead93eadb39466275444a327cba0d5de8817134712baf3a8a"
+    },
+    {
+      "old": "reports/sb-audit-checks-2026-10-30.json",
+      "new": "reports/metadata/sb-audit-checks-2026-10-30.json",
+      "sha256_before": "dfd7b5435356d4294fc86670e2fb47fc1f3113649c05218326b04bc4af3dd452"
+    },
+    {
+      "old": "reports/sb-audit-protocol-2026-10-30.md",
+      "new": "reports/archive/sb-town3/sb-audit-protocol-2026-10-30.md",
+      "sha256_before": "e6a33383fe4a83513c67c43b2b81b7e26442fd29fc628092b4143ffb31a1ea43"
+    },
+    {
+      "old": "reports/sb-decision-mechanism-2026-10-30.json",
+      "new": "reports/metadata/sb-decision-mechanism-2026-10-30.json",
+      "sha256_before": "04e89e0c8ed0c9f0682318e724c7f4516cb31fa40b541972c363c24eb765ba12"
+    },
+    {
+      "old": "reports/sb-deep-research-2026-10-30.md",
+      "new": "reports/archive/sb-town3/sb-deep-research-2026-10-30.md",
+      "sha256_before": "886286f590c16cf68902c3c807115c6b5dbc89ca9a0e89b48b950882b9d26ab4"
+    },
+    {
+      "old": "reports/sb-huong-moi-2026-11-02.md",
+      "new": "reports/archive/sb-town3/sb-huong-moi-2026-11-02.md",
+      "sha256_before": "0f9f39c13fd1afbd27a51505d679cf26bf8854b4b7eae5b9f1b63e17b4c32e0b"
+    },
+    {
+      "old": "reports/sb-mathematical-foundations-2026-11-02.md",
+      "new": "reports/archive/sb-town3/sb-mathematical-foundations-2026-11-02.md",
+      "sha256_before": "3ef606559d434f35c0bc041e3c87051820dae50e2ab7c6585827192eeed8f158"
+    },
+    {
+      "old": "reports/sb-next-decision-2026-10-31.md",
+      "new": "reports/archive/sb-town3/sb-next-decision-2026-10-31.md",
+      "sha256_before": "59421381f78c401182a2b8708188fd6005d6ebd291bb9052147700ca8f2bcc82"
+    },
+    {
+      "old": "reports/sb-paper-reproductions-2026-10-31.md",
+      "new": "reports/archive/sb-town3/sb-paper-reproductions-2026-10-31.md",
+      "sha256_before": "91435906880054e57c2e424223cce4297b4370de3eef7fa5eb74374ab69736da"
+    },
+    {
+      "old": "reports/sb-pilot-matched-2026-11-02.md",
+      "new": "reports/archive/sb-town3/sb-pilot-matched-2026-11-02.md",
+      "sha256_before": "c9f8bbe528d48022cd6fe4b3335f25ab2f2cfad27dec73dc332d1fc11e3dbd65"
+    },
+    {
+      "old": "reports/sb-training-root-audit-2026-10-31.md",
+      "new": "reports/archive/sb-town3/sb-training-root-audit-2026-10-31.md",
+      "sha256_before": "ad480696c07594b753408c3a0ab4028f56045e57620d030ea504ebd97e34a356"
+    },
+    {
+      "old": "reports/step1-hardening-2026-11-03.md",
+      "new": "reports/archive/sb-town3/step1-hardening-2026-11-03.md",
+      "sha256_before": "198b43f5b6e82f8acc3b0019bd1ffe6d786ddad2a6df4c6a1a1b29700e9b05d0"
+    },
+    {
+      "old": "reports/swarm-packages-2026-11-04.json",
+      "new": "reports/metadata/swarm-packages-2026-11-04.json",
+      "sha256_before": "b43169bc7cee506fbde2a96fa9768826f41f10b1b936adb6a6e042d4fcfa9909"
+    },
+    {
+      "old": "reports/swarm-support-repos-2026-11-04.json",
+      "new": "reports/metadata/swarm-support-repos-2026-11-04.json",
+      "sha256_before": "6960bee18df8e90af069cf6484c280af2e6d422e4cf3b32304f0e0ed9bda4127"
+    },
+    {
+      "old": "reports/swarmbridge-research-direction-2026-10-30.md",
+      "new": "reports/archive/sb-town3/swarmbridge-research-direction-2026-10-30.md",
+      "sha256_before": "ef0eff9633b05f04358f6c20ce60823104fb7d62811457458bd766483a582ca8"
+    },
+    {
+      "old": "reports/tai-them-tai-lieu-swarm-2026-11-03.json",
+      "new": "reports/metadata/tai-them-tai-lieu-swarm-2026-11-03.json",
+      "sha256_before": "b0ae2809521bdf77172edfa52e7a8314530242aea9ad510d7b5cfeef798870ae"
+    },
+    {
+      "old": "reports/tai-them-tai-lieu-swarm-2026-11-04.md",
+      "new": "reports/archive/tai-lieu/tai-them-tai-lieu-swarm-2026-11-04.md",
+      "sha256_before": "fe6f5200ed77a7920db0a102c382f96a4e0642236366f4faebde6553080d302c"
+    },
+    {
+      "old": "reports/temporal-block-selection-2026-11-03.md",
+      "new": "reports/archive/sb-town3/temporal-block-selection-2026-11-03.md",
+      "sha256_before": "3b9ab1a9bf43675b689c9e5cf47d1851f118063c16e4e6f692a14d8c3465be8c"
+    },
+    {
+      "old": "reports/tinh-trang-tai-tai-lieu-2026-10-30.md",
+      "new": "reports/archive/tai-lieu/tinh-trang-tai-tai-lieu-2026-10-30.md",
+      "sha256_before": "caf024895ae597fd3781498dd49a3375065b6ee127ce3843195b70b7ab96e113"
+    },
+    {
+      "old": "reports/uav3d-comm-results-2026-11-04.md",
+      "new": "reports/archive/uav3d/uav3d-comm-results-2026-11-04.md",
+      "sha256_before": "174a30c3f1aa1e26eb39a6842a5a0d8793b449908ab4317c7777043fd38a03bb"
+    },
+    {
+      "old": "reports/uav3d-mini-audit-2026-11-04.md",
+      "new": "reports/archive/uav3d/uav3d-mini-audit-2026-11-04.md",
+      "sha256_before": "b1fd6ffe2d6f7f7f96ae42420fd51ad73b799b35982e55942bb8c48ef452123e"
+    },
+    {
+      "old": "reports/uav3d-proto-box-results-2026-11-04.md",
+      "new": "reports/archive/uav3d/uav3d-proto-box-results-2026-11-04.md",
+      "sha256_before": "41353bc1bc80711655e384f020ebf582114e43401a06726877f792794bfe8c39"
+    },
+    {
+      "old": "reports/uav3d-run-plan-2026-11-04.md",
+      "new": "reports/archive/uav3d/uav3d-run-plan-2026-11-04.md",
+      "sha256_before": "c617d9f10c3c7f87556dc97f88f1fcb94e6ca74a05d1d313e60745980b21e7f0"
+    },
+    {
+      "old": "reports/uav3d-separated-source-pilot-2026-11-04.md",
+      "new": "reports/archive/uav3d/uav3d-separated-source-pilot-2026-11-04.md",
+      "sha256_before": "6ee5e1cddcc08f8cc96ad245a2f97afa1c9e6a920c0eb7f2f88594861080ce72"
+    }
+  ]
+}

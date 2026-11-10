@@ -70,7 +70,8 @@ def main():
                  informative_observation_probability=1.0, expected_risk_reduction=1.0 * 0.1),
         ],
     }
-    path = Path("reports/sb-decision-mechanism-2026-10-30.json")
+    path = Path("reports/metadata/sb-decision-mechanism-2026-10-30.json")
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(json.dumps(result, indent=2))
 

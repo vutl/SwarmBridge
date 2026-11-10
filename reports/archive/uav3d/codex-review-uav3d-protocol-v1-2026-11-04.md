@@ -1,6 +1,6 @@
 # Review độc lập protocol UAV3D v1 — 04/11/2026
 
-Đối tượng review: `reports/uav3d-protocol-v1-2026-11-04.md`, commit `5d0fb46d`. Chỉ đọc code và chạy phân tích CPU; không sửa protocol hay code của Claude, không chạy GPU. Có thể sửa code song song theo các điểm được thống nhất, nhưng **chưa khóa protocol và chưa chạy GPU** cho tới khi giải quyết các điểm chặn dưới đây và review diff.
+Đối tượng review: `reports/archive/uav3d/uav3d-protocol-v1-2026-11-04.md`, commit `5d0fb46d`. Chỉ đọc code và chạy phân tích CPU; không sửa protocol hay code của Claude, không chạy GPU. Có thể sửa code song song theo các điểm được thống nhất, nhưng **chưa khóa protocol và chưa chạy GPU** cho tới khi giải quyết các điểm chặn dưới đây và review diff.
 
 ## Kết luận
 

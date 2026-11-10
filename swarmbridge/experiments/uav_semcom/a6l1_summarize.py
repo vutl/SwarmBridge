@@ -1,4 +1,4 @@
-"""A6.0-L1 summary tables (markdown) from runs/uav_semcom/a6l1/ (reports/uav-semcom-a6-l1.md section 0.5).
+"""A6.0-L1 summary tables (markdown) from runs/uav_semcom/a6l1/ (reports/archive/uav-semcom-a/uav-semcom-a6-l1.md section 0.5).
 Run in the WSL env (policy-level AP50 needs the cached per-image matching of a6l1_ap).
 
   tune    tuned members under the task reward (train) vs the A5 PSNR-tuned ones

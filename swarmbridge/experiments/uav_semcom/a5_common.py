@@ -3,7 +3,7 @@
 Reference regime = the A4 configuration (K = 3 UAVs, M = 2 channels, 1 MHz, survey at 20 m/s, `predicted` mode info,
 w_T = 0.3, deadlines U(4, 12) s, Qmin U(22, 30) dB, urban air-to-ground channel, Shannon rate), now on the A5 image
 pools. Every other regime changes ONE group of parameters (one-dimensional sweeps, no Cartesian product), each with
-a physical reason (report reports/uav-semcom-a5.md section 3):
+a physical reason (report reports/archive/uav-semcom-a/uav-semcom-a5.md section 3):
   K2/K4/K5        : number of UAVs sharing M = 2 channels (contention; K2 = no contention)
   v10/v15         : survey speed (frame rate per UAV, 0.4 / 0.6 / 0.8 frames/s)
   env_*           : air-to-ground propagation environment, Al-Hourani et al. IEEE WCL 2014 (a, b, eta_LoS, eta_NLoS)

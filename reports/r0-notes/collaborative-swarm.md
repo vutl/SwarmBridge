@@ -5,7 +5,7 @@ Date 2026-11-10. Read-only extraction. UAV3D and Active Semantic Recovery (ASR) 
 Conventions:
 - Depth tags: F = full read, P = partial (method/experiments/dataset sections, located with grep on pdftotext output), A = abstract, landing page or snippet only.
 - "p.N" = PDF page number from the pdftotext form-feed count, not the printed page.
-- [audit] = taken from reports/novelty-audit-a5-l1-2026-11-10.md (sec. 2.2) and not re-read.
+- [audit] = taken from reports/archive/uav-semcom-a/novelty-audit-a5-l1-2026-11-10.md (sec. 2.2) and not re-read.
 - [web] = found by a web-research sub-agent (WebSearch/WebFetch). No web paper was read in full.
 - "not found" = grep/search found nothing. It does not mean the paper lacks it.
 

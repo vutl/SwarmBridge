@@ -1,4 +1,4 @@
-"""A5.5 (reports/uav-semcom-a5.5.md, section 0): self-calibrating heuristic + 3-level uncertainty.
+"""A5.5 (reports/archive/uav-semcom-a/uav-semcom-a5.5.md, section 0): self-calibrating heuristic + 3-level uncertainty.
 
   tune  --regimes R1,R2..    the SC family (a55_heur.family('sc'), 56 members) on the TRAIN pool, seeds 0..29 (as A5);
                              -> runs/uav_semcom/a55/tune/<regime>.json: rows, T:SC, and H* = the better of {A5 T:best,

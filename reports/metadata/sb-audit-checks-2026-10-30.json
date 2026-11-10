@@ -1,0 +1,98 @@
+{
+  "device": "cpu",
+  "trained_any_model": false,
+  "torch_version": "2.12.0+cu130",
+  "heteroscedastic_variance_gradient_into_shared_trunk_norm": 0.2267100214958191,
+  "faithful_shared_trunk_gradient_should_be_zero": true,
+  "deterministic_pinned_bridge_counterexample": {
+    "q": 1.0,
+    "t": 0.75,
+    "s": 0.5,
+    "required_forward_variance": 0.25,
+    "posterior_mean_update_variance": 0.08333333333333333,
+    "scope": "Turning off reverse-kernel noise does not preserve pinned marginals; this is not proof that every deterministic heuristic is useless."
+  },
+  "gaussian_conditional_sampling": [
+    {
+      "q": 1.0,
+      "nfe": 1,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.0,
+      "monte_carlo_mean": 0.0,
+      "monte_carlo_variance": 0.0
+    },
+    {
+      "q": 1.0,
+      "nfe": 4,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.21529856386999244,
+      "monte_carlo_mean": -0.005192040931433439,
+      "monte_carlo_variance": 0.21389293670654297
+    },
+    {
+      "q": 1.0,
+      "nfe": 16,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.36895198299615856,
+      "monte_carlo_mean": -0.004333300981670618,
+      "monte_carlo_variance": 0.37028828263282776
+    },
+    {
+      "q": 1.0,
+      "nfe": 64,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.4486701751523634,
+      "monte_carlo_mean": 0.0007442844798788428,
+      "monte_carlo_variance": 0.4451805055141449
+    },
+    {
+      "q": 1.0,
+      "nfe": 256,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.48205511534122786,
+      "monte_carlo_mean": 0.0053993402980268,
+      "monte_carlo_variance": 0.4845585525035858
+    },
+    {
+      "q": 10.0,
+      "nfe": 1,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.0,
+      "monte_carlo_mean": 0.0,
+      "monte_carlo_variance": 0.0
+    },
+    {
+      "q": 10.0,
+      "nfe": 4,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.06098669017009957,
+      "monte_carlo_mean": -0.0030918586999177933,
+      "monte_carlo_variance": 0.06075344979763031
+    },
+    {
+      "q": 10.0,
+      "nfe": 16,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.18841354633529614,
+      "monte_carlo_mean": -0.004292621277272701,
+      "monte_carlo_variance": 0.18936468660831451
+    },
+    {
+      "q": 10.0,
+      "nfe": 64,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.3271147767655388,
+      "monte_carlo_mean": 0.002885722555220127,
+      "monte_carlo_variance": 0.32881230115890503
+    },
+    {
+      "q": 10.0,
+      "nfe": 256,
+      "target_posterior_variance": 0.5,
+      "exact_implemented_sampler_variance": 0.4206856296646845,
+      "monte_carlo_mean": 0.00408461969345808,
+      "monte_carlo_variance": 0.4252614974975586
+    }
+  ],
+  "scope": "Exact toy estimator and scalar moments only; these diagnostics do not establish Town3 performance or that learned uncertainty is calibrated."
+}

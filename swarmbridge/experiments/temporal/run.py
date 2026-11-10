@@ -1,4 +1,4 @@
-"""Realistic temporal baseline (step 1 of reports/sb-huong-moi-2026-11-02.md).
+"""Realistic temporal baseline (step 1 of reports/archive/sb-town3/sb-huong-moi-2026-11-02.md).
 
 python -m swarmbridge.experiments.temporal.run --seeds 0          # train + rollout eval
 python -m swarmbridge.experiments.temporal.run --eval-only --seeds 0

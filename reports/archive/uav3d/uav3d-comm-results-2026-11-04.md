@@ -1,6 +1,6 @@
 # UAV3D: gửi box hay gửi feature? Kết quả chạy thật (2026-11-04)
 
-Code: `swarmbridge/experiments/uav3d_comm/`. Kết quả: `runs/uav3d_comm/`. Plan: `reports/uav3d-run-plan-2026-11-04.md`.
+Code: `swarmbridge/experiments/uav3d_comm/`. Kết quả: `runs/uav3d_comm/`. Plan: `reports/archive/uav3d/uav3d-run-plan-2026-11-04.md`.
 Môi trường: WSL `~/envs/uav3d` (py3.8, torch 1.10.1+cu113, mmcv-full 1.4.0, op BEVFusion build bằng nvcc 11.3 + gcc 9;
 cần hạ sysroot conda về 2.17 và xóa cờ execstack của libtorch trên Ubuntu 26.04).
 
@@ -31,7 +31,7 @@ cần hạ sysroot conda về 2.17 và xóa cờ execstack của libtorch trên 
    - Hệ quả: tracker đang lấy dt từ timestamp (2.7 s). Hiện chưa sao vì detector cho vận tốc gần 0, nhưng protocol mới phải dùng dt = 0.2 s.
      Report vẫn ghi độ trễ theo frame; 1 frame = 0.2 s mô phỏng.
    - Kèm theo phát hiện của Codex: ở đầu scene, độ trễ thực tế ngắn hơn nhãn (warm-start). Với delay 2 frame thì 6/60 frame trễ ít hơn 2.
-3b. **Từ audit của Codex** (`reports/codex-uav3d-independent-audit-2026-11-04.md`): mAP 0.693 là của BEV FP16, chưa đi qua lượng tử q8.
+3b. **Từ audit của Codex** (`reports/archive/uav3d/codex-uav3d-independent-audit-2026-11-04.md`): mAP 0.693 là của BEV FP16, chưa đi qua lượng tử q8.
     Box chưa được lượng tử thật theo 85 bit. Poture lấy box helper ở cap 83, còn late fusion lấy ở cap 500.
     Phép warp chỉ tịnh tiến, chưa xoay. Tất cả đã được ghi nhận; phải sửa trước thí nghiệm mới.
 4. **"2600 lần ít bit hơn" không phải phép so codec công bằng.** Feature được tính là dense 8 bit, chưa nén thật

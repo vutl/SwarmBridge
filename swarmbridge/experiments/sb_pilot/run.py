@@ -11,7 +11,7 @@ Every model below uses this sampler, so old-sampler checkpoints are reference on
 Factors (one at a time against the matched mapping):
   input:    x  = x_t only;  c = [x_t, z_received, r]  (mapping gets [z_rx, z_rx, r])
   endpoint: p10 / p50 = fraction of bridge examples drawn exactly at t=1
-Pre-registered gate (from reports/sb-training-root-audit-2026-10-31.md): an SB variant passes if
+Pre-registered gate (from reports/archive/sb-town3/sb-training-root-audit-2026-10-31.md): an SB variant passes if
   mIoU_SB - mIoU_map >= -0.005 at BOTH 15% and 30% sent, and
   mean vehicle IoU at 70/100% is not below the matched mapping by more than 0.005.
 """

@@ -8,9 +8,9 @@ Tôi cần điều chỉnh cả lời khuyên trước của mình. “SB cho be
 
 **Phạm vi đọc và truy nguồn**
 
-Thư viện lúc bắt đầu có 67 PDF, 1.420 trang: 62 paper và 5 bản đề xuất/Deep Research do AI tổng hợp. Đã tạo cache toàn văn có số trang; rà phạm vi của toàn bộ, đọc lại các phần phương pháp/kết quả then chốt, đối chiếu với năm file reports người dùng nêu và lịch sử Claude mới gửi. Mức đọc từng tài liệu được ghi trong [bản đồ bằng chứng](literature-evidence-map-2026-10-30.md). Không tuyên bố đã kiểm chứng mọi chứng minh hoặc tái lập mọi benchmark.
+Thư viện lúc bắt đầu có 67 PDF, 1.420 trang: 62 paper và 5 bản đề xuất/Deep Research do AI tổng hợp. Đã tạo cache toàn văn có số trang; rà phạm vi của toàn bộ, đọc lại các phần phương pháp/kết quả then chốt, đối chiếu với năm file reports người dùng nêu và lịch sử Claude mới gửi. Mức đọc từng tài liệu được ghi trong [bản đồ bằng chứng](../tai-lieu/literature-evidence-map-2026-10-30.md). Không tuyên bố đã kiểm chứng mọi chứng minh hoặc tái lập mọi benchmark.
 
-Đã lần theo các nguồn trong Deep Research, đọc thêm các nhánh gần proposal và tìm nền tảng conditional inference còn thiếu. Tám paper bổ sung đã lưu vào pdf/; danh mục và checksum ở [manifest bổ sung](bo-sung-nguon-nghien-cuu-2026-10-30.json). Không dùng các bản tổng hợp AI như nguồn primary để khẳng định novelty.
+Đã lần theo các nguồn trong Deep Research, đọc thêm các nhánh gần proposal và tìm nền tảng conditional inference còn thiếu. Tám paper bổ sung đã lưu vào pdf/; danh mục và checksum ở [manifest bổ sung](../../metadata/bo-sung-nguon-nghien-cuu-2026-10-30.json). Không dùng các bản tổng hợp AI như nguồn primary để khẳng định novelty.
 
 **Điều dữ liệu hiện tại cho phép kết luận**
 
@@ -43,7 +43,7 @@ Mặt khác, một mapping đủ mạnh từ toàn bộ lịch sử sang action-
 
 | Nhóm nguồn | Điều ảnh hưởng trực tiếp tới quyết định của ta |
 |---|---|
-| [CodeFilling](../pdf/Communication-Efficient%20Collaborative%20Perception%20via%20Information%20Filling%20with%20Codebook.pdf), [CoSDH](https://arxiv.org/html/2503.03430) | Receiver demand, sender supply và tránh redundancy đã có. Bộ chọn phải vượt các cơ chế này nếu claim cooperative perception. |
+| [CodeFilling](../../../pdf/Communication-Efficient%20Collaborative%20Perception%20via%20Information%20Filling%20with%20Codebook.pdf), [CoSDH](https://arxiv.org/html/2503.03430) | Receiver demand, sender supply và tránh redundancy đã có. Bộ chọn phải vượt các cơ chế này nếu claim cooperative perception. |
 | [CoGMP](https://openaccess.thecvf.com/content/CVPR2025/papers/Fu_Generative_Map_Priors_for_Collaborative_BEV_Semantic_Segmentation_CVPR_2025_paper.pdf), [GenComm](https://arxiv.org/html/2510.19618), [DiffCP](https://arxiv.org/html/2409.19592), [LR-V2X](https://arxiv.org/html/2610.11264) | Generative fusion, heterogeneous translation và packet-loss recovery đều có prior art gần. Thay tên sampler chưa đủ. |
 | [SComCP](https://arxiv.org/html/2507.00895), [CoDS](https://arxiv.org/html/2512.22513), [Generative Feature Imputing](https://arxiv.org/html/2508.17957) | Channel uses, quantization/coding, packetization và reliability đã là phần của hệ thống. Không dùng “8 bit/value” để suy kết quả digital deployment. |
 | [GOSC](https://arxiv.org/html/2609.39477) | Đã có vòng kín chọn nội dung/thời điểm/độ bảo vệ dựa trên value và common knowledge. “Nối loop” không còn đủ đặc thù. |
@@ -94,7 +94,7 @@ Plugin sampler hiện tại giữ term đầu, thay X0 bằng mean và bỏ term
 | q=1 | 16 | 0,3690 | 0,5000 |
 | q=10 | 4 | 0,0610 | 0,5000 |
 
-Kết quả mới khớp thí nghiệm audit trước. Mã [analyze_sb_decision_mechanism.py](../scripts/analyze_sb_decision_mechanism.py), số liệu [sb-decision-mechanism-2026-10-30.json](sb-decision-mechanism-2026-10-30.json).
+Kết quả mới khớp thí nghiệm audit trước. Mã [analyze_sb_decision_mechanism.py](../../../scripts/analyze_sb_decision_mechanism.py), số liệu [sb-decision-mechanism-2026-10-30.json](../../metadata/sb-decision-mechanism-2026-10-30.json).
 
 Covariance bổ sung là giải pháp đúng cho toy Gaussian đã biết likelihood/posterior. Với posterior nhiều mode, matching mean/covariance vẫn chưa tái tạo đúng mixture. Không lấy bảng này làm bản vá sampler BEV tổng quát. Cũng không dùng nó giải thích vì sao SB một bước thua mapping về mIoU.
 

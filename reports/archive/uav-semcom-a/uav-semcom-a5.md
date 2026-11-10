@@ -1,6 +1,6 @@
 # SwarmBridge hướng A — A5: mở rộng dữ liệu, task fidelity, khảo sát chế độ vận hành, RL có mục tiêu
 
-Bắt đầu 2026-11-07, tiếp nối A4 (commit `0e77387a`, báo cáo `reports/uav-semcom-a.md` mục 8).
+Bắt đầu 2026-11-07, tiếp nối A4 (commit `0e77387a`, báo cáo `reports/archive/uav-semcom-a/uav-semcom-a.md` mục 8).
 
 **Câu hỏi chính của A5:** trong điều kiện nào RL thực sự mang lại lợi ích so với heuristic thích nghi mạnh nhất (reuse+budget, rút ra từ A4), và khi nào heuristic đã đủ tốt?
 

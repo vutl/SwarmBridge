@@ -1,4 +1,4 @@
-"""A6.0-L1 (reports/uav-semcom-a6-l1.md section 0): tune heuristics and evaluate policies under the TASK reward.
+"""A6.0-L1 (reports/archive/uav-semcom-a/uav-semcom-a6-l1.md section 0): tune heuristics and evaluate policies under the TASK reward.
 
   tune --regimes ..   every A5 family (base, budget, reuse) + the task-valued family a55_heur.family('tv'), train pool,
                       seeds 0..29, task reward -> runs/uav_semcom/a6l1/tune/<regime>.json (rows; tuned member per

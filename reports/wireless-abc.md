@@ -1,6 +1,6 @@
 # Wireless A/B/C pilot — tài liệu tổng hợp
 
-Plan gốc: plan pilot của Codex (05/11), dựa trên `reports/ke-hoach-proposal-abc-2026-11-04.md`. Phạm vi: feasibility/dev,
+Plan gốc: plan pilot của Codex (05/11), dựa trên `reports/archive/huang-abc/ke-hoach-proposal-abc-2026-11-04.md`. Phạm vi: feasibility/dev,
 tối đa 10 GB dữ liệu mới, 8 giờ GPU, một job GPU tại một thời điểm (khóa chung Windows–WSL).
 
 **ĐÍNH CHÍNH (05/11 trưa, sau audit của Codex và ChatGPT):** vòng đêm có lỗi implementation và kết luận diễn đạt quá rộng.

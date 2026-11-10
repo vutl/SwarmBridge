@@ -5,8 +5,8 @@ Các thay đổi so với v1 ghi ở mục 10; các mục 3 và 9 đã sửa the
 Mọi thay đổi sau khi đã xem kết quả test phải ghi thành protocol v2, không sửa đè.
 
 Nguồn các yêu cầu:
-- Đính chính trong `uav3d-comm-results-2026-11-04.md`;
-- `codex-uav3d-independent-audit-2026-11-04.md`;
+- Đính chính trong `archive/uav3d/uav3d-comm-results-2026-11-04.md`;
+- `archive/uav3d/codex-uav3d-independent-audit-2026-11-04.md`;
 - góp ý của ChatGPT ngày 04/11.
 
 ## 1. Dữ liệu

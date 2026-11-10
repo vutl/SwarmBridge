@@ -1,0 +1,19 @@
+{
+ "date": "2026-11-10",
+ "note": "superseded reports moved to reports/archive/<topic>/",
+ "moves": {
+  "reports/uav-semcom-a.md": "reports/archive/uav-semcom-a/uav-semcom-a.md",
+  "reports/uav-semcom-a5.md": "reports/archive/uav-semcom-a/uav-semcom-a5.md",
+  "reports/uav-semcom-a5.5.md": "reports/archive/uav-semcom-a/uav-semcom-a5.5.md",
+  "reports/uav-semcom-a6-l1.md": "reports/archive/uav-semcom-a/uav-semcom-a6-l1.md",
+  "reports/uav-semcom-a6-l1-audit.md": "reports/archive/uav-semcom-a/uav-semcom-a6-l1-audit.md",
+  "reports/novelty-audit-a5-l1-2026-11-10.md": "reports/archive/uav-semcom-a/novelty-audit-a5-l1-2026-11-10.md",
+  "reports/huang-step0.md": "reports/archive/huang-abc/huang-step0.md",
+  "reports/ke-hoach-proposal-abc-2026-11-04.md": "reports/archive/huang-abc/ke-hoach-proposal-abc-2026-11-04.md",
+  "reports/uav3d-ket-qua-va-kiem-toan.md": "reports/archive/uav3d/uav3d-ket-qua-va-kiem-toan.md",
+  "reports/uav3d-proto-v1.1-budget-queue-2026-11-04.md": "reports/archive/uav3d/uav3d-proto-v1.1-budget-queue-2026-11-04.md",
+  "reports/uav3d-protocol-v1-2026-11-04.md": "reports/archive/uav3d/uav3d-protocol-v1-2026-11-04.md",
+  "reports/sb-va-town3.md": "reports/archive/sb-town3/sb-va-town3.md",
+  "reports/tai-lieu-va-ma-nguon.md": "reports/archive/tai-lieu/tai-lieu-va-ma-nguon.md"
+ }
+}

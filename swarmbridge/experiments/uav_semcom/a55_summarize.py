@@ -1,5 +1,5 @@
 """A5.5 summary tables (markdown) from runs/uav_semcom/a55/, following the pre-registered rules of
-reports/uav-semcom-a5.5.md section 0:
+reports/archive/uav-semcom-a/uav-semcom-a5.5.md section 0:
   * 0.3 confirmatory deltas (env seeds 8000..8099): PPO mode-only - H*, PPO joint - H*, PPO joint K5 5M - H*,
     T:SC - A5 T:best; test and test-dev, regimes ref / K5 / phy_mcs_blind;
   * 0.4 three uncertainty levels: (1) paired t over env seeds of the 3-model mean; (2) video cluster bootstrap with

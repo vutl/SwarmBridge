@@ -1,5 +1,5 @@
 #!/bin/bash
-# A5.5 CPU queue (reports/uav-semcom-a5.5.md section 0). Resumable: each output is skipped if present.
+# A5.5 CPU queue (reports/archive/uav-semcom-a/uav-semcom-a5.5.md section 0). Resumable: each output is skipped if present.
 #   1. tests; 2. tune the self-calibrating family (train, 21 regimes); 3. CONFIRMATORY evaluation, fresh env seeds
 #   8000..8099: heuristics (21 regimes, test pool; 3 regimes, test-dev), A5 PPO checkpoints (3 regimes, both pools);
 #   4. EXPLORATORY: new heuristics on the A5 test seeds 7000..7099 (comparable with the A5 tables);

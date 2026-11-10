@@ -1,4 +1,4 @@
-"""Summary tables (markdown) of the A6.0-L1 method audit (reports/uav-semcom-a6-l1-audit.md section 0), from
+"""Summary tables (markdown) of the A6.0-L1 method audit (reports/archive/uav-semcom-a/uav-semcom-a6-l1-audit.md section 0), from
 runs/uav_semcom/a6l1/audit/. Run in the WSL env (policy-level AP50 uses the cached matching of a6l1_ap).
 Sections: cross (0.2), qmin (0.3 a), val (0.3 b / 0.4), final (0.4). Usage: python a6l1_audit_summarize.py [sections]
 """

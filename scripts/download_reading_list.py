@@ -15,7 +15,7 @@ from pypdf import PdfReader
 ROOT = Path(__file__).resolve().parent.parent
 PDF = ROOT / "pdf"
 REPOS = PDF / "GithubModels"
-OUT = ROOT / "reports" / "danh-sach-tai-lieu-2026-10-30.json"
+OUT = ROOT / "reports" / "metadata" / "danh-sach-tai-lieu-2026-10-30.json"
 A = "https://arxiv.org/pdf/"
 papers = [
  ("01", "Wireless Communications with Unmanned Aerial Vehicles Opportunities and Challenges", [A+"1602.03602"]),
@@ -148,7 +148,7 @@ def get_repo(item):
 def main():
     PDF.mkdir(exist_ok=True)
     REPOS.mkdir(exist_ok=True)
-    OUT.parent.mkdir(exist_ok=True)
+    OUT.parent.mkdir(parents=True, exist_ok=True)
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
         paper_results = list(pool.map(get_paper, papers))
         repo_results = list(pool.map(get_repo, repos))

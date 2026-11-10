@@ -1,5 +1,5 @@
 """A5.5 / A6.0-L1 heuristics: the A5 budget / paced-backlog / reuse heuristics (mode_heur.py, policies.py) rebuilt
-with two switches (pre-registered in reports/uav-semcom-a5.5.md 0.1 and reports/uav-semcom-a6-l1.md 0.3):
+with two switches (pre-registered in reports/archive/uav-semcom-a/uav-semcom-a5.5.md 0.1 and reports/archive/uav-semcom-a/uav-semcom-a6-l1.md 0.3):
 
   cal   ONLINE SELF-CALIBRATION of the three model quantities the A5 heuristics take from the model, from what the
         team has observed so far (strictly past data):

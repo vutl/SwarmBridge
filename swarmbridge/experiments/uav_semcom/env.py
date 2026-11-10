@@ -1,7 +1,7 @@
 """A2 v2: multi-UAV image delivery environment (UAV camera -> UAV encoder -> air-to-ground link -> ground BS).
 
 The system model and MDP (state, observation, action, transition order, reward, constraints, parameter sources) are
-written out in reports/uav-semcom-a.md section 4, with pointers back to the functions here.
+written out in reports/archive/uav-semcom-a/uav-semcom-a.md section 4, with pointers back to the functions here.
 
 v2.1 changes vs v2 (v2 = commit d812c7e7, frozen copy in legacy_env_v2.py):
   * interference is time-resolved inside the slot: transmission is simulated event by event (an image finishes, an

@@ -98,7 +98,7 @@ def diagnose():
 
 if __name__ == "__main__":
     result = diagnose()
-    output = Path("reports/sb-audit-checks-2026-10-30.json")
-    output.parent.mkdir(exist_ok=True)
+    output = Path("reports/metadata/sb-audit-checks-2026-10-30.json")
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print(json.dumps(result, indent=2))

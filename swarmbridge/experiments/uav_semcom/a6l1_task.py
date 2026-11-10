@@ -1,4 +1,4 @@
-"""A6.0-L1 task reward (pre-registered: reports/uav-semcom-a6-l1.md section 0).
+"""A6.0-L1 task reward (pre-registered: reports/archive/uav-semcom-a/uav-semcom-a6-l1.md section 0).
 
 Task value of frame i sent in mode m (measured, a5_fidelity.py over every (image, mode) pair, run_a6l1_gpu.sh):
     v_i(m) = (TP_i(m) - BETA * FP_i(m)) / Vbar,   BETA = 0.5,  conf >= 0.25, IoU >= 0.5, class-aware,

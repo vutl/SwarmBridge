@@ -1,6 +1,6 @@
 # SwarmBridge hướng A — A5.5: kiểm toán độ bền của kết luận A5
 
-Bắt đầu 2026-11-09 tối, sau A5 (báo cáo `reports/uav-semcom-a5.md`, commit `399d36b5`). A5 không bị sửa: mọi kết quả A5.5 nằm ở `runs/uav_semcom/a55/`.
+Bắt đầu 2026-11-09 tối, sau A5 (báo cáo `reports/archive/uav-semcom-a/uav-semcom-a5.md`, commit `399d36b5`). A5 không bị sửa: mọi kết quả A5.5 nằm ở `runs/uav_semcom/a55/`.
 
 **Câu hỏi:** ưu thế của PPO trong A5 (đặc biệt +12,3 ở K5 trên test-dev) có còn không khi:
 1. đối thủ là một heuristic **tự hiệu chỉnh trực tuyến**;

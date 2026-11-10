@@ -1,0 +1,424 @@
+{
+  "papers": [
+    {
+      "id": "01",
+      "title": "Wireless Communications with Unmanned Aerial Vehicles Opportunities and Challenges",
+      "urls": [
+        "https://arxiv.org/pdf/1602.03602"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Wireless Communications with Unmanned Aerial Vehicles Opportunities and Challenges.pdf",
+      "source": "https://arxiv.org/pdf/1602.03602",
+      "pages": 15,
+      "sha256": "113f235edc9d48638d3bda9cca3401c3e84262c56a95582f875b8e21d8a55729"
+    },
+    {
+      "id": "02",
+      "title": "Accessing From the Sky A Tutorial on UAV Communications for 5G and Beyond",
+      "urls": [
+        "https://arxiv.org/pdf/1903.05289"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Accessing From the Sky A Tutorial on UAV Communications for 5G and Beyond.pdf",
+      "source": "https://arxiv.org/pdf/1903.05289",
+      "pages": 46,
+      "sha256": "c8e4ce166f711f68a4d50f8a7a80f51781fdebe598b7732e95629d834b8c3514"
+    },
+    {
+      "id": "03",
+      "title": "Deep Joint Source-Channel Coding for Wireless Image Transmission",
+      "urls": [
+        "https://arxiv.org/pdf/1809.01733"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Deep Joint Source-Channel Coding for Wireless Image Transmission.pdf",
+      "source": "https://arxiv.org/pdf/1809.01733",
+      "pages": 13,
+      "sha256": "ed0494782f43d27c777337091acdd7f14d43a719fa9534de94130152d55ce84a"
+    },
+    {
+      "id": "04",
+      "title": "Deep Learning Enabled Semantic Communication Systems",
+      "urls": [
+        "https://arxiv.org/pdf/2006.10685"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Deep Learning Enabled Semantic Communication Systems.pdf",
+      "source": "https://arxiv.org/pdf/2006.10685",
+      "pages": 13,
+      "sha256": "55e9532aa8d375164ae6bed6a688a30695b5e9ff5a46de768eaadf9cc69303d6"
+    },
+    {
+      "id": "05",
+      "title": "Semantic Communications in Networked Systems A Data Significance Perspective",
+      "urls": [
+        "https://arxiv.org/pdf/2103.05391"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Semantic Communications in Networked Systems A Data Significance Perspective.pdf",
+      "source": "https://arxiv.org/pdf/2103.05391",
+      "pages": 10,
+      "sha256": "524cb3769969899add9be3012905c122abbecb08001985a7c7fa71ce8c1a97e3"
+    },
+    {
+      "id": "06",
+      "title": "The Age of Incorrect Information An Enabler of Semantics-Empowered Communication",
+      "urls": [
+        "https://arxiv.org/pdf/2012.13214"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\The Age of Incorrect Information An Enabler of Semantics-Empowered Communication.pdf",
+      "source": "https://arxiv.org/pdf/2012.13214",
+      "pages": 18,
+      "sha256": "aae20ff08fe853b27a05ac922756043376ddaf55b1fb7397aeccf0d7d254fc42"
+    },
+    {
+      "id": "07",
+      "title": "Cooperative Internet of UAVs Distributed Trajectory Design by Multi-Agent Deep Reinforcement Learning",
+      "urls": [
+        "https://arxiv.org/pdf/2007.14297"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Cooperative Internet of UAVs Distributed Trajectory Design by Multi-Agent Deep Reinforcement Learning.pdf",
+      "source": "https://arxiv.org/pdf/2007.14297",
+      "pages": 33,
+      "sha256": "7b01021499a19f2dbb789f90f408e18307a5b11f5d62ea0068e17d6db923639b"
+    },
+    {
+      "id": "08",
+      "title": "Multi-Agent Deep Reinforcement Learning Based Trajectory Planning for Multi-UAV Assisted Mobile Edge Computing",
+      "urls": [
+        "https://arxiv.org/pdf/2009.11277"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Multi-Agent Deep Reinforcement Learning Based Trajectory Planning for Multi-UAV Assisted Mobile Edge Computing.pdf",
+      "source": "https://arxiv.org/pdf/2009.11277",
+      "pages": 11,
+      "sha256": "77f690f1b07fe59b50c8b4e2a29ca782ec60d6b49c6b847e7597992be2a3f7f2"
+    },
+    {
+      "id": "09",
+      "title": "Multi-Agent Reinforcement Learning Based Resource Allocation for UAV Networks",
+      "urls": [
+        "https://arxiv.org/pdf/1810.10408"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Multi-Agent Reinforcement Learning Based Resource Allocation for UAV Networks.pdf",
+      "source": "https://arxiv.org/pdf/1810.10408",
+      "pages": 30,
+      "sha256": "dcaf994e00695bb4e1a30889c931e95fcd91a2c55a33524fc0436489a8d7108b"
+    },
+    {
+      "id": "10",
+      "title": "NOMA in UAV-aided Cellular Offloading A Machine Learning Approach",
+      "urls": [
+        "https://arxiv.org/pdf/2011.14776"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\NOMA in UAV-aided Cellular Offloading A Machine Learning Approach.pdf",
+      "source": "https://arxiv.org/pdf/2011.14776",
+      "pages": 7,
+      "sha256": "e7e152dc0036fa830016f8623076727b89a705d04163698d428ed64e588b295d"
+    },
+    {
+      "id": "11",
+      "title": "Performance Optimization for Semantic Communications An Attention-Based Reinforcement Learning Approach",
+      "urls": [
+        "https://arxiv.org/pdf/2208.08239",
+        "https://oar.princeton.edu/bitstream/88435/pr1mk65820/1/2208.08239.pdf"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Performance Optimization for Semantic Communications An Attention-Based Reinforcement Learning Approach.pdf",
+      "source": "https://arxiv.org/pdf/2208.08239",
+      "pages": 15,
+      "sha256": "01d72c8b7a9dd3481884f55c1f0134a91b9564ddf7bae80a2691fcf130411073"
+    },
+    {
+      "id": "12",
+      "title": "UAV-assisted Semantic Communication with Hybrid Action Reinforcement Learning",
+      "urls": [
+        "https://arxiv.org/pdf/2309.16713"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\UAV-assisted Semantic Communication with Hybrid Action Reinforcement Learning.pdf",
+      "source": "https://arxiv.org/pdf/2309.16713",
+      "pages": 6,
+      "sha256": "fdb2dde555753429137fe09e408803e89b4874d3e222a9ebcc2b7c28d9a3e103"
+    },
+    {
+      "id": "13",
+      "title": "Joint Optimization Trajectory and Resource Allocation for UAV-Assisted Semantic Communications",
+      "urls": [
+        "https://www.sciencedirect.com/science/article/pii/S1874490724002738/pdfft?isDTMRedir=true&download=true"
+      ],
+      "status": "failed",
+      "errors": [
+        "https://www.sciencedirect.com/science/article/pii/S1874490724002738/pdfft?isDTMRedir=true&download=true: HTTPError: HTTP Error 403: Forbidden"
+      ]
+    },
+    {
+      "id": "14",
+      "title": "Resource Allocation for Multi-Modal Semantic Communication in UAV Collaborative Networks",
+      "urls": [
+        "https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=10930657"
+      ],
+      "status": "provided locally",
+      "previous_download_errors": [
+        "https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=10930657: HTTPError: HTTP Error 502: Bad Gateway"
+      ],
+      "file": "pdf\\Resource Allocation for Multi-Modal Semantic Communication in UAV Collaborative Networks.pdf",
+      "pages": 18,
+      "sha256": "3426aa479affd8e9835bb6f10e9cd67c46e616605635b5f04089608eb3078938",
+      "source": "Local PDF supplied after the initial download attempt"
+    },
+    {
+      "id": "15",
+      "title": "Resource Allocation for UAV-Assisted Anti-Jamming Semantic D2D Networks A Graph Reinforcement Learning Approach",
+      "urls": [
+        "https://www.sciencedirect.com/science/article/pii/S138912862500430X/pdfft?isDTMRedir=true&download=true"
+      ],
+      "status": "failed",
+      "errors": [
+        "https://www.sciencedirect.com/science/article/pii/S138912862500430X/pdfft?isDTMRedir=true&download=true: HTTPError: HTTP Error 403: Forbidden"
+      ]
+    },
+    {
+      "id": "16",
+      "title": "Decision Transformer Reinforcement Learning via Sequence Modeling",
+      "urls": [
+        "https://arxiv.org/pdf/2106.01345"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Decision Transformer Reinforcement Learning via Sequence Modeling.pdf",
+      "source": "https://arxiv.org/pdf/2106.01345",
+      "pages": 21,
+      "sha256": "6ff675a7b8286ca7bf8e01e4b90a41bf5c90f4c3c007e17fdb4d24e26fd05e28"
+    },
+    {
+      "id": "17",
+      "title": "Conservative Q-Learning for Offline Reinforcement Learning",
+      "urls": [
+        "https://arxiv.org/pdf/2006.04779"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Conservative Q-Learning for Offline Reinforcement Learning.pdf",
+      "source": "https://arxiv.org/pdf/2006.04779",
+      "pages": 31,
+      "sha256": "2bae51a0b45635ab714df39446cd656a9f4f1c503f512d6d0ce1eec3198d1716"
+    },
+    {
+      "id": "18",
+      "title": "Decision Transformers for Wireless Communications A New Paradigm of Resource Management",
+      "urls": [
+        "https://arxiv.org/pdf/2404.05199"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Decision Transformers for Wireless Communications A New Paradigm of Resource Management.pdf",
+      "source": "https://arxiv.org/pdf/2404.05199",
+      "pages": 7,
+      "sha256": "e96ded69f193d954f3a2a4d81cf11e40740a408f6592d1451fbf99c178c0df57"
+    },
+    {
+      "id": "19",
+      "title": "Decision Transformer-Based Drone Trajectory Planning with Dynamic Safety Efficiency Trade-Offs",
+      "urls": [
+        "https://arxiv.org/pdf/2507.21506"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Decision Transformer-Based Drone Trajectory Planning with Dynamic Safety Efficiency Trade-Offs.pdf",
+      "source": "https://arxiv.org/pdf/2507.21506",
+      "pages": 8,
+      "sha256": "b3c7da13705d0f76d8de4041d9c7bdb0e2974488a8f114f9a52157452256bd11"
+    },
+    {
+      "id": "20",
+      "title": "Constrained Decision Transformer for Offline Safe Reinforcement Learning",
+      "urls": [
+        "https://proceedings.mlr.press/v202/liu23m/liu23m.pdf"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Constrained Decision Transformer for Offline Safe Reinforcement Learning.pdf",
+      "source": "https://proceedings.mlr.press/v202/liu23m/liu23m.pdf",
+      "pages": 20,
+      "sha256": "b2a7956ee3fa404ea2d26268d5ea8aaddf08a0e1ecccd45ebf9c19ebde800e6d"
+    },
+    {
+      "id": "21",
+      "title": "When Should We Prefer Decision Transformers for Offline Reinforcement Learning",
+      "urls": [
+        "https://openreview.net/pdf?id=vpV7fOFQy4",
+        "https://arxiv.org/pdf/2305.14550"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\When Should We Prefer Decision Transformers for Offline Reinforcement Learning.pdf",
+      "source": "https://arxiv.org/pdf/2305.14550",
+      "pages": 40,
+      "sha256": "5454a76b9e384312a431e01e159f0e1c33fdb464bd3d0ec7f11c0abc6b022836"
+    },
+    {
+      "id": "22",
+      "title": "Adaptive Task-Oriented Semantic Communication for UAVs With Joint Trajectory and Resource Optimization",
+      "urls": [
+        "https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=11664598"
+      ],
+      "status": "provided locally",
+      "previous_download_errors": [
+        "https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=11664598: HTTPError: HTTP Error 502: Bad Gateway"
+      ],
+      "file": "pdf\\Adaptive Task-Oriented Semantic Communication for UAVs With Joint Trajectory and Resource Optimization.pdf",
+      "pages": 21,
+      "sha256": "a88bd8975abf833afb4b010e5e3a032faa09c9c152ea9539ab53c213b96598e0",
+      "source": "Local PDF supplied after the initial download attempt"
+    },
+    {
+      "id": "23",
+      "title": "Predictive and Adaptive Semantic Communication for QoE Optimization in Multi-UAV Networks",
+      "urls": [
+        "https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=11615274"
+      ],
+      "status": "provided locally",
+      "previous_download_errors": [
+        "https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=11615274: HTTPError: HTTP Error 502: Bad Gateway"
+      ],
+      "file": "pdf\\Predictive and Adaptive Semantic Communication for QoE Optimization in Multi-UAV Networks.pdf",
+      "pages": 5,
+      "sha256": "e0c9d820446c085ae1451ca457840cd3a6dc4194ae2a1ec8dae76be5c2c17d9e",
+      "source": "Local PDF supplied after the initial download attempt"
+    },
+    {
+      "id": "24",
+      "title": "Adaptive Cross-Modal UAV Semantic Communications via Hierarchical DRL",
+      "urls": [
+        "https://link.springer.com/content/pdf/10.1186/s13638-026-02664-z_reference.pdf"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Adaptive Cross-Modal UAV Semantic Communications via Hierarchical DRL.pdf",
+      "source": "https://link.springer.com/content/pdf/10.1186/s13638-026-02664-z_reference.pdf?error=cookies_not_supported&code=17e65700-a7bf-4f31-8551-de80212899d0",
+      "pages": 39,
+      "sha256": "8f842306d304c07c0929b912e85d94a0c5498247b5aab477319cd42d25ede28d"
+    },
+    {
+      "id": "25",
+      "title": "Deep Graph Reinforcement Learning for UAV-Enabled Multi-User Secure Communications",
+      "urls": [
+        "https://arxiv.org/pdf/2504.01446"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Deep Graph Reinforcement Learning for UAV-Enabled Multi-User Secure Communications.pdf",
+      "source": "https://arxiv.org/pdf/2504.01446",
+      "pages": 13,
+      "sha256": "d8ec5936ea121a1c1eef7e6db9da491df2bbd43e62f5470d42b67cc9e01d0215"
+    },
+    {
+      "id": "26",
+      "title": "Collaborative Computation and Migration in Multi-UAV Networks with Semantic Communication",
+      "urls": [
+        "https://arxiv.org/pdf/2609.14476"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Collaborative Computation and Migration in Multi-UAV Networks with Semantic Communication.pdf",
+      "source": "https://arxiv.org/pdf/2609.14476",
+      "pages": 14,
+      "sha256": "dd2037b3e0e3e8ad9c84e1c7b6cf2a934b705801dd69192a538460d74317617f"
+    },
+    {
+      "id": "R5",
+      "title": "Reinforcement Learning-powered Semantic Communication via Semantic Similarity",
+      "urls": [
+        "https://arxiv.org/pdf/2108.12121"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Reinforcement Learning-powered Semantic Communication via Semantic Similarity.pdf",
+      "source": "https://arxiv.org/pdf/2108.12121",
+      "pages": 17,
+      "sha256": "227a801fc9f4333c21eafd213672297e5a24a60814073280933d5507ef82eca2"
+    },
+    {
+      "id": "R6",
+      "title": "UavNetSim-v1 A Python-based Simulation Platform for UAV Communication Networks",
+      "urls": [
+        "https://arxiv.org/pdf/2507.09852"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\UavNetSim-v1 A Python-based Simulation Platform for UAV Communication Networks.pdf",
+      "source": "https://arxiv.org/pdf/2507.09852",
+      "pages": 6,
+      "sha256": "9e7a32abcc788c45159323ffd9ba256029da2d26a682b4166bf7ac2b5995cd69"
+    },
+    {
+      "id": "R3",
+      "title": "Computation Offloading Optimization for UAV-assisted Mobile Edge Computing A Deep Deterministic Policy Gradient Approach",
+      "urls": [
+        "https://link.springer.com/content/pdf/10.1007/s11276-021-02632-z.pdf"
+      ],
+      "status": "downloaded",
+      "file": "pdf\\Computation Offloading Optimization for UAV-assisted Mobile Edge Computing A Deep Deterministic Policy Gradient Approach.pdf",
+      "source": "https://link.springer.com/content/pdf/10.1007/s11276-021-02632-z.pdf?error=cookies_not_supported&code=0d6b27d6-936a-4497-a991-c16237da7936",
+      "pages": 16,
+      "sha256": "bdd864a1faeb61af7c871a21e39f951f46891837be6de3572bceb44289d9728b"
+    },
+    {
+      "id": "R2",
+      "title": "DDQN-Enabled UAV Path Planning in Non-Terrestrial Networks Under ICAS Constraints",
+      "status": "included in repository",
+      "file": "pdf/GithubModels/UAV-PATH-OPTIMIZATION/DDQN-Enabled_UAV_Path_Planning_in_Non-Terrestrial_Networks_Under_ICAS_Constraints.pdf",
+      "note": "The title in the source repository differs from the user's pasted description."
+    }
+  ],
+  "repositories": [
+    {
+      "repository": "https://github.com/vale817/DeepJSCC",
+      "status": "downloaded",
+      "directory": "pdf\\GithubModels\\DeepJSCC",
+      "branch": "main",
+      "source": "https://codeload.github.com/vale817/DeepJSCC/zip/refs/heads/main",
+      "zip_bytes": 66041,
+      "note": "Source archive; no Git history; Git LFS pointers may require separate downloads."
+    },
+    {
+      "repository": "https://github.com/amanjaiswal-07/UAV-PATH-OPTIMIZATION",
+      "status": "downloaded",
+      "directory": "pdf\\GithubModels\\UAV-PATH-OPTIMIZATION",
+      "branch": "main",
+      "source": "https://codeload.github.com/amanjaiswal-07/UAV-PATH-OPTIMIZATION/zip/refs/heads/main",
+      "zip_bytes": 5024088,
+      "note": "Source archive; no Git history; Git LFS pointers may require separate downloads."
+    },
+    {
+      "repository": "https://github.com/fangvv/UAV-DDPG",
+      "status": "downloaded",
+      "directory": "pdf\\GithubModels\\UAV-DDPG",
+      "branch": "main",
+      "source": "https://codeload.github.com/fangvv/UAV-DDPG/zip/refs/heads/main",
+      "zip_bytes": 48655,
+      "note": "Source archive; no Git history; Git LFS pointers may require separate downloads."
+    },
+    {
+      "repository": "https://github.com/13274086/DeepSC",
+      "status": "downloaded",
+      "directory": "pdf\\GithubModels\\DeepSC",
+      "branch": "master",
+      "source": "https://codeload.github.com/13274086/DeepSC/zip/refs/heads/master",
+      "zip_bytes": 16271,
+      "note": "Source archive; no Git history; Git LFS pointers may require separate downloads."
+    },
+    {
+      "repository": "https://github.com/lukun199/SemanticRL",
+      "status": "downloaded",
+      "directory": "pdf\\GithubModels\\SemanticRL",
+      "branch": "master",
+      "source": "https://codeload.github.com/lukun199/SemanticRL/zip/refs/heads/master",
+      "zip_bytes": 258422,
+      "note": "Default branch source archive; no Git history. Corrects earlier main-branch download."
+    },
+    {
+      "repository": "https://github.com/Zihao-Felix-Zhou/UavNetSim-v1",
+      "status": "downloaded",
+      "directory": "pdf\\GithubModels\\UavNetSim-v1",
+      "branch": "master",
+      "source": "https://codeload.github.com/Zihao-Felix-Zhou/UavNetSim-v1/zip/refs/heads/master",
+      "zip_bytes": 41662267,
+      "note": "Source archive; no Git history; Git LFS pointers may require separate downloads."
+    }
+  ]
+}
