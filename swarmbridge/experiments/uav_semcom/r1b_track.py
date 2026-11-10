@@ -5,6 +5,9 @@ Association: Hungarian on IoU (class-agnostic), gate IoU >= iou_gate, two stages
 Update: alpha-beta on centre (alpha on position, beta on velocity), size smoothed with alpha.
 Observation kinds: 'full' (a whole frame was observed: unmatched tracks count a miss), 'partial' (tokens: no misses).
 Death: misses >= max_miss (full observations only), or no observation for > max_age ticks, or centre outside frame.
+Out-of-sequence observations (capture tick older than a track's newest observation, e.g. a FRAME overtaken by a TOK
+in the pipelined model): a matched det is consumed without rolling the track back; such tracks get no miss.
+update() returns det index -> tid; `last_changed` holds the tids actually updated or created (no OOS matches).
 """
 import numpy as np
 from scipy.optimize import linear_sum_assignment
@@ -53,6 +56,7 @@ class Tracker:
         self.alpha, self.beta, self.max_miss, self.max_age, self.id_mod = alpha, beta, max_miss, max_age, id_mod
         self.tracks = []
         self.next_id = 0
+        self.last_changed = set()
 
     def _new_id(self):
         live = {t.tid for t in self.tracks}
@@ -85,6 +89,7 @@ class Tracker:
     def update(self, dets, t, kind="full"):
         """dets: list of (box xyxy, cls, conf). Returns {det index: tid} for matched/new tracks."""
         assign = {}
+        self.last_changed = set()
         hi = [i for i, d in enumerate(dets) if d[2] >= self.conf_high]
         lo = [i for i, d in enumerate(dets) if d[2] < self.conf_high]
         free = list(range(len(self.tracks)))
@@ -96,16 +101,20 @@ class Tracker:
             used = set()
             for a_, b_, _ in pairs:
                 k = free[a_]; i = group[b_]
-                self._update_track(self.tracks[k], *dets[i], t)
+                if self.tracks[k].t_obs <= t:
+                    self._update_track(self.tracks[k], *dets[i], t)
+                    self.last_changed.add(self.tracks[k].tid)
+                # out-of-sequence observation (older than the track's newest one): consumed, track not rolled back
                 assign[i] = self.tracks[k].tid; used.add(k)
             free = [k for k in free if k not in used]
         if kind == "full":
             for k in free:
-                self.tracks[k].misses += 1
+                if self.tracks[k].t_obs <= t and self.tracks[k].born <= t:
+                    self.tracks[k].misses += 1
         for i in hi + lo:
             if i not in assign and dets[i][2] >= self.conf_new:
                 tr = Track(self._new_id(), dets[i][0], dets[i][1], dets[i][2], t)
-                self.tracks.append(tr); assign[i] = tr.tid
+                self.tracks.append(tr); assign[i] = tr.tid; self.last_changed.add(tr.tid)
         self.prune(t)
         return assign
 

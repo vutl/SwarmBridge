@@ -2,8 +2,17 @@
 
 Ngày 10/11/2026. Dựa trên thiết kế v3 ([swarmbridge-r1b-design.md](swarmbridge-r1b-design.md)) và quyết định phản biện ngày 10/11.
 
-**Trạng thái:**
-- Đã có: split v1, code mô phỏng, 25 unit test (đều qua), đo thời gian tính toán trên CPU.
+**Trạng thái (cập nhật sau phản biện thứ hai, 10/11):**
+- Đã có: split v1, code mô phỏng, đo thời gian tính toán trên CPU.
+- Đã sửa theo phản biện:
+  - chỉ số theo lớp là chính;
+  - kênh ngẫu nhiên ghép cặp, có khoá;
+  - downlink chính xác đến từng bit;
+  - B+;
+  - xử lý quan sát sai thứ tự;
+  - chẩn đoán track ma.
+- **52 unit test đều qua.** Báo cáo kiểm chứng kỹ thuật: [swarmbridge-r1b0a-validation.md](swarmbridge-r1b0a-validation.md).
+- Chưa xem bất kỳ kết quả nào trên G7.
 - **Chưa chạy thí nghiệm chính.** Blocker: chưa có xác nhận phạm vi Active Semantic Recovery (mục 9).
 - Các số đánh dấu **[khoá trước khi chạy]** sẽ điền theo đúng quy tắc ở đây từ dữ liệu TUNE, rồi commit trước khi chấm G7.
 
@@ -38,8 +47,10 @@ File `runs/uav_semcom/r1b/split_v1.json`, sinh bằng `r1b_split.py` từ `vid_a
 - **Độ phân giải xử lý:** khung thu về cạnh dài **1344 px**, bằng độ phân giải VID nhỏ nhất. GT và detection theo cùng tỉ lệ.
 - **GT được chấm:** lớp 1–10 với score = 1. Vùng bỏ qua là lớp 0 và lớp 11. Output không khớp GT mà nằm > 50% trong vùng bỏ qua thì bị loại, không tính FP.
 - **Chỉ số** (`r1b_metrics.py`), trên output của tracker BS dự đoán tới tick f, chỉ dùng gói đã xử lý trước t_f:
-  - object-time P / R / F1, class-agnostic, IoU ≥ 0,5, Hungarian theo từng tick (**chỉ số chính**);
-  - IDF1;
+  - **chỉ số chính:** object-time P / R / F1 **theo lớp**. TP phải cùng lớp VisDrone (1–10) **và** IoU ≥ 0,5; Hungarian theo từng tick, trong từng lớp. Đúng box sai lớp tính là 1 FP + 1 FN;
+  - **phụ:** cùng chỉ số nhưng class-agnostic (chỉ đo định vị), hậu tố `_ag`;
+  - IDF1 theo lớp (ghép từng lớp rồi gộp) và IDF1 class-agnostic. Cả hai khớp py-motmetrics 1.4.0 tới 1e-9 trên dữ liệu có đổi id, đổi lớp và FP;
+  - lớp YOLO 0–9 ánh xạ sang lớp VisDrone 1–10 khi tính trước detection;
   - FP-giây / phút; số track không bao giờ khớp và thời lượng trung bình của chúng;
   - độ trễ báo lần đầu (trung vị, p90) của track GT có ≥ 3 tick, cùng tỉ lệ không bao giờ được báo;
   - UL / DL kbit/s, ms UAV / BS mỗi tick, số khung bị bỏ vì bận tính toán, số gói trễ hạn hoặc mất, belief F1 (chẩn đoán: \hat T_f so với bảng BS thật).
@@ -51,20 +62,34 @@ Mọi điều kiện dùng chung: detector, tracker (`r1b_track.py`, cùng tham 
 | Mã | \hat T_f | Downlink |
 |---|---|---|
 | A0 (phụ) | Bản sao ảo của tracker BS, nạp những gì UAV đã gửi **ngay lúc gửi**. FRAME → detection YOLO11n của chính UAV làm proxy | 0 |
-| **A1** | Như A0, nhưng chỉ nạp khi ACK tới, theo thứ tự chụp. Thứ chưa ACK coi như BS **chưa có** (thận trọng) | 32 bit / gói được xử lý, gộp theo lượt gửi |
-| **B** | Box BS tại khung đã xử lý gần nhất, không id. Box khớp track cục bộ của UAV tại tick đó thì đi theo track ấy; còn lại đứng yên | 24 + 52 bit/box |
-| C0 (phụ) | Delta trạng thái, không phiên bản / băm; snapshot định kỳ | 60 + 87 bit/op (xoá 12) |
-| **C1** | Delta có phiên bản + CRC32 tại t_state + snapshot định kỳ và khi bị yêu cầu; header uplink 48 bit | 124 + 87 bit/op (xoá 12) |
+| **A1** | Như A0, nhưng chỉ nạp khi ACK tới, theo thứ tự chụp. Thứ chưa ACK coi như BS **chưa có** (thận trọng) | 11 + 16 bit / gói được xử lý, gộp theo lượt gửi |
+| **B** | Box BS tại khung đã xử lý gần nhất: **chỉ box**, không id, không lớp, không conf. Box khớp track cục bộ của UAV tại tick đó thì đi theo track ấy; còn lại đứng yên | 27 + 48 bit/box |
+| **B+** | Như B, thêm **lớp và conf** của từng box. UAV phát hiện được lệch lớp | 27 + 55 bit/box |
+| C0 (phụ) | Delta trạng thái, không phiên bản / băm, có cờ snapshot; snapshot định kỳ | 64 + 87 bit/op (xoá 12) |
+| **C1** | Delta có phiên bản + CRC32 tại t_state + snapshot định kỳ và khi bị yêu cầu; header uplink 48 bit | 127 + 87 bit/op (xoá 12) |
 | **D** | Bảng thật của tracker BS tại thời điểm quyết định (không triển khai được) | 0 |
 
 **Downlink chung:**
 - BS gửi tối đa một thông điệp mỗi khi link downlink rảnh và gộp nội dung, nên không có hàng đợi downlink.
 - Thêm 96 bit header ứng dụng mỗi gói, ở cả hai chiều.
 
+**Định dạng wire chính xác từng bit** (`r1b_proto.py`):
+- Mọi thông điệp downlink và header đồng bộ uplink được **pack thành bytes** rồi **giải mã ở UAV**. Mô phỏng chỉ chuyển bytes, không chuyển đối tượng Python.
+- Bit downlink = 8 × số byte (đệm cho tròn byte) + 96 bit header mỗi gói.
+- Trường ngoài miền thì báo lỗi, không cắt ngầm.
+- Một track mà dự đoán số nguyên rời miền biểu diễn được thì bị **xoá** khỏi trạng thái công bố, nên snapshot nào cũng serialise được.
+
 **Sửa định dạng so với v3** (trước khi có kết quả):
 - Toạ độ dùng 12 bit (1/4096 khung) thay 8 bit. 1/256 khung ở 1344 px là khoảng 5 px, quá thô cho vật nhỏ.
 - Vận tốc 10 bit có dấu.
-- Header C1: 124 bit.
+- `n_ops` 11 bit thay 8 bit: id 10 bit nên một delta chạm tối đa 1024 track; 8 bit chỉ chứa 255.
+- Header C1 127 bit; header C0 64 bit (thêm cờ snapshot, vì C0 không có trường base).
+
+**Chính sách khi có lớp:** nếu \hat T_f có lớp (A0 / A1 / B+ / C0 / C1 / D) và lớp khác lớp mà UAV thấy, đối tượng được tính là "trôi" và có thể được gửi trong TOK. B không có lớp nên không thấy loại lệch này.
+
+**Giới hạn của menu hành động:** TOK chỉ gửi đối tượng mới hoặc trôi. Nó **không** xoá trực tiếp được một track sai ở BS; chỉ FRAME (hai lần không thấy) mới xoá được.
+- Chẩn đoán bắt buộc: track ma ở BS (giây / phút); tỉ lệ thời gian track ma mà UAV **không** thấy vật ở đó; tỉ lệ track ma UAV vừa không thấy vừa biết BS đang giữ.
+- Nếu H1 FAIL, **không** được diễn giải là "mọi phản hồi ngữ nghĩa đều vô dụng" khi chẩn đoán cho thấy phần lớn lỗi là track ma mà menu không sửa được.
 
 ## 4. Kênh, deadline, ngân sách
 
@@ -75,6 +100,16 @@ Mọi điều kiện dùng chung: detector, tracker (`r1b_track.py`, cùng tham 
 - **Kiểm soát nhận gói phía UAV** (thông tin cục bộ, như nhau ở mọi điều kiện): hành động bị hạ xuống hành động rẻ hơn nếu, theo hàng đợi uplink của chính UAV và kích thước ước lượng, nó sẽ trễ deadline.
   - Kích thước FRAME ước lượng bằng EMA, khởi tạo bằng trung bình TUNE; không bao giờ dùng kích thước của chính clip.
 - **Token bucket** ở R_ul, độ sâu 1 s.
+- Gói vào hàng đợi uplink **lúc mã hoá xong**. Ở mô hình pipelined, một TOK sẵn sàng sớm có thể vượt một FRAME đang mã hoá.
+  - BS xử lý quan sát cũ đến muộn theo kiểu "out-of-sequence": detection khớp với track đã có quan sát mới hơn thì bị tiêu thụ, nhưng track không bị kéo lùi và không sinh track trùng.
+  - Số quan sát sai thứ tự được báo.
+- **Ngẫu nhiên kênh ngoại sinh, ghép cặp giữa các điều kiện.** Mỗi lần rút là một hash có khoá của (seed, luồng, tick chụp hoặc tick gửi, chỉ số thông điệp, chỉ số gói).
+  - Luồng UL và DL tách riêng.
+  - Gói uplink chụp ở tick f gặp cùng số phận ở mọi điều kiện nếu cùng số gói, không phụ thuộc lịch sử hành động.
+  - Trạng thái Gilbert–Elliott là chuỗi theo khe 10 ms, độc lập với lưu lượng.
+- **Seed kênh khoá trước:**
+  - chấm G7: {0, 1, 2, 3, 4};
+  - tinh chỉnh trên TUNE: {1000, 1001}. Không chọn seed sau khi xem kết quả.
 - **Downlink:** link tốc độ DL_cap = 64 kbit/s (16 chỉ báo); d_dl và p_dl theo kịch bản (N: 100 ms, 1%).
 
 ## 5. Tính toán và thời gian nhân quả (mới; trả lời phản biện về timing)
@@ -115,12 +150,12 @@ Mọi điều kiện dùng chung: detector, tracker (`r1b_track.py`, cùng tham 
 | c_det, c_enc | Trung vị TUNE ở cấu hình đã khoá | 29 ms; 92 ms (q20) |
 | frame_bits0 | Trung bình bit FRAME trên toàn TUNE | [khoá trước khi chạy] |
 | R_F | Tốc độ tối thiểu để một FRAME trung vị kịp deadline khi hàng đợi rỗng: (bit + header) / (D_max − c_det − c_trk − c_enc − d_ul) | ≈ 146 kbit / 167 ms ≈ **0,88 Mbit/s** (q20, số đo sơ bộ) |
-| R_ul | {1, 2, 4} × R_F | ≈ {0,88; 1,75; 3,5} Mbit/s [khoá theo R_F cuối] |
+| R_ul | {1, 2, 4} × R_F (tiêu chí); thêm 0,5 × R_F chỉ báo, nơi FRAME gần như không kịp và token có thể có lợi nhất | ≈ {0,88; 1,75; 3,5} (+0,44) Mbit/s [khoá theo R_F cuối] |
 | DL_cap | 64 kbit/s (16 phụ) | |
 | D_max, p_ul, d_ul | 300 ms, 1%, 10 ms | |
 | N_ref, W_hold, N_hist | 20 tick, 10 tick, 64 phiên bản | |
 | Tracker | iou_gate 0,3; conf_high 0,5; conf_new 0,4; conf_confirm 0,6; alpha 0,7; beta 0,3; max_miss 2 FRAME; max_age 50 tick | |
-| Seed kênh | 0 (cùng seed cho mọi điều kiện) | |
+| Seed kênh | G7: {0, 1, 2, 3, 4}; TUNE: {1000, 1001}; cùng seed cho mọi điều kiện (ghép cặp) | |
 
 **Tại sao R_ul tính theo R_F:** dưới R_F, FRAME gần như không bao giờ kịp deadline, và thí nghiệm chỉ còn là chọn token. Đặt mức thấp nhất bằng R_F giữ cả ba hành động khả thi ở mọi mức.
 
@@ -145,19 +180,25 @@ Mọi điều kiện dùng chung: detector, tracker (`r1b_track.py`, cùng tham 
 
 ## 8. Cổng H1 (G7, kịch bản N, DL_cap 64)
 
-ΔF1 là hiệu object-time F1 gộp 7 nguồn, đơn vị điểm phần trăm. "Thắng" một mức R_ul nghĩa là: ΔF1(C1 − A1) gộp ≥ +2,0 **và** ΔF1 > 0 ở **≥ 5/7 nguồn**.
+**Định nghĩa ΔF1:**
+- ΔF1 là hiệu object-time F1 **theo lớp**, đơn vị điểm phần trăm.
+- Với mỗi nguồn, F1 lấy **trung bình trên 5 seed kênh** đã khoá; "gộp" là trên 7 nguồn × 5 seed.
+- "Thắng" một mức R_ul: ΔF1(C1 − A1) gộp ≥ +2,0 **và** ΔF1 trung bình theo seed > 0 ở **≥ 5/7 nguồn**.
+- Baseline gợi ý mạnh nhất là **max(B, B+)** tại từng mức, chọn sau tinh chỉnh trên TUNE (không chọn trên G7).
 
 | Kết luận | Điều kiện |
 |---|---|
-| **PASS** | Thắng ở ≥ 2/3 mức R_ul, **và** C1 − B ≥ 0 gộp ở các mức đó, **và** không mức nào C1 − A1 < −1 |
+| **PASS** | Thắng ở ≥ 2/3 mức R_ul, **và** C1 − max(B, B+) ≥ 0 gộp ở các mức đó, **và** không mức nào C1 − A1 < −1 |
 | **FAIL (không có dư địa)** | D − A1 < +2 ở mọi mức |
 | **FAIL (phản hồi có giá không dùng được)** | D − A1 ≥ +2 ở ít nhất một mức nhưng C1 − A1 < +1 ở mọi mức. Báo rõ và **dừng** semantic ACK |
 | **INCONCLUSIVE** | Các trường hợp còn lại |
 
 **Báo cáo bắt buộc:**
-- theo từng nguồn: mọi chỉ số ở mục 2;
+- theo từng nguồn: mọi chỉ số ở mục 2, cả theo lớp và class-agnostic;
 - gộp 7 nguồn kèm CI bootstrap theo nguồn (B = 2000), **chỉ để mô tả**;
-- A0, C0, mô hình pipelined, DL_cap 16 và 3 clip AUX: phân tích phụ.
+- **độ ổn định qua seed:** ΔF1 gộp của từng seed, và số seed (trên 5) cho cùng kết luận ở từng mức;
+- chẩn đoán track ma (mục 3);
+- phân tích phụ: A0, C0, mô hình pipelined, DL_cap 16, mức 0,5 × R_F và 3 clip AUX.
 
 **Sau cổng:**
 - H1 FAIL: báo nguyên nhân, dừng mở rộng phản hồi ngữ nghĩa.
@@ -173,7 +214,9 @@ Claude **không đọc** nhánh ASR. Đề nghị người phụ trách (Codex) 
 - không xây lại và gọi đó là đóng góp mới;
 - R1b-0a khi ấy chỉ còn giá trị như phép đo độc lập giá trị gia tăng của phản hồi (H1), và phải trích dẫn ASR.
 
-## 10. Kiểm thử (`test_r1b.py`, 25/25 qua)
+## 10. Kiểm thử (`test_r1b.py`, 52/52 qua; chi tiết ở báo cáo kiểm chứng)
+
+Bảng dưới là bộ 25 test ban đầu. Phần bổ sung sau phản biện thứ hai (wire format, chỉ số theo lớp, motmetrics, ghép cặp kênh, timing chính xác, ngân sách, sai thứ tự, B+, track ma) nằm ở [swarmbridge-r1b0a-validation.md](swarmbridge-r1b0a-validation.md).
 
 | Nhóm | Phép thử |
 |---|---|
