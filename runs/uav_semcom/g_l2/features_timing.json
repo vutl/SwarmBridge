@@ -1,0 +1,9 @@
+{
+ "B_cpu_ms_median": 9.62203299968678,
+ "C_gpu_ms_median": 12.324557999818353,
+ "gpu": "NVIDIA GeForce RTX 3070",
+ "cpu": 6,
+ "C_cpu_threads1_ms_median": 35.140797499934706,
+ "C_cpu_threads6_ms_median": 39.758591500003604,
+ "C_params": 9431662
+}

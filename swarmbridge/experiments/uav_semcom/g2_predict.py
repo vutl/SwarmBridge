@@ -94,6 +94,20 @@ class Baselines:
         return c[k][0], k, c[k][1], {kk: v[0] for kk, v in c.items()}
 
 
+_AP = {}
+
+
+def ap50(d, I, ch, pool):
+    """COCO AP50 (a6l1_ap) of sending image I[k] in mode ch[k], every image once."""
+    import a6l1_ap as AP
+    key = "val" if pool in ("test", "val") else "testdev"
+    if key not in _AP:
+        b = AP.build(key)
+        _AP[key] = (b, {n: i for i, n in enumerate(b["images"])})
+    b, idx = _AP[key]
+    return AP.ap50([(key, idx[d.images[i]], d.modes[m]) for i, m in zip(I, ch)], {key: b})
+
+
 def features(d, rows):
     man = {e["name"]: e for e in C.manifest()["images"]}
     by = {r["image"]: r for r in rows}
@@ -258,6 +272,12 @@ def main():
                                     n_gt=float(d.ngt[I[i]]), mode_pred=d.modes[fam.ch[dom, i]],
                                     mode_rv=d.modes[bl.RV.ch[rvk, i]]) for i in worst]
             row["rv_member_bits"] = float(bl.RV.B[rvk].mean() / 1e6)
+            # policy-level COCO AP50 (deterministic members): predictor's dominant member, nearest RV member, F at B
+            fk = bl.F.fixed_at(B, pos, Np)[1][0][0]
+            row["ap50"] = dict(pred=ap50(d, I, fam.ch[dom], p) * PT, rv=ap50(d, I, bl.RV.ch[rvk], p) * PT,
+                               fixed=ap50(d, I, bl.F.ch[fk], p) * PT,
+                               bits=dict(pred=float(fam.B[dom].mean() / 1e6), rv=float(bl.RV.B[rvk].mean() / 1e6),
+                                         fixed=float(bl.F.B[fk].mean() / 1e6)))
             res["final"][m]["pools"][p] = row
         t, td = res["final"][m]["pools"]["test"], res["final"][m]["pools"]["testdev"]
         c1 = all(x["delta"] >= 1.0 and x["ci"][0] > 0 for x in (t, td))
@@ -284,6 +304,13 @@ def main():
                   f"{r['BL']:.2f} ({r['BL_name']}) | **{r['delta']:+.2f}** [{r['ci'][0]:+.2f}, {r['ci'][1]:+.2f}] | "
                   f"{r['lovo_min']:+.2f} | {r['recall_small']:.2f} | {r['fp_per_frame']:.1f} | {r['diversity']:.2f} | "
                   f"{r['oracle']:.2f} | {r['oracle_share'] * 100:.0f}% |")
+    print()
+    print("AP50 COCO (thành viên đơn định: predictor trội / RV gần bit nhất / mode cố định tốt nhất ≤ B; Mbit/khung):\n")
+    for m in Bs:
+        for p in ("test", "testdev"):
+            a_ = res["final"][m]["pools"][p]["ap50"]
+            print(f"- {m} {p}: predictor {a_['pred']:.2f} ({a_['bits']['pred']:.3f}), RV {a_['rv']:.2f} "
+                  f"({a_['bits']['rv']:.3f}), cố định {a_['fixed']:.2f} ({a_['bits']['fixed']:.3f})")
     print()
     for m, g in gate.items():
         print(f"- {m}: điều kiện 1 {g['c1']}, 2 {g['c2']}, 3 {g['c3']} (chi phí {res['final'][m]['cost_cpu_ms']:.0f} ms CPU),"

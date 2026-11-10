@@ -134,3 +134,139 @@ Việc khớp bit dùng λ (hoặc trần, hoặc p_m) để bit trung bình đ�
 
 ### 0.7 Không làm trong đợt này
 Train PPO, SAC hay MARL; simulator mới; relay; CARLA; UAV3D; Active Recovery; ROI encoder; sửa báo cáo cũ.
+
+## 1. Code, cách chạy, chi phí
+
+| Thành phần | File |
+|---|---|
+| Dữ liệu, đường cong khớp bit, đối chứng F/MX/RV/CB | `swarmbridge/experiments/uav_semcom/g2_common.py` |
+| Bước 2 | `g2_headroom.py` |
+| Đo lại bằng ảnh lật (GPU) | `g2_flip.py` |
+| Đặc trưng trên UAV (GPU + đo CPU) | `g2_features.py` |
+| Bước 3–4 | `g2_predict.py` |
+| Hàng đợi | `scripts/uav_semcom/run_g2_flip.sh`, `run_g2_features.sh` |
+| Kết quả; bảng đầy đủ ở `summary.md` | `runs/uav_semcom/g_l2/` |
+
+- **Thời gian chạy:**
+  - đo lật: 388 ảnh × 13 mode, khoảng 1,5 giờ GPU, chậm vì tranh CPU với kiểm toán L1;
+  - đặc trưng: dưới 20 phút;
+  - bước 3–4: 1 phút.
+- **Kiểm tra trong lúc chạy:** payload của mọi (ảnh, mode) trong lần đo lật trùng từng byte với L1.
+- **Môi trường:** đã cài thêm scikit-learn 1.9.1 vào env `semcom-a`; numpy giữ nguyên.
+
+## 2. Bước 2: dư địa oracle (train ∪ val, điểm recall)
+
+**Mức bit:** B1 = 0,303, B2 = 0,627, B3 = 1,266 Mbit/khung (mbt q3 / avif_50 / avif_80 trên train).
+
+| mức bit | O (lạc quan) | BL (loại) | F | MX | RV | CB | **H** [CI video] | O_x | BL_x | **H_x** [CI video] |
+|---|---|---|---|---|---|---|---|---|---|---|
+| B1 | 56,68 | 54,39 (RV) | 53,45 | 53,72 | 54,39 | 54,09 | **+2,29** [1,48; 2,96] | 55,25 | 54,30 | **+0,95** [0,36; 1,42] |
+| B2 | 59,46 | 57,63 (RV) | 57,38 | 57,44 | 57,63 | 57,44 | **+1,84** [1,38; 2,28] | 57,85 | 57,64 | **+0,21** [−0,09; 0,51] |
+| B3 | 59,83 | 58,71 (RV) | 57,92 | 58,50 | 58,71 | 58,66 | **+1,12** [0,87; 1,42] | 58,14 | 58,53 | **−0,40** [−0,57; −0,23] |
+
+CI theo video là cluster bootstrap B = 300, khám phá. Train và val riêng cho cùng bức tranh (`summary.md`).
+
+**1. Đối chứng mạnh nhất luôn là RV:** biết payload từng ảnh, chỉ dùng giá trị trung bình của mode. Nó hơn mode cố định 0,8–0,9 điểm (B1, B3) và 0,25 điểm (B2). So sánh oracle với mode cố định ở L1 vì thế đã phóng đại dư địa.
+
+**2. Phần lớn dư địa của oracle lạc quan là nhiễu detector.**
+- Hai phép đo (ảnh gốc và ảnh lật) gần như trùng ở mức TP: tương quan 0,995.
+- Nhưng **hiệu** TP giữa hai mode lặp lại kém:
+
+  | hiệu | tương quan giữa hai phép đo |
+  |---|---|
+  | mbt q3 − avif_20 | 0,85 |
+  | avif_50 − mbt q3 | 0,69 |
+  | avif_80 − avif_50 | 0,41 |
+
+- Chọn bằng một phép đo rồi chấm bằng phép kia, dư địa chỉ còn +0,95 / +0,21 / −0,40 điểm. Ở B3 nó âm: chọn theo kết quả đo của từng ảnh còn tệ hơn dùng giá trị trung bình của mode.
+
+**3. Dư địa nằm ở đâu.**
+- Phần lớn dư địa (lạc quan) nằm **trong** từng video, tức giữa các khung. Oracle chọn một mode cố định cho mỗi video chỉ thu 14–37% (khám phá, thêm sau tiền đăng ký theo gợi ý của audit tài liệu).
+- Không có video nào chiếm đa số: video lớn nhất chiếm 25% / 15% / 8%.
+- Dư địa tập trung ở ảnh nhiều vật thể và nhiều vật nhỏ, ở B1.
+
+**Quy tắc 0.4:** chỉ **B1** đạt (H ≥ 1,0 và H_x ≥ 0,5), nên đi tiếp sang bước 3.
+
+## 3. Bước 3: bộ dự đoán
+
+**Đặc trưng** (bảng đủ ở `summary.md`):
+- **A:** log payload của 14 mode và số pixel;
+- **B:** 13 thống kê ảnh;
+- **C:** 15 đặc trưng từ detector A5 chạy ở imgsz 480.
+
+**Chọn trên val (Δ_val, điểm):** không ứng viên nào hơn đối chứng mạnh nhất một cách đáng kể. Tốt nhất là A+C / abs / ridge, +0,04 ở B2.
+- Bộ A (chỉ payload) và các mô hình có bộ B kém hơn: −0,15 đến −5,5.
+- Bộ C (detector nhẹ) giúp nhiều nhất nhưng vẫn quanh 0.
+
+Ứng viên chọn:
+
+| mức bit | ứng viên | Δ_val |
+|---|---|---|
+| B1 | A+C / abs / gbm | −0,05 |
+| B2 | A+C / abs / ridge | +0,04 |
+| B3 | A+C / abs / ridge | −0,10 |
+
+**Đánh giá cuối, một lần** (Δ = recall − BL tại bit thực tế của predictor; CI cluster bootstrap theo video, B = 2000):
+
+| mức bit | pool | Mbit/khung | recall | BL (loại) | **Δ** [CI] | LOVO nhỏ nhất | đa dạng mode |
+|---|---|---|---|---|---|---|---|
+| B1 | test | 0,267 | 57,06 | 57,79 (RV) | **−0,73** [−1,66; +0,04] | −0,86 | 0,58 |
+| B1 | test-dev | 0,214 | 43,38 | 43,55 (CB) | **−0,17** [−1,09; +0,94] | −0,47 | 0,69 |
+| B2 | test | 0,563 | 60,70 | 61,10 (RV) | **−0,40** [−0,79; −0,17] | −0,48 | 0,50 |
+| B2 | test-dev | 0,544 | 48,58 | 49,92 (RV) | **−1,33** [−2,09; −0,70] | −1,45 | 0,68 |
+| B3 | test | 0,986 | 60,56 | 61,17 (RV) | **−0,61** [−1,17; −0,31] | −0,77 | 0,31 |
+| B3 | test-dev | 0,757 | 49,23 | 50,91 (RV) | **−1,67** [−2,50; −1,02] | −1,89 | 0,73 |
+
+- **Ở cả 6 ô, predictor kém hơn luật RV** (không nhìn nội dung ngoài payload). 4/6 ô có CI nằm hẳn dưới 0.
+- AP50, recall vật nhỏ và FP đi cùng chiều (`summary.md`). AP50 của predictor thấp hơn thành viên RV gần bit nhất 0,1–1,7 điểm, trừ B2 test-dev (+0,1, nhưng predictor dùng nhiều bit hơn khoảng 8%).
+- **Chi phí trên UAV** (đo khi máy rảnh; trung vị 20 ảnh):
+  - thống kê ảnh (B): 9,6 ms;
+  - detector imgsz 480 (C): 35–40 ms CPU, 12 ms GPU (RTX 3070), 9,4 triệu tham số.
+
+  Điều kiện chi phí (≤ 100 ms) **đạt**. Lần đo đầu (3185 ms) bị phồng vì đo lúc 6 tiến trình kiểm toán chiếm CPU; số đó được giữ ở `features_timing_contended.json`. Quyết định không đổi.
+- **Ca thất bại:**
+  - Predictor tiết kiệm bit bằng cách gửi một số ảnh ở mode rất rẻ (mbt q1, avif_5, jpeg2000_100, mode sinh ảnh). Nó tưởng các ảnh đó "không cần chất lượng", nhưng chúng mất 8–34 TP mỗi ảnh. Bit dồn cho ảnh khác không bù được.
+  - Ca tệ nhất là những ảnh nhiều vật thể (ví dụ test-dev 9999979: 218 vật thể, mất 34 TP).
+  - Đây đúng là hệ quả của việc **hiệu** giữa các mode khó đoán: chỉ cần đoán sai vài ảnh là mất nhiều hơn phần lợi nhỏ từ các ảnh đoán đúng.
+
+## 4. Quyết định (quy tắc 0.6)
+
+| mức bit | 1. Δ ≥ +1 và CI > 0, hai pool | 2. LOVO > 0 | 3. chi phí ≤ 100 ms | 4. đa dạng ≥ 20% | kết luận |
+|---|---|---|---|---|---|
+| B1 | không | không | có (40 ms) | có | FAIL |
+| B2 | không | không | có | có | FAIL |
+| B3 | không | không | có | có | FAIL |
+
+**G-L2: FAIL.**
+
+Predictor có đổi mode theo ảnh (đa dạng 0,31–0,73), nhưng những thay đổi đó làm recall **giảm** so với luật không nhìn nội dung ở cùng bit.
+
+## 5. Diễn giải
+
+1. **Trên menu codec toàn ảnh, với detector A5, gần như không có tín hiệu "mode nào hợp ảnh nào" để học.**
+   - Phần dư địa lặp lại được (+0,95 điểm ở bit thấp, khoảng 0 ở bit vừa và cao) nhỏ hơn mục tiêu +1 điểm ngay cả với oracle.
+   - Phần còn lại là nhiễu detector: một vài detection đổi qua lại giữa hai mode gần nhau.
+2. **Luật đơn giản biết payload (RV) đã lấy gần hết phần lợi theo nội dung** mà payload mang theo. Ảnh phức tạp tốn nhiều bit hơn ở mọi mode, nên RV tự hạ mode cho các ảnh đó.
+3. **Kết quả khớp với L1 và phần kiểm toán.** Reward tác vụ chỉ dời điểm hoạt động dọc đường bit–recall, không tạo được lựa chọn mode theo nội dung, vì chính dữ liệu không chứa lựa chọn đó.
+4. **Đối chiếu tài liệu** (`reports/novelty-audit-g-l2-2026-11-10.md`):
+   - Bộ dự đoán rẻ chọn cấu hình nén theo nội dung đã có: DAO (ACM MM 2022), AdaCompress, SMR, JRD.
+   - Nếu G-L2 PASS thì cũng không đủ làm đóng góp chính.
+   - Điều các công trình đó thường không có là đối chứng mạnh khớp bit (trộn mode, luật biết payload) và kiểm nhiễu detector. Đây chính là thứ làm G-L2 FAIL. Đó là một phát hiện về phương pháp đánh giá, có giá trị cho một bài kiểm chứng.
+
+**Giới hạn:**
+- Detector, menu mode và tập ảnh là của A5. Chỉ có 304 ảnh train; nhiều dữ liệu hơn có thể giúp predictor.
+- Phép lật chỉ bắt một loại nhiễu.
+- Detector nhẹ trong bộ C dùng cùng trọng số với trạm. Đây là trường hợp lạc quan, và nó vẫn thua.
+- Đánh giá tĩnh, không mô phỏng mạng.
+- Không thử chọn theo vùng (ROI/QP theo khối); G-L2 không bao trùm hướng đó.
+
+## 6. Khuyến nghị
+
+1. **Dừng nhánh chọn mode codec toàn ảnh theo reward tác vụ.** Không đưa đặc trưng nội dung vào quan sát của PPO. Không có tín hiệu cho PPO học, và luật biết payload đã đủ.
+2. **Giữ A5 → A5.5 → L1 → kiểm toán → G-L2 làm một nghiên cứu kiểm chứng.** Có thể dựng outline song song. Thông điệp chính:
+   - RL chỉ có ích bền khi kênh nghẽn hoặc lệch PHY;
+   - reward tác vụ không tạo thích nghi ngữ nghĩa, mà chỉ chọn một điểm rẻ hơn;
+   - oracle theo ảnh phần lớn là nhiễu detector;
+   - cách đếm recall dưới Qmin theo PSNR làm phồng ưu thế của policy.
+3. **Nếu muốn tiếp tục SemCom thật sự,** phải đổi **thứ được gửi** (biểu diễn), không chọn thêm giữa các codec toàn ảnh. Cần một cổng mới, có audit tài liệu riêng trước khi code, vì AccMPEG, RL-RC-DoT và AdaMask đã chiếm phần lớn hướng ROI. Việc chọn hướng nào thuộc về người dùng.
+4. **Không mở RL lớn, relay, SAC/MARL, CARLA, UAV3D** khi chưa có một cơ chế semantic qua được cổng kiểu G-L2.
