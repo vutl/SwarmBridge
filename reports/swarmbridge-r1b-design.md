@@ -173,11 +173,19 @@ snapshot: base_version = 0, toàn bộ bảng
 - **Pilot H1 dùng M0 cho mọi điều kiện.** Đây là biến thể rẻ nhất và giống nhau giữa các điều kiện. M1 / M2 chạy như phân tích phụ.
 - Kết quả báo theo tam phân vị chuyển động camera. Ngưỡng tam phân vị tính trên clip train, bằng homography ước lượng offline, chỉ dùng để phân nhóm.
 
-## 7. Cổng R1b-0 (khả thi, trên 7 clip val; không phải xác nhận thống kê)
+## 7. Cổng R1b-0 (khả thi, trên 7 clip cổng G7; không phải xác nhận thống kê)
+
+> **Cập nhật 10/11 sau kiểm toán dữ liệu** ([visdrone-vid-data-audit.md](visdrone-vid-data-audit.md) mục 5): 4/7 clip VID-val chứa khung **trùng hệt** ảnh DET-train (tập huấn luyện của detector). Theo quy tắc khoá ở mục 4 của báo cáo đó, cổng chuyển sang **G7 = 7 clip VID-train sạch**, chọn cơ học theo id:
+> `uav0000020_00406_v`, `uav0000138_00000_v`, `uav0000244_01440_v`, `uav0000278_00001_v`, `uav0000289_00001_v`, `uav0000289_06922_v`, `uav0000295_02300_v`.
+>
+> - G7 bị loại khỏi tập tinh chỉnh.
+> - 3 clip val sạch (`086`, `117`, `268`) được báo từng clip như **kết quả phụ, không quyết định cổng**.
+> - Mọi chỗ "7 clip val" bên dưới đọc là "7 clip G7"; quy tắc 5/7 giữ nguyên.
 
 **Dữ liệu:**
-- tinh chỉnh trên clip VID **train**, trừ các clip bị loại ở kiểm toán rò rỉ;
-- cổng chấm trên 7 clip **val**;
+
+- tinh chỉnh trên 49 clip VID **train** còn lại (gồm cả clip trùng DET-train, ghi rõ);
+- cổng chấm trên 7 clip **G7**;
 - **test-dev chưa tải**, giữ cho xác nhận cuối với protocol khoá lại.
 
 **Kịch bản kênh khoá trước:**
@@ -238,7 +246,7 @@ Mục tiêu: trả lời câu "BS có tracker mạnh hơn; phản hồi trạng 
 
 **Phạm vi:**
 - **Một UAV.** Nhịp phát lại 10 khung/s.
-- **Dữ liệu:** 7 clip val; clip train sau loại rò rỉ, có thể lấy một tập con cố định theo id để giảm thời gian tinh chỉnh.
+- **Dữ liệu:** 7 clip G7 (mục 7); 49 clip train còn lại, có thể lấy một tập con cố định theo id để giảm thời gian tinh chỉnh.
 - **Menu hành động:**
   - SKIP;
   - TOK: token đối tượng lệch, 48 + 52 bit/box như R1a;
@@ -269,7 +277,7 @@ Kết quả: một quyết định H1 theo mục 7. Chỉ khi H1 không FAIL m�
 | DL_cap | 64 kbit/s (+ 16 phụ) |
 | Kênh | N (+ S1–S4 nếu H1 không FAIL) |
 | Chuyển động | M0 (+ M1, M2 phụ) |
-| Clip | 7 val, báo từng clip |
+| Clip | 7 G7 (cổng) + 3 val sạch (phụ), báo từng clip |
 
 ## 10. Ma trận chồng lấn với Active Semantic Recovery (chờ người phụ trách)
 
