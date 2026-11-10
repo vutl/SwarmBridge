@@ -168,7 +168,7 @@ CI theo video là cluster bootstrap B = 300, khám phá. Train và val riêng ch
 
 **1. Đối chứng mạnh nhất luôn là RV:** biết payload từng ảnh, chỉ dùng giá trị trung bình của mode. Nó hơn mode cố định 0,8–0,9 điểm (B1, B3) và 0,25 điểm (B2). So sánh oracle với mode cố định ở L1 vì thế đã phóng đại dư địa.
 
-**2. Phần lớn dư địa của oracle lạc quan là nhiễu detector.**
+**2. Phần lớn dư địa của oracle lạc quan không lặp lại được dưới phép lật ảnh** (xem mục 7: đây là độ ổn định dưới một phép biến đổi, không phải phép đo chính xác của nhiễu ngẫu nhiên).
 - Hai phép đo (ảnh gốc và ảnh lật) gần như trùng ở mức TP: tương quan 0,995.
 - Nhưng **hiệu** TP giữa hai mode lặp lại kém:
 
@@ -245,7 +245,7 @@ Predictor có đổi mode theo ảnh (đa dạng 0,31–0,73), nhưng những th
 
 1. **Trên menu codec toàn ảnh, với detector A5, gần như không có tín hiệu "mode nào hợp ảnh nào" để học.**
    - Phần dư địa lặp lại được (+0,95 điểm ở bit thấp, khoảng 0 ở bit vừa và cao) nhỏ hơn mục tiêu +1 điểm ngay cả với oracle.
-   - Phần còn lại là nhiễu detector: một vài detection đổi qua lại giữa hai mode gần nhau.
+   - Phần còn lại không lặp lại được dưới phép lật ngang: một vài detection đổi qua lại giữa hai mode gần nhau (độ nhạy của detector với biến đổi nhỏ, không nhất thiết là nhiễu ngẫu nhiên; mục 7).
 2. **Luật đơn giản biết payload (RV) đã lấy gần hết phần lợi theo nội dung** mà payload mang theo. Ảnh phức tạp tốn nhiều bit hơn ở mọi mode, nên RV tự hạ mode cho các ảnh đó.
 3. **Kết quả khớp với L1 và phần kiểm toán.** Reward tác vụ chỉ dời điểm hoạt động dọc đường bit–recall, không tạo được lựa chọn mode theo nội dung, vì chính dữ liệu không chứa lựa chọn đó.
 4. **Đối chiếu tài liệu** (`reports/novelty-audit-g-l2-2026-11-10.md`):
@@ -266,7 +266,67 @@ Predictor có đổi mode theo ảnh (đa dạng 0,31–0,73), nhưng những th
 2. **Giữ A5 → A5.5 → L1 → kiểm toán → G-L2 làm một nghiên cứu kiểm chứng.** Có thể dựng outline song song. Thông điệp chính:
    - RL chỉ có ích bền khi kênh nghẽn hoặc lệch PHY;
    - reward tác vụ không tạo thích nghi ngữ nghĩa, mà chỉ chọn một điểm rẻ hơn;
-   - oracle theo ảnh phần lớn là nhiễu detector;
+   - phần lớn dư địa của oracle theo ảnh không ổn định dưới phép lật ảnh;
    - cách đếm recall dưới Qmin theo PSNR làm phồng ưu thế của policy.
 3. **Nếu muốn tiếp tục SemCom thật sự,** phải đổi **thứ được gửi** (biểu diễn), không chọn thêm giữa các codec toàn ảnh. Cần một cổng mới, có audit tài liệu riêng trước khi code, vì AccMPEG, RL-RC-DoT và AdaMask đã chiếm phần lớn hướng ROI. Việc chọn hướng nào thuộc về người dùng.
 4. **Không mở RL lớn, relay, SAC/MARL, CARLA, UAV3D** khi chưa có một cơ chế semantic qua được cổng kiểu G-L2.
+
+## 7. Bổ sung sau quyết định: giới hạn diễn giải (theo phản biện ngày 10/11)
+
+Quyết định **G-L2 FAIL theo protocol** không đổi. Mục này nói rõ kết luận được phép rút ra đến đâu. Phân tích ở 7.1 là khám phá, làm **sau** quyết định (`g2_caveats.py`, `runs/uav_semcom/g_l2/caveats.json`).
+
+### 7.1 RV dùng payload lý tưởng, BL là bao hindsight
+
+Hai điều phản biện nêu là đúng về thiết kế:
+- RV trong G-L2 biết payload **thật** của cả 14 mode trước khi chọn, mạnh hơn probe nhân quả AVIF-5 của A5.
+- BL lấy thành viên tốt nhất trên chính pool đánh giá, nên là một **bao hindsight**, không phải một policy triển khai được.
+
+Đã đo thêm bản triển khai được:
+- **RV_probe** chọn bằng payload **dự đoán** từ probe AVIF-5 (cùng mô hình log-tuyến tính, fit trên train, như UAV của A5), nhưng bị tính bit thật.
+- So với từng policy đơn, không lấy bao.
+
+| pool | mức bit | F | MX | **RV_probe** (triển khai được) | RV_true (payload lý tưởng) | BL (bao) | predictor − RV_probe tại bit của predictor |
+|---|---|---|---|---|---|---|---|
+| test | B1 | 56,80 | 57,62 | **58,46** | 58,55 | 58,55 | −0,54 |
+| test | B2 | 60,85 | 60,85 | **61,08** | 61,17 | 61,17 | −0,31 |
+| test | B3 | 60,85 | 60,85 | **61,15** | 61,17 | 61,17 | −0,58 |
+| test-dev | B1 | 41,84 | 45,88 | **46,79** | 46,77 | 46,77 | −0,18 |
+| test-dev | B2 | 46,56 | 49,93 | **50,35** | 50,35 | 50,35 | −1,19 |
+| test-dev | B3 | 50,40 | 51,14 | **51,50** | 51,48 | 51,48 | −1,62 |
+
+- **Payload lý tưởng gần như không giúp RV:** RV_true − RV_probe nằm trong khoảng −0,03 đến +0,10 điểm. Một probe nhân quả đã đủ.
+- **Ở các mức bit này, bao BL trùng RV.** Bao hindsight không làm đối chứng mạnh lên.
+- **Predictor G-L2 cũng thua bản triển khai được RV_probe** ở cả 6 ô.
+
+Cách nói chính xác: *các predictor đã thử không vượt được một luật biết payload. Luật đó vẫn mạnh như vậy khi chỉ dùng payload dự đoán từ một probe nhân quả.*
+
+RV_probe vẫn cần mã hoá probe AVIF-5 trên UAV; A5 đã tính chi phí này.
+
+### 7.2 Phép lật ảnh đo độ ổn định, không đo nhiễu
+
+Detector không nhất thiết bất biến với phép lật ngang. Vì vậy:
+- Phép kiểm cho thấy phần lớn lợi thế của oracle **không ổn định dưới một biến đổi nhỏ của ảnh**.
+- Nó **không** đo chính xác bao nhiêu phần trăm là nhiễu ngẫu nhiên.
+
+Các câu ở mục 2 và 5 đã được sửa theo cách nói này. Kết luận thực hành không đổi: một policy chọn mode theo ảnh không thể dựa vào phần lợi thế không lặp lại được.
+
+### 7.3 Phạm vi
+
+G-L2 chỉ trả lời một câu hỏi offline:
+- ở cùng bit trung bình,
+- trên menu **codec toàn ảnh** của A5,
+- với detector YOLO11s ở trạm,
+- tập ảnh VisDrone của A5,
+- không mô phỏng mạng.
+
+Nó **không** cho phép kết luận rằng nhận biết nội dung vô ích trong multi-UAV SemCom nói chung. Đặc biệt, nó không nói gì về:
+- biểu diễn khác loại (token, ROI, feature);
+- tương tác với hàng đợi, deadline và nhiệm vụ.
+
+### 7.4 Qmin và recall
+
+Mọi báo cáo từ nay báo **hai** chỉ số riêng:
+- recall tuân thủ Qmin (khung đúng hạn **và** PSNR ≥ Qmin);
+- **recall_ontime** (mọi khung giao đúng hạn).
+
+Số "+2,43 điểm recall" của PPO task so với T:best_task ở K5 test-dev (L1) **không** được dùng làm bằng chứng PPO giao nhiều thông tin hơn. Theo recall_ontime, hiệu đó là −0,23 điểm (kiểm toán L1, mục 5).
