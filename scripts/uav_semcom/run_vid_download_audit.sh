@@ -7,16 +7,18 @@ WD=/mnt/c/Users/USER/Downloads
 WD2=/mnt/c/Users/USER/Documents/SwarmBridge/data/visdrone   # browser download placed in the repo data dir (git-ignored)
 mkdir -p $D && cd $D
 LOG=$D/download.log
+PY="/home/uservutl/envs/semcom-a/bin/python -I"          # no `unzip` in this WSL image -> python zipfile
+ZT=/mnt/c/Users/USER/Documents/SwarmBridge/scripts/uav_semcom/zip_tool.py
 dl() {  # id name pattern
   [ -f $2.ok ] && return 0
   if [ ! -f $2 ]; then
     for f in $WD/$3 $WD2/$3; do [ -f "$f" ] && { echo "found browser download $f" >> $LOG; cp "$f" $2; break; }; done
   fi
-  if [ -f $2 ] && unzip -tq $2 >> $LOG 2>&1; then touch $2.ok; echo "ok (existing file) $2 $(date)" >> $LOG; return 0; fi
+  if [ -f $2 ] && $PY $ZT test $2 >> $LOG 2>&1; then touch $2.ok; echo "ok (existing file) $2 $(date)" >> $LOG; return 0; fi
   echo "try gdown $2 $(date)" >> $LOG
   rm -f $2.part
   /home/uservutl/.local/bin/uvx gdown "https://drive.google.com/uc?id=$1" -O $2.part >> $LOG 2>&1 || { echo "GDOWN FAILED $2" >> $LOG; rm -f $2.part; return 1; }
-  unzip -tq $2.part >> $LOG 2>&1 || { echo "ZIP TEST FAILED $2" >> $LOG; rm -f $2.part; return 1; }
+  $PY $ZT test $2.part >> $LOG 2>&1 || { echo "ZIP TEST FAILED $2" >> $LOG; rm -f $2.part; return 1; }
   mv $2.part $2; touch $2.ok; echo "ok $2 $(date)" >> $LOG
 }
 for a in $(seq 1 16); do
@@ -27,7 +29,7 @@ for a in $(seq 1 16); do
 done
 if ! { [ -f VisDrone2019-VID-val.zip.ok ] && [ -f VisDrone2019-VID-train.zip.ok ]; }; then echo VID_DL_FAILED >> $LOG; exit 1; fi
 sha256sum VisDrone2019-VID-val.zip VisDrone2019-VID-train.zip > sha256.txt
-for z in VisDrone2019-VID-val.zip VisDrone2019-VID-train.zip; do unzip -qn $z -d $D; done
+for z in VisDrone2019-VID-val.zip VisDrone2019-VID-train.zip; do $PY $ZT x $z $D >> $LOG 2>&1 || { echo "EXTRACT FAILED $z" >> $LOG; exit 1; }; done
 echo VID_DL_DONE >> $LOG
 cd /mnt/c/Users/USER/Documents/SwarmBridge/swarmbridge/experiments/uav_semcom
 /home/uservutl/envs/semcom-a/bin/python -I vid_audit.py $D /home/uservutl/work/vid_audit /home/uservutl/work/vid_audit/side \
