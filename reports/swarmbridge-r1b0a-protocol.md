@@ -2,6 +2,8 @@
 
 Ngày 10/11/2026. Dựa trên thiết kế v3 ([swarmbridge-r1b-design.md](swarmbridge-r1b-design.md)) và quyết định phản biện ngày 10/11.
 
+**Kết quả (11/11):** tham số TUNE khoá ở `6d2247f1`; G7 chấm một lần: **H1 = FAIL (không có dư địa)**. Xem [swarmbridge-r1b0a-h1-result.md](swarmbridge-r1b0a-h1-result.md). Phần dưới giữ nguyên như lúc khoá.
+
 **Trạng thái (cập nhật sau phản biện thứ hai, 10/11):**
 - Đã có: split v1, code mô phỏng, đo thời gian tính toán trên CPU.
 - Đã sửa theo phản biện:
