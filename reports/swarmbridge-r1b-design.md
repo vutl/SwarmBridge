@@ -175,16 +175,17 @@ snapshot: base_version = 0, toàn bộ bảng
 
 ## 7. Cổng R1b-0 (khả thi, trên 7 clip cổng G7; không phải xác nhận thống kê)
 
-> **Cập nhật 10/11 sau kiểm toán dữ liệu** ([visdrone-vid-data-audit.md](visdrone-vid-data-audit.md) mục 5): 4/7 clip VID-val chứa khung **trùng hệt** ảnh DET-train (tập huấn luyện của detector). Theo quy tắc khoá ở mục 4 của báo cáo đó, cổng chuyển sang **G7 = 7 clip VID-train sạch**, chọn cơ học theo id:
-> `uav0000020_00406_v`, `uav0000138_00000_v`, `uav0000244_01440_v`, `uav0000278_00001_v`, `uav0000289_00001_v`, `uav0000289_06922_v`, `uav0000295_02300_v`.
+> **Cập nhật 10/11 sau kiểm toán dữ liệu và phản biện** ([visdrone-vid-data-audit.md](visdrone-vid-data-audit.md) mục 5): 4/7 clip VID-val chứa khung **trùng hệt** ảnh DET-train (tập huấn luyện của detector). Cổng chuyển sang **G7 = 7 nguồn VID-train độc lập, mỗi nguồn một clip** (split v1):
+> `uav0000020_00406_v`, `uav0000138_00000_v`, `uav0000244_01440_v`, `uav0000278_00001_v`, `uav0000289_00001_v`, `uav0000295_02300_v`, `uav0000316_01288_v`.
 >
-> - G7 bị loại khỏi tập tinh chỉnh.
+> - `uav0000289_06922_v` (cùng nguồn 289) bị **cách ly**: không ở cổng, không ở tinh chỉnh.
 > - 3 clip val sạch (`086`, `117`, `268`) được báo từng clip như **kết quả phụ, không quyết định cổng**.
-> - Mọi chỗ "7 clip val" bên dưới đọc là "7 clip G7"; quy tắc 5/7 giữ nguyên.
+> - Mọi chỗ "7 clip val" bên dưới đọc là "7 nguồn G7"; "5/7" là 5/7 **nguồn độc lập**.
+> - Số khoá, timing và tinh chỉnh: [swarmbridge-r1b0a-protocol.md](swarmbridge-r1b0a-protocol.md).
 
 **Dữ liệu:**
 
-- tinh chỉnh trên 49 clip VID **train** còn lại (gồm cả clip trùng DET-train, ghi rõ);
+- tinh chỉnh trên 48 clip VID **train** còn lại (gồm cả clip trùng DET-train, ghi rõ);
 - cổng chấm trên 7 clip **G7**;
 - **test-dev chưa tải**, giữ cho xác nhận cuối với protocol khoá lại.
 
@@ -246,7 +247,7 @@ Mục tiêu: trả lời câu "BS có tracker mạnh hơn; phản hồi trạng 
 
 **Phạm vi:**
 - **Một UAV.** Nhịp phát lại 10 khung/s.
-- **Dữ liệu:** 7 clip G7 (mục 7); 49 clip train còn lại, có thể lấy một tập con cố định theo id để giảm thời gian tinh chỉnh.
+- **Dữ liệu:** 7 clip G7 (mục 7); 48 clip train còn lại, có thể lấy một tập con cố định theo id để giảm thời gian tinh chỉnh.
 - **Menu hành động:**
   - SKIP;
   - TOK: token đối tượng lệch, 48 + 52 bit/box như R1a;
@@ -281,7 +282,19 @@ Kết quả: một quyết định H1 theo mục 7. Chỉ khi H1 không FAIL m�
 
 ## 10. Ma trận chồng lấn với Active Semantic Recovery (chờ người phụ trách)
 
-Không đọc, không sửa nhánh ASR. Câu hỏi gửi người phụ trách, nguyên văn đề xuất của người dùng:
+Không đọc, không sửa nhánh ASR.
+
+**Cập nhật 10/11.** Phản biện yêu cầu người phụ trách ASR (Codex) làm **kiểm toán phạm vi chỉ đọc**: không sửa, không chạy lại thí nghiệm. Kiểm toán cần xác định ASR đã có những gì sau đây và chỉ ra chỗ dùng chung / chỗ khác biệt thật:
+1. bản sao trạng thái bên nhận ở phía gửi (sender-side replica);
+2. phản hồi từ bên nhận / phục hồi dựa trên ACK;
+3. theo vết theo thời gian, đồng bộ trạng thái;
+4. tinh chỉnh hoặc ROI do bên nhận yêu cầu;
+5. chọn token / ảnh ngữ nghĩa;
+6. lập lịch tài nguyên nhiều UAV.
+
+Không claim novelty chỉ vì khác tên thuật toán.
+
+Câu hỏi gốc gửi người phụ trách, nguyên văn đề xuất của người dùng:
 
 > Mình đang đối chiếu phạm vi SwarmBridge R1b với Active Semantic Recovery. Bên R1b dự kiến UAV chủ động chọn skip/token/video/ROI theo ước lượng trạng thái tracking của BS, với semantic feedback có delay, loss và communication overhead. Nhánh Active Recovery hiện có tracking theo video, receiver feedback về detections/tracks, semantic state synchronization, hay receiver-requested ROI/refinement không? Và đã có cơ chế tương đương trên nhiều UAV chưa? Mình chỉ cần xác nhận phạm vi hiện tại để tránh triển khai trùng nhau, chưa cần truy cập hoặc sửa code của nhánh.
 
@@ -293,23 +306,23 @@ Không đọc, không sửa nhánh ASR. Câu hỏi gửi người phụ trách, 
 | Phản hồi detection / track từ BS | Có, có giá | ? | Như trên |
 | Nhiều UAV | Chỉ ở R2 | ? | Không ảnh hưởng R1b |
 
-**Chưa code R1b-0 cho tới khi phạm vi ASR được xác nhận.** Chuẩn bị dữ liệu được làm độc lập.
+**Cập nhật 10/11:** phản biện cho phép **chuẩn bị** R1b-0a (protocol, unit test, loader, tracker, mô phỏng sự kiện), đã làm xong. **Thí nghiệm chính chờ** xác nhận ASR, hoặc chờ người dùng quyết định khi biết blocker.
 
 ## 11. Checklist trước khi code / chạy R1b-0a
 
 | # | Việc | Trạng thái |
 |---|---|---|
-| 1 | Câu trả lời ASR, điền mục 10; người dùng xác nhận phạm vi | Chờ |
-| 2 | VID train / val: nguồn, checksum, clip id, schema nhãn, thống kê track, kiểm tra rò rỉ với DET (pHash + xem tay) | Xem `reports/visdrone-vid-data-audit.md` |
-| 3 | Clip VID trùng DET-train bị loại khỏi val (hoặc thay bằng clip train sạch, ghi rõ); quy tắc loại khoá trước khi xem kết quả | Sau mục 2 |
+| 1 | Câu trả lời ASR, điền mục 10; người dùng xác nhận phạm vi | **Chờ (blocker)** |
+| 2 | VID train / val: nguồn, checksum, clip id, schema nhãn, thống kê track, kiểm tra rò rỉ với DET (pHash + xem tay) | Xong (`reports/visdrone-vid-data-audit.md`) |
+| 3 | Clip VID trùng DET-train bị loại khỏi val (hoặc thay bằng clip train sạch, ghi rõ); quy tắc loại khoá trước khi xem kết quả | Xong: split v1, G7 theo nguồn |
 | 4 | Ghi rõ giao thức huấn luyện: detector train trên VisDrone-DET-train, dùng trên VID. Đây là protocol nghiên cứu riêng, **không** claim tuân thủ challenge. Dữ liệu chỉ dùng cho nghiên cứu, không phân phối lại khung | Ghi trong báo cáo dữ liệu |
-| 5 | Khoá: nhịp phát lại, chất lượng FRAME, 3 mức R_ul, DL_cap, D_max, p_ul, kịch bản N / S1–S4, giới hạn ms UAV | Sau khi đo bit trên VID train |
-| 6 | Khoá: lớp policy, lưới tinh chỉnh, định nghĩa A0 / A1 / B / C0 / C1 / D, định dạng và số bit của mọi thông điệp downlink | Mục 3–4, chờ duyệt |
-| 7 | Tracker BS và UAV (ByteTrack-kiểu IoU + Kalman điểm cố định), bộ dự đoán chung | Chưa code |
-| 8 | Unit test chỉ số: GT làm detection cho F1 = IDF1 = 100; trễ tổng hợp cho độ trễ báo lần đầu đúng giá trị cấy | Chưa code |
-| 9 | Unit test giao thức (mục 4, bốn phép thử) | Chưa code |
-| 10 | Đo ms trên UAV: YOLO11n (đã có), ORB / LK / RANSAC (cho M1 / M2) | Chưa |
-| 11 | Protocol R1b-0a (mục 7 + 9 đã khoá số) commit **trước** khi chạy | Chưa |
+| 5 | Khoá: nhịp phát lại, chất lượng FRAME, 3 mức R_ul, DL_cap, D_max, p_ul, kịch bản N / S1–S4, giới hạn ms UAV | Quy tắc đã viết (protocol R1b-0a mục 6); số cuối sau khi tính trước trên TUNE |
+| 6 | Khoá: lớp policy, lưới tinh chỉnh, định nghĩa A0 / A1 / B / C0 / C1 / D, định dạng và số bit của mọi thông điệp downlink | Protocol R1b-0a mục 3, 7 |
+| 7 | Tracker BS và UAV (IoU + Hungarian, alpha-beta tất định), bộ dự đoán chung số nguyên | Xong (`r1b_track.py`, `r1b_proto.py`) |
+| 8 | Unit test chỉ số: GT làm detection cho F1 = IDF1 = 100; trễ tổng hợp cho độ trễ báo lần đầu đúng giá trị cấy | Xong, qua |
+| 9 | Unit test giao thức (mục 4, bốn phép thử) | Xong, qua |
+| 10 | Đo ms trên UAV: YOLO11n, AVIF trên khung VID TUNE; ORB / LK / RANSAC (cho M1 / M2) | YOLO11n và AVIF xong; ORB để sau (M0 ở pilot) |
+| 11 | Protocol R1b-0a (mục 7 + 9 đã khoá số) commit **trước** khi chạy | Bản nháp đã commit; số cuối điền trước khi chấm G7 |
 | 12 | Cho H3 (sau): x264 / ffmpeg low-delay, bit theo khung, chọn tham chiếu, ROI-QP trên WSL | Để sau H1 |
 
 ## 12. Phạm vi (nói thẳng)

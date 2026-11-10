@@ -13,7 +13,8 @@ Cập nhật 10/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 3 | [swarmbridge-next-scenario-r0.md](swarmbridge-next-scenario-r0.md) | R0: chọn kịch bản tiếp theo (chọn C) | xong |
 | 4 | [swarmbridge-r1a.md](swarmbridge-r1a.md) | R1a: token / hybrid / ROI so với ảnh, theo ngân sách bit | **INCONCLUSIVE** (đã đăng ký trước); mục 7 là khám phá |
 | 5 | [swarmbridge-r1b-design.md](swarmbridge-r1b-design.md) | Thiết kế R1b v3: ablation thông tin phản hồi, các cổng H1 / H2 / H3, pilot R1b-0a | chờ duyệt và chờ trả lời về ASR |
-| 6 | [visdrone-vid-data-audit.md](visdrone-vid-data-audit.md) | Kiểm toán VisDrone-VID: rò rỉ DET, cổng G7 | xong |
+| 6 | [visdrone-vid-data-audit.md](visdrone-vid-data-audit.md) | Kiểm toán VisDrone-VID: rò rỉ DET, cổng G7 theo nguồn (split v1) | xong |
+| 7 | [swarmbridge-r1b0a-protocol.md](swarmbridge-r1b0a-protocol.md) | Protocol R1b-0a: split, timing nhân quả, số khoá, lưới tinh chỉnh, cổng H1, 25 unit test | nháp; thí nghiệm chính chờ ASR |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).

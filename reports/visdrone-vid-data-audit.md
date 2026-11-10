@@ -186,6 +186,25 @@ Số khung xác nhận lớn hơn nhiều số ảnh DET, vì các khung liền 
 
    DET-val là pool đánh giá A5/R1a, nên các con số R1a và R1b **không độc lập hoàn toàn về cảnh**.
 
+### 5.5 Sửa G7 theo nguồn (protocol amendment, 10/11, đã duyệt)
+
+Phản biện duyệt định nghĩa "sạch" ở 5.4 (thêm điều kiện không có số nguồn trong DET-train). Đây là sửa đổi vì **tính toàn vẹn dữ liệu**, làm trước mọi kết quả R1b.
+
+Nhưng phản biện chỉ ra một lỗi: G7 ở 5.4 có hai clip cùng nguồn 289, nên "5/7 clip" không phải 5/7 quan sát độc lập. **Split v1** (`runs/uav_semcom/r1b/split_v1.json`, sinh bằng `r1b_split.py`) thay thế mục 5.4.3–5.4.4:
+
+| Tập | Nội dung |
+|---|---|
+| **G7** | 7 nguồn đủ điều kiện có số nhỏ nhất, mỗi nguồn một clip: 020_00406, 138_00000, 244_01440, 278_00001, 289_00001, 295_02300, **316_01288**. Tổng 3.370 khung |
+| **Cách ly** | 289_06922: cùng nguồn với một clip G7, nên không ở cổng và **không** ở tinh chỉnh |
+| **TUNE** | 48 clip train còn lại (gồm nguồn đủ điều kiện 360 không dùng); 20.621 khung |
+| **AUX** | val 086, 117, 268: kết quả phụ, không đổi điều kiện PASS |
+
+**Kiểm tra lại trùng lặp trước khi khoá:**
+- So pHash mọi khung giữa G7 / AUX / cách ly và TUNE, và giữa các nguồn G7: 0 cặp xác nhận (NCC ≥ 0,9).
+- 5 cặp nghi đều ở đúng ngưỡng Hamming 10.
+- Xem tay 3 cặp tốt nhất: cảnh khác nhau.
+- Kiểm cấu trúc: 0 vi phạm. Unit test `test_split_v1` khoá danh sách.
+
 **Hệ quả:**
 - G7 gồm clip train, không phải split val chính thức. Kết quả R1b-0 vì vậy **không so trực tiếp được** với số liệu VID-val công bố.
 - Vẫn còn rò rỉ cảnh kiểu "cùng thành phố, khác địa điểm" mà pHash không đo được.
