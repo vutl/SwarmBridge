@@ -141,6 +141,106 @@ def cmd_tune(a):
     print("TUNE_DONE", out)
 
 
+def _run1(args):
+    L, cond, R_ul, params, seed, name, extra = args
+    cfg = base_cfg(L, cond, R_ul, seed, params)
+    for k, v in extra.items():
+        setattr(cfg, k, v)
+    r = run_clip(_CLIPS[name], cfg)
+    return {k: r[k] for k in r if not isinstance(r[k], (list, dict))} | dict(level_R=R_ul, variant=extra.get("_v", "main"))
+
+
+def micro_f1(rows):
+    tp = sum(r["tp"] for r in rows); fp = sum(r["fp"] for r in rows); fn = sum(r["fn"] for r in rows)
+    P = tp / max(tp + fp, 1); R = tp / max(tp + fn, 1)
+    return 100 * 2 * P * R / max(P + R, 1e-12)
+
+
+def verdict(rows, levels, sources, seeds, rng):
+    """Protocol sec 8. rows: G7 main rows. Returns per-level stats and the H1 verdict."""
+    out = {}
+    for lname, R in levels:
+        cell = lambda c, src=None, sd=None: [r for r in rows if r["cond"] == c and r["level_R"] == R
+                                             and (src is None or r["clip"] == src) and (sd is None or r["seed"] == sd)]
+        st = {}
+        for c in ("A1", "B", "Bp", "C1", "D", "A0", "C0"):
+            st[c] = micro_f1(cell(c))
+        per_src = {s: float(np.mean([r["F1"] for r in cell("C1", s)]) - np.mean([r["F1"] for r in cell("A1", s)]))
+                   for s in sources}
+        d = st["C1"] - st["A1"]
+        boot = []
+        for _ in range(2000):
+            ss = rng.choice(sources, len(sources))
+            boot.append(micro_f1([r for s in ss for r in cell("C1", s)]) - micro_f1([r for s in ss for r in cell("A1", s)]))
+        seed_d = {sd: micro_f1(cell("C1", sd=sd)) - micro_f1(cell("A1", sd=sd)) for sd in seeds}
+        seed_win = {sd: bool(seed_d[sd] >= 2 and sum(
+            np.mean([r["F1"] for r in cell("C1", s, sd)]) - np.mean([r["F1"] for r in cell("A1", s, sd)]) > 0
+            for s in sources) >= 5) for sd in seeds}
+        out[lname] = dict(F1=st, d_C1_A1=d, ci95=[float(np.percentile(boot, 2.5)), float(np.percentile(boot, 97.5))],
+                          d_D_A1=st["D"] - st["A1"], d_D_C1=st["D"] - st["C1"], d_C1_C0=st["C1"] - st["C0"],
+                          per_source_d_C1_A1=per_src, n_sources_pos=int(sum(v > 0 for v in per_src.values())),
+                          win=bool(d >= 2 and sum(v > 0 for v in per_src.values()) >= 5), per_seed_d=seed_d,
+                          per_seed_win=seed_win)
+    return out
+
+
+def h1_rule(V, crit):
+    """Protocol sec 8. V[level] needs win, d_C1_A1, d_C1_hint, d_D_A1. Returns (verdict, winning levels)."""
+    wins = [ln for ln in crit if V[ln]["win"]]
+    if len(wins) >= 2 and all(V[ln]["d_C1_hint"] >= 0 for ln in wins) and not any(V[ln]["d_C1_A1"] < -1 for ln in crit):
+        return "PASS", wins
+    if all(V[ln]["d_D_A1"] < 2 for ln in crit):
+        return "FAIL (no headroom: D - A1 < 2 at every level)", wins
+    if any(V[ln]["d_D_A1"] >= 2 for ln in crit) and all(V[ln]["d_C1_A1"] < 1 for ln in crit):
+        return "FAIL (costed feedback unusable: D - A1 >= 2 somewhere but C1 - A1 < 1 everywhere)", wins
+    return "INCONCLUSIVE", wins
+
+
+def cmd_gate(a):
+    out = Path(a.out)
+    if out.exists() and not a.force:
+        raise SystemExit(f"{out} exists: G7 is scored once (use --force only to re-render, never to re-tune)")
+    L = json.loads(Path(a.lock).read_text()); T = json.loads(Path(a.tune).read_text())
+    S = json.loads(Path(a.split).read_text())
+    gate, aux = S["gate"], S["aux_val"]
+    paths = [str(Path(a.precomp, "gate", f"{c}.pkl")) for c in gate] + [str(Path(a.precomp, "aux", f"{c}.pkl")) for c in aux]
+    levels = list(L["R_ul_levels"].items())
+    conds = PRIMARY + SECONDARY
+    jobs = []
+    for lname, R in levels:
+        for c in conds:
+            p = T["best"][f"{c}|{lname}"]["params"]
+            for sd in GATE_SEEDS:
+                for nm in gate + aux:
+                    jobs.append((L, c, R, p, sd, nm, {}))
+                    if lname != "0.5xR_F (report only)" and c in PRIMARY:
+                        pa = T["best"][f"A1|{lname}"]["params"]          # shared-threshold sensitivity
+                        if nm in gate:
+                            jobs.append((L, c, R, pa, sd, nm, {"_v": "shared_A1_params"}))
+                            jobs.append((L, c, R, p, sd, nm, {"_v": "pipelined", "compute": "pipelined"}))
+                            jobs.append((L, c, R, p, sd, nm, {"_v": "DL16", "DL_cap": 16e3}))
+    with Pool(a.procs, initializer=_init, initargs=(paths, L["frame_q"])) as pool:
+        rows = []
+        for k, r in enumerate(pool.imap_unordered(_run1, jobs, chunksize=4)):
+            rows.append(r)
+            if k % 500 == 0:
+                print(f"{k}/{len(jobs)}", flush=True)
+    rng = np.random.default_rng(12345)
+    main_g7 = [r for r in rows if r["variant"] == "main" and r["clip"] in gate]
+    crit = [lv for lv in levels if lv[0] != "0.5xR_F (report only)"]
+    V = verdict(main_g7, crit + [lv for lv in levels if lv not in crit], gate, GATE_SEEDS, rng)
+    # strongest hint baseline per level: chosen by TUNE F1 (protocol sec 8), not by G7
+    for lname, _ in levels:
+        tb = T["best"]; hb = "B" if tb[f"B|{lname}"]["F1_tune"] >= tb[f"Bp|{lname}"]["F1_tune"] else "Bp"
+        V[lname]["hint_baseline"] = hb
+        V[lname]["d_C1_hint"] = V[lname]["F1"]["C1"] - V[lname]["F1"][hb]
+    h1, wins = h1_rule(V, [ln for ln, _ in crit])
+    res = dict(H1=h1, wins=wins, levels=V, lock=a.lock, tune=a.tune, seeds=GATE_SEEDS, gate=gate, aux=aux)
+    json.dump(res, open(out, "w"), indent=1, default=str)
+    json.dump(rows, open(str(out).replace(".json", "_rows.json"), "w"), default=str)
+    print("H1:", h1, "wins:", wins)
+
+
 def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -149,8 +249,11 @@ def main():
     p.add_argument("out"); p.add_argument("--conds", default=",".join(PRIMARY + SECONDARY)); p.add_argument("--levels")
     p.add_argument("--procs", type=int, default=6); p.add_argument("--subset", type=int, default=0)
     p.add_argument("--limit", type=int, default=0)
+    p = sub.add_parser("gate"); p.add_argument("split"); p.add_argument("precomp"); p.add_argument("lock")
+    p.add_argument("tune"); p.add_argument("out"); p.add_argument("--procs", type=int, default=6)
+    p.add_argument("--force", action="store_true")
     a = ap.parse_args()
-    {"lock": cmd_lock, "tune": cmd_tune}[a.cmd](a)
+    {"lock": cmd_lock, "tune": cmd_tune, "gate": cmd_gate}[a.cmd](a)
 
 
 if __name__ == "__main__":

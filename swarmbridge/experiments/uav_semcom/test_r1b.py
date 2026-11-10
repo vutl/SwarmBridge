@@ -473,6 +473,52 @@ def test_c1_belief_beats_a1_with_good_downlink_and_diagnostics():
         assert 0 <= r["ghost_uav_absent_frac"] <= 1 and 0 <= r["ghost_known_absent_frac"] <= r["ghost_uav_absent_frac"]
 
 
+# ---------------------------------------------------------------- H1 decision rule (protocol sec 8)
+def _rows(levels, f1, sources=("s%d" % i for i in range(7)), seeds=(0, 1)):
+    """f1[(cond, level, source)] -> F1; build rows with tp/fp/fn giving exactly that F1 (P = R)."""
+    rows = []
+    for lv in levels:
+        for c in ("A1", "B", "Bp", "C1", "D", "A0", "C0"):
+            for s in [f"s{i}" for i in range(7)]:
+                for sd in seeds:
+                    v = f1(c, lv, s)
+                    tp = int(round(10 * v)); fn = fp = 1000 - tp
+                    rows.append(dict(cond=c, level_R=lv, clip=s, seed=sd, tp=tp, fp=fp, fn=fn, F1=100 * tp / 1000))
+    return rows
+
+
+def _verdict(f1):
+    from r1b_run import h1_rule, verdict
+    levels = [("1x", 1.0), ("2x", 2.0), ("4x", 4.0)]
+    V = verdict(_rows([1.0, 2.0, 4.0], f1), levels, [f"s{i}" for i in range(7)], [0, 1], np.random.default_rng(0))
+    for ln, _ in levels:
+        V[ln]["d_C1_hint"] = V[ln]["F1"]["C1"] - max(V[ln]["F1"]["B"], V[ln]["F1"]["Bp"])
+    return h1_rule(V, [ln for ln, _ in levels]), V
+
+
+def test_h1_rule_pass_fail_inconclusive():
+    base = {"A1": 30, "B": 29, "Bp": 30, "C1": 30, "D": 30, "A0": 28, "C0": 30}
+    # PASS: C1 +4 over A1 at all levels in 6/7 sources, beats hints, D above
+    (h, wins), V = _verdict(lambda c, lv, s: base[c] + (4.5 if c == "C1" and s != "s0" else 0) + (6 if c == "D" else 0))
+    assert h == "PASS" and len(wins) == 3 and V["1x"]["n_sources_pos"] == 6
+    # FAIL no headroom: D - A1 < 2 everywhere
+    (h, _), _ = _verdict(lambda c, lv, s: base[c] + (1 if c == "D" else 0))
+    assert h.startswith("FAIL (no headroom")
+    # FAIL costed unusable: D +5, C1 +0.5
+    (h, _), _ = _verdict(lambda c, lv, s: base[c] + (5 if c == "D" else 0) + (0.5 if c == "C1" else 0))
+    assert h.startswith("FAIL (costed")
+    # INCONCLUSIVE: C1 +1.5 (between +1 and +2), D +5
+    (h, _), _ = _verdict(lambda c, lv, s: base[c] + (5 if c == "D" else 0) + (1.5 if c == "C1" else 0))
+    assert h == "INCONCLUSIVE"
+    # +3 pooled but only 4/7 sources positive -> no win -> INCONCLUSIVE
+    (h, wins), _ = _verdict(lambda c, lv, s: base[c] + (5 if c == "D" else 0)
+                            + ((7 if s in ("s0", "s1", "s2", "s3") else -1) if c == "C1" else 0))
+    assert wins == [] and h == "INCONCLUSIVE"
+    # C1 wins but loses to the strongest hint baseline -> not PASS
+    (h, _), _ = _verdict(lambda c, lv, s: base[c] + (4 if c == "C1" else 0) + (6 if c in ("D", "Bp") else 0))
+    assert h == "INCONCLUSIVE"
+
+
 # ---------------------------------------------------------------- split
 def test_split_v1():
     p = REPO / "runs/uav_semcom/r1b/split_v1.json"
