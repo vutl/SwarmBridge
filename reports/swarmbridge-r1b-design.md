@@ -1,137 +1,175 @@
-# SwarmBridge R1b: thiết kế đã sửa (đề xuất, chưa phải protocol khoá)
+# SwarmBridge R1b: thiết kế v2 (đề xuất, chưa phải protocol khoá)
 
-Ngày 10/11/2026. Sửa ứng viên C của `reports/swarmbridge-next-scenario-r0.md` theo phản biện ngày 10/11:
-- ACK gói ≠ ACK ngữ nghĩa;
-- codec video liên khung phải là đối chứng;
-- Glimpse/MARLIN đã có các cơ chế gần.
+Ngày 11/11/2026. Bản v2 sửa bản v1 (cùng file, xem lịch sử git) theo hai đợt phản biện ngày 10–11/11. Ghi chú đọc paper ở `reports/r0-notes/r1b-feedback-video.md`.
 
-Ghi chú đọc paper (tiếng Anh, có số trang) ở `reports/r0-notes/r1b-feedback-video.md`.
+**Chưa** tải VisDrone-VID, chưa code R1b, chưa train RL, chưa mở R2. Trước khi chạy pilot cần đủ điều kiện ở mục 9.
 
-**Chưa** tải VisDrone-VID, chưa code R1b, chưa train RL. Bản này cần người dùng duyệt, và cần hỏi nhóm ASR (mục 8), trước khi khoá protocol.
+## 1. Câu hỏi nghiên cứu
 
-## 1. Câu hỏi nghiên cứu (đã sửa)
+> Khi BS đã có một trạng thái nhận thức (bảng track), nhưng trạng thái ấy có thể **sai hoặc lỗi thời**, và chỉ được đồng bộ **một phần, có trễ, tốn tài nguyên**: UAV có thể chọn một **bằng chứng nhỏ, đúng lúc, đủ tin cậy** (token, vùng ưu tiên trong khung, khung đầy đủ, hoặc không gửi) để sửa trạng thái đó, thay vì truyền lại cả luồng video không?
 
-> Khi hiểu biết của BS chỉ được đồng bộ **một phần, có trễ và tốn tài nguyên**, UAV nên gửi **loại bằng chứng nào** (không gửi, token, khung có vùng ưu tiên, khung đầy đủ) và **khi nào**, để BS duy trì phát hiện và theo dõi mục tiêu tốt nhất, trong một mạng nhiều UAV tranh chấp kênh?
+R1a cho thấy token và hybrid rất mạnh về recall khi bit chật, nhưng kém ảnh về AP/FP. R1b phải chứng minh lợi ích của **việc đồng bộ hiểu biết của BS**, không chỉ lợi ích quen thuộc của "gửi token thay vì ảnh".
 
-Hai điều đã có tiền lệ và **không** phải đóng góp:
-- "UAV biết BS đã biết gì": Glimpse gửi gợi ý từ server về thiết bị; AoIS/AoII lập lịch theo độ sai của bên nhận.
-- Khung kích hoạt theo thay đổi (Glimpse, MARLIN).
+## 2. Dòng thời gian sự kiện (một UAV k)
 
-Phần có thể khác biệt (mục 6):
-- phản hồi ngữ nghĩa **có tính chi phí, có trễ, có mất**, từ một bên nhận **mạnh hơn**;
-- lựa chọn giữa **các họ biểu diễn**;
-- nhiều UAV dùng chung kênh;
-- chấm bằng ground-truth trên video drone thật.
+1. **t_cap:** chụp khung f. Nhịp phát lại được tuyên bố trước (ví dụ 10 khung/s; độ nhạy 5 / 25), vì VisDrone-VID không công bố fps.
+2. **Suy luận trên UAV:** YOLO11n nếu còn hạn mức suy luận (mức năng lực: 5 / 10 / 20 lần/s), nếu không thì cập nhật bằng tracker rẻ.
+   - Thời gian thật lấy từ R1a: u960 50 ms CPU proxy, u640 26 ms.
+   - Ước lượng chuyển động camera (mục 4).
+3. **Cập nhật tracker cục bộ** → tập đối tượng UAV thấy L_f.
+4. **Dự đoán niềm tin của BS:** từ bản sao (T_v, t_v), cùng bộ dự đoán tất định với BS (mục 3), đưa về thời điểm t_cap.
+5. **Độ lệch ước lượng** g_f giữa L_f và niềm tin dự đoán:
+   - đối tượng mới chưa có ở BS;
+   - track BS có lẽ đã mất (vật biến mất);
+   - track trôi (IoU thấp);
+   - vùng không chắc.
+6. **Chọn hành động:** SKIP / TOK / VF-ROI / VF / KEY (mục 5), qua heuristic có ngưỡng tinh chỉnh trên train.
+7. **Mã hoá, xếp hàng uplink, truyền** (kênh: một UAV ở R1b; mô hình A5 ở R2). Có trễ, có thể mất gói p_ul.
+8. **BS nhận:** giải mã nếu chuỗi tham chiếu còn nguyên (mục 5), chạy YOLO11s trên phần ảnh, gộp với token bằng cách gộp đã hiệu chỉnh theo nguồn của addendum R1a, cập nhật bảng track → phiên bản v+1.
+9. **BS gửi phản hồi ngữ nghĩa** (mục 3) trên downlink: trễ d_dl, mất p_dl, có thể lặp hoặc đến sai thứ tự.
+10. **UAV áp dụng phản hồi** nếu hợp lệ, rồi xác nhận phiên bản đã áp dụng trong header của uplink kế tiếp.
 
-## 2. Mô hình hệ thống đã sửa
+## 3. Đồng bộ trạng thái (semantic ACK)
 
-**Bên nhận (BS):**
-- Chạy YOLO11s trên nội dung ảnh nhận được (khung, vùng), dùng token như detection.
-- Duy trì **bảng track T_v có số phiên bản v** cho mỗi UAV: Kalman vận tốc hằng + ghép IoU, tham số cố định.
+**Trạng thái chuẩn hoá ở BS cho UAV k:**
+- Bảng track T, sắp theo id track.
+- Mỗi track có: id, lớp, box lượng tử 1/256 khung, vận tốc lượng tử, mức conf, tuổi.
+- Phiên bản v tăng đơn điệu, thời điểm trạng thái t_v.
+- **Mã băm nội dung** H(T): CRC32 trên chuỗi hoá chuẩn của T, không chỉ trên số phiên bản.
+- Hai bảng cùng phiên bản mà khác nội dung sẽ bị phát hiện.
 
-**Phản hồi ngữ nghĩa (semantic ACK), thay cho ACK gói:**
-- Sau mỗi lần cập nhật, BS gửi về UAV một **delta tích luỹ** so với phiên bản UAV đã xác nhận, nên áp dụng nhiều lần vẫn đúng khi mất gói:
-  - header khoảng 48 bit (id UAV, phiên bản, khung uplink đã xử lý, cờ);
-  - mỗi track thay đổi khoảng 52 bit (id track, thao tác thêm/sửa/xoá, lớp, box lượng tử 1/256, mức conf);
-  - xoá khoảng 14 bit.
-  - Cỡ điển hình 0,3–1,1 kbit mỗi thông điệp.
-- Tối đa **một thông điệp đang bay**, cộng **làm mới toàn trạng thái** mỗi N_ref (ví dụ 1 s).
-- UAV gửi kèm trên uplink một mã băm 16–32 bit của phiên bản nó tin. Nếu lệch, BS gửi làm mới.
-- **Kênh xuống:** trễ d_dl ∈ {20; 100; 300} ms cộng thời gian suy luận ở BS; mất gói p_dl ∈ {0; 1; 5; 10}% (Bernoulli, thêm Gilbert–Elliott nếu kịp).
-- **Bit xuống được tính** cùng ngân sách với bit lên. Báo cả hai và tổng.
+**Thông điệp phản hồi (BS → UAV):**
 
-**Bản sao ở UAV:**
-- UAV chạy **cùng bộ dự đoán tất định** như BS (Kalman, tham số cố định) trên phiên bản T_v cuối đã nhận. Từ đó nó biết BS **đang tin gì ở thời điểm hiện tại** mà không cần chạy lại detector của BS.
-- Các gửi đi chưa được xác nhận: báo cả hai cách giả định, **thận trọng** (BS chưa áp dụng) và **lạc quan** (BS đã áp dụng).
-- **Không có ground-truth hay trạng thái ẩn của BS trong quan sát của UAV.** Sai lệch thật giữa bản sao và BS (belief error, ghép IoU) được đo, nhưng chỉ để báo cáo.
+```
+msg_id(16) | uav_id(4) | base_version(16) | state_version(16) | t_state(16, ms mod) | frame_processed(16)
+| n_ops(8) | ops[...] | H(T_state)(32)
+op: track_id(10) | kind(2: add / update / delete) | [lớp 4 | box 32 | vận tốc 16 | conf 3]  → ~67 bit (xoá: 12 bit)
+snapshot: như trên với base_version = 0 và toàn bộ bảng
+```
 
-**Hành động uplink mỗi khung:**
+- **Delta tích luỹ** từ phiên bản UAV đã xác nhận áp dụng (base_version) tới phiên bản mới. Mất một thông điệp không làm hỏng các thông điệp sau.
+- BS giữ lịch sử phiên bản đủ để tính delta từ bất kỳ base nào trong N bản gần nhất. Quá xa thì gửi snapshot.
+
+**Ở UAV:**
+
+| Trường hợp | Xử lý |
+|---|---|
+| `base_version == applied` | Áp dụng; so H với băm tính lại. Khớp thì `applied := state_version`. Lệch thì đánh dấu lệch và yêu cầu snapshot |
+| `state_version ≤ applied` (lặp, cũ) | Bỏ qua |
+| `base_version ≠ applied` và mới hơn (đến sai thứ tự hoặc thiếu) | Giữ lại tới khi đủ, hoặc yêu cầu snapshot sau T_wait |
+
+- Header uplink mang `applied_version(16) | H(bản sao)(32)`.
+- BS so với bản lưu của phiên bản đó; lệch thì gửi snapshot.
+- **Snapshot định kỳ** mỗi N_ref (ví dụ 2 s) dù không lệch.
+- **Gửi đi chưa được xác nhận:** báo hai cách giả định của UAV, thận trọng (BS chưa áp dụng) và lạc quan (BS đã áp dụng).
+
+**Chi phí:**
+- Bit downlink (thông điệp + snapshot) và bit uplink (header + nội dung) **báo riêng từng chiều** và báo tổng, vì tài nguyên lên và xuống không hoán đổi 1:1.
+- Kịch bản kênh: d_dl ∈ {20; 100; 300} ms; p_dl ∈ {0; 1; 5; 10}% (Bernoulli, thêm Gilbert–Elliott); có lặp và đảo thứ tự ở một kịch bản riêng.
+
+**Không rò rỉ:** quan sát của UAV chỉ gồm khung của nó, detector của nó, và các thông điệp phản hồi đã nhận. Sai lệch thật giữa bản sao và BS (belief error) chỉ dùng để báo cáo.
+
+## 4. Chuyển động của UAV (ego-motion)
+
+UAV bay và quay làm vật đứng yên trên mặt đất dịch chuyển mạnh trong ảnh. Kalman vận tốc hằng trong toạ độ ảnh sẽ dự đoán sai, dễ gây gửi KEY liên tục.
+
+**Ba biến thể, so trực tiếp:**
+- **(a) Kalman trong toạ độ ảnh:** baseline ngây thơ.
+- **(b) Bù chuyển động:** UAV ước lượng homography giữa các khung liên tiếp (ORB/LK + RANSAC) và gửi kèm tham số tích luỹ (8 số × 16 bit, có tính bit) để BS và bản sao biến đổi track về cùng hệ.
+- **(c) Như (b) nhưng homography tính ở BS** từ các khung nhận được. Chỉ dùng được khi có khung, nên là cận.
+
+**Báo riêng theo mức chuyển động camera:** chia clip theo trung vị độ dịch chuyển homography thành tam phân vị (đứng gần yên / vừa / nhiều). VisDrone-VID không có telemetry, nên không dùng pose GPS/IMU.
+
+## 5. Biểu diễn, phụ thuộc liên khung và mất đồng bộ bộ giải mã
+
+**Hành động:**
 - **SKIP:** không gửi.
-- **TOK:** token YOLO11n, dạng delta so với bản sao.
-- **VF(q):** khung video **mã hoá liên khung** bởi một encoder low-delay (x264, không B-frame, zerolatency). Encoder chỉ nhận các khung được chọn gửi, nên khung tham chiếu là khung gửi trước đó. Như vậy gửi khung đã hưởng dư thừa thời gian một cách công bằng.
-- **VF-ROI(q_bg, q_roi):** như VF, nhưng bản đồ QP lấy từ box không chắc / vật nhỏ của YOLO11n (ROI trong cùng codec, kiểu AccMPEG/EAAR). **Không gửi ô ảnh độc lập**, vì DDS cho thấy trên video VisDrone ảnh vùng độc lập thua video H.264.
-- **KEY:** khung khoá (I-frame) khi cảnh đổi lớn hoặc bản sao lệch nhiều.
+- **TOK:** token delta so với niềm tin dự đoán; độc lập, không phụ thuộc khung khác.
+- **VF:** khung P của luồng x264 low-delay (không B-frame, zerolatency). Encoder chỉ nhận các khung được chọn (nhịp khung thay đổi), nên tham chiếu là khung gửi trước.
+- **VF-ROI:** như VF với bản đồ QP từ box không chắc / vật nhỏ của YOLO11n. Không gửi ô ảnh độc lập.
+- **KEY:** khung I.
 
-**Tính toán trên UAV:**
-- YOLO11n bị giới hạn tốc độ theo mức năng lực (ví dụ 5 / 10 lần/s, lấy từ số đo R1a).
-- Giữa hai lần suy luận dùng tracker rẻ (LK / IoU).
-- Thời gian suy luận và mã hoá tính vào deadline.
+**Phụ thuộc và mất gói:** một khung VF chỉ giải mã được nếu khung tham chiếu đã tới.
+- Mất gói uplink p_ul làm bộ giải mã ở BS **mất đồng bộ** cho tới KEY kế tiếp, hoặc tới khi encoder tham chiếu lại một khung BS **đã xác nhận giải mã** (reference-picture selection theo phản hồi).
+- Trường `frame_processed` trong phản hồi mang thông tin "khung giải mã được gần nhất".
+- **Áp dụng như nhau** cho đối chứng x264, để so công bằng.
+- Mã hoá ảnh độc lập (AVIF của A5/R1a) chỉ giữ làm đối chứng tham khảo, không phải đối thủ chính.
 
-**Nhịp video:** VisDrone-VID không công bố fps. Phải **tuyên bố nhịp phát lại** (ví dụ 10 khung/s), với độ nhạy ở 5 và 25.
+## 6. Chỉ số (bắt buộc)
 
-## 3. Chỉ số
+| Chỉ số | Định nghĩa |
+|---|---|
+| **Object-time precision / recall / F1 ở BS** | Ở mỗi khung GT: danh sách track BS đang giữ (sau dự đoán) so với box GT, IoU ≥ 0,5, cùng lớp |
+| **Thời lượng track sai** | Tổng giây một track BS tồn tại mà không khớp GT |
+| **IDF1** | Id track BS so với id GT của VisDrone-VID |
+| **Độ trễ báo lần đầu** | Mỗi track GT: trung vị, p90 |
+| **Bit** | Uplink, downlink, tổng |
+| **Tính toán** | ms trên UAV mỗi khung và tỉ lệ dùng hạn mức suy luận; ms ở BS |
+| Belief error | Chẩn đoán |
+| Tỉ lệ khung không giải mã được | Chẩn đoán |
 
-- **Recall hiện thời ở BS:** tỉ lệ (đối tượng GT, khung) mà danh sách track BS **đang giữ** có box khớp IoU ≥ 0,5, cùng lớp. Báo riêng vật nhỏ.
-- **Độ trễ báo lần đầu** của mỗi track GT: trung vị và p90.
-- IDF1 nếu kịp.
-- Track sai mỗi khung.
-- Bit lên, bit xuống, tổng.
-- ms tính toán trên UAV.
-- Belief error.
-- Chấm theo **nhãn VisDrone**, không theo detection của YOLO11s. DDS dùng DNN làm ground-truth, cách đó che lỗi của detector ở server.
+Chấm theo **nhãn VisDrone**. Báo riêng vật nhỏ và theo tam phân vị chuyển động camera.
 
-## 4. Đối chứng (xếp theo mức nguy hiểm cho C)
+## 7. Đối chứng
 
-1. **Codec video ở cùng bitrate thực tế:** x264 low-delay CBR, thêm SVT-AV1 nếu kịp. BS chạy YOLO11s + tracker trên mọi khung giải mã. Ba biến thể:
+1. **x264 low-delay CBR ở cùng bitrate uplink thực tế:**
    - đủ fps;
-   - lưới giảm fps / độ phân giải (kiểu AWStream);
-   - ROI-QP từ box của YOLO11n.
-2. **Kiểu Glimpse:** theo vết trên UAV, gửi khung khi dịch chuyển đặc trưng hoặc thay đổi pixel so với khung đã gửi vượt ngưỡng; BS gửi gợi ý (detection) về. **Bit gợi ý được tính.**
-3. **Kiểu MARLIN:** kích hoạt khi tương quan trong box theo dõi < 0,3 hoặc có thay đổi ngoài box. Bộ phát hiện thay đổi đơn giản hoá; ghi rõ.
-4. **Kiểu AoIS / AoII:** gửi khi f(tuổi) · g(độ lệch ước lượng) vượt ngưỡng. Ở R2 nhiều UAV: lập lịch tham lam theo AoIS lớn nhất.
-5. **Định kỳ:** bỏ qua K khung; gửi mọi khung ở chất lượng cố định.
-6. **Hai cận để đo giá trị của phản hồi:**
-   - **local-only:** UAV giả định BS biết đúng những gì UAV đã gửi, chỉ dùng ACK gói;
-   - **oracle-belief:** UAV biết chính xác trạng thái BS, miễn phí.
+   - lưới giảm fps / độ phân giải;
+   - ROI-QP từ YOLO11n.
 
-Mọi ngưỡng tinh chỉnh trên chuỗi train, khoá trên val, chấm test-dev một lần.
+   BS dùng cùng YOLO11s, cùng tracker, cùng mô hình mất gói. SVT-AV1 nếu kịp.
+2. **Kiểu Glimpse:** khung kích hoạt theo thay đổi + gợi ý từ server. **Bit gợi ý tính ở downlink.**
+3. **Kiểu MARLIN:** kích hoạt khi theo vết suy giảm hoặc có thay đổi ngoài box.
+4. **Kiểu AoIS / AoII:** gửi khi f(tuổi) · g(độ lệch ước lượng) vượt ngưỡng.
+5. **Token mỗi khung**, chỉ dùng ACK gói (local-only), và bỏ qua K khung định kỳ.
+6. **Cận:**
+   - **local-only:** UAV giả định BS biết đúng những gì UAV đã gửi;
+   - **oracle-belief:** UAV biết chính xác bảng của BS, miễn phí.
 
-## 5. Dữ liệu
+   Khoảng cách giữa hai cận là giá trị tối đa của phản hồi ngữ nghĩa.
 
-- **VisDrone-VID:** 96 clip.
+Mọi ngưỡng tinh chỉnh trên clip train, khoá trên val. Test-dev chỉ dùng cho R1b đầy đủ, **không** dùng trong pilot.
 
-  | phần | clip | khung | dung lượng tải |
-  |---|---|---|---|
-  | train | 56 | 24 198 | 7,53 GB |
-  | val | 7 | 2 846 | 1,49 GB |
-  | test-dev | 17 | 6 635 | 2,14 GB |
+## 8. Ma trận chồng lấn với Active Semantic Recovery (điền khi có câu trả lời)
 
-  - Nhãn có id track.
-  - Chỉ có câu "dùng cho mục đích nghiên cứu", không có văn bản giấy phép.
-  - Ổ WSL còn khoảng 870 GB.
-- **Rò rỉ:** cả YOLO11s (BS) và YOLO11n (UAV) đều train trên VisDrone-DET-train. Không có tuyên bố chính thức nào về việc DET và VID có chung cảnh quay. **Trước khi chấm:** kiểm tra gần-trùng (perceptual hash) giữa khung VID val/test-dev và ảnh DET-train; loại clip trùng, ghi rõ.
-- **Cỡ mẫu:** test-dev chỉ có 17 clip, nên CI theo clip sẽ rộng. Nói trước để không diễn giải quá mức.
+| Cơ chế | C dùng? | ASR có? (chờ người phụ trách) | Nếu trùng thì C điều chỉnh |
+|---|---|---|---|
+| ROI hoặc tinh chỉnh do bên nhận yêu cầu | Không; C chủ động phía gửi. Snapshot theo yêu cầu khi lệch | ? | Bỏ snapshot theo yêu cầu, chỉ giữ định kỳ; nhấn vào chọn phía gửi |
+| Theo dõi video / đồng bộ trạng thái | Có (trung tâm) | ? | Nếu ASR có đồng bộ trạng thái, C phải khác ở chi phí/lỗi phản hồi hoặc ở họ biểu diễn |
+| Chọn token / ảnh / hybrid | Có | ? | Nếu trùng, C giữ phần đồng bộ trạng thái làm đóng góp chính |
+| Phản hồi detection/track từ BS | Có, có tính chi phí | ? | Như trên |
+| Lập lịch nhiều UAV / uplink chung | Chỉ ở R2 | ? | Không ảnh hưởng R1b |
 
-## 6. Điều còn khác biệt (nói thẳng)
+## 9. Cổng khả thi R1b-0 (pilot nhỏ trên video VAL)
 
-- Mọi thành phần đều có tiền lệ:
-  - khung kích hoạt, gợi ý từ server, theo vết che độ trễ: Glimpse, MARLIN;
-  - độ tươi có trọng số theo độ sai: AoII, AoIS (Han 2025; Zhou JWCN 2026);
-  - ROI trong codec: AccMPEG, EAAR;
-  - lập lịch nhiều UAV: Zhou JWCN 2026.
-- Không tìm thấy trong các nguồn đã kiểm:
-  - phản hồi ngữ nghĩa **được tính bit, có trễ, có mất**, từ một bên nhận mạnh hơn bên gửi. Glimpse, DDS, EAAR trả kết quả nhưng không tính chi phí. AoII/AoIS giả định ACK hoàn hảo. Zhou cho bên gửi biết trạng thái bên nhận miễn phí;
-  - lựa chọn **họ biểu diễn** theo khung, chấm bằng ground-truth trên video drone.
-- Đây là **tổ hợp**, độ mới trung bình.
-- R1b chỉ có **một UAV**. R2 với 5 UAV phát lại 5 video độc lập vẫn là **tối ưu uplink dùng chung nhiều UAV**, chưa phải hợp tác nhận thức sâu. Phải nói rõ giới hạn này khi viết.
+Cổng chỉ dùng clip train (tinh chỉnh) và 7 clip val (đánh giá pilot), **không** dùng test-dev. Policy C ở pilot là heuristic đơn giản, khoá trước.
 
-## 7. Cổng R1b (đề xuất, sẽ khoá cùng protocol)
+| Câu hỏi | PASS nếu (val, ở d_dl = 100 ms, p_dl = 1%) |
+|---|---|
+| **Q1.** Bản sao BS có giảm sai lệch so với local-only và gợi ý kiểu Glimpse không? | Belief error giảm ≥ 30% so với local-only, **và** object-time F1 ≥ local-only + 2 điểm ở cùng tổng bit (lên + xuống), **và** không thấp hơn kiểu Glimpse ở cùng bit |
+| **Q2.** Lợi ích còn khi tính chi phí và trễ phản hồi không? | Ở d_dl = 300 ms **hoặc** p_dl = 10%, còn ≥ 50% phần lợi F1 của Q1 |
+| **Q3.** So với x264 ở cùng bitrate thực tế và ngân sách tính toán, chọn biểu diễn có đáng đầu tư không? | F1 của C ≥ biến thể x264 tốt nhất + 2 điểm ở ít nhất 1 trong 3 mức bitrate, hoặc cùng F1 với ≤ 70% bit uplink |
 
-**Bước 0: giá trị của phản hồi.** Trên val, ở 2–3 mức bit khớp nhau, đo oracle-belief, local-only và Glimpse-hint, cùng x264 ở cùng bit thực tế.
-- Khoảng cách oracle-belief − local-only là **giá trị tối đa của phản hồi ngữ nghĩa**.
-- Nếu khoảng cách < 1 điểm recall hiện thời: không cần thiết kế semantic ACK. C thu về local-only + chọn biểu diễn; ghi nhận và tiếp tục với câu hỏi chọn biểu diễn.
+- Vì val chỉ có 7 clip, mỗi điều kiện còn phải **cùng dấu ở ≥ 5/7 clip**. CI được báo nhưng không làm tiêu chí.
+- **FAIL Q1 hoặc Q3:** dừng C trước R1b đầy đủ, báo nguyên nhân.
+- **Chỉ FAIL Q2:** ghi rằng phản hồi chỉ có ích khi kênh xuống tốt, rồi quyết định cùng người dùng.
 
-**PASS chính.** C dùng phản hồi có tính chi phí (d_dl = 100 ms, p_dl = 1%) phải hơn **cả** biến thể x264 tốt nhất **và** kiểu Glimpse ở cùng tổng bit (lên + xuống), theo một trong hai cách:
-- recall hiện thời cao hơn ≥ +3 điểm;
-- hoặc cùng recall với ≤ 70% bit.
+## 10. Điều kiện tối thiểu trước khi chạy pilot R1b-0
 
-Kèm điều kiện:
-- p90 độ trễ báo lần đầu không tệ hơn;
-- CI theo clip trên test-dev loại 0;
-- ở p_dl = 10%, giữ ≥ một nửa lợi ích.
+1. **Câu trả lời của nhóm ASR**, điền vào ma trận mục 8, và người dùng xác nhận phạm vi.
+2. **Kiểm tra VisDrone-VID:**
+   - điều khoản: chỉ có câu "research purpose", ghi rõ khi dùng;
+   - link tải: Google Drive / Baidu trên README chính thức; chưa thử tải;
+   - dung lượng: train 7,53 GB, val 1,49 GB, test-dev 2,14 GB; ổ WSL còn khoảng 870 GB;
+   - định dạng nhãn: khung, id, box, score, lớp, truncation, occlusion.
+3. **Kiểm tra rò rỉ:** perceptual hash giữa khung VID (train, val, test-dev) và ảnh VisDrone-DET-train (tập train của cả hai detector). Clip nào trùng thì loại, hoặc chỉ dùng cho train. Cần tải VID trước. Đề nghị tải **val và train** trước (khoảng 9 GB), test-dev sau, khi người dùng cho phép.
+4. **Addendum R1a** đã chốt cách gộp có hiệu chỉnh theo nguồn (khoá trên val) để dùng ở BS.
+5. **Protocol R1b-0** (mục 9, cùng nhịp phát lại, mức năng lực, kịch bản kênh) được commit **trước** khi chạy.
+6. **Kiểm tra công cụ:** x264 / ffmpeg low-delay, bản đồ QP (addroi), đếm bit theo khung trên môi trường WSL.
 
-**FAIL:** không hơn x264 **hoặc** không hơn Glimpse ở cùng bit. Khi đó dừng trước R2 và trước mọi RL, báo nguyên nhân.
+## 11. Phạm vi (nói thẳng)
 
-## 8. Câu hỏi gửi nhóm Active Semantic Recovery (trước khi khoá R1b)
-
-> Bên mình đang thiết kế một hướng trong đó UAV duy trì ước lượng trạng thái theo dõi đối tượng của BS (qua phản hồi ngữ nghĩa có tính chi phí) và chủ động chọn bỏ qua / token / khung có vùng ưu tiên / khung đầy đủ trên video VisDrone-VID. Nhánh Active Semantic Recovery hiện có dùng: (1) yêu cầu ROI hoặc tinh chỉnh do bên nhận khởi xướng; (2) theo dõi video hoặc đồng bộ trạng thái; (3) chọn giữa token / ảnh / hybrid; (4) phản hồi detection/track từ BS; (5) lập lịch nhiều UAV hoặc uplink dùng chung không? Mình muốn biết phần chồng lấn trước khi triển khai để tránh làm trùng.
+- **R1b chỉ một UAV:** không có đóng góp swarm.
+- **R2 với 5 luồng video độc lập** chủ yếu là bài toán lập lịch nhiều nguồn chia kênh.
+- Muốn thành nghiên cứu swarm intelligence, sau khi C qua pilot vẫn cần xác định **một quyết định hợp tác thực sự giữa các UAV** dựa trên dữ liệu có cơ sở, ví dụ góc nhìn chồng lấn (ứng viên B của R0).
+- **Độ mới chưa được xác lập:** Glimpse, AoIS, video analytics và hybrid semantic communication đều rất gần.

@@ -208,3 +208,70 @@ INCONCLUSIVE cho phép sang **thiết kế** R1b, theo bản sửa ở `reports/
 - **Khung đầy đủ / codec video**: cho AP, FP thấp và các khung dày vật nhỏ.
 
 **Câu hỏi của C trở nên sắc hơn:** token mạnh đến mức "khi nào token **không đủ**" (cảnh dày vật nhỏ, đối tượng mới, BS cần bằng chứng) là quyết định trung tâm. Đó đúng là chỗ trạng thái hiểu biết của BS và phản hồi ngữ nghĩa có thể có giá trị. Điều này phải kiểm ở R1b, so với x264 và Glimpse.
+
+## 7. Phụ lục kiểm tra độ vững (KHÁM PHÁ, sau khi xem kết quả; kết luận INCONCLUSIVE ở mục 3 giữ nguyên)
+
+Làm theo phản biện ngày 11/11. Không train lại.
+- Code: `r1a_addendum.py`.
+- Kết quả: `runs/uav_semcom/r1a/addendum.json`, bảng đủ ở `runs/uav_semcom/r1a/addendum.md`.
+- Mọi lựa chọn (cách hiệu chỉnh, biến thể gộp, ngưỡng) làm trên train/val rồi khoá. Test và test-dev chấm một lần.
+- Phụ lục này **không có CI** theo video; chỉ dùng để xem dấu và độ lớn.
+
+**Cách làm:**
+1. **So ở bitrate thực tế.** Mỗi cấu hình đã chọn được so với RV_probe chạy ở đúng số bit cấu hình đó dùng trên pool. Báo tỉ lệ vi phạm ngân sách.
+2. **RV_probe thực thi thật.** Hỗn hợp hai thành viên λ được hiện thực hoá theo từng ảnh với seed cố định; AP50 là COCO trên chính các detection đó (không nội suy AP, không dùng "thành viên trội" như bảng mục 2).
+3. **Hiệu chỉnh điểm theo nguồn.**
+   - Logistic trên [logit(score), log diện tích] → P(TP), fit trên pool **train**, cho từng nguồn: token 640 / 960, BS trên từng ảnh nền, BS trên ô q50 / q80.
+   - Sáu biến thể gộp: điểm gốc + NMS 0,6; hiệu chỉnh + NMS {0,5; 0,6; 0,7}; hiệu chỉnh + gom cụm theo lớp với điểm max hoặc noisy-OR giữa các nguồn.
+   - Mọi biến thể bỏ box có điểm gốc < 0,05 và giữ tối đa 500 box/ảnh.
+   - **Chọn trên val** theo AP50: TOK → hiệu chỉnh + NMS; HYB và ROI → hiệu chỉnh + noisy-OR.
+4. **Recall ở cùng FP/khung.** Ngưỡng điểm của mỗi cấu hình đặt trên **val** sao cho FP/khung bằng FP/khung của RV_probe thực thi ở cùng B trên val, rồi dùng nguyên trên test / test-dev.
+
+### 7.1 Kết quả (các mức vận hành; bảng đủ ở `addendum.md`)
+
+Ngoặc ở cột AP50: RV_probe thực thi ở **bit thực tế của họ**. Ngoặc ở cột recall @ cùng FP: FP/khung đạt được. Cột cuối: RV_probe thực thi tại B (recall / FP / AP50).
+
+| pool | B | họ | Mbit thực (so với B) | Δ recall tại bit thực | AP50 hiệu chỉnh (RV @ bit thực) | recall @ cùng FP (FP đạt) | RV_probe thực thi tại B |
+|---|---|---|---|---|---|---|---|
+| test | 0,08 | HYB nền avif_5 | 0,069 (−14%) | **+16,4** | **31,9** (23,8) | **48,6** (12,1) | 43,0 / 12,1 / 26,7 |
+| test-dev | 0,08 | HYB nền avif_5 | 0,099 (**+24%**) | **+15,9** | **27,2** (20,2) | **42,3** (9,2) | 27,4 / 9,5 / 16,5 |
+| test | 0,08 | TOK | 0,003 | +50 | 28,4 (≈ 0,6) | 47,9 (9,8) | 43,0 / 12,1 / 26,7 |
+| test-dev | 0,08 | TOK | 0,002 | +44 | 24,2 (≈ 0,5) | 42,1 (8,3) | 27,4 / 9,5 / 16,5 |
+| test | 0,3 | HYB nền mbt q3 | 0,250 (−17%) | +3,7 | 41,2 (41,0) | 57,8 (15,5) | 58,5 / 15,4 / 42,6 |
+| test-dev | 0,3 | HYB nền mbt q3 | 0,323 (+8%) | +4,8 | 32,6 (31,7) | 48,9 (12,2) | 46,8 / 11,1 / 31,6 |
+| test | 1,2 | ROI | 0,636 (−47%) | +2,7 | 41,0 (**43,8**) | 54,6 (17,3) | **61,2** / 16,2 / **44,3** |
+| test-dev | 1,2 | ROI | 0,727 (−39%) | +3,4 | 33,6 (**35,2**) | 46,2 (12,3) | **51,4** / 12,5 / **36,2** |
+
+### 7.2 Đọc kết quả
+
+1. **Vi phạm ngân sách không đổi chiều kết luận.** Hai ca vượt ngân sách (HYB test-dev +24% ở B = 0,08; +8% ở B = 0,3) vẫn hơn ảnh khi so ở **đúng** số bit đã dùng: +15,9 và +4,8 điểm.
+
+   Dù vậy, không được gọi các ca đó là "cải thiện ở cùng ngân sách B". Chỉ được nói "ở cùng bitrate thực tế".
+
+2. **Khi kiểm soát FP, có một điểm giao rõ:**
+
+   | Ngân sách | Kết quả |
+   |---|---|
+   | **Thấp (≈ 0,08 Mbit/khung)** | Token và hybrid thắng ảnh ở **mọi** thước đo: recall, AP50 (+2 đến +8 điểm), recall ở cùng FP (+5 đến +15 điểm), recall vật nhỏ |
+   | **Vừa (≈ 0,3)** | Hybrid ≈ ảnh: AP50 chênh ≤ 1 điểm; recall ở cùng FP −0,6 (test) / +2,2 (test-dev, FP cao hơn 1,1/khung) |
+   | **Cao (≥ 0,7)** | **Ảnh thắng.** ROI kém ảnh ở cùng bit về AP50 (−1,6 đến −2,8) và kém ở cùng FP về recall (−5 đến −7 điểm). Ưu thế recall +2,7 ở mục 2 đến từ việc ROI chấp nhận nhiều FP hơn, không phải từ thông tin tốt hơn |
+
+3. **Hiệu chỉnh và gộp biết nguồn có giúp nhưng không đổi kết luận.**
+   - AP50 của ROI tăng khoảng 1,4 điểm (39,5 → 41,0 test; 32,2 → 33,6 test-dev).
+   - HYB gần như không đổi (±0,3 điểm).
+   - Giới hạn của ROI là **thật**: ghép kết quả từ ô và ảnh nền chất lượng thấp không bằng một ảnh đủ chất lượng khi bit đủ.
+
+4. **Hệ quả cho C.** Hai kiểu biểu diễn không bị thống trị theo nghĩa chặt (cùng FP):
+   - token/hybrid khi bit chật;
+   - ảnh khi bit đủ.
+
+   **Bên nào thắng phụ thuộc ngân sách bit khả dụng,** tức trạng thái kênh và hàng đợi, đúng loại trạng thái mà A5.5 cho thấy đoán được. Ngưỡng giao khoảng 0,3 Mbit/khung trên dữ liệu này.
+
+   ROI độc lập không đáng giữ ở dạng hiện tại. Ở R1b, ROI chỉ còn dưới dạng ROI-QP trong codec video.
+
+**Giới hạn của phụ lục:**
+- Khám phá, làm sau khi xem test.
+- Không có CI theo video.
+- Ngưỡng FP khoá trên val với 84 ảnh.
+- Hiệu chỉnh là logistic đơn giản theo nguồn.
+- Không thử detector UAV khác.
