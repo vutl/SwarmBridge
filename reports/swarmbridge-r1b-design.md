@@ -306,13 +306,38 @@ Câu hỏi gốc gửi người phụ trách, nguyên văn đề xuất của ng
 | Phản hồi detection / track từ BS | Có, có giá | ? | Như trên |
 | Nhiều UAV | Chỉ ở R2 | ? | Không ảnh hưởng R1b |
 
+### 10.1 Kết quả kiểm toán phạm vi ASR (Codex, chỉ đọc, tại HEAD 57471292; 10/11)
+
+**ASR chưa triển khai cơ chế tương đương C1.** Phần đã chạy: detection trên ảnh tĩnh VisDrone-DET, truyền box / ảnh, phân tích offloading.
+- Lịch sử ASR: protocol `7fc2d4c7` → Gate A `bb54ea53` → offloading `da01886c` → CPU ghép cặp `af43a5c3` → delivered F1 `9d41615a`.
+
+| Cơ chế | ASR | R1b-0a |
+|---|---|---|
+| Bản sao trạng thái bên nhận ở phía gửi | Chưa có | Tracker ảo A0 / A1, Replica C0 / C1 |
+| Phản hồi / phục hồi dựa trên ACK | Chỉ trong protocol, chưa chạy | ACK, hint, delta có phiên bản, CRC, snapshot; chạy trong mô phỏng, tính bit |
+| Tracking video, đồng bộ theo thời gian | Chưa có (ảnh độc lập) | Tracker BS / UAV, dự đoán giữa các quan sát, quan sát sai thứ tự |
+| ROI do bên nhận yêu cầu | Đề xuất (JPEG Q10 + patch Q85), Gate B chưa mở | Không có (R1b-0a chỉ SKIP / TOK / FRAME) |
+| Chọn token / ảnh | Có biểu diễn và đối chứng thật, nhưng là phương án **cố định tốt nhất offline** | Chọn online từng tick theo độ lệch quan sát / niềm tin về BS, backlog, deadline |
+| Nhiều UAV | Chưa có | Chưa có (R2) |
+
+- **Dùng chung được:** quy tắc tách thông tin triển khai được với oracle, cách tính chi phí và thời điểm có hiệu lực của phản hồi, hạ tầng đo thời gian / provenance.
+- **Đính chính:** câu "ASR đã có sender replica và phục hồi khi ACK không tin cậy" **sai** với code ASR.
+
+**Tiền lệ nội bộ phải trích dẫn** (không thuộc ASR):
+1. **Town3, `temporal_select` (`91179ca1`):** bản sao xấp xỉ trạng thái latent / segmentation của bên nhận, nhớ qua chuỗi 20 khung, có thử mất ACK (kể cả mất 100%). Không phải bảng track có phiên bản / CRC / delta / snapshot.
+2. **UAV3D v1.1 (`70486c1b`, [archive](archive/uav3d/uav3d-proto-v1.1-budget-queue-2026-11-04.md) mục 3b):** sender biết "receiver đã chắc xe nào" qua phản hồi. **Khi trừ bit phản hồi vào chính ngân sách, lợi thế so với heuristic không cần phản hồi biến mất:** +0,005–0,008 AMOTA, cỡ nhiễu seed.
+
+   Đây là **tiền lệ âm trực tiếp** cho H1. R1b-0a khác ở ba điểm: phản hồi là trạng thái track đầy đủ có giá và chịu lỗi; quyết định thời điểm gửi (SKIP / TOK / FRAME), không chỉ thứ tự box; dữ liệu video thật. Nhưng giả thuyết "phản hồi có giá không đáng" là **giả thuyết đối nghịch nghiêm túc**, không phải người rơm.
+
+**Quyết định:** blocker ASR đã được giải. Chạy R1b-0a theo protocol đã khoá. Kiểm toán này **không** xác lập novelty so với literature.
+
 **Cập nhật 10/11:** phản biện cho phép **chuẩn bị** R1b-0a (protocol, unit test, loader, tracker, mô phỏng sự kiện), đã làm xong. **Thí nghiệm chính chờ** xác nhận ASR, hoặc chờ người dùng quyết định khi biết blocker.
 
 ## 11. Checklist trước khi code / chạy R1b-0a
 
 | # | Việc | Trạng thái |
 |---|---|---|
-| 1 | Câu trả lời ASR, điền mục 10; người dùng xác nhận phạm vi | **Chờ (blocker)** |
+| 1 | Câu trả lời ASR, điền mục 10; người dùng xác nhận phạm vi | Xong (mục 10.1): không trùng C1; ghi tiền lệ Town3 / UAV3D |
 | 2 | VID train / val: nguồn, checksum, clip id, schema nhãn, thống kê track, kiểm tra rò rỉ với DET (pHash + xem tay) | Xong (`reports/visdrone-vid-data-audit.md`) |
 | 3 | Clip VID trùng DET-train bị loại khỏi val (hoặc thay bằng clip train sạch, ghi rõ); quy tắc loại khoá trước khi xem kết quả | Xong: split v1, G7 theo nguồn |
 | 4 | Ghi rõ giao thức huấn luyện: detector train trên VisDrone-DET-train, dùng trên VID. Đây là protocol nghiên cứu riêng, **không** claim tuân thủ challenge. Dữ liệu chỉ dùng cho nghiên cứu, không phân phối lại khung | Ghi trong báo cáo dữ liệu |

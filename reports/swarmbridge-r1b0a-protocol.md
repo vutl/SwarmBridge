@@ -13,7 +13,8 @@ Ngày 10/11/2026. Dựa trên thiết kế v3 ([swarmbridge-r1b-design.md](swarm
   - chẩn đoán track ma.
 - **52 unit test đều qua.** Báo cáo kiểm chứng kỹ thuật: [swarmbridge-r1b0a-validation.md](swarmbridge-r1b0a-validation.md).
 - Chưa xem bất kỳ kết quả nào trên G7.
-- **Chưa chạy thí nghiệm chính.** Blocker: chưa có xác nhận phạm vi Active Semantic Recovery (mục 9).
+- **Chưa chạy thí nghiệm chính.** Blocker ASR **đã giải** ngày 10/11 (mục 9): ASR không có cơ chế tương đương C1.
+- **Protocol khoá ở commit này.** Các số [khoá trước khi chạy] được điền theo đúng quy tắc mục 6 từ dữ liệu TUNE, commit, rồi mới tính trước và chấm G7.
 - Các số đánh dấu **[khoá trước khi chạy]** sẽ điền theo đúng quy tắc ở đây từ dữ liệu TUNE, rồi commit trước khi chấm G7.
 
 ## 1. Dữ liệu (data-integrity amendment, đã duyệt)
@@ -206,7 +207,11 @@ Mọi điều kiện dùng chung: detector, tracker (`r1b_track.py`, cùng tham 
 
 Không train PPO / SAC, không chạy R2, không tải VID test-dev, chưa làm H3 / x264.
 
-## 9. Active Semantic Recovery: blocker
+## 9. Active Semantic Recovery
+
+**Đã giải (10/11).** Codex kiểm toán chỉ đọc: ASR không có bản sao trạng thái bên nhận, vòng ACK, tracking video hay policy online. Bảng đối chiếu và tiền lệ nội bộ (Town3 `temporal_select`; UAV3D v1.1, nơi phản hồi có tính phí **không** còn lợi) nằm ở thiết kế v3 mục 10.1. Báo cáo H1 phải trích các tiền lệ này.
+
+Nội dung cũ của mục (giữ để truy vết):
 
 Claude **không đọc** nhánh ASR. Đề nghị người phụ trách (Codex) làm một **kiểm toán phạm vi chỉ đọc**: không sửa, không chạy lại. Câu hỏi và bảng cần điền ở mục 10 của thiết kế v3 (bản cập nhật).
 
