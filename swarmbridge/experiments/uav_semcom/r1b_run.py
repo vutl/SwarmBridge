@@ -219,6 +219,9 @@ def cmd_gate(a):
                             jobs.append((L, c, R, pa, sd, nm, {"_v": "shared_A1_params"}))
                             jobs.append((L, c, R, p, sd, nm, {"_v": "pipelined", "compute": "pipelined"}))
                             jobs.append((L, c, R, p, sd, nm, {"_v": "DL16", "DL_cap": 16e3}))
+                            # all-or-nothing packet-loss sensitivity (declared before scoring G7; report only)
+                            jobs.append((L, c, R, p, sd, nm, {"_v": "p_ul0", "p_ul": 0.0}))
+                            jobs.append((L, c, R, p, sd, nm, {"_v": "p_ul5", "p_ul": 0.05}))
     with Pool(a.procs, initializer=_init, initargs=(paths, L["frame_q"])) as pool:
         rows = []
         for k, r in enumerate(pool.imap_unordered(_run1, jobs, chunksize=4)):

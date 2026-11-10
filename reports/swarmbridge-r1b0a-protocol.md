@@ -174,7 +174,7 @@ Mọi điều kiện dùng chung: detector, tracker (`r1b_track.py`, cùng tham 
 - N_max ∈ {30; ∞};
 - w_new = 1; w_lost ∈ {0; 1}; w_drift ∈ {0; 1}; w_unc ∈ {0; 0,5}.
 
-**Sửa đổi v1.1** (10/11, **trước** mọi kết quả tinh chỉnh; lý do là thời gian tính):
+**Sửa đổi v1.1** (10/11; lý do là thời gian tính). **Đính chính thời điểm** (theo phản biện): sửa đổi này làm **sau một lần chạy thử kỹ thuật trên TUNE**, khi đã thấy F1 của 16 lần chạy, nhưng **trước khi chấm G7**. Câu "trước mọi kết quả tinh chỉnh" trong commit 8950b1ff là không chính xác. Không có rò rỉ từ G7.
 - Đo trên dữ liệu thật: một điểm lưới × một điều kiện × một mức × một seed trên 48 clip TUNE mất khoảng 50 s trên một nhân. Lưới 256 × 2 seed × 7 điều kiện × 4 mức sẽ mất khoảng 33 giờ.
 - **Lưới mới 64 điểm:** θ_T ∈ {0,5; 1; 2; 4}, θ_F ∈ {2; 4; 8; ∞}, N_max ∈ {30; ∞}, w_lost ∈ {0; 1}; cố định **w_drift = 1** (trôi, gồm cả lệch lớp, là tín hiệu cốt lõi) và **w_unc = 0**.
 - **Một seed tinh chỉnh (1000).** Seed chấm G7 giữ nguyên {0..4}.
@@ -206,6 +206,11 @@ Mọi điều kiện dùng chung: detector, tracker (`r1b_track.py`, cùng tham 
 - gộp 7 nguồn kèm CI bootstrap theo nguồn (B = 2000), **chỉ để mô tả**;
 - **độ ổn định qua seed:** ΔF1 gộp của từng seed, và số seed (trên 5) cho cùng kết luận ở từng mức;
 - chẩn đoán track ma (mục 3);
+- **tỉ lệ FRAME / TOK tới BS kịp và nguyên vẹn** theo điều kiện × mức.
+- **Mất gói kiểu tất cả hoặc không** (khai báo 10/11, trước khi chấm G7):
+  - FRAME 289 kbit cần khoảng 31 gói. Với p_ul = 1% mỗi gói, khoảng 27% FRAME mất trọn, trong khi TOK (1 gói) mất khoảng 1%.
+  - Đây là mô hình **không có FEC hay truyền lại**; kết quả không được khái quát cho mọi mạng không dây.
+  - Độ nhạy chỉ báo: p_ul ∈ {0; 5%} với tham số đã chọn;
 - phân tích phụ: A0, C0, mô hình pipelined, DL_cap 16, mức 0,5 × R_F và 3 clip AUX.
 
 **Sau cổng:**

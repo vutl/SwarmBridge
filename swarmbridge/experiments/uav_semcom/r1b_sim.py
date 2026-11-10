@@ -145,7 +145,8 @@ def run_clip(clip, cfg, trace=False):
 
     S = dict(ul_bits=0, dl_bits=0, n_frame=0, n_tok=0, n_skip=0, dropped_compute=0, ul_lost=0, ul_late=0,
              dl_msgs=0, dl_lost=0, snapshots=0, desync_ticks=0, uav_ms=0.0, bs_ms=0.0, belief_f1=[], oos=0,
-             ghost_ticks=0, ghost_uav_absent=0, ghost_known_absent=0, decided=0)
+             ghost_ticks=0, ghost_uav_absent=0, ghost_known_absent=0, decided=0, FRAME_lost=0, FRAME_late=0,
+             TOK_lost=0, TOK_late=0)
     ul_log, dl_sent_in_tick, pending_ul = [], {}, []
     scorer = Scorer(tick_s=T / 1000)
     bucket = [cfg.R_ul * cfg.bucket_s, 0.0]
@@ -400,13 +401,13 @@ def run_clip(clip, cfg, trace=False):
             ul_log.append(dict(f=f_cap, act=act, bits=tot, n_pk=n_packets(tot, cfg.mtu_bits), ready=ready,
                                start=start, lost=not arrs, arr=arrs[0] if arrs else None))
             if not arrs:
-                S["ul_lost"] += 1
+                S["ul_lost"] += 1; S[f"{act}_lost"] += 1
             else:
                 push(arrs[0], "BS_RX", (f_cap, obs_bs, hdr))
         elif kind == "BS_RX":
             f_cap, obs, hdr = data
             if now - f_cap * T > cfg.D_max:
-                S["ul_late"] += 1
+                S["ul_late"] += 1; S[("FRAME" if obs[0] == "frame" else "TOK") + "_late"] += 1
                 continue
             c = cfg.c_bs_frame if obs[0] == "frame" else cfg.c_bs_tok
             start = max(now, bs_busy[0]); bs_busy[0] = start + c; S["bs_ms"] += c
@@ -435,6 +436,9 @@ def run_clip(clip, cfg, trace=False):
              n_frame=S["n_frame"], n_tok=S["n_tok"], n_skip=S["n_skip"], dropped_compute=S["dropped_compute"],
              ul_lost=S["ul_lost"], ul_late=S["ul_late"], dl_msgs=S["dl_msgs"], dl_lost=S["dl_lost"],
              snapshots=S["snapshots"], desync_ticks=S["desync_ticks"], oos_obs=S["oos"],
+             frame_lost=S["FRAME_lost"], frame_late=S["FRAME_late"], tok_lost=S["TOK_lost"], tok_late=S["TOK_late"],
+             frame_ok_frac=(S["n_frame"] - S["FRAME_lost"] - S["FRAME_late"]) / max(S["n_frame"], 1),
+             tok_ok_frac=(S["n_tok"] - S["TOK_lost"] - S["TOK_late"]) / max(S["n_tok"], 1),
              uav_ms_per_tick=S["uav_ms"] / n, bs_ms_per_tick=S["bs_ms"] / n,
              belief_f1=100 * float(np.mean(S["belief_f1"])) if S["belief_f1"] else None,
              ghost_s_per_min=S["ghost_ticks"] * T / 1000 / max(dur / 60, 1e-9),

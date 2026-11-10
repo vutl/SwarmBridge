@@ -427,6 +427,19 @@ def test_deadline_admission_and_late_drop():
             assert e["bits"] > 0                       # late frames still cost bits
 
 
+def test_per_action_delivery_counters():
+    clip = synth_clip(17, n=150, bits=290_000)
+    r = run_clip(clip, Cfg(cond="A1", R_ul=4e6, th_T=0.5, th_F=3.0, N_max=10, p_ul=0.01, frame_bits0=290_000), trace=True)
+    log = r["ul_log"]
+    assert r["frame_lost"] == sum(e["lost"] for e in log if e["act"] == "FRAME")
+    assert r["tok_lost"] == sum(e["lost"] for e in log if e["act"] == "TOK")
+    assert r["frame_lost"] + r["tok_lost"] == r["ul_lost"] and r["frame_late"] + r["tok_late"] == r["ul_late"]
+    assert 0 <= r["frame_ok_frac"] <= 1 and 0 <= r["tok_ok_frac"] <= 1
+    # all-or-nothing: P(FRAME lost) = 1 - 0.99^31 ~ 27 %; tokens fit in one packet (~1 %)
+    n_pk = math.ceil((290_000 + 96 * 31) / 9600)
+    assert n_pk >= 30
+
+
 def test_budget_holds_when_real_frame_sizes_differ_from_estimate():
     clip = synth_clip(14, n=200, bits=300_000)
     R = 2e6
