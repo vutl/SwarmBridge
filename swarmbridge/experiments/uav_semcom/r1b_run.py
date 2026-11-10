@@ -23,11 +23,13 @@ from r1b_metrics import Scorer
 from r1b_sim import Cfg, Clip, run_clip
 from r1b_track import match
 
-GRID = dict(th_T=[0.5, 1, 2, 4], th_F=[2, 4, 8, float("inf")], N_max=[30, 10 ** 9], w_lost=[0, 1], w_drift=[0, 1],
-            w_unc=[0, 0.5])
+# amendment v1.1 (before any tuning outcome; compute budget): 64-point grid, one tuning seed. Measured ~50 s per grid
+# point per condition per level per seed over the 48 TUNE clips on one core -> the 256 x 2-seed grid was ~33 h.
+GRID = dict(th_T=[0.5, 1, 2, 4], th_F=[2, 4, 8, float("inf")], N_max=[30, 10 ** 9], w_lost=[0, 1], w_drift=[1],
+            w_unc=[0])
 PRIMARY = ["A1", "B", "Bp", "C1", "D"]
 SECONDARY = ["A0", "C0"]
-TUNE_SEEDS = [1000, 1001]
+TUNE_SEEDS = [1000]
 GATE_SEEDS = [0, 1, 2, 3, 4]
 
 

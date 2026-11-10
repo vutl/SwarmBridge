@@ -174,6 +174,13 @@ Mọi điều kiện dùng chung: detector, tracker (`r1b_track.py`, cùng tham 
 - N_max ∈ {30; ∞};
 - w_new = 1; w_lost ∈ {0; 1}; w_drift ∈ {0; 1}; w_unc ∈ {0; 0,5}.
 
+**Sửa đổi v1.1** (10/11, **trước** mọi kết quả tinh chỉnh; lý do là thời gian tính):
+- Đo trên dữ liệu thật: một điểm lưới × một điều kiện × một mức × một seed trên 48 clip TUNE mất khoảng 50 s trên một nhân. Lưới 256 × 2 seed × 7 điều kiện × 4 mức sẽ mất khoảng 33 giờ.
+- **Lưới mới 64 điểm:** θ_T ∈ {0,5; 1; 2; 4}, θ_F ∈ {2; 4; 8; ∞}, N_max ∈ {30; ∞}, w_lost ∈ {0; 1}; cố định **w_drift = 1** (trôi, gồm cả lệch lớp, là tín hiệu cốt lõi) và **w_unc = 0**.
+- **Một seed tinh chỉnh (1000).** Seed chấm G7 giữ nguyên {0..4}.
+- Lưới như nhau cho mọi điều kiện.
+- Ghi minh bạch: lúc đo tốc độ đã thấy F1 của 16 lần chạy thử trên TUNE. Đó là dữ liệu tinh chỉnh, không dùng để chọn lưới.
+
 **Tinh chỉnh:**
 - Mỗi điều kiện × mỗi mức R_ul tinh chỉnh **riêng** trên **48 clip TUNE**, kịch bản N.
 - Chọn F1 gộp lớn nhất; hoà thì lấy UL thấp hơn. UL ≤ R_ul và DL ≤ cap tự đảm bảo nhờ bucket và link.
