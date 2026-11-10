@@ -4,12 +4,13 @@
 # (Drive download quota), up to 16 attempts; then sha256 + unzip + integrity audit.
 D=/home/uservutl/data/visdrone_vid
 WD=/mnt/c/Users/USER/Downloads
+WD2=/mnt/c/Users/USER/Documents/SwarmBridge/data/visdrone   # browser download placed in the repo data dir (git-ignored)
 mkdir -p $D && cd $D
 LOG=$D/download.log
 dl() {  # id name pattern
   [ -f $2.ok ] && return 0
   if [ ! -f $2 ]; then
-    for f in $WD/$3; do [ -f "$f" ] && { echo "found browser download $f" >> $LOG; cp "$f" $2; break; }; done
+    for f in $WD/$3 $WD2/$3; do [ -f "$f" ] && { echo "found browser download $f" >> $LOG; cp "$f" $2; break; }; done
   fi
   if [ -f $2 ] && unzip -tq $2 >> $LOG 2>&1; then touch $2.ok; echo "ok (existing file) $2 $(date)" >> $LOG; return 0; fi
   echo "try gdown $2 $(date)" >> $LOG
