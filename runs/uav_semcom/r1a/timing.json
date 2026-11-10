@@ -1,0 +1,14 @@
+{
+ "cpu": 6,
+ "gpu": "NVIDIA GeForce RTX 3070",
+ "n": 30,
+ "onboard640_gpu_ms": 14.995411499967304,
+ "onboard960_gpu_ms": 13.681488999964131,
+ "onboard640_cpu1_ms": 27.02370700035317,
+ "onboard960_cpu1_ms": 46.81125549996068,
+ "onboard640_cpu6_ms": 25.69416850019479,
+ "onboard960_cpu6_ms": 49.73688800009768,
+ "server_frame_gpu_ms": 13.366620499937198,
+ "server_tile_gpu_ms": 9.02779650004959,
+ "onboard_params": 2607070
+}

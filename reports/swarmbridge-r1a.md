@@ -101,3 +101,110 @@ Mức +2 điểm là ngưỡng **ý nghĩa thực tiễn**, không phải tiêu 
 - đặc điểm của chúng: số vật thể, tỉ lệ vật nhỏ, độ phân giải, video.
 
 **Cận trên:** ROI-oracle cho biết bao nhiêu phần thua của token là do **chọn ô sai**, bao nhiêu là do chính detector ở BS.
+
+## 1. Code, cách chạy, chi phí
+
+| Thành phần | File |
+|---|---|
+| Train YOLO11n | `swarmbridge/experiments/uav_semcom/r1a_det.py`, `scripts/uav_semcom/run_r1a_det.sh` (22 phút GPU) |
+| Đo | `r1a_measure.py`, `scripts/uav_semcom/run_r1a_measure.sh` (khoảng 25 phút GPU + đo thời gian khi máy rảnh) |
+| Đánh giá | `r1a_eval.py` |
+| Kết quả | `runs/uav_semcom/r1a/eval.json`, `runs/uav_semcom/r1a/summary.md`. Detection thô (`~/work/r1a/measure/measure.pkl`) không vào git; sha256 của trọng số ở `~/work/r1a/measure/sha256.txt` |
+
+**YOLO11n trên UAV:** mAP50 holdout 0,31 (YOLO11s của BS: 0,475); 2,6 triệu tham số.
+
+**Thời gian** (trung vị 30 ảnh, máy rảnh; CPU proxy là desktop 6 luồng, không phải phần cứng UAV):
+
+| | ms/khung |
+|---|---|
+| YOLO11n @640 | 26 (CPU), 15 (GPU) |
+| YOLO11n @960 | 50 (CPU), 14 (GPU) |
+| YOLO11s ở BS, khung đầy đủ | 13 (GPU) |
+| YOLO11s ở BS, mỗi ô | 9 (GPU) |
+| Mã hoá AVIF (bảng A5) | 72–134 |
+| Mã hoá mbt2018 trên CPU (bảng A5) | 460–910 |
+
+Cả hai mức YOLO11n đều chạy ≥ 5 lần/s (≈ 20 và 38 lần/s).
+
+## 2. Kết quả chính (cấu hình chọn trên val, chấm test / test-dev một lần)
+
+Recall (điểm) ở ngân sách B. Δ_B = họ − RV_probe(B); CI cluster bootstrap theo video, B = 2000. Ngoặc ở các cột recall nhỏ / FP / AP50 là giá trị của RV_probe.
+
+| pool | B | RV_probe (ảnh) | họ: cấu hình | recall | **Δ_B** [CI] | Mbit thực | recall nhỏ | FP/khung | AP50 | ms UAV / BS |
+|---|---|---|---|---|---|---|---|---|---|---|
+| test | 0,08 | 42,9 | TOK: u960, τ 0,25 | 52,2 | **+9,2** [+6,4; +12,1] | 0,003 | 39,9 (29,2) | 17,7 (12,2) | 28,2 (26,7) | 50 / 0 |
+| | | | HYB: u960, τ 0,25, nền avif_5 | 55,1 | **+12,1** [+9,6; +14,9] | 0,069 | 42,7 (29,2) | 24,0 (12,2) | 31,6 (26,7) | 121 / 13 |
+| test | 0,3 | 58,4 | HYB: nền mbt q3 | 61,1 | **+2,7** [+1,3; +4,1] | 0,250 | 49,6 (46,4) | 22,6 (15,4) | 41,0 (**42,6**) | 526 / 13 |
+| test | 1,2 | 61,1 | ROI: u960, τ 0,25, ô avif_50, nền avif_5 | 63,8 | **+2,7** [+1,7; +3,5] | 0,636 | 53,1 (49,9) | 42,7 (16,2) | 39,5 (**44,3**) | 441 / 93 |
+| test-dev | 0,08 | 27,4 | TOK: u960, τ 0,25 | 45,3 | **+17,8** [+12,9; +21,6] | 0,002 | 32,2 (16,7) | 12,8 (8,3) | 24,2 (17,7) | 50 / 0 |
+| | | | HYB: nền avif_5 | 47,5 | **+20,1** [+15,3; +23,8] | 0,099 | 33,8 (16,7) | 16,9 (8,3) | 27,4 (17,7) | 121 / 13 |
+| test-dev | 0,3 | 46,7 | HYB: nền mbt q3 | 51,8 | **+5,1** [+3,1; +7,1] | 0,323 | 38,8 (33,9) | 17,2 (11,1) | 32,8 (31,6) | 526 / 13 |
+| test-dev | 1,2 | 51,5 | ROI: ô avif_50, nền avif_5 | 54,2 | **+2,7** [+1,5; +3,5] | 0,727 | 41,3 (38,6) | 30,3 (12,5) | 32,2 (**36,3**) | 488 / 102 |
+
+- Ở ngân sách rất thấp (0,005 và 0,02 Mbit), ảnh gần như vô dụng (recall 3–13), còn token ≈ 2–3 kbit cho recall 45–52 (Δ +37 đến +49).
+- Token chỉ hơn ảnh ở ngân sách thấp: ở B = 0,3 và 1,2, token thua ảnh 1,5–9 điểm. Ở đó HYB và ROI mới hơn.
+- Bảng mọi cấu hình (Mbit, recall, recall nhỏ, FP, ms) ở `summary.md`.
+
+## 3. Kết luận theo quy tắc 0.6: INCONCLUSIVE
+
+| Điều kiện | Kết quả |
+|---|---|
+| 1 | **Đạt ở cả ba mức vận hành, cả hai pool**, CI > 0: TOK và HYB ở 0,08; HYB ở 0,3; ROI ở 1,2 |
+| 3 (khả thi) | **Đạt** |
+| 2 (ảnh không bị thống trị: ảnh hơn mọi họ khác ≥ 2 điểm recall ở một mức B) | **Không đạt ở mức nào.** Theo recall, ảnh bị thống trị ở mọi ngân sách |
+
+**PASS cần cả 1 và 2, và FAIL không xảy ra.** Protocol không liệt kê sẵn trường hợp "các họ không phải ảnh thống trị ảnh". Tôi xếp nó vào INCONCLUSIVE và nói rõ lý do, không đổi quy tắc sau khi xem kết quả.
+
+## 4. Diễn giải
+
+**1. Có đánh đổi thật, nhưng giữa các họ không phải ảnh, và theo nhiều chiều.**
+- Theo (bit, recall), TOK → HYB → ROI lần lượt tốt nhất khi ngân sách tăng:
+
+  | Họ | Bit | Recall (test-dev) | ms UAV |
+  |---|---|---|---|
+  | TOK | ~2 kbit | 45 | 50 |
+  | HYB nền avif_5 | ~0,1 Mbit | 48 | 121 |
+  | HYB nền mbt q3 | ~0,3 Mbit | 52 | 526 |
+  | ROI | ~0,7 Mbit | 54 | 488 |
+
+- Đây đúng là yêu cầu "ít nhất hai lựa chọn không bị thống trị". Nhưng nó không đúng với câu chữ của điều kiện 2, vốn đòi chính **ảnh** phải không bị thống trị.
+
+**2. Ảnh vẫn không bị thống trị ở các chiều khác.**
+- **AP50 ở ngân sách cao:** ảnh 44,3 / 36,3 so với ROI 39,5 / 32,2 và HYB 41,0 (test).
+- **FP:** ảnh 12–16 FP/khung, ROI 30–43.
+- **Tính toán ở BS:** 1 lần chạy so với khoảng 10 ô.
+- **Bằng chứng hình ảnh đầy đủ** cho người vận hành.
+- **Lý do:** gộp nhiều nguồn (token của YOLO11n, ảnh nền và ô qua YOLO11s) làm tăng TP ở ngưỡng 0,25, nhưng điểm tin cậy từ hai detector không cùng thang. Thứ hạng detection vì thế kém hơn, nên AP thấp hơn và FP cao hơn. Hiệu chỉnh điểm theo nguồn có thể giảm phần này; chưa thử.
+
+**3. Cơ chế chính: phát hiện trước khi nén.**
+- YOLO11n chạy trên **ảnh gốc chưa nén** ngay trên UAV: recall 45 trên test-dev ở u960. Con số này cao hơn YOLO11s ở BS chạy trên ảnh avif_5 (≈ 27) và ngang ảnh nén ≈ 0,3 Mbit.
+- Nén mất vật nhỏ nhiều hơn mức mà một detector nhỏ bỏ sót.
+- Đây là điều đã biết trong edge video analytics (Vigil, EdgeDuet). Bản thân nó **không mới**, nhưng nó giải thích vì sao bài toán chọn mode toàn ảnh của A5–G-L2 bỏ qua lựa chọn quan trọng nhất.
+
+**4. Chọn ô theo độ không chắc trên UAV gần bằng oracle.**
+- ROI-oracle (ô chọn bằng nhãn) chỉ hơn ROI 0,2–0,5 điểm recall, nhưng dùng ít ô hơn (7,2 so với 9,8 ô; ít bit hơn khoảng 25%).
+- Giới hạn của ROI nằm ở detector BS và cách gộp, không ở cách chọn ô.
+
+**5. Ca thất bại** (test-dev; số vật nhỏ mất so với ảnh RV_probe ở cùng B):
+- Tập trung ở các khung **rất dày vật nhỏ**: 100–330 vật/khung, phần lớn nhỏ (chuỗi 9999938, 9999979, 9999952, 0000066).
+- TOK @1,2 mất tới 21 vật nhỏ/khung. ROI cũng còn mất tới 19 ở 0000066 (275 vật, 960×540).
+- Đó là trạng thái mà ở R1b nên chuyển sang khung đầy đủ. Chi tiết trong `eval.json` (`failures_testdev`).
+
+## 5. Giới hạn
+
+- **Tĩnh:** không có hành động "không gửi", không có thời gian, không có trạng thái hiểu biết của BS, không mô phỏng mạng.
+- **Thời gian đo trên CPU desktop,** không phải phần cứng UAV; không đo năng lượng.
+- **Họ ảnh là các ảnh nén độc lập.** Ở R1b phải thay bằng codec video liên khung.
+- **Cấu hình ROI chọn trên val (≤ 1,2 Mbit) dùng 0,64–0,73 Mbit thực tế.** Bit thực tế có thể vượt ngưỡng val một chút ở pool khác.
+- **Hai detector cùng train trên VisDrone-DET-train;** các pool A5 không trùng chuỗi với tập train này.
+- **mbt q3 làm ảnh nền tốn khoảng 0,5 s mã hoá trên CPU.** Nền avif_20 (0,19 Mbit, recall 49,9 trên test-dev, 141 ms) là lựa chọn rẻ hơn về tính toán.
+
+## 6. Hệ quả (theo 0.7)
+
+INCONCLUSIVE cho phép sang **thiết kế** R1b, theo bản sửa ở `reports/swarmbridge-r1b-design.md`. Tôi không tự bắt đầu R1b. Những gì nên giữ cho menu biểu diễn:
+- **TOK** (u960, τ 0,25): rẻ nhất, mạnh nhất khi bit chật.
+- **HYB** với nền avif_5 / avif_20: tầm 0,1–0,2 Mbit.
+- **ROI**: ở R1b chuyển thành ROI-QP **trong codec video**, không dùng ô ảnh độc lập.
+- **Khung đầy đủ / codec video**: cho AP, FP thấp và các khung dày vật nhỏ.
+
+**Câu hỏi của C trở nên sắc hơn:** token mạnh đến mức "khi nào token **không đủ**" (cảnh dày vật nhỏ, đối tượng mới, BS cần bằng chứng) là quyết định trung tâm. Đó đúng là chỗ trạng thái hiểu biết của BS và phản hồi ngữ nghĩa có thể có giá trị. Điều này phải kiểm ở R1b, so với x264 và Glimpse.
