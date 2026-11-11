@@ -17,6 +17,7 @@ Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 7 | [swarmbridge-r1b0a-protocol.md](swarmbridge-r1b0a-protocol.md) | Protocol R1b-0a: split, timing nhân quả, số khoá, lưới tinh chỉnh, cổng H1 | đã khoá; G7 chấm một lần 11/11 |
 | 8 | [swarmbridge-r1b0a-validation.md](swarmbridge-r1b0a-validation.md) | Kiểm chứng kỹ thuật bộ mô phỏng: chỉ số theo lớp, wire format, kênh ghép cặp, timing; 52 test | xong (dữ liệu tổng hợp) |
 | 9 | [swarmbridge-r1b0a-h1-result.md](swarmbridge-r1b0a-h1-result.md) | Kết quả cổng H1 trên G7: bảng A1 / B / B+ / C1 / D, độ nhạy, chẩn đoán | **FAIL (không có dư địa)**; dừng nhánh phản hồi ngữ nghĩa |
+| 10 | [swarmbridge-direction-reassessment.md](swarmbridge-direction-reassessment.md) | Đánh giá lại hướng sau R1b: postmortem, prior art, 3 hướng, novelty / dataset matrix, cổng 0 trên MDMT. Ghi chú nguồn: [reassess-notes/](reassess-notes/) | đề xuất, chờ duyệt |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).
