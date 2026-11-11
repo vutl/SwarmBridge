@@ -172,6 +172,7 @@ Hai lưu ý:
   - vật to, nên lý do cần biểu diễn nặng (vật nhỏ bị detector UAV bỏ sót) gần như không có;
   - chỉ có một lớp.
 - Một kết quả "không có dư địa" trên VisionTrack có thể đến từ bản chất dataset, không từ cơ chế.
+- **Toàn vẹn:** CRC của mọi mục trong hai zip đều đúng (`testzip`). `test`: 22 cảnh × 2 góc, 58.038 ảnh, 87 file nhãn. Riêng `00012night_View2` thiếu `gt/gt.txt` nhưng có `View2.txt`, mà ở `train` hai file này có cùng nội dung. Bộ đọc nhãn sẽ dùng `ViewN.txt` làm nguồn chính. Ngoài các con số đếm này, chưa đọc gì từ `test`.
 - **Quyết định:** VisionTrack giữ vai trò **REPL / kiểm tra liên kết**, không thay MDMT làm tập 0B chính. MDMT (51 đối tượng mỗi khung, vật nhỏ, có xe) vẫn là ứng viên chính, chờ trả lời về quyền và đường tải.
 
 - **Rò rỉ với dữ liệu train detector:** kiểm MDMT và VisDrone-DET bằng pHash như audit VID (cùng nhóm phát hành).
