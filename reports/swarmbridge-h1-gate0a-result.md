@@ -1,5 +1,10 @@
 # SwarmBridge H1: kết quả Gate 0A (khám phá)
 
+> **Hiệu chỉnh 12/11** (xem [swarmbridge-h1-gate0a-audit.md](swarmbridge-h1-gate0a-audit.md)):
+> - S1–S3 là **oracle danh tính có trễ**, không phải cơ chế triển khai được. Cột "thực tế" dưới đây phải đọc là "oracle có trễ".
+> - S0 không tối ưu với TOK: Δ_free bị đánh giá thấp.
+> - Khi tính chi phí bản kê, TOK không bao giờ dương; CROP giữ được 69–82% lợi ích.
+
 Ngày 12/11/2026.
 - **Protocol:** [swarmbridge-h1-gate0-protocol-v2.md](swarmbridge-h1-gate0-protocol-v2.md), mục 10 (v2.1, khoá ở `74e047c3`).
 - **Code và test** (14 test qua) commit trước khi chạy: `6f3e1949`, sửa hiệu năng ở `8297b558`.
