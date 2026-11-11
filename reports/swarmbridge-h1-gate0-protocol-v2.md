@@ -154,6 +154,26 @@ Hai lưu ý:
   - chỉ chấm một lần, sau khi protocol v2.1 được khoá.
 - Vai trò của VisionTrack (thay REPL bằng tập 0B chính, hay giữ làm REPL) được quyết định từ kết quả trên `train` và quyền sử dụng. Quyết định đó không dựa vào `test`.
 
+### 5.2. VisionTrack `train`: kết quả khảo sát (11/11; chỉ `train`, `test` chưa mở)
+
+| Đại lượng | Giá trị |
+|---|---|
+| Cấu trúc | 24 cảnh × 2 góc (View1/View2), 57.508 ảnh 1920×1080, 28.754 cặp khung đồng bộ (số khung hai góc bằng nhau ở mọi cảnh) |
+| Nhãn | `gt/gt.txt` dạng MOT (frame, id, x, y, w, h, 1, 1, 1), cùng `gt/ViewN.txt` (6 cột, cùng nội dung). Chỉ một lớp: **người đi bộ**. Không có file license hay README trong zip |
+| ID xuyên góc | **Có, đã kiểm bằng mắt:** vẽ box và ID ở cảnh 00145road khung 100; người 1, 2, 3 trùng khớp giữa hai góc nhìn rất khác nhau |
+| Đối tượng mỗi khung mỗi góc | **10,3** trung bình. 12/24 cảnh chỉ có 2–4 người (dàn dựng); vài cảnh đông 26–50 người (football, basketball, canteen) |
+| Tỉ lệ trùng (cả hai thấy / hợp) | **0,511** gộp; theo cảnh 0,19–1,00 |
+| Cỡ box | Chiều cao p10 / p50 / p90 = 34 / 73 / 185 px. Drone bay thấp, chụp nghiêng; vật to hơn MDMT nhiều (diện tích trung vị 2.368 so với 1.078 px²) |
+
+**Hệ quả cho H1:**
+- **Dùng được** để kiểm tra liên kết xuyên góc (B1-real) với góc nhìn rất khác nhau, và để lặp lại kết quả. Đây là dữ liệu thật với ID đã xác minh.
+- **Yếu nếu dùng làm bằng chứng chính:**
+  - ít đối tượng, nên dòng token chỉ khoảng 0,55 kbit mỗi khung mỗi góc, và phần trùng tuyệt đối rất nhỏ;
+  - vật to, nên lý do cần biểu diễn nặng (vật nhỏ bị detector UAV bỏ sót) gần như không có;
+  - chỉ có một lớp.
+- Một kết quả "không có dư địa" trên VisionTrack có thể đến từ bản chất dataset, không từ cơ chế.
+- **Quyết định:** VisionTrack giữ vai trò **REPL / kiểm tra liên kết**, không thay MDMT làm tập 0B chính. MDMT (51 đối tượng mỗi khung, vật nhỏ, có xe) vẫn là ứng viên chính, chờ trả lời về quyền và đường tải.
+
 - **Rò rỉ với dữ liệu train detector:** kiểm MDMT và VisDrone-DET bằng pHash như audit VID (cùng nhóm phát hành).
 - Chuỗi nào trùng nguồn thì đưa ra khỏi HOLD.
 - **Không dùng kết quả HOLD để chọn lại** policy, chỉ số hay mức ngân sách.
