@@ -121,3 +121,11 @@ def test_policy_never_reads_ids_beyond_given_sets():
     box = (0.0, 0.0, 1.0, 1.0)
     s = G.schemes("q", 1, {1}, {1, 2}, {1: box, 2: box}, None, {"8x8": set(), "16x9": set()})
     assert all(v == (set(), 0.0) for k, v in s.items() if k != "S0")
+
+
+def test_capacity_huge_budget_is_fast_and_capped():
+    import time
+    t = time.time()
+    assert G.tok_capacity(1e12, cap=7) == 7
+    r = G.tok_independent({1, 2, 3}, {3, 4}, 5e11, 5e11)
+    assert r["cov"] == pytest.approx(4) and time.time() - t < 0.5

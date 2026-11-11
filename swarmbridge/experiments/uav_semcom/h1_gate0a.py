@@ -55,11 +55,11 @@ def msg_overhead(payload):
     return 0 if payload <= 0 else MSG_HDR + APP_HDR * math.ceil((MSG_HDR + payload) / MTU)
 
 
-def tok_capacity(budget):
-    """max tokens one UAV message can carry within budget (incl. headers)."""
+def tok_capacity(budget, cap=10 ** 6):
+    """max tokens (<= cap) one UAV message can carry within budget (incl. headers)."""
     if budget < TOK_BITS + msg_overhead(TOK_BITS):
         return 0
-    k = int((budget - MSG_HDR - APP_HDR) // TOK_BITS)
+    k = int(min(cap, (budget - MSG_HDR - APP_HDR) // TOK_BITS))
     while k > 0 and k * TOK_BITS + msg_overhead(k * TOK_BITS) > budget:
         k -= 1
     return k
@@ -73,7 +73,7 @@ def p_hit_random(k, n):
 def tok_independent(A, B, bA, bB):
     """each UAV sends a uniformly random subset of its objects within its own budget."""
     a_only, b_only, both = len(A - B), len(B - A), len(A & B)
-    kA, kB = tok_capacity(bA), tok_capacity(bB)
+    kA, kB = tok_capacity(bA, len(A)), tok_capacity(bB, len(B))
     pA, pB = p_hit_random(kA, len(A)), p_hit_random(kB, len(B))
     cov = a_only * pA + b_only * pB + both * (1 - (1 - pA) * (1 - pB))
     sent = min(kA, len(A)) + min(kB, len(B))
