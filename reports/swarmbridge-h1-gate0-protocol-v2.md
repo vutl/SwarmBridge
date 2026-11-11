@@ -1,4 +1,10 @@
-# SwarmBridge H1: protocol Gate 0 v2 (bản nháp để duyệt)
+# SwarmBridge H1: protocol Gate 0 v2 / v2.1
+
+> **v2.1 (11/11):**
+> - Gate 0A được duyệt, **chỉ ở mức khám phá**. Đặc tả khoá ở mục 10. Mục 10 **thay thế** các phần về 0A trong mục 1 và 7: mặc định "downlink phải gửi lại toàn bộ box" và ranh giới 64 kbit/s bị bỏ.
+> - Gate 0B **chưa** được duyệt.
+> - A5/A5.5 (PPO cho lập lịch vô tuyến) vẫn là nền RL; H1 chỉ là ứng viên hợp tác bổ sung, không thay toàn bộ hướng.
+
 
 Ngày 11/11/2026. Viết theo phản biện thứ tư về [swarmbridge-direction-reassessment.md](swarmbridge-direction-reassessment.md) (commit `498eb171`).
 
@@ -278,3 +284,91 @@ Người gửi điền tên và đơn vị. Gửi tới tác giả liên hệ gh
 >
 > Best regards,
 > [Name, affiliation]
+
+
+## 10. Gate 0A v2.1: đặc tả khoá (11/11, trước khi chạy)
+
+### 10.1. Phạm vi
+
+- **Dữ liệu:** chỉ nhãn MDMT-test công khai (14 cặp chuỗi, EXPL). Nhãn này đã thấy khi chọn dataset, nên **kết quả 0A là khám phá, không phải bằng chứng xác nhận**.
+- **Không làm:** không ảnh, không detector, không VisionTrack test, không tải MDMT, không Gate 0B.
+- **Báo cáo hai giả thuyết riêng:**
+  - **H1-TOK:** token hoàn hảo;
+  - **H1-CROP:** mảnh ảnh hoàn hảo theo mô hình bit.
+
+  Kết quả nhánh này không được dùng để sửa ngưỡng của nhánh kia.
+- **FRAME không định lượng ở 0A,** vì dedup ở mức khung cần hình học vùng chồng ảnh, tức cần ảnh. Để cho 0B nếu được duyệt.
+
+### 10.2. Đơn vị
+
+- **Epoch:** cứ mỗi s khung lấy một cặp khung đồng bộ. Mặc định s = 10, độ nhạy s ∈ {1, 30}. fps của MDMT không được ghi, nên s được báo theo khung.
+- **Mỗi epoch:**
+  - BS cần biết **mọi đối tượng duy nhất** (theo GT ID) đang có mặt trong ít nhất một góc nhìn;
+  - mọi box đều tính, kể cả visibility 0,5 (độ nhạy: bỏ box bị che).
+- **Token hoàn hảo:** box GT, luôn đúng.
+- **Chỉ số chính:** recall đối tượng duy nhất U (%), micro trên toàn bộ epoch của 14 chuỗi.
+  - Với token hoàn hảo, khi BS khử trùng bằng danh tính lý tưởng thì precision = 1, nên F1 = 2U / (1 + U). F1 được báo kèm.
+  - Khi BS **không** khử trùng, bản trùng là FP_dup; báo riêng.
+- **Báo kèm:** bit trùng đã giao, bit đạt được, bit điều phối, số đối tượng bị bỏ nhầm do lỗi điều phối.
+
+### 10.3. Chi phí bit (hằng số từ `r1b_sim`)
+
+- **Token:** 52 bit/đối tượng.
+- **Header mỗi thông điệp của một UAV:** 48 bit + 96 bit ứng dụng cho mỗi gói 1.200 byte.
+- **Mảnh ảnh (CROP):** vùng = box nở 1,5 lần mỗi chiều, cạnh tối thiểu 64 px; bit = c0 + bpp × diện tích.
+  - Mặc định bpp = 0,65 (khoảng avif_50 trên ô 320 px ở R1a) và c0 = 2.400 bit (khoảng 300 byte overhead container).
+  - Độ nhạy: bpp ∈ {0,3; 0,65}, c0 ∈ {0; 2.400}.
+
+### 10.4. Ngân sách
+
+- **B là tổng của cả hai UAV mỗi epoch,** gồm header, cộng ρ × bit downlink điều phối.
+- **ρ (giá bit DL so với bit UL):** chính ρ = 1 (bảo thủ); độ nhạy ρ ∈ {0; 0,5}.
+- **Lưới B:**
+  - TOK: {250, 500, 1k, 1,5k, 2k, 3k, 4k, 5k, 6k, 8k} bit/epoch, cùng điểm "gửi hết";
+  - CROP: {10k, 20k, 50k, 100k, 200k, 500k, 1M, 2M} bit/epoch.
+- **Quy đổi sang kbit/s:** báo bảng theo tần số làm tươi r ∈ {1, 2, 5, 10} epoch/s. **Không dùng một ngưỡng tốc độ duy nhất.** Báo **vùng (B, r) còn dư địa** để người đọc tự đối chiếu với từng loại liên kết.
+
+### 10.5. Chính sách
+
+**Không phối hợp:**
+- **IND-eq:** mỗi UAV B/2, chọn ngẫu nhiên đối tượng của mình. Dùng kỳ vọng chính xác, không mô phỏng:
+  E[phủ] = |A\B|·p_A + |B\A|·p_B + |A∩B|·(1 − (1 − p_A)(1 − p_B)).
+  - CROP: mỗi UAV lấy rẻ nhất trước. Đây là tối ưu cho số lượng dưới knapsack đơn vị giá trị, và cùng quy tắc cho mọi chính sách.
+- **IND-α:** như IND-eq, nhưng tỉ lệ chia ngân sách α ∈ {0,3; 0,4; 0,5; 0,6; 0,7}, lấy α tốt nhất theo từng B trên chính EXPL. Điều này **có lợi cho baseline**.
+- **Q (chỉ hạn mức):** BS báo hạn mức theo tỉ lệ số đối tượng mỗi UAV, tốn 22 bit DL; không khử trùng.
+
+**Có phối hợp:** UAV1 gửi trước, ưu tiên các đối tượng được đánh dấu "chung"; UAV2 bỏ các đối tượng bị đánh dấu.
+
+| Mã | Cơ chế | Chi phí DL mỗi epoch | Nguồn lỗi |
+|---|---|---|---|
+| **S0** | Oracle miễn phí: biết đúng tập chung **ở epoch hiện tại** | 0 | Không |
+| **S1** | Gửi lại box: BS gửi box (trong khung UAV2) của các đối tượng chung ở epoch trước | 52 × n_chung + 48 | Trễ một epoch: đối tượng mới chung bị gửi trùng; đối tượng UAV1 đã mất bị bỏ nhầm |
+| **S2** | Bitmap trên danh sách track của UAV2 ở epoch trước | \|B_{t−1}\| + 48 | Như S1 (track ID cục bộ coi là ổn định, vì đây là GT) |
+| **S2b** | Bloom filter trên track ID của UAV2, f ∈ {1%, 5%} | ⌈1,44 · log2(1/f) · n_chung⌉ + 48 | Như S2, cộng dương tính giả với xác suất f, làm bỏ nhầm |
+| **S3** | Mặt nạ ô lưới trên ảnh UAV2, g ∈ {8×8, 16×9}. Ô = 1 nếu ở epoch trước ≥ 50% đối tượng của UAV2 trong ô là chung. UAV2 bỏ đối tượng có tâm trong ô = 1 | g + 48 | Ô thô: bỏ nhầm và gửi trùng |
+| **S3s** | Mặt nạ tĩnh: tính một lần từ epoch đầu của chuỗi, gửi một lần | ≈ 0 mỗi epoch | Như S3, cộng sai lệch khi drone di chuyển |
+
+- **S0 là cận lạc quan.** Các S1–S3 dùng GT ID của epoch **trước**, nên vẫn là oracle danh tính có trễ. Lỗi liên kết thật do detector và đăng ký để cho Gate 1.
+- **Trùng lặp sau khi nhận:** BS khử trùng bằng danh tính lý tưởng (O-ID-BS) trong mọi chính sách. Vì vậy, với token hoàn hảo, IND không mất precision; nó chỉ mất ngân sách vì gửi trùng.
+
+### 10.6. Đại lượng và luật đọc (khai báo trước; khám phá)
+
+- **Δ_free(B) = U(S0) − max[U(IND-eq), U(IND-α), U(Q)]**, tính bằng điểm recall.
+- **Δ_real(B) = max_k U(S_k) − max[...]** với k ∈ {S1, S2, S2b, S3, S3s}, ở ρ = 1.
+- **Một điểm (B, nhánh) được đọc là "có dư địa"** nếu Δ_free ≥ 5 điểm **và** Δ_real ≥ 0,5 × Δ_free.
+- **Kết luận cho mỗi nhánh:**
+  - nếu không có B nào "có dư địa": "không có dư địa ở vùng ngân sách đã xét";
+  - nếu có: báo **khoảng B** đó, quy đổi thành kbit/s theo r.
+- **Phân tích phụ:**
+  - Δ theo từng chuỗi, so với tỉ lệ chồng lấn (0,23–0,83);
+  - độ nhạy s, ρ, CROP (bpp, c0), bỏ box bị che.
+- **Hệ quả cho 0B:** nhánh nào có dư địa thì đề xuất 0B cho nhánh đó. Nhánh CROP còn phụ thuộc giả thuyết "detector UAV bỏ sót vật nhỏ", mà 0A không kiểm được. 0B vẫn cần duyệt riêng.
+
+### 10.7. Tính đúng của code
+
+Có test trên dữ liệu tổng hợp nhỏ:
+- công thức kỳ vọng IND so với vét cạn;
+- S0 bằng min(K, |A∪B|);
+- chi phí từng cơ chế;
+- lỗi trễ một epoch được đếm đúng;
+- tham lam rẻ nhất trước là tối ưu so với vét cạn (CROP).
