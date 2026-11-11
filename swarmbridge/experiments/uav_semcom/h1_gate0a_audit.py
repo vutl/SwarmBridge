@@ -137,6 +137,7 @@ def snapshot_audit(data, stride=10, bpp=0.65, c0=2400.0):
                 r = G.tok_coordinated(A, B, sup, Bg, dl, 1.0) if br == "TOK" else \
                     G.crop_coordinated(A, B, cA, cB, sup, Bg, dl, 1.0)
                 acc["S2_lagID"] += r["cov"]
+                per_seq[seq][(br, Bg)]["S2_lagID"] += r["cov"]
                 # manifest variants: association ideal but its uplink cost is charged
                 for m in (24, 52):
                     if br == "TOK":       # UAV1 tokens double as its manifest; UAV2 uploads an m-bit manifest
@@ -253,6 +254,11 @@ def main():
             rec = {k: 100 * v / U for k, v in acc.items() if k != "U"}
             base = max([rec[f"IND_a{x}"] for x in G.ALPHAS] + [rec["Q"]])
             seqd = {}
+            # consistency guard: per-sequence sums must reproduce the pooled sums
+            for k in ("U", "S0_exact", "S2_lagID", "S2m24", "S2m52", "IND_a0.5"):
+                tot = sum(per_seq[s][(br, Bg)][k] for s in per_seq)
+                ref = acc["U"] if k == "U" else acc[k]
+                assert abs(tot - ref) < 1e-6 * max(1.0, ref), (br, Bg, k, tot, ref)
             for s in per_seq:
                 d = per_seq[s][(br, Bg)]
                 b5 = 100 * d["IND_a0.5"] / d["U"]
