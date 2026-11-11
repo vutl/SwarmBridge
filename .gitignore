@@ -104,3 +104,5 @@ runs/uav_semcom/a6l1/final/*.dec.json.gz
 
 # VisionTrack (GMT, CVPR 2026) multi-drone dataset: data stays out of git
 /data/visiontrack/
+# MDMT public test GT (no license; analysis only, never redistributed)
+/data/mdmt_public_gt/
