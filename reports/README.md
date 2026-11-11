@@ -18,7 +18,8 @@ Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 8 | [swarmbridge-r1b0a-validation.md](swarmbridge-r1b0a-validation.md) | Kiểm chứng kỹ thuật bộ mô phỏng: chỉ số theo lớp, wire format, kênh ghép cặp, timing; 52 test | xong (dữ liệu tổng hợp) |
 | 9 | [swarmbridge-r1b0a-h1-result.md](swarmbridge-r1b0a-h1-result.md) | Kết quả cổng H1 trên G7: bảng A1 / B / B+ / C1 / D, độ nhạy, chẩn đoán | **FAIL (không có dư địa)**; dừng nhánh phản hồi ngữ nghĩa |
 | 10 | [swarmbridge-direction-reassessment.md](swarmbridge-direction-reassessment.md) | Đánh giá lại hướng sau R1b: postmortem, prior art, 3 hướng, novelty / dataset matrix, cổng 0 trên MDMT. Ghi chú nguồn: [reassess-notes/](reassess-notes/) | H1 duyệt ở mức ứng viên; Gate 0 thay bằng #11 |
-| 11 | [swarmbridge-h1-gate0-protocol-v2.md](swarmbridge-h1-gate0-protocol-v2.md) | Protocol Gate 0 v2 cho H1: phân loại oracle, đặc tả bộ chấm F1 đối tượng duy nhất, ma trận baseline, split chống thiên lệch chọn, quyết định quyền dữ liệu, checklist | nháp, chờ duyệt |
+| 11 | [swarmbridge-h1-gate0-protocol-v2.md](swarmbridge-h1-gate0-protocol-v2.md) | Protocol Gate 0 v2 cho H1: phân loại oracle, đặc tả bộ chấm F1 đối tượng duy nhất, ma trận baseline, split chống thiên lệch chọn, quyết định quyền dữ liệu, checklist | v2.1 khoá cho 0A; 0B chưa duyệt |
+| 12 | [swarmbridge-h1-gate0a-result.md](swarmbridge-h1-gate0a-result.md) | Gate 0A (khám phá, nhãn MDMT-test, báo cáo hoàn hảo): dư địa phối hợp theo ngân sách, TOK và CROP riêng | TOK: dư địa hẹp (≈ dòng token); CROP: dư địa ở 100–500 kbit/epoch |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).
