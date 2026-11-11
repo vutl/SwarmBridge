@@ -20,7 +20,8 @@ Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 10 | [swarmbridge-direction-reassessment.md](swarmbridge-direction-reassessment.md) | Đánh giá lại hướng sau R1b: postmortem, prior art, 3 hướng, novelty / dataset matrix, cổng 0 trên MDMT. Ghi chú nguồn: [reassess-notes/](reassess-notes/) | H1 duyệt ở mức ứng viên; Gate 0 thay bằng #11 |
 | 11 | [swarmbridge-h1-gate0-protocol-v2.md](swarmbridge-h1-gate0-protocol-v2.md) | Protocol Gate 0 v2 cho H1: phân loại oracle, đặc tả bộ chấm F1 đối tượng duy nhất, ma trận baseline, split chống thiên lệch chọn, quyết định quyền dữ liệu, checklist | v2.1 khoá cho 0A; 0B chưa duyệt |
 | 12 | [swarmbridge-h1-gate0a-result.md](swarmbridge-h1-gate0a-result.md) | Gate 0A (khám phá, nhãn MDMT-test, báo cáo hoàn hảo): dư địa phối hợp theo ngân sách, TOK và CROP riêng | TOK: dư địa hẹp (≈ dòng token); CROP: dư địa ở 100–500 kbit/epoch |
-| 13 | [swarmbridge-h1-gate0a-audit.md](swarmbridge-h1-gate0a-audit.md) | Kiểm toán 0A: S2 là oracle có trễ; oracle chính xác (MILP); chi phí bản kê; baseline nhớ lịch sử; điều kiện C1–C6 cho CROP | TOK NO-GO; CROP GO có điều kiện (pilot chỉ trên TUNE) |
+| 13 | [swarmbridge-h1-gate0a-audit.md](swarmbridge-h1-gate0a-audit.md) | Kiểm toán 0A: S2 là oracle có trễ; oracle chính xác (MILP); chi phí bản kê; baseline nhớ lịch sử; điều kiện C1–C6 cho CROP | TOK NO-GO; CROP GO có điều kiện; v2 sửa chi phí bản kê (mục 8) |
+| 14 | [swarmbridge-h1-0b-tune-pilot-protocol.md](swarmbridge-h1-0b-tune-pilot-protocol.md) | Protocol pilot 0B-TUNE cho CROP: ứng viên không GT, AVIF thật, YOLO11n/s thật, F1 có FP, CPU, airtime, tiêu chí sàng lọc C1–C5 | nháp; chặn bởi quyền dùng ảnh MDMT |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).

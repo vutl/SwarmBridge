@@ -1,5 +1,11 @@
 # SwarmBridge H1: kiểm toán phương pháp Gate 0A (hiệu chỉnh khám phá)
 
+> **Hiệu chỉnh v2 (12/11, theo phản biện thứ bảy; mục 8):**
+> - Chế độ lịch sử và snapshot TOK của v1 chỉ trừ bản kê của UAV2. v2 trừ bản kê của **cả hai** UAV, cộng bitmap cho mỗi UAV được điều phối.
+> - Kết quả mới ở `gate0a_audit_v2.json`; v1 giữ nguyên.
+> - **S2m24 / S2m52 là "oracle liên kết hoàn hảo có tính phí"**: trừ bit bản kê, nhưng **không** thực hiện liên kết xuyên góc. Chúng không phải cơ chế triển khai được, và không cho thấy cải thiện thực tế.
+> - Ở mục 0–3, cột "Δ có tính bản kê" của chế độ lịch sử là số v1; số đúng ở mục 8.
+
 Ngày 12/11/2026. Viết theo phản biện thứ sáu về [swarmbridge-h1-gate0a-result.md](swarmbridge-h1-gate0a-result.md).
 
 - **Code:** `swarmbridge/experiments/uav_semcom/h1_gate0a_audit.py`.
@@ -168,3 +174,43 @@ Mọi ứng viên sai vẫn tốn bit và tốn thời gian mã hoá trên UAV.
 4. **Liên hệ với A5/A5.5:**
    - Lợi ích phối hợp tập trung ở vùng ngân sách xấp xỉ dòng dữ liệu, nên quyết định "khi nào phối hợp" phụ thuộc trạng thái mạng.
    - Đây vẫn chỉ là giả thuyết; chỉ đáng đưa PPO vào sau khi C1–C4 cho thấy giá trị nhiệm vụ thật với detector thật.
+
+
+## 8. Hiệu chỉnh v2: chi phí bản kê của cả hai UAV (phản biện thứ bảy)
+
+**Lỗi:**
+- Trong `_hist_run()`, S2m chỉ trừ `m · |B|`, tức bản kê của UAV2.
+- Ở snapshot TOK, tôi giả định token của UAV1 kiêm bản kê. Điều đó chỉ đúng khi UAV1 gửi hết token, điều không được bảo đảm dưới ngân sách.
+- Ở chế độ lịch sử, oracle chọn đối tượng cho **cả hai** UAV, nhưng chỉ trừ một bitmap.
+
+**Giao thức nhân quả dùng cho v2:**
+1. Mỗi UAV gửi bản kê m bit/track của mọi track hiện có, mỗi bản kê là một thông điệp riêng có header.
+2. BS liên kết. Ở đây liên kết vẫn lý tưởng, theo GT; đây là phần oracle.
+3. BS gửi bitmap cho mỗi UAV mà lựa chọn được điều phối: snapshot chỉ UAV2, lịch sử cả hai. Mỗi bitmap có 1 bit/mục cộng 48 bit header, ρ = 1.
+4. UAV gửi payload.
+
+Chi phí nằm trong một hàm chung `coord_costs()`. Có 4 test kế toán ngân sách mới, gồm một test sẽ rớt nếu chỉ trừ bản kê UAV2. Tổng cộng 74 test qua.
+
+**Kết quả v2:** Δ so với baseline độc lập tốt nhất, điểm recall đối tượng duy nhất; báo cáo hoàn hảo; EXPL.
+
+| Chế độ | Nhánh | B | Δ oracle chính xác | Δ S2m24 v1 | **Δ S2m24 v2** | Δ S2m52 v2 |
+|---|---|---|---|---|---|---|
+| Lịch sử | CROP | 50k | +2,9 | +2,6 | **+2,0** | +1,1 |
+| Lịch sử | CROP | 100k | +4,0 | +3,8 | **+3,5** | +2,3 |
+| Lịch sử | CROP | 200k | +9,8 | +8,8 | **+8,6** | +8,0 |
+| Lịch sử | CROP | 500k | +12,4 | +12,2 | **+12,1** | +11,8 |
+| Lịch sử | TOK | 2k | +7,1 | −27,5 | **−39,8** | −46,2 |
+| Lịch sử | TOK | 4k | +9,4 | −26,6 | **−45,5** | −57,7 |
+| Snapshot | CROP | 100k / 200k / 500k | +5,1 / +9,0 / +11,8 | +3,5 / +6,7 / +9,7 | **không đổi** | +2,8 / +6,0 / +9,3 |
+| Snapshot | TOK | 4k | +8,3 | −25,2 | **−40,0** | −53,4 |
+
+- **Theo chuỗi** (snapshot CROP, S2m24): 14/14 chuỗi dương ở 50k–200k, 12/14 ở 500k. Snapshot TOK: 0–1/14.
+- **Cách đọc đúng của các số S2m:** nếu BS liên kết hoàn hảo và chỉ phải trả thêm bit bản kê, phối hợp CROP còn lợi bao nhiêu. Chúng **không** trả lời được câu "bản kê 24 bit có đủ để liên kết hai góc nhìn rất khác nhau không". Câu đó thuộc Gate 1, chưa mở.
+- **GT trong baseline nhớ lịch sử:**
+  - box là box GT (báo cáo hoàn hảo);
+  - track ID theo góc là GT ID (tracker cục bộ hoàn hảo);
+  - "box cũ" được đo bằng IoU với box GT hiện tại;
+  - ACK lý tưởng (không mất, không trễ).
+- **Kết luận không đổi:**
+  - TOK: phối hợp bằng giao thức bản kê này là NO-GO. Đây **không** có nghĩa token vô dụng làm một hành động trong hệ SemCom có RL.
+  - CROP: còn dư địa ở mức oracle có tính phí; đáng làm pilot với detector thật.
