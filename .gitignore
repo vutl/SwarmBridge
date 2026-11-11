@@ -101,3 +101,6 @@ Thumbs.db
 
 # A6.0-L1 decision-state dumps (21 MB, sha256 in runs/uav_semcom/a6l1/final/dec_sha256.txt)
 runs/uav_semcom/a6l1/final/*.dec.json.gz
+
+# VisionTrack (GMT, CVPR 2026) multi-drone dataset: data stays out of git
+/data/visiontrack/
