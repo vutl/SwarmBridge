@@ -139,6 +139,21 @@ Hai lưu ý:
 | **HOLD** | Một phần chuỗi MDMT train/val, chọn bằng băm tên chuỗi **trước khi tải** (cố định seed, ghi vào protocol) | Chưa thấy | 0B: tập xác nhận, chấm một lần |
 | **REPL** | VisionTrack (2 drone, người đi bộ, ID xuyên góc có sẵn) hoặc M3OT (2 drone, xe, CC BY 4.0, phải dựng ID và kiểm ≥ 300 cặp bằng tay) | Chưa thấy | Lặp lại độc lập; chỉ báo |
 
+### 5.1. VisionTrack: quy tắc dùng, ghi trước khi mở bất kỳ nhãn nào (11/11)
+
+- Dữ liệu đã tải về `data/visiontrack/` (không vào git). Kích thước khớp từng byte với OneDrive: `train.zip` 36.255.903.058 byte, `test.zip` 36.191.427.443 byte.
+- **`train`** (VT-TUNE) được phép khám phá:
+  - đọc định dạng và license kèm theo nếu có;
+  - xác minh ID xuyên góc nhìn;
+  - đo độ chồng lấn;
+  - kiểm rò rỉ với VisDrone-DET;
+  - tinh chỉnh ở 0B.
+- **`test`** (VT-HOLD) là tập xác nhận chưa ai nhìn:
+  - trước khi chấm, chỉ được kiểm CRC của zip và đếm số chuỗi, số khung, số file;
+  - **không** tính bất kỳ thống kê nhãn nào (chồng lấn, số đối tượng, lớp);
+  - chỉ chấm một lần, sau khi protocol v2.1 được khoá.
+- Vai trò của VisionTrack (thay REPL bằng tập 0B chính, hay giữ làm REPL) được quyết định từ kết quả trên `train` và quyền sử dụng. Quyết định đó không dựa vào `test`.
+
 - **Rò rỉ với dữ liệu train detector:** kiểm MDMT và VisDrone-DET bằng pHash như audit VID (cùng nhóm phát hành).
 - Chuỗi nào trùng nguồn thì đưa ra khỏi HOLD.
 - **Không dùng kết quả HOLD để chọn lại** policy, chỉ số hay mức ngân sách.
