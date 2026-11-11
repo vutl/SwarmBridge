@@ -3,8 +3,10 @@
 Requested by review #6. Does NOT replace runs/uav_semcom/h1/gate0a_v21.json; writes gate0a_audit_v1.json.
 1. Exact oracles: S0-exact (TOK: enumerate per-UAV token counts; CROP: MILP with per-UAV packetisation)
    versus the heuristic S0 of h1_gate0a.py (pre-charged headers / greedy).
-2. Deployable cost of S2: relabelled "lagged-identity oracle". Manifest variants S2m(m): each UAV uploads a
-   manifest of m bits per current track (association itself still ideal), BS returns a bitmap.
+2. S2 relabelled "lagged-identity oracle". S2m(m) = COSTED PERFECT-ASSOCIATION ORACLE (not a deployable scheme):
+   both UAVs' m-bit manifests (UL) and the bitmaps (DL) are charged, but cross-view association is not performed;
+   GT identities decide what is shared. v2 (review #7) charges BOTH manifests in every mode (v1 charged only UAV2's
+   manifest in the temporal mode and in snapshot TOK) and a bitmap to each coordinated UAV.
 3. Strong no-peer baseline in a temporal mode: each UAV remembers what it delivered (perfect ACK) and only
    resends objects whose BS box is stale (IoU < 0.5) in its own view. Coordination then only removes
    cross-view resends. Myopic per-epoch oracle S0-hist (exact per epoch, not a dynamic optimum).
@@ -83,6 +85,16 @@ def exact_crop(A, B, cA, cB, budget, return_sel=False):
     return int(round(-res.fun))
 
 
+def coord_costs(nA, nB, m, bitmaps_for=("B",)):
+    """Costs of the costed perfect-association oracle S2m{m} (association itself is NOT performed: ideal).
+    UL: each UAV uploads a manifest of m bits per current track, in its own message (header + packetisation).
+    DL: one bitmap (1 bit per manifest entry + 48-bit header) to each UAV whose selection is coordinated."""
+    ul = sum(m * n + G.msg_overhead(m * n) for n in (nA, nB) if n)
+    sizes = {"A": nA, "B": nB}
+    dl = sum(sizes[k] + G.DL_HDR for k in bitmaps_for if sizes[k])
+    return ul, dl
+
+
 def heuristic_s0_tok(A, B, budget):
     return G.tok_coordinated(A, B, A & B, budget, 0.0, 1.0)["cov"]
 
@@ -138,14 +150,12 @@ def snapshot_audit(data, stride=10, bpp=0.65, c0=2400.0):
                     G.crop_coordinated(A, B, cA, cB, sup, Bg, dl, 1.0)
                 acc["S2_lagID"] += r["cov"]
                 per_seq[seq][(br, Bg)]["S2_lagID"] += r["cov"]
-                # manifest variants: association ideal but its uplink cost is charged
+                # costed perfect-association oracle (v2): BOTH UAVs upload m-bit manifests (UL); association ideal;
+                # snapshot: only UAV2's selection is coordinated -> one bitmap (DL, over UAV2's manifest)
                 for m in (24, 52):
-                    if br == "TOK":       # UAV1 tokens double as its manifest; UAV2 uploads an m-bit manifest
-                        ul = m * len(B) + (G.msg_overhead(m * len(B)) if B else 0)
-                        r = G.tok_coordinated(A, B, C, Bg - ul, len(B) + G.DL_HDR, 1.0)
-                    else:                 # both UAVs upload manifests; crops follow
-                        ul = sum(m * len(S) + (G.msg_overhead(m * len(S)) if S else 0) for S in (A, B))
-                        r = G.crop_coordinated(A, B, cA, cB, C, Bg - ul, len(B) + G.DL_HDR, 1.0)
+                    ul, dl = coord_costs(len(A), len(B), m, bitmaps_for=("B",))
+                    r = G.tok_coordinated(A, B, C, Bg - ul, dl, 1.0) if br == "TOK" else \
+                        G.crop_coordinated(A, B, cA, cB, C, Bg - ul, dl, 1.0)
                     acc[f"S2m{m}"] += r["cov"]
                     per_seq[seq][(br, Bg)][f"S2m{m}"] += r["cov"]
                 ps = per_seq[seq][(br, Bg)]
@@ -186,8 +196,10 @@ def _hist_run(data, br, Bg, pol, alpha, rng, stride, bpp, c0):
                 nA_, nB_ = need & A, need & B
                 avail = Bg
                 if pol != "S0":
-                    m = int(pol[3:])
-                    avail -= m * len(B) + (G.msg_overhead(m * len(B)) if B else 0) + len(B) + G.DL_HDR
+                    # v2: both manifests (UL) + a bitmap to EACH UAV (DL, rho = 1), because the coordinated
+                    # choice below selects objects for both UAVs
+                    ul, dl = coord_costs(len(A), len(B), int(pol[3:]), bitmaps_for=("A", "B"))
+                    avail -= ul + dl
                 avail = max(avail, 0)
                 if br == "TOK":
                     k = exact_tok(len(nA_), len(nB_), len(need), avail)
@@ -218,8 +230,10 @@ def history_audit(data, stride=10, bpp=0.65, c0=2400.0, seeds=(0, 1, 2, 3, 4)):
     """Temporal mode. BS keeps the last delivered box per (view, id); an object is covered if, in some view where
     it is visible, that box has IoU >= 0.5 with the current GT box. Senders know their own deliveries (ACK).
     IND_a: fixed budget split alpha for all epochs (no per-epoch selection). S0: per-epoch exact (myopic)
-    coordinated choice over objects not covered. S2m{m}: same choice but UAV2 manifest (m bits/track, UL) and
-    bitmap (DL, rho = 1) are charged; association ideal."""
+    coordinated choice over objects not covered. S2m{m}: same choice with both manifests (UL) and both bitmaps
+    (DL, rho = 1) charged; association ideal (costed perfect-association oracle).
+    GT use (all policies, incl. the no-peer IND baseline): boxes are GT boxes (perfect reports), per-view track IDs
+    are GT IDs (perfect local tracker), staleness uses IoU with the current GT box, ACKs are ideal (no loss/delay)."""
     n_ep = sum(len(sorted(set(data[s][1]) | set(data[s][2]))[::stride]) for s in data)
     res = {}
     for br, budgets in (("TOK", HIST_TOK), ("CROP", HIST_CROP)):
@@ -270,7 +284,7 @@ def main():
         print("snapshot", br, "done", flush=True)
     hist = history_audit(data)
     print("history done", flush=True)
-    json.dump(dict(note="exploratory correction of Gate 0A (EXPL only); not confirmatory", snapshot=snap,
+    json.dump(dict(note="exploratory correction of Gate 0A (EXPL only); not confirmatory; v2 = both manifests charged", version="audit_v2", snapshot=snap,
                    history={f"{k[0]}|{k[1]}": v for k, v in hist.items()}), open(a.out, "w"), indent=1, default=str)
 
 

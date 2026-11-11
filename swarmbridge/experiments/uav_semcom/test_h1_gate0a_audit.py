@@ -111,3 +111,49 @@ def test_history_budget_limits_coverage():
     one_tok = G.TOK_BITS + G.msg_overhead(G.TOK_BITS)
     cS, U, _ = AU._hist_run(d, "TOK", one_tok, "S0", 0.5, random.Random(0), 1, 0.65, 2400.0)
     assert cS <= U and cS >= 3                                  # at least one new object per epoch
+
+
+# ---------------------------------------------------------------- v2: budget accounting of S2m (review #7)
+def test_coord_costs_charge_both_manifests_and_bitmaps():
+    ul, dl = AU.coord_costs(10, 20, 24, bitmaps_for=("A", "B"))
+    assert ul == (240 + G.msg_overhead(240)) + (480 + G.msg_overhead(480))
+    assert dl == (10 + G.DL_HDR) + (20 + G.DL_HDR)
+    ul1, dl1 = AU.coord_costs(10, 20, 24, bitmaps_for=("B",))
+    assert ul1 == ul and dl1 == 20 + G.DL_HDR
+    assert AU.coord_costs(0, 5, 24) == (120 + G.msg_overhead(120), 5 + G.DL_HDR)
+
+
+def _one_frame(A_ids, B_ids):
+    box = (100.0, 100.0, 20.0, 20.0)
+    return {"t": {1: {1: {i: box for i in A_ids}}, 2: {1: {i: box for i in B_ids}}}}
+
+
+def test_hist_s2m_budget_is_exact_ul_dl_payload():
+    # A = {1}, B = {1, 2}: both new. Cheapest optimal payload: UAV2 sends 2 tokens (one message).
+    d = _one_frame({1}, {1, 2})
+    ul, dl = AU.coord_costs(1, 2, 24, bitmaps_for=("A", "B"))
+    pay = AU.tok_cost(2)
+    c_ok, U, _ = AU._hist_run(d, "TOK", ul + dl + pay, "S2m24", 0.5, random.Random(0), 1, 0.65, 2400.0)
+    c_short, _, _ = AU._hist_run(d, "TOK", ul + dl + pay - 1, "S2m24", 0.5, random.Random(0), 1, 0.65, 2400.0)
+    assert (c_ok, U) == (2, 2) and c_short == 1
+
+
+def test_hist_s2m_crop_charges_uav1_manifest():
+    # same toy, CROP: if only UAV2's manifest were charged, budget below would still cover both objects
+    d = _one_frame({1}, {1, 2})
+    cost = G.crop_bits((100.0, 100.0, 20.0, 20.0), 0.65, 2400.0)
+    ul, dl = AU.coord_costs(1, 2, 24, bitmaps_for=("A", "B"))
+    pay = 2 * cost + G.msg_overhead(2 * cost)
+    c_ok, _, _ = AU._hist_run(d, "CROP", ul + dl + pay, "S2m24", 0.5, random.Random(0), 1, 0.65, 2400.0)
+    uav1_manifest = 24 + G.msg_overhead(24)
+    c_short, _, _ = AU._hist_run(d, "CROP", ul + dl + pay - uav1_manifest, "S2m24", 0.5, random.Random(0), 1, 0.65, 2400.0)
+    assert c_ok == 2 and c_short == 1
+
+
+def test_snapshot_s2m_uses_both_manifests():
+    A, B = {1, 2}, {2, 3}
+    ul, dl = AU.coord_costs(len(A), len(B), 24, bitmaps_for=("B",))
+    hdr = G.msg_overhead(2 * G.TOK_BITS) + G.msg_overhead(1 * G.TOK_BITS)
+    full = ul + dl + hdr + 3 * G.TOK_BITS
+    assert G.tok_coordinated(A, B, A & B, full - ul, dl, 1.0)["cov"] == pytest.approx(3)
+    assert G.tok_coordinated(A, B, A & B, full - ul - 1, dl, 1.0)["cov"] < 3
