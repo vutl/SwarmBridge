@@ -1,5 +1,7 @@
 # SwarmBridge: đánh giá lại hướng nghiên cứu (sau R1b)
 
+> **Cập nhật 11/11 (sau phản biện):** H1 được duyệt ở mức ứng viên. Gate 0 ở mục 6 và ý "chấp nhận rủi ro license" ở mục 7 đã bị **thay thế** bởi [swarmbridge-h1-gate0-protocol-v2.md](swarmbridge-h1-gate0-protocol-v2.md): phân loại oracle, F1 đối tượng duy nhất, MDMT-test chỉ còn là tập khám phá, quyết định truy cập dữ liệu.
+
 Ngày 11/11/2026. Chưa code, chưa train, chưa chạy thí nghiệm nào cho phần này.
 
 **Nguồn:**
