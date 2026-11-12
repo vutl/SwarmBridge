@@ -24,6 +24,7 @@ Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 14 | [swarmbridge-h1-0b-tune-pilot-protocol.md](swarmbridge-h1-0b-tune-pilot-protocol.md) | Protocol pilot 0B-TUNE cho CROP: ứng viên không GT, AVIF thật, YOLO11n/s thật, F1 có FP, CPU, airtime, tiêu chí sàng lọc C1–C5 | phương án B (11 cặp EXPL) theo #15; chạy ảnh thật chờ cơ sở quyền dữ liệu |
 | 15 | [swarmbridge-h1-0b-pilot-readiness.md](swarmbridge-h1-0b-pilot-readiness.md) | Sẵn sàng pilot 0B: adapter MDMT (chốt split / quyền / GT), lõi pilot, precompute model thật, đánh giá C1–C5, 57 test, smoke test model thật; sửa lỗi căn chỉnh số file | v3 duyệt (#11); đã chạy pilot, xem #16 |
 | 16 | [swarmbridge-h1-0b-pilot-expl-result.md](swarmbridge-h1-0b-pilot-expl-result.md) | Pilot 0B trên 11 chuỗi MDMT EXPL với YOLO11n / AVIF / YOLO11s thật: C1–C5, T1 so với T0 / T0+, F, T2 | PASS khám phá, hiệu ứng yếu (+1–3 điểm, chủ yếu chuỗi 59); khung +8 điểm nhưng vượt CPU. Mục 6: cổng 'crop khi detector thiếu chắc chắn' dự đoán được (LOSO) nhưng thưởng nhỏ → chưa train PPO cho TOKEN/CROP. Quyền dữ liệu chưa xác minh |
+| 17 | [swarmbridge-h1-0b-pilot-cluster-ci.md](swarmbridge-h1-0b-pilot-cluster-ci.md) | Độ tin cậy pilot 0B: bootstrap theo 11 chuỗi + bỏ từng chuỗi (từ JSON đã lưu) | Crop: CI chỉ loại 0 ở B 305k, 70–99% lợi ích từ chuỗi 59, bỏ 59 thì mọi CI chứa 0; T2 (GT) +0,3–0,7 ổn định; khung +8,3 [5,3; 11,5] |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).
