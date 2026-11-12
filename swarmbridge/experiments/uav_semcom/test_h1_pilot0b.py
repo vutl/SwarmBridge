@@ -637,3 +637,18 @@ def test_align_check_renders_both_views_with_labels(fakezip):
     assert A.colour(3) == A.colour(3) and A.colour(3) != A.colour(4)
     with pytest.raises(M.AccessError):
         A.render(M.MDMT(fakezip), 52, 0)                       # no rights note -> no pixels
+
+
+def test_gate_loso_runs_and_held_out_sequence_is_unseen():
+    import h1_pilot0b_gate as GA
+    pairs = {s: _toy_seq(3) for s in (1, 2, 3)}
+    tab = GA.tabulate(pairs, 35, 10 ** 6)
+    assert tab[1]["C"].shape == (6, 2, len(E.TAUS), 3) and tab[1]["X"].shape == (6, len(GA.FEATS))
+    f = GA.fold(tab, 2)
+    assert set(f["res"]) == {"T0", "T1", "GATE_F", "GATE_LR", "RAND", "ORACLE"}
+    assert f["res"]["T1"]["f1"] > f["res"]["T0"]["f1"]               # toy: crops recover the missed object
+    tab_bad = {k: dict(v) for k, v in tab.items()}                   # corrupting the held-out GT counts must not
+    tab_bad[2] = dict(tab[2], C=np.zeros_like(tab[2]["C"]))          # change any choice made in the fold
+    g = GA.fold(tab_bad, 2)
+    assert (g["tau0"], g["tau1"], g["gate_feature"], g["gate_th"], g["lr_threshold"]) == \
+        (f["tau0"], f["tau1"], f["gate_feature"], f["gate_th"], f["lr_threshold"])

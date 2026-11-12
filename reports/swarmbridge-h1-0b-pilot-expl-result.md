@@ -84,3 +84,46 @@ F1 từng góc theo các mức ngân sách UL chung B (q50, α và τ_decl đư�
 - Detector huấn luyện trên VisDrone, chưa tinh chỉnh trên MDMT; ánh xạ lớp. F1 không phân lớp có trong file kết quả.
 - CPU là CPU desktop 1 luồng, không phải phần cứng UAV.
 - Không có hàng đợi, không mất gói. Chỉ có ứng viên P1 từ detection không chắc; chưa có đề xuất theo chuyển động.
+
+## 6. Phân tích offline: tín hiệu trên UAV có dự đoán được khi nào crop hơn token không? (phản biện #12, bước 3)
+
+Code `h1_pilot0b_gate.py`; kết quả `runs/uav_semcom/h1/pilot0b_gate_q50_v1.json`. Chỉ dùng các bản ghi đã có, không mở ảnh mới.
+
+**Cách làm:**
+- Leave-one-**sequence**-out: 11 fold, đơn vị độc lập là chuỗi.
+- Trong mỗi fold, mọi lựa chọn được thực hiện trên 10 chuỗi huấn luyện: τ_decl của từng chế độ, đặc trưng, chiều và ngưỡng của cổng một đặc trưng, mô hình logistic và ngưỡng của nó. Có test kiểm rằng việc làm hỏng GT của chuỗi để riêng không đổi lựa chọn nào.
+- Mỗi góc, mỗi epoch, cổng chọn T0 (token) hay T1 (token + crop q50). Phần ngân sách của mỗi UAV là B/2; α cố định 0,5.
+- **Đặc trưng** đều tính được trên UAV từ đầu ra YOLO11n: số detection, số detection chắc / không chắc, tỉ lệ không chắc, conf trung bình, số ứng viên P1, tổng kbit P1, kích thước box chắc.
+- **Đối chứng:**
+  - RAND: cổng ngẫu nhiên với cùng tỉ lệ chọn crop như GATE_LR;
+  - ORACLE: với mỗi (epoch, góc), chọn chế độ có TP − FP ròng lớn hơn, dùng GT; chỉ để tham chiếu, và là một proxy chứ không phải tối ưu F1.
+
+**Kết quả (F1 macro trên 11 chuỗi để riêng):**
+
+| B (kbit) | T0 | T1 | GATE_F (1 đặc trưng) | GATE_LR | RAND | ORACLE | UL: T1 → GATE_F (kbit) |
+|---|---|---|---|---|---|---|---|
+| 76 | 0,628 | 0,639 | **0,643** | 0,640 | 0,639 | 0,642 | 68 → 44 |
+| 153 | 0,628 | 0,644 | **0,648** | 0,646 | 0,645 | 0,648 | 131 → 84 |
+| 305 | 0,628 | 0,656 | **0,658** | 0,658 | 0,654 | 0,664 | 226 → 177 |
+| *Bỏ chuỗi 59, ở 305* | 0,667 | 0,675 | 0,678 | 0,677 | 0,673 | 0,687 | |
+
+- **Cổng ổn định giữa các fold.** Cổng một đặc trưng chọn gần như cùng một quy tắc ở mọi fold: "gửi crop khi **tỉ lệ detection không chắc ≥ khoảng 0,5**" (ở B = 76k), hoặc "khi **tổng kbit P1 ≥ khoảng 120**" (ở B = 153k và 305k). Cả hai đều có nghĩa là "detector trên UAV đang thiếu chắc chắn".
+- **Hướng đúng:**
+  - Ở chuỗi 48 và 57, nơi detector tốt (sót 14–20%), crop luôn bật làm hại 1–2 điểm. Cổng chỉ bật crop ở 3–5% epoch, nên giữ được F1 của T0.
+  - Ở các chuỗi detector kém (59, 31, 61, 68), cổng bật crop ở 80–100% epoch.
+- **So sánh, đếm theo chuỗi:**
+  - GATE_F > T0 ở 8, 8, 9/11 chuỗi; > RAND ở 10, 8, 8/11; > T1 ở 7, 7, 6/11.
+  - Kiểm định dấu một phía (khám phá): 9/11 cho p ≈ 0,03; 8/11 cho p ≈ 0,11.
+  - GATE_F đạt khoảng 80–100% dư địa của ORACLE so với T0.
+- **Tiết kiệm:** so với luôn bật crop (T1), cổng dùng ít hơn 22–37% bit UL, mà F1 bằng hoặc cao hơn một chút (+0,2 đến +0,4 điểm).
+
+**Nhưng phần thưởng nhỏ:**
+- GATE_F − T0 = +1,5 / +2,0 / +3,0 điểm (cả 11 chuỗi); bỏ chuỗi 59 chỉ còn **+0,5 / +0,8 / +1,1 điểm**.
+- Ngay cả ORACLE per-(epoch, góc) cũng chỉ hơn T0 khoảng +1,4 đến +3,6 điểm. Như vậy việc chuyển chế độ theo từng epoch không còn nhiều dư địa ngoài cổng một ngưỡng.
+
+**Đọc kết quả:**
+- **Dự đoán được, hướng đúng, ổn định:** tín hiệu rẻ là "detector trên UAV đang thiếu chắc chắn".
+- **Lợi ích tuyệt đối nhỏ**, và **một ngưỡng đơn giản đã lấy gần hết dư địa** của lựa chọn token / crop trong thiết lập này.
+- Vì vậy bằng chứng này **không đủ để train PPO cho việc chọn TOKEN / CROP**: không còn dư địa cho chính sách phức tạp hơn một ngưỡng.
+- Lựa chọn FRAME chưa phân tích được, vì khung chỉ vừa ở mức B cao nhất và vượt CPU.
+- Theo phản biện #12, bước hợp lý là quay lại hướng A5 / A5.5 và bài toán tài nguyên, nơi đã có kết quả tốt hơn. Quy tắc "crop khi detector thiếu chắc chắn" có thể được giữ như một **chế độ cố định** trong không gian hành động của chính sách đó, nếu sau này cần.
