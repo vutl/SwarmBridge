@@ -116,3 +116,33 @@ Các ngưỡng là **tiêu chí sàng lọc đã đăng ký**. Chúng cho biết
 
    Code chỉ được chạy trên dữ liệu tổng hợp.
 5. **VisionTrack:** chỉ khi được duyệt riêng, `train` có thể dùng làm **đối chứng âm** cho C1–C2 (vật to, nên C1 có lẽ trượt). `test` vẫn đóng.
+
+
+## 9. Cập nhật dữ liệu (12/11): bản sao MDMT trên HuggingFace
+
+Link Baidu chính thức không tải được. Bản sao **không chính thức** `huggingface.co/datasets/mrhwl123/MDMT` (một zip 16,7 GB, license "other" trỏ về repo gốc) đã được tải về `data/mdmt/`. Thư mục này nằm trong gitignore.
+
+**Kiểm tra:**
+- CRC toàn bộ zip: OK.
+- Trong zip có checkpoint `.pth` và 2 file config `.py` của mmdet. **Không load, không chạy.**
+- **Nhãn:** XML (định dạng CVAT) của 4 chuỗi test (26, 31, 57, 73, cả hai góc) chứa **mọi** box của nhãn test chính thức trên GitHub, sai lệch ≤ 1 px. Khung và ID đánh số từ 0; XML có thêm khoảng 0,1% box.
+- **Ảnh:** vẽ box chính thức lên ảnh chuỗi 26, khung 150: khớp ở cả hai góc; ID chung chỉ cùng một xe.
+
+**Bản sao không đủ:** chỉ 33/88 chuỗi có ảnh.
+
+| Tập | Chuỗi có ảnh cả hai drone | Ghi chú |
+|---|---|---|
+| train | **0/14** (chỉ có drone 1) | Không dùng được cho cặp góc nhìn |
+| val | **5/5**: 22, 36, 46, 49, 72 (1.930 cặp khung) | Nhãn chưa ai trong nhóm nhìn |
+| test | **12/14** (71, 73 thiếu drone 2) | Nhãn là EXPL (đã thấy ở Gate 0A) |
+
+**Hệ quả:** pilot-TUNE theo mục 2 (6 cặp chuỗi MDMT train) **không làm được** với bản sao này. Quy tắc HOLD theo hash vẫn giữ cho bản đầy đủ sau này.
+
+**Đề xuất sửa mục 2 (chờ duyệt):**
+- **Phương án B (khuyến nghị):**
+  - pilot sàng lọc trên **12 cặp chuỗi test (EXPL)**: cùng dữ liệu với Gate 0A, nên so được trực tiếp dư địa lý tưởng với giá trị thật trên cùng chuỗi;
+  - **giữ 5 chuỗi val chưa mở** làm tập kiểm tra nhỏ;
+  - tập xác nhận thật vẫn cần bản đầy đủ.
+- **Phương án A:** pilot trên 5 chuỗi val (chưa thấy nhãn). Sạch hơn, nhưng nhỏ, và mất tập chưa mở duy nhất.
+
+Quyền dùng dữ liệu vẫn **chưa rõ**: không có license, và đây là bản sao không chính thức. Đề nghị vẫn gửi thư hỏi tác giả.
