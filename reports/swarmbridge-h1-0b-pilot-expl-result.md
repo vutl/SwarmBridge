@@ -2,8 +2,11 @@
 
 Ngày 13/11/2026. Code readiness v3 (đã duyệt ở phản biện #11). Chạy một lần, ngưỡng không đổi sau khi thấy kết quả.
 
+> **Đọc kết quả (phản biện #12):** Gate 0B là **PASS khám phá với hiệu ứng yếu**, không phải bằng chứng cho paper. Đơn vị độc lập là **11 chuỗi** (cụm), không phải 459 epoch.
+
 - **Kết quả số:** `runs/uav_semcom/h1/pilot0b_expl_v1.json`.
-- **Tình trạng quyền dùng dữ liệu:** người nghiên cứu tự thực hiện việc dùng nội bộ, khám phá. Giấy phép của dataset và quyền của bản mirror bên thứ ba chưa được xác minh độc lập. Không phát hành lại ảnh hay nhãn gốc.
+- **Tình trạng quyền dùng dữ liệu (đã sửa 13/11 theo phản biện #12):** người nghiên cứu tự thực hiện việc dùng nội bộ, khám phá. **Giấy phép của dataset và quyền của bản mirror bên thứ ba chưa được xác minh độc lập** (chưa có trả lời của tác giả, chưa có ý kiến của lab / trường). Repo này không phát hành lại ảnh hay nhãn gốc nào; file kết quả chỉ chứa chỉ số tổng hợp, số GT theo chuỗi, cấu hình và đường dẫn. Bản trước của mục này (và của provenance) ghi rằng việc dùng "được phép" (*permitted*); khẳng định đó không có cơ sở và đã được sửa.
+- **Không chạy thêm thí nghiệm MDMT nào trên ảnh** cho đến khi quyền dùng được làm rõ. Phân tích ở mục 6 chỉ dùng các bản ghi đã có.
 - **Dữ liệu:** 11 cặp chuỗi MDMT-test (EXPL), 459 epoch, 2 góc, khoảng 45.000 box GT. val, HOLD và VisionTrack-test vẫn đóng.
 - **Bản chất:** khám phá. Nhãn EXPL đã được dùng ở Gate 0A, và α, τ_decl được chọn trên chính các chuỗi này. Đây là sàng lọc, không phải xác nhận.
 

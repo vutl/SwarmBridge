@@ -4528,5 +4528,5 @@
    "stage": "pilot_expl"
   }
  },
- "status": "EXPLORATORY (EXPL split; not a confirmation)"
+ "status": "EXPLORATORY (EXPL split; not a confirmation). Data-use authorization NOT independently verified (provenance corrected 2026-11-13)"
 }
