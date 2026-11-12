@@ -1,0 +1,23 @@
+{
+ "protocol": "reports/swarmbridge-h1-0b-tune-pilot-protocol.md (sec 3-6, sec 9 option B)",
+ "status": "EXPLORATORY: EXPL split only, not a confirmation",
+ "allowed_splits": ["test"],
+ "closed": {"val": "kept unopened (5 paired sequences)", "hold": "full-dataset hash rule, not in the mirror"},
+ "avif_q": [35, 50],
+ "frame_q": 35,
+ "epoch_step": 10,
+ "epoch_period_s": 1.0,
+ "stages": {
+  "smoke_expl": {"split": "test", "n_seq": 2, "max_epochs": 10,
+                 "purpose": "pipeline check on real frames; no criterion read"},
+  "pilot_expl": {"split": "test", "n_seq": 12, "max_epochs": 60,
+                 "purpose": "screening C1-C5 (exploratory)"}
+ },
+ "weights": {
+  "onboard": "~/work/r1a/yolo11n_visdrone_640/weights/best.pt",
+  "server": "~/work/a5_det/yolo11s_visdrone_960/weights/best.pt"
+ },
+ "thresholds": {"tau_hi": 0.25, "tau_lo": 0.05, "C1": 0.15, "C2": 0.5, "C4": 0.2, "C5_ms": 1000},
+ "budget_rule": "B = {0.25, 0.5, 1.0} x mean per-epoch stream (strong tokens + every P1 crop at q35, both UAVs, headers) + one level fitting two full frames",
+ "tuning": "alpha in {0.3..0.7}, tau_decl in {0.05..0.5} chosen per (condition, q, B) on the same sequences; declared"
+}

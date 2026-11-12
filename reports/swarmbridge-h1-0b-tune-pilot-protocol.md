@@ -146,3 +146,10 @@ Link Baidu chính thức không tải được. Bản sao **không chính thức
 - **Phương án A:** pilot trên 5 chuỗi val (chưa thấy nhãn). Sạch hơn, nhưng nhỏ, và mất tập chưa mở duy nhất.
 
 Quyền dùng dữ liệu vẫn **chưa rõ**: không có license, và đây là bản sao không chính thức. Đề nghị vẫn gửi thư hỏi tác giả.
+
+## 10. Cập nhật 12/11 sau phản biện #8
+
+- **Phương án B được áp dụng:** pilot chỉ trên chuỗi test (EXPL); 5 chuỗi val vẫn đóng (adapter chặn).
+- **Quy tắc căn chỉnh** (ghi trước khi mở ảnh): chỉ dùng chuỗi mà ở cả hai góc, khung có nhãn lớn nhất bằng số ảnh − 1. Chuỗi 55 bị loại, còn **11 cặp**, 459 epoch.
+- **Khung f ↔ ảnh thứ f theo thứ tự file**, không phải file f+1 (6 chuỗi có số file không bắt đầu từ 1).
+- Chi tiết cài đặt và giới hạn: [báo cáo sẵn sàng](swarmbridge-h1-0b-pilot-readiness.md).
