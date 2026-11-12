@@ -106,3 +106,5 @@ runs/uav_semcom/a6l1/final/*.dec.json.gz
 /data/visiontrack/
 # MDMT public test GT (no license; analysis only, never redistributed)
 /data/mdmt_public_gt/
+# MDMT images (unofficial HF mirror mrhwl123/MDMT; no license; never commit)
+/data/mdmt/
