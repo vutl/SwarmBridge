@@ -22,7 +22,8 @@ Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 12 | [swarmbridge-h1-gate0a-result.md](swarmbridge-h1-gate0a-result.md) | Gate 0A (khám phá, nhãn MDMT-test, báo cáo hoàn hảo): dư địa phối hợp theo ngân sách, TOK và CROP riêng | TOK: dư địa hẹp (≈ dòng token); CROP: dư địa ở 100–500 kbit/epoch |
 | 13 | [swarmbridge-h1-gate0a-audit.md](swarmbridge-h1-gate0a-audit.md) | Kiểm toán 0A: S2 là oracle có trễ; oracle chính xác (MILP); chi phí bản kê; baseline nhớ lịch sử; điều kiện C1–C6 cho CROP | TOK NO-GO; CROP GO có điều kiện; v2 sửa chi phí bản kê (mục 8) |
 | 14 | [swarmbridge-h1-0b-tune-pilot-protocol.md](swarmbridge-h1-0b-tune-pilot-protocol.md) | Protocol pilot 0B-TUNE cho CROP: ứng viên không GT, AVIF thật, YOLO11n/s thật, F1 có FP, CPU, airtime, tiêu chí sàng lọc C1–C5 | phương án B (11 cặp EXPL) theo #15; chạy ảnh thật chờ cơ sở quyền dữ liệu |
-| 15 | [swarmbridge-h1-0b-pilot-readiness.md](swarmbridge-h1-0b-pilot-readiness.md) | Sẵn sàng pilot 0B: adapter MDMT (chốt split / quyền / GT), lõi pilot, precompute model thật, đánh giá C1–C5, 57 test, smoke test model thật; sửa lỗi căn chỉnh số file | code xong; chưa mở ảnh MDMT |
+| 15 | [swarmbridge-h1-0b-pilot-readiness.md](swarmbridge-h1-0b-pilot-readiness.md) | Sẵn sàng pilot 0B: adapter MDMT (chốt split / quyền / GT), lõi pilot, precompute model thật, đánh giá C1–C5, 57 test, smoke test model thật; sửa lỗi căn chỉnh số file | v3 duyệt (#11); đã chạy pilot, xem #16 |
+| 16 | [swarmbridge-h1-0b-pilot-expl-result.md](swarmbridge-h1-0b-pilot-expl-result.md) | Pilot 0B trên 11 chuỗi MDMT EXPL với YOLO11n / AVIF / YOLO11s thật: C1–C5, T1 so với T0 / T0+, F, T2 | C1–C5 đạt (C3 chỉ q50); hiệu ứng crop nhỏ (+1–3 điểm F1), tập trung ở chuỗi 59; khung +8 điểm nhưng vượt CPU |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).
