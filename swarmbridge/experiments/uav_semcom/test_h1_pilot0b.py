@@ -235,42 +235,110 @@ def test_F_sends_frame_only_if_it_fits_else_T0():
     assert not s["frame"] and s["items"] == [("tok", 0, P.TOK_BITS)]
 
 
-# ================================================================ T2 oracle
+# ================================================================ T2 / T2v (GT-assisted suppression heuristics)
 def _gt(*boxes):
     return {i: (*b, 1) for i, b in boxes}
 
 
-def test_t2_drop_rules():
-    # view 1: object 7 proposed as candidate; object 8 carried by a strong token
+def _win(b):
+    return P.crop_window(b, 1920, 1080)
+
+
+def _scene():
+    """view 1: object 7 as a P1 candidate, object 8 as a strong token. view 2: candidates on 7, 8, 9 (only view 2)
+    and a false window."""
     g1 = _gt((7, (100, 100, 120, 120)), (8, (500, 500, 520, 520)))
-    r1 = _rec(P.dets([(500, 500, 520, 520)], [1], [0.9]), p1=[_cand(P.crop_window((100, 100, 120, 120), 1920, 1080), .2)])
-    # view 2: candidates on 7 (drop: proposed), 8 (drop: token), 9 (keep: only view 2), and an FP window (keep)
+    r1 = _rec(P.dets([(500, 500, 520, 520)], [1], [0.9]),
+              p1=[_cand(_win((100, 100, 120, 120)), .2, bs=P.dets([(100, 100, 120, 120)], [1], [.8]))])
     g2 = _gt((7, (300, 300, 320, 320)), (8, (700, 700, 720, 720)), (9, (900, 100, 920, 120)))
-    w = [P.crop_window(b, 1920, 1080) for b in [(300, 300, 320, 320), (700, 700, 720, 720), (900, 100, 920, 120)]]
-    r2 = _rec(P.dets(), p1=[_cand(w[0], .2), _cand(w[1], .2), _cand(w[2], .2), _cand((1500, 900, 1564, 964), .2)])
-    assert P.t2_drop(r1, r2, g1, g2) == frozenset({0, 1})
+    r2 = _rec(P.dets(), p1=[_cand(_win(g2[i][:4]), .2, bs=P.dets([g2[i][:4]], [1], [.8])) for i in (7, 8, 9)]
+              + [_cand((1500, 900, 1564, 964), .2)])
+    return r1, r2, g1, g2
 
 
-def test_t2_weak_token_does_not_count_and_class_mismatch_does_not_count():
+def test_t2_suppresses_what_uav1_sent():
+    r1, r2, g1, g2 = _scene()
+    e = P.run_epoch(r1, r2, g1, g2, "T2", 35, 10 ** 7, .5)
+    assert e["drop"] == frozenset({0, 1}) and e["coord_ok"]
+    assert [k for kind, k, _ in e["sent"][1]["items"] if kind == "P1"] == [2, 3]   # FP window never dropped
+
+
+def test_t2_counterexample_proposed_but_not_sent_is_not_suppressed():
+    # review #9: UAV1 proposes object X (=7) but its share cannot carry the crop; UAV2 can -> X must reach the BS
+    r1, r2, g1, g2 = _scene()
+    r1["cands"]["P1"][0]["bits"] = {35: 9000, 50: 9000}
+    r1["det"] = P.dets()                                                    # no token either
+    B, a = 20000, 0.3                                                       # UAV1 share 6000 < 9000 + headers
+    e = P.run_epoch(r1, r2, g1, g2, "T2", 35, B, a)
+    assert e["sent"][0]["items"] == [] and 0 not in e["drop"]
+    assert ("P1", 0, 1000) in e["sent"][1]["items"]
+    v1 = P.view_counts(e["decl"][0], g1, .05); v2 = P.view_counts(e["decl"][1], g2, .05)
+    assert 7 in v2["ids"] and 7 in (v1["ids"] | v2["ids"])
+
+
+def test_t2_detected_but_unsent_token_does_not_suppress():
+    r1, r2, g1, g2 = _scene()
+    r1["cands"]["P1"] = []
+    e = P.run_epoch(r1, r2, g1, g2, "T2", 35, 4000, 0.05)                  # UAV1 share 200 bits: nothing sent
+    assert e["sent"][0]["items"] == [] and e["drop"] == frozenset()
+
+
+def test_t2_weak_or_wrong_class_token_does_not_count():
     g1 = _gt((8, (500, 500, 520, 520)))
-    r1 = _rec(P.dets([(500, 500, 520, 520)], [1], [0.2]))                  # weak: not a strong token
     g2 = _gt((8, (700, 700, 720, 720)))
-    r2 = _rec(P.dets(), p1=[_cand(P.crop_window((700, 700, 720, 720), 1920, 1080), .2)])
-    assert P.t2_drop(r1, r2, g1, g2) == frozenset()
-    r1b = _rec(P.dets([(500, 500, 520, 520)], [0], [0.9]))                 # strong but wrong class
-    assert P.t2_drop(r1b, r2, g1, g2) == frozenset()
+    r2 = _rec(P.dets(), p1=[_cand(_win((700, 700, 720, 720)), .2)])
+    for det in (P.dets([(500, 500, 520, 520)], [1], [0.2]), P.dets([(500, 500, 520, 520)], [0], [0.9])):
+        e = P.run_epoch(_rec(det), r2, g1, g2, "T2", 35, 10 ** 7, .5)
+        assert e["drop"] == frozenset()
 
 
-def test_t2_charges_both_manifests_and_bitmap():
-    r1 = _rec(P.dets([(0, 0, 9, 9), (20, 20, 29, 29)], [1, 1], [0.9, 0.1]), p1=[_cand((0, 0, 64, 64), .1)])
-    r2 = _rec(P.dets(), p1=[_cand((0, 0, 64, 64), .1)] * 3)
-    ul, dl = P.t2_coord_costs(r1, r2)
-    assert (ul, dl) == AU.coord_costs(2, 3, P.MAN_BITS, bitmaps_for=("B",))
-    assert ul == P.msg_cost(48) + P.msg_cost(72) and dl == 3 + G.DL_HDR
-    e = P.run_epoch(r1, r2, {}, {}, "T2", 35, 10 ** 7, 0.5)
-    assert e["ul"] == e["sent"][0]["ul"] + e["sent"][1]["ul"] + ul and e["dl"] == dl
-    e = P.run_epoch(r1, r2, {}, {}, "T2", 35, ul + dl, 0.5)                 # nothing left for payload
-    assert e["sent"][0]["items"] == [] and e["sent"][1]["items"] == []
+def test_t2v_requires_bs_recognition_of_uav1_report():
+    r1, r2, g1, g2 = _scene()
+    r1["cands"]["P1"][0]["bs"] = {35: P.dets(), 50: P.dets()}              # crop sent but BS finds nothing
+    e = P.run_epoch(r1, r2, g1, g2, "T2", 35, 10 ** 7, .5)
+    ev = P.run_epoch(r1, r2, g1, g2, "T2v", 35, 10 ** 7, .5)
+    assert 0 in e["drop"] and 0 not in ev["drop"] and 1 in ev["drop"]      # token on 8 is recognised
+
+
+def test_t2_uplink_downlink_accounting():
+    r1, r2, g1, g2 = _scene()
+    nB = len(r2["cands"]["P1"])
+    B, a = 30000, .5
+    e = P.run_epoch(r1, r2, g1, g2, "T2", 35, B, a)
+    s1, s2 = e["sent"]
+    man1, man2 = P.msg_cost(P.MAN_BITS * len(s1["items"])), P.msg_cost(P.MAN_BITS * nB)
+    assert e["ul"] == s1["ul"] + man1 + s2["ul"] + man2 and e["man_ul"] == man1 + man2
+    assert e["dl"] == nB + G.DL_HDR
+    assert s1["ul"] + man1 <= a * B and s2["ul"] + man2 <= (1 - a) * B        # rho = 0: DL not charged to B
+    assert s2["items"] == P.send(r2, "T1", 35, (1 - a) * B - man2, e["drop"])["items"]
+    e1 = P.run_epoch(r1, r2, g1, g2, "T2", 35, B, a, rho=1.0)               # shared time: B - rho * dl
+    Bu = B - e["dl"]
+    assert e1["sent"][1]["items"] == P.send(r2, "T1", 35, (1 - a) * Bu - man2, e1["drop"])["items"]
+    assert e1["sent"][0]["ul"] + P.msg_cost(P.MAN_BITS * len(e1["sent"][0]["items"])) <= a * Bu
+
+
+def test_t2_dl_cap_disables_suppression_but_manifests_are_paid():
+    r1, r2, g1, g2 = _scene()
+    e = P.run_epoch(r1, r2, g1, g2, "T2", 35, 10 ** 7, .5, B_dl=10)
+    assert not e["coord_ok"] and e["drop"] == frozenset() and e["man_ul"] > 0
+
+
+def test_t2_without_uav2_candidates_equals_t1():
+    r1, r2, g1, g2 = _scene()
+    r2["cands"]["P1"] = []
+    e, t = P.run_epoch(r1, r2, g1, g2, "T2", 35, 50000, .5), P.run_epoch(r1, r2, g1, g2, "T1", 35, 50000, .5)
+    assert e["ul"] == t["ul"] and e["man_ul"] == 0 and e["dl"] == 0
+
+
+def test_send_with_manifest_fits_budget():
+    rng = np.random.default_rng(5)
+    for _ in range(100):
+        d = P.dets(np.tile([0, 0, 9, 9], (5, 1)), [1] * 5, rng.uniform(.25, 1, 5))
+        r = _rec(d, p1=[_cand((0, 0, 64, 64), .2, bits=int(rng.integers(100, 5000))) for _ in range(4)])
+        b = float(rng.uniform(0, 20000))
+        s, m = P.send_with_manifest(r, "T1", 35, b)
+        assert s["ul"] + m <= b or not s["items"]
+        assert m == (P.msg_cost(P.MAN_BITS * len(s["items"])) if s["items"] else 0)
 
 
 def test_t2_with_ample_budget_never_lowers_unique_tp():
@@ -281,14 +349,14 @@ def test_t2_with_ample_budget_never_lowers_unique_tp():
         g2 = {i: (*b, 1) for i, b in boxes.items() if rng.random() < .7}
         recs = []
         for g in (g1, g2):
-            p1 = [_cand(P.crop_window(b[:4], 1920, 1080), .2, bs=P.dets([b[:4]], [1], [.9])) for b in g.values()]
+            p1 = [_cand(_win(b[:4]), .2, bs=P.dets([b[:4]], [1], [.9])) for b in g.values()]
             recs.append(_rec(P.dets(), p1=p1))
         u = {}
-        for cond in ("T1", "T2"):
+        for cond in ("T1", "T2", "T2v"):
             e = P.run_epoch(recs[0], recs[1], g1, g2, cond, 35, 10 ** 8, .5)
             v = [P.view_counts(e["decl"][k], g, .05) for k, g in enumerate((g1, g2))]
             u[cond] = P.unique_counts(v[0], v[1], g1, g2)["tp"]
-        assert u["T2"] == u["T1"] == len(set(g1) | set(g2))
+        assert u["T2"] == u["T2v"] == u["T1"] == len(set(g1) | set(g2))
 
 
 # ================================================================ BS fusion and scoring
@@ -369,7 +437,11 @@ def test_cpu_ms_all_vs_sent():
     r = _rec(P.dets([(0, 0, 9, 9)], [0], [0.1]), p1=[_cand((0, 0, 64, 64), .1), _cand((100, 0, 164, 64), .1)])
     assert P.cpu_ms(r, 35) == 60.0
     s = P.send(r, "T1", 35, P.msg_cost(1000))
-    assert P.cpu_ms(r, 35, s) == 55.0
+    assert P.cpu_ms(r, 35, s) == 55.0                       # supplementary: only the sent crop
+    # primary (review #9): every candidate the condition may send is encoded before selection
+    r["cands"]["P2"] = [_cand((0, 0, 320, 320), .1)] * 3
+    assert [P.cpu_ms_all(r, c, 35) for c in ("T0", "T0+", "T1", "T2", "T2v", "T1P2", "F")] == \
+        [50.0, 50.0, 60.0, 60.0, 60.0, 65.0, 80.0]
 
 
 def test_budget_levels_rule():
@@ -402,18 +474,22 @@ def _toy_seq(n=4):
 
 def test_end_to_end_toy_crop_recovers_missed_object():
     res = E.evaluate({1: _toy_seq(), 2: _toy_seq()}, qs=(35,), procs=1)
-    get = lambda c, q, B: next(r for r in res["table"] if r["cond"] == c and r["q"] == q and r["B"] == B)
+    get = lambda c, q, B: next(r for r in res["table"] if r["cond"] == c and r["q"] == q and r["B"] == B
+                               and r["rho"] == 0.0)
     Bmax = res["budget"]["levels"][-1]
-    assert get("T0", None, Bmax)["r_view"] == pytest.approx(0.5)
-    assert get("T1", 35, Bmax)["f1_view"] > get("T0", None, Bmax)["f1_view"]
-    assert get("T1", 35, Bmax)["f1_view"] > get("T0+", None, Bmax)["f1_view"]
-    assert get("F", None, res["budget"]["frame_level"])["f1_view"] == pytest.approx(1.0)
+    assert get("T0", None, Bmax)["r_view_macro"] == pytest.approx(0.5)
+    assert get("T1", 35, Bmax)["f1_view_macro"] > get("T0", None, Bmax)["f1_view_macro"]
+    assert get("T1", 35, Bmax)["f1_view_micro"] > get("T0+", None, Bmax)["f1_view_micro"]
+    assert get("F", None, res["budget"]["frame_level"])["f1_view_macro"] == pytest.approx(1.0)
     cr = res["criteria"]
     assert cr["C1_pass"] and cr["C2_pass"] and cr["C3"]["pass"] and cr["C5_pass"]
     assert res["screening"]["C1"]["miss_rate"] == pytest.approx(0.5)
     assert res["screening"]["C2"]["false_cand_per_view_epoch"] == pytest.approx(1.0)
     # same scene in both views -> every matched candidate is redundant; T2 drops UAV2's copy
-    assert res["screening"]["C4_redundancy"]["frac"] == pytest.approx(1.0)
+    assert res["screening"]["C4_proposal_redundancy"]["frac"] == pytest.approx(1.0)
+    t2 = get("T2", 35, Bmax)
+    assert t2["man"] > 0 and t2["dl"] > 0
+    assert t2["f1_unique_macro"] >= get("T1", 35, Bmax)["f1_unique_macro"] - 1e-9
 
 
 def test_pipeline_uav_side_never_sees_gt():
@@ -438,3 +514,26 @@ def test_vectorised_cover_matches_loop(seed):
                 cov.append((-v, i))
         assert g == (min(cov)[1] if cov else None)
         assert P.covered_ids(w, gt) == {i for _, i in cov}
+
+
+def _row(f_seq, p, r, fp, cond="T1", q=35, B=100, rho=0.0, uq=0.5):
+    return dict(cond=cond, q=q, B=B, rho=rho, f1_view_macro=float(np.mean(f_seq)),
+                f1_view_micro=float(np.mean(f_seq)), p_view_micro=p, r_view_micro=r, fp_per_view_epoch=fp,
+                f1_view_per_seq=list(f_seq), f1_unique_macro=uq, f1_unique_micro=uq,
+                f1_unique_per_seq=[uq] * len(f_seq), ul=1.0, dl=0.0)
+
+
+def test_c3_precision_guard_and_per_seq_reporting():
+    scr = dict(C1=dict(miss_rate=.3), C2=dict(cand_recall=.6), C4_proposal_redundancy=dict(frac=.3),
+               C5=dict(q35=dict(median_ms=100.)))
+    base = [_row([.50, .50], .80, .40, 2.0, "T0", None), _row([.40, .40], .70, .45, 3.0, "T0+", None)]
+    coord = [_row([.5, .5], .8, .4, 2., c, 35, 100, r) for c, r in (("T2", 0.0), ("T2", 1.0), ("T2", 4.0),
+                                                                      ("T2v", 0.0))]
+    # T1 gains F1 but precision falls 0.10 > 0.05 -> does not pass
+    bad = E.criteria(base + coord + [_row([.55, .53], .70, .60, 6.0)], scr, [100], (35,))
+    c = bad["C3"]["q35"]["per_B"][0]
+    assert c["diff_macro"] > 0 and c["dP_micro"] == pytest.approx(-.10) and not c["pass_B"]
+    assert not bad["C3"]["pass"] and c["dFP_per_view_epoch"] == pytest.approx(4.0)
+    assert c["per_seq_diff"] == pytest.approx([.05, .03]) and c["seqs_positive"] == 2 and c["base"] == "T0"
+    good = E.criteria(base + coord + [_row([.55, .53], .78, .55, 2.5)], scr, [100], (35,))
+    assert good["C3"]["pass"] and not good["C4"]["pass"]                  # T2 - T1 unique diff == 0

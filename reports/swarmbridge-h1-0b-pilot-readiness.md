@@ -2,6 +2,8 @@
 
 Ngày 12/11/2026. Theo phản biện thứ tám: duyệt viết code pilot 0B-TUNE và test tổng hợp. Chưa duyệt HOLD, Gate 1 hay huấn luyện RL mới.
 
+> **v2 (phản biện #9, cùng ngày):** T2 sửa lại thành tuần tự, chỉ bỏ dựa trên những gì UAV1 **thực sự gửi**, và đổi nhãn thành heuristic, không phải oracle. CPU chính tính mọi ứng viên được mã hoá. UL và DL được tách. Báo cả F1 micro và macro. Xem **mục 8**; mục 8 thay thế mục 1–3 ở những chỗ mâu thuẫn.
+
 **Trạng thái:**
 - Code, test, adapter và cấu hình đã xong.
 - **Chưa chạy trên ảnh MDMT nào.** Adapter từ chối trả ảnh khi chưa có ghi chú cơ sở quyền dùng dữ liệu (mục 6).
@@ -28,7 +30,8 @@ Ngày 12/11/2026. Theo phản biện thứ tám: duyệt viết code pilot 0B-TU
 | T1 | Token chắc, rồi crop P1 |
 | T1P2 | Token chắc, rồi ô P2 |
 | F | Khung AVIF; nếu không vừa thì quay về T0 |
-| T2 | **Oracle liên kết hoàn hảo có tính phí** (dùng ID GT, không triển khai được) |
+| T2 | ~~Oracle liên kết hoàn hảo có tính phí~~ → **heuristic bỏ trùng có trợ giúp GT** (v2, mục 8). Dùng ID GT, không triển khai được, không phải cận trên |
+| T2v | Như T2, nhưng chỉ tính vật mà BS thực sự nhận ra từ báo cáo của UAV1 (v2) |
 
 ## 2. Các chi tiết được chốt khi viết code (khai báo; khác hoặc cụ thể hơn protocol)
 
@@ -185,3 +188,98 @@ python h1_pilot0b_eval.py h1_pilot0b_config.json OUT result.json --zip data/mdmt
 - CPU desktop thay cho phần cứng UAV. Tiến trình AVIF chạy song song nên thời gian có nhiễu do tranh tài nguyên.
 - Chưa có đề xuất theo chuyển động, hàng đợi, mất gói, hay liên kết xuyên góc thật.
 - F1 duy nhất dùng liên kết lý tưởng cho mọi điều kiện.
+
+## 8. Readiness v2: sửa theo phản biện #9
+
+### 8.1. Lỗi logic của T2 (v1)
+
+**Lỗi:** v1 cho UAV2 bỏ crop nếu UAV1 **đề xuất** cùng vật, hoặc **phát hiện** nó bằng token chắc, kể cả khi UAV1 không đủ ngân sách để gửi. BS khi đó có thể không nhận được báo cáo nào về vật đó, tức là "oracle" tự làm mất TP duy nhất.
+
+**Sửa:** T2 giờ chạy tuần tự.
+1. **UAV1 lập lịch trước**, theo thứ tự T1, trong phần ngân sách của nó. Bản kê 24 bit cho mỗi món **đã gửi** nằm trong phần ngân sách đó: hàm `send_with_manifest` bỏ dần món cuối cho đến khi payload + bản kê vừa.
+2. **UAV2 chỉ bỏ** ứng viên P1 khớp vật GT mà UAV1 **thực sự gửi**: một crop đã gửi phủ vật đó, hoặc một token chắc đã gửi (box đã lượng tử) khớp đúng lớp.
+3. Ứng viên không khớp GT không bao giờ bị bỏ.
+4. Nếu UAV2 không có ứng viên, không có phối hợp: T2 = T1 và chi phí bằng 0.
+
+**Thêm T2v:** vật chỉ được coi là đã giao nếu BS **nhận ra** nó từ báo cáo của UAV1 (giải mã thật, khớp đúng lớp, conf ≥ 0,05). Biến thể này tách "đã gửi" khỏi "đã gửi và đủ tốt để BS nhận diện".
+
+**Nhãn:**
+- T2 và T2v là **heuristic bỏ trùng có trợ giúp GT**, với liên kết hoàn hảo có tính phí.
+- Chúng **không** tối ưu F1 và **không** là cận trên.
+- T2 − T1 ≤ 0 **không** có nghĩa là không còn dư địa hợp tác. Muốn có cận trên cần một bộ tối ưu riêng trên cùng không gian hành động; việc đó chưa làm.
+- C4 đổi tên phép đo trùng lặp thành **trùng lặp ở mức đề xuất** (trước ngân sách).
+
+### 8.2. Mô hình tài nguyên UL / DL
+
+**B là ngân sách uplink chung của 2 UAV.**
+
+| Thành phần | Kênh | Tính vào đâu |
+|---|---|---|
+| Bản kê của UAV1 (24 bit / món đã gửi) | UL | Phần ngân sách của UAV1 |
+| Bản kê của UAV2 (24 bit / ứng viên) | UL | Phần ngân sách của UAV2 |
+| Bitmap (1 bit / ứng viên UAV2 + header DL) | **DL, kênh riêng** | Không trừ vào B |
+
+**Thiết lập chính, ρ = 0:**
+- DL được báo bằng bit và theo thời gian phối hợp T_coord = (bản kê UAV1 + bitmap) / R, ở R ∈ {2, 5, 10, 20} Mbit/s, giả định R_DL = R_UL.
+- Có thể đặt trần DL `B_dl`. Nếu bitmap không vừa thì không bỏ gì, nhưng bản kê vẫn phải trả.
+
+**Độ nhạy, ρ ∈ {1, 4}:** ngân sách chia sẻ thời gian. ρ = R_UL / R_DL quy bit DL ra bit UL tương đương: B_eff = B − ρ · DL.
+
+### 8.3. CPU
+
+- **Phép đo chính:** UAV chỉ biết số bit AVIF chính xác sau khi mã hoá, nên chi phí xử lý = YOLO11n + mã hoá **mọi** ứng viên mà điều kiện có thể gửi:
+  - T1 / T2 / T2v: mọi P1;
+  - T1P2: mọi P2;
+  - F: cả khung;
+  - T0 / T0+: chỉ YOLO11n.
+- Báo median và p90 cho từng điều kiện. C5 dùng con số này.
+- `cpu_sent_median_supplementary` chỉ là con số phụ, lạc quan: nó chỉ đúng nếu đoán được số bit mà không cần mã hoá. Không dùng nó để tuyên bố khả thi.
+
+### 8.4. Chỉ số và tiêu chí
+
+- **Mỗi dòng kết quả gồm:**
+  - F1 / P / R từng góc, bản **macro** (trung bình theo chuỗi) và **micro** (gộp số đếm);
+  - F1 duy nhất, macro và micro;
+  - F1 của từng chuỗi;
+  - FP mỗi góc mỗi epoch;
+  - bit UL thực đạt, bản kê, DL;
+  - số crop đã gửi và crop sai;
+  - CPU chính và CPU phụ;
+  - airtime và T_coord.
+- **Chọn α, τ_decl:** theo F1 macro, trên chính các chuỗi EXPL. Mỗi dòng đều ghi rõ là khám phá.
+- **C3, quy tắc đăng ký ở v2 trước khi có kết quả MDMT:**
+  - T1 − max(T0, T0+) > 0 **ở cả macro và micro**;
+  - precision micro giảm không quá 0,05;
+  - báo kèm ΔP, ΔR, ΔFP, chênh lệch từng chuỗi và số chuỗi dương.
+- **C4:**
+  - trùng lặp mức đề xuất ≥ 20%;
+  - và F1 duy nhất của T2 hoặc T2v (ρ = 0) − T1 > 0 ở cả macro và micro tại ít nhất một B;
+  - báo các mức ρ và ΔFP.
+
+### 8.5. Test
+
+**138 qua** (64 test của pilot + 74 test cũ). Test mới:
+- **Phản ví dụ của phản biện:** UAV1 đề xuất X nhưng không đủ ngân sách gửi; UAV2 phải gửi X, và BS phải thấy X. Test này trượt với logic v1.
+- Token phát hiện được nhưng không gửi thì không bỏ.
+- Token yếu hoặc sai lớp không tính.
+- T2v: crop đã gửi nhưng BS không nhận ra thì không bỏ.
+- Kế toán UL / DL:
+  - UL = payload + bản kê của cả hai UAV;
+  - DL không trừ vào B khi ρ = 0;
+  - B_eff = B − DL khi ρ = 1;
+  - trần DL tắt việc bỏ nhưng vẫn tính bản kê.
+- Không có ứng viên UAV2 thì T2 = T1.
+- `send_with_manifest` luôn vừa ngân sách (100 ca ngẫu nhiên).
+- CPU chính theo từng điều kiện.
+- C3 chặn precision và báo từng chuỗi.
+
+**Thời gian đánh giá** (dữ liệu tổng hợp cỡ thật): khoảng 3 phút cho 459 epoch.
+
+### 8.6. Việc chưa thay đổi
+
+- Vẫn **chưa mở ảnh MDMT nào**.
+- Khi có cơ sở quyền dùng ảnh (thư của tác giả, hoặc xác nhận của lab / trường cho việc dùng nội bộ bản công khai qua mirror; tự điền `rights_note` không tạo ra quyền):
+  1. chạy `smoke_expl`;
+  2. kiểm căn chỉnh 52 và 68 bằng mắt;
+  3. rồi chạy `pilot_expl` trên 11 chuỗi đã đăng ký.
+- `val` vẫn đóng. Không HOLD, không Gate 1, không huấn luyện PPO.

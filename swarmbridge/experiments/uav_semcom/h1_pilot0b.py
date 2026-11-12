@@ -19,10 +19,19 @@ Conditions (same joint budget B for the 2 UAVs, UAV1 gets alpha*B, UAV2 (1-alpha
     T1      T0, then P1 crops (uncertain detection windows), conf-descending
     T1P2    T0, then P2 tiles (R1a 320 px grid tiles holding an uncertain detection)
     F       full AVIF frame if it fits the UAV share, else T0 (fallback counted)
-    T2      COSTED PERFECT-ASSOCIATION ORACLE (uses GT ids, never deployable): T1 where UAV2 drops each P1 candidate
-            whose GT object is also proposed by UAV1 or already carried by a UAV1 strong token; both UAV manifests
-            (24 bit / item) and a DL bitmap to UAV2 are charged to B first. Candidates matching no GT are never
-            dropped.
+    T2      GT-ASSISTED SUPPRESSION HEURISTIC with costed perfect association (uses GT ids, never deployable; NOT an
+            F1-optimal oracle and NOT an upper bound, so T2 - T1 <= 0 does not mean "no cooperative headroom").
+            Sequential (review #9): UAV1 schedules first (T1 order, its manifest of SENT items inside its share);
+            UAV2 then drops each P1 candidate whose GT object UAV1 actually SENT (a sent crop covering it, or a sent
+            strong token matching it). Candidates matching no GT are never dropped. If UAV2 has no candidate, no
+            coordination happens (T2 == T1, zero cost).
+    T2v     as T2, but an object only counts as delivered by UAV1 if the BS decoding of UAV1's sent items matches it
+            (class-aware, conf >= TAU_LO): "sent" vs "sent and recognised".
+Resource model (review #9): B is the JOINT UPLINK budget of the two UAVs. Manifests are uplink and charged to the
+sending UAV's share (UAV1: 24 bit per sent item; UAV2: 24 bit per P1 candidate). The DL bitmap (one bit per UAV2
+candidate + DL header) is a separate link: main setting rho = 0 (DL not charged to B, reported in bits / airtime,
+optional DL cap B_dl: if the bitmap does not fit, no suppression happens but manifests are still paid);
+sensitivity rho > 0 = shared-time budget where rho = R_UL / R_DL converts DL bits to uplink-equivalent bits.
 """
 import math
 
@@ -30,7 +39,6 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 import h1_gate0a as G
-import h1_gate0a_audit as AU
 
 TAU_HI, TAU_LO = 0.25, 0.05
 CROP_SCALE, CROP_MIN, MERGE_IOU = 1.5, 64, 0.5
@@ -44,8 +52,9 @@ NCLS = 4                      # mdmt_adapter.CLASSES: person, car, bicycle, bus
 # VisDrone 1..10 (pedestrian, people, bicycle, car, van, truck, tricycle, awning-tricycle, bus, motor) -> MDMT.
 # Fixed before any MDMT image is seen; tricycles have no MDMT class. Class-agnostic scores are reported as a check.
 VISDRONE_TO_MDMT = {1: 0, 2: 0, 3: 2, 4: 1, 5: 1, 6: 1, 9: 3, 10: 2}
-CONDS = ("T0", "T0+", "T1", "T1P2", "F", "T2")
-CROP_CONDS = ("T1", "T1P2", "T2")
+CONDS = ("T0", "T0+", "T1", "T1P2", "F", "T2", "T2v")
+CROP_CONDS = ("T1", "T1P2", "T2", "T2v")
+COORD_CONDS = ("T2", "T2v")
 
 
 # ---------------------------------------------------------------- detections
@@ -215,7 +224,7 @@ def uav_items(rec, cond, q, drop=frozenset()):
     items = [("tok", int(k), TOK_BITS) for k in strong_idx(d)]
     if cond == "T0+":
         items += [("tok", int(k), TOK_BITS) for k in weak_idx(d)]
-    elif cond in ("T1", "T2"):
+    elif cond in ("T1",) + COORD_CONDS:
         items += [("P1", k, c["bits"][q]) for k, c in enumerate(rec["cands"]["P1"]) if k not in drop]
     elif cond == "T1P2":
         items += [("P2", k, c["bits"][q]) for k, c in enumerate(rec["cands"]["P2"])]
@@ -310,36 +319,76 @@ def false_flags(rec, gt, kind):
     return (~cover([x["win"] for x in c], gt)[2].any(1)).tolist()
 
 
-def t2_drop(rec1, rec2, gt1, gt2):
-    """MARKED ORACLE: P1 candidate positions of UAV2 to drop (uses GT ids of both views)."""
-    have = set(cand_gt_all([c["win"] for c in rec1["cands"]["P1"]], gt1)) - {None}
-    have |= {g for _, g in match(take(rec1["det"], strong_idx(rec1["det"])), gt1)}
-    g2 = cand_gt_all([c["win"] for c in rec2["cands"]["P1"]], gt2)
-    return frozenset(k for k, g in enumerate(g2) if g is not None and g in have)
+def t2_context(rec1, rec2, gt1, gt2):
+    """budget-independent GT lookups for the T2 heuristics (cacheable per epoch)."""
+    d1 = rec1["det"]
+    tq = quant_tokens(d1, rec1["W"], rec1["H"])                 # what the BS would receive for each token
+    si = strong_idx(d1)
+    tok_gt = {int(si[p]): g for p, g in match(take(tq, si), gt1)}
+    return dict(c1=cand_gt_all([c["win"] for c in rec1["cands"]["P1"]], gt1),
+                c2=cand_gt_all([c["win"] for c in rec2["cands"]["P1"]], gt2), tok1=tok_gt)
 
 
-def t2_coord_costs(rec1, rec2):
-    nA = len(strong_idx(rec1["det"])) + len(rec1["cands"]["P1"])
+def delivered_ids(rec1, s1, gt1, ctx, verified, q):
+    """GT objects UAV1 actually sent (T2) or sent AND the BS recognised from what it sent (T2v)."""
+    if verified:
+        d = bs_decode(rec1, s1, q)
+        return {g for _, g in match(take(d, np.where(d["s"] >= TAU_LO)[0]), gt1)}
+    out = set()
+    for kind, k, _ in s1["items"]:
+        g = ctx["c1"][k] if kind == "P1" else ctx["tok1"].get(k) if kind == "tok" else None
+        if g is not None:
+            out.add(g)
+    return out
+
+
+def send_with_manifest(rec, cond, q, budget, man_bits=MAN_BITS):
+    """schedule, then drop trailing items until payload message + manifest message (man_bits per SENT item) fit."""
+    s = send(rec, cond, q, budget)
+    items = list(s["items"])
+    while items:
+        pay = sum(b for _, _, b in items)
+        if msg_cost(pay) + msg_cost(man_bits * len(items)) <= budget:
+            break
+        items.pop()
+    pay = sum(b for _, _, b in items)
+    return dict(items=items, payload=pay, ul=msg_cost(pay), frame=False), (msg_cost(man_bits * len(items))
+                                                                           if items else 0)
+
+
+def run_coord(rec1, rec2, gt1, gt2, cond, q, B, alpha, rho=0.0, B_dl=math.inf, ctx=None):
+    """T2 / T2v (GT-assisted suppression heuristic, sequential, costed)."""
     nB = len(rec2["cands"]["P1"])
-    return AU.coord_costs(nA, nB, MAN_BITS, bitmaps_for=("B",))
+    if nB == 0:                                                 # nothing to coordinate
+        e = run_epoch(rec1, rec2, gt1, gt2, "T1", q, B, alpha)
+        e.update(man_ul=0, coord_ok=False)
+        return e
+    ctx = ctx or t2_context(rec1, rec2, gt1, gt2)
+    dl = nB + G.DL_HDR
+    Bu = B - rho * dl                                           # shared-time sensitivity only (rho > 0)
+    man2 = msg_cost(MAN_BITS * nB)
+    s1, man1 = send_with_manifest(rec1, "T1", q, alpha * Bu) if alpha * Bu > 0 else (
+        dict(items=[], payload=0, ul=0, frame=False), 0)
+    coord_ok = dl <= B_dl and (1 - alpha) * Bu - man2 > 0
+    drop = frozenset()
+    if coord_ok:
+        have = delivered_ids(rec1, s1, gt1, ctx, cond == "T2v", q)
+        drop = frozenset(k for k, g in enumerate(ctx["c2"]) if g is not None and g in have)
+    b2 = (1 - alpha) * Bu - man2
+    s2 = send(rec2, "T1", q, b2, drop) if b2 > 0 else dict(items=[], payload=0, ul=0, frame=False)
+    return dict(decl=(bs_decode(rec1, s1, q), bs_decode(rec2, s2, q)), ul=s1["ul"] + man1 + s2["ul"] + man2,
+                dl=dl, man_ul=man1 + man2, sent=(s1, s2), drop=drop, coord_ok=coord_ok)
 
 
 # ---------------------------------------------------------------- one epoch, one condition
-def run_epoch(rec1, rec2, gt1, gt2, cond, q, B, alpha, t2=None):
-    """-> dict(decl=(d1, d2), ul, dl, sent=(s1, s2)). GT only used by the T2 oracle (`t2` = cached t2_drop)."""
-    drop, ul_c, dl = frozenset(), 0, 0
-    avail = B
-    if cond == "T2":
-        drop = t2_drop(rec1, rec2, gt1, gt2) if t2 is None else t2
-        ul_c, dl = t2_coord_costs(rec1, rec2)
-        avail = B - ul_c - dl
-    if avail <= 0:
-        s1 = s2 = dict(items=[], payload=0, ul=0, frame=False)
-    else:
-        s1 = send(rec1, cond, q, alpha * avail)
-        s2 = send(rec2, cond, q, (1 - alpha) * avail, drop)
-    return dict(decl=(bs_decode(rec1, s1, q), bs_decode(rec2, s2, q)), ul=s1["ul"] + s2["ul"] + ul_c, dl=dl,
-                sent=(s1, s2), drop=drop)
+def run_epoch(rec1, rec2, gt1, gt2, cond, q, B, alpha, rho=0.0, B_dl=math.inf, ctx=None):
+    """-> dict(decl=(d1, d2), ul, dl, sent=(s1, s2)). GT only used by the T2 / T2v heuristics."""
+    if cond in COORD_CONDS:
+        return run_coord(rec1, rec2, gt1, gt2, cond, q, B, alpha, rho, B_dl, ctx)
+    s1 = send(rec1, cond, q, alpha * B)
+    s2 = send(rec2, cond, q, (1 - alpha) * B)
+    return dict(decl=(bs_decode(rec1, s1, q), bs_decode(rec2, s2, q)), ul=s1["ul"] + s2["ul"], dl=0, man_ul=0,
+                sent=(s1, s2), drop=frozenset())
 
 
 # ---------------------------------------------------------------- scoring
@@ -394,8 +443,9 @@ def c1_c2(rec, gt, q=FRAME_Q):
 
 
 def c4_redundancy(rec1, rec2, gt1, gt2):
-    """candidates matched to a GT object, and how many of those the other view also proposes or already carries
-    with a strong token (both directions)."""
+    """PROPOSAL-LEVEL redundancy (before any budget): candidates matched to a GT object, and how many of those the
+    other view also proposes or already detects with a strong token (both directions). Says how much overlap
+    exists, not how much a scheduler can save."""
     n = red = 0
     for ra, rb, ga, gb in ((rec1, rec2, gt1, gt2), (rec2, rec1, gt2, gt1)):
         other = set(cand_gt_all([c["win"] for c in rb["cands"]["P1"]], gb)) - {None}
@@ -406,10 +456,22 @@ def c4_redundancy(rec1, rec2, gt1, gt2):
     return dict(matched=n, redundant=red)
 
 
+def cpu_ms_all(rec, cond, q):
+    """PRIMARY onboard CPU per epoch (review #9): exact bit lengths are only known after encoding, so the UAV
+    encodes EVERY candidate the condition may send before selecting: YOLO11n + all encodes of that candidate set."""
+    if cond in ("T0", "T0+"):
+        return rec["det_ms"]
+    if cond == "F":
+        return rec["det_ms"] + rec["frame"]["enc_ms"]
+    kind = "P2" if cond == "T1P2" else "P1"
+    return rec["det_ms"] + sum(c["enc_ms"][q] for c in rec["cands"][kind])
+
+
 def cpu_ms(rec, q, sent=None):
-    """onboard CPU per epoch: YOLO11n + AVIF encode of all P1 candidates (or only the sent ones)."""
+    """onboard CPU per epoch: YOLO11n + AVIF encode of all P1 candidates (C5), or, SUPPLEMENTARY and optimistic,
+    only of the items actually sent (valid only if bit lengths could be predicted without encoding)."""
     if sent is None:
-        return rec["det_ms"] + sum(c["enc_ms"][q] for c in rec["cands"]["P1"])
+        return cpu_ms_all(rec, "T1", q)
     return rec["det_ms"] + sum(rec["cands"][kind][k]["enc_ms"][q] for kind, k, _ in sent["items"]
                                if kind in ("P1", "P2")) + sum(rec["frame"]["enc_ms"] for kind, _, _ in sent["items"]
                                                                if kind == "frame")
