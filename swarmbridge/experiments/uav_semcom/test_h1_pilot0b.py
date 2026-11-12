@@ -627,3 +627,13 @@ def test_c3_precision_guard_and_per_seq_reporting():
     assert c["per_seq_diff"] == pytest.approx([.05, .03]) and c["seqs_positive"] == 2 and c["base"] == "T0"
     good = E.criteria(base + coord + [_row([.55, .53], .78, .55, 2.5)], scr, [100], (35,))
     assert good["C3"]["pass"] and not good["C4"]["pass"]                  # T2 - T1 unique diff == 0
+
+
+def test_align_check_renders_both_views_with_labels(fakezip):
+    import h1_pilot0b_align_check as A
+    ds = M.MDMT(fakezip, rights_note="synthetic")
+    im = A.render(ds, 52, 0, width=64)
+    assert im.size == (64, 16)
+    assert A.colour(3) == A.colour(3) and A.colour(3) != A.colour(4)
+    with pytest.raises(M.AccessError):
+        A.render(M.MDMT(fakezip), 52, 0)                       # no rights note -> no pixels

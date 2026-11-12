@@ -336,3 +336,21 @@ T2v là **heuristic oracle kết quả đã xác minh**: dùng GT để biết B
 - Không đổi thiết kế nào khác.
 - Bước tiếp theo, khi có cơ sở dùng ảnh: `smoke_expl` + kiểm căn chỉnh 52 / 68 bằng mắt → `pilot_expl` trên 11 chuỗi EXPL → báo GO / NO-GO trung thực cho câu hỏi: T1 có tốt hơn T0 / T0+ ở cùng ngân sách không?
 - val đóng. Không HOLD, Gate 1, PPO.
+
+## 10. Trạng thái 13/11: readiness v3 được duyệt (phản biện #11)
+
+- **Code readiness v3: APPROVED.** Không còn vòng audit hay thiết kế nào trước pilot.
+- Protocol, cấu hình và 11 chuỗi EXPL giữ nguyên. Ngưỡng không được đổi sau khi thấy kết quả.
+
+**Đã chuẩn bị để chạy ngay khi có cơ sở dùng ảnh** (từ tác giả, hoặc lab / trường):
+- `h1_pilot0b_align_check.py`: vẽ nhãn của hai góc lên ảnh ở epoch đầu, giữa và cuối của chuỗi 52 và 68; cùng ID thì cùng màu. Có test trên zip tổng hợp.
+- `scripts/uav_semcom/h1_pilot0b_run.sh`:
+  - `smoke`: chạy test, vẽ ảnh căn chỉnh, precompute `smoke_expl`, rồi **dừng** để xem ảnh bằng mắt;
+  - `pilot`: precompute `pilot_expl` + đánh giá.
+
+**Thứ tự báo cáo khi có kết quả:**
+1. **C3 trước:** T1 so với T0 / T0+, gồm F1 macro / micro, P, R, FP, bit UL thực đạt, recall ứng viên, CPU p90, từng chuỗi.
+2. Sau đó mới đến C4, tách riêng. T2 / T2v không được dùng để tuyên bố lợi ích hợp tác triển khai được.
+3. Kết luận **GO / NO-GO / INCONCLUSIVE**.
+
+Vẫn đóng: MDMT-val, VisionTrack-test, HOLD, Gate 1, PPO / MAPPO.
