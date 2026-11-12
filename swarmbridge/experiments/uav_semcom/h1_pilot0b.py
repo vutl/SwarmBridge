@@ -25,12 +25,15 @@ Conditions (same joint budget B for the 2 UAVs, UAV1 gets alpha*B, UAV2 (1-alpha
             UAV2 then drops each P1 candidate whose GT object UAV1 actually SENT (a sent crop covering it, or a sent
             strong token matching it). Candidates matching no GT are never dropped. If UAV2 has no candidate, no
             coordination happens (T2 == T1, zero cost).
-    T2v     as T2, but an object only counts as delivered by UAV1 if the BS decoding of UAV1's sent items matches it
-            (class-aware, conf >= TAU_LO): "sent" vs "sent and recognised".
+    T2v     VERIFIED-OUTCOME ORACLE HEURISTIC: as T2, but an object only counts as delivered by UAV1 if the BS
+            decoding of UAV1's sent items matches it in GT (class-aware, conf >= TAU_LO). Assumes BS inference and
+            the feedback to UAV2 fit in the epoch (T_coord covers radio time only). Not deployable.
+    Fallback (coord_feasible): if coordination cannot be paid in full in advance, the epoch runs as plain T1 and no
+    coordination message is sent or charged; the reason is recorded.
 Resource model (review #9): B is the JOINT UPLINK budget of the two UAVs. Manifests are uplink and charged to the
 sending UAV's share (UAV1: 24 bit per sent item; UAV2: 24 bit per P1 candidate). The DL bitmap (one bit per UAV2
 candidate + DL header) is a separate link: main setting rho = 0 (DL not charged to B, reported in bits / airtime,
-optional DL cap B_dl: if the bitmap does not fit, no suppression happens but manifests are still paid);
+optional DL cap B_dl: if the bitmap does not fit, coordination is not attempted, see coord_feasible);
 sensitivity rho > 0 = shared-time budget where rho = R_UL / R_DL converts DL bits to uplink-equivalent bits.
 """
 import math
@@ -264,7 +267,10 @@ def gt_arrays(gt):
 
 
 def match(d, gt, thr=MATCH_IOU, class_aware=True):
-    """Hungarian per class (max #matches with IoU >= thr, then max IoU). -> list of (det index, gt id)."""
+    """Hungarian per class, LEXICOGRAPHIC: maximum number of pairs with IoU >= thr, then maximum total IoU among
+    those. Each valid edge weighs BONUS + IoU with BONUS = min(n_det, n_gt) + 1 > any total IoU, so one extra pair
+    always outweighs any IoU gain (review #10: the former 1 + IoU weight chose 4 exact pairs (8.0) over 5 pairs at
+    IoU 0.5 (7.5)). -> list of (det index, gt id)."""
     ids, gb, gc = gt_arrays(gt)
     out = []
     classes = np.unique(np.concatenate([d["c"], gc])) if class_aware else [None]
@@ -274,7 +280,7 @@ def match(d, gt, thr=MATCH_IOU, class_aware=True):
         if not len(di) or not len(gi):
             continue
         M = iou_matrix(d["b"][di], gb[gi])
-        Wt = np.where(M >= thr, 1.0 + M, 0.0)
+        Wt = np.where(M >= thr, float(min(M.shape) + 1) + M, 0.0)
         r, k = linear_sum_assignment(-Wt)
         out += [(int(di[a]), ids[gi[b]]) for a, b in zip(r, k) if Wt[a, b] > 0]
     return out
@@ -356,28 +362,47 @@ def send_with_manifest(rec, cond, q, budget, man_bits=MAN_BITS):
                                                                            if items else 0)
 
 
-def run_coord(rec1, rec2, gt1, gt2, cond, q, B, alpha, rho=0.0, B_dl=math.inf, ctx=None):
-    """T2 / T2v (GT-assisted suppression heuristic, sequential, costed)."""
+def coord_feasible(rec2, B, alpha, rho=0.0, B_dl=math.inf):
+    """registered fallback rule (review #10). Coordination is attempted only if everything it needs is known to fit
+    BEFORE anything is sent (all inputs are known in advance: UAV2's candidate count, the shares, the DL cap):
+      UAV2 has >= 1 P1 candidate; the shared-time budget B - rho * DL stays > 0; the DL bitmap fits B_dl; UAV2's
+      share can carry its manifest. Otherwise the epoch runs as plain T1 with the full budget and NO coordination
+      message is sent or charged. -> (ok, reason)."""
     nB = len(rec2["cands"]["P1"])
-    if nB == 0:                                                 # nothing to coordinate
+    if nB == 0:
+        return False, "no_uav2_candidate"
+    dl = nB + G.DL_HDR
+    Bu = B - rho * dl
+    if Bu <= 0:
+        return False, "shared_time_budget"
+    if dl > B_dl:
+        return False, "dl_cap"
+    if msg_cost(MAN_BITS * nB) > (1 - alpha) * Bu:
+        return False, "uav2_manifest"
+    return True, "ok"
+
+
+def run_coord(rec1, rec2, gt1, gt2, cond, q, B, alpha, rho=0.0, B_dl=math.inf, ctx=None):
+    """T2 / T2v, sequential, costed. T2 = GT-assisted suppression heuristic; T2v = VERIFIED-OUTCOME ORACLE
+    HEURISTIC (uses GT to decide whether the BS recognised UAV1's report, and assumes the BS inference + feedback
+    finish inside the epoch; neither is deployable). Invariant: ul + rho * dl <= B."""
+    ok, why = coord_feasible(rec2, B, alpha, rho, B_dl)
+    if not ok:
         e = run_epoch(rec1, rec2, gt1, gt2, "T1", q, B, alpha)
-        e.update(man_ul=0, coord_ok=False)
+        e.update(coord_ok=False, coord_reason=why, dl_attempted=0)
         return e
     ctx = ctx or t2_context(rec1, rec2, gt1, gt2)
+    nB = len(rec2["cands"]["P1"])
     dl = nB + G.DL_HDR
-    Bu = B - rho * dl                                           # shared-time sensitivity only (rho > 0)
+    Bu = B - rho * dl
     man2 = msg_cost(MAN_BITS * nB)
-    s1, man1 = send_with_manifest(rec1, "T1", q, alpha * Bu) if alpha * Bu > 0 else (
-        dict(items=[], payload=0, ul=0, frame=False), 0)
-    coord_ok = dl <= B_dl and (1 - alpha) * Bu - man2 > 0
-    drop = frozenset()
-    if coord_ok:
-        have = delivered_ids(rec1, s1, gt1, ctx, cond == "T2v", q)
-        drop = frozenset(k for k, g in enumerate(ctx["c2"]) if g is not None and g in have)
-    b2 = (1 - alpha) * Bu - man2
-    s2 = send(rec2, "T1", q, b2, drop) if b2 > 0 else dict(items=[], payload=0, ul=0, frame=False)
+    s1, man1 = send_with_manifest(rec1, "T1", q, alpha * Bu)
+    have = delivered_ids(rec1, s1, gt1, ctx, cond == "T2v", q)
+    drop = frozenset(k for k, g in enumerate(ctx["c2"]) if g is not None and g in have)
+    s2 = send(rec2, "T1", q, (1 - alpha) * Bu - man2, drop)
     return dict(decl=(bs_decode(rec1, s1, q), bs_decode(rec2, s2, q)), ul=s1["ul"] + man1 + s2["ul"] + man2,
-                dl=dl, man_ul=man1 + man2, sent=(s1, s2), drop=drop, coord_ok=coord_ok)
+                dl=dl, dl_attempted=dl, man_ul=man1 + man2, sent=(s1, s2), drop=drop, coord_ok=True,
+                coord_reason="ok")
 
 
 # ---------------------------------------------------------------- one epoch, one condition

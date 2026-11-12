@@ -3,6 +3,8 @@
 Ngày 12/11/2026. Theo phản biện thứ tám: duyệt viết code pilot 0B-TUNE và test tổng hợp. Chưa duyệt HOLD, Gate 1 hay huấn luyện RL mới.
 
 > **v2 (phản biện #9, cùng ngày):** T2 sửa lại thành tuần tự, chỉ bỏ dựa trên những gì UAV1 **thực sự gửi**, và đổi nhãn thành heuristic, không phải oracle. CPU chính tính mọi ứng viên được mã hoá. UL và DL được tách. Báo cả F1 micro và macro. Xem **mục 8**; mục 8 thay thế mục 1–3 ở những chỗ mâu thuẫn.
+>
+> **v3 (phản biện #10):** sửa bộ chấm Hungarian (trước đây có thể không tối đa số TP) và bất biến ngân sách UL của T2. Xem **mục 9**.
 
 **Trạng thái:**
 - Code, test, adapter và cấu hình đã xong.
@@ -283,3 +285,54 @@ python h1_pilot0b_eval.py h1_pilot0b_config.json OUT result.json --zip data/mdmt
   2. kiểm căn chỉnh 52 và 68 bằng mắt;
   3. rồi chạy `pilot_expl` trên 11 chuỗi đã đăng ký.
 - `val` vẫn đóng. Không HOLD, không Gate 1, không huấn luyện PPO.
+
+## 9. Readiness v3: sửa theo phản biện #10
+
+Cả hai lỗi đã được tái hiện trên code v2 trước khi sửa.
+
+### 9.1. Hungarian chưa tối đa số TP
+
+**Lỗi:** với trọng số 1 + IoU, đường tăng cường thay k cặp trùng khít bằng k + 1 cặp IoU 0,5 bị thua khi k ≥ 4 (2k > 1,5(k + 1)).
+- Phản ví dụ của phản biện: 5 GT, 5 detection. Code v2 cho 4 TP, trong khi có thể ghép 5.
+
+**Sửa:** trọng số cạnh hợp lệ = BONUS + IoU, với BONUS = min(n_det, n_gt) + 1, lớn hơn mọi tổng IoU có thể có. Như vậy thứ tự là: tối đa số cặp trước, rồi mới tối đa IoU.
+
+**Test hồi quy:**
+- phản ví dụ n = 5;
+- 60 đồ thị lưới dạng chuỗi (bước 20 px, rộng 60: cặp trùng IoU 1, cặp lệch một bước IoU 0,5), đối chiếu với ghép cực đại Kuhn, một thuật toán độc lập. Kuhn lại được đối chiếu với vét cạn trên 30 đồ thị nhỏ.
+
+**Kiểm tra rằng test có tác dụng:** chạy lại bộ test với trọng số cũ thì 3 test trượt (phản ví dụ + 2 seed lưới).
+
+Sửa này làm **trước** mọi đánh giá MDMT, không phải sửa theo kết quả.
+
+### 9.2. T2 vượt ngân sách UL
+
+**Lỗi:** v2 cộng bản kê của UAV2 vào UL kể cả khi phần ngân sách của UAV2 không đủ trả. Phản ví dụ: B = 100, α = 0,5, một ứng viên, bản kê 168 bit → UL báo 168 > B.
+
+**Sửa:** quy tắc fallback, đăng ký trước, hàm `coord_feasible`. Phối hợp chỉ được thử khi mọi thứ cần thiết vừa **từ trước**; các đại lượng đều biết trước khi gửi:
+- UAV2 có ít nhất một ứng viên;
+- B − ρ·DL > 0;
+- bitmap vừa trần B_dl;
+- phần ngân sách của UAV2 trả được bản kê.
+
+Nếu một điều kiện trượt: epoch chạy như T1 với toàn bộ B, **không** gửi và không tính bất kỳ thông điệp phối hợp nào. Lý do fallback được ghi lại (`coord_reasons`).
+
+Hệ quả:
+- DL đã thử = DL đã giao (bằng 0 khi fallback);
+- trường hợp trần DL không còn "trả bản kê mà không bỏ được gì".
+
+**Bất biến:** UL + ρ·DL ≤ B, và DL ≤ B_dl, cho mọi điều kiện và mọi epoch.
+- Test thuộc tính: 6 seed × 60 cặp bản ghi ngẫu nhiên × 7 điều kiện, với B từ 0 đến 1e6, α ∈ {0,3; 0,5; 0,7}, ρ ∈ {0, 1, 4}, B_dl ∈ {∞, 10, 80}.
+- Đánh giá cũng kiểm bất biến này lúc chạy và dừng ngay nếu vi phạm.
+
+### 9.3. Phân loại T2v
+
+T2v là **heuristic oracle kết quả đã xác minh**: dùng GT để biết BS đã nhận ra đúng vật chưa, và giả định suy luận ở BS cùng phản hồi tới UAV2 xong trong epoch. Không triển khai được. T_coord chỉ gồm thời gian vô tuyến; thời gian suy luận ở BS chưa nằm trong phân tích deadline.
+
+### 9.4. Trạng thái
+
+- **207 test qua.**
+- Đánh giá khoảng 3 phút cho 459 epoch (đo trên dữ liệu tổng hợp).
+- Không đổi thiết kế nào khác.
+- Bước tiếp theo, khi có cơ sở dùng ảnh: `smoke_expl` + kiểm căn chỉnh 52 / 68 bằng mắt → `pilot_expl` trên 11 chuỗi EXPL → báo GO / NO-GO trung thực cho câu hỏi: T1 có tốt hơn T0 / T0+ ở cùng ngân sách không?
+- val đóng. Không HOLD, Gate 1, PPO.

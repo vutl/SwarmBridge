@@ -3,6 +3,7 @@ crop geometry, candidates, token quantisation, budget packing, T2 oracle rules a
 screening measurements and an end-to-end toy. No real dataset image is used."""
 import io
 import itertools
+import math
 import zipfile
 
 import numpy as np
@@ -317,10 +318,47 @@ def test_t2_uplink_downlink_accounting():
     assert e1["sent"][0]["ul"] + P.msg_cost(P.MAN_BITS * len(e1["sent"][0]["items"])) <= a * Bu
 
 
-def test_t2_dl_cap_disables_suppression_but_manifests_are_paid():
+def test_t2_dl_cap_falls_back_to_t1_without_coordination_messages():
     r1, r2, g1, g2 = _scene()
     e = P.run_epoch(r1, r2, g1, g2, "T2", 35, 10 ** 7, .5, B_dl=10)
-    assert not e["coord_ok"] and e["drop"] == frozenset() and e["man_ul"] > 0
+    t = P.run_epoch(r1, r2, g1, g2, "T1", 35, 10 ** 7, .5)
+    assert not e["coord_ok"] and e["coord_reason"] == "dl_cap" and e["drop"] == frozenset()
+    assert e["man_ul"] == 0 and e["dl"] == 0 and e["dl_attempted"] == 0 and e["ul"] == t["ul"]
+
+
+def test_t2_counterexample_uav2_manifest_unaffordable_review10():
+    # review #10: B = 100, alpha = .5, one UAV2 candidate, manifest 168 bit > UAV2 share 50 -> v2 reported UL 168
+    def rec(p1):
+        return _rec(P.dets(), p1=p1)
+    r1, r2 = rec([]), rec([_cand((0, 0, 64, 64), .2, bits=10)])
+    assert P.msg_cost(P.MAN_BITS) == 168
+    e = P.run_epoch(r1, r2, {}, {}, "T2", 35, 100, .5)
+    assert e["ul"] <= 100 and e["man_ul"] == 0 and e["coord_reason"] == "uav2_manifest"
+
+
+@pytest.mark.parametrize("seed", range(6))
+def test_uplink_never_exceeds_budget_any_condition(seed):
+    rng = np.random.default_rng(seed)
+
+    def rnd_rec():
+        n = int(rng.integers(0, 8))
+        xy = rng.uniform(0, 1800, (n, 2))
+        d = P.dets(np.c_[xy, xy + 30], rng.integers(0, 4, n), rng.uniform(.05, 1, n))
+        p1 = [_cand((int(x), int(y), int(x) + 64, int(y) + 64), .2, bits=int(rng.integers(50, 20000)))
+              for x, y in rng.uniform(0, 1800, (int(rng.integers(0, 6)), 2))]
+        p2 = [_cand((0, 0, 320, 320), .2, bits=int(rng.integers(50, 20000))) for _ in range(int(rng.integers(0, 3)))]
+        return _rec(d, p1=p1, p2=p2, frame_bits=int(rng.integers(1000, 400000)))
+
+    for _ in range(60):
+        r1, r2 = rnd_rec(), rnd_rec()
+        g = {i: (x, y, x + 30, y + 30, 1) for i, (x, y) in enumerate(rng.uniform(0, 1800, (5, 2)))}
+        for cond in P.CONDS:
+            B = float(rng.choice([0, 50, 100, 300, 1000, 5000, 3e4, 3e5, 1e6]))
+            a, rho = float(rng.choice([.3, .5, .7])), float(rng.choice([0, 1, 4]))
+            bdl = float(rng.choice([math.inf, 10, 80]))
+            e = P.run_epoch(r1, r2, g, g, cond, 35, B, a, rho=rho, B_dl=bdl)
+            assert e["ul"] + rho * e["dl"] <= B + 1e-6, (cond, B, a, rho, e["ul"], e["dl"])
+            assert e["dl"] <= bdl
 
 
 def test_t2_without_uav2_candidates_equals_t1():
@@ -392,6 +430,58 @@ def test_match_is_maximum_cardinality(seed):
     b = rng.uniform(0, 60, (5, 2)); b = np.concatenate([b, b + 20], 1)
     d = P.dets(b, rng.integers(0, 2, 5), rng.uniform(0, 1, 5))
     assert len(P.match(d, gt)) == _brute_match(d, gt, P.MATCH_IOU)
+
+
+def test_match_counterexample_review10_max_cardinality_first():
+    gt = {i: (x, 0, x + 60, 20, 1) for i, x in enumerate((0, 20, 40, 60, 80))}
+    d = P.dets([(x, 0, x + 60, 20) for x in (20, 40, 60, 80, 100)], [1] * 5, [.9] * 5)
+    m = P.match(d, gt)
+    assert len(m) == 5 == _brute_match(d, gt, P.MATCH_IOU)
+    assert P.view_counts(d, gt, .5) == dict(tp=5, fp=0, fn=0, ids={0, 1, 2, 3, 4})
+
+
+def _kuhn_max_card(d, gt, thr):
+    """independent reference: maximum bipartite matching size (Kuhn augmenting paths), same-class IoU >= thr."""
+    ids = sorted(gt)
+    adj = [[j for j, g in enumerate(ids) if d["c"][i] == gt[g][4]
+            and P.iou_matrix([d["b"][i]], [gt[g][:4]])[0, 0] >= thr] for i in range(len(d["s"]))]
+    owner = [-1] * len(ids)
+
+    def aug(i, seen):
+        for j in adj[i]:
+            if not seen[j]:
+                seen[j] = True
+                if owner[j] < 0 or aug(owner[j], seen):
+                    owner[j] = i
+                    return True
+        return False
+    return sum(aug(i, [False] * len(ids)) for i in range(len(adj)))
+
+
+@pytest.mark.parametrize("seed", range(60))
+def test_match_max_cardinality_on_lattice_chains(seed):
+    # lattice step 20, width 60: same slot IoU 1, neighbour slot IoU exactly 0.5 (valid), two slots apart 0.2.
+    # A run of >= 4 GT with detections shifted by one slot is where 1 + IoU weights pick fewer pairs.
+    rng = np.random.default_rng(100 + seed)
+    L, s0 = int(rng.integers(4, 8)), int(rng.integers(0, 3))
+    gx = (np.arange(L) + s0) * 20.0
+    dx = np.sort(rng.choice(np.arange(10) * 20.0, int(rng.integers(4, 9)), replace=False))
+    gt = {i: (x, 0, x + 60, 20, 1) for i, x in enumerate(gx)}
+    d = P.dets([(x, 0, x + 60, 20) for x in dx], [1] * len(dx), [.9] * len(dx))
+    m = P.match(d, gt)
+    assert len(m) == _kuhn_max_card(d, gt, P.MATCH_IOU)
+    assert len({a for a, _ in m}) == len(m) == len({g for _, g in m})
+    assert all(P.iou_matrix([d["b"][a]], [gt[g][:4]])[0, 0] >= P.MATCH_IOU for a, g in m)
+
+
+def test_kuhn_reference_agrees_with_bruteforce():
+    rng = np.random.default_rng(9)
+    for _ in range(30):
+        gx = np.sort(rng.choice(np.arange(8) * 20.0, int(rng.integers(1, 5)), replace=False))
+        dx = np.sort(rng.choice(np.arange(8) * 20.0, int(rng.integers(1, 5)), replace=False))
+        gt = {i: (x, 0, x + 60, 20, 1) for i, x in enumerate(gx)}
+        d = P.dets([(x, 0, x + 60, 20) for x in dx], [1] * len(dx), [.9] * len(dx))
+        assert _kuhn_max_card(d, gt, .5) == _brute_match(d, gt, .5)
 
 
 def test_unique_counts_object_in_two_views_counts_once():

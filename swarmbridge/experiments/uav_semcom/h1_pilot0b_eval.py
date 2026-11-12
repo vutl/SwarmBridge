@@ -57,10 +57,15 @@ def eval_seq(args):
             acc = _new_acc()
             st = dict(ul=[], dl=[], man=[], crops=[], false_crops=[], false_bits=[], drops=[], coord_ok=[],
                       cpu_all=[], cpu_sent=[], fp_view=[])
-            frames, air = 0, {r: 0 for r in RATES_MBPS}
+            frames, air, fallback = 0, {r: 0 for r in RATES_MBPS}, {}
             tco = {r: [] for r in RATES_MBPS}
             for ei, (r1, r2, g1, g2) in enumerate(pairs):
                 e = P.run_epoch(r1, r2, g1, g2, cond, qq, B, a, rho=rho, ctx=ctx[ei])
+                if e["ul"] + rho * e["dl"] > B + 1e-6:                  # review #10 invariant, checked at run time
+                    raise AssertionError(f"UL budget exceeded: {cond} q{q} B{B} a{a} rho{rho} epoch {ei}")
+                if cond in P.COORD_CONDS:
+                    why = e.get("coord_reason", "ok")
+                    fallback[why] = fallback.get(why, 0) + 1
                 st["ul"].append(e["ul"]); st["dl"].append(e["dl"]); st["man"].append(e["man_ul"])
                 st["drops"].append(len(e["drop"])); st["coord_ok"].append(bool(e.get("coord_ok", False)))
                 for r in RATES_MBPS:
@@ -85,7 +90,7 @@ def eval_seq(args):
                     P.add(acc[t]["va"], P.view_counts(e["decl"][1], g2, t, False))
             n = len(pairs)
             res[(cond, q, B, rho, a)] = dict(
-                acc=acc, n_epochs=n, frame_frac=frames / (2 * n),
+                acc=acc, n_epochs=n, frame_frac=frames / (2 * n), coord_reasons=fallback,
                 **{k: float(np.mean(st[k])) for k in ("ul", "dl", "man", "crops", "false_crops", "false_bits",
                                                      "drops", "coord_ok")},
                 cpu_all=st["cpu_all"], cpu_sent=st["cpu_sent"],
@@ -163,6 +168,8 @@ def summarise(per_seq_res, cells):
             f1_unique_per_seq=[P.f1(r["acc"][t]["u"]) for r in rows],
             **{k: float(np.mean([r[k] for r in rows])) for k in
                ("ul", "dl", "man", "crops", "false_crops", "false_bits", "frame_frac", "drops", "coord_ok")},
+            coord_reasons={k: sum(r["coord_reasons"].get(k, 0) for r in rows)
+                           for k in sorted({k for r in rows for k in r["coord_reasons"]})},
             cpu_all_median=float(np.median(cpu_all)), cpu_all_p90=float(np.percentile(cpu_all, 90)),
             cpu_sent_median_supplementary=float(np.median(cpu_sent)),
             airtime_over={str(rt): float(np.mean([r["airtime_over"][rt] for r in rows])) for rt in RATES_MBPS},
