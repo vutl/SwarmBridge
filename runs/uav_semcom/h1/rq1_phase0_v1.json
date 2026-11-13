@@ -1,0 +1,173 @@
+{
+ "status": "RQ1 v2 phase 0 (first-half epochs only; GT used as a diagnostic ruler only)",
+ "per_seq": {
+  "26": {
+   "n_epochs": 15,
+   "valid_share": 0.26666666666666666,
+   "diag_median_px": 419.93238492782916,
+   "n_amb": 84,
+   "cov_p1": 48,
+   "cov_any": 69,
+   "failures": {
+    "only 6 mutual pairs within 40 px": 1,
+    "only 7 mutual pairs within 40 px": 5,
+    "degenerate homography": 5
+   },
+   "registrable": false,
+   "tokens_per_view_mean": [
+    45.4,
+    24.866666666666667
+   ],
+   "init_similarity_epochs": 11,
+   "init_similarity_valid": 3,
+   "valid_with_diag_over_100px": 4
+  },
+  "31": {
+   "n_epochs": 18,
+   "valid_share": 1.0,
+   "diag_median_px": 18.039935711020675,
+   "n_amb": 1202,
+   "cov_p1": 389,
+   "cov_any": 1083,
+   "failures": {},
+   "registrable": true,
+   "tokens_per_view_mean": [
+    50.388888888888886,
+    62.666666666666664
+   ],
+   "init_similarity_epochs": 1,
+   "init_similarity_valid": 1,
+   "valid_with_diag_over_100px": 0
+  },
+  "34": {
+   "n_epochs": 15,
+   "valid_share": 0.4666666666666667,
+   "diag_median_px": 675.4908747688627,
+   "n_amb": 212,
+   "cov_p1": 128,
+   "cov_any": 204,
+   "failures": {
+    "only 6 mutual pairs within 40 px": 2,
+    "only 7 mutual pairs within 40 px": 3,
+    "degenerate homography": 2,
+    "only 3 mutual pairs within 40 px": 1
+   },
+   "registrable": false,
+   "tokens_per_view_mean": [
+    12.6,
+    44.06666666666667
+   ],
+   "init_similarity_epochs": 9,
+   "init_similarity_valid": 5,
+   "valid_with_diag_over_100px": 7
+  },
+  "52": {
+   "n_epochs": 18,
+   "valid_share": 1.0,
+   "diag_median_px": 15.416697171629325,
+   "n_amb": 1512,
+   "cov_p1": 284,
+   "cov_any": 1203,
+   "failures": {},
+   "registrable": true,
+   "tokens_per_view_mean": [
+    55.333333333333336,
+    84.88888888888889
+   ],
+   "init_similarity_epochs": 1,
+   "init_similarity_valid": 1,
+   "valid_with_diag_over_100px": 3
+  },
+  "56": {
+   "n_epochs": 20,
+   "valid_share": 0.3,
+   "diag_median_px": 124.30088411082687,
+   "n_amb": 116,
+   "cov_p1": 37,
+   "cov_any": 72,
+   "failures": {
+    "degenerate homography": 1,
+    "only 5 mutual pairs within 40 px": 2,
+    "only 7 mutual pairs within 40 px": 7,
+    "only 6 mutual pairs within 40 px": 3,
+    "only 4 mutual pairs within 40 px": 1
+   },
+   "registrable": false,
+   "tokens_per_view_mean": [
+    10.25,
+    20.6
+   ],
+   "init_similarity_epochs": 14,
+   "init_similarity_valid": 3,
+   "valid_with_diag_over_100px": 3
+  },
+  "57": {
+   "n_epochs": 24,
+   "valid_share": 0.6666666666666666,
+   "diag_median_px": 80.06629305677004,
+   "n_amb": 548,
+   "cov_p1": 104,
+   "cov_any": 361,
+   "failures": {
+    "only 6 mutual pairs within 40 px": 1,
+    "degenerate homography": 7
+   },
+   "registrable": false,
+   "tokens_per_view_mean": [
+    22.625,
+    30.541666666666668
+   ],
+   "init_similarity_epochs": 8,
+   "init_similarity_valid": 6,
+   "valid_with_diag_over_100px": 4
+  },
+  "61": {
+   "n_epochs": 13,
+   "valid_share": 0.6153846153846154,
+   "diag_median_px": 623.3616019040835,
+   "n_amb": 303,
+   "cov_p1": 119,
+   "cov_any": 240,
+   "failures": {
+    "only 5 mutual pairs within 40 px": 2,
+    "degenerate homography": 3
+   },
+   "registrable": false,
+   "tokens_per_view_mean": [
+    24.46153846153846,
+    67.84615384615384
+   ],
+   "init_similarity_epochs": 5,
+   "init_similarity_valid": 3,
+   "valid_with_diag_over_100px": 8
+  },
+  "62": {
+   "n_epochs": 30,
+   "valid_share": 1.0,
+   "diag_median_px": 4.667223795994966,
+   "n_amb": 153,
+   "cov_p1": 15,
+   "cov_any": 80,
+   "failures": {},
+   "registrable": true,
+   "tokens_per_view_mean": [
+    16.6,
+    17.933333333333334
+   ],
+   "init_similarity_epochs": 1,
+   "init_similarity_valid": 1,
+   "valid_with_diag_over_100px": 0
+  }
+ },
+ "decision": {
+  "n_registrable": 3,
+  "n_seq": 8,
+  "ambiguous_total": 4130,
+  "crop_cover_share": 0.8019370460048426,
+  "crop_cover_share_p1": 0.2721549636803874,
+  "RQ1A": "NOT IDENTIFIABLE FROM EXISTING RECORDS",
+  "RQ1B": "NOT IDENTIFIABLE FROM EXISTING RECORDS"
+ },
+ "data_use_basis": "As reported by the user on 2026-11-13: their supervising professor permitted the lab to use MDMT for this research (verbal, relayed by the user; no written confirmation; no reply from the dataset authors; data from an unofficial mirror). Provenance note only, not a verification.",
+ "note": "per-sequence aggregates only; the per-epoch table stays outside git (MDMT-derived per-frame data)"
+}
