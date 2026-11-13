@@ -29,6 +29,7 @@ Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 19 | [swarmbridge-a7s-semantic-family-result.md](swarmbridge-a7s-semantic-family-result.md) | A7-S0 kết quả: FIX / AGN / CAU / ORA ở ref, K5, phy_mcs_blind, hai fold theo chuỗi | G-S1 đạt: cận trên thông tin +6–11% return, +8–10 recall ở ref / K5; dư địa là theo nội dung, không theo kênh; heuristic nhân quả không ổn định; PPO chưa chạy, chờ duyệt |
 | 20 | [swarmbridge-a7s1-temporal-diagnostic.md](swarmbridge-a7s1-temporal-diagnostic.md) | A7-S1: giá trị khung t−1 / khung tráo cùng cảnh thay cho giá trị thật; tách bit thật và giá trị thật | Dư địa 91–99% từ giá trị thật; t−1 giữ 48–83%, khung tráo 30–80% → hiểu biết mức cảnh; NO-GO PPO mode-only trong A5 hiện tại |
 | 21 | [swarmbridge-a7s2-bs-feedback-proxy.md](swarmbridge-a7s2-bs-feedback-proxy.md) | A7-S2: proxy không nhãn ở BS (detection mới của FRAME so với token) + heuristic thăm dò–khai thác nhân quả | Proxy xếp hạng cảnh tốt (0,80 / 0,96) nhưng dương giả ở cảnh đông; EE giữ 8% / âm / 71% / 18% dư địa → NO-GO cho cơ chế này; giá trị FRAME là đặc tính của góc nhìn |
+| 22 | [swarmbridge-research-decision-review-2026-11-13.md](swarmbridge-research-decision-review-2026-11-13.md) | Research Decision Review: bằng chứng mạnh / yếu từ A5 đến A7-S2, A5 có hợp tác không, hai hướng tiếp theo kèm phép kiểm tra GO / NO-GO | Chờ quyết định; không thí nghiệm mới |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).

@@ -116,4 +116,5 @@ Proxy xếp hạng cảnh khá tốt, nhưng **đánh giá quá cao** ở các c
 - Hai fold, 5–6 chuỗi mỗi phía; ± là CI theo seed và đánh giá thấp bất định theo chuỗi; bảng theo cảnh ở mục 4 để đọc trực tiếp.
 - Môi trường A5 rút ảnh độc lập: "cảnh" ở đây chỉ là nhãn (chuỗi, góc) của ảnh được rút, thứ tự thời gian trong cảnh không được giữ. PRX0 và SCN dùng thông tin của cả cảnh (kể cả khung "tương lai") nên chỉ là chẩn đoán; chỉ EE là nhân quả.
 - Thời gian suy luận ở BS và trễ phản hồi là giả định (0,05 s và 1 s).
+- **Bit phản hồi DL chỉ được báo cáo, chưa được mô phỏng (phản biện #17):** `FB_DL_BITS` không đi qua bộ lập lịch downlink, không chiếm tài nguyên vô tuyến và không ảnh hưởng return. Mô hình chỉ có trễ phản hồi 1 s và bit token gửi kèm FRAME. Nếu tính đủ chi phí DL thì EE chỉ có thể kém hơn, nên kết luận NO-GO không đổi; không chạy lại.
 - τ_decl = 0,3 chọn trên EXPL. Quyền dùng MDMT chưa xác minh độc lập; bảng theo khung nằm ngoài git.
