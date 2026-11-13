@@ -23,6 +23,7 @@ BS_DEC_S = (0.0, 0.05, 0.05)                      # ASSUMED (BS inference time n
 FOLD_A_TRAIN = (56, 34, 52, 68, 48, 62)           # first six of the registered pilot hash order
 TUNE_SEEDS, TEST_SEEDS = list(range(30)), list(range(11000, 11100))
 SLOTS = ("greedy", "pacedB1.5", "pacedB2", "pacedB3")
+EE_N, EE_BONUS, FB_DELAY_S, FB_DL_BITS = (1, 2, 3), 1.0, 1.0, 64      # A7-S2 (declared before the run)
 G = {}
 
 
@@ -31,14 +32,15 @@ def build(args):
     import h1_pilot0b as P
     import h1_pilot0b_eval as E
     pairs, _ = E.load_pairs(args.precomp, args.zip, ("test",))
-    rows = dict(seq=[], frame=[], view=[], bits=[], tp=[], fp=[], ngt=[], feat=[], enc_ms=[], det_ms=[])
+    rows = dict(seq=[], frame=[], view=[], bits=[], tp=[], fp=[], ngt=[], feat=[], enc_ms=[], det_ms=[], bsx=[])
     for s in sorted(pairs):
         for i, (r1, r2, g1, g2) in enumerate(pairs[s]):
             for v, (rec, g) in enumerate(((r1, g1), (r2, g2)), 1):
-                b, tp, fp = [], [], []
+                b, tp, fp, dec = [], [], [], {}
                 for cond in ("T0", "T1", "F"):
                     snd = P.send(rec, cond, Q, 1e12)
-                    c = P.view_counts(P.bs_decode(rec, snd, Q), g, TAU)
+                    dec[cond] = P.bs_decode(rec, snd, Q)
+                    c = P.view_counts(dec[cond], g, TAU)
                     b.append(max(snd["ul"], P.msg_cost(0) or 144)); tp.append(c["tp"]); fp.append(c["fp"])
                 d = rec["det"]["s"]
                 ns, nw = int((d >= P.TAU_HI).sum()), int(((d >= P.TAU_LO) & (d < P.TAU_HI)).sum())
@@ -46,6 +48,12 @@ def build(args):
                 rows["bits"].append(b); rows["tp"].append(tp); rows["fp"].append(fp); rows["ngt"].append(len(g))
                 rows["feat"].append([ns, nw, nw / max(ns + nw, 1), len(rec["cands"]["P1"])])
                 rows["det_ms"].append(rec["det_ms"])
+                # A7-S2: what the BS can compute WITHOUT labels once it holds a FRAME and the UAV's tokens:
+                # declared detections (conf >= TAU) of the frame, of the tokens, and their class-aware IoU matches
+                dF = P.take(dec["F"], np.where(dec["F"]["s"] >= TAU)[0])
+                dT = P.take(dec["T0"], np.where(dec["T0"]["s"] >= TAU)[0])
+                pseudo = {j: (*dT["b"][j], int(dT["c"][j])) for j in range(len(dT["s"]))}
+                rows["bsx"].append([len(dF["s"]), len(dT["s"]), len(P.match(dF, pseudo))])
                 rows["enc_ms"].append([0.0, sum(c["enc_ms"][Q] for c in rec["cands"]["P1"]), rec["frame"]["enc_ms"]])
     np.savez(args.out, **{k: np.array(v) for k, v in rows.items()})
     print("built", len(rows["seq"]), "records")
@@ -59,6 +67,8 @@ class SemTable:
         self.modes = list(MODES)
         self.images = [f"{s}_{f}_{v}" for s, f, v in zip(D["seq"], D["frame"], D["view"])]
         self.bits = D["bits"].astype(float)
+        if "bsx" in D:                                          # A7-S2: FRAME carries the tokens too
+            self.bits[:, 2] += self.bits[:, 0]
         self.psnr = np.full(self.bits.shape, 99.0)            # no PSNR floor in the semantic setting (declared)
         self.lpips = np.zeros(self.bits.shape)
         tr = np.asarray(train_idx)
@@ -106,6 +116,18 @@ class SemTask:
             idx = np.where((D["seq"] == g[0]) & (D["view"] == g[1]))[0]
             order = rng.permutation(idx)
             self.shuf[order] = np.roll(order, 1)                 # each record gets another record of its group
+        # A7-S2: scene = (sequence, view); label-free BS proxy of v_FRAME - v_TOKEN, calibrated on TRAIN only
+        self.scene = np.array([int(s) * 10 + int(v) for s, v in zip(D["seq"], D["view"])])
+        self.dtrue = self.v[:, 2] - self.v[:, 0]
+        if "bsx" in D:
+            nF, nT, nM = D["bsx"].T.astype(float)
+            self.px_raw = dict(new=nF - nM, new_minus_lost=(nF - nM) - (nT - nM), lost=nT - nM)
+            Xp = np.stack([np.ones(len(nF)), nF - nM, nT - nM], 1)
+            self.coef_px = np.linalg.lstsq(Xp[tr], self.dtrue[tr], rcond=None)[0]
+            self.px = Xp @ self.coef_px                         # what one received FRAME tells the BS
+            sc = np.unique(self.scene)
+            self.scene_true = {int(s): float(self.dtrue[self.scene == s].mean()) for s in sc}   # GT, diagnostic
+            self.scene_px = {int(s): float(self.px[self.scene == s].mean()) for s in sc}        # free knowledge
 
     def vhat(self, img):
         return self.X[img] @ self.coef
@@ -125,12 +147,49 @@ def make_envs():
                 return self.tt.v_mean
             if self.VALUE == "true":
                 return self.tt.v[img]
+            if self.VALUE in ("scn", "prx0") or self.VALUE.startswith("ee"):
+                tt = self.tt
+                s = int(tt.scene[img])
+                if self.VALUE == "scn":
+                    d = tt.scene_true[s]
+                elif self.VALUE == "prx0":
+                    d = tt.scene_px[s]
+                else:                                           # causal explore / exploit
+                    self._ee_update()
+                    a = self._ee.get(s)
+                    d = a[0] / a[1] if a and a[1] >= self.N_EXPLORE else EE_BONUS
+                return np.array([tt.v_mean[0], tt.v_mean[1], tt.v_mean[0] + d])
             if self.VALUE in ("lag", "shuf"):                   # decision information only; reward stays true v
                 j = (self.tt.prev if self.VALUE == "lag" else self.tt.shuf)[img]
                 return self.tt.v[j] if j >= 0 else self.tt.v_mean
             return self.tt.vhat(img)
 
-    return {v: type(f"SemEnv_{v}", (SemEnv,), dict(VALUE=v)) for v in ("hat", "mean", "true", "lag", "shuf")}
+    def reset(self, seed=None):
+        self._ee, self._ee_seen, self._ee_wait = {}, 0, []
+        return TK.TaskSurveyEnv.reset(self, seed)
+
+    def _ee_update(self):
+        """feedback of FRAMEs that were actually delivered in time, available FB_DELAY_S after delivery."""
+        fin = self.finished
+        for tk in fin[self._ee_seen:]:
+            if tk.ok and tk.mode == 2:
+                self._ee_wait.append((tk.t_cap + tk.delay + FB_DELAY_S, tk.img))
+        self._ee_seen = len(fin)
+        keep = []
+        for t_av, img in self._ee_wait:
+            if t_av <= self.t:
+                a = self._ee.setdefault(int(self.tt.scene[img]), [0.0, 0])
+                a[0] += float(self.tt.px[img]); a[1] += 1
+            else:
+                keep.append((t_av, img))
+        self._ee_wait = keep
+
+    SemEnv.reset, SemEnv._ee_update = reset, _ee_update
+    out = {v: type(f"SemEnv_{v}", (SemEnv,), dict(VALUE=v)) for v in ("hat", "mean", "true", "lag", "shuf", "scn",
+                                                                       "prx0")}
+    for n in EE_N:
+        out[f"ee{n}"] = type(f"SemEnv_ee{n}", (SemEnv,), dict(VALUE=f"ee{n}", N_EXPLORE=n))
+    return out
 
 
 # ---------------------------------------------------------------- policies
@@ -163,7 +222,10 @@ COND = dict(FIX=("mean", "predicted"), AGN=("mean", "predicted"), CAU=("hat", "p
             # A7-S1 (review #15): diagnostics, none deployable
             TV_PB=("true", "predicted"), HV_TB=("hat", "oracle_probe"),
             LAG_TB=("lag", "oracle_probe"), LAG_PB=("lag", "predicted"),
-            SHUF_TB=("shuf", "oracle_probe"), SHUF_PB=("shuf", "predicted"))
+            SHUF_TB=("shuf", "oracle_probe"), SHUF_PB=("shuf", "predicted"),
+            # A7-S2 (review #16): SCN = GT scene mean (reference), PRX0 = label-free proxy scene mean known for free
+            # (diagnostic: uses all frames of the scene), EE = causal explore / exploit on delivered FRAMEs only
+            SCN=("scn", "predicted"), PRX0=("prx0", "predicted"), EE=("ee", "predicted"))
 
 
 def init(npz):
@@ -187,6 +249,8 @@ def episode(job):
     fold, regime, cond, name, pool, seed = job
     F = G["fold"][fold]
     value, info = COND[cond]
+    if cond == "EE":
+        value, name = name.split("|")
     core = G["envs"][value](F["tab"], F["pools"][pool], C.regime_cfg(regime, mode_info=info))
     sp, mp = policy(name)
     m = V.run_episode_ev(core, sp, mp, seed)
@@ -197,7 +261,7 @@ def episode(job):
     keep.update(share_TOKEN=share[0], share_CROP=share[1], share_FRAME=share[2])
     by = {}
     for tk in core.finished:                                    # per-sequence task utility (cluster view)
-        s = int(G["D"]["seq"][tk.img])
+        s = "%d-%d" % (int(G["D"]["seq"][tk.img]), int(G["D"]["view"][tk.img]))
         a = by.setdefault(s, [0.0, 0, 0.0, 0])
         a[0] += tk.util; a[1] += 1
         if tk.ok:
@@ -213,7 +277,9 @@ def mean(rows, k):
 def run(args):
     regimes = args.regimes.split(",")
     tv, fx = tv_names(), fix_names()
-    cand = {c: (fx if c == "FIX" else tv) for c in COND}
+    cand = {c: (fx if c == "FIX" else [f"ee{n}|{x}" for n in EE_N for x in tv] if c == "EE" else tv) for c in COND}
+    if args.only:
+        cand = {c: cand[c] for c in args.only.split(",")}
     jobs = [(f, r, c, n, "train", s) for f in "AB" for r in regimes for c in cand for n in cand[c] for s in TUNE_SEEDS]
     print("tune jobs", len(jobs), flush=True)
     with Pool(args.procs, initializer=init, initargs=(args.npz,)) as pool:
@@ -261,6 +327,7 @@ def run(args):
                                                                 v_per_task=b[2] / max(b[1], 1),
                                                                 frame_share=b[3] / max(b[1], 1))
                                                    for s, b in sorted(bs.items())},
+                                           fb_dl_bits=FB_DL_BITS * mean(rows, "n_ok") * mean(rows, "share_FRAME"),
                                            **{k: mean(rows, k) for k in keys},
                                            per_seed_task_score=[x["task_score"] for x in rows],
                                            per_seed_return=[x["return"] for x in rows])
@@ -286,7 +353,7 @@ def run(args):
         p = c["policies"]
         print(c["fold"], c["regime"], " ".join(
             f"{k}:{p[k]['task_score']:.3f}/R{p[k]['return']:+.1f}/T{p[k]['share_TOKEN']:.2f},C{p[k]['share_CROP']:.2f},F{p[k]['share_FRAME']:.2f}"
-            for k in ("FIX", "AGN", "CAU", "ORA")), "| fixed", {m: round(v["task_score"], 3) for m, v in c["fixed_modes"].items()},
+            for k in ("FIX", "CAU", "SCN", "PRX0", "EE", "ORA") if k in p), "| fixed", {m: round(v["task_score"], 3) for m, v in c["fixed_modes"].items()},
             "| GS1", c["gate"]["GS1_cell"], flush=True)
         print("    retained ORA-FIX return:", {k: round(v, 2) for k, v in c["retained_return_frac"].items()}, flush=True)
     print("GS1 regimes (both folds):", out["GS1_regimes"])
@@ -298,6 +365,7 @@ def main():
     b = sub.add_parser("build"); b.add_argument("precomp"); b.add_argument("out"); b.add_argument("--zip", required=True)
     r = sub.add_parser("run"); r.add_argument("npz"); r.add_argument("out")
     r.add_argument("--regimes", default="ref,K5,phy_mcs_blind"); r.add_argument("--procs", type=int, default=5)
+    r.add_argument("--only", default="")
     a = ap.parse_args()
     (build if a.cmd == "build" else run)(a)
 
