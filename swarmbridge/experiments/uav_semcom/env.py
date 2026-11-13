@@ -56,7 +56,7 @@ DEFAULT = dict(
     # mechanism switches (ablation)
     mobility=True, interference=True, energy=True,
     # PHY abstraction (A5 sensitivity; see UavSemcomEnv.link_rate): shannon | gap | mcs | mcs_blind
-    phy="shannon", phy_gap_db=0.0, phy_bler=0.1,
+    phy="shannon", phy_gap_db=0.0, phy_bler=0.1, phy_lambda=0.0,
 )
 # LTE 4-bit CQI table (3GPP TS 36.213, Table 7.2.3-1): spectral efficiency (bit/s/Hz) of CQI 1..15, and the SINR (dB)
 # at which each reaches ~10 % BLER on AWGN -- approximate values widely used in system-level studies; ASSUMED here.
@@ -264,6 +264,14 @@ class UavSemcomEnv:
             return c["B_total"] / c["M"] * (CQI_EFF[i - 1] * (1 - c["phy_bler"]) if i else 0.0)
         if phy == "mcs_blind":
             i = int(np.searchsorted(CQI_THR_DB, 10 * math.log10(max(snr_free, 1e-30)), side="right"))
+            if i == 0 or sinr_db < CQI_THR_DB[i - 1]:
+                return 0.0
+            return c["B_total"] / c["M"] * CQI_EFF[i - 1] * (1 - c["phy_bler"])
+        if phy == "mcs_partial":
+            # A8 mismatch ladder: the link adaptation sees only a fraction phy_lambda of the co-channel interference
+            # (lambda = 1 -> 'mcs', lambda = 0 -> 'mcs_blind'); the block fails if the true SINR is below the chosen CQI
+            est_db = 10 * math.log10(max(sig / (noise + c["phy_lambda"] * interf), 1e-30))
+            i = int(np.searchsorted(CQI_THR_DB, est_db, side="right"))
             if i == 0 or sinr_db < CQI_THR_DB[i - 1]:
                 return 0.0
             return c["B_total"] / c["M"] * CQI_EFF[i - 1] * (1 - c["phy_bler"])

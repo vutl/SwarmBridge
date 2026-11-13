@@ -100,3 +100,21 @@ def test_regimes_one_dimensional():
         changed = {k for k in set(cfg) | set(ref) if cfg.get(k) != ref.get(k)}
         assert changed == set(C.REGIMES[name]) - {k for k, v in C.REGIMES[name].items() if ref.get(k) == v}
     assert C.regime_cfg("ref@oracle")["mode_info"] == "oracle"
+
+
+def test_mcs_partial_ladder_endpoints_and_monotone(tmp_path):
+    """A8: lambda = 1 reproduces 'mcs', lambda = 0 reproduces 'mcs_blind'; more knowledge never fails more often."""
+    m, b = env_with(tmp_path, phy="mcs"), env_with(tmp_path, phy="mcs_blind")
+    ls = {lam: env_with(tmp_path, phy="mcs_partial", phy_lambda=lam) for lam in (0.0, 0.25, 0.5, 0.75, 1.0)}
+    rng = np.random.default_rng(0)
+    n = 1e-14
+    fails = {lam: 0 for lam in ls}
+    for _ in range(3000):
+        sig = n * 10 ** (rng.uniform(-10, 28) / 10)
+        interf = 0.0 if rng.random() < 0.3 else n * 10 ** (rng.uniform(-15, 15) / 10)
+        assert ls[1.0].link_rate(sig, n, interf, sig / n) == pytest.approx(m.link_rate(sig, n, interf, sig / n), rel=1e-12)
+        assert ls[0.0].link_rate(sig, n, interf, sig / n) == b.link_rate(sig, n, interf, sig / n)
+        for lam, e in ls.items():
+            fails[lam] += e.link_rate(sig, n, interf, sig / n) == 0.0 and m.link_rate(sig, n, interf, sig / n) > 0
+    assert fails[1.0] == 0 and fails[0.0] >= fails[0.25] >= fails[0.5] >= fails[0.75] >= fails[1.0]
+    assert fails[0.0] > fails[0.5] > 0
