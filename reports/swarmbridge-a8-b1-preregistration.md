@@ -78,3 +78,21 @@ Phần chấm tầng 1 chỉ chạy khi cơ sở dùng dữ liệu MDMT được
 ## Không làm
 
 Không train; không ảnh MDMT mới; không val / HOLD; không Gate 1; không A7-S3; không đổi ngưỡng sau khi xem kết quả.
+
+## Sửa đổi 1 cho B1 (13/11/2026, theo phản biện #19; trước khi chạy tầng 1 trên bất kỳ bản ghi dataset nào)
+
+**Lý do:** bản gốc yêu cầu "cùng ngân sách bit thực" nhưng code chỉ báo số bit đạt được. FRAME của hai UAV có kích thước khác nhau, nên "một FRAME + một TOKEN mỗi epoch" không phải là so sánh cùng bit.
+
+**Thay đổi (ngưỡng GO giữ nguyên):**
+- **Giới hạn chung B cho mọi phương án, theo từng epoch.** B là ngân sách UL chung của hai UAV.
+- **B_ref** = giá trị lớn nhất, trên các epoch của **nửa đầu**, của chi phí "một FRAME (góc nào cũng được) + TOKEN của góc kia". Chỉ dùng số bit, không dùng nhãn.
+- **Các mức:** B = κ · B_ref với κ ∈ {0,25; 0,5; 0,75; 1; 1,5; 2}. Quyết định ở **κ = 1**; các mức khác chỉ để báo đường F1–bit.
+- **Quy tắc gửi (không dùng nhãn):** góc ở mode TOKEN được phục vụ trước; nếu token không vừa thì chia đều B và đóng gói theo quy tắc của pilot. Sau đó mỗi FRAME được yêu cầu chỉ được gửi nếu vừa phần còn lại (FRAME nhỏ hơn trước); nếu không vừa, góc đó gửi TOKEN trong phần còn lại.
+- **Bất biến:** số bit gửi ≤ B ở mọi epoch; code dừng nếu vi phạm.
+- **VIEW chọn góc dưới cùng giới hạn B** trên nửa đầu.
+- **Thêm baseline `BIG`:** FRAME cho góc có FRAME trung bình lớn hơn ở nửa đầu (không nhìn nhãn). Đây là đối chứng "tiêu nhiều bit hơn". Tập baseline cùng ngân sách thành {`TT`, `ALT`, `NDET`, `BIG`}; thêm baseline chỉ làm cổng khó hơn.
+- **Báo thêm cho mỗi phương án:** bit đạt được (trung bình, lớn nhất), tỉ lệ epoch gửi đúng như yêu cầu, F1 / P / R; `FF` không giới hạn chỉ là tham chiếu.
+- **Cách đọc đã định trước:** nếu `VIEW` vượt ngưỡng so với {`TT`, `ALT`} nhưng không vượt so với `NDET` hoặc `BIG`, kết luận là "có cơ hội theo góc nhìn, nhưng một quy tắc không cần GT đã lấy được nó"; vẫn **không** phải GO cho `VIEW`.
+- Kết quả chỉ áp dụng cho các chuỗi đạt sàng lọc ID (8/11); ngưỡng tỉ lệ dương ≥ 73% giữ nguyên (≥ 6/8).
+
+Code: `swarmbridge/experiments/uav_semcom/h1_b1_view.py`; 17 test tổng hợp ở `test_h1_b1.py` (không dùng bản ghi dataset).

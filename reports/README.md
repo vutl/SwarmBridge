@@ -32,6 +32,7 @@ Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 22 | [swarmbridge-research-decision-review-2026-11-13.md](swarmbridge-research-decision-review-2026-11-13.md) | Research Decision Review: bằng chứng mạnh / yếu từ A5 đến A7-S2, A5 có hợp tác không, hai hướng tiếp theo kèm phép kiểm tra GO / NO-GO | Chờ quyết định; không thí nghiệm mới |
 | 23 | [swarmbridge-a8-b1-preregistration.md](swarmbridge-a8-b1-preregistration.md) | Đăng ký trước A8 (thang sai lệch mô hình, PPO đóng băng so với H\*) và B1 (cơ hội hợp tác theo góc nhìn; kiểm ID xuyên góc trước) | đã khoá trước khi chạy |
 | 24 | [swarmbridge-a8-b1-result-decision.md](swarmbridge-a8-b1-result-decision.md) | Kết quả A8 và B1 + báo cáo quyết định | A8 **không hợp lệ** (thang không tác động: không có nhiễu đồng kênh với các chính sách được so; Δ = +5,73 ở cả 5 mức); B1: ID xuyên góc đạt 8/11 chuỗi, tầng 1 chưa chạy (chờ cơ sở dùng dữ liệu) |
+| 25 | [swarmbridge-b-feasibility-datasets.md](swarmbridge-b-feasibility-datasets.md) | Sau phản biện #19: sửa so sánh cùng ngân sách bit của B1 (Sửa đổi 1), khảo sát M3OT và CrossTrack-UAV, tính khả thi của hướng B theo từng bộ dữ liệu | B1 sẵn sàng về code; MDMT chờ quyền; M3OT giấy phép rõ nhưng chỉ 3/9 chuỗi qua sàng lọc ID, không thay thế trực tiếp được; CrossTrack-UAV cần ký thỏa thuận |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).

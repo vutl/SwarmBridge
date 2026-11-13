@@ -84,7 +84,9 @@ Ngày 13/11/2026, theo phản biện #18. Đăng ký trước: [swarmbridge-a8-b
 
 - ID chung khớp hình học ở mọi chuỗi (0,50–1,00 so với 0,00–0,03 khi tráo), nên ID thật sự chỉ cùng một vật ở hai góc.
 - Theo ngưỡng đã đăng ký, **8/11 chuỗi đạt**, đúng mức tối thiểu. Không đổi ngưỡng. B1 sẽ chỉ chấm 8 chuỗi này; ngưỡng "dương ở ≥ 73% số chuỗi" thành ≥ 6/8.
-- Chuỗi 59 bị loại. Đây là chuỗi đóng góp 70–99% lợi ích crop trong pilot 0B, nên việc loại nó làm phép chấm khắt khe hơn chứ không dễ hơn.
+- Chuỗi 59 bị loại. Đây là chuỗi đóng góp 70–99% lợi ích crop trong pilot 0B. (Sửa theo phản biện #19: bản trước viết rằng việc loại này làm phép chấm khắt khe hơn; điều đó chưa được chứng minh và đã rút lại.)
+- Đây là **sàng lọc** tính nhất quán ID, không chứng minh mọi ID trong 8 chuỗi đều đúng. Kết quả B1 sau này chỉ áp dụng cho 8 chuỗi đạt; 3 chuỗi không đạt vẫn được báo trong bảng trên.
+- Phản biện #19 phát hiện code tầng 1 chưa cưỡng chế cùng ngân sách bit. Đã sửa: xem Sửa đổi 1 trong bản đăng ký và [swarmbridge-b-feasibility-datasets.md](swarmbridge-b-feasibility-datasets.md).
 
 ### 3.2 Điều kiện 2 và tầng 1
 
