@@ -236,8 +236,32 @@ Không tìm thấy bộ dữ liệu UAV thật nào vừa có giấy phép rõ, 
 
 Không có hướng nào được GO. Nếu RQ1 cũng NO-GO ở phép thử khả thi, tôi đề nghị đổi trọng tâm: SwarmBridge khi đó nên là một **nghiên cứu đánh giá** (khi nào hợp tác đa UAV thật sự giúp, đo bằng detector và codec thật, ID xuyên góc thật, chỉ số vật thể duy nhất, baseline đơn giản bắt buộc), không phải một thuật toán mới.
 
-## 10. Việc chưa làm
+## 10. Bổ sung 14/11/2026: toàn văn năm bài nguy hiểm nhất và bandit có phản hồi trễ
 
-- Chưa đọc toàn văn PIB, MVSparse, JigsawComm, WhisperNet, MASS: đây là các bài cần đọc kỹ nhất nếu RQ1 hoặc RQ2 được mở.
-- Chưa rà soát tài liệu bandit có phản hồi trễ (cho RQ2).
+Năm bài ở mục 2.4 trước đó chỉ đọc tóm tắt nay đã được một agent đọc toàn văn trên arXiv HTML. Trích dẫn đi qua công cụ tóm tắt trang, nên là trích đoạn chứ không phải bản sao nguyên văn. Phần chưa đọc: khoảng 15 nghìn ký tự cuối của JigsawComm (phụ lục) và khoảng 6 nghìn ký tự cuối của MASS (có lẽ là tài liệu tham khảo).
+
+| Bài | Liên kết xuyên góc | Bất định liên kết dùng để quyết định truyền? | Phản hồi và trễ | Thời gian | RQ1 | RQ2 |
+|---|---|---|---|---|---|---|
+| PIB | chiếu lên mặt phẳng đất hiệu chuẩn (Wildtrack, 7 camera thật) | không | phần thưởng quan sát ngay (Alg. 2); không trễ | bandit UCB phân tán, regret O(√(T ln T)) | không đụng | một phần (chọn camera trực tuyến; không trễ) |
+| MVSparse | chiếu lên mặt phẳng đất, gom cụm theo ngưỡng khoảng cách cứng | không | server gửi kết quả về làm phần thưởng; trễ không mô hình hoá, chi phí không tính | RL trực tuyến, huấn luyện lại mỗi 10 khung; "the best camera changes quite frequently" | không đụng | một phần, **gần nhất** (dữ liệu nhiều góc thật, giá trị đổi theo thời gian, học từ phản hồi; không trễ) |
+| JigsawComm | lưới BEV chung; bù lệch tịnh tiến bằng RANSAC, bỏ bù lệch kém tin cậy | không (chỉ để căn chỉnh) | bản đồ tiện ích 0,08 KB/khung được tính; trễ chỉ quét độ bền | từng khung | không đụng | không đụng |
+| WhisperNet | theo OpenCOOD (pose biết) | không | giao thức yêu cầu–đáp ứng toàn cục; trễ không mô hình hoá | không theo dõi theo thời gian | không đụng | không đụng |
+| MASS | "perfect pose information" | không | lợi ích biết vào cuối slot; không có trễ nhiều slot | restless bandit, regret cho trường hợp 2 xe | không đụng | một phần, **mạnh** (giá trị đổi theo thời gian, có cận regret; không trễ, dữ liệu mô phỏng) |
+
+**Bandit có phản hồi trễ (đã xác minh trên trang nguồn):**
+- Joulani, György, Szepesvári, ICML 2013, [PMLR 28(3):1453–1461](https://proceedings.mlr.press/v28/joulani13.html): trễ làm regret tăng theo kiểu cộng trong bài toán ngẫu nhiên và kiểu nhân trong bài toán đối kháng.
+- Pike-Burke et al., ICML 2018, [PMLR 80:4105–4113](https://proceedings.mlr.press/v80/pike-burke18a.html): phản hồi trễ, gộp, ẩn danh; phạt vẫn là cộng nếu biết kỳ vọng trễ.
+- Vernade, Cappé, Perchet, UAI 2017, [arXiv 1706.09186](https://arxiv.org/abs/1706.09186).
+- Vernade et al., ICML 2020, [PMLR 119:9712–9721](https://proceedings.mlr.press/v119/vernade20a.html) (linear bandit, trễ ngẫu nhiên).
+- Thune, Cesa-Bianchi, Seldin, [arXiv 1906.00670](https://arxiv.org/abs/1906.00670): regret O(√((KT + D) ln K)), D là tổng trễ.
+- Vernade, György, Mann, ICML 2020, [arXiv 2006.02119](https://arxiv.org/abs/2006.02119): **môi trường không dừng + phản hồi trễ**; nếu môi trường đổi nhanh cỡ độ trễ thì gần như không học được, trừ khi có tín hiệu trung gian. Đây là bài sát RQ2 nhất.
+
+**Hệ quả:**
+- **RQ1 giữ nguyên HIGH RISK.** Khoảng trống là thật nhưng hẹp: cả năm bài đều giả định liên kết đã biết (mặt phẳng đất hiệu chuẩn hoặc pose biết), hoặc coi sai pose là nhiễu cần chịu được. Không bài nào gửi thêm dữ liệu để phân định một cặp mơ hồ.
+- **RQ2 về thuật toán: NO-GO được củng cố.** "Lập lịch với phản hồi trễ" là kỹ thuật đã biết, kể cả khi giá trị thay đổi theo thời gian (Vernade 2020). RQ2 chỉ còn có thể mới nhờ cấu trúc riêng của bài toán, ví dụ một tín hiệu trung gian rẻ và tức thời từ UAV (như số detection trên UAV, tức NDET) theo nghĩa của Vernade 2020, hoặc nhờ phần đánh giá trên dữ liệu thật [SUY LUẬN].
+- MVSparse và MASS phải là baseline và được trích dẫn nếu RQ2 được mở; PIB là prior art chính cho "chọn camera trực tuyến theo lợi ích nhận thức".
+
+## 11. Việc chưa làm
+
 - Chưa xác minh venue chính thức của SchedCP và SComCP, và arXiv của How2comm.
+- Danh sách 2024–2026 vẫn là một lượt tìm kiếm, không hệ thống.
