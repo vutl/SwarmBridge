@@ -116,6 +116,7 @@ Code `h1_pilot0b_gate.py`; kết quả `runs/uav_semcom/h1/pilot0b_gate_q50_v1.j
   - Kiểm định dấu một phía (khám phá): 9/11 cho p ≈ 0,03; 8/11 cho p ≈ 0,11.
   - GATE_F đạt khoảng 80–100% dư địa của ORACLE so với T0.
 - **Tiết kiệm:** so với luôn bật crop (T1), cổng dùng ít hơn 22–37% bit UL, mà F1 bằng hoặc cao hơn một chút (+0,2 đến +0,4 điểm).
+- **Chỉ tiết kiệm bit truyền, chưa chứng minh tiết kiệm CPU (phản biện #14):** ở B = 153k và 305k, cổng thường dùng tổng kbit P1, mà muốn biết số này UAV phải mã hoá mọi crop trước. Chỉ cổng theo tỉ lệ detection không chắc (ở B = 76k) mới quyết định được trước khi mã hoá.
 
 **Nhưng phần thưởng nhỏ:**
 - GATE_F − T0 = +1,5 / +2,0 / +3,0 điểm (cả 11 chuỗi); bỏ chuỗi 59 chỉ còn **+0,5 / +0,8 / +1,1 điểm**.
@@ -124,6 +125,6 @@ Code `h1_pilot0b_gate.py`; kết quả `runs/uav_semcom/h1/pilot0b_gate_q50_v1.j
 **Đọc kết quả:**
 - **Dự đoán được, hướng đúng, ổn định:** tín hiệu rẻ là "detector trên UAV đang thiếu chắc chắn".
 - **Lợi ích tuyệt đối nhỏ**, và **một ngưỡng đơn giản đã lấy gần hết dư địa** của lựa chọn token / crop trong thiết lập này.
-- Vì vậy bằng chứng này **không đủ để train PPO cho việc chọn TOKEN / CROP**: không còn dư địa cho chính sách phức tạp hơn một ngưỡng.
+- Vì vậy bằng chứng này **không đủ để train PPO cho việc chọn TOKEN / CROP**. Cách nói chính xác (phản biện #14): trong bài toán TOKEN / CROP **tĩnh** hiện tại, heuristic một ngưỡng đã rất cạnh tranh, nên chưa có lý do đủ mạnh để train PPO chỉ nhằm thay nó. Con số "80–100% dư địa ORACLE" **không** chứng minh PPO hết cơ hội: ORACLE ở đây chỉ là proxy TP − FP, không tối ưu F1 trực tiếp, và chưa xét điều kiện mạng động.
 - Lựa chọn FRAME chưa phân tích được, vì khung chỉ vừa ở mức B cao nhất và vượt CPU.
 - Theo phản biện #12, bước hợp lý là quay lại hướng A5 / A5.5 và bài toán tài nguyên, nơi đã có kết quả tốt hơn. Quy tắc "crop khi detector thiếu chắc chắn" có thể được giữ như một **chế độ cố định** trong không gian hành động của chính sách đó, nếu sau này cần.
