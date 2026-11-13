@@ -39,6 +39,7 @@ ALLOCS = ("TT", "FF", "F1T", "TF2", "ALT", "NDET", "BIG", "VIEW")
 VIEW_AGNOSTIC = ("TT", "ALT")
 LABEL_FREE_VIEW_AWARE = ("NDET", "BIG")
 EQUAL_BIT_BASELINES = VIEW_AGNOSTIC + LABEL_FREE_VIEW_AWARE
+ORIGINAL_BASELINES = ("TT", "ALT", "NDET")      # pre-amendment set: reported next to the gate, never decides
 GO_F1, GO_SHARE = 0.02, 8 / 11
 KAPPAS, PRIMARY = (0.25, 0.5, 0.75, 1.0, 1.5, 2.0), 1.0
 NO_CAP = 1e18
@@ -165,6 +166,10 @@ def _level(per_seq, seqs, lev):
     d = _diff(per_seq, seqs, lev, base)
     return dict(mean_f1=mean, mean_bits={a: float(np.mean([x["bits"] for x in A[a]])) for a in ALLOCS},
                 feasible={a: float(np.mean([x["feasible"] for x in A[a]])) for a in ALLOCS},
+                # share of the cap actually used (achieved bits / B), mean over sequences: a common CAP is not equal bits
+                utilisation={a: float(np.mean([x["bits"] / B for x, B in
+                                               zip(A[a], (per_seq[s]["levels"][lev].get("B") for s in seqs)) if B]
+                                              or [float("nan")])) for a in ALLOCS},
                 baseline=base, view_minus_baseline=float(np.mean(d)), per_seq_diff=dict(zip(map(str, seqs), d)),
                 share_positive=float(np.mean([x > 0 for x in d])),
                 view_minus_each={a: float(np.mean(_diff(per_seq, seqs, lev, a))) for a in ALLOCS if a != "VIEW"})
@@ -183,14 +188,22 @@ def gate(per_seq):
     g = _level(per_seq, seqs, lev)
     go, _, _ = _passes(per_seq, seqs, lev, EQUAL_BIT_BASELINES, g["mean_f1"])
     agn, agn_base, agn_d = _passes(per_seq, seqs, lev, VIEW_AGNOSTIC, g["mean_f1"])
+    org, org_base, org_d = _passes(per_seq, seqs, lev, ORIGINAL_BASELINES, g["mean_f1"])
     g.update(n_seq=len(seqs), kappa=PRIMARY, GO=go,
              bits_ratio_view_over_baseline=g["mean_bits"]["VIEW"] / max(g["mean_bits"][g["baseline"]], 1e-9),
              view_agnostic=dict(baseline=agn_base, view_minus_baseline=agn_d, passes=agn),
+             original_baselines=dict(baseline=org_base, view_minus_baseline=org_d, passes=org,
+                                     note="pre-amendment set {TT, ALT, NDET}: reported only, the amended gate decides"),
+             bits_ratio_view_over_each={a: g["mean_bits"]["VIEW"] / max(g["mean_bits"][a], 1e-9)
+                                        for a in ALLOCS if a != "VIEW"},
+             comparison="matched CAP (same per-epoch UL cap for every allocation), not exactly matched achieved bits; "
+                        "the baseline is the best of the set on the scored half (conservative diagnostic, not a "
+                        "deployable selection)",
              # pre-registered reading of a NO-GO that is only due to NDET / BIG: the view-aware opportunity exists but
              # does not need GT (a label-free rule already captures it) -> reported as such, still not a GO for VIEW
              label_free_rule_sufficient=bool(agn and not go),
-             tradeoff={k: {x: v[x] for x in ("mean_f1", "mean_bits", "feasible", "baseline", "view_minus_baseline",
-                                             "share_positive")}
+             tradeoff={k: {x: v[x] for x in ("mean_f1", "mean_bits", "feasible", "utilisation", "baseline",
+                                             "view_minus_baseline", "share_positive")}
                        for k, v in ((key(kp), _level(per_seq, seqs, key(kp))) for kp in KAPPAS)},
              ff_uncapped=dict(f1=float(np.mean([per_seq[s]["ff_uncapped"]["f1"] for s in seqs])),
                               bits=float(np.mean([per_seq[s]["ff_uncapped"]["bits"] for s in seqs]))),
@@ -204,7 +217,8 @@ def main():
     ap.add_argument("precomp"); ap.add_argument("idcheck"); ap.add_argument("out")
     ap.add_argument("--zip", required=True)
     ap.add_argument("--data-use-basis", required=True,
-                    help="who confirmed that this use of the dataset is acceptable (author / lab / university)")
+                    help="who confirmed that this use of the dataset is acceptable (author / lab / university). "
+                         "A provenance note only: it records the basis, it does not verify or create an authorisation")
     a = ap.parse_args()
     import h1_pilot0b_eval as E
     ok = {int(s) for s, v in json.loads(Path(a.idcheck).read_text())["sequences"].items() if v["pass"]}

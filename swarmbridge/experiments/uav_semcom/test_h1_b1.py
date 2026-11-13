@@ -236,6 +236,21 @@ def test_gate_rule():
     assert six["share_positive"] == pytest.approx(6 / 8) and six["GO"]   # 6 / 8 >= 73 % (registered share rule)
     spend = B.gate({s: _seqres(.60, .50, .57, .55, big=.60) for s in range(8)})
     assert not spend["GO"] and spend["label_free_rule_sufficient"]      # the spend-more control matches VIEW
+    # the pre-amendment set {TT, ALT, NDET} is reported next to the gate but never decides
+    assert spend["original_baselines"]["passes"] and spend["original_baselines"]["baseline"] == "ALT"
+    assert go["original_baselines"]["passes"] and "BIG" not in B.ORIGINAL_BASELINES
+
+
+def test_gate_reports_cap_utilisation_and_bit_ratios():
+    g = B.gate({s: B.run_sequence(_seq_sizes(8)) for s in range(3)})
+    cap = cost(900000) + TOK1
+    assert g["utilisation"]["TF2"] == pytest.approx(1.0)                # the big FRAME + tokens fill the cap exactly
+    assert g["utilisation"]["F1T"] == pytest.approx((cost(300000) + TOK1) / cap)
+    assert g["utilisation"]["TT"] == pytest.approx(2 * TOK1 / cap)
+    assert g["bits_ratio_view_over_each"]["F1T"] == pytest.approx(cap / (cost(300000) + TOK1))   # same cap, 3x the bits
+    assert g["bits_ratio_view_over_each"]["BIG"] == pytest.approx(1.0)
+    assert set(g["tradeoff"]["0.5"]) >= {"utilisation", "feasible", "mean_bits", "mean_f1"}
+    assert "matched CAP" in g["comparison"]
 
 
 def test_main_requires_data_use_basis(monkeypatch):

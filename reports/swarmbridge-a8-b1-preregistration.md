@@ -96,3 +96,14 @@ Không train; không ảnh MDMT mới; không val / HOLD; không Gate 1; không 
 - Kết quả chỉ áp dụng cho các chuỗi đạt sàng lọc ID (8/11); ngưỡng tỉ lệ dương ≥ 73% giữ nguyên (≥ 6/8).
 
 Code: `swarmbridge/experiments/uav_semcom/h1_b1_view.py`; 17 test tổng hợp ở `test_h1_b1.py` (không dùng bản ghi dataset).
+
+### Trạng thái sau phản biện #20: Sửa đổi 1 được chấp nhận, protocol B1 đóng băng
+
+- `B_ref` = max nửa đầu và mức quyết định κ = 1 giữ nguyên; không đổi sang trung vị.
+- Đây là so sánh **cùng giới hạn bit** (matched cap), **không** phải cùng số bit đạt được. Báo cáo phải kèm tỉ lệ dùng ngân sách, tỉ lệ bit `VIEW` / từng baseline, tỉ lệ fallback, và độ nhạy trên mọi κ đã đăng ký.
+- `BIG` nằm trong cổng quyết định. So sánh với tập gốc {`TT`, `ALT`, `NDET`} được báo kèm (`original_baselines`) nhưng **không** quyết định.
+- `BIG` được chọn theo kích thước FRAME của nửa đầu; không mặc định nó tiêu nhiều bit nhất ở nửa sau.
+- Baseline của cổng là phương án tốt nhất trong tập **trên nửa được chấm**: một đối chứng bảo thủ, không phải cách chọn chính sách triển khai được. Nếu `VIEW` không vượt, kết luận là "không vượt tập đối chứng mạnh của protocol", không phải "mọi chiến lược hợp tác đều vô ích".
+- Tham số `--data-use-basis` chỉ ghi lại nguồn xác nhận; nó không xác minh và không tạo ra quyền dùng dữ liệu.
+- Không thêm thay đổi nào vào protocol trước khi chạy. Chưa chạy trên MDMT.
+
