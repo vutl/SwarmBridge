@@ -27,6 +27,7 @@ Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | 17 | [swarmbridge-h1-0b-pilot-cluster-ci.md](swarmbridge-h1-0b-pilot-cluster-ci.md) | Độ tin cậy pilot 0B: bootstrap theo 11 chuỗi + bỏ từng chuỗi (từ JSON đã lưu) | Crop: CI chỉ loại 0 ở B 305k, 70–99% lợi ích từ chuỗi 59, bỏ 59 thì mọi CI chứa 0; T2 (GT) +0,3–0,7 ổn định; khung +8,3 [5,3; 11,5] |
 | 18 | [swarmbridge-a7s-semantic-family-design.md](swarmbridge-a7s-semantic-family-design.md) | A7-S0: họ TOKEN / CROP / FRAME trong môi trường A5, thiết kế + cổng dư địa đăng ký trước (không train) | đã chạy, xem #19 |
 | 19 | [swarmbridge-a7s-semantic-family-result.md](swarmbridge-a7s-semantic-family-result.md) | A7-S0 kết quả: FIX / AGN / CAU / ORA ở ref, K5, phy_mcs_blind, hai fold theo chuỗi | G-S1 đạt: cận trên thông tin +6–11% return, +8–10 recall ở ref / K5; dư địa là theo nội dung, không theo kênh; heuristic nhân quả không ổn định; PPO chưa chạy, chờ duyệt |
+| 20 | [swarmbridge-a7s1-temporal-diagnostic.md](swarmbridge-a7s1-temporal-diagnostic.md) | A7-S1: giá trị khung t−1 / khung tráo cùng cảnh thay cho giá trị thật; tách bit thật và giá trị thật | Dư địa 91–99% từ giá trị thật; t−1 giữ 48–83%, khung tráo 30–80% → hiểu biết mức cảnh; NO-GO PPO mode-only trong A5 hiện tại |
 
 - Ghi chú nền của R0: [r0-notes/](r0-notes/).
 - Hình: [figures/](figures/).

@@ -95,6 +95,17 @@ class SemTask:
         self.X = np.stack([np.ones(len(f)), f[:, 0], f[:, 1], f[:, 2]], 1)   # 1, n strong, n weak, weak fraction
         self.coef = np.linalg.lstsq(self.X[tr], self.v[tr], rcond=None)[0]
         self.bits, self.probe_j = table.bits, 0
+        # A7-S1 diagnostics: previous record of the SAME sequence and view (MDMT time order), and a within-group
+        # derangement (control). -1 = no past (first epoch) -> the mode-mean value is used.
+        key = {(int(s), int(v), int(f)): i for i, (s, v, f) in enumerate(zip(D["seq"], D["view"], D["frame"]))}
+        self.prev = np.array([key.get((int(s), int(v), int(f) - 1), -1)
+                              for s, v, f in zip(D["seq"], D["view"], D["frame"])])
+        self.shuf = np.full(len(self.prev), -1)
+        rng = np.random.default_rng(7)
+        for g in sorted({(int(s), int(v)) for s, v in zip(D["seq"], D["view"])}):
+            idx = np.where((D["seq"] == g[0]) & (D["view"] == g[1]))[0]
+            order = rng.permutation(idx)
+            self.shuf[order] = np.roll(order, 1)                 # each record gets another record of its group
 
     def vhat(self, img):
         return self.X[img] @ self.coef
@@ -114,9 +125,12 @@ def make_envs():
                 return self.tt.v_mean
             if self.VALUE == "true":
                 return self.tt.v[img]
+            if self.VALUE in ("lag", "shuf"):                   # decision information only; reward stays true v
+                j = (self.tt.prev if self.VALUE == "lag" else self.tt.shuf)[img]
+                return self.tt.v[j] if j >= 0 else self.tt.v_mean
             return self.tt.vhat(img)
 
-    return {v: type(f"SemEnv_{v}", (SemEnv,), dict(VALUE=v)) for v in ("hat", "mean", "true")}
+    return {v: type(f"SemEnv_{v}", (SemEnv,), dict(VALUE=v)) for v in ("hat", "mean", "true", "lag", "shuf")}
 
 
 # ---------------------------------------------------------------- policies
@@ -145,7 +159,11 @@ def policy(name):
 
 
 COND = dict(FIX=("mean", "predicted"), AGN=("mean", "predicted"), CAU=("hat", "predicted"),
-            ORA=("true", "oracle_probe"))
+            ORA=("true", "oracle_probe"),
+            # A7-S1 (review #15): diagnostics, none deployable
+            TV_PB=("true", "predicted"), HV_TB=("hat", "oracle_probe"),
+            LAG_TB=("lag", "oracle_probe"), LAG_PB=("lag", "predicted"),
+            SHUF_TB=("shuf", "oracle_probe"), SHUF_PB=("shuf", "predicted"))
 
 
 def init(npz):
@@ -177,6 +195,14 @@ def episode(job):
     keep = {k: float(m[k]) for k in ("return", "recall", "precision", "task_score", "ok_rate", "bits_sent", "n_ok",
                                     "n_planned", "fp")}
     keep.update(share_TOKEN=share[0], share_CROP=share[1], share_FRAME=share[2])
+    by = {}
+    for tk in core.finished:                                    # per-sequence task utility (cluster view)
+        s = int(G["D"]["seq"][tk.img])
+        a = by.setdefault(s, [0.0, 0, 0.0, 0])
+        a[0] += tk.util; a[1] += 1
+        if tk.ok:
+            a[2] += float(F["tt"].v[tk.img, tk.mode]); a[3] += tk.mode == 2
+    keep["by_seq"] = by
     return job, keep
 
 
@@ -187,7 +213,7 @@ def mean(rows, k):
 def run(args):
     regimes = args.regimes.split(",")
     tv, fx = tv_names(), fix_names()
-    cand = dict(FIX=fx, AGN=tv, CAU=tv, ORA=tv)
+    cand = {c: (fx if c == "FIX" else tv) for c in COND}
     jobs = [(f, r, c, n, "train", s) for f in "AB" for r in regimes for c in cand for n in cand[c] for s in TUNE_SEEDS]
     print("tune jobs", len(jobs), flush=True)
     with Pool(args.procs, initializer=init, initargs=(args.npz,)) as pool:
@@ -224,7 +250,17 @@ def run(args):
             for c in cand:
                 n = best[(f, r, c)]
                 rows = test[(f, r, c, n)]
+                bs = {}
+                for x in rows:
+                    for s, a in x["by_seq"].items():
+                        b = bs.setdefault(s, [0.0, 0, 0.0, 0])
+                        for i in range(4):
+                            b[i] += a[i]
                 cell["policies"][c] = dict(name=n, train_return=mean(tune[(f, r, c, n)], "return"),
+                                           by_seq={str(s): dict(util_per_task=b[0] / max(b[1], 1),
+                                                                v_per_task=b[2] / max(b[1], 1),
+                                                                frame_share=b[3] / max(b[1], 1))
+                                                   for s, b in sorted(bs.items())},
                                            **{k: mean(rows, k) for k in keys},
                                            per_seed_task_score=[x["task_score"] for x in rows],
                                            per_seed_return=[x["return"] for x in rows])
@@ -233,6 +269,8 @@ def run(args):
                 cell["fixed_modes"][m] = dict(name=n, **{k: mean(test[(f, r, "FIX", n)], k) for k in keys})
             p = cell["policies"]
             head = p["ORA"]["task_score"] - p["FIX"]["task_score"]
+            gap = p["ORA"]["return"] - p["FIX"]["return"]
+            cell["retained_return_frac"] = {k: (p[k]["return"] - p["FIX"]["return"]) / gap for k in p if k != "FIX"}
             cell["gate"] = dict(
                 ORA_minus_FIX_task_score=head, ORA_minus_FIX_return=p["ORA"]["return"] - p["FIX"]["return"],
                 AGN_minus_FIX_task_score=p["AGN"]["task_score"] - p["FIX"]["task_score"],
@@ -248,8 +286,9 @@ def run(args):
         p = c["policies"]
         print(c["fold"], c["regime"], " ".join(
             f"{k}:{p[k]['task_score']:.3f}/R{p[k]['return']:+.1f}/T{p[k]['share_TOKEN']:.2f},C{p[k]['share_CROP']:.2f},F{p[k]['share_FRAME']:.2f}"
-            for k in p), "| fixed", {m: round(v["task_score"], 3) for m, v in c["fixed_modes"].items()},
+            for k in ("FIX", "AGN", "CAU", "ORA")), "| fixed", {m: round(v["task_score"], 3) for m, v in c["fixed_modes"].items()},
             "| GS1", c["gate"]["GS1_cell"], flush=True)
+        print("    retained ORA-FIX return:", {k: round(v, 2) for k, v in c["retained_return_frac"].items()}, flush=True)
     print("GS1 regimes (both folds):", out["GS1_regimes"])
 
 
