@@ -2,6 +2,8 @@
 
 Theo phản biện #17. Bản này **không có thí nghiệm mới**: chỉ tổng hợp từ các báo cáo đã có (A5, A5.5, A6.0-L1 và audit, G-L2, R1a, R1b-0a, Gate 0A và audit, Pilot 0B, A7-S0 / S1 / S2, hai bản novelty audit). Số liệu lấy nguyên từ các báo cáo đó; không kết quả cũ nào bị sửa.
 
+> **Đính chính (13/11/2026, sau A8):** cụm từ "PHY không quan sát được nhiễu" dưới đây và ở mục 6 là diễn giải sai. Với các chính sách không dùng chung kênh (PPO mode-only và H\*), `phy_mcs_blind` trùng với `phy_mcs`: lợi thế +5,73 có nguyên vẹn khi bộ thích ứng liên kết biết SINR thật. Số liệu không đổi; chỉ lời giải thích bị rút lại. Xem [swarmbridge-a8-b1-result-decision.md](swarmbridge-a8-b1-result-decision.md).
+
 ## 1. Tóm tắt một trang
 
 - **Bằng chứng mạnh nhất hiện có:** PPO mode-only trên nền A5 thắng heuristic đã điều chỉnh tốt nhất khi **PHY không quan sát được nhiễu** (phy_mcs_blind: +5,7 return trên test, +7,8 trên test-dev; khoảng tin cậy mức 3 đều loại trừ 0) và khi **nghẽn kèm lệch phân phối** (K5 test-dev: +12,4). Ở chế độ ref và K5 test, không có lợi thế.

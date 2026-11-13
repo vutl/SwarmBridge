@@ -1,0 +1,23 @@
+progress 252/5040 3s eta 60s
+progress 504/5040 7s eta 64s
+progress 756/5040 10s eta 58s
+progress 1008/5040 13s eta 54s
+progress 1260/5040 17s eta 52s
+progress 1512/5040 21s eta 48s
+progress 1764/5040 24s eta 44s
+progress 2016/5040 27s eta 40s
+progress 2268/5040 30s eta 37s
+progress 2520/5040 33s eta 33s
+progress 2772/5040 35s eta 29s
+progress 3024/5040 39s eta 26s
+progress 3276/5040 42s eta 23s
+progress 3528/5040 44s eta 19s
+progress 3780/5040 47s eta 16s
+progress 4032/5040 51s eta 13s
+progress 4284/5040 53s eta 9s
+progress 4536/5040 57s eta 6s
+progress 4788/5040 61s eta 3s
+progress 5040/5040 64s eta 0s
+phy_mcs_l75    T:SC=sc:pacedB3+budget1.5 (+16.55)  A5 T:best=pacedB2+budget1 (+14.98)  H*=sc:pacedB3+budget1.5
+phy_mcs_l50    T:SC=sc:pacedB3+budget1.5 (+16.55)  A5 T:best=pacedB2+budget1 (+14.98)  H*=sc:pacedB3+budget1.5
+phy_mcs_l25    T:SC=sc:pacedB3+budget1.5 (+16.55)  A5 T:best=pacedB2+budget1 (+14.98)  H*=sc:pacedB3+budget1.5

@@ -1,0 +1,3 @@
+phy_mcs_l75 base=fixed_mbt2018-mean_q3(+14.97) budget=pacedB2+budget1(+14.98) reuse=pacedB2+budget1+reuse(+2.17) fixed=fixed_mbt2018-mean_q3(+14.97)
+phy_mcs_l50 base=fixed_mbt2018-mean_q3(+14.97) budget=pacedB2+budget1(+14.98) reuse=pacedB1.5+budget0.75+reuse(-15.51) fixed=fixed_mbt2018-mean_q3(+14.97)
+phy_mcs_l25 base=fixed_mbt2018-mean_q3(+14.97) budget=pacedB2+budget1(+14.98) reuse=stag_near_q2+reuse(-16.62) fixed=fixed_mbt2018-mean_q3(+14.97)

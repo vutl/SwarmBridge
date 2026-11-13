@@ -1,0 +1,50 @@
+progress 150/3000 3s eta 50s
+progress 300/3000 4s eta 40s
+progress 450/3000 19s eta 106s
+progress 600/3000 30s eta 119s
+progress 750/3000 32s eta 95s
+progress 900/3000 33s eta 77s
+progress 1050/3000 44s eta 82s
+progress 1200/3000 55s eta 83s
+progress 1350/3000 57s eta 69s
+progress 1500/3000 58s eta 58s
+progress 1650/3000 69s eta 57s
+progress 1800/3000 81s eta 54s
+progress 1950/3000 82s eta 44s
+progress 2100/3000 84s eta 36s
+progress 2250/3000 95s eta 32s
+progress 2400/3000 107s eta 27s
+progress 2550/3000 109s eta 19s
+progress 2700/3000 110s eta 12s
+progress 2850/3000 121s eta 6s
+progress 3000/3000 132s eta 0s
+phy_mcs        T5:best                                            (pacedB2+budget1+reuse         ) return   +27.40  ok 0.949
+phy_mcs        T:SC                                               (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs        T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs        P:mode_best_s0=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s0=/home/uservutl/) return   +31.22  ok 0.988
+phy_mcs        P:mode_best_s1=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s1=/home/uservutl/) return   +31.47  ok 0.988
+phy_mcs        P:mode_best_s2=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s2=/home/uservutl/) return   +31.45  ok 0.987
+phy_mcs_l75    T5:best                                            (pacedB2+budget1               ) return   +26.49  ok 0.945
+phy_mcs_l75    T:SC                                               (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs_l75    T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs_l75    P:mode_best_s0=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s0=/home/uservutl/) return   +31.22  ok 0.988
+phy_mcs_l75    P:mode_best_s1=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s1=/home/uservutl/) return   +31.47  ok 0.988
+phy_mcs_l75    P:mode_best_s2=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s2=/home/uservutl/) return   +31.45  ok 0.987
+phy_mcs_l50    T5:best                                            (pacedB2+budget1               ) return   +26.49  ok 0.945
+phy_mcs_l50    T:SC                                               (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs_l50    T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs_l50    P:mode_best_s0=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s0=/home/uservutl/) return   +31.22  ok 0.988
+phy_mcs_l50    P:mode_best_s1=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s1=/home/uservutl/) return   +31.47  ok 0.988
+phy_mcs_l50    P:mode_best_s2=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s2=/home/uservutl/) return   +31.45  ok 0.987
+phy_mcs_l25    T5:best                                            (pacedB2+budget1               ) return   +26.49  ok 0.945
+phy_mcs_l25    T:SC                                               (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs_l25    T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs_l25    P:mode_best_s0=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s0=/home/uservutl/) return   +31.22  ok 0.988
+phy_mcs_l25    P:mode_best_s1=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s1=/home/uservutl/) return   +31.47  ok 0.988
+phy_mcs_l25    P:mode_best_s2=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s2=/home/uservutl/) return   +31.45  ok 0.987
+phy_mcs_blind  T5:best                                            (pacedB2+budget1               ) return   +26.49  ok 0.945
+phy_mcs_blind  T:SC                                               (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs_blind  T:HSTAR                                            (sc:pacedB3+budget1.5          ) return   +25.65  ok 0.946
+phy_mcs_blind  P:mode_best_s0=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s0=/home/uservutl/) return   +31.22  ok 0.988
+phy_mcs_blind  P:mode_best_s1=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s1=/home/uservutl/) return   +31.47  ok 0.988
+phy_mcs_blind  P:mode_best_s2=/home/uservutl/work/a5/phy_mcs_blin (P:mode_best_s2=/home/uservutl/) return   +31.45  ok 0.987
