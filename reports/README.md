@@ -1,6 +1,21 @@
 # SwarmBridge: báo cáo
 
-Cập nhật 11/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng đang làm**. Các giai đoạn trước nằm trong [archive/](archive/README.md).
+Cập nhật 13/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng đang làm**. Các giai đoạn trước nằm trong [archive/](archive/README.md).
+
+## Trạng thái nghiên cứu (13/11/2026, sau phản biện #21)
+
+Các nhánh hiện tại **dừng tối ưu**; mọi kết quả được giữ nguyên. Không train, không thí nghiệm mới cho đến khi xác định được một bài toán *dynamic cooperative perception* có dữ liệu phù hợp.
+
+| Thành phần | Kết luận |
+|---|---|
+| A5 / A5.5 PPO mode-only | Có lợi ích thực nghiệm ở một số cấu hình; cơ chế chưa giải thích được; không phải bằng chứng hợp tác |
+| A8 thang sai lệch mô hình | Không hợp lệ: thang không tác động lên các chính sách được so |
+| Pilot 0B (CROP) | Lợi ích nhỏ, không ổn định |
+| A7 lập lịch theo ngữ nghĩa | Có dư địa lý tưởng; proxy thực tế chưa khai thác ổn định |
+| B1 chọn góc nhìn | NO-GO: quy tắc không nhãn bắt kịp lựa chọn dùng GT; nhánh đóng trên MDMT |
+| RL hợp tác bầy đàn | **Chưa có bằng chứng thực nghiệm** |
+
+Bước tiếp theo: xin truy cập CrossTrack-UAV và thiết kế câu hỏi nghiên cứu (xem mục 8 của [swarmbridge-b1-tier1-result.md](swarmbridge-b1-tier1-result.md)).
 
 ## Hướng hiện tại: semantic communication cho UAV (VisDrone), đi từ R0 đến R1b
 

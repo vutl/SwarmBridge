@@ -89,3 +89,21 @@ Trung bình trên 8 chuỗi, nửa sau của mỗi chuỗi. F1 / P / R là của
 
 - Kết quả: `runs/uav_semcom/h1/b1_view_tier1_v1.json` (tổng hợp theo chuỗi; không có bảng theo từng khung).
 - Code: `swarmbridge/experiments/uav_semcom/h1_b1_view.py`; sàng lọc ID: `runs/uav_semcom/h1/b1_id_check_v1.json`.
+
+## 8. Quyết định sau phản biện #21 (13/11/2026)
+
+**NO-GO được chấp nhận. Nhánh chọn góc nhìn tĩnh trên MDMT đóng lại; không thêm thí nghiệm nào trên nhánh này.**
+
+- B1 được giữ như một kết quả âm mang tính khám phá.
+- Phân bổ bất đối xứng có ích, nhưng ưu tiên góc tĩnh trên MDMT không đủ làm đóng góp "swarm intelligence": không train PPO / MAPPO, không xây proxy mới, không mở Gate 1 cho bài toán này.
+- Quan sát "một FRAME đúng góc gần bằng hai FRAME với ít hơn khoảng 40% bit" được giữ lại, nhưng **không** được gọi là cải thiện hiệu quả đầu-cuối: thời gian mã hoá FRAME (1,17 s) vượt chu kỳ 1 s và B1 không xét hạn chót.
+- Câu hỏi hợp tác đa UAV tổng quát vẫn mở, nhưng cần thiết lập khác: giá trị tương đối của các góc **thay đổi theo thời gian**, vùng quan sát chồng lấn, chất lượng quan sát thay đổi, và một thước đo triển khai được cho thông tin bổ sung.
+
+**Bước tiếp theo là tiếp cận dữ liệu và thiết kế nghiên cứu, không phải tính toán:**
+1. Theo thủ tục xin CrossTrack-UAV (thỏa thuận học thuật có chữ ký).
+2. Trước khi chạy detector trên bất kỳ bộ dữ liệu mới nào, kiểm xem nó có nhiều lần **đảo chiều** góc tốt hơn và có đánh giá vật thể chồng lấn có nghĩa không.
+3. So với góc cố định, `NDET`, heuristic động đơn giản và một oracle GT được đánh dấu, trước khi xét bất kỳ thuật toán RL nào. Đo trước xem oracle động có thật sự thắng heuristic động không.
+4. Chỉ đăng ký cổng mới sau khi đã xác lập tính khả thi của dữ liệu và rà soát các công trình collaborative perception liên quan.
+
+A5 / A5.5 được giữ như bằng chứng RL hiện có, không được trình bày như bằng chứng về hợp tác bầy đàn.
+
