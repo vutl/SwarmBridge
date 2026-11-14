@@ -113,7 +113,8 @@ Gọi s_t là bản đồ thật, h_t là những gì bên nhận đã có (bả
   - **T1:** BEV segmentation 3 lớp (đã có teacher);
   - **T2:** phát hiện xe trong BEV từ box 3D (nhãn có sẵn: 67.576 box có ID, cần dựng nhãn BEV);
   - **T3 (giữ lại cho tầng 2):** một nhiệm vụ không dùng lúc huấn luyện bộ mã hoá / dự đoán, ví dụ hướng di chuyển hoặc vận tốc xe từ ID theo vết. Chỉ huấn luyện một đầu đọc nhỏ trên trạng thái ở BS, không truyền lại gì. Chốt T3 trước khi huấn luyện.
-- **Giai đoạn sau, VisDrone-VID** (video UAV thật; split v1 theo nguồn đã kiểm toán trong R1b): thông điệp là detection, dự đoán theo thời gian bằng vết; nhiệm vụ là F1 phát hiện. Không so chỉ số trực tiếp với Town3.
+- **Kiểm chứng trên dữ liệu thật, ứng viên 1: UAVid** (video UAV thật, segmentation ngữ nghĩa 8 lớp, ảnh 4K, 42 chuỗi chia 20 / 7 / 15; giấy phép CC BY-NC-SA 4.0, đã xác minh trên trang uavid.nl ngày 14/11; nhãn test chấm qua server). Cùng loại nhiệm vụ với T1 (bản đồ ngữ nghĩa theo thời gian) nên thử được tầng 1 trên ảnh thật; chỉ dùng train / valid. Mật độ khung có nhãn và pose của camera chưa xác minh.
+- **Ứng viên 2: VisDrone-VID** (video UAV thật; split v1 theo nguồn đã kiểm toán trong R1b): thông điệp là detection, dự đoán theo thời gian bằng vết; nhiệm vụ là F1 phát hiện. Không so chỉ số trực tiếp với Town3.
 
 ## 7. Các phương pháp so sánh
 
@@ -172,6 +173,7 @@ Các phân tích Q1 theo vùng là mô tả, không quyết định.
 Chưa đọc trong đợt này; liệt kê từ bản trao đổi và kiến thức nền, phải xác minh:
 - mã hoá video có điều kiện / dự đoán (DVC, DCVC và các biến thể): "dự đoán + gửi phần dư + mô hình entropy có điều kiện" là kỹ thuật chuẩn;
 - CommJEPA (arXiv, 11/2026); TS-JEPA cho điều khiển tiết kiệm truyền thông; truyền thông hướng nhiệm vụ có world model JEPA cho mạng tác tử (2026);
+- UA-TSC (Zhao et al., IEEE TNSE 2026, DOI 10.1109/TNSE.2026.3727280; có trong `pdf/`): một UAV, phân loại cảnh AID, PPO chọn độ sâu encoder / số ký hiệu / công suất theo kênh, không theo nội dung; Diffuser lập quỹ đạo. Gần với A5 / A5.5 (PPO chọn mode theo kênh); khác proposal này ở chỗ không có dự đoán theo thời gian hay trạng thái bên nhận;
 - GOSC và truyền thông theo giá trị có vòng kín; Wyner–Ziv / thông tin phụ ở bên nhận;
 - dự đoán BEV theo thời gian trong collaborative perception (bù trễ kiểu How2comm, CoBEVFlow).
 
@@ -185,7 +187,7 @@ Mục tiêu của đợt rà này là trả lời: đã có ai làm "trạng th�
 | 1 | Tầng 1: B2, ConvGRU-CE, U-Net-CE, Mamba-CE; C1 trên val | vài giờ GPU mỗi mô hình (1.700 lưới, 192 × 192) |
 | 2 | Tầng 2: 2 × 2 backbone × mục tiêu, prior entropy chung, đầu đọc T3; C2, C3 trên val | khoảng 1 ngày GPU |
 | 3 | Q3 độ bền; khoá cấu hình; chấm test một lần | vài giờ |
-| 4 | VisDrone-VID (thông điệp detection, dự đoán theo vết) | đề cương riêng sau bước 3 |
+| 4 | Dữ liệu thật: UAVid (bản đồ ngữ nghĩa theo thời gian) hoặc VisDrone-VID (detection theo vết) | đề cương riêng sau bước 3 |
 
 Mamba đã có môi trường chạy được. Không train lại V-JEPA 2 hay mô hình nền lớn; bộ mã hoá dùng lại hoặc nhỏ, đóng băng khi so các bộ dự đoán.
 
