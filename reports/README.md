@@ -12,7 +12,7 @@ Cập nhật 14/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | A8 thang sai lệch mô hình | Không hợp lệ: thang không tác động lên các chính sách được so | [archive/a7-a8-b1/](archive/README.md#a7-a8-b1) |
 | B1 chọn góc nhìn | NO-GO: quy tắc không nhãn bắt kịp lựa chọn dùng GT; nhánh đóng | [archive/a7-a8-b1/](archive/README.md#a7-a8-b1) |
 | Rà soát novelty | PPO / MAPPO chọn TOKEN / CROP / FRAME: NO-GO (đã có người làm); RQ2: NO-GO về thuật toán; MARL chưa có lý do | [novelty review](swarmbridge-collab-perception-novelty-review-2026-11-13.md) |
-| **RQ1** (liên kết xuyên góc làm lý do truyền) | **Đang mở.** Phase 0 trên bản ghi cache: NOT IDENTIFIABLE (chỉ hình học, 3/8 chuỗi). Bước tiếp: đánh giá khả thi dùng ngoại hình (Re-ID) trên ảnh MDMT thật | [RQ1 protocol](swarmbridge-rq1-association-preregistration.md), [Phase 0](swarmbridge-rq1-phase0-result.md) |
+| **RQ1** (liên kết xuyên góc làm lý do truyền) | **Đang mở.** Phase 0 trên bản ghi cache: NOT IDENTIFIABLE (chỉ hình học, 3/8 chuỗi). Bước tiếp: RQ1-E dùng ngoại hình (DINOv2) trên ảnh MDMT thật, xem memo khả thi | [RQ1 protocol](swarmbridge-rq1-association-preregistration.md), [Phase 0](swarmbridge-rq1-phase0-result.md) |
 | RL hợp tác bầy đàn | **Chưa có bằng chứng thực nghiệm** | |
 
 ## Hướng đang mở
@@ -22,6 +22,7 @@ Cập nhật 14/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | [swarmbridge-collab-perception-novelty-review-2026-11-13.md](swarmbridge-collab-perception-novelty-review-2026-11-13.md) | Rà soát novelty: CCSRA, HyComm, SchedCP, Where2comm, CodeFilling, CoSDH, PIB, MVSparse, MASS...; ma trận so sánh; RQ1 / RQ2 |
 | [swarmbridge-rq1-association-preregistration.md](swarmbridge-rq1-association-preregistration.md) | Protocol v2 của RQ1 (RQ1-A / RQ1-B, bộ liên kết không GT, Phase 0); v1 rút trước khi chạy |
 | [swarmbridge-rq1-phase0-result.md](swarmbridge-rq1-phase0-result.md) | Phase 0: NOT IDENTIFIABLE FROM EXISTING RECORDS; vì sao, và điều gì làm RQ1 đo được |
+| [swarmbridge-rq1-reid-feasibility-memo.md](swarmbridge-rq1-reid-feasibility-memo.md) | Memo khả thi: RQ1 bằng ngoại hình (DINOv2 zero-shot) trên ảnh MDMT thật, mô hình truyền TOKEN / embedding / CROP, đề xuất thí nghiệm RQ1-E (chưa duyệt chạy) |
 
 ## Lưu trữ
 
