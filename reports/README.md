@@ -13,6 +13,7 @@ Cập nhật 14/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | B1 chọn góc nhìn | NO-GO: quy tắc không nhãn bắt kịp lựa chọn dùng GT; nhánh đóng | [archive/a7-a8-b1/](archive/README.md#a7-a8-b1) |
 | Rà soát novelty | PPO / MAPPO chọn TOKEN / CROP / FRAME: NO-GO (đã có người làm); RQ2: NO-GO về thuật toán; MARL chưa có lý do | [novelty review](swarmbridge-collab-perception-novelty-review-2026-11-13.md) |
 | **RQ1** (liên kết xuyên góc làm lý do truyền) | Phase 0 (chỉ hình học, bản ghi cache): NOT IDENTIFIABLE. RQ1-E E0 (DINOv2-S zero-shot, ảnh thật): **NO-GO**. Dừng trên MDMT; còn mở nếu có metadata camera hoặc Re-ID được học (cần duyệt mới) | [RQ1 protocol](swarmbridge-rq1-association-preregistration.md), [Phase 0](swarmbridge-rq1-phase0-result.md), [RQ1-E E0](swarmbridge-rq1e-e0-result.md) |
+| **Hướng đề xuất mới** | Truyền thông ngữ nghĩa có dự đoán trên Town3 (JEPA chỉ là một ứng viên ở tầng trạng thái chung) | [proposal](swarmbridge-jepa-semcom-proposal.md) |
 | RL hợp tác bầy đàn | **Chưa có bằng chứng thực nghiệm** | |
 
 ## Hướng đang mở
@@ -25,6 +26,7 @@ Cập nhật 14/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | [swarmbridge-rq1-reid-feasibility-memo.md](swarmbridge-rq1-reid-feasibility-memo.md) | Memo khả thi: RQ1 bằng ngoại hình (DINOv2 zero-shot) trên ảnh MDMT thật, mô hình truyền TOKEN / embedding / CROP, đề xuất thí nghiệm RQ1-E (chưa duyệt chạy) |
 | [swarmbridge-rq1e-preregistration.md](swarmbridge-rq1e-preregistration.md) | Protocol RQ1-E (DINOv2-S zero-shot, E0 khoá trước, cam kết cho E1) |
 | [swarmbridge-rq1e-e0-result.md](swarmbridge-rq1e-e0-result.md) | RQ1-E E0: **FAIL 0/8 → NO-GO** cho ngoại hình zero-shot trên MDMT; E1 không chạy; đo tốc độ thật; chẩn đoán vì sao |
+| [swarmbridge-jepa-semcom-proposal.md](swarmbridge-jepa-semcom-proposal.md) | **Proposal mới:** truyền thông ngữ nghĩa có dự đoán, đồng bộ trạng thái bên nhận, trên Town3; tầng 1 mã hoá dự đoán output nhiệm vụ, tầng 2 trạng thái latent đa nhiệm vụ (JEPA là ứng viên, thiết kế 2 × 2 backbone × mục tiêu); chờ duyệt |
 
 ## Lưu trữ
 
