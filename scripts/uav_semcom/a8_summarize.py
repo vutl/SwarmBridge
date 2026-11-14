@@ -1,4 +1,4 @@
-"""A8 mismatch ladder summary (reports/swarmbridge-a8-b1-preregistration.md): delta = PPO mode-only (frozen
+"""A8 mismatch ladder summary (reports/archive/a7-a8-b1/swarmbridge-a8-b1-preregistration.md): delta = PPO mode-only (frozen
 phy_mcs_blind models, mean of 3) - H*(level), with the three A5.5 uncertainty levels and the pre-registered GO rule.
 Usage: python a8_summarize.py RUNS_A8_DIR CODE_DIR OUT_JSON
 """

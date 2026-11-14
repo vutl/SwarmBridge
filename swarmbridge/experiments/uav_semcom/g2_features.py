@@ -1,4 +1,4 @@
-"""G-L2 step 3 (reports/uav-semcom-g-l2.md 0.5): on-board features of every manifest image (computed from the
+"""G-L2 step 3 (reports/archive/r1-visdrone/uav-semcom-g-l2.md 0.5): on-board features of every manifest image (computed from the
 ORIGINAL frame, before sending; no labels).
 
   B  cheap statistics on the grey frame resized to width 480: gradient magnitude mean / std, edge density, Laplacian

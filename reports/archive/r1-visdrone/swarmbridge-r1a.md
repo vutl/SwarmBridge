@@ -1,6 +1,6 @@
 # SwarmBridge R1a: các họ biểu diễn có đánh đổi thật không? (ảnh tĩnh VisDrone-DET, offline)
 
-Ngày 10/11/2026. Bước đầu tiên của ứng viên C trong `reports/swarmbridge-next-scenario-r0.md`, protocol đã sửa theo phản biện ngày 10/11.
+Ngày 10/11/2026. Bước đầu tiên của ứng viên C trong `reports/archive/r1-visdrone/swarmbridge-next-scenario-r0.md`, protocol đã sửa theo phản biện ngày 10/11.
 - Được phép: train YOLO11n (qua khoá GPU) và đo các họ IMG / TOK / HYB / ROI.
 - Không train PPO/SAC, không dựng simulator mới, không đụng UAV3D / ASR, không tải VisDrone-VID.
 
@@ -205,7 +205,7 @@ Recall (điểm) ở ngân sách B. Δ_B = họ − RV_probe(B); CI cluster boot
 
 ## 6. Hệ quả (theo 0.7)
 
-INCONCLUSIVE cho phép sang **thiết kế** R1b, theo bản sửa ở `reports/swarmbridge-r1b-design.md`. Tôi không tự bắt đầu R1b. Những gì nên giữ cho menu biểu diễn:
+INCONCLUSIVE cho phép sang **thiết kế** R1b, theo bản sửa ở `reports/archive/r1-visdrone/swarmbridge-r1b-design.md`. Tôi không tự bắt đầu R1b. Những gì nên giữ cho menu biểu diễn:
 - **TOK** (u960, τ 0,25): rẻ nhất, mạnh nhất khi bit chật.
 - **HYB** với nền avif_5 / avif_20: tầm 0,1–0,2 Mbit.
 - **ROI**: ở R1b chuyển thành ROI-QP **trong codec video**, không dùng ô ảnh độc lập.

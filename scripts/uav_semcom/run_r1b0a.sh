@@ -1,5 +1,5 @@
 #!/bin/bash
-# R1b-0a queue (protocol reports/swarmbridge-r1b0a-protocol.md): precompute G7 + AUX with the locked FRAME config
+# R1b-0a queue (protocol reports/archive/r1-visdrone/swarmbridge-r1b0a-protocol.md): precompute G7 + AUX with the locked FRAME config
 # (detections only, nothing scored), then tune every condition x R_ul level on TUNE (CPU). Resumable precompute.
 REPO=/mnt/c/Users/USER/Documents/SwarmBridge
 PY=/home/uservutl/envs/semcom-a/bin/python

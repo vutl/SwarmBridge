@@ -1,4 +1,4 @@
-"""B1 tier 1 (reports/swarmbridge-a8-b1-preregistration.md + amendment 1): view-aware cooperative OPPORTUNITY,
+"""B1 tier 1 (reports/archive/a7-a8-b1/swarmbridge-a8-b1-preregistration.md + amendment 1): view-aware cooperative OPPORTUNITY,
 offline on the existing pilot 0B records. GT-ASSISTED FEASIBILITY SCREENING: the preferred view is chosen with GT
 (first half of each sequence) and the BS association is ideal (GT ids) -> not a deployable mechanism, no
 cooperative-gain claim.

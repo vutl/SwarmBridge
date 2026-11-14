@@ -1,4 +1,4 @@
-"""G-L2 0.4 (reports/uav-semcom-g-l2.md): a second, independent detector measurement of every (image, codec mode).
+"""G-L2 0.4 (reports/archive/r1-visdrone/uav-semcom-g-l2.md): a second, independent detector measurement of every (image, codec mode).
 
 Same codecs, settings, detector, operating point and scoring as a5_fidelity.py (A5.2 / L1), except that the detector
 sees the decoded image FLIPPED horizontally (boxes flipped back before matching). The codecs are deterministic (the

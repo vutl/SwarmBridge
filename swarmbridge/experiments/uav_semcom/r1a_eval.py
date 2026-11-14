@@ -1,4 +1,4 @@
-"""R1a evaluation (reports/swarmbridge-r1a.md section 0), CPU, from r1a_measure.py outputs + the L1 per-image table
+"""R1a evaluation (reports/archive/r1-visdrone/swarmbridge-r1a.md section 0), CPU, from r1a_measure.py outputs + the L1 per-image table
 and detections (IMG family, HYB backgrounds).
 
 Per (image, configuration) of TOK / HYB / ROI / ROI-oracle: final BS detection set (union + class-wise NMS 0.6),

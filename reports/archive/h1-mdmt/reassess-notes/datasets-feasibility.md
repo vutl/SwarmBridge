@@ -4,7 +4,7 @@ Problem under test: several UAVs observe overlapping ground areas at the same ti
 
 The hard rule: independent single-view videos (VisDrone etc.) are NOT treated as synchronized views. Ground truth for "redundant vs unique object" needs synchronized views plus the same physical object carrying one identity across views.
 
-This audit resolves the open cells of `reports/r0-notes/collaborative-swarm.md` section 2 and adds 2024-2026 datasets. Method:
+This audit resolves the open cells of `reports/archive/r1-visdrone/r0-notes/collaborative-swarm.md` section 2 and adds 2024-2026 datasets. Method:
 - Landing pages, GitHub (via the REST API), HuggingFace and Figshare/Dryad APIs, arXiv HTML.
 - No dataset bulk was downloaded.
 - One small label sample was fetched: the MDMT test ground truth, 28 txt files, 16 MB, publicly in the GitHub repo. Saved to `C:\Users\USER\AppData\Local\Temp\claude\434d0fc3082c421a\211e39df-8890-414c-a6ef-90f1625f6d0a\scratchpad\datasets_meta\mdmt_test_gt\`, analysed with `...\scratchpad\mdmt_overlap.py`.

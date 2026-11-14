@@ -1,4 +1,4 @@
-"""A7-S0 (reports/swarmbridge-a7s-semantic-family-design.md, pre-registered): the semantic representation family
+"""A7-S0 (reports/archive/a7-a8-b1/swarmbridge-a7s-semantic-family-design.md, pre-registered): the semantic representation family
 TOKEN / CROP / FRAME measured in pilot 0B, placed in the A5 task environment (a6l1_task.TaskSurveyEnv). Heuristics
 and an information upper bound only -- NO training.
 
@@ -306,7 +306,7 @@ def run(args):
         test.setdefault((f, r, c, n), []).append(m)
     keys = ("return", "task_score", "recall", "precision", "ok_rate", "bits_sent", "share_TOKEN", "share_CROP",
             "share_FRAME")
-    out = dict(design="reports/swarmbridge-a7s-semantic-family-design.md", status="EXPLORATORY; no training",
+    out = dict(design="reports/archive/a7-a8-b1/swarmbridge-a7s-semantic-family-design.md", status="EXPLORATORY; no training",
                modes=MODES, tau_decl=TAU, q=Q, bs_dec_s_assumed=BS_DEC_S, tune_seeds=[0, 29],
                test_seeds=[TEST_SEEDS[0], TEST_SEEDS[-1]], cells=[])
     for f in "AB":

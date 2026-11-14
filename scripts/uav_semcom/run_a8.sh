@@ -1,4 +1,4 @@
-# A8 mismatch ladder (reports/swarmbridge-a8-b1-preregistration.md). CPU only, resumable.
+# A8 mismatch ladder (reports/archive/a7-a8-b1/swarmbridge-a8-b1-preregistration.md). CPU only, resumable.
 set -e
 REPO=/mnt/c/Users/USER/Documents/SwarmBridge
 PY=/home/uservutl/envs/semcom-a/bin/python

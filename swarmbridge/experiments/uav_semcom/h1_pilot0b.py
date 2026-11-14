@@ -1,6 +1,6 @@
 """H1-CROP pilot 0B-TUNE: causal UAV logic, budget packing, BS fusion, scorers and screening criteria.
 
-Protocol: reports/swarmbridge-h1-0b-tune-pilot-protocol.md (sec 3-6), approved for implementation by review #8.
+Protocol: reports/archive/h1-mdmt/swarmbridge-h1-0b-tune-pilot-protocol.md (sec 3-6), approved for implementation by review #8.
 Everything here is pure (numpy / scipy) and runs on precomputed per-frame records written by
 h1_pilot0b_precompute.py, so the expensive parts (YOLO11n, AVIF, YOLO11s) run once.
 

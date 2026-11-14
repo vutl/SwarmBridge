@@ -1,4 +1,4 @@
-"""G-L2 steps 3-4 (reports/uav-semcom-g-l2.md 0.5 / 0.6): causal on-board predictor of per-image task value per
+"""G-L2 steps 3-4 (reports/archive/r1-visdrone/uav-semcom-g-l2.md 0.5 / 0.6): causal on-board predictor of per-image task value per
 mode, matched-bitrate evaluation against the strongest content-agnostic baseline, PASS / INCONCLUSIVE / FAIL.
 
 Candidates: feature sets A / A+B / A+C / A+B+C x targets 'abs' (TP_i(m)) / 'pair' (TP_i(m) - TP_i(mbt q3)) x models

@@ -1,6 +1,6 @@
 # R0 design notes: what the closest papers actually model (representation choice, onboard compute, contention, mission objective, cooperation)
 
-Date: 2026-11-10. Builds on `reports/archive/uav-semcom-a/novelty-audit-a5-l1-2026-11-10.md` (A5L1) and `reports/novelty-audit-g-l2-2026-11-10.md` (GL2).
+Date: 2026-11-10. Builds on `reports/archive/uav-semcom-a/novelty-audit-a5-l1-2026-11-10.md` (A5L1) and `reports/archive/r1-visdrone/novelty-audit-g-l2-2026-11-10.md` (GL2).
 Only facts not already in those audits, or facts needed for the R0 questions, are added here.
 "p.N" = PDF page counted by pdftotext page breaks (not the journal page). Eq. numbers are the paper's own.
 Depth: F = method + evaluation read from full text; P = full text available, key sections grepped/read; A = abstract/metadata only.

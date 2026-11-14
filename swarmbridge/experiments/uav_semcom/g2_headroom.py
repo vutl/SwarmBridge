@@ -1,4 +1,4 @@
-"""G-L2 step 2 (reports/uav-semcom-g-l2.md 0.4): oracle headroom over the strongest content-agnostic baseline, on
+"""G-L2 step 2 (reports/archive/r1-visdrone/uav-semcom-g-l2.md 0.4): oracle headroom over the strongest content-agnostic baseline, on
 train U val only (test / test-dev untouched).
 
   H(B)   = O(B) - BL(B): optimistic oracle (true detector outcome per image and mode), full 14-mode menu;

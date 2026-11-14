@@ -53,7 +53,7 @@ REGIMES = {
     "q_low": dict(qmin=(18.0, 26.0)), "q_high": dict(qmin=(28.0, 36.0)),
     "wt0": dict(w_time=0.0), "wt0.1": dict(w_time=0.1), "wt1": dict(w_time=1.0),
     "phy_gap3": dict(phy="gap", phy_gap_db=3.0), "phy_mcs": dict(phy="mcs"), "phy_mcs_blind": dict(phy="mcs_blind"),
-    # A8 mismatch ladder (reports/swarmbridge-a8-b1-preregistration.md): link adaptation sees lambda x interference
+    # A8 mismatch ladder (reports/archive/a7-a8-b1/swarmbridge-a8-b1-preregistration.md): link adaptation sees lambda x interference
     "phy_mcs_l75": dict(phy="mcs_partial", phy_lambda=0.75), "phy_mcs_l50": dict(phy="mcs_partial", phy_lambda=0.5),
     "phy_mcs_l25": dict(phy="mcs_partial", phy_lambda=0.25),
 }

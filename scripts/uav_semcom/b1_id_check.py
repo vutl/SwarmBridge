@@ -1,4 +1,4 @@
-"""B1 condition 1 (reports/swarmbridge-a8-b1-preregistration.md): are GT track ids consistent across the two UAV
+"""B1 condition 1 (reports/archive/a7-a8-b1/swarmbridge-a8-b1-preregistration.md): are GT track ids consistent across the two UAV
 views? Labels only (no image, no detector, no scorer). Two metadata checks per sequence, each with a shuffled control:
   class    share of ids present in both views (same epoch) that carry the same class in both
   geometry per epoch with >= 12 common ids: split the common ids at random in two halves, fit a homography view1 ->

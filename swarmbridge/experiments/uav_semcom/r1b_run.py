@@ -1,4 +1,4 @@
-"""R1b-0a driver (protocol reports/swarmbridge-r1b0a-protocol.md).
+"""R1b-0a driver (protocol reports/archive/r1-visdrone/swarmbridge-r1b0a-protocol.md).
 
   lock  : FRAME quality rule (sec 6) on TUNE: q20 unless BS YOLO11s class-aware recall (conf >= 0.25, IoU 0.5) on the
           decoded frames is > 5 points below the uncompressed frames, then q35; frame_bits0 = TUNE mean bits; c_enc =

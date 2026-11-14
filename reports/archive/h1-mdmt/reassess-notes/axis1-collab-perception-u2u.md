@@ -1,6 +1,6 @@
 # Axis 1 reassessment notes: multi-UAV / multi-agent collaborative perception, communication efficiency, U2U/U2B cooperative reporting
 
-Date 2026-11-11. Scope: prior art for the candidate problem below. It adds to `reports/r0-notes/collaborative-swarm.md` (R0) and does not repeat it. Entries already in R0 appear only where this pass found something new about them.
+Date 2026-11-11. Scope: prior art for the candidate problem below. It adds to `reports/archive/r1-visdrone/r0-notes/collaborative-swarm.md` (R0) and does not repeat it. Entries already in R0 appear only where this pass found something new about them.
 
 Candidate problem (not validated):
 - K UAVs with overlapping views report to a BS over a shared, limited uplink, with U2U links possibly available.

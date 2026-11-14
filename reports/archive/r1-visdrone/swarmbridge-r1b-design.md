@@ -1,10 +1,10 @@
 # SwarmBridge R1b: thiết kế v3 (đề xuất, chưa phải protocol khoá)
 
-Ngày 12/11/2026. Bản v3 sửa v2 theo phản biện ngày 12/11; v1 và v2 xem trong lịch sử git. Ghi chú đọc paper ở `reports/r0-notes/r1b-feedback-video.md`.
+Ngày 12/11/2026. Bản v3 sửa v2 theo phản biện ngày 12/11; v1 và v2 xem trong lịch sử git. Ghi chú đọc paper ở `reports/archive/r1-visdrone/r0-notes/r1b-feedback-video.md`.
 
 **Trạng thái:**
 - Chưa code R1b-0, chưa chạy pilot, chưa train RL, chưa mở R2.
-- Chuẩn bị dữ liệu VisDrone-VID train / val: xem `reports/visdrone-vid-data-audit.md`.
+- Chuẩn bị dữ liệu VisDrone-VID train / val: xem `reports/archive/r1-visdrone/visdrone-vid-data-audit.md`.
 
 **Thay đổi chính so với v2:**
 1. Thí nghiệm đầu tiên là một **ablation có kiểm soát**: chỉ thay **thông tin phản hồi** mà UAV được thấy, mọi thứ khác giữ nguyên (mục 3). Hệ đầy đủ với codec video chỉ xây nếu ablation này có kết quả dương.
@@ -325,7 +325,7 @@ Câu hỏi gốc gửi người phụ trách, nguyên văn đề xuất của ng
 
 **Tiền lệ nội bộ phải trích dẫn** (không thuộc ASR):
 1. **Town3, `temporal_select` (`91179ca1`):** bản sao xấp xỉ trạng thái latent / segmentation của bên nhận, nhớ qua chuỗi 20 khung, có thử mất ACK (kể cả mất 100%). Không phải bảng track có phiên bản / CRC / delta / snapshot.
-2. **UAV3D v1.1 (`70486c1b`, [archive](archive/uav3d/uav3d-proto-v1.1-budget-queue-2026-11-04.md) mục 3b):** sender biết "receiver đã chắc xe nào" qua phản hồi. **Khi trừ bit phản hồi vào chính ngân sách, lợi thế so với heuristic không cần phản hồi biến mất:** +0,005–0,008 AMOTA, cỡ nhiễu seed.
+2. **UAV3D v1.1 (`70486c1b`, [archive](../uav3d/uav3d-proto-v1.1-budget-queue-2026-11-04.md) mục 3b):** sender biết "receiver đã chắc xe nào" qua phản hồi. **Khi trừ bit phản hồi vào chính ngân sách, lợi thế so với heuristic không cần phản hồi biến mất:** +0,005–0,008 AMOTA, cỡ nhiễu seed.
 
    Đây là **tiền lệ âm trực tiếp** cho H1. R1b-0a khác ở ba điểm: phản hồi là trạng thái track đầy đủ có giá và chịu lỗi; quyết định thời điểm gửi (SKIP / TOK / FRAME), không chỉ thứ tự box; dữ liệu video thật. Nhưng giả thuyết "phản hồi có giá không đáng" là **giả thuyết đối nghịch nghiêm túc**, không phải người rơm.
 
@@ -338,7 +338,7 @@ Câu hỏi gốc gửi người phụ trách, nguyên văn đề xuất của ng
 | # | Việc | Trạng thái |
 |---|---|---|
 | 1 | Câu trả lời ASR, điền mục 10; người dùng xác nhận phạm vi | Xong (mục 10.1): không trùng C1; ghi tiền lệ Town3 / UAV3D |
-| 2 | VID train / val: nguồn, checksum, clip id, schema nhãn, thống kê track, kiểm tra rò rỉ với DET (pHash + xem tay) | Xong (`reports/visdrone-vid-data-audit.md`) |
+| 2 | VID train / val: nguồn, checksum, clip id, schema nhãn, thống kê track, kiểm tra rò rỉ với DET (pHash + xem tay) | Xong (`reports/archive/r1-visdrone/visdrone-vid-data-audit.md`) |
 | 3 | Clip VID trùng DET-train bị loại khỏi val (hoặc thay bằng clip train sạch, ghi rõ); quy tắc loại khoá trước khi xem kết quả | Xong: split v1, G7 theo nguồn |
 | 4 | Ghi rõ giao thức huấn luyện: detector train trên VisDrone-DET-train, dùng trên VID. Đây là protocol nghiên cứu riêng, **không** claim tuân thủ challenge. Dữ liệu chỉ dùng cho nghiên cứu, không phân phối lại khung | Ghi trong báo cáo dữ liệu |
 | 5 | Khoá: nhịp phát lại, chất lượng FRAME, 3 mức R_ul, DL_cap, D_max, p_ul, kịch bản N / S1–S4, giới hạn ms UAV | Quy tắc đã viết (protocol R1b-0a mục 6); số cuối sau khi tính trước trên TUNE |

@@ -1,5 +1,5 @@
 {
- "protocol": "reports/swarmbridge-h1-0b-tune-pilot-protocol.md (sec 3-6, sec 9 option B)",
+ "protocol": "reports/archive/h1-mdmt/swarmbridge-h1-0b-tune-pilot-protocol.md (sec 3-6, sec 9 option B)",
  "status": "EXPLORATORY: EXPL split only, not a confirmation",
  "allowed_splits": ["test"],
  "closed": {"val": "kept unopened (5 paired sequences)", "hold": "full-dataset hash rule, not in the mirror"},

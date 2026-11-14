@@ -1,6 +1,6 @@
 # R1b-0a postmortem (11/11/2026)
 
-Nguồn: [swarmbridge-r1b0a-h1-result.md](../swarmbridge-r1b0a-h1-result.md) (commit `1655425d`) và chẩn đoán TUNE (`scripts/uav_semcom/r1b_tune_diag_D.py`). Không chạy thêm G7, không chạy thêm thí nghiệm nào.
+Nguồn: [swarmbridge-r1b0a-h1-result.md](../../r1-visdrone/swarmbridge-r1b0a-h1-result.md) (commit `1655425d`) và chẩn đoán TUNE (`scripts/uav_semcom/r1b_tune_diag_D.py`). Không chạy thêm G7, không chạy thêm thí nghiệm nào.
 
 ## 1. Giới hạn của cách triển khai (không phải kết luận khoa học)
 

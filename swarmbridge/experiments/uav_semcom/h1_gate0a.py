@@ -1,6 +1,6 @@
 """H1 Gate 0A (exploratory): cross-UAV coordination opportunity on MDMT public test labels.
 
-Spec: reports/swarmbridge-h1-gate0-protocol-v2.md sec 10 (v2.1, locked before running).
+Spec: reports/archive/h1-mdmt/swarmbridge-h1-gate0-protocol-v2.md sec 10 (v2.1, locked before running).
 Perfect reports (GT boxes); two separate hypotheses: TOK (52-bit tokens) and CROP (bit model).
 Budget B = total of both UAVs per epoch incl. headers + rho * downlink coordination bits.
 BS removes duplicates with ideal identity in every policy; coordination only saves uplink budget.
@@ -300,7 +300,7 @@ def main():
     ap.add_argument("labels"); ap.add_argument("out")
     a = ap.parse_args()
     data = load(a.labels)
-    out = {"spec": "reports/swarmbridge-h1-gate0-protocol-v2.md sec 10 (v2.1)", "runs": {}}
+    out = {"spec": "reports/archive/h1-mdmt/swarmbridge-h1-gate0-protocol-v2.md sec 10 (v2.1)", "runs": {}}
     configs = [("main", dict(stride=10, rho=1.0, bpp=0.65, c0=2400.0), False),
                ("s1", dict(stride=1, rho=1.0, branches=("TOK",)), False),
                ("s30", dict(stride=30, rho=1.0), False),

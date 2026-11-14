@@ -2,7 +2,7 @@
 
 Ngày 13–14/11/2026, theo phản biện #22. Chỉ đọc tài liệu: không train, không thí nghiệm, không mở ảnh dataset. Chưa đăng ký thí nghiệm mới, chưa viết thuật toán.
 
-Bản này bổ sung cho [swarmbridge-direction-reassessment.md](swarmbridge-direction-reassessment.md) (mục 2 và 5) và các ghi chú [reassess-notes/axis1-collab-perception-u2u.md](reassess-notes/axis1-collab-perception-u2u.md), [reassess-notes/axis2-voi-taskoriented-beliefs.md](reassess-notes/axis2-voi-taskoriented-beliefs.md). Những bài đã phân tích ở đó (EMP, C-MASS, RACooper, BHU, GOSC, PRISM, Mazandarani, Harbor, LGCP, Sun & Pappas) không được đọc lại; tôi chỉ trích kết luận.
+Bản này bổ sung cho [swarmbridge-direction-reassessment.md](archive/h1-mdmt/swarmbridge-direction-reassessment.md) (mục 2 và 5) và các ghi chú [reassess-notes/axis1-collab-perception-u2u.md](archive/h1-mdmt/reassess-notes/axis1-collab-perception-u2u.md), [reassess-notes/axis2-voi-taskoriented-beliefs.md](archive/h1-mdmt/reassess-notes/axis2-voi-taskoriented-beliefs.md). Những bài đã phân tích ở đó (EMP, C-MASS, RACooper, BHU, GOSC, PRISM, Mazandarani, Harbor, LGCP, Sun & Pappas) không được đọc lại; tôi chỉ trích kết luận.
 
 ## 0. Mức đọc
 
@@ -220,7 +220,7 @@ Không tìm thấy bộ dữ liệu UAV thật nào vừa có giấy phép rõ, 
 
 **Hiện tại: không.**
 
-- **Bên nhận là BS và đã có toàn bộ thông tin đã nhận.** Mọi bài gần nhất (SchedCP, RACooper, CCSRA, C-MASS, TAMP) dùng bộ điều khiển tập trung. Điều phối qua đường xuống (bản đồ yêu cầu, "đã biết") rẻ hơn đường lên nhiều bên ([reassess-notes/axis1](reassess-notes/axis1-collab-perception-u2u.md)).
+- **Bên nhận là BS và đã có toàn bộ thông tin đã nhận.** Mọi bài gần nhất (SchedCP, RACooper, CCSRA, C-MASS, TAMP) dùng bộ điều khiển tập trung. Điều phối qua đường xuống (bản đồ yêu cầu, "đã biết") rẻ hơn đường lên nhiều bên ([reassess-notes/axis1](archive/h1-mdmt/reassess-notes/axis1-collab-perception-u2u.md)).
 - **Bằng chứng của dự án:** quy tắc đơn giản bắt kịp oracle GT (B1); PPO không có cơ chế giải thích được (A8); dư địa ở A7 là kiến thức cấp cảnh, không phải liên kết.
 - **MARL cho MAC ngữ nghĩa đã có** (PRISM, MADRL), nên MARL tự nó không phải đóng góp.
 - **Khi nào MARL mới có lý do [SUY LUẬN]:** khi các UAV phải tự quyết mà không có thông tin kịp thời từ BS (phản hồi trễ ngang thời gian thay đổi giá trị, không có U2U), và khi một bộ tập trung với thông tin trễ thua rõ một oracle có thông tin tươi. Chính phép thử RQ2 phải cho thấy khoảng cách đó trước.

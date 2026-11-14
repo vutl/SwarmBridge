@@ -140,7 +140,7 @@ Ghi chú: EAAR (MobiCom'19, [doi](https://doi.org/10.1145/3300061.3300116)), Gli
 
 ## 4. Đối chiếu với G-L2
 
-Mỗi thành phần G-L2 (theo `reports/uav-semcom-g-l2.md` §0.5) đối chiếu với prior art gần nhất:
+Mỗi thành phần G-L2 (theo `reports/archive/r1-visdrone/uav-semcom-g-l2.md` §0.5) đối chiếu với prior art gần nhất:
 
 | Thành phần G-L2 | Prior art gần nhất | Mức trùng |
 |---|---|---|

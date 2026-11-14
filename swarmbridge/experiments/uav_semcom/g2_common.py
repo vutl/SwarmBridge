@@ -1,4 +1,4 @@
-"""G-L2 shared code (reports/uav-semcom-g-l2.md section 0): per-image task outcomes, matched-bitrate evaluation of
+"""G-L2 shared code (reports/archive/r1-visdrone/uav-semcom-g-l2.md section 0): per-image task outcomes, matched-bitrate evaluation of
 frame-level mode-choice policies, and the content-agnostic baselines F / MX / RV / CB.
 
 Static frame-level evaluation (0.2): every image of a pool is sent once in the mode its policy chooses;

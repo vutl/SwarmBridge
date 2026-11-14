@@ -1,4 +1,4 @@
-"""R1a measurements (reports/swarmbridge-r1a.md 0.3 / 0.4), GPU, every image of the A5 pools:
+"""R1a measurements (reports/archive/r1-visdrone/swarmbridge-r1a.md 0.3 / 0.4), GPU, every image of the A5 pools:
 
   * onboard YOLO11n detections at imgsz 640 and 960 (conf >= 0.05, NMS 0.7, max 500), original-image coordinates;
   * every 320 px tile (stride 288, last tile aligned to the border) encoded with the A5 avif_50 / avif_80 codecs

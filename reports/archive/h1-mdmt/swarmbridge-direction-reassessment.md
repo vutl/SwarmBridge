@@ -10,7 +10,7 @@ Ngày 11/11/2026. Chưa code, chưa train, chưa chạy thí nghiệm nào cho p
   - [axis1-collab-perception-u2u.md](reassess-notes/axis1-collab-perception-u2u.md): khoảng 30 công trình collaborative perception, BS/RSU làm bên nhận, U2U/relay;
   - [axis2-voi-taskoriented-beliefs.md](reassess-notes/axis2-voi-taskoriented-beliefs.md): VoI, nguồn tương quan, niềm tin cũ/chung, ra quyết định đa tác tử;
   - [datasets-feasibility.md](reassess-notes/datasets-feasibility.md): kiểm toán dataset và dữ liệu kênh.
-- Ghi chú R0 cũ: [r0-notes/collaborative-swarm.md](r0-notes/collaborative-swarm.md).
+- Ghi chú R0 cũ: [r0-notes/collaborative-swarm.md](../r1-visdrone/r0-notes/collaborative-swarm.md).
 
 **Cách làm:**
 - Ba sub-agent đọc paper và trang dataset; tôi tổng hợp.

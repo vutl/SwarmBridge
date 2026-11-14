@@ -4,7 +4,7 @@ Ngày 10/11/2026. Đây là phép thử **offline** (feasibility gate), không p
 - Không train PPO, SAC hay MARL.
 - Không dựng simulator mới, không đụng relay, CARLA, UAV3D hay Active Recovery.
 - A5, A5.5, L1 giữ nguyên.
-- Phần kiểm toán L1 ở `reports/archive/uav-semcom-a/uav-semcom-a6-l1-audit.md`; phần đối chiếu tài liệu ở `reports/novelty-audit-g-l2-2026-11-10.md`.
+- Phần kiểm toán L1 ở `reports/archive/uav-semcom-a/uav-semcom-a6-l1-audit.md`; phần đối chiếu tài liệu ở `reports/archive/r1-visdrone/novelty-audit-g-l2-2026-11-10.md`.
 
 ## 0. Bài toán, giả thuyết và quy tắc định trước (commit trước mọi phép đo của G-L2)
 
@@ -248,7 +248,7 @@ Predictor có đổi mode theo ảnh (đa dạng 0,31–0,73), nhưng những th
    - Phần còn lại không lặp lại được dưới phép lật ngang: một vài detection đổi qua lại giữa hai mode gần nhau (độ nhạy của detector với biến đổi nhỏ, không nhất thiết là nhiễu ngẫu nhiên; mục 7).
 2. **Luật đơn giản biết payload (RV) đã lấy gần hết phần lợi theo nội dung** mà payload mang theo. Ảnh phức tạp tốn nhiều bit hơn ở mọi mode, nên RV tự hạ mode cho các ảnh đó.
 3. **Kết quả khớp với L1 và phần kiểm toán.** Reward tác vụ chỉ dời điểm hoạt động dọc đường bit–recall, không tạo được lựa chọn mode theo nội dung, vì chính dữ liệu không chứa lựa chọn đó.
-4. **Đối chiếu tài liệu** (`reports/novelty-audit-g-l2-2026-11-10.md`):
+4. **Đối chiếu tài liệu** (`reports/archive/r1-visdrone/novelty-audit-g-l2-2026-11-10.md`):
    - Bộ dự đoán rẻ chọn cấu hình nén theo nội dung đã có: DAO (ACM MM 2022), AdaCompress, SMR, JRD.
    - Nếu G-L2 PASS thì cũng không đủ làm đóng góp chính.
    - Điều các công trình đó thường không có là đối chứng mạnh khớp bit (trộn mode, luật biết payload) và kiểm nhiễu detector. Đây chính là thứ làm G-L2 FAIL. Đó là một phát hiện về phương pháp đánh giá, có giá trị cho một bài kiểm chứng.

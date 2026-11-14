@@ -6,18 +6,18 @@
 
 | # | Paper | Trạng thái / đường dẫn |
 |---|---|---|
-| 1 | Diffusion Schrödinger Bridge-Based Channel Estimation for MIMO ISAC Systems | [PDF](<../pdf/Diffusion Schrödinger Bridge-Based Channel Estimation for MIMO ISAC Systems.pdf>); [IEEE](https://ieeexplore.ieee.org/document/11189857), [DOI](https://doi.org/10.1109/LWC.2025.3617170) |
-| 2 | Brownian Bridge-Based Diffusion Channel Denoising for ISAC Massive MIMO Systems | [PDF](<../pdf/Brownian Bridge-Based Diffusion Channel Denoising for ISAC Massive MIMO Systems.pdf>); [IEEE](https://ieeexplore.ieee.org/document/10859257), [DOI](https://doi.org/10.1109/TCCN.2025.3537103) |
-| 3 | Diffusion-based Generative Prior for Low-Complexity MIMO Channel Estimation | [PDF mới](<../pdf/Diffusion-based Generative Prior for Low-Complexity MIMO Channel Estimation.pdf>) |
-| 4 | Generative Diffusion Models for High Dimensional Channel Estimation | [PDF mới](<../pdf/Generative Diffusion Models for High Dimensional Channel Estimation.pdf>) |
-| 5 | Generative Diffusion Model-Based Variational Inference for MIMO Channel Estimation | [PDF](<../pdf/Generative Diffusion Model-Based Variational Inference for MIMO Channel Estimation.pdf>); [IEEE](https://ieeexplore.ieee.org/document/10946972/), [accepted manuscript tại QMUL](https://qmro.qmul.ac.uk/xmlui/bitstream/handle/123456789/106727/Nallanathan%20Generative%20Diffusion%20Model-based%20Variational%20Inference%20for%20MIMO%20Channel%20Estimation%202025%20Accepted.pdf?isAllowed=y&sequence=2) |
-| 6 | Environment-Aware Diffusion Model for Massive MIMO-OFDM Channel Estimation | [PDF mới](<../pdf/Environment-Aware Diffusion Model for Massive MIMO-OFDM Channel Estimation.pdf>) |
-| 7 | Environment-Aware Channel Inference via Cross-Modal Flow | [PDF mới](<../pdf/Environment-Aware Channel Inference via Cross-Modal Flow.pdf>) |
+| 1 | Diffusion Schrödinger Bridge-Based Channel Estimation for MIMO ISAC Systems | [PDF](<../../../pdf/Diffusion Schrödinger Bridge-Based Channel Estimation for MIMO ISAC Systems.pdf>); [IEEE](https://ieeexplore.ieee.org/document/11189857), [DOI](https://doi.org/10.1109/LWC.2025.3617170) |
+| 2 | Brownian Bridge-Based Diffusion Channel Denoising for ISAC Massive MIMO Systems | [PDF](<../../../pdf/Brownian Bridge-Based Diffusion Channel Denoising for ISAC Massive MIMO Systems.pdf>); [IEEE](https://ieeexplore.ieee.org/document/10859257), [DOI](https://doi.org/10.1109/TCCN.2025.3537103) |
+| 3 | Diffusion-based Generative Prior for Low-Complexity MIMO Channel Estimation | [PDF mới](<../../../pdf/Diffusion-based Generative Prior for Low-Complexity MIMO Channel Estimation.pdf>) |
+| 4 | Generative Diffusion Models for High Dimensional Channel Estimation | [PDF mới](<../../../pdf/Generative Diffusion Models for High Dimensional Channel Estimation.pdf>) |
+| 5 | Generative Diffusion Model-Based Variational Inference for MIMO Channel Estimation | [PDF](<../../../pdf/Generative Diffusion Model-Based Variational Inference for MIMO Channel Estimation.pdf>); [IEEE](https://ieeexplore.ieee.org/document/10946972/), [accepted manuscript tại QMUL](https://qmro.qmul.ac.uk/xmlui/bitstream/handle/123456789/106727/Nallanathan%20Generative%20Diffusion%20Model-based%20Variational%20Inference%20for%20MIMO%20Channel%20Estimation%202025%20Accepted.pdf?isAllowed=y&sequence=2) |
+| 6 | Environment-Aware Diffusion Model for Massive MIMO-OFDM Channel Estimation | [PDF mới](<../../../pdf/Environment-Aware Diffusion Model for Massive MIMO-OFDM Channel Estimation.pdf>) |
+| 7 | Environment-Aware Channel Inference via Cross-Modal Flow | [PDF mới](<../../../pdf/Environment-Aware Channel Inference via Cross-Modal Flow.pdf>) |
 | 8 | Semantic-Driven Multi-UAV Cooperative Communication With Joint Positioning and Resource Allocation | [Đã có](../../../pdf/Semantic-Driven_Multi-UAV_Cooperative_Communication_With_Joint_Positioning_and_Resource_Allocation.pdf) |
-| 9 | Optimally Bridging Semantics and Data: Generative Semantic Communication via Schrödinger Bridge | [Đã có](<../pdf/Optimally Bridging Semantics and Data Generative Semantic Communication via Schrodinger Bridge.pdf>) |
-| 10 | DiffCP: Ultra-Low Bit Collaborative Perception via Diffusion Model | [PDF mới](<../pdf/DiffCP Ultra-Low Bit Collaborative Perception via Diffusion Model.pdf>) |
-| 11 | BridgeCodec | [Đã có](<../pdf/BridgeCodec Mamba Enhanced Neural Audio Codec with Schrödinger Bridge at Low Bitrate.pdf>) |
-| 12 | I²SB | [Đã có](<../pdf/I2SB Image-to-Image Schrodinger Bridge.pdf>) |
+| 9 | Optimally Bridging Semantics and Data: Generative Semantic Communication via Schrödinger Bridge | [Đã có](<../../../pdf/Optimally Bridging Semantics and Data Generative Semantic Communication via Schrodinger Bridge.pdf>) |
+| 10 | DiffCP: Ultra-Low Bit Collaborative Perception via Diffusion Model | [PDF mới](<../../../pdf/DiffCP Ultra-Low Bit Collaborative Perception via Diffusion Model.pdf>) |
+| 11 | BridgeCodec | [Đã có](<../../../pdf/BridgeCodec Mamba Enhanced Neural Audio Codec with Schrödinger Bridge at Low Bitrate.pdf>) |
+| 12 | I²SB | [Đã có](<../../../pdf/I2SB Image-to-Image Schrodinger Bridge.pdf>) |
 
 IEEE trả trang HTML xác thực thay vì PDF cho #1 và #2. Với #5, IEEE không cung cấp PDF cho phiên tải; bản accepted manuscript có thể xem qua trang QMUL nhưng máy tải nhận kết nối đóng hoặc trang chặn 403. Bạn có thể thử các link bằng trình duyệt hoặc tài khoản trường. Không lưu HTML dưới tên PDF.
 

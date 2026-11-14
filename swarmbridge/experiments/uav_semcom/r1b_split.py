@@ -1,6 +1,6 @@
 """R1b-0a data split v1 (data-integrity amendment of 10/11, reviewed): gate G7 = one clip per independent source.
 
-Rules (reports/visdrone-vid-data-audit.md sec 4 + amendment 5.4/5.5):
+Rules (reports/archive/r1-visdrone/visdrone-vid-data-audit.md sec 4 + amendment 5.4/5.5):
   * eligible source: no DET-train source id AND no confirmed DET-train pHash match in any of its clips;
   * G7 = the 7 smallest eligible source ids, one clip per source (smallest clip name of that source);
   * other clips of a G7 source -> QUARANTINE (neither gate nor tuning);
