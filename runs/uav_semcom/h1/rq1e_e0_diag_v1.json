@@ -1,0 +1,114 @@
+{
+ "26": {
+  "decl_per_view": [
+   45.4,
+   24.866666666666667
+  ],
+  "ideal_pairs_per_epoch": 11.133333333333333,
+  "candidates_per_epoch": 0.26666666666666666,
+  "mutual_nn_per_epoch": 6.6,
+  "mutual_nn_precision": 0.20833333333333334,
+  "true_partner_rank1": 0.31736526946107785,
+  "true_partner_rank5": 0.6526946107784432,
+  "median_rank": 3.0,
+  "median_same_class_pool": null
+ },
+ "31": {
+  "decl_per_view": [
+   50.388888888888886,
+   62.666666666666664
+  ],
+  "ideal_pairs_per_epoch": 35.27777777777778,
+  "candidates_per_epoch": 1.6666666666666667,
+  "mutual_nn_per_epoch": 13.333333333333334,
+  "mutual_nn_precision": 0.5060240963855421,
+  "true_partner_rank1": 0.1763779527559055,
+  "true_partner_rank5": 0.3905511811023622,
+  "median_rank": 11.0,
+  "median_same_class_pool": null
+ },
+ "34": {
+  "decl_per_view": [
+   12.6,
+   44.06666666666667
+  ],
+  "ideal_pairs_per_epoch": 6.0,
+  "candidates_per_epoch": 0.4,
+  "mutual_nn_per_epoch": 3.6666666666666665,
+  "mutual_nn_precision": 0.4583333333333333,
+  "true_partner_rank1": 0.4666666666666667,
+  "true_partner_rank5": 0.7555555555555555,
+  "median_rank": 2.0,
+  "median_same_class_pool": null
+ },
+ "52": {
+  "decl_per_view": [
+   55.333333333333336,
+   84.88888888888889
+  ],
+  "ideal_pairs_per_epoch": 45.55555555555556,
+  "candidates_per_epoch": 1.2222222222222223,
+  "mutual_nn_per_epoch": 13.222222222222221,
+  "mutual_nn_precision": 0.4120603015075377,
+  "true_partner_rank1": 0.22560975609756098,
+  "true_partner_rank5": 0.474390243902439,
+  "median_rank": 7.0,
+  "median_same_class_pool": null
+ },
+ "56": {
+  "decl_per_view": [
+   10.25,
+   20.6
+  ],
+  "ideal_pairs_per_epoch": 9.05,
+  "candidates_per_epoch": 0.5,
+  "mutual_nn_per_epoch": 3.6,
+  "mutual_nn_precision": 0.49230769230769234,
+  "true_partner_rank1": 0.32044198895027626,
+  "true_partner_rank5": 0.6961325966850829,
+  "median_rank": 3.0,
+  "median_same_class_pool": null
+ },
+ "57": {
+  "decl_per_view": [
+   22.625,
+   30.541666666666668
+  ],
+  "ideal_pairs_per_epoch": 20.208333333333332,
+  "candidates_per_epoch": 0.25,
+  "mutual_nn_per_epoch": 5.458333333333333,
+  "mutual_nn_precision": 0.19008264462809918,
+  "true_partner_rank1": 0.13195876288659794,
+  "true_partner_rank5": 0.42061855670103093,
+  "median_rank": 8.0,
+  "median_same_class_pool": null
+ },
+ "61": {
+  "decl_per_view": [
+   24.46153846153846,
+   67.84615384615384
+  ],
+  "ideal_pairs_per_epoch": 16.23076923076923,
+  "candidates_per_epoch": 1.3846153846153846,
+  "mutual_nn_per_epoch": 9.538461538461538,
+  "mutual_nn_precision": 0.5229357798165137,
+  "true_partner_rank1": 0.3981042654028436,
+  "true_partner_rank5": 0.6303317535545023,
+  "median_rank": 2.0,
+  "median_same_class_pool": null
+ },
+ "62": {
+  "decl_per_view": [
+   16.6,
+   17.933333333333334
+  ],
+  "ideal_pairs_per_epoch": 11.766666666666667,
+  "candidates_per_epoch": 0.43333333333333335,
+  "mutual_nn_per_epoch": 4.733333333333333,
+  "mutual_nn_precision": 0.5808823529411765,
+  "true_partner_rank1": 0.41076487252124644,
+  "true_partner_rank5": 0.8328611898016998,
+  "median_rank": 2.0,
+  "median_same_class_pool": null
+ }
+}
