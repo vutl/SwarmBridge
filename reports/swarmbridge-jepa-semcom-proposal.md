@@ -1,205 +1,208 @@
-# Proposal: truyền thông ngữ nghĩa có dự đoán, đồng bộ trạng thái bên nhận, trên Town3 (JEPA là một ứng viên, không phải tiền đề)
+# Proposal v2: truyền thông ngữ nghĩa có dự đoán, thích ứng theo nhiệm vụ, cho nhiều UAV
 
-Ngày 14/11/2026, theo đề nghị của người phản biện sau RQ1-E. Nguồn đầu vào: bản trao đổi "JEPA cho UAV SemCom" (`pdf/JEPA cho UAV SemCom.pdf`, 33 trang) và các báo cáo Town3 trong [archive/sb-town3/](archive/README.md#sb-town3). Chưa chạy GPU; đây là đề cương cho một nghiên cứu hệ thống.
+Ngày 15/11/2026, sửa theo phản biện sau bản v1 (commit f1e54601, 050fc67a). Bản này thay thế v1. Chưa train mô hình nào; đã kiểm dữ liệu thật của Songdo Traffic (mục 2).
+
+## 0. Thay đổi so với v1
+
+- Dữ liệu chính chuyển sang **Songdo Traffic v2** (quỹ đạo xe thật từ 10 drone, CC BY 4.0). Town3 giữ làm baseline kỹ thuật; UAVid giữ làm kiểm chứng độc lập cho bản đồ ngữ nghĩa theo thời gian.
+- Thêm **bộ chọn mode truyền** theo nhiệm vụ, trạng thái bên nhận và kênh (không chỉ theo kênh như SAGIN / UA-TSC).
+- JEPA vẫn là một giả thuyết được kiểm, không phải tiền đề. Kiểm dữ liệu cho thấy rõ **ở đâu JEPA kiểm được và ở đâu không** (mục 2.5).
 
 ## 1. Tóm tắt
 
-- **Câu hỏi then chốt:** sau khi đã có một bộ truyền bản đồ có dự đoán rất mạnh, JEPA còn thêm được gì mà mô hình thời gian thông thường không làm được?
-- **Trả lời thẳng [SUY LUẬN, sẽ được kiểm]:**
-  - Với **một nhiệm vụ cố định** (BEV segmentation 3 lớp) và thông điệp là **bản đồ số**, JEPA **không có lý do kỹ thuật** để thắng.
-  - Lý do: số bit cần gửi bằng −log p(bản đồ thật | trạng thái bên nhận). Mục tiêu đúng là một mô hình **xác suất có điều kiện** của bản đồ kế tiếp (huấn luyện bằng cross-entropy), dùng trực tiếp làm mô hình entropy.
-  - JEPA chỉ học dự đoán trong không gian latent bằng sai số L2, không có likelihood, nên không cho mô hình entropy. Gắn tên JEPA ở thiết lập này là trang trí.
-- **JEPA có vai trò kỹ thuật thật** khi bên nhận phải giữ một **trạng thái chung cho nhiều nhiệm vụ, hoặc cho nhiệm vụ chưa biết lúc truyền**. Khi đó thông điệp không thể là output của một nhiệm vụ.
-  - Mục tiêu dự đoán trong latent của JEPA bỏ qua chi tiết không dự đoán được, vốn tốn bit nếu dùng mục tiêu tái tạo.
-  - Đây là giả thuyết trung tâm của proposal, và nó kiểm chứng được trên Town3: đã có nhãn BEV, box 3D có ID theo vết, và pose.
-- **Thiết kế hai tầng:**
-  - **Tầng 1:** hệ thống mã hoá dự đoán cho output nhiệm vụ (bản đồ, box), dùng các bộ dự đoán học (ConvGRU, temporal U-Net, Mamba). Đây vừa là baseline mạnh nhất, vừa là một kết quả có ích tự thân.
-  - **Tầng 2:** trạng thái latent có dự đoán cho đa nhiệm vụ, với một nhiệm vụ **giữ lại** không được thấy lúc huấn luyện.
-- **Tên JEPA chỉ được giữ** nếu mục tiêu JEPA thắng mục tiêu dự đoán thông thường **cùng backbone** ở tầng 2 (thiết kế 2 × 2: backbone × mục tiêu).
+- **Songdo Traffic là bối cảnh nhiều UAV thật hợp với SwarmBridge hơn MDMT**, nhưng theo kiểu khác với dự kiến:
+  - 10 drone bay **đồng thời**;
+  - mỗi drone **tuần tra** luân phiên 2–3 giao lộ, nên mỗi giao lộ chỉ được quan sát ngắt quãng (khoảng trống dài nhất 4,7–11 phút);
+  - vùng nhìn chồng nhau đồng thời giữa các drone **gần như không có**: chỉ 20 giây ở giao lộ R và 51 giây ở S, lúc bàn giao.
+- **Bài toán tự nhiên của dữ liệu này:** BS giữ trạng thái giao thông của 20 giao lộ. Drone chỉ thấy một phần, theo lịch tuần tra, và cùng chia một đường lên có hạn. BS phải **dự đoán** những gì không được quan sát hay chưa được gửi; drone phải chọn **gửi gì, mode nào, khi nào**.
+  - Đây là bài toán dự đoán + lập lịch nhiều UAV thật, không cần liên kết xuyên góc.
+- **Kết luận thẳng về JEPA trên Songdo Traffic:**
+  - Quan sát duy nhất của bên gửi là **trạng thái xe có cấu trúc** (vị trí, vận tốc, lớp, làn). Mọi latent học từ dữ liệu này là hàm của chính trạng thái đó, nên **không mang thêm thông tin** nào mà một thông điệp trạng thái có cấu trúc không mang được.
+  - Trên CSV quỹ đạo, mode latent / JEPA vì thế không có lý do tồn tại về mặt thông tin.
+  - JEPA chỉ kiểm được ở nơi có **ảnh**: Town3 (đa nhiệm vụ) và 29 video mẫu của Songdo (60 giây mỗi video, khớp được với quỹ đạo). Songdo Vision **không** khớp được với quỹ đạo.
+- **Ước lượng thô:** trạng thái có cấu trúc rất rẻ.
+  - Mỗi giao lộ có trung bình 31–117 xe trong khung hình, vận tốc trung vị khoảng 1 km/h ở giờ cao điểm chiều (phần lớn đứng chờ).
+  - Gửi đủ trạng thái 1 lần/giây tốn vài kbit/s mỗi giao lộ, so với 0,5–1 Mbit cho một khung 4K.
+  - Gần như chắc chắn: với ba nhiệm vụ đã định, **gửi trạng thái có cấu trúc kèm dự đoán đã đủ**. Proposal ghi rõ điều đó thay vì tạo nhu cầu cho JEPA.
 
-## 2. Cơ sở thực nghiệm đã có (đối chiếu với báo cáo trong repo)
+## 2. Kiểm tra khả thi dữ liệu (đã làm)
 
-Town3 test, BEV segmentation 3 lớp (khác, đường, xe), teacher đạt mIoU 0,881.
+Cách làm: đọc metadata Zenodo và README; chỉ lấy **CSV phiên PM5 ngày 7/10/2022 của cả 20 giao lộ** (khoảng 360 MB nén, 2,6 GB giải nén) bằng yêu cầu theo dải byte; liệt kê tên file trong `sample_videos.zip` mà không tải video. Script: `scripts/songdo/audit_*.py`; kết quả tổng hợp: `runs/songdo/audit_overlap_2022-10-07_PM5.json`. Dữ liệu thô nằm ở `data/songdo/` (ngoài git).
 
-**Khôi phục latent theo thời gian, gửi 15% block** ([sb-va-town3.md](archive/sb-town3/sb-va-town3.md)):
+### 2.1 Songdo Traffic v2 (Zenodo 17924857, CC BY 4.0)
 
-| Phương pháp | mIoU |
+| Mục | Đã xác minh |
 |---|---|
-| Mapping từng frame | 0,609 |
-| Bộ nhớ dịch theo pose (không học) | 0,679 |
-| Temporal U-Net | 0,685 |
+| Kích thước | 41 GB: 80 zip quỹ đạo (16–360 MB, mỗi zip = 1 giao lộ × 1 ngày × 10 phiên AM1–AM5, PM1–PM5), orthophoto 1,8 GB, master frames 0,25 GB, phân đoạn làn 25 KB, video mẫu 26,8 GB |
+| Phạm vi | 20 giao lộ (A–U, không có D), 4 ngày (4–7/10/2022), 10 drone DJI Mavic 3, cao 140–150 m, 29,97 điểm/giây |
+| Cột CSV | `Vehicle_ID` (duy nhất **trong một CSV**), `Local_Time`, `Drone_ID`, toạ độ ortho / EPSG:5186 / WGS84, dài–rộng xe, lớp (xe con, buýt, tải, mô tô), vận tốc, gia tốc, `Road_Section`, `Lane_Number`, `Visibility` |
+| Phiên PM5 ngày 7/10 | 26,8 triệu dòng, 22.068 ID xe (theo CSV); bắt đầu 17:40–17:52, kết thúc 17:55–18:10 ở mọi giao lộ → **các drone bay đồng thời** |
+| Tuần tra | Mỗi drone luân phiên 2–3 giao lộ, mỗi lượt 2–4 phút (ví dụ D1: A → B → C → B → A …); mỗi giao lộ có dữ liệu 217–1.042 giây trong phiên dài 886–1.673 giây |
+| Nhiều drone trên một giao lộ | 8 giao lộ (A, F, J, L, M, N, R, S) có 2–3 drone, nhưng **thay phiên**: số giây có hai drone cùng lúc là 0, trừ R (20 s) và S (51 s) |
+| Cùng một xe ở hai drone | Chỉ ở R (39 cặp) và S (150 cặp), ghép theo vị trí – thời gian – lớp trong hệ toạ độ chung. Khoảng cách trung vị 0,14 m, nhỏ đáng ngờ so với sai số phát hiện, nên có thể là dấu vết của bước xử lý; cần đối chiếu video. **Không có ID xuyên drone nào được cung cấp.** |
+| Video mẫu | 29 video, 60 giây đầu của PM5 ngày 7/10, đặt tên `<giao lộ>_D<drone>`; 8 giao lộ có 2–3 video từ các drone khác nhau |
 
-**Chọn block, 15%** ([temporal-block-selection-2026-11-03.md](archive/sb-town3/temporal-block-selection-2026-11-03.md)), mIoU / IoU xe:
+### 2.2 Songdo Vision v2 (Zenodo 21728430, CC BY 4.0)
 
-| Cách chọn | Kết quả |
-|---|---|
-| Ngẫu nhiên | 0,676 / 0,220 |
-| Trạm chọn theo bất định | 0,707 / 0,277 |
-| UAV giữ bản sao trạng thái trạm (replica) | **0,760 / 0,419** |
-| Biết trạng thái thật của trạm (chẩn đoán) | 0,763 / 0,420 |
-| Replica khi mất toàn bộ ACK | 0,744 |
+- 5.419 ảnh 4K (4.335 train / 1.084 test), 274.190 box, 4 lớp; 16,1 GB.
+- Các khung **lấy ngẫu nhiên** từ video (cộng 145 khung khó chọn tay), tên file là số thứ tự (`00001.jpg`), chia train / test **ngẫu nhiên theo khung**.
+- Hệ quả:
+  - **Không khớp được ảnh với quỹ đạo** từ thông tin đã phát hành (không có giao lộ, phiên hay thời điểm);
+  - split train / test có thể rò rỉ (khung cùng phiên ở cả hai phía).
+- Dùng được làm dữ liệu huấn luyện detector trên ảnh drone 4K nhìn thẳng xuống; không dùng làm nhãn cho nhiệm vụ theo thời gian.
 
-**Gửi bản đồ segmentation thay vì latent** ([step1-hardening-2026-11-03.md](archive/sb-town3/step1-hardening-2026-11-03.md), bit là độ dài mã lý tưởng theo mô hình ngữ cảnh, kênh số có mất gói, bên nhận không có mạng học):
+### 2.3 Những điểm phải xử lý khi dùng Songdo Traffic
 
-| | Kết quả |
-|---|---|
-| Toàn bộ bản đồ | **1,0 kbit/frame** (test), mIoU 0,882 nếu không mất gói |
-| Toàn bộ latent, lượng tử + nén entropy | 56,2 kbit/frame |
-| Bộ nhớ + replica, khoảng 0,35 kbit/frame | **0,771 / 0,504** |
-| Cùng chất lượng bằng latent | khoảng 8,4 kbit (khoảng 24 lần nhiều hơn) |
+- **Vận tốc và gia tốc trong CSV được làm mượt Gauss**, tức dùng cả dữ liệu tương lai, nên **không nhân quả**. Bên gửi không được dùng chúng như quan sát lúc t; phải tính lại vận tốc nhân quả từ vị trí. Giá trị làm mượt chỉ dùng làm mục tiêu đánh giá.
+- **Quỹ đạo là đầu ra tự động** (detector + tracker + ổn định hình + nội suy), không phải GT gán tay. Chúng vừa là "quan sát của UAV" vừa là "đích đánh giá", nên mọi kết quả là tương đối so với pipeline geo-trax. Ghi rõ đây là giới hạn.
+- Đã biết có phân mảnh vết, nhập nhằng ID, gán làn sai cho xe cao (README).
 
-Hai nhánh khác kênh và cách lượng tử, nên tỉ lệ là chẩn đoán của thiết lập, không phải kết luận tổng quát.
+### 2.4 Town3 và UAVid
 
-**Bốn điều rút ra cho proposal:**
-1. Phần lớn lợi ích thời gian đến từ **tái dùng frame trước**: bộ nhớ không học 0,679, U-Net chỉ thêm 0,6 điểm. Bộ dự đoán học chỉ có chỗ ở những gì bộ nhớ dịch theo pose làm sai: xe di chuyển, vùng mới thấy, mất gói liên tiếp.
-2. Với kênh số và ACK, UAV mô phỏng **chính xác** trạng thái trạm. Phần "receiver-aware" đã giải xong trong thiết lập đó; khoảng trống cho mô hình niềm tin chỉ khoảng 1,5–2 điểm (khi mất toàn bộ ACK).
-3. Output nhiệm vụ rẻ hơn latent hơn 20 lần. Mọi biểu diễn học phải so với thông điệp output nhiệm vụ, cùng kênh, cùng cách tính bit.
-4. Vùng tốc độ đáng quan tâm là **0,08–0,6 kbit/frame**, nơi bộ nhớ + replica còn cách teacher 0,88 mIoU khá xa (0,58–0,81).
+- **Town3:** 17 scene × 20 mốc × 5 UAV, chia theo scene 11 / 2 / 4, có nhãn BEV, box 3D có ID và pose. Baseline mạnh đã đo:
+  - bộ nhớ dịch theo pose 0,679 so với temporal U-Net 0,685 (gửi 15%);
+  - toàn bộ bản đồ 1,0 kbit/frame đạt 0,882;
+  - bộ nhớ + replica 0,771 @ 0,35 kbit (latent khoảng 8,4 kbit).
+  - Nguồn: [sb-va-town3.md](archive/sb-town3/sb-va-town3.md), [step1-hardening-2026-11-03.md](archive/sb-town3/step1-hardening-2026-11-03.md).
+- **UAVid:** video UAV thật, segmentation 8 lớp, 42 chuỗi (20 / 7 / 15), CC BY-NC-SA 4.0. Theo người phản biện, GT test 2020 đã công khai qua EOStore (tôi chưa tự kiểm cách truy cập). Kiểm chứng độc lập cho bản đồ ngữ nghĩa theo thời gian.
 
-**Đã có sẵn:** dữ liệu `data/coperception_uav/` (bev_town3 với `rgb`, `obs`, `gt`, `seen` cho 5 UAV, `origin`, `axes`; bảng nuScenes-style với 67.576 box có ID); code `temporal/`, `temporal_select/`, `segmap_baseline/`; latent cache của teacher; môi trường `~/envs/sb` với `mamba-ssm` 2.3.2 đã kiểm chạy được (torch 2.12, RTX 3070).
+### 2.5 Mỗi bộ dữ liệu kiểm được câu hỏi nào
 
-**Giới hạn đã biết:** chỉ 17 scene (11 train / 2 val / 4 test), mô phỏng, UAV cách xa nhau (không có chồng lấn đáng kể giữa UAV). Giấy phép CoPerception-UAV chưa được kiểm trong đợt này.
+| Câu hỏi | Songdo Traffic | Video mẫu Songdo | Town3 | UAVid |
+|---|---|---|---|---|
+| Dự đoán trạng thái + mã hoá phần đổi mới | **có** (quỹ đạo) | có (ngắn) | có (bản đồ) | có (bản đồ) |
+| Lập lịch nhiều UAV chung đường lên, quan sát ngắt quãng | **có** (10 drone tuần tra đồng thời) | một phần | không (UAV xa nhau) | không |
+| Chọn mode theo nhiệm vụ | **có** cho M0 / M1 | có cho M3 | có | có |
+| Latent / JEPA cho nhiệm vụ giữ lại | **không** (latent chỉ là hàm của trạng thái) | có, nhưng chỉ 29 × 60 s | **có** | có |
+| Hợp tác vùng nhìn chồng nhau | gần như không (R, S lúc bàn giao) | không đủ | không | không |
 
-## 3. JEPA thêm được gì? Lập luận kỹ thuật
+## 3. Bài toán (dựa trên dữ liệu)
 
-### 3.1 Khi nhiệm vụ cố định và thông điệp là output nhiệm vụ: không
+- Một BS giữ trạng thái **S_t** của 20 giao lộ: các xe đang có, vị trí, vận tốc, lớp, làn, hàng chờ.
+- 10 drone bay theo lịch tuần tra (BS biết lịch, coi như kế hoạch bay).
+- Ở mỗi bước Δ (mặc định 1 giây), drone k đang ở giao lộ X_k(t) có quan sát o_{k,t} (trạng thái xe trong khung hình của nó).
+- Đường lên chung có ngân sách B_t (bit / bước, chia giữa các drone); kênh từng drone có thể khác nhau.
+- BS phục vụ nhiều nhiệm vụ (mục 5) từ trạng thái đã cập nhật Ŝ_t.
+- Ở giao lộ chưa ai quan sát, BS chỉ có **dự đoán**.
 
-Gọi s_t là bản đồ thật, h_t là những gì bên nhận đã có (bản đồ trước đã căn pose, thông điệp đã nhận). Với mã entropy lý tưởng, số bit để gửi phần còn thiếu của s_t là
+## 4. Hệ thống nhân quả
 
-  R_t = −log₂ p_θ(s_t | h_t) (trên các block được gửi).
+**Trên drone k (bên gửi):**
+1. Quan sát o_{k,t}: trạng thái xe trong khung hình. Vận tốc tính lại nhân quả từ vị trí; không dùng giá trị làm mượt.
+2. **Replica** Ŝ^{BS}_t của BS cho giao lộ đang quan sát. Chính xác nếu kênh số + ACK; ước lượng nếu ACK mất hoặc trễ.
+3. **Bộ dự đoán P** giống hệt ở BS: dự đoán trạng thái kế tiếp, kèm phân phối hoặc độ bất định.
+4. **Bộ chọn mode** a_{k,t} = π(q_t, Ŝ^{BS}_t, c_{k,t}, B_t):
+   - q_t: nhu cầu nhiệm vụ hiện tại của BS;
+   - Ŝ^{BS}_t: trạng thái BS ước lượng nhân quả;
+   - c_{k,t}: kênh;
+   - B_t: phần ngân sách.
+5. **Codec** cho mode được chọn; header, chỉ số và độ dài thông điệp đều tính phí.
 
-- Bộ dự đoán tốt nhất cho truyền thông là bộ cho **likelihood cao nhất** của bản đồ thật, tức một mô hình phân loại có điều kiện theo từng ô, huấn luyện bằng cross-entropy. Nó cho luôn cả bộ chọn block: những ô có entropy cao là chỗ có thông tin mới.
-- Một predictor JEPA học ẑ ≈ z (L2 trong latent, target encoder EMA, không decoder) **không** cho p_θ(s_t | h_t). Muốn dùng để mã hoá phải gắn thêm đầu ra xác suất, và khi đó nó thành một bộ dự đoán có điều kiện thông thường với một bước tiền huấn luyện.
-- Hệ quả: ở tầng 1, so sánh đúng là **backbone × mục tiêu**, không phải "JEPA so với U-Net". Nếu JEPA không thắng cùng backbone dùng cross-entropy, không có lý do gọi hệ thống là JEPA.
+**Kênh:** số, mất gói với xác suất p (hiện thực rút trước, dùng chung cho mọi phương pháp); ACK 1 bit / gói trên đường xuống, có thể trễ.
 
-### 3.2 Khi bên nhận phải phục vụ nhiều nhiệm vụ, hoặc nhiệm vụ chưa biết: có thể
+**Tại BS:** dự đoán P cho mọi giao lộ; cập nhật bằng thông điệp nhận được; các đầu nhiệm vụ đọc từ Ŝ_t.
 
-- Nếu nhiệm vụ ở BS không cố định, ví dụ thêm đếm xe theo hướng hay dự báo chiếm chỗ sau khi hệ thống đã triển khai, thì gửi output của từng nhiệm vụ không còn khả thi: không biết trước phải gửi output nào.
-- Thông điệp phải là một **trạng thái chung** z_t, và bên nhận giữ ẑ_t dự đoán từ lịch sử.
-- So với mục tiêu **tái tạo** (pixel / MAE): mục tiêu tái tạo buộc z_t mã hoá cả chi tiết không dự đoán được (kết cấu, nhiễu), vốn tốn bit mỗi frame. JEPA dự đoán **trong latent** và có xu hướng loại phần không dự đoán được khỏi mục tiêu. Đó chính là điều một bộ mã dự đoán cần: phần dư z_t − ẑ_t nhỏ ở những chỗ không có sự kiện.
-- So với **học có giám sát đa nhiệm vụ**: latent học theo các nhiệm vụ đã biết có thể bỏ thông tin mà nhiệm vụ mới cần.
-- Đây là giả thuyết **H-J** của proposal: *ở cùng số bit và cùng backbone, trạng thái latent học bằng mục tiêu JEPA phục vụ một nhiệm vụ giữ lại tốt hơn mục tiêu tái tạo và mục tiêu giám sát đa nhiệm vụ, và tốn ít bit hơn việc gửi output của mọi nhiệm vụ đã biết.* H-J có thể sai, và thiết kế dưới đây cho phép nó sai.
+**Vai trò từng trường dữ liệu:**
 
-### 3.3 Những điều JEPA không tự làm
+| Trường | Bên gửi biết lúc t? | Bên nhận biết miễn phí? | Vai trò |
+|---|---|---|---|
+| Vị trí, lớp, kích thước, làn, `Visibility` của xe trong khung hình | có (coi là đầu ra perception trên drone) | **không**; chỉ qua thông điệp | quan sát, được gửi có tính phí; đồng thời là đích đánh giá |
+| Vận tốc / gia tốc làm mượt trong CSV | **không** (không nhân quả) | không | chỉ làm đích đánh giá |
+| Vận tốc nhân quả (sai phân vị trí, lọc một phía) | có | không | quan sát |
+| `Vehicle_ID` | có, như ID vết cục bộ trên drone | không | dùng trong thông điệp M1 (tính bit) |
+| Bản đồ làn, orthophoto, lịch tuần tra | có | **có** (tri thức tĩnh / kế hoạch) | ngữ cảnh dùng chung |
+| Xe ở giao lộ không được quan sát | không | không | không có đích đánh giá; chỉ chấm lúc drone quay lại |
 
-- Không tự biết thay đổi nào quan trọng cho nhiệm vụ (cần bộ chọn theo nhiệm vụ, áp như nhau cho mọi bộ dự đoán).
-- Không tự giải đồng bộ khi mất gói (cơ chế replica và ACK áp như nhau cho mọi phương pháp).
-- Không tự là codec (cần lượng tử và mô hình entropy, áp như nhau cho mọi thông điệp latent).
+## 5. Ba nhiệm vụ
 
-## 4. Kiến trúc hệ thống đề xuất
+- **T1, giám sát / đếm:** số xe theo lớp trên mỗi `Road_Section` (nhánh vào giao lộ) trong cửa sổ 10 giây, và độ dài hàng chờ (số xe vận tốc < 5 km/h theo làn). Chỉ số: MAE theo giao lộ – cửa sổ.
+- **T2, theo vết / ước lượng trạng thái:** BS giữ danh sách xe đang ở các giao lộ đang được quan sát, kèm vị trí và vận tốc. Chỉ số: sai số vị trí trung bình trên các xe khớp được, tỉ lệ xe bị sót / thừa (kiểu MOTA giản lược), đo cả trong lúc không có thông điệp mới.
+- **T3, dự báo ngắn hạn:** vị trí từng xe sau 1, 2 và 3 giây (ADE / FDE), và số xe vào mỗi nhánh trong 30 giây tới.
+  - Mở rộng (không chính): dự báo trạng thái giao lộ **lúc drone quay lại** sau khoảng trống tuần tra, chấm bằng quan sát lúc quay lại.
+- Phương án an toàn (dự phòng nếu chọn thay T3): phát hiện cặp xe có thời gian tới va chạm dưới 2 giây. Chỉ dùng nếu chốt trước khi chạy.
 
-**UAV (bên gửi):**
-1. Quan sát x_t và pose_t; bộ mã hoá E cho output nhiệm vụ (tầng 1) hoặc latent z_t (tầng 2). Bộ mã hoá dùng chung, đóng băng giữa các phương pháp được so.
-2. **Replica** của bên nhận: giữ đúng trạng thái h_t mà BS có (chính xác với kênh số + ACK; ước lượng khi ACK mất hoặc trễ).
-3. **Bộ dự đoán P** giống hệt BS: ŝ_t = P(h_t, pose_t), kèm phân phối hoặc độ bất định.
-4. **Bộ chọn phần đổi mới theo nhiệm vụ:** chọn block có giảm mất mát nhiệm vụ kỳ vọng lớn nhất trên mỗi bit, dưới ngân sách B_t.
-5. **Mã entropy** theo mô hình xác suất của chính bộ dự đoán (tầng 1) hoặc một prior học được dùng chung (tầng 2); header và chỉ số block được tính phí.
+## 6. Các mode truyền
 
-**Kênh:** số, block đến nguyên vẹn hoặc mất (xác suất p_erase, hiện thực kênh rút trước và dùng chung cho mọi phương pháp); ACK 1 bit/block trên đường xuống, có thể trễ d frame hoặc mất.
-
-**BS (bên nhận):** cùng P → ŝ_t; ghép thông điệp nhận được → h_{t+1}; các đầu nhiệm vụ (BEV seg, phát hiện xe, nhiệm vụ giữ lại) đọc từ h_{t+1}.
-
-## 5. Ba câu hỏi nghiên cứu (một nghiên cứu thống nhất)
-
-- **Q1, dự đoán:** bộ dự đoán học (theo backbone và mục tiêu) dự đoán trạng thái kế tiếp tốt hơn bộ nhớ dịch theo pose **ở đâu**? Đo tách riêng ở ô có xe di chuyển, ô mới thấy (dùng mặt nạ `seen`), và sau chuỗi mất gói.
-- **Q2, tốc độ – chất lượng:** lợi ích dự đoán có thành tiết kiệm bit ở cùng chất lượng không? Đo đường cong tốc độ – chất lượng và BD-rate so với bộ nhớ + replica, ở dải 0,08–1 kbit/frame (tầng 1) và ở tầng 2.
-- **Q3, độ bền:** khi mất gói, ACK trễ hoặc trạng thái hai bên lệch, cơ chế cập nhật còn hoạt động không? Đo độ dốc suy giảm và thời gian hồi phục sau khi lệch.
-
-## 6. Dữ liệu, nhiệm vụ và cách chia
-
-- **Town3:** 17 scene × 20 mốc thời gian × 5 UAV = 1.700 lưới BEV; chia theo scene đã có: 11 / 2 / 4. Chọn mọi thứ trên val, chấm test một lần.
-- Test chỉ có 4 scene (20 chuỗi UAV), nên báo kết quả **theo scene** và khoảng tin cậy bootstrap theo scene. Không coi seed huấn luyện là đơn vị độc lập.
-- **Nhiệm vụ:**
-  - **T1:** BEV segmentation 3 lớp (đã có teacher);
-  - **T2:** phát hiện xe trong BEV từ box 3D (nhãn có sẵn: 67.576 box có ID, cần dựng nhãn BEV);
-  - **T3 (giữ lại cho tầng 2):** một nhiệm vụ không dùng lúc huấn luyện bộ mã hoá / dự đoán, ví dụ hướng di chuyển hoặc vận tốc xe từ ID theo vết. Chỉ huấn luyện một đầu đọc nhỏ trên trạng thái ở BS, không truyền lại gì. Chốt T3 trước khi huấn luyện.
-- **Kiểm chứng trên dữ liệu thật, ứng viên 1: UAVid** (video UAV thật, segmentation ngữ nghĩa 8 lớp, ảnh 4K, 42 chuỗi chia 20 / 7 / 15; giấy phép CC BY-NC-SA 4.0, đã xác minh trên trang uavid.nl ngày 14/11; nhãn test chấm qua server). Cùng loại nhiệm vụ với T1 (bản đồ ngữ nghĩa theo thời gian) nên thử được tầng 1 trên ảnh thật; chỉ dùng train / valid. Mật độ khung có nhãn và pose của camera chưa xác minh.
-- **Ứng viên 2: VisDrone-VID** (video UAV thật; split v1 theo nguồn đã kiểm toán trong R1b): thông điệp là detection, dự đoán theo thời gian bằng vết; nhiệm vụ là F1 phát hiện. Không so chỉ số trực tiếp với Town3.
-
-## 7. Các phương pháp so sánh
-
-Mọi phương pháp dùng **cùng loại thông điệp** trong cùng tầng, cùng codec, cùng hiện thực kênh, cùng ngân sách, cùng quy tắc replica và bộ chọn.
-
-| Nhóm | Phương pháp | Ghi chú |
+| Mode | Nội dung | Codec / bit |
 |---|---|---|
-| Không học | B0: không nhớ (ngẫu nhiên / gửi hết) | mốc dưới |
-| Không học | **B1: bộ nhớ dịch theo pose + replica** | baseline mạnh nhất hiện có (0,771 @ 0,35 kbit) |
-| Không học | B2: B1 + ngoại suy chuyển động xe (vận tốc không đổi theo vết đã nhận) | kiểm tra "dự đoán chuyển động đơn giản" |
-| Học, mục tiêu dự đoán thông thường | ConvGRU-CE, temporal U-Net-CE, Mamba-CE | cross-entropy trên bản đồ / box kế tiếp (tầng 1); tái tạo hoặc giám sát đa nhiệm vụ (tầng 2) |
-| Học, mục tiêu JEPA | ConvGRU-JEPA, Mamba-JEPA | target encoder EMA, stop-gradient, L2 latent; đầu nhiệm vụ nhỏ cho đánh giá |
-| Tham chiếu | gửi hết output mọi nhiệm vụ; teacher không mất gói | trần / chi phí đối chứng |
+| **M0: output nhiệm vụ** | số đếm theo lớp – nhánh, độ dài hàng chờ | mã entropy theo mô hình xác suất có điều kiện của số đếm (từ dự đoán) |
+| **M1: cập nhật trạng thái có cấu trúc** | với mỗi xe: ID cục bộ, lớp, vị trí, vận tốc lượng tử; chỉ gửi khi sai số so với dự đoán của BS vượt ε (kiểu dead-reckoning), cộng sự kiện xe vào / ra | độ dài mã −log₂ p(trạng thái thật | dự đoán) với một mô hình sai số Gauss / Laplace, cộng bit ID và header |
+| **M2: latent dùng chung** | biểu diễn học được của cảnh | lượng tử + prior entropy chung. **Chỉ áp dụng ở nơi có ảnh** (Town3, video mẫu Songdo) |
+| **M3: crop / khung ảnh** | AVIF của crop hoặc khung | bit AVIF đo thật. Chỉ trên 29 video mẫu (dự phòng khi trạng thái không đủ) |
 
-**Thiết kế 2 × 2 chính:** {ConvGRU, Mamba} × {mục tiêu thông thường, JEPA}, cùng số tham số (±10%), cùng dữ liệu, cùng số bước huấn luyện. Nó tách được lợi ích do **kiến trúc** và lợi ích do **mục tiêu học**.
+Mọi mode dùng cùng khung tính bit: payload, header theo gói, ACK / yêu cầu đường xuống (báo riêng), số lần dùng kênh với tỉ lệ mã cố định. Độ trễ = truyền + suy luận (đo trên RTX 3070, ghi là proxy).
 
-## 8. Tính bit
+## 7. Bộ dự đoán và baseline
 
-- **Tầng 1 (output nhiệm vụ):** độ dài mã lý tưởng −log₂ p theo mô hình của chính phương pháp (B1 / B2 dùng mô hình ngữ cảnh đã fit như `segmap_baseline`), cộng chỉ số block (bitmap hoặc mã vị trí) và header.
-- **Tầng 2 (latent):** lượng tử đều + mô hình entropy dạng prior phân tách học trên train, dùng chung cho mọi phương pháp latent; chi phí là độ dài mã lý tưởng.
-- **Đường xuống:** ACK 1 bit/block, bitmap yêu cầu nếu có; báo riêng.
-- **Kênh:** báo cả bit và số lần dùng kênh với một tỉ lệ mã cố định khai báo trước.
-- **Độ trễ:** thời gian suy luận đo trên RTX 3070, ghi rõ là proxy, không phải phần cứng UAV.
+**Bộ dự đoán P** (dùng cho M1, và cho trạng thái BS ở giao lộ không quan sát):
 
-## 9. Chỉ số
+| Loại | Phương pháp |
+|---|---|
+| Không học | giữ nguyên (xe đứng yên); vận tốc không đổi (dead-reckoning); đi theo làn với vận tốc không đổi; mô hình hàng chờ theo pha đèn ước lượng từ dữ liệu |
+| Học (xác suất) | ConvGRU / Mamba / Transformer nhỏ trên tập xe của một giao lộ, đầu ra là phân phối (NLL), dùng thẳng làm mô hình entropy |
+| Học (mục tiêu JEPA) | cùng backbone, mục tiêu dự đoán latent kiểu JEPA + đầu đọc. **Chỉ ở tầng có ảnh** (Town3, video Songdo); trên quỹ đạo thì đây là phân tích phụ, vì JEPA không cho likelihood (xem v1, mục 3.1) |
 
-- Đường cong tốc độ – chất lượng: mIoU, IoU xe (T1), AP / F1 (T2), độ chính xác T3.
-- BD-rate so với B1.
-- Chất lượng tách theo vùng (Q1): ô xe di chuyển, ô mới thấy, sau mất gói.
-- Độ bền (Q3): chất lượng theo p_erase và độ trễ ACK; số frame để hồi phục sau một lần lệch trạng thái.
-- Chi phí tính toán: thời gian và số tham số của bộ dự đoán, chạy ở cả hai đầu.
-- Mọi số liệu theo từng scene, kèm khoảng tin cậy bootstrap theo scene.
+Thiết kế 2 × 2 {ConvGRU, Mamba} × {dự đoán thường, JEPA} giữ nguyên, chạy trên Town3 (tầng latent đa nhiệm vụ, có nhiệm vụ giữ lại). Trên Songdo, so sánh chính là **giữa các bộ dự đoán xác suất** về số bit M1 cần để đạt chất lượng T1–T3.
 
-## 10. Các so sánh chính (khoá trước khi chấm test; không phải chuỗi cổng nhỏ)
+**Bộ chọn mode và lập lịch giữa 10 drone:**
 
-Một nghiên cứu, báo đủ mọi kết quả thành công lẫn thất bại. Bốn so sánh chính:
+| Loại | Phương pháp |
+|---|---|
+| Cố định | luôn M0; luôn M1 tần số cố định; luôn M3 (trên video mẫu) |
+| Theo kênh (kiểu SAGIN / UA-TSC) | chọn mode / tốc độ chỉ theo SNR và ngân sách |
+| Tuổi thông tin (AoI) | ưu tiên giao lộ có trạng thái cũ nhất |
+| **Theo giá trị thông tin / bit** | ước lượng mức giảm lỗi nhiệm vụ kỳ vọng của mỗi mode trên mỗi bit, từ độ bất định của dự đoán và nhu cầu q_t; chọn tham lam dưới ngân sách |
+| Oracle (đánh dấu) | biết trước lỗi nhiệm vụ thật của mỗi lựa chọn |
 
-1. **C1 (Q2, tầng 1):** bộ dự đoán học tốt nhất (chọn trên val) so với B1, BD-rate trên T1 ở dải 0,08–0,6 kbit/frame. *Có ý nghĩa* nếu tiết kiệm ≥ 10% và khoảng tin cậy theo scene không chứa 0.
-2. **C2 (2 × 2, tầng 1 và 2):** JEPA so với mục tiêu thông thường cùng backbone. Tên JEPA được giữ chỉ khi JEPA thắng ở T3 giữ lại (tầng 2) với khoảng tin cậy không chứa 0, và không kém quá 1 điểm ở T1 / T2.
-3. **C3 (tầng 2 so với tầng 1):** tổng bit để đạt chất lượng mục tiêu trên T1 + T2 của trạng thái latent so với gửi output của cả hai nhiệm vụ; cộng thêm khả năng phục vụ T3 mà không truyền lại.
-4. **C4 (Q3):** độ dốc suy giảm theo p_erase và độ trễ ACK so với B1.
+RL chỉ được xét nếu oracle hơn heuristic giá trị / bit đáng kể **và** lựa chọn hiện tại ảnh hưởng tương lai rõ rệt (ví dụ trước khoảng trống tuần tra dài).
 
-Các phân tích Q1 theo vùng là mô tả, không quyết định.
+## 8. Chia dữ liệu
 
-## 11. Kết luận nào sẽ rút ra trong từng kịch bản
+- **Theo ngày:** train 4–5/10, val 6/10, test 7/10. Xe không có ID xuyên ngày nên không rò ID; nhưng hình học giao lộ lặp lại, nên thêm trục thứ hai bên dưới.
+- **Theo giao lộ (kiểm tổng quát):** giữ riêng một cụm giao lộ cho test. Vì lịch tuần tra nối các giao lộ với nhau, phải giữ trọn **lãnh thổ của một nhóm drone** (ví dụ D9 + D10: R, S, T, U), không tách lẻ giao lộ.
+- **Theo phiên:** AM và PM báo riêng (lưu lượng khác nhau).
+- Chọn mọi siêu tham số trên val; chấm test một lần.
+- **Video mẫu Songdo:** chỉ có PM5 ngày 7/10, nên chỉ dùng cho thử nghiệm M2 / M3 trên test, không huấn luyện trên chúng.
+
+## 9. Một nghiên cứu, bốn so sánh chính (khoá trước khi chấm test)
+
+1. **S1, trạng thái có cấu trúc đủ tới đâu (Songdo):** đường cong bit – chất lượng của M0 và M1 với từng bộ dự đoán, cho T1–T3. Báo rõ số bit / giây / giao lộ cần để đạt chất lượng gần trần. Nếu M1 với dead-reckoning đã đạt T1–T3 ở mức vài kbit/s, **ghi kết luận đó**.
+2. **S2, bộ dự đoán học có giảm bit không (Songdo):** bộ dự đoán xác suất tốt nhất (chọn trên val) so với dead-reckoning / đi theo làn: BD-rate cho M1 trên T2 và T3, khoảng tin cậy bootstrap theo giao lộ – phiên.
+3. **S3, lập lịch nhiều UAV (Songdo):** bộ chọn theo giá trị / bit so với cố định, theo kênh và AoI, ở cùng ngân sách chung cho 10 drone; chỉ số T1–T3 trên mọi giao lộ (kể cả giao lộ đang không được quan sát, chấm lúc quay lại).
+4. **S4, JEPA cho trạng thái chung (Town3):** thiết kế 2 × 2 trên nhiệm vụ giữ lại; tên JEPA chỉ được giữ nếu JEPA thắng cùng backbone với khoảng tin cậy không chứa 0, và không kém quá 1 điểm ở nhiệm vụ đã biết.
+
+**Kết luận theo kịch bản:**
 
 | Kết quả | Kết luận |
 |---|---|
-| C1 không đạt | Trên Town3, bộ nhớ dịch theo pose đã gần tối ưu cho dự đoán bản đồ; bài viết (nếu có) là một nghiên cứu đánh giá về truyền bản đồ có dự đoán, không có bộ dự đoán học |
-| C1 đạt, C2 không đạt | Bộ dự đoán học có ích, JEPA thì không; hệ thống mang tên theo cơ chế (predictive task-output coding), không gắn JEPA |
-| C2 đạt, C3 không đạt | JEPA cho trạng thái chung tốt hơn các mục tiêu khác nhưng vẫn đắt hơn gửi output; chỉ đáng khi nhiệm vụ thật sự thay đổi |
-| C1, C2, C3 đạt | Ứng viên đóng góp hệ thống: trạng thái ngữ nghĩa có dự đoán, phục vụ nhiều nhiệm vụ với ít bit; cần kiểm chứng độc lập trên VisDrone-VID |
+| S1 cho thấy M1 rẻ và đủ; S2 không có lợi | Bài viết là về **lập lịch dự đoán nhiều UAV với trạng thái có cấu trúc** (S3); không có JEPA |
+| S2 có lợi | Bộ dự đoán học có giá trị truyền thông đo được; Mamba / ConvGRU so sánh trực tiếp |
+| S3: giá trị / bit hơn AoI và theo kênh | Đóng góp chính: quyết định theo nhiệm vụ + trạng thái bên nhận, khác SAGIN / UA-TSC |
+| S4 đạt | JEPA có vai trò cho trạng thái đa nhiệm vụ ở nơi có ảnh; một phần độc lập của bài |
 
-## 12. Prior art phải rà trước khi tuyên bố gì
+## 10. Prior art phải rà (chưa đọc trong đợt này)
 
-Chưa đọc trong đợt này; liệt kê từ bản trao đổi và kiến thức nền, phải xác minh:
-- mã hoá video có điều kiện / dự đoán (DVC, DCVC và các biến thể): "dự đoán + gửi phần dư + mô hình entropy có điều kiện" là kỹ thuật chuẩn;
-- CommJEPA (arXiv, 11/2026); TS-JEPA cho điều khiển tiết kiệm truyền thông; truyền thông hướng nhiệm vụ có world model JEPA cho mạng tác tử (2026);
-- UA-TSC (Zhao et al., IEEE TNSE 2026, DOI 10.1109/TNSE.2026.3727280; có trong `pdf/`): một UAV, phân loại cảnh AID, PPO chọn độ sâu encoder / số ký hiệu / công suất theo kênh, không theo nội dung; Diffuser lập quỹ đạo. Gần với A5 / A5.5 (PPO chọn mode theo kênh); khác proposal này ở chỗ không có dự đoán theo thời gian hay trạng thái bên nhận;
-- GOSC và truyền thông theo giá trị có vòng kín; Wyner–Ziv / thông tin phụ ở bên nhận;
-- dự đoán BEV theo thời gian trong collaborative perception (bù trễ kiểu How2comm, CoBEVFlow).
+- **Dead-reckoning và quy tắc phát bản tin V2X** (ETSI CAM / CPM): "chỉ gửi khi sai số so với dự đoán vượt ngưỡng" là kỹ thuật chuẩn. S1 / S2 phải so với chúng.
+- Lập lịch theo **AoI / VoI** cho nhiều nguồn chung kênh (Sun & Pappas, TAMP, Fresh2comm đã ghi trong rà soát trước).
+- **Đa nhiệm vụ, chuyển mode theo dịch vụ** trong SemCom: "Multi-level semantic-aware communication for multi-task image transmission" (2025), "Multimodal Semantic Communication With Information-Theoretic Disentangled Representations" (2026); bài lai bit / semantic dùng DRL trong SAGIN (có trong `pdf/`); UA-TSC (TNSE 2026).
+- **Mã hoá dự đoán / nén quỹ đạo** (trajectory compression, dự báo quỹ đạo xe).
+- JEPA cho truyền thông: CommJEPA (11/2026), TS-JEPA, TOC với world model JEPA (2026).
 
-Mục tiêu của đợt rà này là trả lời: đã có ai làm "trạng thái latent có dự đoán, phục vụ nhiệm vụ giữ lại, có tính bit" chưa? Không phải viết lại một bản tổng quan lớn.
+## 11. Kế hoạch
 
-## 13. Kế hoạch và tính toán
-
-| Bước | Nội dung | Ước tính (RTX 3070) |
+| Bước | Nội dung | Cần gì |
 |---|---|---|
-| 0 | Chạy lại B1 từ code có sẵn (khớp 0,771 @ 0,35 kbit); dựng nhãn BEV cho T2, chốt T3; khung tính bit chung; hiện thực kênh rút trước | 1–2 ngày công, không cần GPU nhiều |
-| 1 | Tầng 1: B2, ConvGRU-CE, U-Net-CE, Mamba-CE; C1 trên val | vài giờ GPU mỗi mô hình (1.700 lưới, 192 × 192) |
-| 2 | Tầng 2: 2 × 2 backbone × mục tiêu, prior entropy chung, đầu đọc T3; C2, C3 trên val | khoảng 1 ngày GPU |
-| 3 | Q3 độ bền; khoá cấu hình; chấm test một lần | vài giờ |
-| 4 | Dữ liệu thật: UAVid (bản đồ ngữ nghĩa theo thời gian) hoặc VisDrone-VID (detection theo vết) | đề cương riêng sau bước 3 |
+| 0 | Tải **chỉ các zip quỹ đạo** theo split (khoảng 9,5 GB / ngày; có thể bắt đầu với PM của 4 ngày) + phân đoạn làn; dựng pipeline bước 1 giây, vận tốc nhân quả, nhãn T1–T3; khung tính bit chung; kênh rút trước | CPU, đĩa |
+| 1 | S1: M0 / M1 với dự đoán không học; đo trần chất lượng và số bit | CPU |
+| 2 | S2: bộ dự đoán xác suất ConvGRU / Mamba / Transformer | GPU, vài giờ mỗi mô hình |
+| 3 | S3: bộ chọn mode + lập lịch 10 drone | CPU |
+| 4 | S4: Town3, thiết kế 2 × 2 | GPU, khoảng 1 ngày |
+| 5 | Video mẫu Songdo (M2 / M3) và UAVid | đề cương riêng |
 
-Mamba đã có môi trường chạy được. Không train lại V-JEPA 2 hay mô hình nền lớn; bộ mã hoá dùng lại hoặc nhỏ, đóng băng khi so các bộ dự đoán.
+Không cần tải 26,8 GB video, 16,1 GB Songdo Vision hay orthophoto cho bước 0–3.
 
-## 14. Rủi ro
+## 12. Cần duyệt
 
-- **Dữ liệu nhỏ** (4 scene test): khoảng tin cậy sẽ rộng; kết luận là khám phá cho tới khi có VisDrone-VID.
-- **Baseline đã rất mạnh:** chỗ cho bộ dự đoán học nằm ở xe di chuyển và vùng mới thấy. Phải đo trước những ô này chiếm bao nhiêu phần lỗi của B1 (bước 0) để biết trần lợi ích. Không tạo thêm sự kiện nhân tạo để JEPA thắng.
-- **Nhiệm vụ giữ lại T3** phải được chốt trước và không được chọn sau khi xem kết quả.
-- **Chồng chéo prior art** với mã hoá video có điều kiện: đóng góp chỉ có thể nằm ở trạng thái đa nhiệm vụ có dự đoán và tính bit đầy đủ, không ở "dự đoán + phần dư".
-
-## 15. Cần duyệt
-
-1. Đồng ý cách đặt vấn đề: JEPA là một ứng viên cho trạng thái chung ở tầng 2, không phải tiền đề của toàn hệ thống.
-2. Chốt T3 (đề xuất: hướng / vận tốc xe từ ID theo vết).
-3. Duyệt bước 0 và bước 1 (GPU nội bộ, dữ liệu Town3 đã có, không tải gì mới).
+1. Đồng ý trọng tâm Songdo: dự đoán + lập lịch nhiều UAV với trạng thái có cấu trúc; JEPA chỉ kiểm ở nơi có ảnh (Town3).
+2. Chốt ba nhiệm vụ T1–T3 (và có dùng phương án an toàn thay T3 không).
+3. Duyệt bước 0–1: tải các zip quỹ đạo (không video), CPU.
