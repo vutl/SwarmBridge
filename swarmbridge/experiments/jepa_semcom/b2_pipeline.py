@@ -9,6 +9,10 @@ g = Conv3x3(d->256) GELU Conv1x1(256->384).
   smooth (B-E5)      the task losses plus a temporal-consistency term w_smooth * MSE(f(x_t), f(x_{t-1})) (both
                      online, with gradient) and the same VICReg variance / covariance terms as jepa; no EMA target,
                      no predictor (control for 'JEPA = temporal smoothing').
+  rate (B-E6)        smooth + beta * R_hat, a differentiable surrogate of the exp-Golomb length of the quantised
+                     temporal innovation: R_hat = mean log2(1 + |z_t - z_{t-1}| / (sigma * step)), sigma = per-dim batch
+                     std of the codes (detached; the codec quantises codes normalised per dimension), step = 0.25
+                     (the codec's step). --w-smooth 0 gives rate-only. Saved under --name.
   jepa               the same losses on the ONLINE encoder, plus a JEPA term: a predictor h (same architecture as
                      the B-E1 learned predictor) maps the online codes of frames t-1, t-2 to the codes of frame t
                      produced by an EMA TARGET encoder (momentum 0.99, stop-gradient), plus VICReg variance /
@@ -121,6 +125,7 @@ def train(a):
         return (l * m).sum() / (m.sum() * 4 + 1e-6)
 
     for kind in a.kinds.split(","):
+        name = a.name or kind
         rng = np.random.default_rng(a.seed)                                  # paired: same batch schedule per kind
         torch.manual_seed(a.seed)
         enc, dec = make_codec(a.d)
@@ -144,12 +149,16 @@ def train(a):
             l_task = task_loss(rec, y, v)
             loss = l_rec + a.w_task * l_task
             logs = [float(l_rec), float(l_task)]
-            if kind == "smooth":
+            if kind in ("smooth", "rate"):
                 z1 = enc(x[:, -2])
                 l_s = F.mse_loss(z, z1)
                 var_l, cov_l = vicreg(z)
                 loss = loss + a.w_smooth * l_s + a.w_var * var_l + a.w_cov * cov_l
                 logs += [float(l_s), float(var_l), float(cov_l)]
+                if kind == "rate":
+                    l_r = rate_surrogate(z, z1)
+                    loss = loss + a.beta_rate * l_r
+                    logs.append(float(l_r))
             if kind == "jepa":
                 z1, z2 = enc(x[:, -2]), enc(x[:, -3])
                 with torch.no_grad():
@@ -175,9 +184,13 @@ def train(a):
         torch.save(dict(enc=enc.cpu().state_dict(), dec=dec.cpu().state_dict(),
                         pred=pred.cpu().state_dict() if pred is not None else None,
                         zmu=zmu, zsd=zsd, mu=P["mu"], sd_tok=sd_tok.cpu().numpy().ravel()),
-                   out / f"{kind}_s{a.seed}_d{a.d}.pt")
-        stats[kind] = dict(codec_params=int(n_par), pred_params=int(sum(p_.numel() for p_ in pred.parameters())) if pred else 0,
+                   out / f"{name}_s{a.seed}_d{a.d}.pt")
+        stats[name] = dict(codec_params=int(n_par), pred_params=int(sum(p_.numel() for p_ in pred.parameters())) if pred else 0,
                            iters=a.iters, final=np.mean(hist[-500:], 0).tolist(), train_s=time.time() - t0)
+        if a.no_posthoc:
+            del enc, dec
+            torch.cuda.empty_cache()
+            continue
         enc, dec = enc.to(dev), dec.to(dev)
         # post-hoc predictor on frozen normalised codes (identical procedure for every representation)
         with torch.no_grad():
@@ -189,7 +202,15 @@ def train(a):
                                                dev, seed=a.seed)
         del enc, dec
         torch.cuda.empty_cache()
-    (out / f"train_stats_s{a.seed}_d{a.d}.json").write_text(json.dumps(stats, indent=1))
+    (out / f"train_stats_{a.name + '_' if a.name else ''}s{a.seed}_d{a.d}.json").write_text(json.dumps(stats, indent=1))
+
+
+def rate_surrogate(z, z1, step=0.25):
+    """differentiable proxy of the exp-Golomb bits of the quantised temporal innovation (per coefficient, up to an
+    affine map: a signed order-0 EG code of q has 2*floor(log2(2|q|+1))+1 bits)."""
+    import torch
+    sig = z.permute(0, 2, 3, 1).reshape(-1, z.shape[1]).std(0).detach().clamp(min=1e-3).view(1, -1, 1, 1)
+    return torch.log2(1 + (z - z1).abs() / (sig * step)).mean()
 
 
 def train_posthoc(seqs, d, path, iters, dev, step=0.25, bs=32, seed=0):
@@ -282,7 +303,7 @@ def eval_job(j):
     rep = G["models"][key]
     D = np.load(G["tok"] / f"{clip}.npz")
     X = D["tokens"].astype(np.float32)
-    Y, M = D["labels"].reshape(-1, 4), D["valid"].reshape(-1)
+    Y, M = D["labels"].reshape(-1, 4), D["valid"].reshape(-1).astype(bool)
     Z = rep.codes(X)
     learned = None
     if pred == "posthoc":
@@ -295,9 +316,29 @@ def eval_job(j):
     else:
         rx, bits = B1.transmit(Z, "learned" if pred in ("posthoc", "own") else pred, k, 0.25, learned)
     tok = rep.tokens(rx)
-    ap = B0.task_ap(tok.reshape(-1, DIM) @ G["W"] + G["b"], Y, M)
+    sc = tok.reshape(-1, DIM) @ G["W"] + G["b"]
+    ap = B0.task_ap(sc, Y, M)
+    ch, ev = change_masks(Y, M, len(Z))
     return dict(clip=clip, rep=rep_name, d=d, pred=pred, k=k, ap=ap, bits_mean_all=float(bits.mean()),
-                bits_init=float(bits[0]), sim_s=time.time() - t0)
+                bits_init=float(bits[0]), sim_s=time.time() - t0,
+                ap_change=B0.task_ap(sc, Y, M & ch), ap_event=B0.task_ap(sc, Y, M & ev),
+                n_change=int((M & ch).sum()), n_event_frames=int(ev.reshape(len(Z), -1)[:, 0].sum()))
+
+
+def change_masks(Y, M, T):
+    """B-E6 event metrics. change: patches (t >= 1) whose 4-class label differs from frame t-1 (objects appearing,
+    disappearing or moving; evaluation stride 3). event: all patches of the frames in the top quarter by number of
+    changed valid patches."""
+    y = Y.reshape(T, N_TOK, 4)
+    ch = np.zeros((T, N_TOK), bool)
+    ch[1:] = (y[1:] != y[:-1]).any(2)
+    n = (ch & M.reshape(T, N_TOK)).sum(1)
+    ev = np.zeros((T, N_TOK), bool)
+    if T > 1:
+        thr = np.quantile(n[1:], 0.75)
+        sel = (n >= max(thr, 1)) & (np.arange(T) > 0)
+        ev[sel] = True
+    return ch.reshape(-1), ev.reshape(-1)
 
 
 def evaluate(a):
@@ -308,7 +349,7 @@ def evaluate(a):
         for rep in a.reps.split(","):
             for c in ev:
                 jobs.append((c, rep, d, "none", 0))
-                for pred in ("hold", "mc", "posthoc") + (("own",) if rep.startswith("jepa") else ()):
+                for pred in tuple(x for x in a.preds.split(",") if x != "own") + (("own",) if rep.startswith("jepa") and "own" in a.preds else ()):
                     for k in (16, 32, 64, 128, 256):
                         jobs.append((c, rep, d, pred, k))
     with Pool(a.procs, initializer=_init, initargs=(a.out_work, a.b1_work, a.tokens_dir)) as p:
@@ -332,15 +373,20 @@ def diag(a):
     for d in a.dims:
         for name in a.reps.split(","):
             rep = Rep(G["work"] / f"{name}_d{d}.pt", d)
-            ph = B1.LearnedPred(G["work"] / f"{name}_d{d}_posthoc.pt", d)
-            acc = {k: [] for k in ("hold", "mc", "posthoc", "own")}
+            php = G["work"] / f"{name}_d{d}_posthoc.pt"
+            ph = B1.LearnedPred(php, d) if php.exists() else None
+            acc = {k: [] for k in ("hold", "mc", "posthoc", "own", "eg_bits_per_coef", "surrogate")}
             for c in ev:
                 Z = rep.codes(np.load(G["tok"] / f"{c}.npz")["tokens"].astype(np.float32))
                 for t in range(2, len(Z)):
                     z, r1, r2 = Z[t], Z[t - 1], Z[t - 2]
                     acc["hold"].append(((z - r1) ** 2).mean())
                     acc["mc"].append(((z - B1.shift_map(r1, *B1.best_mv(r1, z))) ** 2).mean())
-                    acc["posthoc"].append(((z - ph(r1, r2)) ** 2).mean())
+                    if ph is not None:
+                        acc["posthoc"].append(((z - ph(r1, r2)) ** 2).mean())
+                    q = np.rint((z - r1) / 0.25).astype(np.int64)        # all tokens, hold prediction, true history
+                    acc["eg_bits_per_coef"].append(min(B1.eg_len(q, kk) for kk in range(4)) / q.size)
+                    acc["surrogate"].append(float(np.log2(1 + np.abs(z - r1) / 0.25).mean()))
                     if rep.own is not None:
                         acc["own"].append(((z - rep.own_pred(r1, r2)) ** 2).mean())
             out[f"{name}_d{d}"] = {k: float(np.mean(v)) for k, v in acc.items() if v}
@@ -365,6 +411,9 @@ def main():
     t.add_argument("--seed", type=int, default=0)
     t.add_argument("--w-smooth", type=float, default=1.0)
     t.add_argument("--kinds", default="task,jepa")
+    t.add_argument("--name", default="")
+    t.add_argument("--beta-rate", type=float, default=0.3)
+    t.add_argument("--no-posthoc", action="store_true")
     for name in ("eval", "diag"):
         e = sub.add_parser(name)
         for n in ("tokens_dir", "clips", "b1_work", "out_work", "out"):
@@ -372,6 +421,7 @@ def main():
         e.add_argument("--dims", type=int, nargs="+", default=[32, 64])
         e.add_argument("--procs", type=int, default=10)
         e.add_argument("--reps", default="task_s0,jepa_s0")
+        e.add_argument("--preds", default="hold,mc,posthoc,own")
     a = ap.parse_args()
     dict(train=train, eval=evaluate, diag=diag)[a.cmd](a)
 

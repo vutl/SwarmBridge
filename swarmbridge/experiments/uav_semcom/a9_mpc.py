@@ -254,6 +254,7 @@ class MPCMode:
         self.rng = np.random.default_rng(seed)
         self.times, self.timeouts, self.chosen, self.switched, self.cal_fallbacks = [], 0, [], 0, 0
         self.scales, self.robust_checks, self.robust_rejects = None, 0, 0
+        self.cands, self.last_rates = None, None
         self.__name__ = f"mpc_{model}_n{n}_h{horizon}" + (f"_b{budget_ms:g}" if budget_ms else "")
 
     # ---- rates ----
@@ -412,6 +413,22 @@ class MPCMode:
             return d.mean() > 1e-12
         return d.mean() >= self.margin_z * d.std(ddof=1) / math.sqrt(len(d)) + 1e-12
 
+    def screen(self, env, k, task, h1):
+        """A-E7 cheap first pass: mean value of every mode with a SHORT horizon h1 (same N, model and rollout). The
+        decision cost is dominated by the per-mode rollout loop (it grows with the horizon and the number of evaluated
+        modes) and is nearly independent of N, so the screen shortens the horizon. Returns per-mode mean values."""
+        h0 = self.h
+        self.h = h1
+        try:
+            ctx = self._ctx(env, k, task, self._rates(env, k))
+            return np.array([float(self._eval_mode(env, ctx, task, m).mean()) for m in range(env.n_modes)])
+        finally:
+            self.h = h0
+
+    def gain_at(self, env, k, task, a, b, rates):
+        ctx = self._ctx(env, k, task, rates)
+        return self._eval_mode(env, ctx, task, b) - self._eval_mode(env, ctx, task, a)
+
     def gain(self, env, k, task, a, b):
         """per-sample value gain of mode b over mode a with fresh rate samples of this planner's model."""
         ctx = self._ctx(env, k, task, self._rates(env, k))
@@ -422,6 +439,7 @@ class MPCMode:
         also be resolvable when every sampled rate path is multiplied by each scale (same samples: paired)."""
         t_start = time.perf_counter()
         rates = self._rates(env, k)
+        self.last_rates = rates
         ctx = self._ctx(env, k, task, rates)
         # anytime search: the fallback heuristic's mode is the incumbent and is evaluated first; on timeout the best
         # mode evaluated so far is returned (never an unevaluated or arbitrary one)
@@ -429,7 +447,7 @@ class MPCMode:
             inc = int(incumbent)
         else:
             inc = int(self.fallback(env, k, task)) if self.fallback else 0
-        order = [inc] + [m for m in range(env.n_modes) if m != inc]
+        order = [inc] + [m for m in (range(env.n_modes) if self.cands is None else self.cands) if m != inc]
         best, best_v, vals = None, -math.inf, {}
         for m in order:
             if best is not None and self.budget and (time.perf_counter() - t_start) * 1e3 > self.budget:

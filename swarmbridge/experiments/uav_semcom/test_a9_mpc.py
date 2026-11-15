@@ -181,3 +181,12 @@ def test_tracker_stats_and_snapshot():
     env3 = _stub_env()
     trk.update(env3)
     assert abs(trk.stats(env3, 0)[0]) < 1e-9   # the 2e6 slot of the previous episode is not carried over
+
+
+def test_screen_and_candidate_restriction(env_at_decision):
+    core, k, tk = env_at_decision
+    m = M.MPCMode("env", 8, 4, seed=5, rollout="causal")
+    sv = m.screen(core, k, tk, 1)
+    assert sv.shape == (core.n_modes,) and m.h == 4
+    m.cands = [int(np.argmin(sv))]
+    assert m(core, k, tk, incumbent=0) in (0, m.cands[0])

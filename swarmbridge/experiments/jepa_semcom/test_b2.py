@@ -31,3 +31,21 @@ def test_rep_codes_tokens_round_trip(tmp_path):
     with torch.no_grad():
         ref = dec(enc(torch.from_numpy(X.reshape(3, P.GH, P.GW, P.DIM).transpose(0, 3, 1, 2).copy()))).numpy()
     assert np.allclose(rep.tokens(Z), ref.transpose(0, 2, 3, 1).reshape(3, P.N_TOK, P.DIM), atol=1e-4)
+
+
+def test_rate_surrogate_tracks_innovation_size():
+    z = torch.randn(4, 8, P.GH, P.GW)
+    small = P.rate_surrogate(z, z + 0.01 * torch.randn_like(z))
+    large = P.rate_surrogate(z, z + 1.0 * torch.randn_like(z))
+    assert 0 <= float(small) < float(large)
+
+
+def test_change_masks():
+    T = 3
+    Y = np.zeros((T, P.N_TOK, 4), np.uint8)
+    Y[1, 5, 0] = 1                       # object appears at patch 5 in frame 1
+    Y[2, 5, 0] = 1
+    M = np.ones(T * P.N_TOK, bool)
+    ch, ev = P.change_masks(Y.reshape(-1, 4), M, T)
+    ch = ch.reshape(T, P.N_TOK); ev = ev.reshape(T, P.N_TOK)
+    assert ch[1, 5] and ch.sum() == 1 and ev[1].all() and not ev[0].any() and not ev[2].any()
