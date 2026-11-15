@@ -144,3 +144,40 @@ def test_airtime_weighting_is_biased_low():
     b_slot, _, _ = _episode_bias("env")
     b_air, _, _ = _episode_bias("env", slot_weight=False)
     assert b_air < b_slot - 0.03
+
+
+def test_unit_scale_check_does_not_change_decision(env_at_decision):
+    core, k, tk = env_at_decision
+    a = M.MPCMode("env", 8, 4, seed=3, rollout="causal", margin_z=1.0)(core, k, tk, incumbent=0)
+    m = M.MPCMode("env", 8, 4, seed=3, rollout="causal", margin_z=1.0)
+    m.scales = [1.0]
+    assert m(core, k, tk, incumbent=0) == a and m.robust_rejects == 0
+
+
+def _stub_env():
+    import types
+    return types.SimpleNamespace(c=dict(p_levels=(1.0,), dt=30.0), uavs=[types.SimpleNamespace(pos=None)],
+                                 tasks=object(), t=0.0, segments=[], expected_gain=lambda pos: 1.0, noise_w=lambda: 1e-3)
+
+
+def test_tracker_stats_and_snapshot():
+    import types
+    cal = types.SimpleNamespace(mean=lambda env, k: 1e6)
+    trk = M.RateErrTracker(types.SimpleNamespace(model="cal", cal=cal))
+    env = _stub_env()
+    obs = [0.8e6, 1.2e6, 0.9e6, 1.1e6]
+    trk.update(env)
+    for i, r in enumerate(obs):
+        env.segments.append((0, 0, env.t, env.t + 30.0, 0.0, r))
+        env.t += 30.0
+        trk.update(env)
+    b, se = trk.stats(env, 0)
+    assert abs(b) < 1e-9 and abs(se - np.std(np.array(obs) / 1e6, ddof=1) / 2) < 1e-9
+    trk.freeze()
+    env2 = _stub_env()                          # new episode: restart from the frozen state, not from scratch
+    env2.segments.append((0, 0, 0.0, 30.0, 0.0, 2e6))
+    trk.update(env2); env2.t = 30.0; trk.update(env2)
+    assert trk.stats(env2, 0)[0] > 0.1
+    env3 = _stub_env()
+    trk.update(env3)
+    assert abs(trk.stats(env3, 0)[0]) < 1e-9   # the 2e6 slot of the previous episode is not carried over

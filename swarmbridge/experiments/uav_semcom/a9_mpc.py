@@ -31,6 +31,7 @@ inside the timed decision; timeouts are counted and their consequences are in th
       config = MODEL:N:H[:BUDGET_MS]
 """
 import argparse
+import copy
 import json
 import math
 import time
@@ -68,6 +69,12 @@ class CalRates:
         self.persistent, self.slot_weight = persistent, slot_weight
         self.bins, self.num, self.den = {}, 0.0, 0.0
         self.tasks, self.seg_i, self.prev = None, 0, None
+        self.snap = None
+
+    def freeze(self):
+        """A-E6 'pre' protocol: keep the current state (from separate calibration episodes) as the start state of
+        every following episode (test episodes then do not share what they observe)."""
+        self.snap = copy.deepcopy((self.bins, self.num, self.den))
 
     def _snr_db(self, env, k):
         c = env.c
@@ -76,7 +83,9 @@ class CalRates:
     def update(self, env):
         if self.tasks is not env.tasks:                       # new episode
             self.tasks, self.seg_i, self.prev = env.tasks, 0, None
-            if not self.persistent:
+            if self.snap is not None:                       # 'pre': every episode restarts from the warm-start
+                self.bins, self.num, self.den = copy.deepcopy(self.snap)
+            elif not self.persistent:
                 self.bins, self.num, self.den = {}, 0.0, 0.0
         if self.prev is not None and self.prev[0] != env.t:
             t0, snr = self.prev
@@ -161,6 +170,10 @@ class RateErrTracker:
         self.rng = np.random.default_rng(seed)
         self.bins = {}
         self.tasks, self.seg_i, self.prev = None, 0, None
+        self.snap = None
+
+    def freeze(self):
+        self.snap = copy.deepcopy(self.bins)
 
     def _snr_db(self, env, k):
         return 10 * math.log10(max(env.c["p_levels"][-1] * env.expected_gain(env.uavs[k].pos) / env.noise_w(), 1e-30))
@@ -188,13 +201,17 @@ class RateErrTracker:
         """call at every slot boundary, after CalRates.update (so the cal prediction includes the slot just ended)."""
         if self.tasks is not env.tasks:
             self.tasks, self.seg_i, self.prev = env.tasks, 0, None
-            if not self.persistent:
+            if self.snap is not None:
+                self.bins = copy.deepcopy(self.snap)
+            elif not self.persistent:
                 self.bins = {}
         if self.prev is not None and self.prev[0] != env.t:
             _, snr, pred = self.prev
             for k, r, dur in slot_obs(env, self, env.c["dt"] if self.slot_weight else None):
-                acc = self.bins.setdefault(int(math.floor(snr[k] / self.BIN_DB)), [0.0, 0.0, 0.0])
+                acc = self.bins.setdefault(int(math.floor(snr[k] / self.BIN_DB)), [0.0] * 6)
+                ratio = r / max(pred[k], 1.0)
                 acc[0] += r * dur; acc[1] += pred[k] * dur; acc[2] += dur
+                acc[3] += ratio; acc[4] += ratio * ratio; acc[5] += 1
         if self.prev is None or self.prev[0] != env.t:
             n = len(env.uavs)
             self.prev = (env.t, [self._snr_db(env, k) for k in range(n)], [self.predict(env, k) for k in range(n)])
@@ -210,6 +227,20 @@ class RateErrTracker:
                 return num / max(den, 1e-9) - 1.0
         return None
 
+    def stats(self, env, k):
+        """(relative bias, standard error of the mean observed/predicted ratio) with the same pooling; None if
+        < MIN_AIR s."""
+        key = int(math.floor(self._snr_db(env, k) / self.BIN_DB))
+        a = np.zeros(6)
+        for d in (0, -1, 1, -2, 2):
+            if key + d in self.bins:
+                a += np.asarray(self.bins[key + d])
+            if a[2] >= self.MIN_AIR:
+                n = max(a[5], 1.0)
+                var = max(a[4] / n - (a[3] / n) ** 2, 0.0) * n / max(n - 1, 1)
+                return a[0] / max(a[1], 1e-9) - 1.0, math.sqrt(var / n)
+        return None
+
 
 class MPCMode:
     def __init__(self, model="env", n=8, horizon=4, budget_ms=None, fallback=None, seed=0, rollout="scenario",
@@ -222,6 +253,7 @@ class MPCMode:
         self.fallback, self.rollout, self.cal, self.margin_z = fallback, rollout, cal, margin_z
         self.rng = np.random.default_rng(seed)
         self.times, self.timeouts, self.chosen, self.switched, self.cal_fallbacks = [], 0, [], 0, 0
+        self.scales, self.robust_checks, self.robust_rejects = None, 0, 0
         self.__name__ = f"mpc_{model}_n{n}_h{horizon}" + (f"_b{budget_ms:g}" if budget_ms else "")
 
     # ---- rates ----
@@ -325,10 +357,9 @@ class MPCMode:
             best_enc = np.where(better, ready, best_enc)
         return best_u, best_tx, best_enc
 
-    def __call__(self, env, k, task, incumbent=None):
-        t_start = time.perf_counter()
-        u, tab, c = env.uavs[k], env.tab, env.c
-        rates = self._rates(env, k)
+    def _ctx(self, env, k, task, rates):
+        """everything the per-mode evaluation needs for one set of per-slot rate paths."""
+        u, c = env.uavs[k], env.c
         G = self._grid(env, rates)
         ns = len(rates)
         # transmitter backlog of the images ahead (already decided)
@@ -345,7 +376,6 @@ class MPCMode:
                                        max(b, 0.0))
             elif seen and tk.mode < 0:
                 later.append(tk)
-        enc0 = max(env.t, u.enc_free)
         b_hat, q_hat = env.mode_info(task)
         # future frames (statistical)
         fut = []
@@ -356,6 +386,43 @@ class MPCMode:
             qm = sum(c["qmin"]) / 2
             for i in range(min(self.h, left)):
                 fut.append(E.Task(uav=k, wp=-1, tile=0, img=-1, t_cap=env.t + (i + 1) * dtf, dmax=dm, qmin=qm))
+        return dict(G=G, ns=ns, tx_free=tx_free, later=later, enc0=max(env.t, u.enc_free), b_hat=b_hat, q_hat=q_hat,
+                    fut=fut)
+
+    def _eval_mode(self, env, ctx, task, m):
+        """per-sample value of choosing mode m for `task` (+ rollout of later / future images)."""
+        tab, G, ns = env.tab, ctx["G"], ctx["ns"]
+        ready = np.full(ns, ctx["enc0"] + tab.enc_s[m])
+        v, txf = self._value(env, tab, G, ctx["tx_free"], ready, ctx["b_hat"][m], ctx["q_hat"][m], task, m)
+        enc = ready
+        for tk in ctx["later"]:     # per-image info only if its probe has finished, else train means
+            bh, qh = env.mode_info(tk) if tk.info_t <= env.t + 1e-9 else (tab.mean_bits, tab.mean_psnr)
+            enc = np.maximum(enc, tk.info_t)
+            uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, bh, qh)
+            v = v + uu
+        for tk in ctx["fut"]:
+            enc = np.maximum(enc, tk.t_cap) + env.probe_s()
+            uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, tab.mean_bits, tab.mean_psnr)
+            v = v + uu
+        return v
+
+    def _resolvable(self, d):
+        """paired gain d (per sample) exceeds margin_z standard errors (margin None: mean > 0)."""
+        if self.margin_z is None or len(d) < 2:
+            return d.mean() > 1e-12
+        return d.mean() >= self.margin_z * d.std(ddof=1) / math.sqrt(len(d)) + 1e-12
+
+    def gain(self, env, k, task, a, b):
+        """per-sample value gain of mode b over mode a with fresh rate samples of this planner's model."""
+        ctx = self._ctx(env, k, task, self._rates(env, k))
+        return self._eval_mode(env, ctx, task, b) - self._eval_mode(env, ctx, task, a)
+
+    def __call__(self, env, k, task, incumbent=None):
+        """self.scales (set by the caller per decision, A-E6): if not None, a switch away from the incumbent must
+        also be resolvable when every sampled rate path is multiplied by each scale (same samples: paired)."""
+        t_start = time.perf_counter()
+        rates = self._rates(env, k)
+        ctx = self._ctx(env, k, task, rates)
         # anytime search: the fallback heuristic's mode is the incumbent and is evaluated first; on timeout the best
         # mode evaluated so far is returned (never an unevaluated or arbitrary one)
         if incumbent is not None:
@@ -368,26 +435,22 @@ class MPCMode:
             if best is not None and self.budget and (time.perf_counter() - t_start) * 1e3 > self.budget:
                 self.timeouts += 1
                 break
-            ready = np.full(ns, enc0 + tab.enc_s[m])
-            v, txf = self._value(env, tab, G, tx_free, ready, b_hat[m], q_hat[m], task, m)
-            enc = ready
-            for tk in later:     # per-image info only if its probe has finished, else train means
-                bh, qh = env.mode_info(tk) if tk.info_t <= env.t + 1e-9 else (tab.mean_bits, tab.mean_psnr)
-                enc = np.maximum(enc, tk.info_t)
-                uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, bh, qh)
-                v = v + uu
-            for tk in fut:
-                enc = np.maximum(enc, tk.t_cap) + env.probe_s()
-                uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, tab.mean_bits, tab.mean_psnr)
-                v = v + uu
-            vals[m] = v
-            val = float(v.mean())
+            vals[m] = self._eval_mode(env, ctx, task, m)
+            val = float(vals[m].mean())
             if val > best_v:
                 best, best_v = m, val
-        if self.margin_z is not None and best != inc and len(vals[inc]) > 1:
-            d = vals[best] - vals[inc]
-            if d.mean() < self.margin_z * d.std(ddof=1) / math.sqrt(len(d)) + 1e-12:
-                best = inc                                   # gain not resolvable from sampling noise: keep incumbent
+        if self.margin_z is not None and best != inc and not self._resolvable(vals[best] - vals[inc]):
+            best = inc                                       # gain not resolvable from sampling noise: keep incumbent
+        self.last_cand, self.last_rejected = best, False     # for diagnostics (candidate before the robustness check)
+        if best != inc and self.scales:
+            self.robust_checks += 1
+            for sc in self.scales:
+                cs = self._ctx(env, k, task, np.maximum(rates * sc, 1.0))
+                if not self._resolvable(self._eval_mode(env, cs, task, best) - self._eval_mode(env, cs, task, inc)):
+                    best = inc                               # ordering not robust to the model's rate uncertainty
+                    self.robust_rejects += 1
+                    self.last_rejected = True
+                    break
         self.switched += int(best != inc)
         self.chosen.append(int(best))
         self.times.append(time.perf_counter() - t_start)

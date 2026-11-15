@@ -6,6 +6,9 @@ scored with the SAME fixed linear task head as B-E0/B-E1 (trained on original TU
 Matched backbone for every representation: encoder f = Conv1x1(384->256) GELU Conv3x3(256->d); decoder
 g = Conv3x3(d->256) GELU Conv1x1(256->384).
   task   (non-JEPA)  loss = token reconstruction MSE (normalised tokens) + task BCE of the fixed head on g(f(x))
+  smooth (B-E5)      the task losses plus a temporal-consistency term w_smooth * MSE(f(x_t), f(x_{t-1})) (both
+                     online, with gradient) and the same VICReg variance / covariance terms as jepa; no EMA target,
+                     no predictor (control for 'JEPA = temporal smoothing').
   jepa               the same losses on the ONLINE encoder, plus a JEPA term: a predictor h (same architecture as
                      the B-E1 learned predictor) maps the online codes of frames t-1, t-2 to the codes of frame t
                      produced by an EMA TARGET encoder (momentum 0.99, stop-gradient), plus VICReg variance /
@@ -141,6 +144,12 @@ def train(a):
             l_task = task_loss(rec, y, v)
             loss = l_rec + a.w_task * l_task
             logs = [float(l_rec), float(l_task)]
+            if kind == "smooth":
+                z1 = enc(x[:, -2])
+                l_s = F.mse_loss(z, z1)
+                var_l, cov_l = vicreg(z)
+                loss = loss + a.w_smooth * l_s + a.w_var * var_l + a.w_cov * cov_l
+                logs += [float(l_s), float(var_l), float(cov_l)]
             if kind == "jepa":
                 z1, z2 = enc(x[:, -2]), enc(x[:, -3])
                 with torch.no_grad():
@@ -354,6 +363,7 @@ def main():
     t.add_argument("--w-var", type=float, default=1.0)
     t.add_argument("--w-cov", type=float, default=0.04)
     t.add_argument("--seed", type=int, default=0)
+    t.add_argument("--w-smooth", type=float, default=1.0)
     t.add_argument("--kinds", default="task,jepa")
     for name in ("eval", "diag"):
         e = sub.add_parser(name)
