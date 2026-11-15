@@ -1,0 +1,3031 @@
+{
+ "access_label": "VALIDATION",
+ "params": {
+  "match_m": 2.0,
+  "min_seconds": 3,
+  "gap_s": 10
+ },
+ "per_intersection": {
+  "A": {
+   "rows": 723332,
+   "vehicles": 733,
+   "drones": {
+    "2": 374970,
+    "1": 348362
+   },
+   "coverage": {
+    "seconds": 592,
+    "span_s": 1505,
+    "gaps_over_10s": 4,
+    "longest_gap_s": 456
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54087.582,
+   "t1": 55591.424
+  },
+  "B": {
+   "rows": 1214669,
+   "vehicles": 1039,
+   "drones": {
+    "1": 1214669
+   },
+   "coverage": {
+    "seconds": 669,
+    "span_s": 1553,
+    "gaps_over_10s": 3,
+    "longest_gap_s": 321
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54268.746,
+   "t1": 55820.844
+  },
+  "C": {
+   "rows": 475873,
+   "vehicles": 361,
+   "drones": {
+    "1": 475873
+   },
+   "coverage": {
+    "seconds": 446,
+    "span_s": 1130,
+    "gaps_over_10s": 1,
+    "longest_gap_s": 685
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54479.903,
+   "t1": 55608.987
+  },
+  "E": {
+   "rows": 508991,
+   "vehicles": 633,
+   "drones": {
+    "2": 508991
+   },
+   "coverage": {
+    "seconds": 668,
+    "span_s": 1647,
+    "gaps_over_10s": 4,
+    "longest_gap_s": 293
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54070.139,
+   "t1": 55716.55
+  },
+  "F": {
+   "rows": 537296,
+   "vehicles": 463,
+   "drones": {
+    "3": 287135,
+    "2": 250161
+   },
+   "coverage": {
+    "seconds": 668,
+    "span_s": 1350,
+    "gaps_over_10s": 3,
+    "longest_gap_s": 333
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54230.298,
+   "t1": 55579.304
+  },
+  "G": {
+   "rows": 148237,
+   "vehicles": 101,
+   "drones": {
+    "4": 148237
+   },
+   "coverage": {
+    "seconds": 177,
+    "span_s": 843,
+    "gaps_over_10s": 1,
+    "longest_gap_s": 667
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54724.428,
+   "t1": 55566.569
+  },
+  "H": {
+   "rows": 871059,
+   "vehicles": 382,
+   "drones": {
+    "7": 871059
+   },
+   "coverage": {
+    "seconds": 408,
+    "span_s": 1005,
+    "gaps_over_10s": 1,
+    "longest_gap_s": 598
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54599.653,
+   "t1": 55603.089
+  },
+  "I": {
+   "rows": 651476,
+   "vehicles": 635,
+   "drones": {
+    "3": 651476
+   },
+   "coverage": {
+    "seconds": 581,
+    "span_s": 1102,
+    "gaps_over_10s": 2,
+    "longest_gap_s": 281
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54268.16,
+   "t1": 55369.127
+  },
+  "J": {
+   "rows": 1785370,
+   "vehicles": 1451,
+   "drones": {
+    "4": 1256255,
+    "6": 529115
+   },
+   "coverage": {
+    "seconds": 963,
+    "span_s": 1619,
+    "gaps_over_10s": 5,
+    "longest_gap_s": 260
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54041.646,
+   "t1": 55659.286
+  },
+  "K": {
+   "rows": 1306809,
+   "vehicles": 1214,
+   "drones": {
+    "6": 1306809
+   },
+   "coverage": {
+    "seconds": 630,
+    "span_s": 1402,
+    "gaps_over_10s": 3,
+    "longest_gap_s": 283
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54069.765,
+   "t1": 55470.097
+  },
+  "L": {
+   "rows": 2219715,
+   "vehicles": 1656,
+   "drones": {
+    "6": 1241592,
+    "7": 978123
+   },
+   "coverage": {
+    "seconds": 869,
+    "span_s": 1379,
+    "gaps_over_10s": 4,
+    "longest_gap_s": 296
+   },
+   "concurrent_multi_drone_seconds": 13,
+   "t0": 54032.153,
+   "t1": 55410.663
+  },
+  "M": {
+   "rows": 1031661,
+   "vehicles": 869,
+   "drones": {
+    "8": 428853,
+    "3": 385488,
+    "5": 217320
+   },
+   "coverage": {
+    "seconds": 952,
+    "span_s": 1628,
+    "gaps_over_10s": 4,
+    "longest_gap_s": 295
+   },
+   "concurrent_multi_drone_seconds": 10,
+   "t0": 54069.028,
+   "t1": 55696.993
+  },
+  "N": {
+   "rows": 1069226,
+   "vehicles": 973,
+   "drones": {
+    "5": 647399,
+    "4": 421827
+   },
+   "coverage": {
+    "seconds": 835,
+    "span_s": 1496,
+    "gaps_over_10s": 5,
+    "longest_gap_s": 279
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54105.97,
+   "t1": 55600.631
+  },
+  "O": {
+   "rows": 402452,
+   "vehicles": 376,
+   "drones": {
+    "5": 402452
+   },
+   "coverage": {
+    "seconds": 390,
+    "span_s": 1092,
+    "gaps_over_10s": 1,
+    "longest_gap_s": 703
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54329.16,
+   "t1": 55420.383
+  },
+  "P": {
+   "rows": 698800,
+   "vehicles": 353,
+   "drones": {
+    "7": 698800
+   },
+   "coverage": {
+    "seconds": 458,
+    "span_s": 1058,
+    "gaps_over_10s": 1,
+    "longest_gap_s": 601
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54203.324,
+   "t1": 55260.947
+  },
+  "Q": {
+   "rows": 501248,
+   "vehicles": 458,
+   "drones": {
+    "8": 501248
+   },
+   "coverage": {
+    "seconds": 759,
+    "span_s": 1620,
+    "gaps_over_10s": 3,
+    "longest_gap_s": 300
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54060.93,
+   "t1": 55679.514
+  },
+  "R": {
+   "rows": 776491,
+   "vehicles": 673,
+   "drones": {
+    "9": 474488,
+    "8": 302003
+   },
+   "coverage": {
+    "seconds": 678,
+    "span_s": 868,
+    "gaps_over_10s": 1,
+    "longest_gap_s": 191
+   },
+   "concurrent_multi_drone_seconds": 24,
+   "t0": 54333.303,
+   "t1": 55200.57
+  },
+  "S": {
+   "rows": 1814335,
+   "vehicles": 1478,
+   "drones": {
+    "9": 1315010,
+    "10": 499325
+   },
+   "coverage": {
+    "seconds": 915,
+    "span_s": 1491,
+    "gaps_over_10s": 3,
+    "longest_gap_s": 331
+   },
+   "concurrent_multi_drone_seconds": 45,
+   "t0": 54071.108,
+   "t1": 55561.664
+  },
+  "T": {
+   "rows": 1311508,
+   "vehicles": 1238,
+   "drones": {
+    "10": 1311508
+   },
+   "coverage": {
+    "seconds": 588,
+    "span_s": 1474,
+    "gaps_over_10s": 3,
+    "longest_gap_s": 341
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54087.114,
+   "t1": 55560.319
+  },
+  "U": {
+   "rows": 310035,
+   "vehicles": 392,
+   "drones": {
+    "10": 310035
+   },
+   "coverage": {
+    "seconds": 181,
+    "span_s": 181,
+    "gaps_over_10s": 0,
+    "longest_gap_s": 1
+   },
+   "concurrent_multi_drone_seconds": 0,
+   "t0": 54720.613,
+   "t1": 54900.56
+  }
+ },
+ "cross_drone_pairs_with_concurrent_seconds": {
+  "A-D1|E-D2": {
+   "span_intersection_s": 1040.9719999999943,
+   "concurrent_observed_seconds": 106,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|F-D2": {
+   "span_intersection_s": 898.255999999994,
+   "concurrent_observed_seconds": 116,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|J-D4": {
+   "span_intersection_s": 1040.9719999999943,
+   "concurrent_observed_seconds": 264,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|K-D6": {
+   "span_intersection_s": 1040.9719999999943,
+   "concurrent_observed_seconds": 222,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|L-D6": {
+   "span_intersection_s": 886.650999999998,
+   "concurrent_observed_seconds": 48,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|L-D7": {
+   "span_intersection_s": 1040.9719999999943,
+   "concurrent_observed_seconds": 102,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|M-D3": {
+   "span_intersection_s": 1040.9719999999943,
+   "concurrent_observed_seconds": 319,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|N-D5": {
+   "span_intersection_s": 1022.5839999999953,
+   "concurrent_observed_seconds": 259,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|P-D7": {
+   "span_intersection_s": 925.2299999999959,
+   "concurrent_observed_seconds": 135,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|Q-D8": {
+   "span_intersection_s": 1040.9719999999943,
+   "concurrent_observed_seconds": 253,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 8,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|R-D9": {
+   "span_intersection_s": 795.2509999999966,
+   "concurrent_observed_seconds": 176,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|S-D9": {
+   "span_intersection_s": 1040.9719999999943,
+   "concurrent_observed_seconds": 143,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D1|T-D10": {
+   "span_intersection_s": 1040.9719999999943,
+   "concurrent_observed_seconds": 271,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|B-D1": {
+   "span_intersection_s": 905.7710000000006,
+   "concurrent_observed_seconds": 26,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|C-D1": {
+   "span_intersection_s": 905.7710000000006,
+   "concurrent_observed_seconds": 200,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|F-D3": {
+   "span_intersection_s": 893.650999999998,
+   "concurrent_observed_seconds": 161,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|G-D4": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 97,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|H-D7": {
+   "span_intersection_s": 905.7710000000006,
+   "concurrent_observed_seconds": 254,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|I-D3": {
+   "span_intersection_s": 683.474000000002,
+   "concurrent_observed_seconds": 73,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|J-D4": {
+   "span_intersection_s": 807.8430000000008,
+   "concurrent_observed_seconds": 75,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|J-D6": {
+   "span_intersection_s": 905.7710000000006,
+   "concurrent_observed_seconds": 179,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|K-D6": {
+   "span_intersection_s": 784.4440000000031,
+   "concurrent_observed_seconds": 52,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|M-D5": {
+   "span_intersection_s": 846.6489999999976,
+   "concurrent_observed_seconds": 41,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|M-D8": {
+   "span_intersection_s": 755.7900000000009,
+   "concurrent_observed_seconds": 23,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|N-D5": {
+   "span_intersection_s": 905.7710000000006,
+   "concurrent_observed_seconds": 147,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|O-D5": {
+   "span_intersection_s": 734.7300000000032,
+   "concurrent_observed_seconds": 2,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|Q-D8": {
+   "span_intersection_s": 905.7710000000006,
+   "concurrent_observed_seconds": 137,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 24,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|S-D9": {
+   "span_intersection_s": 876.0109999999986,
+   "concurrent_observed_seconds": 243,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|T-D10": {
+   "span_intersection_s": 874.6660000000047,
+   "concurrent_observed_seconds": 142,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "A-D2|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 65,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|E-D2": {
+   "span_intersection_s": 1447.8040000000037,
+   "concurrent_observed_seconds": 228,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|F-D2": {
+   "span_intersection_s": 932.3220000000001,
+   "concurrent_observed_seconds": 132,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|G-D4": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 106,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|H-D7": {
+   "span_intersection_s": 1003.4360000000015,
+   "concurrent_observed_seconds": 82,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|I-D3": {
+   "span_intersection_s": 1100.3810000000012,
+   "concurrent_observed_seconds": 471,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|J-D4": {
+   "span_intersection_s": 1224.75,
+   "concurrent_observed_seconds": 6,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|J-D6": {
+   "span_intersection_s": 986.9530000000013,
+   "concurrent_observed_seconds": 88,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|K-D6": {
+   "span_intersection_s": 1201.3510000000024,
+   "concurrent_observed_seconds": 87,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|L-D6": {
+   "span_intersection_s": 992.1430000000037,
+   "concurrent_observed_seconds": 266,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|L-D7": {
+   "span_intersection_s": 1141.9170000000013,
+   "concurrent_observed_seconds": 97,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|M-D5": {
+   "span_intersection_s": 952.2180000000008,
+   "concurrent_observed_seconds": 203,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|M-D8": {
+   "span_intersection_s": 1149.2819999999992,
+   "concurrent_observed_seconds": 240,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|N-D4": {
+   "span_intersection_s": 980.3799999999974,
+   "concurrent_observed_seconds": 255,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|O-D5": {
+   "span_intersection_s": 1091.2229999999981,
+   "concurrent_observed_seconds": 226,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|P-D7": {
+   "span_intersection_s": 992.2010000000009,
+   "concurrent_observed_seconds": 248,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|Q-D8": {
+   "span_intersection_s": 1410.7680000000037,
+   "concurrent_observed_seconds": 64,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 159,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 141,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|S-D9": {
+   "span_intersection_s": 1292.9179999999978,
+   "concurrent_observed_seconds": 174,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|S-D10": {
+   "span_intersection_s": 1029.862000000001,
+   "concurrent_observed_seconds": 252,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "B-D1|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 142,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|E-D2": {
+   "span_intersection_s": 1129.0840000000026,
+   "concurrent_observed_seconds": 178,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|F-D3": {
+   "span_intersection_s": 1070.903999999995,
+   "concurrent_observed_seconds": 345,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|G-D4": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 36,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|H-D7": {
+   "span_intersection_s": 1003.4360000000015,
+   "concurrent_observed_seconds": 279,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|J-D4": {
+   "span_intersection_s": 1013.5930000000008,
+   "concurrent_observed_seconds": 258,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|J-D6": {
+   "span_intersection_s": 936.6540000000023,
+   "concurrent_observed_seconds": 136,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|K-D6": {
+   "span_intersection_s": 990.1940000000031,
+   "concurrent_observed_seconds": 213,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|L-D7": {
+   "span_intersection_s": 930.760000000002,
+   "concurrent_observed_seconds": 107,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|M-D8": {
+   "span_intersection_s": 961.5400000000009,
+   "concurrent_observed_seconds": 46,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|N-D5": {
+   "span_intersection_s": 1120.7280000000028,
+   "concurrent_observed_seconds": 283,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|O-D5": {
+   "span_intersection_s": 940.4800000000032,
+   "concurrent_observed_seconds": 67,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|Q-D8": {
+   "span_intersection_s": 1129.0840000000026,
+   "concurrent_observed_seconds": 311,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|R-D9": {
+   "span_intersection_s": 720.6670000000013,
+   "concurrent_observed_seconds": 92,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|S-D9": {
+   "span_intersection_s": 1081.7609999999986,
+   "concurrent_observed_seconds": 237,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "C-D1|T-D10": {
+   "span_intersection_s": 1080.4160000000047,
+   "concurrent_observed_seconds": 295,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|F-D3": {
+   "span_intersection_s": 1070.903999999995,
+   "concurrent_observed_seconds": 149,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|G-D4": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 25,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|H-D7": {
+   "span_intersection_s": 1003.4360000000015,
+   "concurrent_observed_seconds": 59,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|I-D3": {
+   "span_intersection_s": 1100.966999999997,
+   "concurrent_observed_seconds": 187,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|J-D4": {
+   "span_intersection_s": 1423.3569999999963,
+   "concurrent_observed_seconds": 342,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|J-D6": {
+   "span_intersection_s": 986.9530000000013,
+   "concurrent_observed_seconds": 40,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|K-D6": {
+   "span_intersection_s": 1399.9579999999987,
+   "concurrent_observed_seconds": 425,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|L-D6": {
+   "span_intersection_s": 1018.9860000000044,
+   "concurrent_observed_seconds": 27,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|L-D7": {
+   "span_intersection_s": 1340.5239999999976,
+   "concurrent_observed_seconds": 378,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|M-D3": {
+   "span_intersection_s": 1058.7809999999954,
+   "concurrent_observed_seconds": 145,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|M-D5": {
+   "span_intersection_s": 952.2180000000008,
+   "concurrent_observed_seconds": 152,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|M-D8": {
+   "span_intersection_s": 1149.2819999999992,
+   "concurrent_observed_seconds": 130,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|N-D4": {
+   "span_intersection_s": 980.3799999999974,
+   "concurrent_observed_seconds": 30,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|N-D5": {
+   "span_intersection_s": 1494.661,
+   "concurrent_observed_seconds": 179,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|O-D5": {
+   "span_intersection_s": 1091.2229999999981,
+   "concurrent_observed_seconds": 201,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|P-D7": {
+   "span_intersection_s": 1057.6229999999996,
+   "concurrent_observed_seconds": 8,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|Q-D8": {
+   "span_intersection_s": 1609.375,
+   "concurrent_observed_seconds": 310,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 121,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 145,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|S-D9": {
+   "span_intersection_s": 1490.5559999999969,
+   "concurrent_observed_seconds": 267,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|S-D10": {
+   "span_intersection_s": 1029.862000000001,
+   "concurrent_observed_seconds": 68,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|T-D10": {
+   "span_intersection_s": 1473.2050000000017,
+   "concurrent_observed_seconds": 240,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "E-D2|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 61,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|I-D3": {
+   "span_intersection_s": 932.9079999999958,
+   "concurrent_observed_seconds": 129,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|J-D4": {
+   "span_intersection_s": 970.7699999999968,
+   "concurrent_observed_seconds": 67,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|K-D6": {
+   "span_intersection_s": 970.7699999999968,
+   "concurrent_observed_seconds": 38,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|L-D6": {
+   "span_intersection_s": 959.1650000000009,
+   "concurrent_observed_seconds": 244,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|M-D3": {
+   "span_intersection_s": 898.6219999999958,
+   "concurrent_observed_seconds": 117,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|M-D8": {
+   "span_intersection_s": 908.9069999999992,
+   "concurrent_observed_seconds": 72,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|N-D4": {
+   "span_intersection_s": 899.2289999999994,
+   "concurrent_observed_seconds": 131,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|N-D5": {
+   "span_intersection_s": 970.7699999999968,
+   "concurrent_observed_seconds": 108,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|O-D5": {
+   "span_intersection_s": 871.9079999999958,
+   "concurrent_observed_seconds": 35,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|P-D7": {
+   "span_intersection_s": 970.7699999999968,
+   "concurrent_observed_seconds": 315,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|Q-D8": {
+   "span_intersection_s": 970.7699999999968,
+   "concurrent_observed_seconds": 196,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 219,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|S-D9": {
+   "span_intersection_s": 970.7699999999968,
+   "concurrent_observed_seconds": 34,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|S-D10": {
+   "span_intersection_s": 910.8179999999993,
+   "concurrent_observed_seconds": 76,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D2|T-D10": {
+   "span_intersection_s": 970.7699999999968,
+   "concurrent_observed_seconds": 138,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|G-D4": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 36,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|H-D7": {
+   "span_intersection_s": 979.650999999998,
+   "concurrent_observed_seconds": 224,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|J-D4": {
+   "span_intersection_s": 985.0959999999977,
+   "concurrent_observed_seconds": 220,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|J-D6": {
+   "span_intersection_s": 906.9709999999977,
+   "concurrent_observed_seconds": 76,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|K-D6": {
+   "span_intersection_s": 961.6970000000001,
+   "concurrent_observed_seconds": 186,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|L-D7": {
+   "span_intersection_s": 902.262999999999,
+   "concurrent_observed_seconds": 66,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|M-D8": {
+   "span_intersection_s": 933.0429999999978,
+   "concurrent_observed_seconds": 34,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|N-D5": {
+   "span_intersection_s": 1070.903999999995,
+   "concurrent_observed_seconds": 242,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|O-D5": {
+   "span_intersection_s": 911.9830000000002,
+   "concurrent_observed_seconds": 26,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|Q-D8": {
+   "span_intersection_s": 1070.903999999995,
+   "concurrent_observed_seconds": 251,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|R-D9": {
+   "span_intersection_s": 692.1699999999983,
+   "concurrent_observed_seconds": 63,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|S-D9": {
+   "span_intersection_s": 1053.2639999999956,
+   "concurrent_observed_seconds": 194,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "F-D3|T-D10": {
+   "span_intersection_s": 1051.9190000000017,
+   "concurrent_observed_seconds": 295,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|H-D7": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 153,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|I-D3": {
+   "span_intersection_s": 644.6990000000005,
+   "concurrent_observed_seconds": 141,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|J-D6": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 154,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|M-D5": {
+   "span_intersection_s": 821.7940000000017,
+   "concurrent_observed_seconds": 121,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|N-D5": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 36,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|Q-D8": {
+   "span_intersection_s": 842.1410000000033,
+   "concurrent_observed_seconds": 36,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 104,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|S-D9": {
+   "span_intersection_s": 837.2359999999971,
+   "concurrent_observed_seconds": 172,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|T-D10": {
+   "span_intersection_s": 835.8910000000033,
+   "concurrent_observed_seconds": 30,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "G-D4|U-D10": {
+   "span_intersection_s": 176.1319999999978,
+   "concurrent_observed_seconds": 141,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|I-D3": {
+   "span_intersection_s": 769.474000000002,
+   "concurrent_observed_seconds": 129,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|J-D4": {
+   "span_intersection_s": 893.8430000000008,
+   "concurrent_observed_seconds": 99,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|J-D6": {
+   "span_intersection_s": 930.7560000000012,
+   "concurrent_observed_seconds": 260,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|K-D6": {
+   "span_intersection_s": 870.4440000000031,
+   "concurrent_observed_seconds": 65,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|M-D5": {
+   "span_intersection_s": 858.3139999999985,
+   "concurrent_observed_seconds": 97,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|M-D8": {
+   "span_intersection_s": 841.7900000000009,
+   "concurrent_observed_seconds": 4,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|N-D5": {
+   "span_intersection_s": 1000.9780000000028,
+   "concurrent_observed_seconds": 242,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|Q-D8": {
+   "span_intersection_s": 1003.4360000000015,
+   "concurrent_observed_seconds": 235,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 80,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|S-D9": {
+   "span_intersection_s": 962.0109999999986,
+   "concurrent_observed_seconds": 324,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|T-D10": {
+   "span_intersection_s": 960.6660000000047,
+   "concurrent_observed_seconds": 185,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "H-D7|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 121,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|J-D4": {
+   "span_intersection_s": 1100.966999999997,
+   "concurrent_observed_seconds": 37,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|J-D6": {
+   "span_intersection_s": 696.7940000000017,
+   "concurrent_observed_seconds": 130,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|K-D6": {
+   "span_intersection_s": 1100.966999999997,
+   "concurrent_observed_seconds": 87,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|L-D6": {
+   "span_intersection_s": 992.7289999999994,
+   "concurrent_observed_seconds": 293,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|L-D7": {
+   "span_intersection_s": 1100.966999999997,
+   "concurrent_observed_seconds": 112,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|M-D5": {
+   "span_intersection_s": 624.351999999999,
+   "concurrent_observed_seconds": 145,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|M-D8": {
+   "span_intersection_s": 1076.9660000000003,
+   "concurrent_observed_seconds": 282,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|N-D4": {
+   "span_intersection_s": 980.3799999999974,
+   "concurrent_observed_seconds": 258,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|O-D5": {
+   "span_intersection_s": 1039.966999999997,
+   "concurrent_observed_seconds": 289,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|P-D7": {
+   "span_intersection_s": 992.7869999999966,
+   "concurrent_observed_seconds": 245,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|Q-D8": {
+   "span_intersection_s": 1100.966999999997,
+   "concurrent_observed_seconds": 44,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 128,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 170,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|S-D9": {
+   "span_intersection_s": 1100.966999999997,
+   "concurrent_observed_seconds": 252,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|S-D10": {
+   "span_intersection_s": 1029.862000000001,
+   "concurrent_observed_seconds": 252,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "I-D3|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 169,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|K-D6": {
+   "span_intersection_s": 1400.3320000000022,
+   "concurrent_observed_seconds": 525,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|L-D7": {
+   "span_intersection_s": 1369.0169999999998,
+   "concurrent_observed_seconds": 324,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|M-D3": {
+   "span_intersection_s": 1059.8919999999998,
+   "concurrent_observed_seconds": 292,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|M-D8": {
+   "span_intersection_s": 1149.2819999999992,
+   "concurrent_observed_seconds": 109,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|N-D5": {
+   "span_intersection_s": 1387.525999999998,
+   "concurrent_observed_seconds": 329,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|O-D5": {
+   "span_intersection_s": 1091.2229999999981,
+   "concurrent_observed_seconds": 127,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|P-D7": {
+   "span_intersection_s": 1057.6229999999996,
+   "concurrent_observed_seconds": 86,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|Q-D8": {
+   "span_intersection_s": 1432.565999999999,
+   "concurrent_observed_seconds": 357,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 17,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 219,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|S-D9": {
+   "span_intersection_s": 1422.387999999999,
+   "concurrent_observed_seconds": 327,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D4|T-D10": {
+   "span_intersection_s": 1406.3819999999978,
+   "concurrent_observed_seconds": 431,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D6|M-D5": {
+   "span_intersection_s": 914.5109999999986,
+   "concurrent_observed_seconds": 112,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D6|N-D5": {
+   "span_intersection_s": 928.2980000000025,
+   "concurrent_observed_seconds": 117,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D6|Q-D8": {
+   "span_intersection_s": 986.9530000000013,
+   "concurrent_observed_seconds": 195,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D6|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 81,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D6|S-D9": {
+   "span_intersection_s": 889.3309999999983,
+   "concurrent_observed_seconds": 219,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D6|T-D10": {
+   "span_intersection_s": 887.9860000000044,
+   "concurrent_observed_seconds": 48,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "J-D6|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 122,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|L-D7": {
+   "span_intersection_s": 1340.898000000001,
+   "concurrent_observed_seconds": 379,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|M-D3": {
+   "span_intersection_s": 1059.1549999999988,
+   "concurrent_observed_seconds": 262,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|M-D5": {
+   "span_intersection_s": 725.3220000000001,
+   "concurrent_observed_seconds": 54,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|M-D8": {
+   "span_intersection_s": 1149.2819999999992,
+   "concurrent_observed_seconds": 157,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|N-D5": {
+   "span_intersection_s": 1364.1270000000004,
+   "concurrent_observed_seconds": 261,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|O-D5": {
+   "span_intersection_s": 1091.2229999999981,
+   "concurrent_observed_seconds": 164,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|P-D7": {
+   "span_intersection_s": 1057.6229999999996,
+   "concurrent_observed_seconds": 38,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|Q-D8": {
+   "span_intersection_s": 1400.3320000000022,
+   "concurrent_observed_seconds": 285,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 74,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 192,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|S-D9": {
+   "span_intersection_s": 1398.9890000000014,
+   "concurrent_observed_seconds": 326,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|S-D10": {
+   "span_intersection_s": 1029.862000000001,
+   "concurrent_observed_seconds": 36,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|T-D10": {
+   "span_intersection_s": 1382.9830000000002,
+   "concurrent_observed_seconds": 349,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "K-D6|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 14,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|L-D7": {
+   "span_intersection_s": 1018.9860000000044,
+   "concurrent_observed_seconds": 13,
+   "accepted_pairs": 25,
+   "candidate_points": 312,
+   "collision_rate": 0.0,
+   "accepted_median_dist_m": 0.09486832988420096,
+   "accepted_p90_dist_m": 0.5507093723163164,
+   "share_a_vehicles_matched": 0.22727272727272727
+  },
+  "L-D6|M-D3": {
+   "span_intersection_s": 887.0169999999998,
+   "concurrent_observed_seconds": 48,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|M-D8": {
+   "span_intersection_s": 968.7280000000028,
+   "concurrent_observed_seconds": 173,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|N-D4": {
+   "span_intersection_s": 959.0500000000029,
+   "concurrent_observed_seconds": 271,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|N-D5": {
+   "span_intersection_s": 1018.9860000000044,
+   "concurrent_observed_seconds": 40,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|O-D5": {
+   "span_intersection_s": 931.7289999999994,
+   "concurrent_observed_seconds": 178,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|P-D7": {
+   "span_intersection_s": 1018.9860000000044,
+   "concurrent_observed_seconds": 360,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|Q-D8": {
+   "span_intersection_s": 1018.9860000000044,
+   "concurrent_observed_seconds": 126,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 256,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|S-D9": {
+   "span_intersection_s": 1018.9860000000044,
+   "concurrent_observed_seconds": 23,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|S-D10": {
+   "span_intersection_s": 970.6390000000029,
+   "concurrent_observed_seconds": 192,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D6|T-D10": {
+   "span_intersection_s": 1018.9860000000044,
+   "concurrent_observed_seconds": 59,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|M-D3": {
+   "span_intersection_s": 1059.8919999999998,
+   "concurrent_observed_seconds": 142,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|M-D5": {
+   "span_intersection_s": 665.887999999999,
+   "concurrent_observed_seconds": 75,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|M-D8": {
+   "span_intersection_s": 1118.5020000000004,
+   "concurrent_observed_seconds": 115,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|N-D5": {
+   "span_intersection_s": 1304.6929999999993,
+   "concurrent_observed_seconds": 71,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|O-D5": {
+   "span_intersection_s": 1081.502999999997,
+   "concurrent_observed_seconds": 180,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|Q-D8": {
+   "span_intersection_s": 1349.7330000000002,
+   "concurrent_observed_seconds": 142,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 95,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 169,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|S-D9": {
+   "span_intersection_s": 1339.5550000000003,
+   "concurrent_observed_seconds": 199,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|S-D10": {
+   "span_intersection_s": 1029.862000000001,
+   "concurrent_observed_seconds": 25,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|T-D10": {
+   "span_intersection_s": 1323.548999999999,
+   "concurrent_observed_seconds": 120,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "L-D7|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 35,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D3|M-D5": {
+   "span_intersection_s": 384.1449999999968,
+   "concurrent_observed_seconds": 10,
+   "accepted_pairs": 19,
+   "candidate_points": 175,
+   "collision_rate": 0.0,
+   "accepted_median_dist_m": 0.2002498439280324,
+   "accepted_p90_dist_m": 0.787771290574798,
+   "share_a_vehicles_matched": 0.5
+  },
+  "M-D3|N-D5": {
+   "span_intersection_s": 1022.9499999999971,
+   "concurrent_observed_seconds": 259,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D3|P-D7": {
+   "span_intersection_s": 925.5959999999977,
+   "concurrent_observed_seconds": 136,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D3|Q-D8": {
+   "span_intersection_s": 1059.8919999999998,
+   "concurrent_observed_seconds": 272,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D3|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 30,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D3|R-D9": {
+   "span_intersection_s": 795.6169999999984,
+   "concurrent_observed_seconds": 192,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D3|S-D9": {
+   "span_intersection_s": 1057.811999999998,
+   "concurrent_observed_seconds": 160,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D3|T-D10": {
+   "span_intersection_s": 1041.8059999999969,
+   "concurrent_observed_seconds": 272,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D5|Q-D8": {
+   "span_intersection_s": 934.7390000000014,
+   "concurrent_observed_seconds": 34,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D5|R-D8": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 180,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D5|R-D9": {
+   "span_intersection_s": 455.79499999999825,
+   "concurrent_observed_seconds": 4,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D5|S-D9": {
+   "span_intersection_s": 816.8889999999956,
+   "concurrent_observed_seconds": 126,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D5|U-D10": {
+   "span_intersection_s": 155.78499999999622,
+   "concurrent_observed_seconds": 157,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D8|N-D4": {
+   "span_intersection_s": 980.3799999999974,
+   "concurrent_observed_seconds": 181,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D8|O-D5": {
+   "span_intersection_s": 1091.2229999999981,
+   "concurrent_observed_seconds": 296,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D8|P-D7": {
+   "span_intersection_s": 968.7860000000001,
+   "concurrent_observed_seconds": 144,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D8|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 117,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D8|S-D9": {
+   "span_intersection_s": 1149.2819999999992,
+   "concurrent_observed_seconds": 166,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D8|S-D10": {
+   "span_intersection_s": 1027.951000000001,
+   "concurrent_observed_seconds": 204,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "M-D8|T-D10": {
+   "span_intersection_s": 1149.2819999999992,
+   "concurrent_observed_seconds": 30,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D4|O-D5": {
+   "span_intersection_s": 953.0589999999938,
+   "concurrent_observed_seconds": 176,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D4|P-D7": {
+   "span_intersection_s": 959.1080000000002,
+   "concurrent_observed_seconds": 247,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D4|Q-D8": {
+   "span_intersection_s": 980.3799999999974,
+   "concurrent_observed_seconds": 71,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D4|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 179,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D4|S-D9": {
+   "span_intersection_s": 980.3799999999974,
+   "concurrent_observed_seconds": 7,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D4|S-D10": {
+   "span_intersection_s": 980.3799999999974,
+   "concurrent_observed_seconds": 203,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D4|T-D10": {
+   "span_intersection_s": 980.3799999999974,
+   "concurrent_observed_seconds": 6,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D5|P-D7": {
+   "span_intersection_s": 1057.6229999999996,
+   "concurrent_observed_seconds": 119,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D5|Q-D8": {
+   "span_intersection_s": 1494.661,
+   "concurrent_observed_seconds": 473,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D5|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 155,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D5|S-D9": {
+   "span_intersection_s": 1455.6939999999959,
+   "concurrent_observed_seconds": 278,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "N-D5|T-D10": {
+   "span_intersection_s": 1454.349000000002,
+   "concurrent_observed_seconds": 440,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "O-D5|P-D7": {
+   "span_intersection_s": 931.7869999999966,
+   "concurrent_observed_seconds": 130,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "O-D5|Q-D8": {
+   "span_intersection_s": 1091.2229999999981,
+   "concurrent_observed_seconds": 1,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "O-D5|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 188,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "O-D5|S-D9": {
+   "span_intersection_s": 1091.2229999999981,
+   "concurrent_observed_seconds": 145,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "O-D5|S-D10": {
+   "span_intersection_s": 990.9519999999975,
+   "concurrent_observed_seconds": 190,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "O-D5|T-D10": {
+   "span_intersection_s": 1091.2229999999981,
+   "concurrent_observed_seconds": 15,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "P-D7|Q-D8": {
+   "span_intersection_s": 1057.6229999999996,
+   "concurrent_observed_seconds": 224,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "P-D7|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 268,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "P-D7|S-D9": {
+   "span_intersection_s": 1057.6229999999996,
+   "concurrent_observed_seconds": 61,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "P-D7|S-D10": {
+   "span_intersection_s": 970.6970000000001,
+   "concurrent_observed_seconds": 192,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "P-D7|T-D10": {
+   "span_intersection_s": 1057.6229999999996,
+   "concurrent_observed_seconds": 157,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "Q-D8|R-D9": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 233,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "Q-D8|S-D9": {
+   "span_intersection_s": 1490.5559999999969,
+   "concurrent_observed_seconds": 323,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "Q-D8|S-D10": {
+   "span_intersection_s": 1029.862000000001,
+   "concurrent_observed_seconds": 5,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "Q-D8|T-D10": {
+   "span_intersection_s": 1473.2050000000017,
+   "concurrent_observed_seconds": 487,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "R-D8|R-D9": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 24,
+   "accepted_pairs": 35,
+   "candidate_points": 642,
+   "collision_rate": 0.0,
+   "accepted_median_dist_m": 0.18439088915343396,
+   "accepted_p90_dist_m": 1.5945961326395868,
+   "share_a_vehicles_matched": 0.5555555555555556
+  },
+  "R-D8|S-D9": {
+   "span_intersection_s": 198.96599999999307,
+   "concurrent_observed_seconds": 109,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "R-D8|U-D10": {
+   "span_intersection_s": 139.36399999999412,
+   "concurrent_observed_seconds": 140,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "R-D9|S-D10": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 89,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "R-D9|T-D10": {
+   "span_intersection_s": 867.2669999999998,
+   "concurrent_observed_seconds": 195,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "S-D9|S-D10": {
+   "span_intersection_s": 1029.862000000001,
+   "concurrent_observed_seconds": 45,
+   "accepted_pairs": 97,
+   "candidate_points": 2267,
+   "collision_rate": 0.0,
+   "accepted_median_dist_m": 0.07280109895261105,
+   "accepted_p90_dist_m": 1.4500000000628643,
+   "share_a_vehicles_matched": 0.776
+  },
+  "S-D9|T-D10": {
+   "span_intersection_s": 1473.2050000000017,
+   "concurrent_observed_seconds": 323,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  },
+  "S-D9|U-D10": {
+   "span_intersection_s": 179.94700000000012,
+   "concurrent_observed_seconds": 150,
+   "accepted_pairs": 0,
+   "candidate_points": 0,
+   "collision_rate": null,
+   "accepted_median_dist_m": null,
+   "accepted_p90_dist_m": null,
+   "share_a_vehicles_matched": 0.0
+  }
+ }
+}

@@ -1,8 +1,18 @@
-"""Songdo Traffic feasibility audit on the Oct 7 PM5 session of all intersections (trajectory CSVs only).
-Per CSV: rows, vehicles, Drone_IDs, time span, spatial extent. Across drones: time overlap, spatial overlap and
-cross-drone same-vehicle evidence from the common georeferenced frame (no GT identity exists across CSVs/drones;
-matching is purely by position, time and class, so this is an estimate).
-Usage: python songdo_audit.py CSV_ROOT OUT_JSON"""
+"""Songdo Traffic coverage / concurrency / cross-drone overlap audit (v2, review #25 R5).
+
+ACCESS LABEL: the Oct 7 PM5 session was inspected for feasibility on 2026-11-15 and belongs to the proposed test day ->
+its statistics are AUDITED-TEST and must not be used to choose designs or thresholds.
+
+Per intersection CSV: rows, vehicles (ids unique within a CSV only), drones, coverage seconds, gaps.
+Per pair of (intersection, drone) streams with a different drone:
+  span_intersection_s          length of the intersection of the two [min t, max t] extents (NOT concurrent observation)
+  concurrent_observed_seconds  seconds in which BOTH streams have at least one row
+  cross-drone vehicle matches  on concurrent seconds only, at 1 Hz: one-to-one mutual nearest neighbours of the same
+                               class within MATCH_M metres in the common georeferenced frame; a vehicle pair is accepted
+                               if matched in >= MIN_SECONDS distinct seconds. Distance statistics use ACCEPTED pairs only.
+                               collision_rate = share of candidate points whose nearest neighbour is not mutual.
+No cross-drone identity is provided by the dataset; matches are geometric estimates, not validated identities.
+Usage: python audit_overlap.py CSV_ROOT OUT_JSON [LABEL]"""
 import glob
 import json
 import sys
@@ -11,93 +21,88 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-root, out = Path(sys.argv[1]), sys.argv[2]
-COLS = ["Vehicle_ID", "Local_Time", "Drone_ID", "Local_X", "Local_Y", "Vehicle_Class", "Vehicle_Speed", "Visibility"]
-MATCH_M, MIN_SECONDS, SAMPLE_HZ = 2.0, 3.0, 1.0
-
-
-def tsec(s):
-    h, m, x = s.str.split(":", expand=True).T.values
-    return h.astype(float) * 3600 + m.astype(float) * 60 + x.astype(float)
+MATCH_M, MIN_SECONDS, GAP_S = 2.0, 3, 10
+COLS = ["Vehicle_ID", "Local_Time", "Drone_ID", "Local_X", "Local_Y", "Vehicle_Class", "Vehicle_Speed"]
 
 
 def load(f):
     d = pd.read_csv(f, usecols=COLS)
-    d["t"] = tsec(d["Local_Time"])
+    h, m, s = d["Local_Time"].str.split(":", expand=True).T.values
+    d["t"] = h.astype(float) * 3600 + m.astype(float) * 60 + s.astype(float)
+    d["sec"] = np.floor(d["t"]).astype(int)
     return d.drop(columns=["Local_Time"])
 
 
-tracks, per = {}, {}
-for f in sorted(glob.glob(str(root / "*" / "files" / "*PM5.csv"))):
-    X = Path(f).stem.split("_")[1]
-    d = load(f)
-    tracks[X] = d
-    xs, ys = d["Local_X"].values, d["Local_Y"].values
-    per[X] = dict(rows=len(d), vehicles=int(d["Vehicle_ID"].nunique()),
-                  drones={int(k): int(v) for k, v in d["Drone_ID"].value_counts().items()},
-                  t0=float(d["t"].min()), t1=float(d["t"].max()),
-                  bbox=[float(np.percentile(xs, 1)), float(np.percentile(ys, 1)), float(np.percentile(xs, 99)), float(np.percentile(ys, 99))],
-                  classes={int(k): int(v) for k, v in d.groupby("Vehicle_ID")["Vehicle_Class"].first().value_counts().items()},
-                  median_speed_kmh=float(d["Vehicle_Speed"].median()))
-    print(X, {k: v for k, v in per[X].items() if k not in ("bbox",)}, flush=True)
-
-# per (intersection, drone) streams
-streams = {}
-for X, d in tracks.items():
-    for dr, g in d.groupby("Drone_ID"):
-        streams[(X, int(dr))] = g
+def coverage(secs):
+    secs = np.sort(np.unique(secs))
+    g = np.diff(secs)
+    return dict(seconds=int(len(secs)), span_s=int(secs[-1] - secs[0] + 1) if len(secs) else 0,
+                gaps_over_10s=int((g > GAP_S).sum()), longest_gap_s=int(g.max()) if len(g) else 0)
 
 
-def overlap(b1, b2):
-    w = min(b1[2], b2[2]) - max(b1[0], b2[0]); h = min(b1[3], b2[3]) - max(b1[1], b2[1])
-    return max(w, 0) * max(h, 0)
-
-
-def match_streams(a, b):
-    """same-vehicle evidence between two streams: at 1 Hz samples, nearest same-class point within MATCH_M metres;
-    a vehicle pair counts if it is matched in >= MIN_SECONDS distinct seconds."""
-    t0, t1 = max(a["t"].min(), b["t"].min()), min(a["t"].max(), b["t"].max())
-    if t1 - t0 < MIN_SECONDS:
-        return dict(time_overlap_s=max(t1 - t0, 0.0), pairs=0)
-    a = a[(a["t"] >= t0) & (a["t"] <= t1)].copy(); b = b[(b["t"] >= t0) & (b["t"] <= t1)].copy()
-    a["s"] = np.floor(a["t"] * SAMPLE_HZ); b["s"] = np.floor(b["t"] * SAMPLE_HZ)
-    a = a.drop_duplicates(["Vehicle_ID", "s"]); b = b.drop_duplicates(["Vehicle_ID", "s"])
-    hits, dists = {}, []
-    bg = dict(tuple(b.groupby("s")))
-    for s, ga in a.groupby("s"):
+def match(a, b, common):
+    a = a[a["sec"].isin(common)].drop_duplicates(["Vehicle_ID", "sec"])
+    b = b[b["sec"].isin(common)].drop_duplicates(["Vehicle_ID", "sec"])
+    bg = dict(tuple(b.groupby("sec")))
+    hits, dist, cand, coll = {}, {}, 0, 0
+    for s, ga in a.groupby("sec"):
         gb = bg.get(s)
         if gb is None:
             continue
         P, Q = ga[["Local_X", "Local_Y"]].values, gb[["Local_X", "Local_Y"]].values
         D = np.linalg.norm(P[:, None, :] - Q[None, :, :], axis=2)
         D[ga["Vehicle_Class"].values[:, None] != gb["Vehicle_Class"].values[None, :]] = np.inf
-        j = D.argmin(1)
-        ok = D[np.arange(len(P)), j] <= MATCH_M
-        for i in np.where(ok)[0]:
-            key = (int(ga["Vehicle_ID"].values[i]), int(gb["Vehicle_ID"].values[j[i]]))
+        r, c = D.argmin(1), D.argmin(0)
+        for i in range(len(P)):
+            if D[i, r[i]] > MATCH_M:
+                continue
+            cand += 1
+            if c[r[i]] != i:
+                coll += 1
+                continue
+            key = (int(ga["Vehicle_ID"].values[i]), int(gb["Vehicle_ID"].values[r[i]]))
             hits[key] = hits.get(key, 0) + 1
-            dists.append(float(D[i, j[i]]))
-    pairs = [k for k, n in hits.items() if n >= MIN_SECONDS]
-    va = set(k[0] for k in pairs)
-    return dict(time_overlap_s=float(t1 - t0), pairs=len(pairs), vehicles_a=int(a["Vehicle_ID"].nunique()),
-                vehicles_b=int(b["Vehicle_ID"].nunique()), share_a_matched=len(va) / max(a["Vehicle_ID"].nunique(), 1),
-                median_dist_m=float(np.median(dists)) if dists else None)
+            dist.setdefault(key, []).append(float(D[i, r[i]]))
+    acc = [k for k, n in hits.items() if n >= MIN_SECONDS]
+    dd = [x for k in acc for x in dist[k]]
+    return dict(accepted_pairs=len(acc), candidate_points=cand, collision_rate=coll / cand if cand else None,
+                accepted_median_dist_m=float(np.median(dd)) if dd else None,
+                accepted_p90_dist_m=float(np.percentile(dd, 90)) if dd else None,
+                share_a_vehicles_matched=len({k[0] for k in acc}) / max(a["Vehicle_ID"].nunique(), 1))
 
 
-keys = sorted(streams)
-bb = {k: [np.percentile(streams[k]["Local_X"], 1), np.percentile(streams[k]["Local_Y"], 1),
-          np.percentile(streams[k]["Local_X"], 99), np.percentile(streams[k]["Local_Y"], 99)] for k in keys}
-pairs = {}
-for i, k1 in enumerate(keys):
-    for k2 in keys[i + 1:]:
-        if k1[1] == k2[1]:
-            continue                                   # same drone in two intersection files: not cross-drone
-        if overlap(bb[k1], bb[k2]) <= 0:
-            continue
-        r = match_streams(streams[k1], streams[k2])
-        if r["pairs"]:
+def main():
+    root, out = Path(sys.argv[1]), sys.argv[2]
+    label = sys.argv[3] if len(sys.argv) > 3 else "UNLABELLED"
+    per, streams = {}, {}
+    for f in sorted(glob.glob(str(root / "*" / "files" / "*.csv"))):
+        X = Path(f).stem.split("_")[1]
+        d = load(f)
+        per[X] = dict(rows=len(d), vehicles=int(d["Vehicle_ID"].nunique()),
+                      drones={int(k): int(v) for k, v in d["Drone_ID"].value_counts().items()},
+                      coverage=coverage(d["sec"].values),
+                      concurrent_multi_drone_seconds=int((d.groupby("sec")["Drone_ID"].nunique() >= 2).sum()),
+                      t0=float(d["t"].min()), t1=float(d["t"].max()))
+        for k, g in d.groupby("Drone_ID"):
+            streams[(X, int(k))] = g
+        print(X, per[X], flush=True)
+    keys = sorted(streams)
+    pairs = {}
+    for i, k1 in enumerate(keys):
+        for k2 in keys[i + 1:]:
+            if k1[1] == k2[1]:
+                continue
+            a, b = streams[k1], streams[k2]
+            span = max(0.0, min(a["t"].max(), b["t"].max()) - max(a["t"].min(), b["t"].min()))
+            common = np.intersect1d(a["sec"].unique(), b["sec"].unique())
+            if span <= 0 or not len(common):
+                continue
+            r = dict(span_intersection_s=float(span), concurrent_observed_seconds=int(len(common)), **match(a, b, common))
             pairs[f"{k1[0]}-D{k1[1]}|{k2[0]}-D{k2[1]}"] = r
             print(k1, k2, r, flush=True)
-json.dump(dict(per_csv=per, streams=[f"{k[0]}-D{k[1]}" for k in keys], cross_drone=pairs,
-               params=dict(match_m=MATCH_M, min_seconds=MIN_SECONDS, sample_hz=SAMPLE_HZ)), open(out, "w"), indent=1)
-print("streams", len(keys), "cross-drone stream pairs with shared vehicles", len(pairs))
+    json.dump(dict(access_label=label, params=dict(match_m=MATCH_M, min_seconds=MIN_SECONDS, gap_s=GAP_S),
+                   per_intersection=per, cross_drone_pairs_with_concurrent_seconds=pairs), open(out, "w"), indent=1)
+
+
+if __name__ == "__main__":
+    main()
