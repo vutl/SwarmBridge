@@ -50,12 +50,74 @@ import policies as P
 S_SLOTS = 40
 
 
+class CalRates:
+    """Causal, ACK-based empirical rate model (review #29). At each slot boundary the realised link rates of the
+    transmission segments of the slot that just ended (known to the sender through ACKs) are stored in bins of the
+    UAV's expected SNR at that slot's start (statistical CSI, 2 dB bins). The planner samples per-slot rates from the
+    bin of the UAV's current expected SNR (neighbouring bins pooled if needed) once >= MIN_AIR s of air time has been
+    observed there; otherwise it falls back to the Shannon model scaled by the pooled ratio rho (observed / Shannon).
+    persistent=False resets at every episode (cold); True keeps what earlier episodes of the run observed (warm)."""
+    BIN_DB, MIN_AIR = 2.0, 20.0
+
+    def __init__(self, persistent=False):
+        self.persistent = persistent
+        self.bins, self.num, self.den = {}, 0.0, 0.0
+        self.tasks, self.seg_i, self.prev = None, 0, None
+
+    def _snr_db(self, env, k):
+        c = env.c
+        return 10 * math.log10(max(c["p_levels"][-1] * env.expected_gain(env.uavs[k].pos) / env.noise_w(), 1e-30))
+
+    def update(self, env):
+        if self.tasks is not env.tasks:                       # new episode
+            self.tasks, self.seg_i, self.prev = env.tasks, 0, None
+            if not self.persistent:
+                self.bins, self.num, self.den = {}, 0.0, 0.0
+        if self.prev is not None and self.prev[0] != env.t:
+            t0, snr = self.prev
+            segs = env.segments
+            while self.seg_i < len(segs):
+                k, ch, a, b, interf, r = segs[self.seg_i]
+                self.seg_i += 1
+                dur = b - a
+                if dur <= 0:
+                    continue
+                key = int(math.floor(snr[k] / self.BIN_DB))
+                self.bins.setdefault(key, ([], []))
+                self.bins[key][0].append(r); self.bins[key][1].append(dur)
+                sh = env.c["B_total"] / env.c["M"] * math.log2(1 + 10 ** (snr[k] / 10))
+                self.num += r * dur; self.den += sh * dur
+        self.prev = (env.t, [self._snr_db(env, k) for k in range(len(env.uavs))])
+
+    def rho(self):
+        return (self.num + C_RHO) / (self.den + C_RHO)
+
+    def sample(self, env, k, shape, rng):
+        key = int(math.floor(self._snr_db(env, k) / self.BIN_DB))
+        rs, ws = [], []
+        for d in (0, -1, 1, -2, 2):
+            if key + d in self.bins:
+                rs += self.bins[key + d][0]; ws += self.bins[key + d][1]
+            if sum(ws) >= self.MIN_AIR:
+                w = np.asarray(ws) / sum(ws)
+                return np.asarray(rs)[rng.choice(len(rs), size=shape, p=w)]
+        return None
+
+
+C_RHO = 5e6
+
+
 class MPCMode:
-    def __init__(self, model="env", n=8, horizon=4, budget_ms=None, fallback=None, seed=0):
+    def __init__(self, model="env", n=8, horizon=4, budget_ms=None, fallback=None, seed=0, rollout="scenario",
+                 cal=None, margin_z=None):
+        """rollout: 'scenario' (future modes chosen per sampled fading path: optimistic, the A-E2 version) or
+        'causal' (one mode per future frame for all samples: nonanticipative). model 'cal' uses CalRates `cal`.
+        margin_z: switch away from the incumbent only if the mean per-sample value gain exceeds margin_z standard
+        errors (paired over samples); None = plain argmax."""
         self.model, self.n, self.h, self.budget = model, n, horizon, budget_ms
-        self.fallback = fallback
+        self.fallback, self.rollout, self.cal, self.margin_z = fallback, rollout, cal, margin_z
         self.rng = np.random.default_rng(seed)
-        self.times, self.timeouts = [], 0
+        self.times, self.timeouts, self.chosen, self.switched, self.cal_fallbacks = [], 0, [], 0, 0
         self.__name__ = f"mpc_{model}_n{n}_h{horizon}" + (f"_b{budget_ms:g}" if budget_ms else "")
 
     # ---- rates ----
@@ -81,6 +143,11 @@ class MPCMode:
         c = env.c
         p = c["p_levels"][-1]
         share = P.channel_share(env)
+        if self.model == "cal":
+            r = self.cal.sample(env, k, (max(self.n, 1), S_SLOTS), self.rng)
+            if r is not None:
+                return np.maximum(r * share, 1.0)
+            self.cal_fallbacks += 1                      # not enough observations: rho-scaled Shannon samples
         if self.n == 0:
             g = np.full((1, S_SLOTS), env.expected_gain(env.uavs[k].pos))
         else:
@@ -91,6 +158,8 @@ class MPCMode:
             z = (self.rng.normal(size=shape) + 1j * self.rng.normal(size=shape)) / math.sqrt(2)
             h = math.sqrt(kf / (kf + 1)) + math.sqrt(1 / (kf + 1)) * z
             g = np.where(los, g_l * np.abs(h) ** 2, g_n * self.rng.exponential(size=shape))
+        if self.model == "cal":
+            return np.maximum(c["B_total"] / c["M"] * np.log2(1 + p * g / env.noise_w()) * self.cal.rho() * share, 1.0)
         return np.maximum(self._rate(env, p * g) * share, 1.0)
 
     # ---- fluid FIFO transmitter on a slot grid ----
@@ -138,16 +207,21 @@ class MPCMode:
         best_u = np.full(len(tx_free), -np.inf)
         best_tx = tx_free.copy()
         best_enc = enc_free.copy()
+        best_mean = -np.inf
         for m in range(env.n_modes):
             ready = enc_free + tab.enc_s[m]
             u, txe = self._value(env, tab, G, tx_free, ready, b_hat[m], q_hat[m], tk_like, m)
+            if self.rollout == "causal":                  # one mode for every sample path (nonanticipative)
+                if u.mean() > best_mean:
+                    best_mean, best_u, best_tx, best_enc = u.mean(), u, txe, np.broadcast_to(ready, txe.shape).copy()
+                continue
             better = u > best_u
             best_u = np.where(better, u, best_u)
             best_tx = np.where(better, txe, best_tx)
             best_enc = np.where(better, ready, best_enc)
         return best_u, best_tx, best_enc
 
-    def __call__(self, env, k, task):
+    def __call__(self, env, k, task, incumbent=None):
         t_start = time.perf_counter()
         u, tab, c = env.uavs[k], env.tab, env.c
         rates = self._rates(env, k)
@@ -180,9 +254,12 @@ class MPCMode:
                 fut.append(E.Task(uav=k, wp=-1, tile=0, img=-1, t_cap=env.t + (i + 1) * dtf, dmax=dm, qmin=qm))
         # anytime search: the fallback heuristic's mode is the incumbent and is evaluated first; on timeout the best
         # mode evaluated so far is returned (never an unevaluated or arbitrary one)
-        inc = int(self.fallback(env, k, task)) if self.fallback else 0
+        if incumbent is not None:
+            inc = int(incumbent)
+        else:
+            inc = int(self.fallback(env, k, task)) if self.fallback else 0
         order = [inc] + [m for m in range(env.n_modes) if m != inc]
-        best, best_v = None, -math.inf
+        best, best_v, vals = None, -math.inf, {}
         for m in order:
             if best is not None and self.budget and (time.perf_counter() - t_start) * 1e3 > self.budget:
                 self.timeouts += 1
@@ -199,9 +276,16 @@ class MPCMode:
                 enc = np.maximum(enc, tk.t_cap) + env.probe_s()
                 uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, tab.mean_bits, tab.mean_psnr)
                 v = v + uu
+            vals[m] = v
             val = float(v.mean())
             if val > best_v:
                 best, best_v = m, val
+        if self.margin_z is not None and best != inc and len(vals[inc]) > 1:
+            d = vals[best] - vals[inc]
+            if d.mean() < self.margin_z * d.std(ddof=1) / math.sqrt(len(d)) + 1e-12:
+                best = inc                                   # gain not resolvable from sampling noise: keep incumbent
+        self.switched += int(best != inc)
+        self.chosen.append(int(best))
         self.times.append(time.perf_counter() - t_start)
         return int(best)
 

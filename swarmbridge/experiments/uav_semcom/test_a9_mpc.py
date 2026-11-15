@@ -65,3 +65,29 @@ def test_vectorised_rate_matches_env(regime):
     n = core.noise_w()
     ref = np.array([core.link_rate(s, n, 0.0, s / n) for s in sig])
     assert np.allclose(M.MPCMode("env")._rate(core, sig), ref)
+
+
+def test_incumbent_kept_with_large_margin_and_causal_rollout(env_at_decision):
+    core, k, tk = env_at_decision
+    mpc = M.MPCMode("env", 16, 4, rollout="causal", margin_z=1e9, seed=0)
+    assert mpc(core, k, tk, incumbent=5) == 5 and mpc.switched == 0
+    free = M.MPCMode("env", 16, 4, rollout="causal", seed=0)(core, k, tk)
+    assert 0 <= free < core.n_modes
+
+
+def test_calibrator_uses_only_finished_segments():
+    AE.init(False)
+    sp, _ = MH.from_name(AE.tuned("phy_mcs_blind", "best"), C.MODES)
+    core = SV.UavSurveyEnv(AE.G["table"], AE.G["pools"]["test"], C.regime_cfg("phy_mcs_blind"))
+    core.reset(8001)
+    cal = M.CalRates()
+    for _ in range(60):
+        cal.update(core)
+        n_seen = cal.seg_i
+        assert n_seen <= len(core.segments)            # never reads beyond what has been recorded
+        core.begin_slot([a[:3] for a in sp(core)])
+        while core.advance()[0] == "mode":
+            core.decide(4)
+    cal.update(core)
+    air = sum(sum(w) for _, w in cal.bins.values())
+    assert air > 0 and 0 < cal.rho() < 1.5            # MCS + BLER realised below Shannon on average
