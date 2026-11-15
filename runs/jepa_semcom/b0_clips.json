@@ -1,0 +1,16 @@
+{
+ "tune": [
+  "uav0000013_00000_v",
+  "uav0000013_01073_v",
+  "uav0000013_01392_v",
+  "uav0000071_03240_v"
+ ],
+ "gate": [
+  "uav0000020_00406_v",
+  "uav0000138_00000_v"
+ ],
+ "aux_val": [
+  "uav0000086_00000_v"
+ ],
+ "_note": "B-E0 subset from runs/uav_semcom/r1b/split_v1.json: tune = train sources (head training), gate = held-out train sources, aux_val = VID-val with no DET-train match"
+}
