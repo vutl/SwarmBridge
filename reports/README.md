@@ -1,6 +1,6 @@
 # SwarmBridge: báo cáo
 
-Cập nhật 15/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng đang mở**. Các nhánh đã đóng nằm trong [archive/](archive/README.md), chia theo giai đoạn.
+Cập nhật 16/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng đang mở**. Các nhánh đã đóng nằm trong [archive/](archive/README.md), chia theo giai đoạn.
 
 ## Trạng thái nghiên cứu
 
@@ -26,6 +26,7 @@ Cập nhật 15/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng �
 | [swarmbridge-rq1-reid-feasibility-memo.md](swarmbridge-rq1-reid-feasibility-memo.md) | Memo khả thi: RQ1 bằng ngoại hình (DINOv2 zero-shot) trên ảnh MDMT thật, mô hình truyền TOKEN / embedding / CROP, đề xuất thí nghiệm RQ1-E (chưa duyệt chạy) |
 | [swarmbridge-rq1e-preregistration.md](swarmbridge-rq1e-preregistration.md) | Protocol RQ1-E (DINOv2-S zero-shot, E0 khoá trước, cam kết cho E1) |
 | [swarmbridge-rq1e-e0-result.md](swarmbridge-rq1e-e0-result.md) | RQ1-E E0: **FAIL 0/8 → NO-GO** cho ngoại hình zero-shot trên MDMT; E1 không chạy; đo tốc độ thật; chẩn đoán vì sao |
+| [swarmbridge-ae5-be4-result.md](swarmbridge-ae5-be4-result.md) | **A-E5 + B-E4 (phản biện #30):** log throughput theo thời gian phát bị lệch thấp (−12 % với mô hình đúng), sửa bằng hiệu chỉnh theo slot; cổng sai số chặn mô hình lệch (Shannon: 16,39 → bằng PPO); bộ hiệu chỉnh theo slot + cổng sai số +1,69 (phy_mcs_blind) / +1,86 (ref) so với PPO, CI > 0, không cần biết PHY; cổng quá bảo thủ với mô hình đúng, độ nhạy τ không đơn điệu. B: 3 seed ghép cặp, JEPA-32 − task-32 = +0,025 / +0,013 / +0,005 (TB +0,015, CI chứa 0); mã JEPA ổn định hơn ở cả 3 seed |
 | [swarmbridge-ae4-be3-result.md](swarmbridge-ae4-be3-result.md) | **A-E4 + B-E3 (phản biện #29):** rollout phi tiên tri xoá phần lớn ưu thế cũ của MPC (≈ PPO); hiệu chỉnh từ ACK sửa sai mô hình (13,98 → 30,94); kết hợp PPO + MPC PHY đúng +2,0 so với PPO (cả 3 model), với mô hình hiệu chỉnh chỉ +0,6. B: bottleneck giữ nhiệm vụ (trần 0,475–0,487), mã học được hơn AVIF 10/10 clip; JEPA-32 hơn non-JEPA +0,02 mAP (8/10 clip) nhờ mã ổn định hơn, d64 ngang |
 | [swarmbridge-ae2-be1-result.md](swarmbridge-ae2-be1-result.md) | **A-E2/E3 + B-E1/E2 (phản biện #28):** MPC mô hình đúng hơn PPO khoảng +2,7 nhưng tốn 30–100 lần thời gian; MPC mô hình Shannon sai thua PPO 8,6 điểm (cơ chế phù hợp với ưu thế PPO); ngang chi phí PPO thì MPC thua. B: PCA nén token được, bù chuyển động có ích ít; predictor học và hoàn thiện kiểu JEPA (target đóng băng) không hơn giữ nguyên, kể cả vòng hở; AVIF→DINOv2 tốt hơn từ khoảng 25 kbit |
 | [swarmbridge-ae1-be0-result.md](swarmbridge-ae1-be0-result.md) | **A-E1 + B-E0 (phản biện #27):** PPO mode-only 1,2–1,7 ms / quyết định so với 40–60 µs của heuristic (return trùng A5.5); pipeline token DINOv2 + giữ nguyên + top-k + bitstream chạy, đồng bộ; 30 % patch đạt 98 % mAP; token thô đắt cỡ AVIF → cần nén token; giữ nguyên yếu khi camera di chuyển |

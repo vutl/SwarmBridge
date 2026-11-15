@@ -17,8 +17,14 @@ frozen TUNE codes; the JEPA model's own predictor h is evaluated as well ('own')
 Evaluation: B-E1 round-trip codec (b1_pipeline.transmit; separate sender / receiver histories asserted identical),
 predictors hold / mc / posthoc / own, k in {16, 32, 64, 128, 256}, closed loop, per clip.
 
-  train  TOKENS CLIPS B1_WORK OUT_WORK [--d 32 --iters 4000]          (GPU, under the lock)
-  eval   TOKENS CLIPS B1_WORK OUT_WORK OUT_JSON [--procs 10]            (CPU)
+  train  TOKENS CLIPS B1_WORK OUT_WORK [--d 32 --iters 4000 --seed S --kinds task,jepa]   (GPU, under the lock)
+  eval   TOKENS CLIPS B1_WORK OUT_WORK OUT_JSON [--dims 32 --reps task_s0,jepa_s0,..]   (CPU)
+
+B-E4 (review #30): paired seeds. For each kind the NumPy minibatch sampler AND torch are reset from the same seed S,
+so task and jepa models of seed S start from identical encoder/decoder weights and see the identical sequence of
+training clips/frames; the post-hoc predictor is likewise seeded by S for both. Models are saved as
+{kind}_s{S}_d{d}.pt (B-E3 used a single sampler shared by the two kinds: same init, different minibatches; its
+seed-0 task model equals task_s0 of this scheme up to GPU nondeterminism).
 """
 import argparse
 import copy
@@ -90,7 +96,7 @@ def train(a):
     pos = torch.cat([y.permute(0, 2, 3, 1).reshape(-1, 4) for y in Yl]).mean(0).clamp(1e-4, 1)
     pw = ((1 - pos) / pos).clamp(max=50)
     out = Path(a.out_work); out.mkdir(parents=True, exist_ok=True)
-    rng = np.random.default_rng(0)
+    rng = None
     stats = {}
 
     def batch(bs, need=3):
@@ -111,8 +117,9 @@ def train(a):
         m = v.unsqueeze(1).float()
         return (l * m).sum() / (m.sum() * 4 + 1e-6)
 
-    for kind in ("task", "jepa"):
-        torch.manual_seed(0)
+    for kind in a.kinds.split(","):
+        rng = np.random.default_rng(a.seed)                                  # paired: same batch schedule per kind
+        torch.manual_seed(a.seed)
         enc, dec = make_codec(a.d)
         enc, dec = enc.to(dev), dec.to(dev)
         params = list(enc.parameters()) + list(dec.parameters())
@@ -159,7 +166,7 @@ def train(a):
         torch.save(dict(enc=enc.cpu().state_dict(), dec=dec.cpu().state_dict(),
                         pred=pred.cpu().state_dict() if pred is not None else None,
                         zmu=zmu, zsd=zsd, mu=P["mu"], sd_tok=sd_tok.cpu().numpy().ravel()),
-                   out / f"{kind}_d{a.d}.pt")
+                   out / f"{kind}_s{a.seed}_d{a.d}.pt")
         stats[kind] = dict(codec_params=int(n_par), pred_params=int(sum(p_.numel() for p_ in pred.parameters())) if pred else 0,
                            iters=a.iters, final=np.mean(hist[-500:], 0).tolist(), train_s=time.time() - t0)
         enc, dec = enc.to(dev), dec.to(dev)
@@ -169,17 +176,18 @@ def train(a):
             for xx in X:
                 zc = enc(((xx.float() - mu) / sd_tok)).cpu().numpy()
                 seqs.append(((zc.transpose(0, 2, 3, 1).reshape(len(zc), N_TOK, a.d) - zmu) / zsd).astype(np.float32))
-        stats[kind]["posthoc"] = train_posthoc(seqs, a.d, out / f"{kind}_d{a.d}_posthoc.pt", a.posthoc_iters, dev)
+        stats[kind]["posthoc"] = train_posthoc(seqs, a.d, out / f"{kind}_s{a.seed}_d{a.d}_posthoc.pt", a.posthoc_iters,
+                                               dev, seed=a.seed)
         del enc, dec
         torch.cuda.empty_cache()
-    (out / f"train_stats_d{a.d}.json").write_text(json.dumps(stats, indent=1))
+    (out / f"train_stats_s{a.seed}_d{a.d}.json").write_text(json.dumps(stats, indent=1))
 
 
-def train_posthoc(seqs, d, path, iters, dev, step=0.25, bs=32):
+def train_posthoc(seqs, d, path, iters, dev, step=0.25, bs=32, seed=0):
     """the B-E1 learned predictor procedure (receiver-like corrupted inputs, residual MSE) on given code sequences."""
     import torch
-    torch.manual_seed(0)
-    rng = np.random.default_rng(1)
+    torch.manual_seed(seed)
+    rng = np.random.default_rng(seed + 1)
     net = B1.make_net(d).to(dev)
     opt = torch.optim.AdamW(net.parameters(), 1e-3, weight_decay=1e-4)
     seqs = [s for s in seqs if len(s) >= 3]
@@ -288,10 +296,10 @@ def evaluate(a):
     ev = [c for r in ("gate", "aux_val") for c in clips.get(r, []) if (Path(a.tokens_dir) / f"{c}.npz").exists()]
     jobs = []
     for d in a.dims:
-        for rep in ("task", "jepa"):
+        for rep in a.reps.split(","):
             for c in ev:
                 jobs.append((c, rep, d, "none", 0))
-                for pred in ("hold", "mc", "posthoc") + (("own",) if rep == "jepa" else ()):
+                for pred in ("hold", "mc", "posthoc") + (("own",) if rep.startswith("jepa") else ()):
                     for k in (16, 32, 64, 128, 256):
                         jobs.append((c, rep, d, pred, k))
     with Pool(a.procs, initializer=_init, initargs=(a.out_work, a.b1_work, a.tokens_dir)) as p:
@@ -313,7 +321,7 @@ def diag(a):
     _init(a.out_work, a.b1_work, a.tokens_dir)
     out = {}
     for d in a.dims:
-        for name in ("task", "jepa"):
+        for name in a.reps.split(","):
             rep = Rep(G["work"] / f"{name}_d{d}.pt", d)
             ph = B1.LearnedPred(G["work"] / f"{name}_d{d}_posthoc.pt", d)
             acc = {k: [] for k in ("hold", "mc", "posthoc", "own")}
@@ -345,12 +353,15 @@ def main():
     t.add_argument("--w-jepa", type=float, default=1.0)
     t.add_argument("--w-var", type=float, default=1.0)
     t.add_argument("--w-cov", type=float, default=0.04)
+    t.add_argument("--seed", type=int, default=0)
+    t.add_argument("--kinds", default="task,jepa")
     for name in ("eval", "diag"):
         e = sub.add_parser(name)
         for n in ("tokens_dir", "clips", "b1_work", "out_work", "out"):
             e.add_argument(n)
         e.add_argument("--dims", type=int, nargs="+", default=[32, 64])
         e.add_argument("--procs", type=int, default=10)
+        e.add_argument("--reps", default="task_s0,jepa_s0")
     a = ap.parse_args()
     dict(train=train, eval=evaluate, diag=diag)[a.cmd](a)
 

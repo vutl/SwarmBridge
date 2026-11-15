@@ -56,11 +56,16 @@ class CalRates:
     UAV's expected SNR at that slot's start (statistical CSI, 2 dB bins). The planner samples per-slot rates from the
     bin of the UAV's current expected SNR (neighbouring bins pooled if needed) once >= MIN_AIR s of air time has been
     observed there; otherwise it falls back to the Shannon model scaled by the pooled ratio rho (observed / Shannon).
-    persistent=False resets at every episode (cold); True keeps what earlier episodes of the run observed (warm)."""
+    persistent=False resets at every episode (cold); True keeps what earlier episodes of the run observed (warm).
+    slot_weight (A-E5): airtime weighting (False, the A-E4 version) is biased low, because a UAV whose queue empties
+    early in a good-fading slot logs little airtime at the high rate while a bad-fading slot logs a full slot at the
+    low rate. With slot_weight=True each (UAV, slot) with transmission is ONE observation of that slot's rate (its
+    airtime-weighted mean within the slot) with weight dt; whether a UAV transmits in a slot is decided before the
+    slot's fading is drawn, so this is unbiased for the per-slot rate distribution."""
     BIN_DB, MIN_AIR = 2.0, 20.0
 
-    def __init__(self, persistent=False):
-        self.persistent = persistent
+    def __init__(self, persistent=False, slot_weight=False):
+        self.persistent, self.slot_weight = persistent, slot_weight
         self.bins, self.num, self.den = {}, 0.0, 0.0
         self.tasks, self.seg_i, self.prev = None, 0, None
 
@@ -75,13 +80,7 @@ class CalRates:
                 self.bins, self.num, self.den = {}, 0.0, 0.0
         if self.prev is not None and self.prev[0] != env.t:
             t0, snr = self.prev
-            segs = env.segments
-            while self.seg_i < len(segs):
-                k, ch, a, b, interf, r = segs[self.seg_i]
-                self.seg_i += 1
-                dur = b - a
-                if dur <= 0:
-                    continue
+            for k, r, dur in slot_obs(env, self, env.c["dt"] if self.slot_weight else None):
                 key = int(math.floor(snr[k] / self.BIN_DB))
                 self.bins.setdefault(key, ([], []))
                 self.bins[key][0].append(r); self.bins[key][1].append(dur)
@@ -103,8 +102,113 @@ class CalRates:
                 return np.asarray(rs)[rng.choice(len(rs), size=shape, p=w)]
         return None
 
+    def mean(self, env, k):
+        """airtime-weighted mean rate the planner would sample from (same bin pooling as sample); None if no data."""
+        key = int(math.floor(self._snr_db(env, k) / self.BIN_DB))
+        num = air = 0.0
+        for d in (0, -1, 1, -2, 2):
+            if key + d in self.bins:
+                r, w = self.bins[key + d]
+                num += float(np.dot(r, w)); air += sum(w)
+            if air >= self.MIN_AIR:
+                return num / air
+        return None
+
 
 C_RHO = 5e6
+
+
+def slot_obs(env, owner, slot_dt=None):
+    """consume the new segments of env (owner.seg_i cursor) -> list of (uav, rate, weight). slot_dt None: one entry
+    per segment weighted by its duration; else one entry per UAV (the slot's airtime-weighted mean rate), weight
+    slot_dt."""
+    segs = env.segments
+    out, acc = [], {}
+    while owner.seg_i < len(segs):
+        k, ch, a, b, interf, r = segs[owner.seg_i]
+        owner.seg_i += 1
+        dur = b - a
+        if dur <= 0:
+            continue
+        if slot_dt is None:
+            out.append((k, r, dur))
+        else:
+            x = acc.setdefault(k, [0.0, 0.0])
+            x[0] += r * dur; x[1] += dur
+    for k, (rd, d) in acc.items():
+        out.append((k, rd / d, slot_dt))
+    return out
+
+
+class RateErrTracker:
+    """A-E5 (review #30): prequential residuals of a planner rate model against observed throughput.
+
+    Observation model (stated limitation): the throughput of finished transmission segments is read from the
+    simulator at the next slot boundary ('observed-throughput calibration'); this is causal in time, but no ACK /
+    feedback protocol, feedback delay or overhead is simulated.
+    At the start of every slot the tracker stores, for each UAV, the planner model's predicted mean per-channel rate
+    at the UAV's position (env / shannon: Monte-Carlo mean over the statistical fading model; cal: the calibrator's
+    mean, or its rho-scaled Shannon fallback when the bin has no data). When the slot has ended, every segment of that
+    slot adds (observed rate x duration, predicted rate x duration, duration) to the bin of the UAV's expected SNR at
+    the slot start (2 dB bins). bias(env, k) pools the current bin with neighbours until >= MIN_AIR s of airtime and
+    returns the relative bias sum(r*w)/sum(pred*w) - 1 (None if not enough airtime). The prediction for a slot is
+    made before that slot's segments are seen (cal: the calibrator then still lacks them). Weighting w: per slot
+    (default; unbiased, see CalRates) or per segment duration (slot_weight=False; biased low by queue emptying)."""
+    BIN_DB, MIN_AIR = 2.0, 20.0
+
+    def __init__(self, mpc, persistent=False, n_mc=64, seed=7, slot_weight=True):
+        self.mpc, self.persistent, self.n_mc, self.slot_weight = mpc, persistent, n_mc, slot_weight
+        self.rng = np.random.default_rng(seed)
+        self.bins = {}
+        self.tasks, self.seg_i, self.prev = None, 0, None
+
+    def _snr_db(self, env, k):
+        return 10 * math.log10(max(env.c["p_levels"][-1] * env.expected_gain(env.uavs[k].pos) / env.noise_w(), 1e-30))
+
+    def predict(self, env, k):
+        m = self.mpc
+        c = env.c
+        p = c["p_levels"][-1]
+        if m.model == "cal":
+            r = m.cal.mean(env, k)
+            if r is not None:
+                return r
+        p_los, g_l, g_n = env._pathgain(env.uavs[k].pos)
+        n = self.n_mc
+        los = self.rng.random(n) < p_los
+        kf = 10 ** (c["rician_k_db"] / 10)
+        z = (self.rng.normal(size=n) + 1j * self.rng.normal(size=n)) / math.sqrt(2)
+        h = math.sqrt(kf / (kf + 1)) + math.sqrt(1 / (kf + 1)) * z
+        g = np.where(los, g_l * np.abs(h) ** 2, g_n * self.rng.exponential(size=n))
+        if m.model == "cal":
+            return float(np.mean(c["B_total"] / c["M"] * np.log2(1 + p * g / env.noise_w()))) * m.cal.rho()
+        return float(np.mean(m._rate(env, p * g)))
+
+    def update(self, env):
+        """call at every slot boundary, after CalRates.update (so the cal prediction includes the slot just ended)."""
+        if self.tasks is not env.tasks:
+            self.tasks, self.seg_i, self.prev = env.tasks, 0, None
+            if not self.persistent:
+                self.bins = {}
+        if self.prev is not None and self.prev[0] != env.t:
+            _, snr, pred = self.prev
+            for k, r, dur in slot_obs(env, self, env.c["dt"] if self.slot_weight else None):
+                acc = self.bins.setdefault(int(math.floor(snr[k] / self.BIN_DB)), [0.0, 0.0, 0.0])
+                acc[0] += r * dur; acc[1] += pred[k] * dur; acc[2] += dur
+        if self.prev is None or self.prev[0] != env.t:
+            n = len(env.uavs)
+            self.prev = (env.t, [self._snr_db(env, k) for k in range(n)], [self.predict(env, k) for k in range(n)])
+
+    def bias(self, env, k):
+        key = int(math.floor(self._snr_db(env, k) / self.BIN_DB))
+        num = den = air = 0.0
+        for d in (0, -1, 1, -2, 2):
+            if key + d in self.bins:
+                a = self.bins[key + d]
+                num += a[0]; den += a[1]; air += a[2]
+            if air >= self.MIN_AIR:
+                return num / max(den, 1e-9) - 1.0
+        return None
 
 
 class MPCMode:
