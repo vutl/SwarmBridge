@@ -363,7 +363,11 @@ Code name: `ahyb:I:cals:8:4:causal:1:2:1:pre:cand=np:trig=any:stack=1:dl=50`. Th
 3. **Warm start.**
    - The method relies on a pre-calibrated rate model.
    - Without the warm start, the gain over PPO drops from about +2 to +0.65 (phy_mcs_blind) and +0.96 (ref) (A-E9).
-   - A stale or mismatched warm start has not been tested.
+   - A **mismatched** warm start is harmful (A-E10): calibrating in the other PHY regime (Shannon ↔ MCS) gives
+     −6.4 [−8.3, −4.4] (phy_mcs_blind) and −12.1 [−14.5, −9.7] (ref) versus PPO, worse than cold. The tracker pools
+     the frozen calibration data with the online reports and does not detect the change.
+   - The warm start must therefore come from the deployment PHY/channel configuration; otherwise the cold protocol
+     is the safe choice. Small mismatches have not been tested.
 4. **Feedback.**
    - Report delay and loss affect only the planner's rate model.
    - The queue observations of PPO and the slot policy are immediate.
@@ -385,6 +389,7 @@ Code name: `ahyb:I:cals:8:4:causal:1:2:1:pre:cand=np:trig=any:stack=1:dl=50`. Th
 | A-E7 | The two-stage selective controller keeps most of the gain at about half the cost. MPC cost scales with horizon × modes, not with $N$. |
 | A-E8 | With the 50 ms cooperative budget: p99 40–44 ms. np-any +2.86, about equal to unrestricted planning (+2.82). The pessimistic candidate helps under the biased model (+1.90 vs +0.71, development seeds). |
 | A-E9 | Fresh environment seeds 8500–8519; CI over seeds, with the 3 checkpoints as paired repeats. np-any: +2.18 [+1.30, +3.06] (phy_mcs_blind), +1.91 [+1.42, +2.39] (ref). np-any is not better than top-2 or unrestricted planning: its value is equal return at lower cost. With report delay of 1–3 slots or loss of 30–60 %, no degradation is resolved (all CIs include 0) under the warm start. Shannon np-pess beats unrestricted planning (+0.90, CI > 0) but not top-2 (+0.39, CI includes 0). |
+| A-E10 | Mismatched warm start (calibrate in the other PHY regime, same seeds): np-any −6.37 [−8.33, −4.41] (phy_mcs_blind), −12.10 [−14.50, −9.69] (ref) vs PPO; worse than cold by 7–13. The current tracker does not detect the regime change because the frozen calibration data dominate the pooled statistics. |
 
 ---
 

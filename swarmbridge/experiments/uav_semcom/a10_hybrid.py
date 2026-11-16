@@ -37,6 +37,9 @@ PPO mode-only). Variants (VARIANT strings):
                                         fbd=D, fbl=P (A-E9: throughput reports reach the calibrator / tracker D slots
                                         late and are lost with probability P, a9_mpc.Feedback; also during the 'pre'
                                         calibration episodes), fbs=SEED (loss draws).
+                                        calreg=NAME (review #35 stress test: the 'pre' calibration episodes run in
+                                        regime NAME's environment, e.g. ref PHY, while testing in another regime;
+                                        same heuristic controller and seeds; stale / mismatched warm start).
   K may be written as e.g. 2g5: the robustness check then uses 5 scales evenly spaced over the interval instead of
   its 2 endpoints.
 PERSIST: cold (reset per episode) | warm (kept across the test episodes of the run: continual adaptation, episodes not
@@ -152,7 +155,8 @@ def job(j):
 
     if mpc is not None and (cal is not None or trk is not None) and persist == "pre":
         for s in CAL_SEEDS:                             # separate calibration episodes (heuristic, val pool)
-            V.run_episode_ev(SV.UavSurveyEnv(AE.G["table"], AE.G["pools"][CAL_POOL], C.regime_cfg(regime)), sp, mp_heur, s)
+            V.run_episode_ev(SV.UavSurveyEnv(AE.G["table"], AE.G["pools"][CAL_POOL], C.regime_cfg(opt.get("calreg", regime))),
+                             sp, mp_heur, s)
         for o_ in (cal, trk):
             if o_ is not None:
                 o_.freeze()
