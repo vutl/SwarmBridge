@@ -301,3 +301,59 @@ def test_feedback_delay_shifts_and_loss_is_shared(env_at_decision):
     assert 0.3 < frac < 0.5 and c.fb.n_used == c.fb.n_sent - c.fb.n_lost
     c2, _, _ = _fb_episode(M.Feedback(0, 0.4, seed=6), M.Feedback(0, 0.4, seed=6))
     assert c2.bins != c.bins                                          # the loss draws depend on the seed
+
+
+def test_recency_window_drops_oldest():
+    """A-E11: with window W the tracker's residual statistics and the calibrator's bin hold only the last W slots."""
+    import types
+    cal = types.SimpleNamespace(mean=lambda env, k: 1e6)
+    trk = M.RateErrTracker(types.SimpleNamespace(model="cal", cal=cal), window=3)
+    env = _stub_env()
+    obs = [2e6, 2e6, 1e6, 1e6, 1e6]                      # the old (2e6) observations must age out
+    trk.update(env)
+    for r in obs:
+        env.segments.append((0, 0, env.t, env.t + 30.0, 0.0, r))
+        env.t += 30.0
+        trk.update(env)
+    b, se = trk.stats(env, 0)
+    assert abs(b) < 1e-9 and se < 1e-9
+    cr = M.CalRates(slot_weight=True, window=2)
+    for r in (5.0, 6.0, 7.0):
+        cr._add(0, r, 30.0, 10.0)
+    assert cr.bins[0][0] == [6.0, 7.0] and len(cr.rho_hist) == 3
+    big = M.CalRates(slot_weight=True)                   # default: unchanged, keeps everything
+    for r in (5.0, 6.0, 7.0):
+        big._add(0, r, 30.0, 10.0)
+    assert big.bins[0][0] == [5.0, 6.0, 7.0]
+
+
+def _monitor_run(cal_regime, test_regime, seed=8003):
+    """warm-start calibrator from 3 heuristic episodes in cal_regime, then an OnlineMonitor over one test episode."""
+    import env_ev as V
+    sp, mp = MH.from_name(AE.tuned(test_regime, "best"), C.MODES)
+    cal = M.CalRates(slot_weight=True)
+
+    def sp_cal(env):
+        cal.update(env)
+        return sp(env)
+    for s in range(9000, 9010):
+        V.run_episode_ev(SV.UavSurveyEnv(AE.G["table"], AE.G["pools"]["val"], C.regime_cfg(cal_regime)), sp_cal, mp, s)
+    mon = M.OnlineMonitor(cal)
+    seen = []
+
+    def sp_test(env):
+        mon.update(env)
+        seen.append(mon.n)
+        return sp(env)
+    V.run_episode_ev(SV.UavSurveyEnv(AE.G["table"], AE.G["pools"]["test"], C.regime_cfg(test_regime)), sp_test, mp, seed)
+    return mon, seen
+
+
+def test_online_monitor_alarms_on_stale_not_on_matched():
+    AE.init(False)
+    for seed in (8003, 8004):
+        mon, seen = _monitor_run("ref", "phy_mcs_blind", seed)   # Shannon warm start, MCS deployment: over-prediction
+        assert mon.alarm_t is not None and mon.alarm_t < 40.0
+        assert seen[0] == 0                               # starts empty in the test episode (no historical ratios)
+        mon2, _ = _monitor_run("phy_mcs_blind", "phy_mcs_blind", seed)
+        assert mon2.alarm_t is None and mon2.n >= mon2.n_min

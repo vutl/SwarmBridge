@@ -40,6 +40,22 @@ PPO mode-only). Variants (VARIANT strings):
                                         calreg=NAME (review #35 stress test: the 'pre' calibration episodes run in
                                         regime NAME's environment, e.g. ref PHY, while testing in another regime;
                                         same heuristic controller and seeds; stale / mismatched warm start).
+                                        A-E11 (review #36): NAME may carry overrides, NAME+key~val+.. (e.g.
+                                        phy_mcs_blind+phy_bler~0.0).
+                                        win=W  recency baseline: calibrator and error tracker keep only the last W
+                                        observations per SNR bin (warm start and online alike).
+                                        sd=trust|ppo  split / detect: the frozen warm-start calibrator is checked by an
+                                        a9_mpc.OnlineMonitor on THIS episode's observations only; after an alarm the
+                                        planner uses an online-only calibrator + tracker (cold start, window wo=W,
+                                        default 30) and PPO's mode while those lack data; before n_min online ratios
+                                        the warm start is used (trust) or PPO's mode is used (ppo). Monitor options
+                                        mw (window, 40), mn (n_min, 20), md (delta on |log ratio|, log 1.5), mz (z, 3).
+                                        tcold=W  split statistics: the calibrator keeps the warm start ('pre'), but
+                                        the error tracker that sets the sensitivity interval is online-only (reset
+                                        every episode, last W observations per bin); PPO's mode until it has data.
+  Any variant (also ppo:I) accepts drift=T+key~val+..: from env time T on, the TEST episode's environment
+  parameters change (e.g. drift=40+phy_bler~0.4); calibration episodes are unaffected. Per-seed return after T is
+  reported (per_seed_return_post).
   K may be written as e.g. 2g5: the robustness check then uses 5 scales evenly spaced over the interval instead of
   its 2 endpoints.
 PERSIST: cold (reset per episode) | warm (kept across the test episodes of the run: continual adaptation, episodes not
@@ -62,8 +78,11 @@ histogram and mean predicted bits of the chosen modes (diagnostic for shallow MP
 Usage: python a10_hybrid.py OUT --regimes phy_mcs_blind,ref --variants V1,V2,.. [--seeds 8000:8020 --procs 12]
 """
 import argparse
+import copy
 import json
+import math
 import time
+import types
 from multiprocessing import Pool
 
 import numpy as np
@@ -102,9 +121,8 @@ def job(j):
     grid = 0
     opt = {}
     dl = None
-    if kind == "ahyb":
-        opt = dict(x.split("=") for x in p[10:])
-        p = p[:10]
+    opt = dict(x.split("=", 1) for x in p if "=" in x)
+    p = [x for x in p if "=" not in x]
     if kind in ("mpc", "hyb", "ehyb", "dhyb", "shyb", "ahyb"):
         o = 1 if kind == "mpc" else 2
         model, n, hz, roll = p[o], int(p[o + 1]), int(p[o + 2]), p[o + 3]
@@ -125,12 +143,17 @@ def job(j):
             persist = (p[o + 5] if kind == "hyb" else (p[o + 4] if len(p) > o + 4 else "cold")) if model in ("cal", "cals") else "cold"
         fbd, fbl = int(opt.get("fbd", 0)), float(opt.get("fbl", 0.0))
         mkfb = (lambda: M.Feedback(fbd, fbl, seed=int(opt.get("fbs", 31)))) if (fbd or fbl) else (lambda: None)
+        win = int(opt["win"]) if "win" in opt else None
         if model in ("cal", "cals"):                    # cals: slot-weighted calibrator (A-E5), cal: airtime-weighted
-            cal = M.CalRates(persistent=(persist in ("warm", "pre")), slot_weight=(model == "cals"), fb=mkfb())
+            cal = M.CalRates(persistent=(persist in ("warm", "pre")), slot_weight=(model == "cals"), fb=mkfb(),
+                             window=win)
             model = "cal"
         mpc = M.MPCMode(model, n, hz, None, fallback=mp_heur, seed=12345, rollout=roll, cal=cal, margin_z=z)
         if kind in ("ehyb", "dhyb", "shyb", "ahyb"):
-            trk = M.RateErrTracker(mpc, persistent=(persist in ("warm", "pre")), fb=mkfb())
+            if "tcold" in opt:                          # A-E11 split statistics: online-only error tracker
+                trk = M.RateErrTracker(mpc, persistent=False, fb=mkfb(), window=int(opt["tcold"]))
+            else:
+                trk = M.RateErrTracker(mpc, persistent=(persist in ("warm", "pre")), fb=mkfb(), window=win)
     biases, scale_w = [], []
     if float(opt.get("dl", 0)) > 0:
         dl = M.Deadline(float(opt["dl"]), margin_ms=float(opt.get("margin", 3.0)))
@@ -146,20 +169,43 @@ def job(j):
     interior = {"nonpos": [], "unresolved": [], "min_rel": []}
     screens = fulls = 0
 
+    sd = opt.get("sd")
+    cal_o = trk_o = mon = None
+    drift = parse_spec(opt["drift"]) if "drift" in opt else None
+    st_test = {"on": False}
+    alarm_t, probation = [], [0]
+
     def sp(env):
+        if drift is not None and st_test["on"] and env.t >= drift[0] and env.c.get("_drifted") is None:
+            env.c.update(drift[1])
+            env.c["_drifted"] = float(env.t)
         if cal is not None:
             cal.update(env)
         if trk is not None:
             trk.update(env)
+        for o_ in (cal_o, trk_o, mon):
+            if o_ is not None:
+                o_.update(env)
         return sp0(env)
 
     if mpc is not None and (cal is not None or trk is not None) and persist == "pre":
+        cname, cover = parse_spec(opt.get("calreg", regime))
         for s in CAL_SEEDS:                             # separate calibration episodes (heuristic, val pool)
-            V.run_episode_ev(SV.UavSurveyEnv(AE.G["table"], AE.G["pools"][CAL_POOL], C.regime_cfg(opt.get("calreg", regime))),
+            V.run_episode_ev(SV.UavSurveyEnv(AE.G["table"], AE.G["pools"][CAL_POOL], C.regime_cfg(cname, **cover)),
                              sp, mp_heur, s)
         for o_ in (cal, trk):
-            if o_ is not None:
+            if o_ is not None and not (o_ is trk and "tcold" in opt):    # tcold: tracker stays online-only
                 o_.freeze()
+        if sd:
+            assert kind == "ahyb" and mpc.model == "cal"
+            ref_cal = M.CalRates(slot_weight=True)
+            ref_cal.bins = copy.deepcopy(cal.snap[0])
+            mon = M.OnlineMonitor(ref_cal, window=int(opt.get("mw", 40)), n_min=int(opt.get("mn", 20)),
+                                  delta=float(opt.get("md", math.log(1.5))), z=float(opt.get("mz", 3.0)))
+            wo = int(opt.get("wo", 30))
+            cal_o = M.CalRates(persistent=False, slot_weight=True, window=wo)
+            trk_o = M.RateErrTracker(types.SimpleNamespace(model="cal", cal=cal_o), persistent=False, window=wo)
+    st_test["on"] = True
     times, chosen_bits, hist, gated = [], [], np.zeros(len(C.MODES), int), 0
     rows = []
     for s in seeds:
@@ -181,7 +227,7 @@ def job(j):
         e = GE.GymUavSemcomEv(AE.G["table"], AE.G["pools"]["test"], C.regime_cfg(regime), seed=s, seeds=[s],
                               core_cls=SV.UavSurveyEnv, slot_pol=sp)
         obs, _ = e.reset()
-        done, tot = False, 0.0
+        done, tot, tot_post = False, 0.0, 0.0
         while not done:
             t0 = time.perf_counter()
             if dl is not None:
@@ -198,7 +244,13 @@ def job(j):
                 else:
                     m_sel = mpc(e.core, k, task, incumbent=m_ppo)
             elif kind == "ahyb":
-                st = trk.stats(e.core, k)
+                use_cal, use_trk = cal, trk
+                if mon is not None and mon.alarm_t is not None:
+                    use_cal, use_trk = cal_o, trk_o
+                st = use_trk.stats(e.core, k)
+                if mon is not None and mon.alarm_t is None and sd == "ppo" and mon.n < mon.n_min:
+                    st = None
+                    probation[0] += 1
                 if st is None:
                     m_sel = m_ppo
                     gated += 1
@@ -210,8 +262,10 @@ def job(j):
                     scale_w.append(hi - lo)
                     mpc.scales = list(np.linspace(lo, hi, grid)) if grid else [lo, hi]
                     screens += int(cand != "all")
+                    mpc.cal = use_cal
                     m_sel = mpc.selective(e.core, k, task, m_ppo, lo, cand=cand, trig=trig, h1=n1, n_cand=2,
                                           stack=stack, dl=dl)
+                    mpc.cal = cal
                     fulls += int(mpc.last_full)
                     if mpc.last_abort:
                         aborts[mpc.last_abort] = aborts.get(mpc.last_abort, 0) + 1
@@ -281,10 +335,15 @@ def job(j):
             chosen_bits.append(e.core.mode_info(task)[0][m_sel])
             act = np.array(a)
             act[-1] = m_sel
+            post = drift is not None and e.core.c.get("_drifted") is not None
             obs, r, done, _, info = e.step(act)
             tot += r
+            tot_post += r if post else 0.0
         info["return"] = tot
         rows.append({k: float(info[k]) for k in AE.KEEP})
+        rows[-1]["return_post"] = tot_post
+        if mon is not None:
+            alarm_t.append(mon.alarm_t)
     t = np.asarray(times) * 1e3
     out = dict(regime=regime, variant=variant, slot_policy_from=heur, per_seed_return=[x["return"] for x in rows],
                decisions=int(len(t)), ms_mean=float(t.mean()), ms_p95=float(np.percentile(t, 95)),
@@ -292,6 +351,12 @@ def job(j):
                frac_over_100ms=float((t > 100).mean()), mode_hist=hist.tolist(), mean_chosen_kbits=float(np.mean(chosen_bits)) / 1e3)
     for k in ("return", "ok_rate", "drop_rate", "late_rate", "q_viol_rate", "mean_psnr"):
         out[k] = float(np.nanmean([x[k] for x in rows]))
+    out["per_seed"] = [{k: x[k] for k in ("ok_rate", "drop_rate", "late_rate", "q_viol_rate", "mean_psnr")} for x in rows]
+    if drift is not None:
+        out.update(drift=dict(t=drift[0], set=drift[1]), per_seed_return_post=[x.get("return_post", float("nan")) for x in rows])
+    if mon is not None:
+        out.update(alarm_t=alarm_t, alarm_frac=float(np.mean([a is not None for a in alarm_t])),
+                   probation_ppo=int(probation[0]))
     if interior["nonpos"]:
         out.update(interior_n=len(interior["nonpos"]), interior_nonpos=float(np.mean(interior["nonpos"])),
                    interior_unresolved=float(np.mean(interior["unresolved"])))
@@ -330,6 +395,24 @@ def job(j):
                    cal_fallbacks=int(mpc.cal_fallbacks), robust_checks=int(mpc.robust_checks),
                    robust_rejects=int(mpc.robust_rejects), protocol=persist)
     return out
+
+
+def parse_spec(spec):
+    """'NAME+key~val+..' -> (NAME, {key: val}) for calreg; 'T+key~val+..' -> (float(T), {key: val}) for drift."""
+    head, *kv = spec.split("+")
+    d = {}
+    for x in kv:
+        key, v = x.split("~")
+        try:
+            v = float(v)
+        except ValueError:
+            pass
+        d[key] = v
+    try:
+        head = float(head)
+    except ValueError:
+        pass
+    return head, d
 
 
 def planned_now(mpc):

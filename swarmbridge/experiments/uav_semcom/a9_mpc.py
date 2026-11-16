@@ -104,16 +104,19 @@ class CalRates:
     slot's fading is drawn, so this is unbiased for the per-slot rate distribution."""
     BIN_DB, MIN_AIR = 2.0, 20.0
 
-    def __init__(self, persistent=False, slot_weight=False, fb=None):
-        self.persistent, self.slot_weight, self.fb = persistent, slot_weight, fb
+    def __init__(self, persistent=False, slot_weight=False, fb=None, window=None):
+        """window (A-E11 recency baseline): keep only the last `window` observations per SNR bin (warm-start and
+        online alike, oldest dropped first); the rho fallback then pools the last 10 x window observations."""
+        self.persistent, self.slot_weight, self.fb, self.window = persistent, slot_weight, fb, window
         self.bins, self.num, self.den = {}, 0.0, 0.0
+        self.rho_hist = []
         self.tasks, self.seg_i, self.prev = None, 0, None
         self.snap = None
 
     def freeze(self):
         """A-E6 'pre' protocol: keep the current state (from separate calibration episodes) as the start state of
         every following episode (test episodes then do not share what they observe)."""
-        self.snap = copy.deepcopy((self.bins, self.num, self.den))
+        self.snap = copy.deepcopy((self.bins, self.num, self.den, self.rho_hist))
 
     def _snr_db(self, env, k):
         c = env.c
@@ -125,9 +128,9 @@ class CalRates:
             if self.fb is not None:
                 self.fb.new_episode()
             if self.snap is not None:                       # 'pre': every episode restarts from the warm-start
-                self.bins, self.num, self.den = copy.deepcopy(self.snap)
+                self.bins, self.num, self.den, self.rho_hist = copy.deepcopy(self.snap)
             elif not self.persistent:
-                self.bins, self.num, self.den = {}, 0.0, 0.0
+                self.bins, self.num, self.den, self.rho_hist = {}, 0.0, 0.0, []
         if self.prev is not None and self.prev[0] != env.t:
             t0, snr = self.prev
             for k, r, dur in slot_obs(env, self, env.c["dt"] if self.slot_weight else None):
@@ -146,6 +149,14 @@ class CalRates:
         self.bins.setdefault(key, ([], []))
         self.bins[key][0].append(r); self.bins[key][1].append(dur)
         self.num += r * dur; self.den += sh * dur
+        if self.window:
+            rs, ws = self.bins[key]
+            if len(rs) > self.window:
+                del rs[:-self.window]; del ws[:-self.window]
+            self.rho_hist.append((r * dur, sh * dur))
+            if len(self.rho_hist) > 10 * self.window:
+                a, b = self.rho_hist.pop(0)
+                self.num -= a; self.den -= b
 
     def rho(self):
         return (self.num + C_RHO) / (self.den + C_RHO)
@@ -215,8 +226,10 @@ class RateErrTracker:
     (default; unbiased, see CalRates) or per segment duration (slot_weight=False; biased low by queue emptying)."""
     BIN_DB, MIN_AIR = 2.0, 20.0
 
-    def __init__(self, mpc, persistent=False, n_mc=64, seed=7, slot_weight=True, fb=None):
+    def __init__(self, mpc, persistent=False, n_mc=64, seed=7, slot_weight=True, fb=None, window=None):
+        """window (A-E11 recency baseline): the residual statistics of a bin use only its last `window` observations."""
         self.mpc, self.persistent, self.n_mc, self.slot_weight, self.fb = mpc, persistent, n_mc, slot_weight, fb
+        self.window = window
         self.rng = np.random.default_rng(seed)
         self.bins = {}
         self.tasks, self.seg_i, self.prev = None, 0, None
@@ -273,10 +286,17 @@ class RateErrTracker:
             self.prev = (env.t, [self._snr_db(env, k) for k in range(n)], [self.predict(env, k) for k in range(n)])
 
     def _add(self, key, r, pred, dur):
-        acc = self.bins.setdefault(key, [0.0] * 6)
+        acc = self.bins.setdefault(key, [0.0] * 6 + ([[]] if self.window else []))
         ratio = r / max(pred, 1.0)
-        acc[0] += r * dur; acc[1] += pred * dur; acc[2] += dur
-        acc[3] += ratio; acc[4] += ratio * ratio; acc[5] += 1
+        x = (r * dur, pred * dur, dur, ratio, ratio * ratio, 1)
+        for i in range(6):
+            acc[i] += x[i]
+        if self.window:
+            acc[6].append(x)
+            if len(acc[6]) > self.window:
+                old = acc[6].pop(0)
+                for i in range(6):
+                    acc[i] -= old[i]
 
     def bias(self, env, k):
         key = int(math.floor(self._snr_db(env, k) / self.BIN_DB))
@@ -296,12 +316,54 @@ class RateErrTracker:
         a = np.zeros(6)
         for d in (0, -1, 1, -2, 2):
             if key + d in self.bins:
-                a += np.asarray(self.bins[key + d])
+                a += np.asarray(self.bins[key + d][:6])
             if a[2] >= self.MIN_AIR:
                 n = max(a[5], 1.0)
                 var = max(a[4] / n - (a[3] / n) ** 2, 0.0) * n / max(n - 1, 1)
                 return a[0] / max(a[1], 1e-9) - 1.0, math.sqrt(var / n)
         return None
+
+
+class OnlineMonitor:
+    """A-E11 (review #36): online-only check of a frozen warm-start rate model.
+
+    `ref` is the warm-start calibrator as frozen after the calibration episodes (CalRates; only its bins are read, it
+    never receives online data). At the start of every slot the monitor stores, per UAV, ref's mean per-slot rate in
+    the bin of the UAV's expected SNR (None if ref has no data there); when the slot has ended, every transmitting
+    (UAV, slot) of this episode adds the ratio observed / predicted (slot-weighted, as CalRates) to a FIFO of the last
+    `window` ratios (pooled over UAVs and bins). Only observations of the current episode enter, so the historical
+    pool never certifies itself. Alarm (sticky for the episode) when >= n_min ratios are available and the mean ratio
+    m satisfies |log m| > delta (default log 1.5: a 50 % rate error) AND |m - 1| > z * se (se = sd / sqrt(n)).
+    alarm_t = env time of the alarm. (A fixed tolerance is needed: with 10 calibration episodes the warm start covers
+    a narrow SNR range, and even a matched warm start extrapolates with |log m| up to ~0.38 on single windows.)"""
+
+    def __init__(self, ref, window=40, n_min=20, delta=math.log(1.5), z=3.0):
+        self.ref, self.window, self.n_min, self.delta, self.z = ref, window, n_min, delta, z
+        self.tasks, self.seg_i, self.prev = None, 0, None
+        self.ratios, self.alarm_t = [], None
+
+    @property
+    def n(self):
+        return len(self.ratios)
+
+    def update(self, env):
+        if self.tasks is not env.tasks:
+            self.tasks, self.seg_i, self.prev = env.tasks, 0, None
+            self.ratios, self.alarm_t = [], None
+        if self.prev is not None and self.prev[0] != env.t:
+            for k, r, _ in slot_obs(env, self, env.c["dt"]):
+                pred = self.prev[1][k]
+                if pred is not None:
+                    self.ratios.append(r / max(pred, 1.0))
+            del self.ratios[:-self.window]
+            if self.alarm_t is None and self.n >= self.n_min:
+                x = np.asarray(self.ratios)
+                m = float(x.mean())
+                se = float(x.std(ddof=1)) / math.sqrt(len(x))
+                if abs(math.log(max(m, 1e-3))) > self.delta and abs(m - 1.0) > self.z * se:
+                    self.alarm_t = float(env.t)
+        if self.prev is None or self.prev[0] != env.t:
+            self.prev = (env.t, [self.ref.mean(env, k) for k in range(len(env.uavs))])
 
 
 class Deadline:
