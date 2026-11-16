@@ -16,6 +16,15 @@ Importance map of frame t (computed at the sender from frames <= t only; frame t
   taskev     event-sensitive: max(p_t, |p_t - shift(p_t-1)|) (task-score change after global-motion compensation:
              appearing / disappearing / moving objects), block max
   oracle     DIAGNOSTIC ONLY (not deployable): ground-truth patch labels of frame t (any class), block max
+B-E9 (review #35) adds an explicit EVENT QUOTA on top of the task ROI:
+  evq        task set as above (top f of blocks by p_t) PLUS up to round(q * #blocks) further blocks, outside the task
+             set, with the largest per-class semantic change
+               E_t(i) = max_c |p_t,c(i) - p~_t-1,c(i)|,  p_c = per-class sigmoid, p~_t-1 = p_t-1 shifted by the
+             global camera motion (frames <= t only; frame 0: no event blocks); eligibility E > 0.1. Unlike taskev's
+             |max_c p_t - max_c p_t-1|, a class swap (car 0.9 -> person 0.9) gives E ~ 0.9.
+  gtq        DIAGNOSTIC ONLY: same quota, but the event blocks are the patches whose ground-truth 4-class label
+             differs from frame t-1 (exactly the patches scored by ap_change; no motion compensation, as the metric)
+  Both quota sets get -A like the task set; mean offset stays 0. Keys: evq_A{A}_f{f}_q{q}.
 Offsets (rank allocation, strength A, fraction f): the blocks with importance > 0.1, at most round(f * #blocks) of
 them with the highest importance, get -A; all other blocks get +A * n_top / (n - n_top) (mean offset 0 in QP units);
 no eligible block -> no offsets. The resulting bit rate is not fixed; methods are compared at matched ACTUAL bits by
@@ -53,6 +62,7 @@ X265_PARAMS = ["keyint=-1", "min-keyint=1", "scenecut=0", "bframes=0", "rc-looka
 BIN = Path.home() / "work" / "jepa_semcom" / "bin" / "x265roi"
 ELIG = 0.1
 METHODS = ("uniform", "motion", "task", "taskev", "oracle")
+QUOTA_METHODS = ("evq", "gtq")
 DEV_CLIPS = "uav0000288_00001_v,uav0000099_02109_v,uav0000273_00001_v,uav0000243_00001_v"   # 4 longest TUNE clips of
 #                                                              distinct source videos (none is an evaluation source)
 
@@ -179,6 +189,69 @@ def imp_oracle(labels, valid):
     return np.stack([block_pool(patch_to_pix(y[t]), "max") for t in range(T)]).astype(np.float32)
 
 
+def class_prob(scores):
+    return 1.0 / (1.0 + np.exp(-scores.reshape(len(scores), -1, 4)))             # (T, 858, 4)
+
+
+def imp_event(scores, sh):
+    """per-class semantic change after global-motion compensation, block max; frame 0 -> 0."""
+    p = class_prob(scores)
+    out = np.zeros((len(p), BH, BW), np.float32)
+    for t in range(1, len(p)):
+        e = None
+        for c in range(p.shape[2]):
+            d = np.abs(patch_to_pix(p[t, :, c]) - shift_img(patch_to_pix(p[t - 1, :, c]), *sh[t]))
+            e = d if e is None else np.maximum(e, d)
+        out[t] = block_pool(np.pad(e, ((0, H_IMG - e.shape[0]), (0, W_IMG - e.shape[1]))), "max")
+    return out
+
+
+def imp_gtchange(labels, valid):
+    """DIAGNOSTIC: patches whose GT 4-class label differs from frame t-1 (the ap_change patches), block max."""
+    T = len(valid)
+    y = labels.reshape(T, -1, 4)
+    ch = np.zeros((T, y.shape[1]), np.float32)
+    ch[1:] = ((y[1:] != y[:-1]).any(2) & valid.reshape(T, -1)[1:].astype(bool))
+    return np.stack([block_pool(np.pad(patch_to_pix(ch[t]), ((0, H_IMG - GH * PATCH), (0, W_IMG - GW * PATCH))), "max")
+                     for t in range(T)]).astype(np.float32)
+
+
+def offsets_quota(base, ev, A, f, q, stats=None):
+    """task set (rank of base, as offsets()) plus up to round(q * n) blocks outside it ranked by ev (ev > ELIG);
+    all selected blocks -A, the rest +A k / (n - k). stats (dict) collects per-frame quota counts and the overlap of
+    the top-ev blocks with the task set."""
+    T = len(base)
+    n = BH * BW
+    qn = int(round(q * n))
+    out = np.zeros((T, n), np.float32)
+    nb, ne, ov, act = [], [], [], 0
+    for t in range(T):
+        v, e = base[t].reshape(-1), ev[t].reshape(-1)
+        kb = min(int(round(f * n)), int((v > ELIG).sum()))
+        sel = np.zeros(n, bool)
+        sel[np.lexsort((np.arange(n), -v))[:kb]] = True
+        order_e = np.lexsort((np.arange(n), -e))
+        top_e = order_e[:min(qn, int((e > ELIG).sum()))]
+        ov.append(float(sel[top_e].mean()) if len(top_e) else np.nan)
+        cand = [i for i in order_e if e[i] > ELIG and not sel[i]][:qn]
+        sel[cand] = True
+        nb.append(kb)
+        ne.append(len(cand))
+        act += len(cand) > 0
+        k = int(sel.sum())
+        if k == 0:
+            continue
+        out[t] = A * k / (n - k)
+        out[t, sel] = -A
+    if stats is not None:
+        ov = np.array(ov, float)
+        stats.update(task_blocks_frac=float(np.mean(nb)) / n, event_blocks_frac=float(np.mean(ne)) / n,
+                     event_share_of_selected=float(np.sum(ne) / max(np.sum(nb) + np.sum(ne), 1)),
+                     frames_with_event_blocks=act / T,
+                     top_event_overlap_with_task=float(np.nanmean(ov)) if np.isfinite(ov).any() else None)
+    return out.reshape(T, BH, BW)
+
+
 def offsets(imp, A, f):
     """rank allocation (module docstring); imp (T, BH, BW) -> (T, BH, BW) QP offsets."""
     T = len(imp)
@@ -204,18 +277,30 @@ def _enc_job(j):
     return key, dec, tot, pk, es
 
 
-def configs(methods, grid):
+def configs(methods, grid, qgrid=()):
     out = []
     for m in methods:
         if m == "uniform":
-            out.append(("uniform", 0.0, 0.0))
+            out.append(("uniform", 0.0, 0.0, 0.0))
+        elif m in QUOTA_METHODS:
+            out += [(m, A, f, q) for A, f, q in qgrid]
         else:
-            out += [(m, A, f) for A, f in grid]
+            out += [(m, A, f, 0.0) for A, f in grid]
     return out
 
 
-def cfg_key(m, A, f):
-    return "uniform" if m == "uniform" else f"{m}_A{A:g}_f{f:g}"
+def cfg_key(m, A, f, q=0.0):
+    if m == "uniform":
+        return "uniform"
+    return f"{m}_A{A:g}_f{f:g}" + (f"_q{q:g}" if m in QUOTA_METHODS else "")
+
+
+def make_offsets(imps, m, A, f, q, stats=None):
+    if m == "uniform":
+        return None
+    if m in QUOTA_METHODS:
+        return offsets_quota(imps["task"], imps["event" if m == "evq" else "gtchange"], A, f, q, stats)
+    return offsets(imps[m], A, f)
 
 
 def run(a):
@@ -245,10 +330,12 @@ def run(a):
     else:
         names = B3.eval_clips(a.clips, a.tokens_dir)
     grid = [tuple(float(x) for x in g.split(":")) for g in a.grid.split(",")]
-    cfgs = configs(a.methods.split(","), grid)
+    qgrid = [tuple(float(x) for x in g.split(":")) for g in a.qgrid.split(",")] if a.qgrid else []
+    cfgs = configs(a.methods.split(","), grid, qgrid)
     if a.select:
         sel = json.loads(Path(a.select).read_text())["selected"]
-        cfgs = [("uniform", 0.0, 0.0)] + [(m, s["A"], s["f"]) for m, s in sel.items()]
+        keep = a.methods.split(",")
+        cfgs = [("uniform", 0.0, 0.0, 0.0)] + [(m, s["A"], s["f"], s.get("q", 0.0)) for m, s in sel.items() if m in keep]
     crfs = [int(x) for x in a.crfs.split(",")]
     outd = Path(a.out_dir); outd.mkdir(parents=True, exist_ok=True)
     stats = json.loads((outd / "run_stats.json").read_text()) if (outd / "run_stats.json").exists() else {}
@@ -281,17 +368,25 @@ def run(a):
             imps["task"] = imp_task(s_orig)
             imps["taskev"] = imp_taskev(s_orig, sh)
             cost.setdefault("taskmap_ms_per_frame", []).append((time.perf_counter() - t0) / len(rgb) * 1e3 / 2)
+            t0 = time.perf_counter()
+            imps["event"] = imp_event(s_orig, sh)
+            cost.setdefault("eventmap_ms_per_frame", []).append((time.perf_counter() - t0) / len(rgb) * 1e3)
             imps["oracle"] = imp_oracle(D["labels"], D["valid"])
+            imps["gtchange"] = imp_gtchange(D["labels"], D["valid"])
             yuv_path = outd / f"_{c}.yuv"
             yuv_path.write_bytes(to_yuv(rgb))
             jobs = []
-            for m, A, f in cfgs:
-                qo = None if m == "uniform" else offsets(imps[m], A, f)
+            qstats = {}
+            for m, A, f, q in cfgs:
+                qs = {}
+                qo = make_offsets(imps, m, A, f, q, qs)
+                if qs:
+                    qstats[cfg_key(m, A, f, q)] = qs
                 for crf in crfs:
-                    jobs.append((str(yuv_path), len(rgb), crf, qo, f"{cfg_key(m, A, f)}_c{crf}"))
+                    jobs.append((str(yuv_path), len(rgb), crf, qo, f"{cfg_key(m, A, f, q)}_c{crf}"))
             res = dict(orig_scores=s_orig.astype(np.float32), shifts=np.array(sh))
-            st = dict(role=role, frames=len(rgb), orig_score_maxdiff=chk, points={},
-                      top_frac={m: float((offsets(imps[m], *grid[0]) < 0).mean()) for m in imps})
+            st = dict(role=role, frames=len(rgb), orig_score_maxdiff=chk, points={}, quota_stats=qstats,
+                      top_frac={m: float((offsets(imps[m], *grid[0]) < 0).mean()) for m in ("motion", "task", "taskev", "oracle")})
             for key, dec, tot, pk, es in pool.imap_unordered(_enc_job, jobs):
                 res[f"{key}_scores"] = scores(list(dec)).astype(np.float32)
                 res[f"{key}_pkt_bits"] = pk
@@ -327,7 +422,13 @@ def evaluate(a):
         for key, p in stats[c]["points"].items():
             ck = key.rsplit("_c", 1)[0]
             curves.setdefault((ck, c), []).append((p["bits_per_frame"], B3.metrics(V[f"{key}_scores"], Y, M, T), p["psnr"]))
+    qs = {}
+    for c in names:
+        for k, v in stats[c].get("quota_stats", {}).items():
+            for kk, x in v.items():
+                qs.setdefault(k, {}).setdefault(kk, []).append(np.nan if x is None else x)
     out = dict(role=a.role, clips=names, targets=targets, cost=stats.get("_cost"),
+               quota_stats={k: {kk: float(np.nanmean(xs)) for kk, xs in v.items()} for k, v in qs.items()},
                original_tokens={k: float(np.mean([orig[c][k] for c in names])) for k in orig[names[0]]},
                matched={}, diffs={})
     for metric in ("ap", "ap_change", "ap_event", "psnr"):
@@ -349,6 +450,9 @@ def evaluate(a):
             te = [k for k in keys if k.startswith("taskev_A")]
             if len(tk) == 1 and len(te) == 1:
                 out["diffs"][f"{metric}@{t:g}:{te[0]}-{tk[0]}"] = B3.ci(np.array(tab[te[0]]) - np.array(tab[tk[0]]))
+            for qk in (k for k in keys if k.split("_A")[0] in QUOTA_METHODS):
+                for ref in tk + te:
+                    out["diffs"][f"{metric}@{t:g}:{qk}-{ref}"] = B3.ci(np.array(tab[qk]) - np.array(tab[ref]))
     # bit saving at equal quality: per clip, uniform metric at target bits -> bits the method needs for that value
     out["bit_saving"] = {}
     for metric in ("ap", "ap_change", "ap_event"):
@@ -370,12 +474,13 @@ def evaluate(a):
                 out["bit_saving"][f"{metric}@{t:g}:{ck}"] = B3.ci(sv)
     if a.role == "dev":                                  # selection of (A, f) per method
         sel = {}
-        for m in METHODS[1:]:
+        for m in METHODS[1:] + QUOTA_METHODS:
             best = None
+            mets = ("ap_change",) if m in QUOTA_METHODS else ("ap", "ap_change")      # B-E9: ap_change is primary
             for ck in keys:
                 if not ck.startswith(m + "_A"):
                     continue
-                vals = [out["diffs"].get(f"{met}@{t:g}:{ck}-uniform", {}).get("mean") for met in ("ap", "ap_change")
+                vals = [out["diffs"].get(f"{met}@{t:g}:{ck}-uniform", {}).get("mean") for met in mets
                         for t in (6000, 9000, 12000)]
                 vals = [v for v in vals if v is not None]
                 if not vals:
@@ -384,8 +489,10 @@ def evaluate(a):
                 if best is None or sc > best[0]:
                     best = (sc, ck)
             if best:
-                A, f = best[1].split("_A")[1].split("_f")
-                sel[m] = dict(A=float(A), f=float(f), key=best[1], score=float(best[0]))
+                rest = best[1].split("_A")[1]
+                q = float(rest.split("_q")[1]) if "_q" in rest else 0.0
+                A, f = rest.split("_q")[0].split("_f")
+                sel[m] = dict(A=float(A), f=float(f), q=q, key=best[1], score=float(best[0]))
         out["selected"] = sel
     Path(a.out).write_text(json.dumps(out, indent=1))
     print("original tokens", out["original_tokens"], "cost", out["cost"])
@@ -400,6 +507,8 @@ def evaluate(a):
     for k, v in out["bit_saving"].items():
         if v["mean"] is not None and v["lo"] is not None and "_A" in k and (a.role == "eval" or k.startswith("ap@")):
             print(f"saving {k:44s} {v['mean'] * 100:+.1f}% [{v['lo'] * 100:+.1f},{v['hi'] * 100:+.1f}] n {v['n']}")
+    if out["quota_stats"]:
+        print("quota stats", json.dumps(out["quota_stats"], indent=0))
     if "selected" in out:
         print("selected", out["selected"])
 
@@ -414,6 +523,7 @@ def main():
     r.add_argument("--dev-clips", default=DEV_CLIPS)
     r.add_argument("--methods", default=",".join(METHODS))
     r.add_argument("--grid", default="4:0.15,4:0.3,8:0.15,8:0.3")
+    r.add_argument("--qgrid", default="", help="A:f:q,... for the quota methods (evq, gtq)")
     r.add_argument("--crfs", default="30,33,36,39,42,45")
     r.add_argument("--select", default="")
     r.add_argument("--procs", type=int, default=3)

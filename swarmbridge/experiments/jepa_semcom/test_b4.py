@@ -89,3 +89,25 @@ def test_global_shift_and_importance_causal():
     assert np.array_equal(R.imp_motion(fr, sh1, g1)[:t0 + 1], R.imp_motion(fr2, sh2, g2)[:t0 + 1])
     assert np.array_equal(R.imp_taskev(sc, sh1)[:t0 + 1], R.imp_taskev(sc2, sh2)[:t0 + 1])
     assert np.array_equal(R.imp_task(sc)[:t0 + 1], R.imp_task(sc2)[:t0 + 1])
+    assert np.array_equal(R.imp_event(sc, sh1)[:t0 + 1], R.imp_event(sc2, sh2)[:t0 + 1])
+
+
+def test_event_map_sees_class_swap_and_quota_is_disjoint():
+    T, N = 2, R.GH * R.GW
+    sc = np.full((T, N, 4), -6.0, np.float32)
+    sc[0, 100, 0] = 2.2                      # car 0.9 ...
+    sc[1, 100, 1] = 2.2                      # ... -> person 0.9 at the same patch (no camera motion)
+    sh = [(0, 0), (0, 0)]
+    ev_old = R.imp_taskev(sc, sh)[1] - R.imp_task(sc)[1]
+    assert ev_old.max() < 1e-6                                # old map: no change signal
+    e = R.imp_event(sc, sh)
+    assert np.all(e[0] == 0) and e[1].max() > 0.8             # per-class map: ~0.9 at the swapped patch
+    base = np.zeros((1, R.BH, R.BW), np.float32)
+    base[0, 0, :10] = 0.9
+    ev = np.zeros((1, R.BH, R.BW), np.float32)
+    ev[0, 0, 5:20] = 0.5                                      # overlaps the task set on 5 blocks
+    st = {}
+    q = R.offsets_quota(base, ev, 4.0, 10 / (R.BH * R.BW), 8 / (R.BH * R.BW), st)
+    assert (q[0] == -4).sum() == 18 and np.all(q[0, 0, :18] == -4) and abs(q[0].mean()) < 1e-5
+    assert abs(st["top_event_overlap_with_task"] - 5 / 8) < 1e-9 and abs(st["event_share_of_selected"] - 8 / 18) < 1e-9
+    assert R.cfg_key("evq", 4.0, 0.15, 0.05) == "evq_A4_f0.15_q0.05" and R.cfg_key("task", 4.0, 0.15) == "task_A4_f0.15"
