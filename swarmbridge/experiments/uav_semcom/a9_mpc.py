@@ -242,6 +242,39 @@ class RateErrTracker:
         return None
 
 
+class Deadline:
+    """A-E8 (review #33): cooperative, proactive decision budget. The decision clock starts BEFORE PPO inference
+    (start(t0)); before every unit of planning work (building a rate/context set, one mode evaluation, one robustness
+    evaluation) the controller asks ok(stage, units): elapsed + units x (per-unit cost estimate) + margin <= budget.
+    Per-unit costs are learnt online from the measured wall time of past work of the same stage (a high quantile of
+    the last `window` per-unit times; `prior_ms` until 20 observations), a unit being one rolled-out image (1 + later
+    queued images + future frames) of one mode evaluation. Work that has started is never interrupted (Python cannot
+    pre-empt a running evaluation), so this is NOT a hard real-time guarantee: a unit that runs longer than estimated
+    (OS scheduling, contention) still causes a miss; misses are measured and reported."""
+
+    def __init__(self, budget_ms, margin_ms=3.0, prior_ms=1.0, q=0.95, window=300):
+        self.budget, self.margin, self.prior, self.q, self.window = budget_ms, margin_ms, prior_ms, q, window
+        self.obs, self.est, self.t0 = {}, {}, None
+
+    def start(self, t0):
+        self.t0 = t0
+
+    def elapsed(self):
+        return (time.perf_counter() - self.t0) * 1e3
+
+    def unit(self, stage):
+        return self.est.get(stage, self.prior)
+
+    def ok(self, stage, units):
+        return self.elapsed() + units * self.unit(stage) + self.margin <= self.budget
+
+    def record(self, stage, units, ms):
+        o = self.obs.setdefault(stage, [])
+        o.append(ms / max(units, 1))
+        if len(o) >= 20 and (len(o) < 100 or len(o) % 10 == 0):
+            self.est[stage] = float(np.quantile(o[-self.window:], self.q))
+
+
 class MPCMode:
     def __init__(self, model="env", n=8, horizon=4, budget_ms=None, fallback=None, seed=0, rollout="scenario",
                  cal=None, margin_z=None):
@@ -255,6 +288,7 @@ class MPCMode:
         self.times, self.timeouts, self.chosen, self.switched, self.cal_fallbacks = [], 0, [], 0, 0
         self.scales, self.robust_checks, self.robust_rejects = None, 0, 0
         self.cands, self.last_rates = None, None
+        self.last_cands, self.last_abort, self.last_full = [], None, False
         self.__name__ = f"mpc_{model}_n{n}_h{horizon}" + (f"_b{budget_ms:g}" if budget_ms else "")
 
     # ---- rates ----
@@ -339,15 +373,27 @@ class MPCMode:
         u = u - ((q < task.qmin) | (delay > task.dmax))
         return np.where(miss, -1.0, u), np.where(miss, np.maximum(latest, np.maximum(tx_free, ready)), end)
 
-    def _rollout(self, env, tab, G, tx_free, enc_free, tk_like, b_hat, q_hat):
-        """greedy per sample over modes for one later image; returns (utility, new tx_free, new enc_free)."""
+    def _rollout(self, env, tab, G, tx_free, enc_free, tk_like, b_hat, q_hat, g=1):
+        """greedy per sample over modes for one later image; returns (utility, new tx_free, new enc_free).
+        g > 1 (A-E8 stacked evaluation): the sample axis holds g independent groups (the same rate paths at g rate
+        scales); the causal rollout then picks one mode per group, so every group equals a separate evaluation."""
         best_u = np.full(len(tx_free), -np.inf)
         best_tx = tx_free.copy()
         best_enc = enc_free.copy()
-        best_mean = -np.inf
+        best_mean = -np.inf if g == 1 else np.full(g, -np.inf)
         for m in range(env.n_modes):
             ready = enc_free + tab.enc_s[m]
             u, txe = self._value(env, tab, G, tx_free, ready, b_hat[m], q_hat[m], tk_like, m)
+            if self.rollout == "causal" and g > 1:
+                mu = u.reshape(g, -1).mean(1)
+                better = mu > best_mean
+                if better.any():
+                    best_mean = np.where(better, mu, best_mean)
+                    bm = np.repeat(better, len(u) // g)
+                    best_u = np.where(bm, u, best_u)
+                    best_tx = np.where(bm, txe, best_tx)
+                    best_enc = np.where(bm, np.broadcast_to(ready, txe.shape), best_enc)
+                continue
             if self.rollout == "causal":                  # one mode for every sample path (nonanticipative)
                 if u.mean() > best_mean:
                     best_mean, best_u, best_tx, best_enc = u.mean(), u, txe, np.broadcast_to(ready, txe.shape).copy()
@@ -399,11 +445,11 @@ class MPCMode:
         for tk in ctx["later"]:     # per-image info only if its probe has finished, else train means
             bh, qh = env.mode_info(tk) if tk.info_t <= env.t + 1e-9 else (tab.mean_bits, tab.mean_psnr)
             enc = np.maximum(enc, tk.info_t)
-            uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, bh, qh)
+            uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, bh, qh, ctx.get("g", 1))
             v = v + uu
         for tk in ctx["fut"]:
             enc = np.maximum(enc, tk.t_cap) + env.probe_s()
-            uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, tab.mean_bits, tab.mean_psnr)
+            uu, txf, enc = self._rollout(env, tab, G, txf, enc, tk, tab.mean_bits, tab.mean_psnr, ctx.get("g", 1))
             v = v + uu
         return v
 
@@ -413,17 +459,88 @@ class MPCMode:
             return d.mean() > 1e-12
         return d.mean() >= self.margin_z * d.std(ddof=1) / math.sqrt(len(d)) + 1e-12
 
-    def screen(self, env, k, task, h1):
+    def stacked_ctx(self, env, k, task, rates, scales):
+        """A-E8: one context holding the same rate paths at several scales (groups along the sample axis). The
+        per-mode cost is nearly independent of the number of samples, so evaluating g scales together costs about
+        one evaluation instead of g."""
+        R = np.concatenate([rates if sc == 1.0 else np.maximum(rates * sc, 1.0) for sc in scales]) if len(scales) > 1 \
+            else (rates if scales[0] == 1.0 else np.maximum(rates * scales[0], 1.0))
+        ctx = self._ctx(env, k, task, R)
+        ctx["g"] = len(scales)
+        return ctx
+
+    @staticmethod
+    def units(ctx):
+        return 1 + len(ctx["later"]) + len(ctx["fut"])
+
+    def screen(self, env, k, task, h1, scales=None, dl=None):
         """A-E7 cheap first pass: mean value of every mode with a SHORT horizon h1 (same N, model and rollout). The
         decision cost is dominated by the per-mode rollout loop (it grows with the horizon and the number of evaluated
-        modes) and is nearly independent of N, so the screen shortens the horizon. Returns per-mode mean values."""
+        modes) and is nearly independent of N, so the screen shortens the horizon. Returns per-mode mean values.
+        A-E8: scales (e.g. [1, lo]) -> array (len(scales), n_modes) from one stacked pass (same samples); dl (Deadline)
+        -> None if the budget does not allow the next mode evaluation (screen interrupted before it)."""
         h0 = self.h
         self.h = h1
         try:
-            ctx = self._ctx(env, k, task, self._rates(env, k))
-            return np.array([float(self._eval_mode(env, ctx, task, m).mean()) for m in range(env.n_modes)])
+            if scales is None:
+                ctx = self._ctx(env, k, task, self._rates(env, k))
+                return np.array([float(self._eval_mode(env, ctx, task, m).mean()) for m in range(env.n_modes)])
+            t1 = time.perf_counter()
+            ctx = self.stacked_ctx(env, k, task, self._rates(env, k), scales)
+            g, L = ctx["g"], self.units(ctx)
+            if dl is not None:
+                dl.record("ctx", 1, (time.perf_counter() - t1) * 1e3)
+            out = np.zeros((g, env.n_modes))
+            for m in range(env.n_modes):
+                if dl is not None and not dl.ok(f"screen{g}", L):
+                    return None
+                t1 = time.perf_counter()
+                out[:, m] = self._eval_mode(env, ctx, task, m).reshape(g, -1).mean(1)
+                if dl is not None:
+                    dl.record(f"screen{g}", L, (time.perf_counter() - t1) * 1e3)
+            return out
         finally:
             self.h = h0
+
+    def selective(self, env, k, task, inc, lo, cand="n2", trig="nom", h1=1, n_cand=2, stack=False, dl=None):
+        """A-E8 selective controller around the incumbent PPO mode `inc` (self.scales = robustness scales set by the
+        caller; lo = low end of the sensitivity interval).
+          cand 'all': no screen, full planning over all modes (= dhyb; anytime under a deadline).
+          cand 'n2' : screen at the nominal model, candidates = top n_cand screened modes (= A-E7 shyb).
+          cand 'np' : one stacked screen at scales [1, lo]; candidates = best nominal mode + best pessimistic mode
+                      (the next nominal one if both coincide); trig: full planning if a mode beats PPO in the nominal
+                      screen ('nom'), in the pessimistic screen ('pess') or in either ('any').
+        Then the full MPC over {inc} + candidates and the endpoint-sensitivity check. last_abort: None | skip_screen |
+        int_screen | skip_full | trunc_full | int_check (deadline-driven fallbacks / truncations)."""
+        self.last_cands, self.last_abort, self.last_full = [], None, False
+        if cand == "all":
+            cands = None
+        else:
+            if dl is not None and not dl.ok("ctx", 1):
+                self.last_abort = "skip_screen"
+                return inc
+            if cand == "n2" and not stack and dl is None:
+                sv = self.screen(env, k, task, h1)[None]          # exactly the A-E7 path
+            else:
+                sv = self.screen(env, k, task, h1, scales=[1.0, lo] if cand == "np" else [1.0], dl=dl)
+                if sv is None:
+                    self.last_abort = "int_screen"
+                    return inc
+            nom = sv[0]
+            on = [m for m in np.argsort(-nom) if m != inc]
+            if cand == "np":
+                pes = sv[1]
+                op = [m for m in np.argsort(-pes) if m != inc]
+                fire_n, fire_p = nom[on[0]] > nom[inc], pes[op[0]] > pes[inc]
+                fire = dict(any=fire_n or fire_p, nom=fire_n, pess=fire_p)[trig]
+                cands = [int(on[0]), int(op[0] if op[0] != on[0] else on[1])]
+            else:
+                fire = nom[on[0]] > nom[inc]
+                cands = [int(m) for m in on[:n_cand]]
+            if not fire:
+                return inc
+        self.last_full = True
+        return self(env, k, task, incumbent=inc, cands=cands, dl=dl, stack=stack)
 
     def gain_at(self, env, k, task, a, b, rates):
         ctx = self._ctx(env, k, task, rates)
@@ -434,41 +551,86 @@ class MPCMode:
         ctx = self._ctx(env, k, task, self._rates(env, k))
         return self._eval_mode(env, ctx, task, b) - self._eval_mode(env, ctx, task, a)
 
-    def __call__(self, env, k, task, incumbent=None):
+    def __call__(self, env, k, task, incumbent=None, cands=None, dl=None, stack=False):
         """self.scales (set by the caller per decision, A-E6): if not None, a switch away from the incumbent must
-        also be resolvable when every sampled rate path is multiplied by each scale (same samples: paired)."""
+        also be resolvable when every sampled rate path is multiplied by each scale (same samples: paired).
+        A-E8: cands (modes besides the incumbent; default self.cands or all); stack: evaluate the nominal model and the
+        robustness scales in one stacked pass (identical decisions, see stacked_ctx); dl (Deadline): proactive
+        budget checks before each evaluation, reserving the robustness evaluations; the incumbent is returned when
+        not even it, one candidate and the check fit (skip_full); evaluation stops early otherwise (trunc_full)."""
         t_start = time.perf_counter()
-        rates = self._rates(env, k)
-        self.last_rates = rates
-        ctx = self._ctx(env, k, task, rates)
-        # anytime search: the fallback heuristic's mode is the incumbent and is evaluated first; on timeout the best
-        # mode evaluated so far is returned (never an unevaluated or arbitrary one)
         if incumbent is not None:
             inc = int(incumbent)
         else:
             inc = int(self.fallback(env, k, task)) if self.fallback else 0
-        order = [inc] + [m for m in (range(env.n_modes) if self.cands is None else self.cands) if m != inc]
+        if dl is not None and not dl.ok("ctx", 1):
+            self.last_abort = "skip_full"
+            return self._done(inc, inc, t_start)
+        rates = self._rates(env, k)
+        self.last_rates = rates
+        stacked = bool(stack and self.scales)
+        if stacked:
+            ctx = self.stacked_ctx(env, k, task, rates, [1.0] + list(self.scales))
+        else:
+            ctx = self._ctx(env, k, task, rates)
+        g, ns = ctx.get("g", 1), len(rates)
+        L = self.units(ctx)
+        stage = f"full{g}"
+        if dl is not None:
+            dl.record("ctx", 1, (time.perf_counter() - t_start) * 1e3)
+        chk_units = 0 if (stacked or not self.scales) else 2 * len(self.scales)
+        # anytime search: the fallback heuristic's mode is the incumbent and is evaluated first; on timeout the best
+        # mode evaluated so far is returned (never an unevaluated or arbitrary one)
+        pool = cands if cands is not None else (range(env.n_modes) if self.cands is None else self.cands)
+        order = [inc] + [m for m in pool if m != inc]
+        self.last_cands = list(order)
         best, best_v, vals = None, -math.inf, {}
-        for m in order:
+        for i, m in enumerate(order):
             if best is not None and self.budget and (time.perf_counter() - t_start) * 1e3 > self.budget:
                 self.timeouts += 1
                 break
+            if dl is not None:
+                need = (2 if i == 0 else 1) * L + chk_units * L * dl.unit("full1") / max(dl.unit(stage), 1e-9)
+                if not dl.ok(stage, need):
+                    if i <= 1:
+                        self.last_abort = "skip_full"
+                        return self._done(inc, inc, t_start)
+                    self.last_abort = "trunc_full"
+                    self.last_cands = list(order[:i])
+                    break
+            t1 = time.perf_counter()
             vals[m] = self._eval_mode(env, ctx, task, m)
-            val = float(vals[m].mean())
+            if dl is not None:
+                dl.record(stage, L, (time.perf_counter() - t1) * 1e3)
+            val = float(vals[m][:ns].mean())
             if val > best_v:
                 best, best_v = m, val
-        if self.margin_z is not None and best != inc and not self._resolvable(vals[best] - vals[inc]):
+        if self.margin_z is not None and best != inc and not self._resolvable(vals[best][:ns] - vals[inc][:ns]):
             best = inc                                       # gain not resolvable from sampling noise: keep incumbent
         self.last_cand, self.last_rejected = best, False     # for diagnostics (candidate before the robustness check)
         if best != inc and self.scales:
             self.robust_checks += 1
-            for sc in self.scales:
-                cs = self._ctx(env, k, task, np.maximum(rates * sc, 1.0))
-                if not self._resolvable(self._eval_mode(env, cs, task, best) - self._eval_mode(env, cs, task, inc)):
+            for j, sc in enumerate(self.scales):
+                if stacked:
+                    d = (vals[best] - vals[inc])[(j + 1) * ns:(j + 2) * ns]
+                else:
+                    if dl is not None and not dl.ok("full1", 2 * L):
+                        best = inc
+                        self.last_abort = "int_check"
+                        break
+                    t1 = time.perf_counter()
+                    cs = self._ctx(env, k, task, np.maximum(rates * sc, 1.0))
+                    d = self._eval_mode(env, cs, task, best) - self._eval_mode(env, cs, task, inc)
+                    if dl is not None:
+                        dl.record("full1", 2 * L, (time.perf_counter() - t1) * 1e3)
+                if not self._resolvable(d):
                     best = inc                               # ordering not robust to the model's rate uncertainty
                     self.robust_rejects += 1
                     self.last_rejected = True
                     break
+        return self._done(best, inc, t_start)
+
+    def _done(self, best, inc, t_start):
         self.switched += int(best != inc)
         self.chosen.append(int(best))
         self.times.append(time.perf_counter() - t_start)

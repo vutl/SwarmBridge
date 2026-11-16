@@ -190,3 +190,75 @@ def test_screen_and_candidate_restriction(env_at_decision):
     assert sv.shape == (core.n_modes,) and m.h == 4
     m.cands = [int(np.argmin(sv))]
     assert m(core, k, tk, incumbent=0) in (0, m.cands[0])
+
+
+# ---------------------------------------------------------------- A-E8
+def test_stacked_groups_equal_separate_evaluations(env_at_decision):
+    """group-wise causal rollout: each scale group of a stacked context equals a separate evaluation."""
+    core, k, tk = env_at_decision
+    m = M.MPCMode("env", 8, 4, seed=11, rollout="causal")
+    rates = m._rates(core, k)
+    scales = [1.0, 0.6, 1.4]
+    cs = m.stacked_ctx(core, k, tk, rates, scales)
+    ns = len(rates)
+    for mode in range(core.n_modes):
+        v = m._eval_mode(core, cs, tk, mode)
+        for j, sc in enumerate(scales):
+            sep = m._eval_mode(core, m._ctx(core, k, tk, rates if sc == 1.0 else np.maximum(rates * sc, 1.0)), tk, mode)
+            assert np.allclose(v[j * ns:(j + 1) * ns], sep)
+
+
+@pytest.mark.parametrize("cand", ["all", "n2", "np"])
+def test_stacked_decision_identical(env_at_decision, cand):
+    core, k, tk = env_at_decision
+    out = []
+    for stack in (False, True):
+        m = M.MPCMode("env", 8, 4, seed=21, rollout="causal", margin_z=1.0)
+        m.scales = [0.8, 1.2]
+        out.append((m.selective(core, k, tk, 0, 0.8, cand=cand, trig="any", stack=stack), m.last_cands, m.last_full))
+    assert out[0] == out[1]
+
+
+def test_selective_n2_equals_shyb_path(env_at_decision):
+    core, k, tk = env_at_decision
+    a = M.MPCMode("env", 8, 4, seed=31, rollout="causal", margin_z=1.0)
+    a.scales = [0.8, 1.2]
+    sv = a.screen(core, k, tk, 1)
+    order = [m for m in np.argsort(-sv) if m != 0]
+    if sv[order[0]] <= sv[0]:
+        ref = 0
+    else:
+        a.cands = [int(m) for m in order[:2]]
+        ref = a(core, k, tk, incumbent=0)
+    b = M.MPCMode("env", 8, 4, seed=31, rollout="causal", margin_z=1.0)
+    b.scales = [0.8, 1.2]
+    assert b.selective(core, k, tk, 0, 0.8, cand="n2") == ref
+
+
+def test_deadline_fallback_and_no_binding(env_at_decision):
+    import time
+    core, k, tk = env_at_decision
+    m = M.MPCMode("env", 8, 4, seed=41, rollout="causal", margin_z=1.0)
+    m.scales = [0.8, 1.2]
+    dl = M.Deadline(1e-3)                        # nothing fits: incumbent, no planning work started
+    dl.start(time.perf_counter())
+    assert m.selective(core, k, tk, 5, 0.8, cand="np", stack=True, dl=dl) == 5 and m.last_abort == "skip_screen"
+    dl2 = M.Deadline(1e-3)
+    dl2.start(time.perf_counter())
+    assert m.selective(core, k, tk, 5, 0.8, cand="all", stack=True, dl=dl2) == 5 and m.last_abort == "skip_full"
+    ref = M.MPCMode("env", 8, 4, seed=42, rollout="causal", margin_z=1.0)
+    ref.scales = [0.8, 1.2]
+    big = M.MPCMode("env", 8, 4, seed=42, rollout="causal", margin_z=1.0)
+    big.scales = [0.8, 1.2]
+    dl3 = M.Deadline(1e9)
+    dl3.start(time.perf_counter())
+    assert big.selective(core, k, tk, 0, 0.8, cand="np", stack=True, dl=dl3) == \
+        ref.selective(core, k, tk, 0, 0.8, cand="np", stack=True) and big.last_abort is None
+    assert dl3.obs and all(len(v) > 0 for v in dl3.obs.values())
+
+
+def test_deadline_estimates_learn_from_measurements():
+    dl = M.Deadline(50.0, prior_ms=1.0)
+    for _ in range(30):
+        dl.record("full1", 4, 8.0)                # 2 ms per unit
+    assert abs(dl.unit("full1") - 2.0) < 1e-9 and dl.unit("screen1") == 1.0

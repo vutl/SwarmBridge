@@ -1,0 +1,1192 @@
+{
+ "uav0000020_00406_v": {
+  "role": "gate",
+  "frames": 100,
+  "orig_score_maxdiff": 2.384185791015625e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 65858.0,
+    "n_packets": 100,
+    "pkt_sum": 6585800,
+    "first_pkt": 208128,
+    "psnr": 39.44295150061098,
+    "enc_s": 2.7018744945526123
+   },
+   "hevc27": {
+    "bits_per_frame": 27818.8,
+    "n_packets": 100,
+    "pkt_sum": 2781880,
+    "first_pkt": 121928,
+    "psnr": 37.09199092841299,
+    "enc_s": 2.0329952239990234
+   },
+   "hevc32": {
+    "bits_per_frame": 11197.28,
+    "n_packets": 100,
+    "pkt_sum": 1119728,
+    "first_pkt": 62560,
+    "psnr": 34.50521862587231,
+    "enc_s": 1.4852495193481445
+   },
+   "hevc37": {
+    "bits_per_frame": 4510.56,
+    "n_packets": 100,
+    "pkt_sum": 451056,
+    "first_pkt": 30680,
+    "psnr": 32.0948781632127,
+    "enc_s": 1.0132415294647217
+   },
+   "hevc42": {
+    "bits_per_frame": 1978.48,
+    "n_packets": 100,
+    "pkt_sum": 197848,
+    "first_pkt": 14784,
+    "psnr": 29.932343881242492,
+    "enc_s": 0.7771093845367432
+   },
+   "hevc47": {
+    "bits_per_frame": 969.2,
+    "n_packets": 100,
+    "pkt_sum": 96920,
+    "first_pkt": 7592,
+    "psnr": 27.856214928796156,
+    "enc_s": 0.6182746887207031
+   },
+   "hevc51": {
+    "bits_per_frame": 598.16,
+    "n_packets": 100,
+    "pkt_sum": 59816,
+    "first_pkt": 4512,
+    "psnr": 26.35280758894024,
+    "enc_s": 0.5593235492706299
+   },
+   "av130": {
+    "bits_per_frame": 30413.28,
+    "n_packets": 100,
+    "pkt_sum": 3041328,
+    "first_pkt": 219576,
+    "psnr": 37.90931227526319,
+    "enc_s": 1.6453659534454346
+   },
+   "av138": {
+    "bits_per_frame": 14523.12,
+    "n_packets": 100,
+    "pkt_sum": 1452312,
+    "first_pkt": 135288,
+    "psnr": 35.944682587326895,
+    "enc_s": 1.5788860321044922
+   },
+   "av145": {
+    "bits_per_frame": 6887.92,
+    "n_packets": 100,
+    "pkt_sum": 688792,
+    "first_pkt": 78880,
+    "psnr": 34.12181359693604,
+    "enc_s": 1.756469488143921
+   },
+   "av150": {
+    "bits_per_frame": 4191.04,
+    "n_packets": 100,
+    "pkt_sum": 419104,
+    "first_pkt": 50712,
+    "psnr": 32.84792754714245,
+    "enc_s": 1.5629518032073975
+   },
+   "av155": {
+    "bits_per_frame": 2609.12,
+    "n_packets": 100,
+    "pkt_sum": 260912,
+    "first_pkt": 32984,
+    "psnr": 31.663898757441494,
+    "enc_s": 1.2899901866912842
+   },
+   "av160": {
+    "bits_per_frame": 1668.24,
+    "n_packets": 100,
+    "pkt_sum": 166824,
+    "first_pkt": 21136,
+    "psnr": 30.645107556120703,
+    "enc_s": 1.845473051071167
+   },
+   "av163": {
+    "bits_per_frame": 1118.24,
+    "n_packets": 100,
+    "pkt_sum": 111824,
+    "first_pkt": 14504,
+    "psnr": 29.68025261211259,
+    "enc_s": 1.627981185913086
+   }
+  }
+ },
+ "uav0000138_00000_v": {
+  "role": "gate",
+  "frames": 71,
+  "orig_score_maxdiff": 1.9073486328125e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 108670.76056338029,
+    "n_packets": 71,
+    "pkt_sum": 7715624,
+    "first_pkt": 403480,
+    "psnr": 34.33834806770067,
+    "enc_s": 2.2701210975646973
+   },
+   "hevc27": {
+    "bits_per_frame": 54503.211267605635,
+    "n_packets": 71,
+    "pkt_sum": 3869728,
+    "first_pkt": 278088,
+    "psnr": 31.656566371333284,
+    "enc_s": 1.837463617324829
+   },
+   "hevc32": {
+    "bits_per_frame": 25721.915492957745,
+    "n_packets": 71,
+    "pkt_sum": 1826256,
+    "first_pkt": 177368,
+    "psnr": 28.724837794463895,
+    "enc_s": 1.3630561828613281
+   },
+   "hevc37": {
+    "bits_per_frame": 11723.718309859154,
+    "n_packets": 71,
+    "pkt_sum": 832384,
+    "first_pkt": 101744,
+    "psnr": 25.924826653692126,
+    "enc_s": 1.0404934883117676
+   },
+   "hevc42": {
+    "bits_per_frame": 4903.43661971831,
+    "n_packets": 71,
+    "pkt_sum": 348144,
+    "first_pkt": 52624,
+    "psnr": 23.40831933792796,
+    "enc_s": 0.8344712257385254
+   },
+   "hevc47": {
+    "bits_per_frame": 1923.718309859155,
+    "n_packets": 71,
+    "pkt_sum": 136584,
+    "first_pkt": 23032,
+    "psnr": 21.128744291890982,
+    "enc_s": 0.635216236114502
+   },
+   "hevc51": {
+    "bits_per_frame": 1294.5352112676057,
+    "n_packets": 71,
+    "pkt_sum": 91912,
+    "first_pkt": 10768,
+    "psnr": 20.051105919570013,
+    "enc_s": 0.48609399795532227
+   },
+   "av130": {
+    "bits_per_frame": 103461.6338028169,
+    "n_packets": 71,
+    "pkt_sum": 7345776,
+    "first_pkt": 483480,
+    "psnr": 34.54548834218425,
+    "enc_s": 1.8881893157958984
+   },
+   "av138": {
+    "bits_per_frame": 59209.126760563384,
+    "n_packets": 71,
+    "pkt_sum": 4203848,
+    "first_pkt": 348472,
+    "psnr": 32.45974559818857,
+    "enc_s": 1.9946014881134033
+   },
+   "av145": {
+    "bits_per_frame": 33745.35211267605,
+    "n_packets": 71,
+    "pkt_sum": 2395920,
+    "first_pkt": 245448,
+    "psnr": 30.357640534168773,
+    "enc_s": 2.0371994972229004
+   },
+   "av150": {
+    "bits_per_frame": 22174.422535211266,
+    "n_packets": 71,
+    "pkt_sum": 1574384,
+    "first_pkt": 183680,
+    "psnr": 28.789467069659963,
+    "enc_s": 2.038684129714966
+   },
+   "av155": {
+    "bits_per_frame": 14453.521126760563,
+    "n_packets": 71,
+    "pkt_sum": 1026200,
+    "first_pkt": 134272,
+    "psnr": 27.307690511143637,
+    "enc_s": 2.0709967613220215
+   },
+   "av160": {
+    "bits_per_frame": 9242.704225352112,
+    "n_packets": 71,
+    "pkt_sum": 656232,
+    "first_pkt": 93560,
+    "psnr": 25.941549000287115,
+    "enc_s": 2.7231059074401855
+   },
+   "av163": {
+    "bits_per_frame": 6040.56338028169,
+    "n_packets": 71,
+    "pkt_sum": 428880,
+    "first_pkt": 67152,
+    "psnr": 24.675562559838077,
+    "enc_s": 2.3223657608032227
+   }
+  }
+ },
+ "uav0000244_01440_v": {
+  "role": "gate",
+  "frames": 100,
+  "orig_score_maxdiff": 2.384185791015625e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 126472.16,
+    "n_packets": 100,
+    "pkt_sum": 12647216,
+    "first_pkt": 362224,
+    "psnr": 36.07223215264933,
+    "enc_s": 3.2446916103363037
+   },
+   "hevc27": {
+    "bits_per_frame": 61700.48,
+    "n_packets": 100,
+    "pkt_sum": 6170048,
+    "first_pkt": 250912,
+    "psnr": 32.796061702118514,
+    "enc_s": 2.5310633182525635
+   },
+   "hevc32": {
+    "bits_per_frame": 26547.76,
+    "n_packets": 100,
+    "pkt_sum": 2654776,
+    "first_pkt": 156704,
+    "psnr": 29.44942649593198,
+    "enc_s": 1.9479186534881592
+   },
+   "hevc37": {
+    "bits_per_frame": 10792.72,
+    "n_packets": 100,
+    "pkt_sum": 1079272,
+    "first_pkt": 85504,
+    "psnr": 26.37400411575056,
+    "enc_s": 1.3402228355407715
+   },
+   "hevc42": {
+    "bits_per_frame": 4177.52,
+    "n_packets": 100,
+    "pkt_sum": 417752,
+    "first_pkt": 42088,
+    "psnr": 23.84874435314825,
+    "enc_s": 0.9580545425415039
+   },
+   "hevc47": {
+    "bits_per_frame": 1721.04,
+    "n_packets": 100,
+    "pkt_sum": 172104,
+    "first_pkt": 17136,
+    "psnr": 21.7732072832107,
+    "enc_s": 0.7467560768127441
+   },
+   "hevc51": {
+    "bits_per_frame": 1012.8,
+    "n_packets": 100,
+    "pkt_sum": 101280,
+    "first_pkt": 8320,
+    "psnr": 20.65520005894687,
+    "enc_s": 0.6047770977020264
+   },
+   "av130": {
+    "bits_per_frame": 108910.08,
+    "n_packets": 100,
+    "pkt_sum": 10891008,
+    "first_pkt": 433504,
+    "psnr": 35.36029389014018,
+    "enc_s": 2.533125400543213
+   },
+   "av138": {
+    "bits_per_frame": 59206.64,
+    "n_packets": 100,
+    "pkt_sum": 5920664,
+    "first_pkt": 313264,
+    "psnr": 32.79306732112559,
+    "enc_s": 2.4486184120178223
+   },
+   "av145": {
+    "bits_per_frame": 30179.44,
+    "n_packets": 100,
+    "pkt_sum": 3017944,
+    "first_pkt": 220184,
+    "psnr": 30.488836104505626,
+    "enc_s": 2.6290812492370605
+   },
+   "av150": {
+    "bits_per_frame": 18669.92,
+    "n_packets": 100,
+    "pkt_sum": 1866992,
+    "first_pkt": 161912,
+    "psnr": 28.8505587288162,
+    "enc_s": 2.630296230316162
+   },
+   "av155": {
+    "bits_per_frame": 11663.44,
+    "n_packets": 100,
+    "pkt_sum": 1166344,
+    "first_pkt": 115400,
+    "psnr": 27.29814251247574,
+    "enc_s": 2.4370012283325195
+   },
+   "av160": {
+    "bits_per_frame": 7204.24,
+    "n_packets": 100,
+    "pkt_sum": 720424,
+    "first_pkt": 79256,
+    "psnr": 26.035052978932207,
+    "enc_s": 3.0324978828430176
+   },
+   "av163": {
+    "bits_per_frame": 4624.16,
+    "n_packets": 100,
+    "pkt_sum": 462416,
+    "first_pkt": 55736,
+    "psnr": 24.888392008436796,
+    "enc_s": 2.4315924644470215
+   }
+  }
+ },
+ "uav0000278_00001_v": {
+  "role": "gate",
+  "frames": 100,
+  "orig_score_maxdiff": 2.1457672119140625e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 97270.48,
+    "n_packets": 100,
+    "pkt_sum": 9727048,
+    "first_pkt": 337848,
+    "psnr": 35.13176904267012,
+    "enc_s": 3.142200469970703
+   },
+   "hevc27": {
+    "bits_per_frame": 45260.96,
+    "n_packets": 100,
+    "pkt_sum": 4526096,
+    "first_pkt": 217680,
+    "psnr": 32.67961443234358,
+    "enc_s": 2.341127872467041
+   },
+   "hevc32": {
+    "bits_per_frame": 20186.48,
+    "n_packets": 100,
+    "pkt_sum": 2018648,
+    "first_pkt": 132552,
+    "psnr": 29.953422025000055,
+    "enc_s": 1.7266035079956055
+   },
+   "hevc37": {
+    "bits_per_frame": 9057.28,
+    "n_packets": 100,
+    "pkt_sum": 905728,
+    "first_pkt": 73928,
+    "psnr": 27.26249695864534,
+    "enc_s": 1.3162400722503662
+   },
+   "hevc42": {
+    "bits_per_frame": 3995.68,
+    "n_packets": 100,
+    "pkt_sum": 399568,
+    "first_pkt": 37024,
+    "psnr": 24.82008783045593,
+    "enc_s": 1.0037651062011719
+   },
+   "hevc47": {
+    "bits_per_frame": 1789.44,
+    "n_packets": 100,
+    "pkt_sum": 178944,
+    "first_pkt": 15528,
+    "psnr": 22.621414521096504,
+    "enc_s": 0.7882139682769775
+   },
+   "hevc51": {
+    "bits_per_frame": 984.24,
+    "n_packets": 100,
+    "pkt_sum": 98424,
+    "first_pkt": 7512,
+    "psnr": 21.267414450185697,
+    "enc_s": 0.6548740863800049
+   },
+   "av130": {
+    "bits_per_frame": 73430.96,
+    "n_packets": 100,
+    "pkt_sum": 7343096,
+    "first_pkt": 392096,
+    "psnr": 34.584871713178245,
+    "enc_s": 2.0312650203704834
+   },
+   "av138": {
+    "bits_per_frame": 39218.48,
+    "n_packets": 100,
+    "pkt_sum": 3921848,
+    "first_pkt": 267024,
+    "psnr": 32.66777134566377,
+    "enc_s": 2.0003418922424316
+   },
+   "av145": {
+    "bits_per_frame": 20434.96,
+    "n_packets": 100,
+    "pkt_sum": 2043496,
+    "first_pkt": 179616,
+    "psnr": 30.714026192299084,
+    "enc_s": 2.3136467933654785
+   },
+   "av150": {
+    "bits_per_frame": 13218.56,
+    "n_packets": 100,
+    "pkt_sum": 1321856,
+    "first_pkt": 129256,
+    "psnr": 29.2392549338017,
+    "enc_s": 2.271160364151001
+   },
+   "av155": {
+    "bits_per_frame": 8665.36,
+    "n_packets": 100,
+    "pkt_sum": 866536,
+    "first_pkt": 91256,
+    "psnr": 27.78962649715671,
+    "enc_s": 1.8773219585418701
+   },
+   "av160": {
+    "bits_per_frame": 5537.6,
+    "n_packets": 100,
+    "pkt_sum": 553760,
+    "first_pkt": 61304,
+    "psnr": 26.534050934674493,
+    "enc_s": 2.4104700088500977
+   },
+   "av163": {
+    "bits_per_frame": 3716.16,
+    "n_packets": 100,
+    "pkt_sum": 371616,
+    "first_pkt": 42896,
+    "psnr": 25.397133465926853,
+    "enc_s": 2.1040759086608887
+   }
+  }
+ },
+ "uav0000289_00001_v": {
+  "role": "gate",
+  "frames": 100,
+  "orig_score_maxdiff": 2.384185791015625e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 102320.88,
+    "n_packets": 100,
+    "pkt_sum": 10232088,
+    "first_pkt": 386816,
+    "psnr": 35.62911160105385,
+    "enc_s": 3.1677358150482178
+   },
+   "hevc27": {
+    "bits_per_frame": 49643.2,
+    "n_packets": 100,
+    "pkt_sum": 4964320,
+    "first_pkt": 263168,
+    "psnr": 33.041761595912305,
+    "enc_s": 2.4698848724365234
+   },
+   "hevc32": {
+    "bits_per_frame": 22137.76,
+    "n_packets": 100,
+    "pkt_sum": 2213776,
+    "first_pkt": 165288,
+    "psnr": 30.203366688518017,
+    "enc_s": 1.7273941040039062
+   },
+   "hevc37": {
+    "bits_per_frame": 9951.76,
+    "n_packets": 100,
+    "pkt_sum": 995176,
+    "first_pkt": 90136,
+    "psnr": 27.48144251730314,
+    "enc_s": 1.3061022758483887
+   },
+   "hevc42": {
+    "bits_per_frame": 4387.68,
+    "n_packets": 100,
+    "pkt_sum": 438768,
+    "first_pkt": 45664,
+    "psnr": 25.03786849965215,
+    "enc_s": 1.015010118484497
+   },
+   "hevc47": {
+    "bits_per_frame": 2024.8,
+    "n_packets": 100,
+    "pkt_sum": 202480,
+    "first_pkt": 20640,
+    "psnr": 22.72741164238305,
+    "enc_s": 0.8682577610015869
+   },
+   "hevc51": {
+    "bits_per_frame": 1190.72,
+    "n_packets": 100,
+    "pkt_sum": 119072,
+    "first_pkt": 10408,
+    "psnr": 21.210224969446337,
+    "enc_s": 0.6915104389190674
+   },
+   "av130": {
+    "bits_per_frame": 78709.68,
+    "n_packets": 100,
+    "pkt_sum": 7870968,
+    "first_pkt": 470584,
+    "psnr": 34.78632309586379,
+    "enc_s": 2.0577094554901123
+   },
+   "av138": {
+    "bits_per_frame": 42216.4,
+    "n_packets": 100,
+    "pkt_sum": 4221640,
+    "first_pkt": 335792,
+    "psnr": 32.688381805563814,
+    "enc_s": 2.0749704837799072
+   },
+   "av145": {
+    "bits_per_frame": 21949.76,
+    "n_packets": 100,
+    "pkt_sum": 2194976,
+    "first_pkt": 234384,
+    "psnr": 30.651865641262017,
+    "enc_s": 2.3972816467285156
+   },
+   "av150": {
+    "bits_per_frame": 14012.8,
+    "n_packets": 100,
+    "pkt_sum": 1401280,
+    "first_pkt": 173600,
+    "psnr": 29.12932237999567,
+    "enc_s": 2.2440829277038574
+   },
+   "av155": {
+    "bits_per_frame": 9020.32,
+    "n_packets": 100,
+    "pkt_sum": 902032,
+    "first_pkt": 125448,
+    "psnr": 27.66549517900232,
+    "enc_s": 1.8773515224456787
+   },
+   "av160": {
+    "bits_per_frame": 5737.2,
+    "n_packets": 100,
+    "pkt_sum": 573720,
+    "first_pkt": 86104,
+    "psnr": 26.4778068284089,
+    "enc_s": 2.5072524547576904
+   },
+   "av163": {
+    "bits_per_frame": 3841.12,
+    "n_packets": 100,
+    "pkt_sum": 384112,
+    "first_pkt": 60432,
+    "psnr": 25.300050292781346,
+    "enc_s": 2.025296688079834
+   }
+  }
+ },
+ "uav0000295_02300_v": {
+  "role": "gate",
+  "frames": 100,
+  "orig_score_maxdiff": 2.384185791015625e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 124208.56,
+    "n_packets": 100,
+    "pkt_sum": 12420856,
+    "first_pkt": 422608,
+    "psnr": 33.930925386631635,
+    "enc_s": 3.3703715801239014
+   },
+   "hevc27": {
+    "bits_per_frame": 66504.64,
+    "n_packets": 100,
+    "pkt_sum": 6650464,
+    "first_pkt": 296016,
+    "psnr": 31.064621742354785,
+    "enc_s": 2.8534038066864014
+   },
+   "hevc32": {
+    "bits_per_frame": 33427.12,
+    "n_packets": 100,
+    "pkt_sum": 3342712,
+    "first_pkt": 192696,
+    "psnr": 27.963215195453103,
+    "enc_s": 2.20951771736145
+   },
+   "hevc37": {
+    "bits_per_frame": 16307.76,
+    "n_packets": 100,
+    "pkt_sum": 1630776,
+    "first_pkt": 112856,
+    "psnr": 25.010198022577637,
+    "enc_s": 1.6995337009429932
+   },
+   "hevc42": {
+    "bits_per_frame": 7081.68,
+    "n_packets": 100,
+    "pkt_sum": 708168,
+    "first_pkt": 58800,
+    "psnr": 22.285982583003907,
+    "enc_s": 1.3127872943878174
+   },
+   "hevc47": {
+    "bits_per_frame": 2849.76,
+    "n_packets": 100,
+    "pkt_sum": 284976,
+    "first_pkt": 26000,
+    "psnr": 19.85992755578326,
+    "enc_s": 0.9732048511505127
+   },
+   "hevc51": {
+    "bits_per_frame": 2179.84,
+    "n_packets": 100,
+    "pkt_sum": 217984,
+    "first_pkt": 12080,
+    "psnr": 19.227842540672945,
+    "enc_s": 0.769235372543335
+   },
+   "av130": {
+    "bits_per_frame": 148136.0,
+    "n_packets": 100,
+    "pkt_sum": 14813600,
+    "first_pkt": 512888,
+    "psnr": 34.47155864820573,
+    "enc_s": 2.8289639949798584
+   },
+   "av138": {
+    "bits_per_frame": 88894.16,
+    "n_packets": 100,
+    "pkt_sum": 8889416,
+    "first_pkt": 372152,
+    "psnr": 32.16951208640219,
+    "enc_s": 2.903719425201416
+   },
+   "av145": {
+    "bits_per_frame": 51710.4,
+    "n_packets": 100,
+    "pkt_sum": 5171040,
+    "first_pkt": 265808,
+    "psnr": 29.928019618882317,
+    "enc_s": 3.1011383533477783
+   },
+   "av150": {
+    "bits_per_frame": 35231.76,
+    "n_packets": 100,
+    "pkt_sum": 3523176,
+    "first_pkt": 201072,
+    "psnr": 28.2539002338439,
+    "enc_s": 2.8300607204437256
+   },
+   "av155": {
+    "bits_per_frame": 23825.68,
+    "n_packets": 100,
+    "pkt_sum": 2382568,
+    "first_pkt": 148560,
+    "psnr": 26.646775817289967,
+    "enc_s": 2.514040946960449
+   },
+   "av160": {
+    "bits_per_frame": 15764.72,
+    "n_packets": 100,
+    "pkt_sum": 1576472,
+    "first_pkt": 105968,
+    "psnr": 25.254757396310566,
+    "enc_s": 3.33743953704834
+   },
+   "av163": {
+    "bits_per_frame": 10692.88,
+    "n_packets": 100,
+    "pkt_sum": 1069288,
+    "first_pkt": 77032,
+    "psnr": 23.926032442562956,
+    "enc_s": 2.866504669189453
+   }
+  }
+ },
+ "uav0000316_01288_v": {
+  "role": "gate",
+  "frames": 43,
+  "orig_score_maxdiff": 2.86102294921875e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 91842.79069767441,
+    "n_packets": 43,
+    "pkt_sum": 3949240,
+    "first_pkt": 393128,
+    "psnr": 36.20745493295581,
+    "enc_s": 1.2994132041931152
+   },
+   "hevc27": {
+    "bits_per_frame": 41184.93023255814,
+    "n_packets": 43,
+    "pkt_sum": 1770952,
+    "first_pkt": 259592,
+    "psnr": 33.519947420151844,
+    "enc_s": 0.9587829113006592
+   },
+   "hevc32": {
+    "bits_per_frame": 17575.81395348837,
+    "n_packets": 43,
+    "pkt_sum": 755760,
+    "first_pkt": 155072,
+    "psnr": 30.708786587462114,
+    "enc_s": 0.7175114154815674
+   },
+   "hevc37": {
+    "bits_per_frame": 7641.116279069767,
+    "n_packets": 43,
+    "pkt_sum": 328568,
+    "first_pkt": 83240,
+    "psnr": 28.128326969300545,
+    "enc_s": 0.5553412437438965
+   },
+   "hevc42": {
+    "bits_per_frame": 3504.0,
+    "n_packets": 43,
+    "pkt_sum": 150672,
+    "first_pkt": 41288,
+    "psnr": 25.910888956502948,
+    "enc_s": 0.4510154724121094
+   },
+   "hevc47": {
+    "bits_per_frame": 1641.6744186046512,
+    "n_packets": 43,
+    "pkt_sum": 70592,
+    "first_pkt": 18664,
+    "psnr": 23.871639758683767,
+    "enc_s": 0.3907351493835449
+   },
+   "hevc51": {
+    "bits_per_frame": 1023.2558139534884,
+    "n_packets": 43,
+    "pkt_sum": 44000,
+    "first_pkt": 9096,
+    "psnr": 22.42648063718704,
+    "enc_s": 0.3343241214752197
+   },
+   "av130": {
+    "bits_per_frame": 64597.395348837206,
+    "n_packets": 43,
+    "pkt_sum": 2777688,
+    "first_pkt": 448976,
+    "psnr": 35.65588317504146,
+    "enc_s": 0.8452236652374268
+   },
+   "av138": {
+    "bits_per_frame": 33547.348837209305,
+    "n_packets": 43,
+    "pkt_sum": 1442536,
+    "first_pkt": 312224,
+    "psnr": 33.6318480378232,
+    "enc_s": 0.8164560794830322
+   },
+   "av145": {
+    "bits_per_frame": 17776.93023255814,
+    "n_packets": 43,
+    "pkt_sum": 764408,
+    "first_pkt": 207824,
+    "psnr": 31.675564256761128,
+    "enc_s": 0.8685934543609619
+   },
+   "av150": {
+    "bits_per_frame": 11465.302325581395,
+    "n_packets": 43,
+    "pkt_sum": 493008,
+    "first_pkt": 147376,
+    "psnr": 30.31386866799525,
+    "enc_s": 0.7817800045013428
+   },
+   "av155": {
+    "bits_per_frame": 7480.930232558139,
+    "n_packets": 43,
+    "pkt_sum": 321680,
+    "first_pkt": 102752,
+    "psnr": 28.942498207346503,
+    "enc_s": 0.6791551113128662
+   },
+   "av160": {
+    "bits_per_frame": 4946.790697674419,
+    "n_packets": 43,
+    "pkt_sum": 212712,
+    "first_pkt": 68576,
+    "psnr": 27.789441836106022,
+    "enc_s": 0.8449790477752686
+   },
+   "av163": {
+    "bits_per_frame": 3433.1162790697676,
+    "n_packets": 43,
+    "pkt_sum": 147624,
+    "first_pkt": 47600,
+    "psnr": 26.73832136494798,
+    "enc_s": 0.7749390602111816
+   }
+  }
+ },
+ "uav0000086_00000_v": {
+  "role": "aux_val",
+  "frames": 100,
+  "orig_score_maxdiff": 2.86102294921875e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 100547.28,
+    "n_packets": 100,
+    "pkt_sum": 10054728,
+    "first_pkt": 359896,
+    "psnr": 32.56490748158189,
+    "enc_s": 3.040762424468994
+   },
+   "hevc27": {
+    "bits_per_frame": 47058.08,
+    "n_packets": 100,
+    "pkt_sum": 4705808,
+    "first_pkt": 238856,
+    "psnr": 30.907321190533466,
+    "enc_s": 2.158327102661133
+   },
+   "hevc32": {
+    "bits_per_frame": 20890.88,
+    "n_packets": 100,
+    "pkt_sum": 2089088,
+    "first_pkt": 145144,
+    "psnr": 28.795721657916438,
+    "enc_s": 1.5763180255889893
+   },
+   "hevc37": {
+    "bits_per_frame": 8998.4,
+    "n_packets": 100,
+    "pkt_sum": 899840,
+    "first_pkt": 80208,
+    "psnr": 26.46091161777002,
+    "enc_s": 1.192361831665039
+   },
+   "hevc42": {
+    "bits_per_frame": 3804.16,
+    "n_packets": 100,
+    "pkt_sum": 380416,
+    "first_pkt": 42632,
+    "psnr": 24.145529866931337,
+    "enc_s": 0.9064218997955322
+   },
+   "hevc47": {
+    "bits_per_frame": 1623.84,
+    "n_packets": 100,
+    "pkt_sum": 162384,
+    "first_pkt": 20528,
+    "psnr": 21.966532261429766,
+    "enc_s": 0.7233250141143799
+   },
+   "hevc51": {
+    "bits_per_frame": 893.2,
+    "n_packets": 100,
+    "pkt_sum": 89320,
+    "first_pkt": 10744,
+    "psnr": 20.43204008312148,
+    "enc_s": 0.6058034896850586
+   },
+   "av130": {
+    "bits_per_frame": 77248.32,
+    "n_packets": 100,
+    "pkt_sum": 7724832,
+    "first_pkt": 436112,
+    "psnr": 32.16028099642185,
+    "enc_s": 1.9893922805786133
+   },
+   "av138": {
+    "bits_per_frame": 40765.36,
+    "n_packets": 100,
+    "pkt_sum": 4076536,
+    "first_pkt": 307576,
+    "psnr": 30.829409378136024,
+    "enc_s": 2.1235666275024414
+   },
+   "av145": {
+    "bits_per_frame": 20710.88,
+    "n_packets": 100,
+    "pkt_sum": 2071088,
+    "first_pkt": 211184,
+    "psnr": 29.37592031932905,
+    "enc_s": 2.48870849609375
+   },
+   "av150": {
+    "bits_per_frame": 13028.88,
+    "n_packets": 100,
+    "pkt_sum": 1302888,
+    "first_pkt": 154288,
+    "psnr": 28.18001795636963,
+    "enc_s": 2.190307140350342
+   },
+   "av155": {
+    "bits_per_frame": 8360.8,
+    "n_packets": 100,
+    "pkt_sum": 836080,
+    "first_pkt": 112544,
+    "psnr": 26.94204124267756,
+    "enc_s": 1.7762434482574463
+   },
+   "av160": {
+    "bits_per_frame": 5352.16,
+    "n_packets": 100,
+    "pkt_sum": 535216,
+    "first_pkt": 78280,
+    "psnr": 25.88265624348092,
+    "enc_s": 2.2304043769836426
+   },
+   "av163": {
+    "bits_per_frame": 3513.04,
+    "n_packets": 100,
+    "pkt_sum": 351304,
+    "first_pkt": 56656,
+    "psnr": 24.74950307480758,
+    "enc_s": 1.8437433242797852
+   }
+  }
+ },
+ "uav0000117_02622_v": {
+  "role": "aux_val",
+  "frames": 100,
+  "orig_score_maxdiff": 3.814697265625e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 78767.36,
+    "n_packets": 100,
+    "pkt_sum": 7876736,
+    "first_pkt": 206752,
+    "psnr": 36.192886038706405,
+    "enc_s": 3.006305694580078
+   },
+   "hevc27": {
+    "bits_per_frame": 37322.88,
+    "n_packets": 100,
+    "pkt_sum": 3732288,
+    "first_pkt": 126024,
+    "psnr": 34.19393000916198,
+    "enc_s": 2.1621756553649902
+   },
+   "hevc32": {
+    "bits_per_frame": 17728.4,
+    "n_packets": 100,
+    "pkt_sum": 1772840,
+    "first_pkt": 75368,
+    "psnr": 31.952241728276068,
+    "enc_s": 1.6655900478363037
+   },
+   "hevc37": {
+    "bits_per_frame": 8304.0,
+    "n_packets": 100,
+    "pkt_sum": 830400,
+    "first_pkt": 44312,
+    "psnr": 29.504870577584867,
+    "enc_s": 1.304072618484497
+   },
+   "hevc42": {
+    "bits_per_frame": 3903.12,
+    "n_packets": 100,
+    "pkt_sum": 390312,
+    "first_pkt": 25088,
+    "psnr": 27.13417574044321,
+    "enc_s": 1.0982089042663574
+   },
+   "hevc47": {
+    "bits_per_frame": 1809.84,
+    "n_packets": 100,
+    "pkt_sum": 180984,
+    "first_pkt": 12928,
+    "psnr": 24.893564048203064,
+    "enc_s": 0.8933732509613037
+   },
+   "hevc51": {
+    "bits_per_frame": 1080.32,
+    "n_packets": 100,
+    "pkt_sum": 108032,
+    "first_pkt": 6904,
+    "psnr": 23.282149556246832,
+    "enc_s": 0.7542524337768555
+   },
+   "av130": {
+    "bits_per_frame": 58316.56,
+    "n_packets": 100,
+    "pkt_sum": 5831656,
+    "first_pkt": 242048,
+    "psnr": 35.459460498129275,
+    "enc_s": 1.8224973678588867
+   },
+   "av138": {
+    "bits_per_frame": 30724.8,
+    "n_packets": 100,
+    "pkt_sum": 3072480,
+    "first_pkt": 154288,
+    "psnr": 33.782315446972866,
+    "enc_s": 1.740729808807373
+   },
+   "av145": {
+    "bits_per_frame": 16344.32,
+    "n_packets": 100,
+    "pkt_sum": 1634432,
+    "first_pkt": 99376,
+    "psnr": 32.07926151993936,
+    "enc_s": 2.066304922103882
+   },
+   "av150": {
+    "bits_per_frame": 10559.04,
+    "n_packets": 100,
+    "pkt_sum": 1055904,
+    "first_pkt": 71384,
+    "psnr": 30.767823393149996,
+    "enc_s": 1.921682357788086
+   },
+   "av155": {
+    "bits_per_frame": 6860.32,
+    "n_packets": 100,
+    "pkt_sum": 686032,
+    "first_pkt": 51024,
+    "psnr": 29.489637501810225,
+    "enc_s": 1.5630345344543457
+   },
+   "av160": {
+    "bits_per_frame": 4415.84,
+    "n_packets": 100,
+    "pkt_sum": 441584,
+    "first_pkt": 35320,
+    "psnr": 28.389086140967503,
+    "enc_s": 2.1445887088775635
+   },
+   "av163": {
+    "bits_per_frame": 2987.92,
+    "n_packets": 100,
+    "pkt_sum": 298792,
+    "first_pkt": 25776,
+    "psnr": 27.31355520591845,
+    "enc_s": 1.777451515197754
+   }
+  }
+ },
+ "uav0000268_05773_v": {
+  "role": "aux_val",
+  "frames": 100,
+  "orig_score_maxdiff": 1.7881393432617188e-06,
+  "points": {
+   "hevc22": {
+    "bits_per_frame": 81138.4,
+    "n_packets": 100,
+    "pkt_sum": 8113840,
+    "first_pkt": 338280,
+    "psnr": 36.31912813654787,
+    "enc_s": 2.532984733581543
+   },
+   "hevc27": {
+    "bits_per_frame": 33325.04,
+    "n_packets": 100,
+    "pkt_sum": 3332504,
+    "first_pkt": 225656,
+    "psnr": 33.8046820026723,
+    "enc_s": 1.6977386474609375
+   },
+   "hevc32": {
+    "bits_per_frame": 10862.8,
+    "n_packets": 100,
+    "pkt_sum": 1086280,
+    "first_pkt": 134504,
+    "psnr": 31.044322116628095,
+    "enc_s": 1.127363920211792
+   },
+   "hevc37": {
+    "bits_per_frame": 3506.72,
+    "n_packets": 100,
+    "pkt_sum": 350672,
+    "first_pkt": 68344,
+    "psnr": 28.396464028017395,
+    "enc_s": 0.7861297130584717
+   },
+   "hevc42": {
+    "bits_per_frame": 1627.84,
+    "n_packets": 100,
+    "pkt_sum": 162784,
+    "first_pkt": 32664,
+    "psnr": 26.18198937793888,
+    "enc_s": 0.6158294677734375
+   },
+   "hevc47": {
+    "bits_per_frame": 881.04,
+    "n_packets": 100,
+    "pkt_sum": 88104,
+    "first_pkt": 13872,
+    "psnr": 24.09111360575579,
+    "enc_s": 0.584223747253418
+   },
+   "hevc51": {
+    "bits_per_frame": 586.64,
+    "n_packets": 100,
+    "pkt_sum": 58664,
+    "first_pkt": 7120,
+    "psnr": 22.503936651458325,
+    "enc_s": 0.495419979095459
+   },
+   "av130": {
+    "bits_per_frame": 35836.4,
+    "n_packets": 100,
+    "pkt_sum": 3583640,
+    "first_pkt": 407088,
+    "psnr": 35.60017071191598,
+    "enc_s": 1.564438819885254
+   },
+   "av138": {
+    "bits_per_frame": 16624.56,
+    "n_packets": 100,
+    "pkt_sum": 1662456,
+    "first_pkt": 289096,
+    "psnr": 33.887118631587505,
+    "enc_s": 1.4677081108093262
+   },
+   "av145": {
+    "bits_per_frame": 8000.88,
+    "n_packets": 100,
+    "pkt_sum": 800088,
+    "first_pkt": 197160,
+    "psnr": 32.07831448177899,
+    "enc_s": 1.5229694843292236
+   },
+   "av150": {
+    "bits_per_frame": 4687.12,
+    "n_packets": 100,
+    "pkt_sum": 468712,
+    "first_pkt": 141288,
+    "psnr": 30.67006132887455,
+    "enc_s": 1.3520162105560303
+   },
+   "av155": {
+    "bits_per_frame": 2921.76,
+    "n_packets": 100,
+    "pkt_sum": 292176,
+    "first_pkt": 97736,
+    "psnr": 29.282871496162546,
+    "enc_s": 1.086663007736206
+   },
+   "av160": {
+    "bits_per_frame": 1902.96,
+    "n_packets": 100,
+    "pkt_sum": 190296,
+    "first_pkt": 64248,
+    "psnr": 28.013194803513244,
+    "enc_s": 1.4010009765625
+   },
+   "av163": {
+    "bits_per_frame": 1319.2,
+    "n_packets": 100,
+    "pkt_sum": 131920,
+    "first_pkt": 44344,
+    "psnr": 26.862096364609673,
+    "enc_s": 1.0996270179748535
+   }
+  }
+ }
+}
