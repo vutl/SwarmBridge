@@ -33,7 +33,10 @@ PPO mode-only). Variants (VARIANT strings):
                                         trig=nom|pess|any (which screen must show a mode beating PPO), stack=0|1
                                         (nominal + endpoint scales in one stacked pass; same decisions, cheaper),
                                         dl=MS (cooperative decision budget incl. PPO inference, a9_mpc.Deadline; PPO's
-                                        mode is the fallback), margin=MS (reserved timing margin, default 3).
+                                        mode is the fallback), margin=MS (reserved timing margin, default 3),
+                                        fbd=D, fbl=P (A-E9: throughput reports reach the calibrator / tracker D slots
+                                        late and are lost with probability P, a9_mpc.Feedback; also during the 'pre'
+                                        calibration episodes), fbs=SEED (loss draws).
   K may be written as e.g. 2g5: the robustness check then uses 5 scales evenly spaced over the interval instead of
   its 2 endpoints.
 PERSIST: cold (reset per episode) | warm (kept across the test episodes of the run: continual adaptation, episodes not
@@ -117,12 +120,14 @@ def job(j):
                 persist = p[o + 6] if len(p) > o + 6 else "cold"
         else:
             persist = (p[o + 5] if kind == "hyb" else (p[o + 4] if len(p) > o + 4 else "cold")) if model in ("cal", "cals") else "cold"
+        fbd, fbl = int(opt.get("fbd", 0)), float(opt.get("fbl", 0.0))
+        mkfb = (lambda: M.Feedback(fbd, fbl, seed=int(opt.get("fbs", 31)))) if (fbd or fbl) else (lambda: None)
         if model in ("cal", "cals"):                    # cals: slot-weighted calibrator (A-E5), cal: airtime-weighted
-            cal = M.CalRates(persistent=(persist in ("warm", "pre")), slot_weight=(model == "cals"))
+            cal = M.CalRates(persistent=(persist in ("warm", "pre")), slot_weight=(model == "cals"), fb=mkfb())
             model = "cal"
         mpc = M.MPCMode(model, n, hz, None, fallback=mp_heur, seed=12345, rollout=roll, cal=cal, margin_z=z)
         if kind in ("ehyb", "dhyb", "shyb", "ahyb"):
-            trk = M.RateErrTracker(mpc, persistent=(persist in ("warm", "pre")))
+            trk = M.RateErrTracker(mpc, persistent=(persist in ("warm", "pre")), fb=mkfb())
     biases, scale_w = [], []
     if float(opt.get("dl", 0)) > 0:
         dl = M.Deadline(float(opt["dl"]), margin_ms=float(opt.get("margin", 3.0)))
@@ -292,6 +297,9 @@ def job(j):
         out.update(options=dict(cand=cand, trig=trig, stack=stack, dl=float(opt.get("dl", 0)),
                                 margin=float(opt.get("margin", 3.0))), aborts=aborts,
                    abort_frac=float(sum(aborts.values()) / max(len(t), 1)))
+        if trk is not None and trk.fb is not None:
+            out.update(feedback=dict(delay=trk.fb.delay, loss=trk.fb.loss, sent=trk.fb.n_sent, lost=trk.fb.n_lost,
+                                     used=trk.fb.n_used))
         if dl is not None:
             out.update(budget_ms=dl.budget, miss_frac=float((t > dl.budget).mean()),
                        miss_ms_max=float(t.max()), unit_est_ms=dl.est)

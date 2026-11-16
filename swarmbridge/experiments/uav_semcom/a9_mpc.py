@@ -51,6 +51,45 @@ import policies as P
 S_SLOTS = 40
 
 
+class Feedback:
+    """A-E9 (review #34): causal delayed / lossy throughput feedback for the planner's rate model.
+
+    Every (UAV, slot) throughput report produced at a slot boundary t (the slot that just ended) is lost with
+    probability `loss` (Bernoulli, independent across UAVs and slots; the draw depends only on (seed, episode index,
+    slot index, UAV), so the calibrator and the error tracker, each holding a Feedback with the same seed, lose the
+    same reports) and otherwise becomes usable `delay` slots later (t + delay * dt). Reports still in flight when an
+    episode ends are discarded. delay=0, loss=0 reproduces the immediate observed-throughput update exactly.
+    Only the rate model (CalRates / RateErrTracker) is affected; the queue state seen by PPO / the slot policy is the
+    A5 environment's observation and is unchanged (stated limitation)."""
+
+    def __init__(self, delay=0, loss=0.0, seed=0):
+        self.delay, self.loss, self.seed = int(delay), float(loss), int(seed)
+        self.ep, self.q = -1, []
+        self.n_sent = self.n_lost = self.n_used = 0
+
+    def new_episode(self):
+        self.ep += 1
+        self.q = []
+
+    def lost(self, t, dt, k):
+        if self.loss <= 0:
+            return False
+        return bool(np.random.default_rng([self.seed, self.ep, int(round(t / dt)), int(k)]).random() < self.loss)
+
+    def push(self, t, dt, k, payload):
+        self.n_sent += 1
+        if self.lost(t, dt, k):
+            self.n_lost += 1
+            return
+        self.q.append((t + self.delay * dt - 1e-9, payload))
+
+    def pop(self, t):
+        out = [p for a, p in self.q if a <= t]
+        self.q = [(a, p) for a, p in self.q if a > t]
+        self.n_used += len(out)
+        return out
+
+
 class CalRates:
     """Causal, ACK-based empirical rate model (review #29). At each slot boundary the realised link rates of the
     transmission segments of the slot that just ended (known to the sender through ACKs) are stored in bins of the
@@ -65,8 +104,8 @@ class CalRates:
     slot's fading is drawn, so this is unbiased for the per-slot rate distribution."""
     BIN_DB, MIN_AIR = 2.0, 20.0
 
-    def __init__(self, persistent=False, slot_weight=False):
-        self.persistent, self.slot_weight = persistent, slot_weight
+    def __init__(self, persistent=False, slot_weight=False, fb=None):
+        self.persistent, self.slot_weight, self.fb = persistent, slot_weight, fb
         self.bins, self.num, self.den = {}, 0.0, 0.0
         self.tasks, self.seg_i, self.prev = None, 0, None
         self.snap = None
@@ -83,6 +122,8 @@ class CalRates:
     def update(self, env):
         if self.tasks is not env.tasks:                       # new episode
             self.tasks, self.seg_i, self.prev = env.tasks, 0, None
+            if self.fb is not None:
+                self.fb.new_episode()
             if self.snap is not None:                       # 'pre': every episode restarts from the warm-start
                 self.bins, self.num, self.den = copy.deepcopy(self.snap)
             elif not self.persistent:
@@ -91,11 +132,20 @@ class CalRates:
             t0, snr = self.prev
             for k, r, dur in slot_obs(env, self, env.c["dt"] if self.slot_weight else None):
                 key = int(math.floor(snr[k] / self.BIN_DB))
-                self.bins.setdefault(key, ([], []))
-                self.bins[key][0].append(r); self.bins[key][1].append(dur)
                 sh = env.c["B_total"] / env.c["M"] * math.log2(1 + 10 ** (snr[k] / 10))
-                self.num += r * dur; self.den += sh * dur
+                if self.fb is None:
+                    self._add(key, r, dur, sh)
+                else:
+                    self.fb.push(env.t, env.c["dt"], k, (key, r, dur, sh))
+        if self.fb is not None:
+            for pl in self.fb.pop(env.t):
+                self._add(*pl)
         self.prev = (env.t, [self._snr_db(env, k) for k in range(len(env.uavs))])
+
+    def _add(self, key, r, dur, sh):
+        self.bins.setdefault(key, ([], []))
+        self.bins[key][0].append(r); self.bins[key][1].append(dur)
+        self.num += r * dur; self.den += sh * dur
 
     def rho(self):
         return (self.num + C_RHO) / (self.den + C_RHO)
@@ -154,7 +204,7 @@ class RateErrTracker:
 
     Observation model (stated limitation): the throughput of finished transmission segments is read from the
     simulator at the next slot boundary ('observed-throughput calibration'); this is causal in time, but no ACK /
-    feedback protocol, feedback delay or overhead is simulated.
+    feedback protocol, feedback delay or overhead is simulated (A-E9: optional Feedback adds report delay / loss).
     At the start of every slot the tracker stores, for each UAV, the planner model's predicted mean per-channel rate
     at the UAV's position (env / shannon: Monte-Carlo mean over the statistical fading model; cal: the calibrator's
     mean, or its rho-scaled Shannon fallback when the bin has no data). When the slot has ended, every segment of that
@@ -165,8 +215,8 @@ class RateErrTracker:
     (default; unbiased, see CalRates) or per segment duration (slot_weight=False; biased low by queue emptying)."""
     BIN_DB, MIN_AIR = 2.0, 20.0
 
-    def __init__(self, mpc, persistent=False, n_mc=64, seed=7, slot_weight=True):
-        self.mpc, self.persistent, self.n_mc, self.slot_weight = mpc, persistent, n_mc, slot_weight
+    def __init__(self, mpc, persistent=False, n_mc=64, seed=7, slot_weight=True, fb=None):
+        self.mpc, self.persistent, self.n_mc, self.slot_weight, self.fb = mpc, persistent, n_mc, slot_weight, fb
         self.rng = np.random.default_rng(seed)
         self.bins = {}
         self.tasks, self.seg_i, self.prev = None, 0, None
@@ -201,6 +251,8 @@ class RateErrTracker:
         """call at every slot boundary, after CalRates.update (so the cal prediction includes the slot just ended)."""
         if self.tasks is not env.tasks:
             self.tasks, self.seg_i, self.prev = env.tasks, 0, None
+            if self.fb is not None:
+                self.fb.new_episode()
             if self.snap is not None:
                 self.bins = copy.deepcopy(self.snap)
             elif not self.persistent:
@@ -208,13 +260,23 @@ class RateErrTracker:
         if self.prev is not None and self.prev[0] != env.t:
             _, snr, pred = self.prev
             for k, r, dur in slot_obs(env, self, env.c["dt"] if self.slot_weight else None):
-                acc = self.bins.setdefault(int(math.floor(snr[k] / self.BIN_DB)), [0.0] * 6)
-                ratio = r / max(pred[k], 1.0)
-                acc[0] += r * dur; acc[1] += pred[k] * dur; acc[2] += dur
-                acc[3] += ratio; acc[4] += ratio * ratio; acc[5] += 1
+                pl = (int(math.floor(snr[k] / self.BIN_DB)), r, pred[k], dur)
+                if self.fb is None:
+                    self._add(*pl)
+                else:
+                    self.fb.push(env.t, env.c["dt"], k, pl)
+        if self.fb is not None:
+            for pl in self.fb.pop(env.t):
+                self._add(*pl)
         if self.prev is None or self.prev[0] != env.t:
             n = len(env.uavs)
             self.prev = (env.t, [self._snr_db(env, k) for k in range(n)], [self.predict(env, k) for k in range(n)])
+
+    def _add(self, key, r, pred, dur):
+        acc = self.bins.setdefault(key, [0.0] * 6)
+        ratio = r / max(pred, 1.0)
+        acc[0] += r * dur; acc[1] += pred * dur; acc[2] += dur
+        acc[3] += ratio; acc[4] += ratio * ratio; acc[5] += 1
 
     def bias(self, env, k):
         key = int(math.floor(self._snr_db(env, k) / self.BIN_DB))

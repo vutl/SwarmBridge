@@ -262,3 +262,42 @@ def test_deadline_estimates_learn_from_measurements():
     for _ in range(30):
         dl.record("full1", 4, 8.0)                # 2 ms per unit
     assert abs(dl.unit("full1") - 2.0) < 1e-9 and dl.unit("screen1") == 1.0
+
+
+def _fb_episode(fb_c, fb_t, seed=8000):
+    """one cold phy_mcs_blind episode (heuristic) with a slot-weighted calibrator + tracker; per slot boundary the
+    number of observations in the calibrator / tracker."""
+    import env_ev as V
+    sp0, mp = MH.from_name(AE.tuned("phy_mcs_blind", "best"), C.MODES)
+    cal = M.CalRates(slot_weight=True, fb=fb_c)
+    mpc = M.MPCMode("cal", 8, 4, cal=cal)
+    trk = M.RateErrTracker(mpc, fb=fb_t)
+    hist = []
+
+    def sp(env):
+        cal.update(env)
+        trk.update(env)
+        hist.append((sum(len(v[0]) for v in cal.bins.values()), sum(a[5] for a in trk.bins.values())))
+        return sp0(env)
+    V.run_episode_ev(SV.UavSurveyEnv(AE.G["table"], AE.G["pools"]["test"], C.regime_cfg("phy_mcs_blind")), sp, mp, seed)
+    return cal, trk, hist
+
+
+def test_feedback_zero_delay_zero_loss_is_immediate(env_at_decision):
+    c0, t0, h0 = _fb_episode(None, None)
+    c1, t1, h1 = _fb_episode(M.Feedback(0, 0.0), M.Feedback(0, 0.0))
+    assert h0 == h1 and h0[-1][0] > 50
+    assert c0.bins == c1.bins and c0.num == c1.num and t0.bins == t1.bins
+
+
+def test_feedback_delay_shifts_and_loss_is_shared(env_at_decision):
+    _, _, h0 = _fb_episode(None, None)
+    _, _, h2 = _fb_episode(M.Feedback(2, 0.0), M.Feedback(2, 0.0))
+    assert [x[0] for x in h2[2:]] == [x[0] for x in h0[:-2]]        # reports usable exactly 2 slots later
+    c, t, h = _fb_episode(M.Feedback(0, 0.4, seed=5), M.Feedback(0, 0.4, seed=5))
+    assert all(a == b for a, b in h)                                  # calibrator and tracker lose the same reports
+    assert {k: len(v[0]) for k, v in c.bins.items()} == {k: int(a[5]) for k, a in t.bins.items()}
+    frac = c.fb.n_lost / c.fb.n_sent
+    assert 0.3 < frac < 0.5 and c.fb.n_used == c.fb.n_sent - c.fb.n_lost
+    c2, _, _ = _fb_episode(M.Feedback(0, 0.4, seed=6), M.Feedback(0, 0.4, seed=6))
+    assert c2.bins != c.bins                                          # the loss draws depend on the seed
