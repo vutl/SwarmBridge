@@ -73,7 +73,11 @@ def reuse(slot_pol):
 
 def from_name(name, modes):
     """'SLOT+budgetTAU' -> (slot policy, mode policy); any other name -> (v2 heuristic, event-greedy / fixed);
-    a '+reuse' suffix wraps the slot policy with reuse() (post-hoc diagnostic)."""
+    a '+reuse' suffix wraps the slot policy with reuse() (post-hoc diagnostic); 'std_*' are the literature-style
+    untuned baselines of std_baselines.py."""
+    if name.startswith("std_"):
+        import std_baselines
+        return std_baselines.from_name(name)
     if name.endswith("+reuse"):
         sp, mp = from_name(name[:-len("+reuse")], modes)
         return reuse(sp), mp

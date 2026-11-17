@@ -168,7 +168,8 @@ def run_eval(args):
     if args.pool != "train":
         assert not set(seeds) & set(C.TRAIN_SEEDS)
     if args.pool == "test" or args.pool == "testdev":
-        assert set(seeds) <= set(C.TEST_SEEDS)
+        # --fresh: the fresh test-pool seed ranges used from A-E9 on (8000..8999), never seen in tuning or selection
+        assert set(seeds) <= (set(range(8000, 9000)) if args.fresh else set(C.TEST_SEEDS))
     specs = args.policies.split(",")
     jobs = [(r, args.pool, sp, s) for r in regimes for sp in specs for s in seeds]
     res, t0 = [], time.time()
@@ -210,6 +211,7 @@ def main():
     e.add_argument("--policies", required=True)
     e.add_argument("--procs", type=int, default=6)
     e.add_argument("--chunk", type=int, default=2)
+    e.add_argument("--fresh", action="store_true", help="allow the fresh test seeds 8000..8999 (A-E9 onwards)")
     args = ap.parse_args()
     (run_tune if args.cmd == "tune" else run_eval)(args)
 
