@@ -1,0 +1,203 @@
+{
+ "regime": "K5_mcsg",
+ "cfg": {
+  "mode_info": "predicted",
+  "v_max": 20.0,
+  "w_time": 0.3,
+  "K": 5,
+  "phy": "mcs"
+ },
+ "rl_part": "mode",
+ "heur": "fixed_mbt2018-mean_q3",
+ "seed": 2,
+ "steps": 2000000.0,
+ "val_seeds": [
+  3000,
+  3001,
+  3002,
+  3003,
+  3004,
+  3005,
+  3006,
+  3007,
+  3008,
+  3009,
+  3010,
+  3011,
+  3012,
+  3013,
+  3014,
+  3015,
+  3016,
+  3017,
+  3018,
+  3019
+ ],
+ "val_pool": "val",
+ "train_pool": "train",
+ "time_discount": true,
+ "log": [
+  {
+   "steps": 200000,
+   "sec": 495.33208107948303,
+   "val_return": 21.99086765319376,
+   "val_ok": 0.9807692307692306,
+   "experience": {
+    "rl_steps_mode": 202752,
+    "episodes": 774,
+    "env_s": 60590.0,
+    "uav_s": 294717.0,
+    "rl_slot": 0,
+    "rl_mode": 201240,
+    "heur_slot": 60590,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 400000,
+   "sec": 855.3850417137146,
+   "val_return": 22.778126463995388,
+   "val_ok": 0.9826923076923075,
+   "experience": {
+    "rl_steps_mode": 405504,
+    "episodes": 1554,
+    "env_s": 120782.0,
+    "uav_s": 588816.0,
+    "rl_slot": 0,
+    "rl_mode": 404040,
+    "heur_slot": 120782,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 600000,
+   "sec": 1216.1564438343048,
+   "val_return": 21.180982303393098,
+   "val_ok": 0.9786538461538459,
+   "experience": {
+    "rl_steps_mode": 608256,
+    "episodes": 2334,
+    "env_s": 180887.0,
+    "uav_s": 882525.0,
+    "rl_slot": 0,
+    "rl_mode": 606840,
+    "heur_slot": 180887,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 800000,
+   "sec": 1577.4476039409637,
+   "val_return": 22.124456142495013,
+   "val_ok": 0.9809615384615386,
+   "experience": {
+    "rl_steps_mode": 811008,
+    "episodes": 3114,
+    "env_s": 240919.0,
+    "uav_s": 1175801.0,
+    "rl_slot": 0,
+    "rl_mode": 809640,
+    "heur_slot": 240919,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1000000,
+   "sec": 1937.103660583496,
+   "val_return": 21.675539042267065,
+   "val_ok": 0.9788461538461538,
+   "experience": {
+    "rl_steps_mode": 1013760,
+    "episodes": 3894,
+    "env_s": 300905.0,
+    "uav_s": 1468978.0,
+    "rl_slot": 0,
+    "rl_mode": 1012440,
+    "heur_slot": 300905,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1200000,
+   "sec": 2302.4504675865173,
+   "val_return": 22.338579986315665,
+   "val_ok": 0.9786538461538463,
+   "experience": {
+    "rl_steps_mode": 1216512,
+    "episodes": 4674,
+    "env_s": 360889.0,
+    "uav_s": 1762144.0,
+    "rl_slot": 0,
+    "rl_mode": 1215240,
+    "heur_slot": 360889,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1400000,
+   "sec": 2667.6465487480164,
+   "val_return": 19.335085837303275,
+   "val_ok": 0.9674999999999999,
+   "experience": {
+    "rl_steps_mode": 1419264,
+    "episodes": 5454,
+    "env_s": 420510.0,
+    "uav_s": 2053706.0,
+    "rl_slot": 0,
+    "rl_mode": 1418040,
+    "heur_slot": 420510,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1600000,
+   "sec": 3034.301694869995,
+   "val_return": 20.601745276134796,
+   "val_ok": 0.9732692307692308,
+   "experience": {
+    "rl_steps_mode": 1622016,
+    "episodes": 6234,
+    "env_s": 480265.0,
+    "uav_s": 2345714.0,
+    "rl_slot": 0,
+    "rl_mode": 1620840,
+    "heur_slot": 480265,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 1800000,
+   "sec": 3400.7453830242157,
+   "val_return": 16.752724014676808,
+   "val_ok": 0.9563461538461537,
+   "experience": {
+    "rl_steps_mode": 1824768,
+    "episodes": 7014,
+    "env_s": 539939.0,
+    "uav_s": 2637384.0,
+    "rl_slot": 0,
+    "rl_mode": 1823640,
+    "heur_slot": 539939,
+    "heur_mode": 0
+   }
+  },
+  {
+   "steps": 2000000,
+   "sec": 3767.292674303055,
+   "val_return": 16.67032869636382,
+   "val_ok": 0.9565384615384614,
+   "experience": {
+    "rl_steps_mode": 2027520,
+    "episodes": 7794,
+    "env_s": 599535.0,
+    "uav_s": 2928698.0,
+    "rl_slot": 0,
+    "rl_mode": 2026440,
+    "heur_slot": 599535,
+    "heur_mode": 0
+   }
+  }
+ ],
+ "best_steps": 400000,
+ "last_steps": 2000000
+}
