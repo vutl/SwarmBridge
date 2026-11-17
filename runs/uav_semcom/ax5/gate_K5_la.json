@@ -1,0 +1,85 @@
+{
+ "regime": "K5_la",
+ "base": "pacedB3+budget0.5+reuse",
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29
+ ],
+ "rows": {
+  "pacedB3+budget0.5+reuse": {
+   "ret": -144.47723752203075,
+   "shared": 0.9160849050832173
+  },
+  "pacedB3+budget0.5+reuse+gate0.15c3": {
+   "ret": -144.54356622507686,
+   "shared": 0.4382691585656745
+  },
+  "pacedB3+budget0.5+reuse+gate0.15c10": {
+   "ret": -127.43085865564778,
+   "shared": 0.22410962465458129
+  },
+  "pacedB3+budget0.5+reuse+gate0.15c30": {
+   "ret": -123.71102599320709,
+   "shared": 0.11266482450158781
+  },
+  "pacedB3+budget0.5+reuse+gate0.25c3": {
+   "ret": -142.7768897695799,
+   "shared": 0.44947308993477375
+  },
+  "pacedB3+budget0.5+reuse+gate0.25c10": {
+   "ret": -128.60327659803326,
+   "shared": 0.23110526556349584
+  },
+  "pacedB3+budget0.5+reuse+gate0.25c30": {
+   "ret": -124.24449738049364,
+   "shared": 0.11681640745986892
+  },
+  "pacedB3+budget0.5+reuse+gate0.4c3": {
+   "ret": -148.4851385670454,
+   "shared": 0.5596384340179391
+  },
+  "pacedB3+budget0.5+reuse+gate0.4c10": {
+   "ret": -139.0830366596243,
+   "shared": 0.3341590434622178
+  },
+  "pacedB3+budget0.5+reuse+gate0.4c30": {
+   "ret": -125.70138132630667,
+   "shared": 0.18893479397359633
+  },
+  "fixed_avif_20": {
+   "ret": -83.30411392686419,
+   "shared": 0.0
+  }
+ },
+ "selected": "pacedB3+budget0.5+reuse+gate0.15c30",
+ "theta": 0.15,
+ "cool": 30
+}

@@ -54,6 +54,8 @@ class GymUavSemcomEv(gym.Env):
                           np.log10(1 + tx_bits) / 7]
             f[o + 4:o + 4 + self.n_modes] = np.log10(b) / 7
             f[o + 4 + self.n_modes:] = np.asarray(q) / 40
+        if core.c.get("obs_la"):           # review #39: causal link-adaptation features, appended at the very end
+            return np.concatenate([core.obs(), f, core.la_features().ravel()]).astype(np.float32)
         return np.concatenate([core.obs(), f]).astype(np.float32)
 
     def reset(self, seed=None, options=None):

@@ -63,6 +63,16 @@ REGIMES = {
     "K5_mcs_l75": dict(K=5, phy="mcs_partial", phy_lambda=0.75),
     "K5_mcs_l50": dict(K=5, phy="mcs_partial", phy_lambda=0.5),
     "K5_mcs_l25": dict(K=5, phy="mcs_partial", phy_lambda=0.25),
+    # review #39: block-level link adaptation (env_la: delayed CQI, logistic BLER, ACK/NACK, OLLA @ 10 % BLER);
+    # obs_la appends the causal link-adaptation features to the Gym observation (heuristics ignore it)
+    "K5_la": dict(K=5, phy="la", obs_la=True),                                         # nominal: sigma 1 dB, delay 2
+    "K5_la_rand": dict(K=5, phy="la", obs_la=True, la_rand=dict(la_cqi_sigma=(0.0, 3.0), la_fb_delay=(1, 20),
+                                                                la_olla_step=(0.1, 1.0), la_cqi_bias=(-2.0, 4.0))),
+    "K5_la_good": dict(K=5, phy="la", obs_la=True, la_cqi_sigma=0.5, la_fb_delay=1),
+    "K5_la_slow": dict(K=5, phy="la", obs_la=True, la_fb_delay=10),
+    "K5_la_noisy": dict(K=5, phy="la", obs_la=True, la_cqi_sigma=3.0),
+    "K5_la_bad": dict(K=5, phy="la", obs_la=True, la_cqi_sigma=3.0, la_fb_delay=20, la_cqi_bias=3.0),
+    "K5_la_l50": dict(K=5, phy="la", obs_la=True, la_lambda=0.5),                       # diagnostic (lambda ladder)
 }
 for _k, _v in URBAN.items():
     assert E.DEFAULT[_k] == _v
@@ -71,7 +81,8 @@ for _k, _v in URBAN.items():
 def regime_cfg(name, **extra):
     """Full cfg overrides of a regime ('NAME' or 'NAME@oracle' etc. for a mode-info variant)."""
     base, _, info = name.partition("@")
-    cfg = dict(REF, **REGIMES[base], **extra)
+    cfg = dict(REF, **REGIMES[base])
+    cfg.update(extra)                  # extra may override regime keys (review #39 tests)
     if info:
         cfg["mode_info"] = info
     return cfg

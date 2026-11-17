@@ -25,6 +25,14 @@ SURVEY = dict(v_max=10.0, tiles_per_wp=1, survey_lines=4, line_len=300.0, frame_
 
 class UavSurveyEnv(V.UavSemcomEnvEv):
 
+    def __new__(cls, table=None, img_pool=None, cfg=None, seed=0):
+        """cfg phy == "la" (review #39 block-level link adaptation) -> env_la.LaSurveyEnv; every other PHY: this class,
+        unchanged (so all existing call sites pick the link-adaptation PHY up from the regime config alone)."""
+        if cls is UavSurveyEnv and (cfg or {}).get("phy") == "la":
+            import env_la
+            return super().__new__(env_la.LaSurveyEnv)
+        return super().__new__(cls)
+
     def __init__(self, table, img_pool, cfg=None, seed=0):
         super().__init__(table, img_pool, dict(SURVEY, **(cfg or {})), seed)
 

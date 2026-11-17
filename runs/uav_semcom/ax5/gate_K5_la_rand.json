@@ -1,0 +1,85 @@
+{
+ "regime": "K5_la_rand",
+ "base": "pacedB2+budget0.5+reuse",
+ "seeds": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29
+ ],
+ "rows": {
+  "pacedB2+budget0.5+reuse": {
+   "ret": -163.63497300020884,
+   "shared": 0.9311411319698369
+  },
+  "pacedB2+budget0.5+reuse+gate0.15c3": {
+   "ret": -178.5243399332271,
+   "shared": 0.4465150913127257
+  },
+  "pacedB2+budget0.5+reuse+gate0.15c10": {
+   "ret": -163.0786540549911,
+   "shared": 0.21956115123289593
+  },
+  "pacedB2+budget0.5+reuse+gate0.15c30": {
+   "ret": -156.31574804730886,
+   "shared": 0.10512588756511028
+  },
+  "pacedB2+budget0.5+reuse+gate0.25c3": {
+   "ret": -179.47794458907262,
+   "shared": 0.465188020840552
+  },
+  "pacedB2+budget0.5+reuse+gate0.25c10": {
+   "ret": -162.8572720620057,
+   "shared": 0.23314773571457018
+  },
+  "pacedB2+budget0.5+reuse+gate0.25c30": {
+   "ret": -156.42155117829577,
+   "shared": 0.11937460014853564
+  },
+  "pacedB2+budget0.5+reuse+gate0.4c3": {
+   "ret": -180.21319793972134,
+   "shared": 0.49426974437908683
+  },
+  "pacedB2+budget0.5+reuse+gate0.4c10": {
+   "ret": -165.3752218353537,
+   "shared": 0.26118618406201466
+  },
+  "pacedB2+budget0.5+reuse+gate0.4c30": {
+   "ret": -156.1422081920788,
+   "shared": 0.12895975396965417
+  },
+  "fixed_mbt2018-mean_q1": {
+   "ret": -124.17735507066965,
+   "shared": 0.0
+  }
+ },
+ "selected": "pacedB2+budget0.5+reuse+gate0.4c30",
+ "theta": 0.4,
+ "cool": 30
+}
