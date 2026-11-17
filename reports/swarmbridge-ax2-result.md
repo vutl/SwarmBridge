@@ -179,14 +179,16 @@ So với T:best:
 | Tài nguyên tần số | thường 10–80 kênh con hoặc 10–20 MHz | 2 × 1 MHz, cho phép dùng chung kênh |
 | Kênh | khoảng 12/19 có fading hoặc shadowing; 6 có nhiễu đồng kênh hoặc NOMA; một số có CSI cũ (Doppler), nhiều anten, ray tracing | LoS/NLoS theo xác suất, Rician K=10 dB / Rayleigh theo từng slot, chỉ có CSI thống kê, nhiễu đồng kênh; stress MCS |
 | Không gian hành động | phần lớn nhỏ hơn hoặc liên tục | 11 × 3 × 3 mỗi UAV + 14 mode |
-| Baseline | luật chưa tune (khoảng 10 bài), RL khác (khoảng 11), solver tham lam hoặc cận trên (khoảng 9); **không bài nào tune họ heuristic** | heuristic tốt nhất trong một họ, tune trên pool riêng |
-| Thống kê | 6/19 nêu số lần chạy; **không bài nào có CI** cho mức lợi | 100 seed mới, CI, độ dao động theo seed train |
+| Baseline | luật chưa tune (khoảng 10 bài), RL khác (khoảng 11), solver tham lam hoặc cận trên (khoảng 9); **trong 19 bài khảo sát, không bài nào tune họ heuristic** | heuristic tốt nhất trong một họ, tune trên pool riêng |
+| Thống kê | 6/19 nêu số lần chạy; **trong 19 bài, không bài nào có CI** cho mức lợi | 100 seed mới, CI, độ dao động theo seed train |
 | Mức lợi báo cáo | +5–12% so với RL khác; +15–90% so với luật đơn giản | +3–7% so với T:best ở K5 (mục 4) |
 
 Ở những bài có baseline mạnh, RL hoà hoặc thua:
 - Ghép cặp Gale–Shapley thắng MARL (*MARL Resource Allocation for UAV Networks*, tr. 22).
 - DP thắng PPO ở quy mô nhỏ (*Adaptive Task-Oriented SemCom for UAVs…*, tr. 17–18).
 - Round Robin thắng SchedCP về utility ở 500–600 kHz (*DRL-Based User Scheduling for Collaborative Perception*, tr. 10).
+
+Phạm vi (sửa theo phản biện #38): các nhận xét trên chỉ áp dụng cho 19 bài + 6 repo có trong `pdf/`, không khái quát cho toàn bộ SOTA.
 
 **Kết luận:** kịch bản của mình không đơn giản hơn trên các chiều quan trọng. Nó **ít người dùng và ít tài nguyên tần
 số hơn**, không có CSI cũ hay người dùng di chuyển. Khoảng cách RL–heuristic nhỏ chủ yếu vì baseline đã được tune. Mục
