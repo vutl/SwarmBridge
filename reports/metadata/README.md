@@ -4,7 +4,7 @@ JSON gốc được giữ nguyên từng byte khi chuyển vào thư mục này.
 
 - [Tổng quan báo cáo](../README.md)
 - [Danh mục paper/repo](../archive/tai-lieu/tai-lieu-va-ma-nguon.md)
-- [Đường dẫn report cũ → mới và SHA-256 trước khi chuyển](report-moves-2026-11-04.json)
+- [Đường dẫn report cũ → mới và SHA-256 trước khi chuyển](report-moves-2026-11-04.json); các lần sau: [10/11](report-moves-2026-11-10.json), [14/11](report-moves-2026-11-14.json), [18/11](report-moves-2026-11-18.json) (chỉ đường dẫn)
 
 ## JSON có sẵn
 
@@ -13,6 +13,9 @@ JSON gốc được giữ nguyên từng byte khi chuyển vào thư mục này.
 - [github-swarm-downloads-2026-11-04.json](github-swarm-downloads-2026-11-04.json)
 - [paper-download-retry-2026-11-04.json](paper-download-retry-2026-11-04.json)
 - [report-moves-2026-11-04.json](report-moves-2026-11-04.json)
+- [report-moves-2026-11-10.json](report-moves-2026-11-10.json)
+- [report-moves-2026-11-14.json](report-moves-2026-11-14.json)
+- [report-moves-2026-11-18.json](report-moves-2026-11-18.json)
 - [sb-audit-checks-2026-10-30.json](sb-audit-checks-2026-10-30.json)
 - [sb-decision-mechanism-2026-10-30.json](sb-decision-mechanism-2026-10-30.json)
 - [swarm-packages-2026-11-04.json](swarm-packages-2026-11-04.json)

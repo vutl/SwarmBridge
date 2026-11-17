@@ -14,7 +14,7 @@ Ngày 15/11/2026. Theo phản biện #25: CONDITIONAL GO chỉ cho bước 0–1
 4. **Kênh:** mỗi gói có thể mất (Bernoulli). ACK về sau 1 bước; replica chỉ cập nhật theo ACK, nên cái gì mất sẽ được gửi lại ở bước sau.
 5. **Chấm điểm:** chỉ ở những thời điểm có nhãn (mặt nạ ở mục 2). Sau đó cộng bit của mọi giao lộ theo từng giây để ra **tải của cả đội 10 drone**, rồi so với dung lượng đường lên có cơ sở vật lý.
 
-Code: [s1.py](../swarmbridge/experiments/songdo/s1.py), [test_s1.py](../swarmbridge/experiments/songdo/test_s1.py) (9 test tổng hợp, đều qua), [run_s1.py](../scripts/songdo/run_s1.py), [audit_overlap.py](../scripts/songdo/audit_overlap.py).
+Code: [s1.py](../../../swarmbridge/experiments/songdo/s1.py), [test_s1.py](../../../swarmbridge/experiments/songdo/test_s1.py) (9 test tổng hợp, đều qua), [run_s1.py](../../../scripts/songdo/run_s1.py), [audit_overlap.py](../../../scripts/songdo/audit_overlap.py).
 Kết quả: `runs/songdo/s1_val_2022-10-06.json`, `runs/songdo/audit_v2_2022-10-06_PM1_VALIDATION.json`, `runs/songdo/audit_v2_2022-10-07_PM5_AUDITED-TEST.json`. Dữ liệu thô nằm ngoài git.
 
 ## 1. Deliverable 1a: audit thời gian, độ phủ và đồng thời (R5, R6)

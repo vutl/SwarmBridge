@@ -61,6 +61,30 @@ Họ TOKEN / CROP / FRAME trong môi trường A5, Research Decision Review, tha
 | 25 | [swarmbridge-b-feasibility-datasets.md](a7-a8-b1/swarmbridge-b-feasibility-datasets.md) | Sau phản biện #19: sửa so sánh cùng ngân sách bit của B1 (Sửa đổi 1), khảo sát M3OT và CrossTrack-UAV, tính khả thi của hướng B theo từng bộ dữ liệu | B1 sẵn sàng về code; MDMT chờ quyền; M3OT giấy phép rõ nhưng chỉ 3/9 chuỗi qua sàng lọc ID, không thay thế trực tiếp được; CrossTrack-UAV cần ký thỏa thuận |
 | 26 | [swarmbridge-b1-tier1-result.md](a7-a8-b1/swarmbridge-b1-tier1-result.md) | B1 tầng 1 trên 8 chuỗi MDMT (sàng lọc có trợ giúp GT, cùng giới hạn bit): `VIEW` so với `TT` / `ALT` / `NDET` / `BIG` | **NO-GO cho `VIEW`**: quy tắc không nhãn `NDET` chọn cùng góc ở 8/8 chuỗi (hiệu 0,0); phân bổ theo góc vẫn hơn luân phiên +2,5 điểm F1 (7/8 chuỗi); góc tốt là UAV 2 ở 7/8 chuỗi |
 
+<a id="rq1-novelty"></a>
+
+## Rà soát novelty và RQ1 trên MDMT (13–14/11)
+
+Rà soát novelty hợp tác nhận thức, protocol RQ1 (liên kết xuyên góc làm lý do truyền), Phase 0 và RQ1-E E0; dừng trên MDMT.
+
+| Tài liệu | Nội dung | Trạng thái |
+|---|---|---|
+| [swarmbridge-collab-perception-novelty-review-2026-11-13.md](rq1-novelty/swarmbridge-collab-perception-novelty-review-2026-11-13.md) | Rà soát novelty: CCSRA, HyComm, SchedCP, Where2comm, CodeFilling, CoSDH, PIB, MVSparse, MASS; ma trận so sánh; RQ1 / RQ2 | PPO / MAPPO chọn TOKEN / CROP / FRAME: NO-GO (đã có người làm); RQ2 NO-GO về thuật toán |
+| [swarmbridge-rq1-association-preregistration.md](rq1-novelty/swarmbridge-rq1-association-preregistration.md) | Protocol v2 của RQ1 (RQ1-A / RQ1-B, bộ liên kết không GT, Phase 0); v1 rút trước khi chạy | đã khoá |
+| [swarmbridge-rq1-phase0-result.md](rq1-novelty/swarmbridge-rq1-phase0-result.md) | Phase 0 chỉ hình học trên bản ghi cache | **NOT IDENTIFIABLE** (đăng ký ảnh không GT được ở 3/8 chuỗi) |
+| [swarmbridge-rq1-reid-feasibility-memo.md](rq1-novelty/swarmbridge-rq1-reid-feasibility-memo.md) | Memo khả thi RQ1 bằng ngoại hình (DINOv2 zero-shot) trên ảnh MDMT thật | dẫn tới RQ1-E |
+| [swarmbridge-rq1e-preregistration.md](rq1-novelty/swarmbridge-rq1e-preregistration.md) | Protocol RQ1-E (E0 khoá trước, cam kết cho E1) | đã khoá |
+| [swarmbridge-rq1e-e0-result.md](rq1-novelty/swarmbridge-rq1e-e0-result.md) | RQ1-E E0 trên ảnh MDMT thật | **FAIL 0/8 → NO-GO**; E1 không chạy; RQ1 dừng trên MDMT |
+
+<a id="songdo-jepa"></a>
+
+## Songdo và proposal JEPA-SemCom (14–15/11)
+
+| Tài liệu | Nội dung | Trạng thái |
+|---|---|---|
+| [swarmbridge-jepa-semcom-proposal.md](songdo-jepa/swarmbridge-jepa-semcom-proposal.md) | Proposal v2.1: truyền thông ngữ nghĩa có dự đoán cho nhiều UAV, dữ liệu chính Songdo Traffic | thay bằng kế hoạch hai hướng (phản biện #26) |
+| [swarmbridge-songdo-s1-feasibility.md](songdo-jepa/swarmbridge-songdo-s1-feasibility.md) | Songdo bước 0–1: audit, codec trạng thái thật, tải cả đội so với dung lượng đường lên | tải cả đội max 11,2 kbit/s so với ≥ 60 kbit/s của riêng kênh C&C → **truyền thông không bị giới hạn**; Songdo S2/S3 và JEPA trên Songdo NO-GO |
+
 <a id="uav-semcom-a"></a>
 
 ## UAV-SemCom giai đoạn A (07–10/11, trước G-L2)

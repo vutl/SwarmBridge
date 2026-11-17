@@ -4,7 +4,7 @@ Ngày 15–16/11/2026, theo phản biện #28. Giai đoạn khám phá. Seed 800
 
 ## Phần A: MPC chỉ chọn mode so với PPO mode-only (A-E2, A-E3)
 
-**Thiết kế** ([a9_mpc.py](../swarmbridge/experiments/uav_semcom/a9_mpc.py), [test_a9_mpc.py](../swarmbridge/experiments/uav_semcom/test_a9_mpc.py), 6 test):
+**Thiết kế** ([a9_mpc.py](../../swarmbridge/experiments/uav_semcom/a9_mpc.py), [test_a9_mpc.py](../../swarmbridge/experiments/uav_semcom/test_a9_mpc.py), 6 test):
 - **Quyền điều khiển như nhau:** MPC chỉ chọn mode của ảnh đang đến lượt. Di chuyển, kênh và công suất do **cùng** slot policy với PPO mode-only quyết định (phần slot của heuristic T:best).
 - **Thông tin như nhau:**
   - bit / PSNR từng mode chỉ qua `mode_info` (`predicted`);
@@ -72,7 +72,7 @@ Cơ chế đáng phát triển là một bộ điều khiển kết hợp: PPO l
 
 ## Phần B: nén token, predictor vòng kín, AVIF qua DINOv2 (B-E1, B-E2)
 
-**Thiết kế** ([b1_pipeline.py](../swarmbridge/experiments/jepa_semcom/b1_pipeline.py), [test_b1.py](../swarmbridge/experiments/jepa_semcom/test_b1.py), 12 test):
+**Thiết kế** ([b1_pipeline.py](../../swarmbridge/experiments/jepa_semcom/b1_pipeline.py), [test_b1.py](../../swarmbridge/experiments/jepa_semcom/test_b1.py), 12 test):
 - **Dữ liệu:** VisDrone-VID theo split v1; lấy 1 khung trong 3, tối đa 100 khung mỗi clip.
   - 48 clip TUNE để fit PCA, head và predictor.
   - 7 clip `gate` (nguồn train giữ riêng) + 3 clip `aux_val` để đánh giá: 10 clip, 796 khung.

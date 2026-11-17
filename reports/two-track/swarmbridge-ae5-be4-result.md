@@ -8,7 +8,7 @@ Ngày 16/11/2026, theo phản biện #30. Vẫn là giai đoạn khám phá:
 
 ### Cơ chế
 
-**Bộ theo dõi sai số tốc độ** (`RateErrTracker`, [a9_mpc.py](../swarmbridge/experiments/uav_semcom/a9_mpc.py)):
+**Bộ theo dõi sai số tốc độ** (`RateErrTracker`, [a9_mpc.py](../../swarmbridge/experiments/uav_semcom/a9_mpc.py)):
 - Đầu mỗi slot, với từng UAV, nó lưu tốc độ trung bình mà mô hình của planner dự đoán tại vị trí hiện tại:
   - `env` / `shannon`: trung bình Monte-Carlo qua phân phối fading thống kê;
   - `cal` / `cals`: trung bình của bộ hiệu chỉnh, hoặc Shannon nhân ρ khi khoảng SNR chưa có dữ liệu.
@@ -16,7 +16,7 @@ Ngày 16/11/2026, theo phản biện #30. Vẫn là giai đoạn khám phá:
 - Cách làm này là **prequential**: dự đoán có trước khi slot được quan sát; có test kiểm tra.
 - `bias(k)` = Σ quan sát / Σ dự đoán − 1 trong khoảng SNR hiện tại của UAV, gộp thêm khoảng lân cận cho đến khi đủ 20 s.
 
-**Bản kết hợp có cổng sai số** (`ehyb`, [a10_hybrid.py](../swarmbridge/experiments/uav_semcom/a10_hybrid.py)):
+**Bản kết hợp có cổng sai số** (`ehyb`, [a10_hybrid.py](../../swarmbridge/experiments/uav_semcom/a10_hybrid.py)):
 - PPO đề xuất mode.
 - MPC (N = 8, H = 4, rollout phi tiên tri, ngưỡng đổi Z = 1) **chỉ chạy khi bias đã biết và |bias| ≤ τ**. Ngược lại dùng ngay mode của PPO, nên chỉ tốn chi phí PPO.
 - τ = 0,1 được **chọn trước khi chạy**. Các giá trị 0,05 / 0,2 / 0,3 chỉ là độ nhạy, không dùng để chọn.
@@ -171,4 +171,4 @@ Kết luận khám phá: JEPA-32 **không kém hơn** và có xu hướng tốt 
 3. Codec video liên khung (ví dụ AV1/HEVC có inter-prediction → DINOv2 → cùng head) trước khi nói về nén.
 4. Chỉ sau đó mới quét trọng số JEPA / d nhỏ.
 
-Code: [a9_mpc.py](../swarmbridge/experiments/uav_semcom/a9_mpc.py) (`RateErrTracker`, `CalRates(slot_weight)`), [a10_hybrid.py](../swarmbridge/experiments/uav_semcom/a10_hybrid.py) (`ehyb`, `cals`), [test_a9_mpc.py](../swarmbridge/experiments/uav_semcom/test_a9_mpc.py) (11 test), [b2_pipeline.py](../swarmbridge/experiments/jepa_semcom/b2_pipeline.py) (`--seed`, `--reps`). Kết quả: `runs/uav_semcom/a11/ae5_phy_mcs_blind.json`, `ae5_ref.json`; `runs/jepa_semcom/b4_eval.json`, `b4_diag_openloop.json`, `b4_train/`.
+Code: [a9_mpc.py](../../swarmbridge/experiments/uav_semcom/a9_mpc.py) (`RateErrTracker`, `CalRates(slot_weight)`), [a10_hybrid.py](../../swarmbridge/experiments/uav_semcom/a10_hybrid.py) (`ehyb`, `cals`), [test_a9_mpc.py](../../swarmbridge/experiments/uav_semcom/test_a9_mpc.py) (11 test), [b2_pipeline.py](../../swarmbridge/experiments/jepa_semcom/b2_pipeline.py) (`--seed`, `--reps`). Kết quả: `runs/uav_semcom/a11/ae5_phy_mcs_blind.json`, `ae5_ref.json`; `runs/jepa_semcom/b4_eval.json`, `b4_diag_openloop.json`, `b4_train/`.

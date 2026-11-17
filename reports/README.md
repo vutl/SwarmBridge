@@ -1,65 +1,122 @@
 # SwarmBridge: báo cáo
 
-Cập nhật 16/11/2026. Ngoài cùng chỉ giữ tài liệu của **hướng đang mở**. Các nhánh đã đóng nằm trong [archive/](archive/README.md), chia theo giai đoạn.
+Cập nhật 18/11/2026 (sau phản biện #40). Trang này là điểm bắt đầu:
+- **Mục 1** cho biết đang ở đâu.
+- **Mục 2–3** là dòng thời gian của hai hướng.
+- **Mục 4** liệt kê mọi kết luận đã bị sửa ở báo cáo sau. Đọc mục này trước khi trích một con số cũ.
 
-## Trạng thái nghiên cứu
+Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/experiments/uav_semcom/`,
+`swarmbridge/experiments/jepa_semcom/`. Bảng chuyển đường dẫn: [metadata/](metadata/README.md) (lần mới nhất
+[18/11](metadata/report-moves-2026-11-18.json)).
 
-| Thành phần | Kết luận | Tài liệu |
+## Cấu trúc thư mục
+
+| Thư mục / file | Nội dung |
+|---|---|
+| [swarmbridge-paperA-method-draft.md](swarmbridge-paperA-method-draft.md) | Bản nháp Method của Paper A (v2, phản biện #35): PPO + MPC chọn lọc, chỉ chọn mode. Chưa viết lại theo yêu cầu phản biện |
+| [scheduling/](scheduling/) | **Đang mở.** Nhánh lập lịch kênh của Paper A: A-X2, A-X2b, A-X5 (phản biện #37–#39) |
+| [two-track/](two-track/) | Kế hoạch hai hướng (phản biện #26) và các vòng A-E1…A-E11 / B-E0…B-E9 (phản biện #27–#36). Mỗi file chứa cả phần A và phần B của một vòng |
+| [archive/](archive/README.md) | Các nhánh đã đóng, chia theo giai đoạn (30/10–15/11) |
+| [figures/](figures/), [metadata/](metadata/README.md) | Hình; JSON kiểm toán và bảng chuyển đường dẫn |
+| [wireless-abc.md](wireless-abc.md) | Tổng hợp hướng A/B/C ngày 06/11. Để nguyên ở đây vì `runs/active_recovery/protocol-v0.1.json` (nhánh Active Semantic Recovery do Codex làm) tham chiếu đúng đường dẫn này |
+
+## 1. Đang ở đâu (18/11)
+
+**Paper A** = DRL cho truyền ảnh ngữ nghĩa từ nhiều UAV, khi mô hình kênh sai và thời gian quyết định có hạn. Có hai phần.
+
+**(a) Bộ điều khiển mode** (Method v2): PPO chọn mode, kết hợp MPC hiệu chỉnh trực tuyến, chạy có chọn lọc trong
+ngân sách 50 ms.
+- Hơn PPO +1,2…+2,2 return trên seed mới (A-E9, A-E11), bền với feedback trễ/mất và, sau khi sửa ở A-E11, với warm-start lệch.
+- Chỉ đã kiểm trên PHY Shannon / MCS cấp slot. **Chưa thử dưới link adaptation thực tế.**
+
+**(b) Lập lịch kênh** (A-X):
+- Scheduler học được hơn heuristic tune khi PHY lý tưởng: +2,5 / +3,1 (Shannon), +11,3 (MCS biết nhiễu).
+- Với link adaptation thực tế (CQI trễ, OLLA, ACK/NACK, ARQ), không dùng chung kênh là tốt nhất ở cả 7 điều kiện.
+- Scheduler train ngẫu nhiên hoá kẹt ở việc dùng chung kênh khoảng 86% thời gian phát (−42,9).
+
+**Phản biện #40 (đang làm):**
+1. Link adaptation biết lịch: BS dùng lịch ghép kênh của chính nó và CQI trễ (chỉ thông tin nhân quả).
+2. Audit PHY: bit trong block hỏng, SINR xấu nhất trong block, OLLA so với goodput, thiếu HARQ.
+3. So sánh không dùng chung / dùng chung có kiểm soát / dùng chung học được.
+4. Chỉ so PPO factorised với PPO chọn kênh tuần tự (autoregressive) nếu thật sự có cơ hội dùng chung kênh.
+5. Riêng: hiệu chỉnh goodput cho bộ điều khiển mode.
+
+Không viết lại Method.
+
+**Paper B** (JEPA-SemCom trên VisDrone-VID) **tạm dừng** từ phản biện #35.
+- Codec video liên khung (HEVC/AV1) → DINOv2 thắng codec ngữ nghĩa ở ≤ 12 kbit (B-E7).
+- ROI-QP trong HEVC có trần khoảng +0,01 AP (B-E8, B-E9).
+- Hướng còn lại được đề xuất: (a) lớp tăng cường ngữ nghĩa trên nền video. Chưa duyệt.
+
+## 2. Paper A: dòng thời gian
+
+| Vòng (phản biện) | Câu hỏi | Kết quả chính | Báo cáo |
+|---|---|---|---|
+| A5 / A5.5 (07–10/11) | PPO chọn mode có hơn heuristic mạnh nhất H\* không | +5,7 (test) / +7,8 (test-dev) ở phy_mcs_blind; K5 test-dev +12,4. Cơ chế chưa rõ | [archive/uav-semcom-a/](archive/README.md#uav-semcom-a) |
+| Kế hoạch (#26) | Tách hai hướng A / B | Paper A: amortized optimization + bền với sai mô hình | [two-track/plan](two-track/swarmbridge-two-track-plan.md) |
+| A-E1 (#27) | PPO tốn bao nhiêu | 1,2–1,7 ms / quyết định so với 40–60 µs của heuristic; không đáng kể so với slot 1 s | [two-track/ae1-be0](two-track/swarmbridge-ae1-be0-result.md) |
+| A-E2/E3 (#28) | PPO so với MPC | MPC mô hình đúng +2,7 nhưng đắt 30–100 lần; MPC Shannon (sai) −8,6 | [two-track/ae2-be1](two-track/swarmbridge-ae2-be1-result.md) |
+| A-E4 (#29) | Rollout phi tiên tri, hiệu chỉnh từ ACK, kết hợp | MPC phi tiên tri ≈ PPO (+0,6); hiệu chỉnh ACK sửa sai mô hình (13,98 → 30,94); PPO + MPC đúng +2,0 | [two-track/ae4-be3](two-track/swarmbridge-ae4-be3-result.md) |
+| A-E5 (#30) | Cổng theo sai số mô hình | Log throughput lệch −12 % → hiệu chỉnh theo slot (`cals`); cổng chặn Shannon; +1,69 / +1,86 | [two-track/ae5-be4](two-track/swarmbridge-ae5-be4-result.md) |
+| A-E6 (#31) | Cổng theo độ tin cậy của lợi ích quyết định | +2,82 / +2,23; giá trị riêng là chống bias (Shannon +1,30 thay vì −8,67) | [two-track/ae6-be5](two-track/swarmbridge-ae6-be5-result.md) |
+| A-E7 (#32) | Giảm chi phí | Hai tầng (sàng lọc H₁ = 1 → MPC 3 mode) +2,39 / +2,22 ở 25 / 20 ms | [two-track/ae7-be6](two-track/swarmbridge-ae7-be6-result.md) |
+| A-E8 (#33) | Ngân sách 50 ms | Giữ hạn (p99 40–44 ms); ứng viên bi quan giúp khi mô hình lệch | [two-track/ae8-be7](two-track/swarmbridge-ae8-be7-result.md) |
+| A-E9 (#34) | Seed mới, feedback trễ/mất | +2,18 / +1,91; feedback 1–3 slot, mất 30–60 % không hại (nhờ warm-start) | [two-track/ae9-be8](two-track/swarmbridge-ae9-be8-result.md) |
+| A-E10 (#35) | Warm-start lệch regime | −6,4 / −12,1 so với PPO; tracker không phát hiện. Method v2 | [two-track/be9-ae10](two-track/swarmbridge-be9-ae10-result.md) |
+| A-E11 (#36) | Sửa A-E10 | Cửa sổ 30 quan sát: tệ nhất −0,14; warm-start chỉ hơn cold +0,4 / +0,9 | [two-track/ae11-ax1](two-track/swarmbridge-ae11-ax1-result.md) |
+| A-X1 (#36) | Kênh × mode có tương tác không | Có ở K5; 16 heuristic chọn kênh không hơn T:best | [two-track/ae11-ax1](two-track/swarmbridge-ae11-ax1-result.md) |
+| A-X2 (#37) | Học chọn kênh (C-only) | +2,52 (K5) / +3,07 (ref); học thêm mode không ổn định; luật kiểu bài báo thua +10…+170; khảo sát 19 bài: khác biệt chính là baseline đã tune | [scheduling/ax2](scheduling/swarmbridge-ax2-result.md) |
+| A-X2b (#38) | C-only train trên MCS biết nhiễu | +11,28; λ = 0,75 → −32, λ = 0 → −131 | [scheduling/ax2b](scheduling/swarmbridge-ax2b-mcs-result.md) |
+| A-X5 (#39) | Link adaptation thực tế + train ngẫu nhiên hoá | Không dùng chung kênh tốt nhất ở cả 7 điều kiện; C-only ngẫu nhiên hoá −42,9 (dùng chung kênh khoảng 0,86, không thích ứng); C-only danh nghĩa ≈ T:best; cổng NACK cứu nhưng vẫn thua | [scheduling/ax5](scheduling/swarmbridge-ax5-la-result.md) |
+
+## 3. Paper B: dòng thời gian (tạm dừng)
+
+| Vòng | Kết quả chính | Báo cáo |
 |---|---|---|
-| A5 / A5.5 PPO mode-only | Có lợi ích thực nghiệm ở một số cấu hình; cơ chế chưa giải thích được; không phải bằng chứng hợp tác | [archive/uav-semcom-a/](archive/README.md#uav-semcom-a) |
-| Pilot 0B (CROP trên MDMT) | Lợi ích nhỏ, không ổn định | [archive/h1-mdmt/](archive/README.md#h1-mdmt) |
-| A7 lập lịch theo ngữ nghĩa | Có dư địa lý tưởng; proxy thực tế chưa khai thác ổn định | [archive/a7-a8-b1/](archive/README.md#a7-a8-b1) |
-| A8 thang sai lệch mô hình | Không hợp lệ: thang không tác động lên các chính sách được so | [archive/a7-a8-b1/](archive/README.md#a7-a8-b1) |
-| B1 chọn góc nhìn | NO-GO: quy tắc không nhãn bắt kịp lựa chọn dùng GT; nhánh đóng | [archive/a7-a8-b1/](archive/README.md#a7-a8-b1) |
-| Rà soát novelty | PPO / MAPPO chọn TOKEN / CROP / FRAME: NO-GO (đã có người làm); RQ2: NO-GO về thuật toán; MARL chưa có lý do | [novelty review](swarmbridge-collab-perception-novelty-review-2026-11-13.md) |
-| **RQ1** (liên kết xuyên góc làm lý do truyền) | Phase 0 (chỉ hình học, bản ghi cache): NOT IDENTIFIABLE. RQ1-E E0 (DINOv2-S zero-shot, ảnh thật): **NO-GO**. Dừng trên MDMT; còn mở nếu có metadata camera hoặc Re-ID được học (cần duyệt mới) | [RQ1 protocol](swarmbridge-rq1-association-preregistration.md), [Phase 0](swarmbridge-rq1-phase0-result.md), [RQ1-E E0](swarmbridge-rq1e-e0-result.md) |
-| **Songdo bước 0–1** (phản biện #25) | Codec trạng thái thật: khoảng 0,7 kbit/s / giao lộ, tải cả đội max 11,2 kbit/s so với ≥ 60 kbit/s của riêng kênh C&C → **truyền thông không bị giới hạn**; lập lịch Songdo S3, S2 (giảm bit) và JEPA trên Songdo: **NO-GO**; S4 Town3 không xin duyệt | [proposal v2.1](swarmbridge-jepa-semcom-proposal.md), [S1 feasibility](swarmbridge-songdo-s1-feasibility.md) |
-| RL hợp tác bầy đàn | **Chưa có bằng chứng thực nghiệm** | |
+| B-E0 (#27) | Pipeline token DINOv2 + giữ nguyên + top-k + bitstream chạy, đồng bộ; token thô đắt cỡ AVIF | [two-track/ae1-be0](two-track/swarmbridge-ae1-be0-result.md) |
+| B-E1/E2 (#28) | PCA nén token được; predictor học / kiểu JEPA không hơn "giữ nguyên"; AVIF → DINOv2 tốt hơn từ khoảng 25 kbit | [two-track/ae2-be1](two-track/swarmbridge-ae2-be1-result.md) |
+| B-E3 (#29) | Bottleneck giữ nhiệm vụ; mã học được hơn AVIF 10/10 clip; JEPA-32 +0,02 mAP nhờ mã ổn định hơn | [two-track/ae4-be3](two-track/swarmbridge-ae4-be3-result.md) |
+| B-E4 (#30) | 3 seed ghép cặp: JEPA +0,025 / +0,013 / +0,005, CI chứa 0 | [two-track/ae5-be4](two-track/swarmbridge-ae5-be4-result.md) |
+| B-E5 (#31) | Chỉ làm mượt theo thời gian ≥ JEPA ở cùng bit → lợi ích JEPA là do ổn định theo thời gian | [two-track/ae6-be5](two-track/swarmbridge-ae6-be5-result.md) |
+| B-E6 (#32) | Surrogate số bit exp-Golomb: +0,030–0,036 mAP so với task ở 9–18 kbit | [two-track/ae7-be6](two-track/swarmbridge-ae7-be6-result.md) |
+| B-E7 (#33) | HEVC/AV1 liên khung → DINOv2 thắng codec ngữ nghĩa ở ≤ 12 kbit và trên patch thay đổi → Paper B dạng hiện tại không đứng | [two-track/ae8-be7](two-track/swarmbridge-ae8-be7-result.md) |
+| B-E8 (#34) | ROI-QP trong HEVC theo DINOv2 +0,01 AP (~11 % bit); ap_change không tăng; số hạng sự kiện không kích hoạt | [two-track/ae9-be8](two-track/swarmbridge-ae9-be8-result.md) |
+| B-E9 (#35) | Hạn mức event riêng: ap_change +0,011 ở 6 kbit = trần GT; không bền → đề xuất hướng (a) | [two-track/be9-ae10](two-track/swarmbridge-be9-ae10-result.md) |
 
-## Hướng đang mở
+## 4. Các lần sửa kết luận
 
-| Tài liệu | Nội dung |
-|---|---|
-| [swarmbridge-collab-perception-novelty-review-2026-11-13.md](swarmbridge-collab-perception-novelty-review-2026-11-13.md) | Rà soát novelty: CCSRA, HyComm, SchedCP, Where2comm, CodeFilling, CoSDH, PIB, MVSparse, MASS...; ma trận so sánh; RQ1 / RQ2 |
-| [swarmbridge-rq1-association-preregistration.md](swarmbridge-rq1-association-preregistration.md) | Protocol v2 của RQ1 (RQ1-A / RQ1-B, bộ liên kết không GT, Phase 0); v1 rút trước khi chạy |
-| [swarmbridge-rq1-phase0-result.md](swarmbridge-rq1-phase0-result.md) | Phase 0: NOT IDENTIFIABLE FROM EXISTING RECORDS; vì sao, và điều gì làm RQ1 đo được |
-| [swarmbridge-rq1-reid-feasibility-memo.md](swarmbridge-rq1-reid-feasibility-memo.md) | Memo khả thi: RQ1 bằng ngoại hình (DINOv2 zero-shot) trên ảnh MDMT thật, mô hình truyền TOKEN / embedding / CROP, đề xuất thí nghiệm RQ1-E (chưa duyệt chạy) |
-| [swarmbridge-rq1e-preregistration.md](swarmbridge-rq1e-preregistration.md) | Protocol RQ1-E (DINOv2-S zero-shot, E0 khoá trước, cam kết cho E1) |
-| [swarmbridge-rq1e-e0-result.md](swarmbridge-rq1e-e0-result.md) | RQ1-E E0: **FAIL 0/8 → NO-GO** cho ngoại hình zero-shot trên MDMT; E1 không chạy; đo tốc độ thật; chẩn đoán vì sao |
-| [swarmbridge-ae8-be7-result.md](swarmbridge-ae8-be7-result.md) | **A-E8 + B-E7 (phản biện #33):** bộ điều khiển chọn lọc với ngân sách 50 ms chủ động (tính cả PPO): giữ hạn ở 99,97–100 % quyết định, p99 40–44 ms, return như bản không ngân sách; đánh giá gộp các mức tốc độ trong một lượt; ứng viên bi quan giúp khi mô hình lệch (Shannon/MCS +1,90 so với +0,71, hiệu +1,19 CI > 0), không giúp ở ref; planner đầy đủ dạng anytime bị cắt 2/3 số quyết định trong 50 ms. B: HEVC/AV1 liên khung nhân quả → DINOv2 **thắng** rateonly03 ở 6–12 kbit/frame (0,02–0,09 mAP) và trên patch thay đổi ở mọi mức bit; chỉ ngang ở ~18 kbit → Paper B ở dạng hiện tại không đứng được; surrogate xếp hạng model đúng (0,98) nhưng theo frame chỉ 0,69–0,80 |
-| [swarmbridge-ae9-be8-result.md](swarmbridge-ae9-be8-result.md) | **A-E9 + B-E8 (phản biện #34):** seed mới 8500–8519, CI theo seed môi trường: np-any +2,18 (phy) / +1,91 (ref) so với PPO; feedback trễ 1–3 slot, mất 30–60 % không làm giảm đáng kể (mọi CI chứa 0), sự bền này đến từ warm-start (cold chỉ +0,65 / +0,96); Shannon np-pess hơn planner đầy đủ (+0,90) nhưng hơn top-2 chưa rõ (+0,39). B: offset QP theo block trong HEVC (adapter libx265): ROI theo DINOv2 phía gửi +0,01 AP (~11–13 % bit) ở 4,5–6 kbit, ap_change không tăng; số hạng sự kiện gần như không kích hoạt (7/10 clip trùng bitstream); ROI theo GT không hơn; motion-only gây hại |
-| [swarmbridge-ax5-la-result.md](swarmbridge-ax5-la-result.md) | **A-X5 (phản biện #39):** PHY link adaptation thực tế (CQI trễ, BLER logistic, ACK/NACK ngẫu nhiên, OLLA 10%, ARQ), đã kiểm chứng độc lập. Ở cả 7 điều kiện, luật tốt nhất không dùng chung kênh. C-only train ngẫu nhiên hoá kẹt ở dùng chung kênh khoảng 0,86, không thích ứng: −42,9 [−46,9, −38,9] so với T:best trên K5_la_rand. C-only train danh nghĩa ngang T:best (−1,4 n.s.) nhưng thua khi feedback chậm. Cổng NACK cứu +18…+102 nhưng vẫn thua; scheduler cũ + cổng chỉ +2,2 n.s. khi feedback tốt. Mode controller trên LA chưa thử. Đề xuất: bước C (chọn kênh tuần tự), LA biết lịch, hiệu chỉnh rate cho mode |
-| [swarmbridge-ax2b-mcs-result.md](swarmbridge-ax2b-mcs-result.md) | **A-X2b (phản biện #38):** scheduler kênh học được, train thẳng trên K5_mcsg: +11,28 [+9,76, +12,79] so với T:best tune cho MCS (cả 3 seed train; SCH\* +11,46), lớn hơn nhiều PPO joint (+0,63) hay mode-only (−0,37). Nhưng lợi ích chỉ có khi link adaptation lý tưởng: link adaptation bỏ sót 25% nhiễu → −32, bỏ sót toàn bộ → −131; controller không đổi hành vi dùng chung kênh. Đề xuất bước 3: link adaptation thực tế (CQI trễ một slot + biên OLLA, shadowing/LoS có tương quan) và train có ngẫu nhiên hoá |
-| [swarmbridge-ax2-result.md](swarmbridge-ax2-result.md) | **A-X2 (phản biện #37) + baseline kiểu bài báo + PPO train trên MCS:** học chọn kênh với mode heuristic (move/power khoá theo T:best) +2,52 (K5) / +3,07 (ref) so với T:best, ổn định qua 3 seed train; học thêm mode không ổn định ở K5, thua C-only ở ref; PPO–MPC cold +0,3…+1,1. Stress MCS: lợi thế dùng chung kênh ở K5 phụ thuộc Shannon lý tưởng; MPC lấy lại +9 ở MCS biết nhiễu, vô dụng ở MCS không biết nhiễu. Luật kiểu bài báo (RR/Max Rate/Random) thua PPO +10…+170; PPO train đúng trên K5_mcsg chỉ ngang T:best (joint +0,63 n.s., chưa hội tụ). Khảo sát 19 bài + 6 repo: kịch bản không dễ hơn; khác biệt chính là baseline đã tune |
-| [swarmbridge-ae11-ax1-result.md](swarmbridge-ae11-ax1-result.md) | **A-E11 + A-X1 (phản biện #36):** A: cửa sổ trượt 30 quan sát/dải SNR sửa lỗi A-E10 (tệ nhất −0,14 so với PPO trên 9 kịch bản, seed mới 8600–8619; warm-start đóng băng −7,5/−13,0); warm-start khớp chỉ hơn cold +0,4/+0,9 → lợi ích chủ yếu từ hiệu chỉnh online. X1: họ 16 heuristic chọn kênh không hơn T:best; phần chọn kênh của PPO joint +2,07 ở ref, ở K5 chỉ có ích khi đi cùng phần mode học chung (+1,78) → có tương tác kênh × mode; đề xuất A-X2 |
-| [swarmbridge-be9-ae10-result.md](swarmbridge-be9-ae10-result.md) | **B-E9 + A-E10 (phản biện #35):** B: bản đồ sự kiện theo từng lớp + hạn mức event riêng trong HEVC: cơ chế giờ thực sự hoạt động (38 % block ưu tiên); ap_change +0,009 so với task ở 6 kbit (CI > 0, ~15 % bit), ngang bản dùng nhãn GT (+0,008) nhưng mất từ 9 kbit và ngược dấu trên dev → trần của ROI-QP khoảng 0,01, đề xuất chuyển hướng (a). A: warm-start hiệu chỉnh ở regime PHY khác làm return −6,4 (phy) / −12,1 (ref) so với PPO, tệ hơn cả cold; tracker không phát hiện → warm-start phải đúng cấu hình PHY. Method Paper A v2 |
-| [swarmbridge-paperA-method-draft.md](swarmbridge-paperA-method-draft.md) | Bản nháp mục Method của Paper A (tiếng Anh): bộ điều khiển PPO + MPC chọn lọc, tham số, pseudo-code, bằng chứng A-E5…A-E9, những gì không khẳng định |
-| [swarmbridge-ae7-be6-result.md](swarmbridge-ae7-be6-result.md) | **A-E7 + B-E6 (phản biện #32):** kiểm tra đầu mút có đảo thứ tự bên trong (12 % lần đổi ở phy_mcs_blind); lưới 5 điểm giảm còn 4 % nhưng không tăng return. Planner hai tầng (sàng lọc tầm nhìn ngắn → MPC 3 mode) giữ +2,39 / +2,22 so với PPO, với 25 / 20,5 ms thay vì 50 / 48 ms. B: bottleneck với surrogate số bit exp-Golomb (không làm mượt MSE) hơn task +0,030–0,036 mAP ở 9–18 kbit, và hơn smooth trên patch có vật xuất hiện / biến mất; surrogate tương quan 0,99999 với bit thật |
-| [swarmbridge-ae6-be5-result.md](swarmbridge-ae6-be5-result.md) | **A-E6 + B-E5 (phản biện #31):** cổng quyết-định-nhận-thức (truyền sai số tốc độ vào hiệu giá trị PPO và planner), warm-start từ episode hiệu chỉnh riêng: +2,82 (phy_mcs_blind) / +2,23 (ref) so với PPO, CI > 0; với mô hình không lệch phần lớn lợi ích giống tăng ngưỡng Z (bảo thủ hơn), phần riêng là chống bias (Shannon lệch 47 %: +1,30 thay vì −8,67 / = PPO); tỉ lệ lần đổi đúng 38 → 79 %. B: smooth-only ≥ JEPA ở cùng bit (JEPA − smooth ≈ −0,004), smooth − task +0,016–0,019 đều 3 seed → lợi ích của JEPA là do ổn định theo thời gian |
-| [swarmbridge-ae5-be4-result.md](swarmbridge-ae5-be4-result.md) | **A-E5 + B-E4 (phản biện #30):** log throughput theo thời gian phát bị lệch thấp (−12 % với mô hình đúng), sửa bằng hiệu chỉnh theo slot; cổng sai số chặn mô hình lệch (Shannon: 16,39 → bằng PPO); bộ hiệu chỉnh theo slot + cổng sai số +1,69 (phy_mcs_blind) / +1,86 (ref) so với PPO, CI > 0, không cần biết PHY; cổng quá bảo thủ với mô hình đúng, độ nhạy τ không đơn điệu. B: 3 seed ghép cặp, JEPA-32 − task-32 = +0,025 / +0,013 / +0,005 (TB +0,015, CI chứa 0); mã JEPA ổn định hơn ở cả 3 seed |
-| [swarmbridge-ae4-be3-result.md](swarmbridge-ae4-be3-result.md) | **A-E4 + B-E3 (phản biện #29):** rollout phi tiên tri xoá phần lớn ưu thế cũ của MPC (≈ PPO); hiệu chỉnh từ ACK sửa sai mô hình (13,98 → 30,94); kết hợp PPO + MPC PHY đúng +2,0 so với PPO (cả 3 model), với mô hình hiệu chỉnh chỉ +0,6. B: bottleneck giữ nhiệm vụ (trần 0,475–0,487), mã học được hơn AVIF 10/10 clip; JEPA-32 hơn non-JEPA +0,02 mAP (8/10 clip) nhờ mã ổn định hơn, d64 ngang |
-| [swarmbridge-ae2-be1-result.md](swarmbridge-ae2-be1-result.md) | **A-E2/E3 + B-E1/E2 (phản biện #28):** MPC mô hình đúng hơn PPO khoảng +2,7 nhưng tốn 30–100 lần thời gian; MPC mô hình Shannon sai thua PPO 8,6 điểm (cơ chế phù hợp với ưu thế PPO); ngang chi phí PPO thì MPC thua. B: PCA nén token được, bù chuyển động có ích ít; predictor học và hoàn thiện kiểu JEPA (target đóng băng) không hơn giữ nguyên, kể cả vòng hở; AVIF→DINOv2 tốt hơn từ khoảng 25 kbit |
-| [swarmbridge-ae1-be0-result.md](swarmbridge-ae1-be0-result.md) | **A-E1 + B-E0 (phản biện #27):** PPO mode-only 1,2–1,7 ms / quyết định so với 40–60 µs của heuristic (return trùng A5.5); pipeline token DINOv2 + giữ nguyên + top-k + bitstream chạy, đồng bộ; 30 % patch đạt 98 % mAP; token thô đắt cỡ AVIF → cần nén token; giữ nguyên yếu khi camera di chuyển |
-| [swarmbridge-two-track-plan.md](swarmbridge-two-track-plan.md) | **Kế hoạch hiện tại (phản biện #26):** hai hướng song song. Paper A: DRL cho UAV SemCom khi mô hình kênh sai và quyết định có hạn thời gian (từ A5/A5.5). Paper B: JEPA-SemCom trên VisDrone-VID. Ba thí nghiệm tối thiểu mỗi hướng |
-| [swarmbridge-songdo-s1-feasibility.md](swarmbridge-songdo-s1-feasibility.md) | **Songdo bước 0–1:** audit độ phủ / đồng thời (validation + AUDITED-TEST), mặt nạ chấm điểm, codec M0 / M1 round-trip, đường cong bit – chất lượng, tải cả đội so với dung lượng đường lên; quyết định GO / NO-GO riêng cho lập lịch Songdo và JEPA |
-| [swarmbridge-jepa-semcom-proposal.md](swarmbridge-jepa-semcom-proposal.md) | **Proposal v2.1:** truyền thông ngữ nghĩa có dự đoán, thích ứng theo nhiệm vụ, cho nhiều UAV; dữ liệu chính Songdo Traffic (10 drone tuần tra đồng thời, đã kiểm), Town3 cho JEPA đa nhiệm vụ; chờ duyệt |
+Cột trái là điều từng được báo. Cột giữa là báo cáo đã sửa nó. Cột phải là điều hiện được coi là đúng.
 
-## Lưu trữ
+| Kết luận cũ | Sửa ở | Hiện được coi là đúng |
+|---|---|---|
+| A8: thang sai lệch mô hình cho thấy PPO bền (+5,73) | A8 (archive) | **Không hợp lệ**: không có nhiễu đồng kênh với các chính sách được so, nên thang không tác động |
+| A-E2: MPC mô hình đúng hơn PPO +2,7 | A-E4 | Phần lớn do rollout lạc quan (mode tương lai riêng từng đường mẫu). Phi tiên tri chỉ +0,6 (n.s.) ở phy_mcs_blind; ref vẫn +2,7 |
+| A-E2/E3: PPO bền hơn planner có mô hình | A-E4 | Không đứng: planner hiệu chỉnh từ ACK cũng bền như vậy. Còn lại luận điểm chi phí và kết hợp |
+| A-E4: hiệu chỉnh theo thời gian phát | A-E5 | Log throughput theo thời gian phát lệch thấp −12 % với mô hình đúng → dùng hiệu chỉnh theo slot (`cals`) |
+| A-E5: cổng sai số +1,69 | A-E6 | Kết quả gắn với giao thức `warm`; khi warm-start riêng (`pre`), cổng dư thừa |
+| A-E6: kiểm tra hai đầu khoảng | A-E7 | Có đảo thứ tự bên trong khoảng (12 % / 22 %); gọi đúng tên là "kiểm tra đầu mút"; lưới 5 điểm không tăng return |
+| A-E9: bền với feedback trễ/mất | A-E9, A-E10 | Bền nhờ warm-start (cold chỉ +0,65); warm-start lệch regime thì −6 / −12 |
+| A-E10: warm-start là nguồn lợi ích | A-E11 | Sửa bằng cửa sổ 30 quan sát; lợi ích chủ yếu từ hiệu chỉnh trong episode (warm chỉ +0,4 / +0,9 so với cold) |
+| A-X2: học chọn kênh +2,5 / +3,1 | A-X2 stress | Lợi thế dùng chung kênh ở K5 phụ thuộc Shannon lý tưởng |
+| A-X2b: C-only trên MCS +11,3 | A-X2b (λ), A-X5 | Chỉ khi link adaptation biết trước nhiễu; với link adaptation thực tế không còn dùng chung kênh có lợi |
+| A-X5: PHY link adaptation đã kiểm chứng | Audit #40 (18/11) | Bit gửi trước khi block bị lật sang NACK vẫn được tính: 0,3–0,5 % số bit, khoảng 1 ảnh / episode, chỉ ở block dùng chung, **lệch có lợi cho dùng chung kênh** → kết luận A-X5 không đổi; sẽ sửa trong #40 |
+| B-E3: JEPA-32 hơn non-JEPA +0,02 | B-E4, B-E5 | CI chứa 0 qua 3 seed; bằng với chỉ làm mượt theo thời gian |
+| B-E3: mã học được hơn AVIF | B-E7 | Đúng so với AVIF ảnh đơn, nhưng thua codec video liên khung ở ≤ 12 kbit |
+| B-E8: số hạng sự kiện | B-E9 | Bản B-E8 gần như không kích hoạt (lỗi thiết kế phân bổ theo hạng); B-E9 sửa, trần khoảng +0,01 |
 
-| Thư mục | Giai đoạn |
-|---|---|
-| [archive/a7-a8-b1/](archive/README.md#a7-a8-b1) | A7 (TOKEN / CROP / FRAME trong A5), Research Decision Review, A8, B1 (13–14/11) |
-| [archive/h1-mdmt/](archive/README.md#h1-mdmt) | Đánh giá lại hướng, Gate 0A, pilot 0B trên MDMT (11–13/11) |
-| [archive/r1-visdrone/](archive/README.md#r1-visdrone) | G-L2, R0, R1a, R1b-0a trên VisDrone (10–11/11) |
-| [archive/uav-semcom-a/](archive/README.md#uav-semcom-a) | UAV-SemCom A, A5, A5.5, A6-L1 cùng các kiểm toán (07–10/11) |
-| [archive/huang-abc/](archive/README.md#huang-abc) | Huang JSAC bước 0, kế hoạch proposal A/B/C (04–06/11) |
-| [archive/uav3d/](archive/README.md#uav3d) | UAV3D (đóng băng từ 04/11) |
-| [archive/sb-town3/](archive/README.md#sb-town3) | SB-decoder / Town3 |
-| [archive/tai-lieu/](archive/README.md#tai-lieu) | Paper, repo, prior art |
-| [metadata/](metadata/README.md) | JSON kiểm toán, manifest; bảng chuyển đường dẫn [04/11](metadata/report-moves-2026-11-04.json), [10/11](metadata/report-moves-2026-11-10.json), [14/11](metadata/report-moves-2026-11-14.json) |
+## 5. Nhánh đã đóng
 
-Báo cáo trong archive có thể chứa kết luận đã bị sửa ở báo cáo sau. Kết quả số: `runs/uav_semcom/`. Code: `swarmbridge/experiments/uav_semcom/`. Hình: [figures/](figures/).
+| Nhánh | Kết luận | Lưu trữ |
+|---|---|---|
+| R0 → R1b trên VisDrone (10–11/11) | H1 FAIL: không có dư địa | [archive/r1-visdrone/](archive/README.md#r1-visdrone) |
+| H1 trên MDMT: Gate 0, pilot 0B (11–13/11) | Lợi ích crop nhỏ (+1–3 F1), không ổn định | [archive/h1-mdmt/](archive/README.md#h1-mdmt) |
+| A7 / A8 / B1 (13–14/11) | A7: dư địa đến từ kiến thức GT cấp cảnh; A8 không hợp lệ; B1 NO-GO | [archive/a7-a8-b1/](archive/README.md#a7-a8-b1) |
+| Rà soát novelty + RQ1 (13–14/11) | PPO / MAPPO chọn TOKEN / CROP / FRAME đã có người làm; RQ1 NOT IDENTIFIABLE, RQ1-E E0 FAIL 0/8 | [archive/rq1-novelty/](archive/README.md#rq1-novelty) |
+| Songdo + proposal JEPA (14–15/11) | Truyền thông không bị giới hạn (tải max 11,2 kbit/s so với ≥ 60 kbit/s) → NO-GO | [archive/songdo-jepa/](archive/README.md#songdo-jepa) |
+| UAV-SemCom A, A5, A5.5, A6-L1 (07–10/11) | Nền của Paper A; PPO mode-only có lợi ở một số cấu hình | [archive/uav-semcom-a/](archive/README.md#uav-semcom-a) |
+| Huang JSAC, proposal A/B/C (04–06/11) | | [archive/huang-abc/](archive/README.md#huang-abc) |
+| UAV3D (đóng băng 04/11) | | [archive/uav3d/](archive/README.md#uav3d) |
+| SB / Town3 (30/10–03/11) | | [archive/sb-town3/](archive/README.md#sb-town3) |
+| Tài liệu, paper, repo | | [archive/tai-lieu/](archive/README.md#tai-lieu) |
 
-## Không thuộc nhánh này
-
-- [wireless-abc.md](wireless-abc.md): tổng hợp hướng A/B/C ngày 06/11. Để nguyên ở đây vì `runs/active_recovery/protocol-v0.1.json` (nhánh Active Semantic Recovery do Codex làm) tham chiếu đúng đường dẫn này.
+**Chưa có bằng chứng thực nghiệm** cho RL hợp tác bầy đàn (MARL). Mọi kết quả RL ở trên là một bộ ra quyết định tập trung.

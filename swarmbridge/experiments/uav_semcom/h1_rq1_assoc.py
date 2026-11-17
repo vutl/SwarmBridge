@@ -1,4 +1,4 @@
-"""RQ1 v2 (reports/swarmbridge-rq1-association-preregistration.md, review #23): cross-view association as a reason to
+"""RQ1 v2 (reports/archive/rq1-novelty/swarmbridge-rq1-association-preregistration.md, review #23): cross-view association as a reason to
 transmit. Offline on the existing pilot 0B records: no new image, detector run, AVIF encode, feature or training.
 
   phase0   first-half epochs only: can a GT-FREE cross-view association be estimated from the recorded geometry /

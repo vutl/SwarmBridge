@@ -18,7 +18,7 @@ Ngày 16/11/2026, theo phản biện #29. Giai đoạn khám phá: 20 seed (8000
   - Planner chỉ đổi khi mức lợi trung bình theo cặp mẫu vượt Z sai số chuẩn (Z = 1).
   - Với mô hình `cal`: nếu chưa có dữ liệu cho khoảng SNR thì không lập kế hoạch, dùng luôn mode của PPO (cổng tin cậy mô hình).
 - **Thời gian:** ngân sách vẫn là soft, chưa có hard deadline; số đo là thời gian thực tế, 12 tiến trình song song.
-- Code: [a9_mpc.py](../swarmbridge/experiments/uav_semcom/a9_mpc.py), [a10_hybrid.py](../swarmbridge/experiments/uav_semcom/a10_hybrid.py), [test_a9_mpc.py](../swarmbridge/experiments/uav_semcom/test_a9_mpc.py) (8 test). Kết quả: `runs/uav_semcom/a10/ae4_phy_mcs_blind.json`, `ae4_ref.json`.
+- Code: [a9_mpc.py](../../swarmbridge/experiments/uav_semcom/a9_mpc.py), [a10_hybrid.py](../../swarmbridge/experiments/uav_semcom/a10_hybrid.py), [test_a9_mpc.py](../../swarmbridge/experiments/uav_semcom/test_a9_mpc.py) (8 test). Kết quả: `runs/uav_semcom/a10/ae4_phy_mcs_blind.json`, `ae4_ref.json`.
 
 ### Kết quả: phy_mcs_blind
 
@@ -80,7 +80,7 @@ Ngày 16/11/2026, theo phản biện #29. Giai đoạn khám phá: 20 seed (8000
 
 ### Thiết kế
 
-- [b2_pipeline.py](../swarmbridge/experiments/jepa_semcom/b2_pipeline.py), [test_b2.py](../swarmbridge/experiments/jepa_semcom/test_b2.py) (3 test). Kết quả: `runs/jepa_semcom/b2_eval.json`, `b2_diag_openloop.json`, `b2_train/`.
+- [b2_pipeline.py](../../swarmbridge/experiments/jepa_semcom/b2_pipeline.py), [test_b2.py](../../swarmbridge/experiments/jepa_semcom/test_b2.py) (3 test). Kết quả: `runs/jepa_semcom/b2_eval.json`, `b2_diag_openloop.json`, `b2_train/`.
 - **Đầu vào:** bản đồ token DINOv2-S đóng băng (384 × 22 × 39) của VisDrone-VID. Cùng split và cùng 10 clip đánh giá như B-E1; 48 clip TUNE để huấn luyện.
 - **Backbone như nhau cho mọi biểu diễn:**
   - encoder: Conv1×1 384→256, GELU, Conv3×3 256→d;

@@ -71,7 +71,7 @@ Cách làm: đọc metadata Zenodo và README; chỉ lấy **CSV phiên PM5 ngà
   - bộ nhớ dịch theo pose 0,679 so với temporal U-Net 0,685 (gửi 15%);
   - toàn bộ bản đồ 1,0 kbit/frame đạt 0,882;
   - bộ nhớ + replica 0,771 @ 0,35 kbit (latent khoảng 8,4 kbit).
-  - Nguồn: [sb-va-town3.md](archive/sb-town3/sb-va-town3.md), [step1-hardening-2026-11-03.md](archive/sb-town3/step1-hardening-2026-11-03.md).
+  - Nguồn: [sb-va-town3.md](../sb-town3/sb-va-town3.md), [step1-hardening-2026-11-03.md](../sb-town3/step1-hardening-2026-11-03.md).
 - **UAVid:** video UAV thật, segmentation 8 lớp, 42 chuỗi (20 / 7 / 15), CC BY-NC-SA 4.0. Theo người phản biện, GT test 2020 đã công khai qua EOStore (tôi chưa tự kiểm cách truy cập). Kiểm chứng độc lập cho bản đồ ngữ nghĩa theo thời gian.
 
 ### 2.5 Mỗi bộ dữ liệu kiểm được câu hỏi nào

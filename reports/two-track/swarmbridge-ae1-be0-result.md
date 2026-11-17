@@ -9,7 +9,7 @@ Ngày 15/11/2026, theo phản biện #27 (GO cho A-E1 và B-E0). Giai đoạn kh
 - Seed 8000..8019, pool test, ba regime ref / K5 / phy_mcs_blind.
 - Một luồng torch, 3 tiến trình song song. Bỏ 50 quyết định đầu (warm-up), trước đó chạy một episode warm-up riêng.
 - Phần cứng: Intel i5-14400F (WSL2), Python 3.12.
-- Code: [a9_latency.py](../swarmbridge/experiments/uav_semcom/a9_latency.py). Kết quả: `runs/uav_semcom/a9/ae1_latency.json`.
+- Code: [a9_latency.py](../../swarmbridge/experiments/uav_semcom/a9_latency.py). Kết quả: `runs/uav_semcom/a9/ae1_latency.json`.
 
 **Kiểm tra:** return của cả 18 tổ hợp (regime × chính sách) **trùng tuyệt đối** với file xác nhận A5.5 trên cùng seed (sai lệch lớn nhất 0,0). Vòng đo không làm thay đổi hành vi.
 
@@ -62,7 +62,7 @@ Ngày 15/11/2026, theo phản biện #27 (GO cho A-E1 và B-E0). Giai đoạn kh
 - Đầu tuyến tính train trên 4 clip TUNE (211 khung).
 - Đánh giá trên 2 clip `gate` (nguồn train giữ riêng) và 1 clip `aux_val` (VID-val không trùng DET-train); 371 khung, lấy 1 khung trong 3.
 - Chỉ số: mAP theo patch.
-- Code: [b0_pipeline.py](../swarmbridge/experiments/jepa_semcom/b0_pipeline.py), [test_b0.py](../swarmbridge/experiments/jepa_semcom/test_b0.py) (19 test tổng hợp, đều qua). Kết quả: `runs/jepa_semcom/b0_run.json`, `b0_extract_stats.json`, `b0_avif_bits.json`. Token nằm ngoài git (`~/work/jepa_semcom/`).
+- Code: [b0_pipeline.py](../../swarmbridge/experiments/jepa_semcom/b0_pipeline.py), [test_b0.py](../../swarmbridge/experiments/jepa_semcom/test_b0.py) (19 test tổng hợp, đều qua). Kết quả: `runs/jepa_semcom/b0_run.json`, `b0_extract_stats.json`, `b0_avif_bits.json`. Token nằm ngoài git (`~/work/jepa_semcom/`).
 
 **Chi phí đo được:**
 - **Trích token** (7 clip, 582 khung; RTX 3070, fp16, batch 16): GPU 138–315 khung/giây, bộ nhớ đỉnh 199 MB.

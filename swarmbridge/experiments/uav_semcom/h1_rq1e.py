@@ -1,4 +1,4 @@
-"""RQ1-E (reports/swarmbridge-rq1e-preregistration.md, review #24): cross-view association from zero-shot DINOv2-S
+"""RQ1-E (reports/archive/rq1-novelty/swarmbridge-rq1e-preregistration.md, review #24): cross-view association from zero-shot DINOv2-S
 appearance features on the real MDMT frames.
 
   extract  crops around the declared detections of the existing pilot 0B records (all epochs, both views), DINOv2-S

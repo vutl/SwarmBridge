@@ -192,10 +192,10 @@ Chi phí huấn luyện mỗi seed (4000 vòng, GPU):
 3. Codec video liên khung trước khi nói về nén.
 
 Code:
-- [a9_mpc.py](../swarmbridge/experiments/uav_semcom/a9_mpc.py) (`_ctx` / `_eval_mode` / `gain`, `scales`, `RateErrTracker.stats`, `freeze`)
-- [a10_hybrid.py](../swarmbridge/experiments/uav_semcom/a10_hybrid.py) (`dhyb`, `pre`, `--rank-diag`)
-- [test_a9_mpc.py](../swarmbridge/experiments/uav_semcom/test_a9_mpc.py) (13 test)
-- [b2_pipeline.py](../swarmbridge/experiments/jepa_semcom/b2_pipeline.py) (`smooth`)
+- [a9_mpc.py](../../swarmbridge/experiments/uav_semcom/a9_mpc.py) (`_ctx` / `_eval_mode` / `gain`, `scales`, `RateErrTracker.stats`, `freeze`)
+- [a10_hybrid.py](../../swarmbridge/experiments/uav_semcom/a10_hybrid.py) (`dhyb`, `pre`, `--rank-diag`)
+- [test_a9_mpc.py](../../swarmbridge/experiments/uav_semcom/test_a9_mpc.py) (13 test)
+- [b2_pipeline.py](../../swarmbridge/experiments/jepa_semcom/b2_pipeline.py) (`smooth`)
 
 Kết quả:
 - `runs/uav_semcom/a12/ae6_{phy_mcs_blind,ref}.json`, `ae6_zcontrol_*.json`, `ae6_rankdiag_phy_mcs_blind.json`

@@ -223,6 +223,27 @@ Val không so được trực tiếp với test vì khác pool ảnh. Ở test, 
      chạy PPO mode hay MPC trên LA. Muốn trả lời thì bộ dự đoán tốc độ của mode controller phải được hiệu chỉnh theo
      goodput thực của LA, giống bài học hiệu chỉnh ở A-E5.
 
+## Audit sau phản biện #40 (18/11)
+
+ChatGPT chỉ ra một chỗ không nhất quán trong `env_la._loop_once`:
+- Kết quả ACK/NACK của block xét theo SINR xấu nhất trong block.
+- Nhưng bit gửi ở phần đầu block, trước khi nhiễu xuất hiện, đã được cộng vào ảnh và **không bị hoàn lại** khi block
+  bị lật sang NACK.
+
+Đo bằng bộ đếm mới (`bits_in_nack_frac`, `tasks_done_in_nack_blocks`; 10 seed, heuristic của K5_la_rand):
+
+| Điều kiện | Luật | Bit được tính trong block NACK / mọi bit được tính | Ảnh xong trong block NACK |
+|---|---|---|---|
+| K5_la | không dùng chung kênh | 0,000 | 0 / 260 |
+| K5_la | dùng chung kênh | 0,004 | 1,2 / 260 |
+| K5_la_good | dùng chung kênh | 0,005 | 0,9 / 260 |
+| K5_la_bad | dùng chung kênh | 0,003 | 1,1 / 260 |
+
+Lỗi có thật nhưng nhỏ. Nó chỉ xảy ra ở block dùng chung kênh và làm các policy dùng chung kênh được lợi. Vì vậy các
+kết luận ở trên (không dùng chung kênh tốt nhất; scheduler học được thua) không đổi, và nếu có thay đổi thì chỉ mạnh
+thêm. Bản sửa (hoàn bit của block NACK) sẽ đi cùng phần audit PHY của phản biện #40. Kết quả trong bảng trên là của
+code chưa sửa.
+
 ## Giới hạn
 
 - Mới có ARQ, chưa có HARQ có kết hợp. Theo hướng dẫn: chưa có shadowing tương quan, chưa có LoS động.

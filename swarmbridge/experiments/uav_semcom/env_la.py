@@ -100,7 +100,8 @@ class LaSurveyEnv(SV.UavSurveyEnv):
         self.la = [LinkAdapter(c["la_bler_target"], p["la_olla_step"], p["la_fb_delay"], c["la_olla_max"])
                    for _ in range(K)]
         self.la_cur = [None] * K
-        self.la_st = dict(blocks=0, nack=0, shared_blocks=0, shared_nack=0, bits_ok=0.0, air=0.0, air_fail=0.0)
+        self.la_st = dict(blocks=0, nack=0, shared_blocks=0, shared_nack=0, bits_ok=0.0, air=0.0, air_fail=0.0,
+                         bits_in_nack_blocks=0.0, tasks_done_in_nack_blocks=0)
 
     def block_of(self, t):
         return int(math.floor(t / self.c["la_tb"] + 1e-9))
@@ -113,7 +114,7 @@ class LaSurveyEnv(SV.UavSurveyEnv):
         rep = ad.report(b)
         est = (rep[1] if rep is not None else self._snr_free_db(k, p)) - ad.off
         return dict(b=b, i=cqi_for(est), g=math.inf, u=float(self.la_u[min(b, len(self.la_u) - 1), k]), ok=True,
-                    shared=interf > 0, air=0.0, sig=sig, interf0=interf)
+                    shared=interf > 0, air=0.0, sig=sig, interf0=interf, bits=0.0, fin=0)
 
     def _la_close(self, k, rec):
         if rec["air"] <= 0:
@@ -126,6 +127,9 @@ class LaSurveyEnv(SV.UavSurveyEnv):
         st["nack"] += nack
         st["shared_blocks"] += rec["shared"]
         st["shared_nack"] += nack and rec["shared"]
+        if nack:                       # audit (review #40): bits / task completions credited before the block flipped
+            st["bits_in_nack_blocks"] += rec["bits"]
+            st["tasks_done_in_nack_blocks"] += rec["fin"]
         lam = c["la_lambda"]
         z = float(self.la_z[min(rec["b"], len(self.la_z) - 1), k])
         s = 10 * math.log10(max(rec["sig"] / (nz + lam * rec["interf0"]), 1e-30)) + self.la_p["la_cqi_bias"] \
@@ -210,6 +214,8 @@ class LaSurveyEnv(SV.UavSurveyEnv):
             h.airtime += d
             rec = self.la_cur[k]
             rec["air"] += d
+            rec["bits"] += sent
+            rec["fin"] += int(fin)
             self.la_st["air"] += d
             self.la_st["bits_ok"] += sent
             if not rec["ok"]:
@@ -251,4 +257,6 @@ class LaSurveyEnv(SV.UavSurveyEnv):
                     shared_block_frac=st["shared_blocks"] / max(st["blocks"], 1),
                     fail_air_frac=st["air_fail"] / max(st["air"], 1e-9), goodput_kbps=st["bits_ok"] / max(st["air"], 1e-9) / 1e3,
                     delivered_mbit=st["bits_ok"] / 1e6, blocks=st["blocks"],
+                    bits_in_nack_frac=st["bits_in_nack_blocks"] / max(st["bits_ok"], 1e-9),
+                    tasks_done_in_nack_blocks=st["tasks_done_in_nack_blocks"],
                     la_hidden={k: float(v) for k, v in self.la_p.items()})

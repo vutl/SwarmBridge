@@ -215,11 +215,11 @@ Trần (không nén): 0,486–0,489 cho mọi biểu diễn.
 3. Tích hợp làm một mode truyền trong môi trường UAV của Paper A.
 
 Code:
-- [a9_mpc.py](../swarmbridge/experiments/uav_semcom/a9_mpc.py) (`screen`, `cands`, `gain_at`)
-- [a10_hybrid.py](../swarmbridge/experiments/uav_semcom/a10_hybrid.py) (`shyb`, lưới `Kg5`, `--interior-diag`)
-- [test_a9_mpc.py](../swarmbridge/experiments/uav_semcom/test_a9_mpc.py) (14 test)
-- [b2_pipeline.py](../swarmbridge/experiments/jepa_semcom/b2_pipeline.py) (`rate`, `rate_surrogate`, `change_masks`, `--name`, `--preds`, `--no-posthoc`)
-- [test_b2.py](../swarmbridge/experiments/jepa_semcom/test_b2.py) (5 test)
+- [a9_mpc.py](../../swarmbridge/experiments/uav_semcom/a9_mpc.py) (`screen`, `cands`, `gain_at`)
+- [a10_hybrid.py](../../swarmbridge/experiments/uav_semcom/a10_hybrid.py) (`shyb`, lưới `Kg5`, `--interior-diag`)
+- [test_a9_mpc.py](../../swarmbridge/experiments/uav_semcom/test_a9_mpc.py) (14 test)
+- [b2_pipeline.py](../../swarmbridge/experiments/jepa_semcom/b2_pipeline.py) (`rate`, `rate_surrogate`, `change_masks`, `--name`, `--preds`, `--no-posthoc`)
+- [test_b2.py](../../swarmbridge/experiments/jepa_semcom/test_b2.py) (5 test)
 
 Kết quả:
 - `runs/uav_semcom/a13/ae7_{phy_mcs_blind,ref}.json`, `ae7_diag_*.json`
