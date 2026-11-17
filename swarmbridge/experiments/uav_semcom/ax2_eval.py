@@ -7,6 +7,9 @@ masks, reward, task list, fading and movement / power.
 Combination  SCHED|MODE[+mpc]
   SCHED  tbest (T:best channel rule) | sch (A-X1 SCH*) | jc (A5 joint PPO channel head, ckpt I)
          | c (A-X2 C-only, ckpt I) | cm (A-X2 C+Mo, ckpt I)
+         | ja (review #42: joint-assignment heuristic ja_sched, member given by --ja; channels only)
+         | ls (movement / power of the controller regime's T:best, channels = least-slack M UAVs, no reuse)
+         | jae (as ja, but movement / power of the ENVIRONMENT regime's T:best, i.e. matched with tbest_env)
   MODE   heur (T:best mode rule) | ppo (A5 mode-only PPO I) | jm (A5 joint PPO mode head I) | cmm (A-X2 C+Mo mode head I)
   +mpc   the mode head proposes, the A-E8 selective controller (cals np-any, N 8, H 4, causal, Z 1, kappa 2, H1 1,
          stacked, 50 ms cooperative budget started before the mode head's inference) may override; calibration
@@ -22,6 +25,8 @@ Diagnostics per episode, besides the A5 metrics:
     the realised bits sent in that slot / dt; ratio of sums and normalised MAE (independent of whether MPC runs);
   * MPC: tracker bias quantiles, gated fraction, time of the first planner run (cold-start fallback time), aborts;
   * decision wall times: scheduler per slot, mode head (+MPC) per mode decision, p99 of each.
+--env-extra JSON: cfg overrides of the environment (review #42: e.g. the link-adaptation PHY of A-X6 / A-X7 with
+obs_la false, so that controllers trained on K5 see their own observation layout).
 Usage: python ax2_eval.py OUT --regime K5 [--env-regime K5_mcs] --combos A,B,.. --seeds 8800:8900 --procs 6"""
 import argparse
 import gzip
@@ -92,7 +97,7 @@ def types_ns(cal):
     return types.SimpleNamespace(model="cal", cal=cal)
 
 
-def episode(ctrl_regime, env_regime, combo, i, seed):
+def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None):
     sched, mode = combo.split("|")
     use_mpc = mode.endswith("+mpc")
     mode = mode.replace("+mpc", "")
@@ -112,8 +117,15 @@ def episode(ctrl_regime, env_regime, combo, i, seed):
             "jm": lambda: mdl("joint", lambda: XP.joint_path(ctrl_regime, i)),
             "cmm": lambda: mdl("cm", lambda: ax2_path(ctrl_regime, "cm", i))}.get(mode)
     # movement + power: the controller regime's T:best (tbest_env: the env regime's own tuned heuristic, whole slot)
-    sp_mp = sp_e if sched == "tbest_env" else sp_t
-    e = X.GymSchedEv(AE.G["table"], AE.G["pools"]["test"], C.regime_cfg(env_regime), seed=seed, seeds=[seed],
+    sp_mp = sp_e if sched in ("tbest_env", "jae") else sp_t
+    if sched in ("ja", "jae"):
+        import ja_sched as JA
+        sp_s = JA.from_name(ja, sp_mp)
+    elif sched == "ls":
+        def sp_s(env):
+            ch = P.assign_channels(env)
+            return [(a[0], ch[k], a[2]) for k, a in enumerate(sp_mp(env))]
+    e = X.GymSchedEv(AE.G["table"], AE.G["pools"]["test"], C.regime_cfg(env_regime, **(extra or {})), seed=seed, seeds=[seed],
                      core_cls=SV.UavSurveyEnv, sp_heur=sp_mp, mp_heur=mp_t, learn_mode=True)
     for f in (smod, mmod):
         if f is not None:
@@ -143,8 +155,8 @@ def episode(ctrl_regime, env_regime, combo, i, seed):
                 trk.update(core)
             t0 = time.perf_counter()
             a = np.zeros(len(e.action_space.nvec), dtype=np.int64)
-            if sched in ("tbest", "tbest_env", "sch"):
-                acts = [x[:3] for x in (sp_s if sched == "sch" else sp_mp)(core)]
+            if sched in ("tbest", "tbest_env", "sch", "ja", "jae", "ls"):
+                acts = [x[:3] for x in (sp_s if sched in ("sch", "ja", "jae", "ls") else sp_mp)(core)]
                 for k in range(K):
                     a[3 * k:3 * k + 3] = acts[k]
             else:
@@ -204,12 +216,13 @@ def episode(ctrl_regime, env_regime, combo, i, seed):
 
 
 def job(j):
-    ctrl, envr, combo, i, seeds = j
+    ctrl, envr, combo, i, seeds = j[:5]
+    extra, ja = (j[5], j[6]) if len(j) > 5 else (None, None)
     import torch
     torch.set_num_threads(1)
     rows, dl = [], []
     for s in seeds:
-        m, d = episode(ctrl, envr, combo, i, s)
+        m, d = episode(ctrl, envr, combo, i, s, extra, ja)
         rows.append(m)
         dl.append(d)
     return dict(ctrl_regime=ctrl, env_regime=envr, combo=combo, ckpt=i, seeds=seeds, rows=rows), dl
@@ -228,13 +241,16 @@ def main():
     ap.add_argument("--combos", required=True)
     ap.add_argument("--seeds", default="8800:8900")
     ap.add_argument("--procs", type=int, default=6)       # WSL has 6 CPUs: more processes break the 50 ms budget
+    ap.add_argument("--env-extra", default=None)
+    ap.add_argument("--ja", default=None)
     a = ap.parse_args()
+    extra = json.loads(a.env_extra) if a.env_extra else None
     envr = a.env_regime or a.regime
     lo, hi = map(int, a.seeds.split(":"))
     seeds = list(range(lo, hi))
     chunks = [seeds[x:x + 25] for x in range(0, len(seeds), 25)]
-    jobs = [(a.regime, envr, c, i, ch) for c in a.combos.split(",") for i in (range(3) if needs_ckpt(c) else [-1])
-            for ch in chunks]
+    jobs = [(a.regime, envr, c, i, ch, extra, a.ja) for c in a.combos.split(",")
+            for i in (range(3) if needs_ckpt(c) else [-1]) for ch in chunks]
     t0 = time.time()
     with Pool(a.procs, initializer=AE.init, initargs=(False,)) as pool:
         res = pool.map(job, jobs, chunksize=1)
@@ -258,7 +274,7 @@ def main():
             ck[v] = [ax2_path(a.regime, v, i) for i in range(3)]
         except OSError:
             pass
-    meta = dict(wall_s=time.time() - t0, ctrl_regime=a.regime, env_regime=envr, ax2_ckpts=ck)
+    meta = dict(wall_s=time.time() - t0, ctrl_regime=a.regime, env_regime=envr, ax2_ckpts=ck, env_extra=extra, ja=a.ja)
     json.dump(dict(meta, results=out), open(a.out, "w"), indent=1)
     json.dump(deliv, gzip.open(a.out.replace(".json", ".deliv.json.gz"), "wt"))
 

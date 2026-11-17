@@ -1,0 +1,333 @@
+== E1 good_sched_persist
+    NR           fixed_avif_20              ret   -55.90 ok 0.760 drop 0.011 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -49.77 ok 0.764 drop 0.004 cochan 0.000 ms50 0.68 ms99 1.02 brier 0.0320->0.0320
+    JA-NR-l      JA:los:NR:a1:m0            ret   -49.44 ok 0.765 drop 0.003 cochan 0.000 ms50 0.71 ms99 1.10 brier 0.0318->0.0000
+    JA-NR-o      JA:oracle:NR:a1:m0         ret   -40.74 ok 0.767 drop 0.000 cochan 0.000 ms50 0.31 ms99 0.46 brier 0.0320->0.0320
+    JA-R-c       JA:stat:R:a1:m3            ret   -46.76 ok 0.766 drop 0.002 cochan 0.279 ms50 1.22 ms99 2.96 brier 0.0322->0.0322
+    JA-R-l       JA:los:R:a1:m3             ret   -46.85 ok 0.766 drop 0.002 cochan 0.279 ms50 1.22 ms99 3.00 brier 0.0327->0.0000
+    JA-R-o       JA:oracle:R:a1:m6          ret   -40.74 ok 0.767 drop 0.000 cochan 0.006 ms50 0.37 ms99 0.58 brier 0.0322->0.0322
+    NR: c - NR                                +6.13 [ +4.75, +7.51]
+    NR: LoS-only oracle gain (l - c)          +0.33 [ -0.39, +1.04]
+    NR: full oracle gain (o - c)              +9.03 [ +7.65,+10.41]
+    NR: fast-fading part (o - l)              +8.70 [ +7.47, +9.94]
+    R: c - NR                                 +9.14 [ +7.72,+10.55]
+    R: LoS-only oracle gain (l - c)           -0.09 [ -0.95, +0.77]
+    R: full oracle gain (o - c)               +6.02 [ +4.91, +7.13]
+    R: fast-fading part (o - l)               +6.11 [ +5.11, +7.11]
+    LoS share of the full gap (NR): 0.04; LoS candidate-slots / episode 9.5 (episodes without any 0.00); Spearman(nLoS, l-c) +0.07 p=0.472; (nLoS, o-c) -0.04; l-c by nLoS tercile [ 0.56 -0.32  0.88]
+== E1 nom_sched_bursty
+    NR           fixed_avif_20              ret   -64.93 ok 0.752 drop 0.021 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -56.75 ok 0.761 drop 0.008 cochan 0.000 ms50 0.70 ms99 1.08 brier 0.0322->0.0322
+    JA-NR-l      JA:los:NR:a1:m0            ret   -57.57 ok 0.761 drop 0.009 cochan 0.000 ms50 0.73 ms99 1.09 brier 0.0322->0.0000
+    JA-NR-o      JA:oracle:NR:a1:m0         ret   -44.26 ok 0.767 drop 0.000 cochan 0.000 ms50 0.33 ms99 0.47 brier 0.0319->0.0319
+    JA-R-c       JA:stat:R:a2:m6            ret   -56.59 ok 0.761 drop 0.008 cochan 0.441 ms50 1.62 ms99 2.98 brier 0.0322->0.0322
+    JA-R-l       JA:los:R:a0:m6             ret   -59.27 ok 0.760 drop 0.010 cochan 0.611 ms50 1.92 ms99 3.07 brier 0.0321->0.0000
+    JA-R-o       JA:oracle:R:a1:m6          ret   -49.83 ok 0.767 drop 0.001 cochan 0.598 ms50 0.43 ms99 0.63 brier 0.0321->0.0321
+    NR: c - NR                                +8.18 [ +6.13,+10.22]
+    NR: LoS-only oracle gain (l - c)          -0.82 [ -2.06, +0.42]
+    NR: full oracle gain (o - c)             +12.49 [+10.75,+14.24]
+    NR: fast-fading part (o - l)             +13.31 [+11.39,+15.23]
+    R: c - NR                                 +8.34 [ +6.35,+10.33]
+    R: LoS-only oracle gain (l - c)           -2.69 [ -4.34, -1.03]
+    R: full oracle gain (o - c)               +6.76 [ +4.88, +8.63]
+    R: fast-fading part (o - l)               +9.44 [ +7.91,+10.98]
+    LoS share of the full gap (NR): -0.07; LoS candidate-slots / episode 10.0 (episodes without any 0.00); Spearman(nLoS, l-c) -0.05 p=0.635; (nLoS, o-c) -0.07; l-c by nLoS tercile [-0.86 -0.33 -1.36]
+== E1 nom_sched_persist
+    NR           fixed_avif_20              ret   -64.93 ok 0.752 drop 0.021 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -56.75 ok 0.761 drop 0.008 cochan 0.000 ms50 0.65 ms99 1.02 brier 0.0322->0.0322
+    JA-NR-l      JA:los:NR:a1:m0            ret   -57.57 ok 0.761 drop 0.009 cochan 0.000 ms50 0.68 ms99 1.04 brier 0.0322->0.0000
+    JA-NR-o      JA:oracle:NR:a1:m0         ret   -44.26 ok 0.767 drop 0.000 cochan 0.000 ms50 0.32 ms99 0.46 brier 0.0319->0.0319
+    JA-R-c       JA:stat:R:a0:m3            ret   -55.17 ok 0.761 drop 0.009 cochan 0.284 ms50 1.51 ms99 3.06 brier 0.0325->0.0325
+    JA-R-l       JA:los:R:a1:m3             ret   -54.18 ok 0.763 drop 0.006 cochan 0.234 ms50 1.47 ms99 3.03 brier 0.0324->0.0000
+    JA-R-o       JA:oracle:R:a1:m6          ret   -44.25 ok 0.767 drop 0.000 cochan 0.006 ms50 0.38 ms99 0.59 brier 0.0317->0.0317
+    NR: c - NR                                +8.18 [ +6.13,+10.22]
+    NR: LoS-only oracle gain (l - c)          -0.82 [ -2.06, +0.42]
+    NR: full oracle gain (o - c)             +12.49 [+10.75,+14.24]
+    NR: fast-fading part (o - l)             +13.31 [+11.39,+15.23]
+    R: c - NR                                 +9.76 [ +7.84,+11.68]
+    R: LoS-only oracle gain (l - c)           +0.99 [ -0.52, +2.50]
+    R: full oracle gain (o - c)              +10.92 [ +9.27,+12.57]
+    R: fast-fading part (o - l)               +9.93 [ +8.18,+11.68]
+    LoS share of the full gap (NR): -0.07; LoS candidate-slots / episode 10.0 (episodes without any 0.00); Spearman(nLoS, l-c) -0.05 p=0.635; (nLoS, o-c) -0.07; l-c by nLoS tercile [-0.86 -0.33 -1.36]
+== E1 slow_sched_persist
+    NR           fixed_avif_20              ret  -138.36 ok 0.639 drop 0.169 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a0:m0           ret  -135.40 ok 0.636 drop 0.174 cochan 0.000 ms50 0.75 ms99 1.05 brier 0.0320->0.0320
+    JA-NR-l      JA:los:NR:a2:m0            ret  -137.43 ok 0.643 drop 0.165 cochan 0.000 ms50 0.79 ms99 1.12 brier 0.0323->0.0000
+    JA-NR-o      JA:oracle:NR:a0:m0         ret   -73.91 ok 0.743 drop 0.033 cochan 0.000 ms50 0.34 ms99 0.48 brier 0.0323->0.0323
+    JA-R-c       JA:stat:R:a0:m3            ret  -131.34 ok 0.644 drop 0.164 cochan 0.065 ms50 2.07 ms99 3.09 brier 0.0322->0.0322
+    JA-R-l       JA:los:R:a1:m0             ret  -130.41 ok 0.662 drop 0.141 cochan 0.429 ms50 2.08 ms99 2.88 brier 0.0324->0.0000
+    JA-R-o       JA:oracle:R:a0:m3          ret   -71.20 ok 0.747 drop 0.026 cochan 0.185 ms50 0.41 ms99 0.59 brier 0.0325->0.0325
+    NR: c - NR                                +2.96 [ -1.84, +7.75]
+    NR: LoS-only oracle gain (l - c)          -2.03 [ -7.82, +3.76]
+    NR: full oracle gain (o - c)             +61.49 [+55.79,+67.19]
+    NR: fast-fading part (o - l)             +63.52 [+57.84,+69.19]
+    R: c - NR                                 +7.02 [ +2.17,+11.87]
+    R: LoS-only oracle gain (l - c)           +0.93 [ -4.12, +5.98]
+    R: full oracle gain (o - c)              +60.14 [+54.80,+65.47]
+    R: fast-fading part (o - l)              +59.21 [+54.33,+64.08]
+    LoS share of the full gap (NR): -0.03; LoS candidate-slots / episode 11.8 (episodes without any 0.00); Spearman(nLoS, l-c) -0.15 p=0.131; (nLoS, o-c) +0.03; l-c by nLoS tercile [  5.72 -16.81  -3.  ]
+== E2 nom_sched_bursty
+    JA-NR-c-n4     ret   -56.63 ms p50 0.50 p99 0.72  vs n32  +0.13 [ -1.46, +1.71]
+    JA-NR-c-n8     ret   -58.33 ms p50 0.53 p99 0.78  vs n32  -1.57 [ -3.18, +0.03]
+    JA-NR-c        ret   -56.75 ms p50 0.69 p99 1.06
+    JA-NR-c-n128   ret   -56.29 ms p50 1.36 p99 2.22  vs n32  +0.46 [ -1.08, +2.01]
+    JA-R-c-n4      ret   -58.16 ms p50 0.66 p99 1.00  vs n32  -1.57 [ -2.93, -0.21]
+    JA-R-c-n8      ret   -56.23 ms p50 0.80 p99 1.24  vs n32  +0.35 [ -1.19, +1.90]
+    JA-R-c         ret   -56.59 ms p50 1.65 p99 3.10
+    JA-R-c-n128    ret   -56.42 ms p50 5.74 p99 11.58  vs n32  +0.17 [ -1.27, +1.61]
+== E2 nom_sched_persist
+    JA-NR-c-n4     ret   -56.63 ms p50 0.46 p99 0.71  vs n32  +0.13 [ -1.46, +1.71]
+    JA-NR-c-n8     ret   -58.33 ms p50 0.51 p99 0.90  vs n32  -1.57 [ -3.18, +0.03]
+    JA-NR-c        ret   -56.75 ms p50 0.65 p99 1.29
+    JA-NR-c-n128   ret   -56.29 ms p50 1.31 p99 2.15  vs n32  +0.46 [ -1.08, +2.01]
+    JA-R-c-n4      ret   -54.81 ms p50 0.61 p99 0.95  vs n32  +0.35 [ -1.17, +1.88]
+    JA-R-c-n8      ret   -54.23 ms p50 0.78 p99 1.26  vs n32  +0.94 [ -0.67, +2.54]
+    JA-R-c         ret   -55.17 ms p50 1.49 p99 3.00
+    JA-R-c-n128    ret   -54.21 ms p50 5.11 p99 12.75  vs n32  +0.96 [ -0.48, +2.39]
+== E3 c0_sched_persist (=E1 nom)
+    NR           fixed_avif_20              ret   -64.93 ok 0.752 drop 0.021 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -56.75 ok 0.761 drop 0.008 cochan 0.000 ms50 0.65 ms99 1.02 brier 0.0322->0.0322
+    JA-NR-l      JA:los:NR:a1:m0            ret   -57.57 ok 0.761 drop 0.009 cochan 0.000 ms50 0.68 ms99 1.04 brier 0.0322->0.0000
+    JA-NR-o      JA:oracle:NR:a1:m0         ret   -44.26 ok 0.767 drop 0.000 cochan 0.000 ms50 0.32 ms99 0.46 brier 0.0319->0.0319
+    JA-R-c       JA:stat:R:a0:m3            ret   -55.17 ok 0.761 drop 0.009 cochan 0.284 ms50 1.51 ms99 3.06 brier 0.0325->0.0325
+    c - NR                              +8.18 [ +6.13,+10.22]
+    LoS-only oracle gain (l - c)        -0.82 [ -2.06, +0.42]
+    full oracle gain (o - c)           +12.49 [+10.75,+14.24]
+== E3 c0_srs_sched_persist
+    NR           fixed_avif_20              ret   -61.69 ok 0.754 drop 0.018 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -54.29 ok 0.763 drop 0.006 cochan 0.000 ms50 0.67 ms99 1.06 brier 0.0327->0.0327
+    JA-NR-f      JA:filt:NR:a1:m0           ret   -54.29 ok 0.763 drop 0.006 cochan 0.000 ms50 0.69 ms99 1.08 brier 0.0327->0.0327
+    JA-NR-l      JA:los:NR:a1:m0            ret   -54.11 ok 0.763 drop 0.006 cochan 0.000 ms50 0.68 ms99 1.06 brier 0.0330->0.0000
+    JA-NR-o      JA:oracle:NR:a0:m0         ret   -43.47 ok 0.767 drop 0.001 cochan 0.000 ms50 0.31 ms99 0.47 brier 0.0317->0.0317
+    JA-R-c       JA:stat:R:a1:m3            ret   -52.92 ok 0.762 drop 0.006 cochan 0.252 ms50 1.40 ms99 2.97 brier 0.0319->0.0319
+    JA-R-f       JA:filt:R:a1:m3            ret   -52.92 ok 0.762 drop 0.006 cochan 0.252 ms50 1.44 ms99 3.10 brier 0.0319->0.0319
+    c - NR                              +7.40 [ +5.43, +9.36]
+    filter gain (f - c)                 +0.00 [ +0.00, +0.00]
+    LoS-only oracle gain (l - c)        +0.18 [ -0.92, +1.27]
+    full oracle gain (o - c)           +10.82 [ +9.14,+12.51]
+    reuse on filter (R-f - NR-f)        +1.36 [ -0.25, +2.98]
+    f - NR                              +7.40 [ +5.43, +9.36]
+    filter recovers 0.00 of the LoS-only oracle gap
+== E3 c100_sched_persist
+    NR           fixed_avif_20              ret   -65.10 ok 0.751 drop 0.021 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -57.92 ok 0.760 drop 0.010 cochan 0.000 ms50 0.69 ms99 1.05 brier 0.0288->0.0288
+    JA-NR-f      JA:filt:NR:a1:m0           ret   -57.68 ok 0.760 drop 0.010 cochan 0.000 ms50 0.79 ms99 1.26 brier 0.0284->0.0264
+    JA-NR-l      JA:los:NR:a1:m0            ret   -58.55 ok 0.759 drop 0.011 cochan 0.000 ms50 0.74 ms99 1.15 brier 0.0284->0.0000
+    JA-NR-o      JA:oracle:NR:a0:m0         ret   -44.25 ok 0.766 drop 0.001 cochan 0.000 ms50 0.35 ms99 0.53 brier 0.0284->0.0284
+    JA-R-c       JA:stat:R:a0:m3            ret   -54.41 ok 0.761 drop 0.009 cochan 0.291 ms50 1.46 ms99 2.98 brier 0.0276->0.0276
+    JA-R-f       JA:filt:R:a0:m3            ret   -55.82 ok 0.759 drop 0.011 cochan 0.291 ms50 1.65 ms99 3.21 brier 0.0279->0.0259
+    c - NR                              +7.18 [ +5.04, +9.31]
+    filter gain (f - c)                 +0.24 [ -0.30, +0.77]
+    LoS-only oracle gain (l - c)        -0.63 [ -2.23, +0.97]
+    full oracle gain (o - c)           +13.67 [+11.72,+15.63]
+    reuse on filter (R-f - NR-f)        +1.86 [ +0.08, +3.65]
+    f - NR                              +7.42 [ +5.32, +9.52]
+    filter recovers -0.38 of the LoS-only oracle gap
+== E3 c100_srs_sched_persist
+    NR           fixed_avif_20              ret   -61.99 ok 0.754 drop 0.018 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -53.77 ok 0.763 drop 0.006 cochan 0.000 ms50 0.68 ms99 1.06 brier 0.0288->0.0288
+    JA-NR-f      JA:filt:NR:a1:m0           ret   -54.30 ok 0.763 drop 0.006 cochan 0.000 ms50 0.80 ms99 1.26 brier 0.0288->0.0238
+    JA-NR-l      JA:los:NR:a1:m0            ret   -53.79 ok 0.763 drop 0.006 cochan 0.000 ms50 0.73 ms99 1.17 brier 0.0285->0.0000
+    JA-NR-o      JA:oracle:NR:a0:m0         ret   -43.08 ok 0.767 drop 0.001 cochan 0.000 ms50 0.36 ms99 0.53 brier 0.0286->0.0286
+    JA-R-c       JA:stat:R:a1:m3            ret   -52.15 ok 0.763 drop 0.006 cochan 0.245 ms50 1.40 ms99 3.00 brier 0.0282->0.0282
+    JA-R-f       JA:filt:R:a1:m6            ret   -54.26 ok 0.763 drop 0.006 cochan 0.000 ms50 1.49 ms99 3.17 brier 0.0287->0.0238
+    c - NR                              +8.22 [ +6.33,+10.11]
+    filter gain (f - c)                 -0.53 [ -1.32, +0.27]
+    LoS-only oracle gain (l - c)        -0.02 [ -1.02, +0.98]
+    full oracle gain (o - c)           +10.69 [ +8.98,+12.40]
+    reuse on filter (R-f - NR-f)        +0.04 [ -0.11, +0.18]
+    f - NR                              +7.69 [ +5.68, +9.69]
+    filter recovers 23.31 of the LoS-only oracle gap
+== E3 c10_sched_persist
+    NR           fixed_avif_20              ret   -64.87 ok 0.752 drop 0.021 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -56.96 ok 0.761 drop 0.008 cochan 0.000 ms50 0.66 ms99 1.07 brier 0.0312->0.0312
+    JA-NR-f      JA:filt:NR:a1:m0           ret   -56.97 ok 0.761 drop 0.008 cochan 0.000 ms50 0.79 ms99 1.22 brier 0.0312->0.0312
+    JA-NR-l      JA:los:NR:a1:m0            ret   -57.69 ok 0.760 drop 0.010 cochan 0.000 ms50 0.70 ms99 1.09 brier 0.0308->0.0000
+    JA-NR-o      JA:oracle:NR:a1:m0         ret   -44.44 ok 0.767 drop 0.001 cochan 0.000 ms50 0.35 ms99 0.51 brier 0.0310->0.0310
+    JA-R-c       JA:stat:R:a0:m3            ret   -54.72 ok 0.761 drop 0.009 cochan 0.291 ms50 1.39 ms99 2.87 brier 0.0310->0.0310
+    JA-R-f       JA:filt:R:a0:m3            ret   -54.71 ok 0.761 drop 0.009 cochan 0.290 ms50 1.59 ms99 3.13 brier 0.0310->0.0310
+    c - NR                              +7.91 [ +5.92, +9.90]
+    filter gain (f - c)                 -0.01 [ -0.02, +0.01]
+    LoS-only oracle gain (l - c)        -0.73 [ -1.97, +0.50]
+    full oracle gain (o - c)           +12.52 [+10.75,+14.28]
+    reuse on filter (R-f - NR-f)        +2.26 [ +0.85, +3.67]
+    f - NR                              +7.90 [ +5.91, +9.90]
+    filter recovers 0.01 of the LoS-only oracle gap
+== E3 c10_srs_sched_persist
+    NR           fixed_avif_20              ret   -61.75 ok 0.754 drop 0.018 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -54.26 ok 0.762 drop 0.007 cochan 0.000 ms50 0.69 ms99 1.21 brier 0.0316->0.0316
+    JA-NR-f      JA:filt:NR:a1:m0           ret   -54.28 ok 0.762 drop 0.007 cochan 0.000 ms50 0.79 ms99 1.24 brier 0.0317->0.0313
+    JA-NR-l      JA:los:NR:a1:m0            ret   -54.18 ok 0.762 drop 0.006 cochan 0.000 ms50 0.73 ms99 1.14 brier 0.0311->0.0000
+    JA-NR-o      JA:oracle:NR:a0:m0         ret   -43.42 ok 0.767 drop 0.001 cochan 0.000 ms50 0.34 ms99 0.53 brier 0.0310->0.0310
+    JA-R-c       JA:stat:R:a1:m3            ret   -52.38 ok 0.763 drop 0.006 cochan 0.258 ms50 1.37 ms99 2.99 brier 0.0309->0.0309
+    JA-R-f       JA:filt:R:a1:m3            ret   -52.12 ok 0.763 drop 0.005 cochan 0.257 ms50 1.50 ms99 3.24 brier 0.0310->0.0308
+    c - NR                              +7.49 [ +5.52, +9.47]
+    filter gain (f - c)                 -0.02 [ -0.05, +0.00]
+    LoS-only oracle gain (l - c)        +0.08 [ -0.96, +1.13]
+    full oracle gain (o - c)           +10.84 [ +9.13,+12.54]
+    reuse on filter (R-f - NR-f)        +2.16 [ +0.67, +3.65]
+    f - NR                              +7.47 [ +5.49, +9.45]
+    filter recovers -0.26 of the LoS-only oracle gap
+== E3 c30_sched_persist
+    NR           fixed_avif_20              ret   -65.05 ok 0.751 drop 0.021 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -56.70 ok 0.761 drop 0.008 cochan 0.000 ms50 0.68 ms99 1.06 brier 0.0299->0.0299
+    JA-NR-f      JA:filt:NR:a1:m0           ret   -56.71 ok 0.761 drop 0.008 cochan 0.000 ms50 0.80 ms99 1.27 brier 0.0299->0.0296
+    JA-NR-l      JA:los:NR:a1:m0            ret   -56.74 ok 0.761 drop 0.008 cochan 0.000 ms50 0.74 ms99 1.18 brier 0.0296->0.0000
+    JA-NR-o      JA:oracle:NR:a1:m0         ret   -44.27 ok 0.767 drop 0.000 cochan 0.000 ms50 0.36 ms99 0.52 brier 0.0305->0.0305
+    JA-R-c       JA:stat:R:a1:m3            ret   -54.96 ok 0.761 drop 0.008 cochan 0.237 ms50 1.47 ms99 3.05 brier 0.0302->0.0302
+    JA-R-f       JA:filt:R:a1:m6            ret   -57.01 ok 0.760 drop 0.009 cochan 0.000 ms50 1.58 ms99 3.18 brier 0.0299->0.0296
+    c - NR                              +8.35 [ +6.20,+10.51]
+    filter gain (f - c)                 -0.02 [ -0.13, +0.09]
+    LoS-only oracle gain (l - c)        -0.04 [ -1.18, +1.10]
+    full oracle gain (o - c)           +12.42 [+10.71,+14.13]
+    reuse on filter (R-f - NR-f)        -0.30 [ -0.76, +0.17]
+    f - NR                              +8.33 [ +6.17,+10.50]
+    filter recovers 0.45 of the LoS-only oracle gap
+== E3 c30_srs_sched_persist
+    NR           fixed_avif_20              ret   -61.72 ok 0.755 drop 0.017 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -53.50 ok 0.763 drop 0.005 cochan 0.000 ms50 0.68 ms99 1.07 brier 0.0303->0.0303
+    JA-NR-f      JA:filt:NR:a1:m0           ret   -53.45 ok 0.763 drop 0.005 cochan 0.000 ms50 0.78 ms99 1.22 brier 0.0303->0.0292
+    JA-NR-l      JA:los:NR:a1:m0            ret   -53.32 ok 0.763 drop 0.005 cochan 0.000 ms50 0.74 ms99 1.22 brier 0.0298->0.0000
+    JA-NR-o      JA:oracle:NR:a0:m0         ret   -43.25 ok 0.767 drop 0.001 cochan 0.000 ms50 0.36 ms99 0.54 brier 0.0300->0.0300
+    JA-R-c       JA:stat:R:a1:m3            ret   -52.12 ok 0.763 drop 0.006 cochan 0.256 ms50 1.41 ms99 3.02 brier 0.0303->0.0303
+    JA-R-f       JA:filt:R:a1:m3            ret   -52.08 ok 0.763 drop 0.005 cochan 0.257 ms50 1.51 ms99 3.15 brier 0.0300->0.0289
+    c - NR                              +8.22 [ +6.33,+10.11]
+    filter gain (f - c)                 +0.06 [ -0.48, +0.59]
+    LoS-only oracle gain (l - c)        +0.18 [ -0.64, +1.00]
+    full oracle gain (o - c)           +10.25 [ +8.75,+11.76]
+    reuse on filter (R-f - NR-f)        +1.37 [ -0.19, +2.92]
+    f - NR                              +8.28 [ +6.45,+10.10]
+    filter recovers 0.31 of the LoS-only oracle gap
+== E3 c30sh4_sched_persist
+    NR           fixed_avif_20              ret   -79.03 ok 0.733 drop 0.046 cochan 0.000 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret   -71.48 ok 0.745 drop 0.030 cochan 0.000 ms50 0.71 ms99 1.09 brier 0.0299->0.0299
+    JA-NR-f      JA:filt:NR:a1:m0           ret   -71.90 ok 0.744 drop 0.031 cochan 0.000 ms50 0.83 ms99 1.30 brier 0.0297->0.0296
+    JA-NR-l      JA:los:NR:a1:m0            ret   -70.42 ok 0.747 drop 0.027 cochan 0.000 ms50 0.76 ms99 1.16 brier 0.0297->0.0000
+    JA-NR-o      JA:oracle:NR:a0:m0         ret   -48.27 ok 0.764 drop 0.005 cochan 0.000 ms50 0.35 ms99 0.55 brier 0.0300->0.0300
+    JA-R-c       JA:stat:R:a2:m0            ret   -67.68 ok 0.750 drop 0.024 cochan 0.539 ms50 1.79 ms99 3.00 brier 0.0291->0.0291
+    JA-R-f       JA:filt:R:a0:m3            ret   -67.68 ok 0.743 drop 0.032 cochan 0.228 ms50 1.55 ms99 2.84 brier 0.0292->0.0290
+    c - NR                              +7.55 [ +5.37, +9.73]
+    filter gain (f - c)                 -0.42 [ -0.91, +0.07]
+    LoS-only oracle gain (l - c)        +1.06 [ -0.59, +2.71]
+    full oracle gain (o - c)           +23.22 [+20.03,+26.40]
+    reuse on filter (R-f - NR-f)        +4.23 [ +1.82, +6.63]
+    f - NR                              +7.13 [ +4.93, +9.32]
+    filter recovers -0.39 of the LoS-only oracle gap
+== E3 probe (SRS every slot) effect, same policy, paired by seed
+    c10 NR         srs - no srs  +3.12 [ +1.66, +4.57]
+    c10 JA-NR-c    srs - no srs  +2.70 [ +1.04, +4.36]
+    c10 JA-NR-f    srs - no srs  +2.69 [ +1.03, +4.34]
+    c30 NR         srs - no srs  +3.33 [ +1.48, +5.17]
+    c30 JA-NR-c    srs - no srs  +3.19 [ +1.55, +4.84]
+    c30 JA-NR-f    srs - no srs  +3.27 [ +1.68, +4.85]
+    c100 NR         srs - no srs  +3.12 [ +1.45, +4.79]
+    c100 JA-NR-c    srs - no srs  +4.15 [ +2.51, +5.80]
+    c100 JA-NR-f    srs - no srs  +3.39 [ +1.81, +4.96]
+== E4 K5
+    NR           pacedB2+budget1+reuse      ret    62.11 ok 0.968 drop 0.004 cochan 0.839 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret    46.81 ok 0.948 drop 0.002 cochan 0.000 ms50 0.86 ms99 1.55 brier 0.0328->0.0328
+    JA-R-c       JA:stat:R:a0:m0            ret    65.96 ok 0.975 drop 0.001 cochan 0.824 ms50 1.63 ms99 3.14 brier 0.0327->0.0327
+    JA-NR-o      JA:oracle:NR:a0:m0         ret    59.68 ok 0.961 drop 0.005 cochan 0.000 ms50 0.50 ms99 0.92 brier 0.0326->0.0326
+    JA-R-o       JA:oracle:R:a0:m6          ret    65.33 ok 0.968 drop 0.002 cochan 0.470 ms50 0.55 ms99 1.05 brier 0.0324->0.0324
+    JA-NR-c - NR                     -15.30 [-16.96,-13.65]
+    JA-R-c - NR                       +3.85 [ +2.90, +4.80]
+    JA-NR-o - NR                      -2.44 [ -3.83, -1.04]
+    JA-R-o - NR                       +3.22 [ +2.11, +4.33]
+    NR - stored T:best (sanity)       +0.00 [ -0.00, +0.00]
+    stored A-X2 C-only RL - NR        +2.52 [ +1.68, +3.35]
+    JA-NR-c - stored RL              -17.82 [-19.21,-16.43]
+    JA-R-c - stored RL                +1.34 [ +0.60, +2.07]
+== E4 ref
+    NR           pacedB1.5+budget1.25+reuse ret    58.94 ok 0.990 drop 0.005 cochan 0.486 ms50 nan ms99 nan brier nan->nan
+    JA-NR-c      JA:stat:NR:a1:m0           ret    60.54 ok 0.994 drop 0.001 cochan 0.000 ms50 0.59 ms99 1.00 brier 0.0335->0.0335
+    JA-R-c       JA:stat:R:a1:m0            ret    62.85 ok 0.996 drop 0.000 cochan 0.364 ms50 0.66 ms99 1.09 brier 0.0331->0.0331
+    JA-NR-o      JA:oracle:NR:a0:m0         ret    62.84 ok 0.994 drop 0.002 cochan 0.000 ms50 0.37 ms99 0.68 brier 0.0333->0.0333
+    JA-R-o       JA:oracle:R:a1:m0          ret    63.07 ok 0.996 drop 0.001 cochan 0.401 ms50 0.38 ms99 0.66 brier 0.0331->0.0331
+    JA-NR-c - NR                      +1.59 [ +0.94, +2.25]
+    JA-R-c - NR                       +3.91 [ +3.33, +4.49]
+    JA-NR-o - NR                      +3.90 [ +3.33, +4.47]
+    JA-R-o - NR                       +4.13 [ +3.49, +4.77]
+    NR - stored T:best (sanity)       +0.00 [ +0.00, +0.00]
+    stored A-X2 C-only RL - NR        +3.07 [ +2.54, +3.59]
+    JA-NR-c - stored RL               -1.47 [ -1.91, -1.03]
+    JA-R-c - stored RL                +0.84 [ +0.47, +1.22]
+== D d_mode_nom.json  env {'la_mode': 'sched', 'la_interf': 'persistent', 'obs_la': False}  ja JA:stat:NR:a1:m0
+    jae|heur               ret   -54.41 [-54.4] ok 0.780 svc 0.70 mode p99 0.1
+    jae|heur_env           ret   -56.75 [-56.8] ok 0.761 svc 0.53 mode p99 0.0
+    jae|ppo                ret   -63.91 [-60.7 -74.6 -56.5] ok 0.820 svc 0.79 mode p99 3.2
+    jae|ppo+mpc            ret   -48.14 [-49.5 -49.4 -45.5] ok 0.859 svc 0.77 mode p99 43.2
+    ja|heur                ret   -55.24 [-55.2] ok 0.817 svc 0.70 mode p99 0.1
+    ja|heur_env            ret   -64.84 [-64.8] ok 0.764 svc 0.48 mode p99 0.0
+    ja|ppo                 ret   -52.88 [-48.5 -64.  -46.2] ok 0.892 svc 0.75 mode p99 3.4
+    ja|ppo+mpc             ret   -41.14 [-40.6 -43.  -39.8] ok 0.908 svc 0.73 mode p99 43.7
+    ls|heur                ret   -72.40 [-72.4] ok 0.780 svc 0.64 mode p99 0.1
+    ls|heur_env            ret   -72.11 [-72.1] ok 0.757 svc 0.47 mode p99 0.0
+    ls|ppo                 ret   -66.62 [-63.7 -78.4 -57.8] ok 0.871 svc 0.72 mode p99 3.2
+    ls|ppo+mpc             ret   -53.29 [-53.4 -57.3 -49.2] ok 0.891 svc 0.69 mode p99 43.3
+    tbest_env|heur         ret   -77.39 [-77.4] ok 0.728 svc 0.64 mode p99 0.1
+    tbest_env|heur_env     ret   -64.93 [-64.9] ok 0.752 svc 0.52 mode p99 0.0
+    tbest_env|ppo          ret   -77.73 [-76.1 -88.  -69.1] ok 0.790 svc 0.78 mode p99 3.2
+    tbest_env|ppo+mpc      ret   -60.60 [-62.1 -61.7 -58. ] ok 0.833 svc 0.75 mode p99 43.7
+    tbest|heur_env         ret  -100.29 [-100.3] ok 0.709 svc 1.17 mode p99 0.0
+    tbest_env: ppo - heur_env                            -12.80 [-17.74, -7.86]
+    tbest_env: ppo+mpc - ppo                             +17.13 [+14.82,+19.44]
+    tbest_env: ppo+mpc - heur_env                         +4.33 [ +0.01, +8.64]
+    tbest_env: heur - heur_env                           -12.46 [-15.40, -9.52]
+    ja: ppo - heur_env                                   +11.96 [ +8.06,+15.87]
+    ja: ppo+mpc - ppo                                    +11.74 [ +9.66,+13.81]
+    ja: ppo+mpc - heur_env                               +23.70 [+20.36,+27.03]
+    ja: heur - heur_env                                   +9.60 [ +6.36,+12.85]
+    heur_env: ja - tbest_env                              +0.09 [ -1.99, +2.17]
+    heur: ja - tbest_env                                 +22.15 [+18.72,+25.59]
+    ppo: ja - tbest_env                                  +24.85 [+21.41,+28.29]
+    ppo+mpc: ja - tbest_env                              +19.46 [+16.48,+22.43]
+    CONFOUNDED interaction (ja gain under ppo+mpc - under heur_env) +19.37 [+16.05,+22.69]
+    ls: ppo - heur_env                                    +5.49 [ +1.67, +9.31]
+    ls: ppo+mpc - ppo                                    +13.33 [+11.11,+15.55]
+    ls: ppo+mpc - heur_env                               +18.82 [+15.86,+21.78]
+    ls: heur - heur_env                                   -0.29 [ -3.59, +3.01]
+    jae: ppo - heur_env                                   -7.15 [-12.41, -1.89]
+    jae: ppo+mpc - ppo                                   +15.76 [+12.95,+18.57]
+    jae: ppo+mpc - heur_env                               +8.61 [ +4.06,+13.16]
+    jae: heur - heur_env                                  +2.34 [ -1.03, +5.71]
+    heur_env: ja - ls (scheduler, paced movement)         +7.27 [ +5.55, +8.99]
+    heur_env: jae - tbest_env (scheduler, mission movement)  +8.18 [ +6.13,+10.22]
+    heur_env: ls - tbest_env (movement, least-slack channels)  -7.18 [ -9.15, -5.21]
+    heur_env: ja - jae (movement, JA channels)            -8.09 [ -9.68, -6.50]
+    heur: ja - ls (scheduler, paced movement)            +17.16 [+13.84,+20.49]
+    heur: jae - tbest_env (scheduler, mission movement)  +22.98 [+20.06,+25.90]
+    heur: ls - tbest_env (movement, least-slack channels)  +4.99 [ +1.54, +8.45]
+    heur: ja - jae (movement, JA channels)                -0.83 [ -3.98, +2.33]
+    ppo: ja - ls (scheduler, paced movement)             +13.74 [+11.22,+16.26]
+    ppo: jae - tbest_env (scheduler, mission movement)   +13.82 [+10.78,+16.87]
+    ppo: ls - tbest_env (movement, least-slack channels) +11.11 [ +7.88,+14.34]
+    ppo: ja - jae (movement, JA channels)                +11.03 [ +7.82,+14.23]
+    ppo+mpc: ja - ls (scheduler, paced movement)         +12.15 [+10.05,+14.25]
+    ppo+mpc: jae - tbest_env (scheduler, mission movement) +12.46 [ +9.52,+15.40]
+    ppo+mpc: ls - tbest_env (movement, least-slack channels)  +7.31 [ +4.18,+10.44]
+    ppo+mpc: ja - jae (movement, JA channels)             +7.00 [ +4.00,+10.00]
+    interaction paced: (ja-ls) under ppo+mpc - under heur_env  +4.88 [ +2.08, +7.67]
+    interaction mission: (jae-tbest_env) under ppo+mpc - under heur_env  +4.28 [ +0.71, +7.85]
+== D d_mode_c30.json  env {'la_mode': 'sched', 'la_interf': 'persistent', 'obs_la': False, 'ch_corr_m': 30.0}  ja JA:filt:NR:a1:m0
+    ja|heur                ret   -56.28 [-56.3] ok 0.815 svc 0.70 mode p99 0.1
+    ja|heur_env            ret   -65.84 [-65.8] ok 0.763 svc 0.48 mode p99 0.0
+    ja|ppo                 ret   -54.03 [-48.1 -67.7 -46.3] ok 0.889 svc 0.75 mode p99 3.3
+    ja|ppo+mpc             ret   -41.95 [-42.2 -45.5 -38.1] ok 0.907 svc 0.73 mode p99 43.6
+    tbest_env|heur         ret   -79.26 [-79.3] ok 0.724 svc 0.64 mode p99 0.1
+    tbest_env|heur_env     ret   -65.05 [-65.] ok 0.751 svc 0.51 mode p99 0.0
+    tbest_env|ppo          ret   -79.75 [-74.7 -91.5 -73. ] ok 0.787 svc 0.78 mode p99 3.2
+    tbest_env|ppo+mpc      ret   -62.64 [-64.9 -63.7 -59.3] ok 0.830 svc 0.75 mode p99 43.5
+    tbest|heur_env         ret  -103.13 [-103.1] ok 0.705 svc 1.16 mode p99 0.0
+    tbest_env: ppo - heur_env                            -14.70 [-19.85, -9.55]
+    tbest_env: ppo+mpc - ppo                             +17.11 [+14.50,+19.72]
+    tbest_env: ppo+mpc - heur_env                         +2.41 [ -1.99, +6.81]
+    tbest_env: heur - heur_env                           -14.21 [-17.23,-11.19]
+    ja: ppo - heur_env                                   +11.81 [ +8.00,+15.62]
+    ja: ppo+mpc - ppo                                    +12.08 [ +9.71,+14.45]
+    ja: ppo+mpc - heur_env                               +23.89 [+20.86,+26.92]
+    ja: heur - heur_env                                   +9.56 [ +6.16,+12.97]
+    heur_env: ja - tbest_env                              -0.79 [ -2.84, +1.27]
+    heur: ja - tbest_env                                 +22.99 [+19.61,+26.36]
+    ppo: ja - tbest_env                                  +25.72 [+22.48,+28.97]
+    ppo+mpc: ja - tbest_env                              +20.69 [+17.36,+24.03]
+    CONFOUNDED interaction (ja gain under ppo+mpc - under heur_env) +21.48 [+18.03,+24.93]

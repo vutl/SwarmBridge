@@ -49,6 +49,21 @@ reproduced exactly with la_atomic False (only allowed with the other three at th
                    it interferes and spends transmit energy (logged as pad_air_s).
   * la_fade: "slot" = small-scale fading drawn once per 1 s slot (as the A5 env); "block" = redrawn every block
     (LoS / NLoS state still per slot), i.e. a coherence time of one block, shorter than any CQI delay.
+
+Review #42 additions (A-X7):
+  * ch_corr_m > 0: SPATIALLY CONSISTENT LoS / NLoS state. Per UAV a latent Gaussian z follows an AR(1) process in
+    travelled distance (Gudmundson): z_s = rho z_{s-1} + sqrt(1 - rho^2) e_s, rho = exp(-d_s / ch_corr_m)
+    [x exp(-dt / ch_corr_tau_s) if ch_corr_tau_s > 0, so that a hovering UAV also decorrelates], d_s = distance flown
+    since the previous slot; the innovation e_s = Phi^-1(f_u[s, k]) re-uses the pre-drawn uniforms of the env (common
+    random numbers across correlation distances). LoS iff Phi(z_s) < p_los(position): the MARGINAL P(LoS) at every
+    position is exactly the p_los of the env, and ch_corr_m = 0 is exactly the original i.i.d. draw. Small-scale
+    fading stays i.i.d. per slot.
+  * ch_shadow_db > 0: log-normal shadowing with that standard deviation (dB), correlated with the same rho (own
+    innovations). It CHANGES the marginal channel distribution (sensitivity only).
+  * la_srs_period = P > 0: measurement probe (uplink sounding): a UAV without any measurement in the last P slots gets
+    one at the start of the slot (its current slot gain at maximum power, same delay / bias / noise as a report).
+    It costs no airtime or energy in the model (SRS overhead is a small fraction of a slot; ASSUMPTION).
+  * slot_los(k): the realised LoS state of the current slot (used only by the LoS-only oracle and by diagnostics).
 """
 import collections
 import math
@@ -60,7 +75,8 @@ import env_survey as SV
 
 LA_DEFAULT = dict(la_tb=0.1, la_bler_target=0.1, la_slope=2.4, la_olla_step=0.5, la_olla_max=10.0, la_fb_delay=2,
                   la_cqi_sigma=1.0, la_cqi_bias=0.0, la_lambda=1.0, la_rand=None, obs_la=False,
-                  la_atomic=True, la_mode="blind", la_interf="bursty", la_fade="slot")
+                  la_atomic=True, la_mode="blind", la_interf="bursty", la_fade="slot",
+                  ch_corr_m=0.0, ch_corr_tau_s=0.0, ch_shadow_db=0.0, la_srs_period=0)
 LA_MODES = ("blind", "sched", "oracle")
 LA_INTERF = ("bursty", "persistent")
 LA_FADE = ("slot", "block")
@@ -137,12 +153,16 @@ class LaSurveyEnv(SV.UavSurveyEnv):
         rf = np.random.default_rng(np.random.SeedSequence([0 if seed is None else int(seed), 0x1B]))
         self.la_fn = rf.normal(size=(nb, K, 2))                 # per-block small-scale fading (la_fade = "block")
         self.la_fe = rf.exponential(size=(nb, K))
+        rs = np.random.default_rng(np.random.SeedSequence([0 if seed is None else int(seed), 0x1C]))
+        self.ch_eps_sh = rs.normal(size=(int(math.ceil(c["T"] / c["dt"])) + 2, K))   # shadowing innovations
+        self._ch = [None] * K                                    # correlated large-scale state per UAV
+        self._pos_hist = [[] for _ in range(K)]                  # UAV position at each slot start (causal history)
         self.la = [LinkAdapter(c["la_bler_target"], p["la_olla_step"], p["la_fb_delay"], c["la_olla_max"])
                    for _ in range(K)]
         self.la_cur = [None] * K
         self.la_st = dict(blocks=0, nack=0, shared_blocks=0, shared_nack=0, bits_ok=0.0, air=0.0, air_fail=0.0,
                           bits_rolled_back=0.0, tasks_reopened=0, pad_air=0.0, pred_shared_blocks=0,
-                          pred_shared_nack=0, unpred_shared_blocks=0, unpred_shared_nack=0)
+                          pred_shared_nack=0, unpred_shared_blocks=0, unpred_shared_nack=0, srs=0)
 
     def block_of(self, t):
         return int(math.floor(t / self.c["la_tb"] + 1e-9))
@@ -159,17 +179,61 @@ class LaSurveyEnv(SV.UavSurveyEnv):
             S["gb_b"], S["gb"] = b, [self._block_gain(k, b) for k in range(self.c["K"])]
         return S["gb"]
 
+    def _large_scale(self, k):
+        """(uniform driving the LoS draw, shadowing normal) of UAV k in the current slot (cached per slot)."""
+        c, s = self.c, min(self.slot, self.f_u.shape[0] - 1)
+        if c["ch_corr_m"] <= 0 and c["ch_corr_tau_s"] <= 0:
+            return float(self.f_u[s, k]), float(self.ch_eps_sh[s, k])
+        st = self._ch[k]
+        if st is not None and st["slot"] == self.slot:
+            return st["u"], st["zs"]
+        from scipy.special import ndtr, ndtri
+        e = float(ndtri(min(max(self.f_u[s, k], 1e-12), 1 - 1e-12)))
+        es = float(self.ch_eps_sh[s, k])
+        pos = np.asarray(self.uavs[k].pos, float).copy()
+        if st is None:
+            z, zs = e, es
+        else:
+            d = float(np.linalg.norm(pos - st["pos"]))
+            rho = math.exp(-d / c["ch_corr_m"]) if c["ch_corr_m"] > 0 else 1.0
+            if c["ch_corr_tau_s"] > 0:
+                rho *= math.exp(-(self.slot - st["slot"]) * c["dt"] / c["ch_corr_tau_s"])
+            q = math.sqrt(max(1.0 - rho * rho, 0.0))
+            z, zs = rho * st["z"] + q * e, rho * st["zs"] + q * es
+        u = float(ndtr(z))
+        self._ch[k] = dict(slot=self.slot, z=z, zs=zs, u=u, pos=pos)
+        return u, zs
+
+    def slot_los(self, k):
+        """realised LoS state of UAV k in the current slot (NON-CAUSAL: oracle / diagnostics only)."""
+        return self._large_scale(k)[0] < self._pathgain(self.uavs[k].pos)[0]
+
+    def slot_gain(self, k):
+        c = self.c
+        if c["ch_corr_m"] <= 0 and c["ch_corr_tau_s"] <= 0 and c["ch_shadow_db"] <= 0:
+            return super().slot_gain(k)
+        p_los, g_l, g_n = self._pathgain(self.uavs[k].pos)
+        s = min(self.slot, self.f_u.shape[0] - 1)
+        u, zs = self._large_scale(k)
+        sh = 10 ** (c["ch_shadow_db"] * zs / 10)
+        if u < p_los:
+            kf = 10 ** (c["rician_k_db"] / 10)
+            n = self.f_n[s, k]
+            h = math.sqrt(kf / (kf + 1)) + math.sqrt(1 / (kf + 1)) * complex(n[0], n[1]) / math.sqrt(2)
+            return g_l * abs(h) ** 2 * sh
+        return g_n * self.f_e[s, k] * sh
+
     def _block_gain(self, k, b):
         """la_fade = "block": LoS / NLoS state per slot (as slot_gain), small-scale fading redrawn every block."""
         p_los, g_l, g_n = self._pathgain(self.uavs[k].pos)
-        s = min(self.slot, self.f_u.shape[0] - 1)
         bb = min(b, self.la_fe.shape[0] - 1)
-        if self.f_u[s, k] < p_los:
+        u, zs = self._large_scale(k)
+        if u < p_los:
             kf = 10 ** (self.c["rician_k_db"] / 10)
             n = self.la_fn[bb, k]
             h = math.sqrt(kf / (kf + 1)) + math.sqrt(1 / (kf + 1)) * complex(n[0], n[1]) / math.sqrt(2)
-            return g_l * abs(h) ** 2
-        return g_n * self.la_fe[bb, k]
+            return g_l * abs(h) ** 2 * 10 ** (self.c["ch_shadow_db"] * zs / 10)
+        return g_n * self.la_fe[bb, k] * 10 ** (self.c["ch_shadow_db"] * zs / 10)
 
     def _interferers(self, k, ch, sending, tx):
         """co-channel UAVs that radiate on k's channel now. bursty: only those actually sending data; persistent:
@@ -258,7 +322,24 @@ class LaSurveyEnv(SV.UavSurveyEnv):
 
     def begin_slot(self, slot_actions):
         self._la_close_finished()
+        for k, u in enumerate(self.uavs):
+            if len(self._pos_hist[k]) == self.slot:
+                self._pos_hist[k].append(np.asarray(u.pos, float).copy())
         super().begin_slot(slot_actions)
+        P = self.c["la_srs_period"]
+        if P > 0:                                      # sounding probe: refresh stale measurements
+            nz, b0 = self.noise_w(), self.block_of(self.t)
+            per = int(round(self.c["dt"] / self.c["la_tb"]))
+            pmax = self.c["p_levels"][-1]
+            for k, u in enumerate(self.uavs):
+                ad = self.la[k]
+                if u.active and (not ad.meas or ad.meas[-1][0] <= b0 - P * per):
+                    z = float(self.la_z[min(b0, len(self.la_z) - 1), k])
+                    err = self.la_p["la_cqi_bias"] + self.la_p["la_cqi_sigma"] * z
+                    g = self._slot["gains"][k]
+                    spw = 10 * math.log10(max(g / nz, 1e-30)) + err
+                    ad.meas.append((b0, spw + 10 * math.log10(pmax), 0.0, spw))
+                    self.la_st["srs"] += 1
 
     def _end_slot(self):
         if self.c["la_atomic"]:

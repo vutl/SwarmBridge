@@ -20,9 +20,17 @@ Information (g_k):
            NEGATIVE: in this simulator fading AND the LoS state are redrawn i.i.d. every 1 s slot, so at a slot start a
            report carries no information about the coming slot beyond its large-scale part, and a UAV with one bad
            report is not scheduled, never re-measured, and starves (smoke test: 25-37 % of images dropped).
+  los    : LoS-ONLY ORACLE (review #42): the true LoS / NLoS state of the coming slot, small-scale fading unknown
+           (sampled). NON-CAUSAL diagnostic: how much of the full-oracle gain is large-scale information.
+  filt   : CAUSAL: the statistical model with P(LoS) replaced by ch_filter.predict_los (posterior from the latest
+           delayed report, propagated through the spatial correlation of the LoS process). Equals stat when the env
+           has no spatial correlation.
   oracle : the REALISED gain of the coming slot (env.slot_gain), i.e. future fading and LoS state. UPPER-BOUND
            DIAGNOSTIC ONLY, not a deployable controller. It bounds what channel knowledge could give THIS policy class;
            it is not the global optimum (one-slot greedy, fixed objective, mean-field interference).
+Optional ":nN" member suffix: N Monte Carlo draws (default 32). Each call logs its wall time (env._ja_t) and, for
+diagnostics only, per candidate (prior P(LoS), P(LoS) used, realised LoS state) in env._ja_diag.
+Rate model: MCS table x (1 - BLER target) except phy "shannon" (B/M log2(1 + SINR)).
 
 reuse=False restricts to at most one UAV per channel: it isolates "better choice of which UAVs transmit" from
 "co-channel reuse" (the review's point that A-X2b may have gained from the former).
@@ -33,9 +41,11 @@ env._ja_log, which measures how often the policy's own predictor sees reuse as a
 """
 import itertools
 import math
+import time
 
 import numpy as np
 
+import ch_filter as CF
 import env_la as LA
 
 URG_FLOOR = 0.5
@@ -59,32 +69,45 @@ def assignments(n, M, reuse):
     return _CACHE[key]
 
 
-def _rate(sinr_db, bw, target):
+def _rate(sinr_db, bw, target, shannon=False):
+    if shannon:
+        return bw * np.log2(1.0 + 10 ** (np.asarray(sinr_db) / 10))
     i = np.searchsorted(LA.THR, sinr_db, side="right") - 1
     return np.where(i >= 0, LA.EFF[np.clip(i, 0, None)] * bw * (1 - target), 0.0)
+
+
+def _realised_los(env, k):
+    if hasattr(env, "slot_los"):
+        return bool(env.slot_los(k))
+    s = min(env.slot, env.f_u.shape[0] - 1)
+    return bool(env.f_u[s, k] < env._pathgain(env.uavs[k].pos)[0])
 
 
 N_MC = 32
 
 
-def _stat_samples(env, cand):
-    """N_MC x n draws of the channel power gain from the statistical model (causal: positions + model only)."""
+def _stat_samples(env, cand, n_mc=N_MC, p_los_override=None):
+    """n_mc x n draws of the channel power gain from the statistical model (causal: positions + model only);
+    p_los_override[i] (a probability, or exactly 0 / 1 for the LoS-only oracle) replaces the prior of candidate i."""
     rng = np.random.default_rng([int(env.slot), 0x5A7])
     kf = 10 ** (env.c["rician_k_db"] / 10)
-    G = np.empty((N_MC, len(cand)))
+    G = np.empty((n_mc, len(cand)))
     for i, k in enumerate(cand):
         p_los, g_l, g_n = env._pathgain(env.uavs[k].pos)
-        los = rng.random(N_MC) < p_los
-        n = rng.normal(size=(N_MC, 2))
+        if p_los_override is not None:
+            p_los = p_los_override[i]
+        los = rng.random(n_mc) < p_los
+        n = rng.normal(size=(n_mc, 2))
         h2 = np.abs(math.sqrt(kf / (kf + 1)) + math.sqrt(1 / (kf + 1)) * (n[:, 0] + 1j * n[:, 1]) / math.sqrt(2)) ** 2
-        G[:, i] = np.where(los, g_l * h2, g_n * rng.exponential(size=N_MC))
+        G[:, i] = np.where(los, g_l * h2, g_n * rng.exponential(size=n_mc))
     return G
 
 
-def joint_assign(base_slot, info="stat", reuse=True, alpha=1.0, margin_db=3.0):
-    assert info in ("stat", "report", "oracle")
+def joint_assign(base_slot, info="stat", reuse=True, alpha=1.0, margin_db=3.0, n_mc=N_MC):
+    assert info in ("stat", "los", "filt", "report", "oracle")
 
     def pol(env):
+        t_start = time.perf_counter()
         acts = [list(a) for a in base_slot(env)]
         c, K, M = env.c, len(env.uavs), env.c["M"]
         cand = [k for k, u in enumerate(env.uavs) if u.active and u.queue]
@@ -95,8 +118,16 @@ def joint_assign(base_slot, info="stat", reuse=True, alpha=1.0, margin_db=3.0):
         nz = env.noise_w()
         dec = [tk.bits for tk in env.tasks if tk.mode >= 0]
         b_und = float(np.median(dec)) if dec else 2e5
+        prior = [env._pathgain(env.uavs[k].pos)[0] for k in cand]
+        used = list(prior)
         if info == "stat":
-            g = _stat_samples(env, cand) / nz                         # (N_MC, n)
+            g = _stat_samples(env, cand, n_mc) / nz                   # (n_mc, n)
+        elif info == "los":
+            used = [1.0 if _realised_los(env, k) else 0.0 for k in cand]
+            g = _stat_samples(env, cand, n_mc, used) / nz
+        elif info == "filt":
+            used = [CF.predict_los(env, k)[0] for k in cand]
+            g = _stat_samples(env, cand, n_mc, used) / nz
         else:
             g = np.empty((1, len(cand)))
             for i, k in enumerate(cand):
@@ -111,8 +142,9 @@ def joint_assign(base_slot, info="stat", reuse=True, alpha=1.0, margin_db=3.0):
         slack = np.array([env.latest_tx_end(env.uavs[k].queue[0]) - env.t for k in cand])
         w = (1.0 / np.maximum(slack, URG_FLOOR)) ** alpha
         bw, dt, tgt = c["B_total"] / M, c["dt"], c.get("la_bler_target", 0.1)
+        sh = c.get("phy") == "shannon"
         s = p[None] * g                                               # (S, n) received SNR alone
-        r_alone = _rate(10 * np.log10(np.maximum(s, 1e-30)), bw, tgt)
+        r_alone = _rate(10 * np.log10(np.maximum(s, 1e-30)), bw, tgt, sh)
         persistent = c.get("la_interf", "bursty") == "persistent"
         f = np.ones_like(s) if persistent else np.minimum(1.0, B[None] / np.maximum(r_alone * dt, 1.0))
 
@@ -123,7 +155,7 @@ def joint_assign(base_slot, info="stat", reuse=True, alpha=1.0, margin_db=3.0):
             interf = np.einsum("aij,sj->sai", same.astype(float), f * s)           # (S, nA, n)
             shared = same.any(axis=2)[None]
             sinr = 10 * np.log10(np.maximum(s[:, None, :] / (1.0 + interf), 1e-30)) - margin_db * shared
-            r = np.where(on[None], _rate(sinr, bw, tgt), 0.0)
+            r = np.where(on[None], _rate(sinr, bw, tgt, sh), 0.0)
             v = (w[None, None] * np.minimum(r * dt, B[None, None])).sum(axis=2).mean(axis=0)
             return v - 1e-9 * on.sum(axis=1)
 
@@ -137,9 +169,13 @@ def joint_assign(base_slot, info="stat", reuse=True, alpha=1.0, margin_db=3.0):
         env.__dict__.setdefault("_ja_log", []).append((float(v_all[best]), v_nr, bool(used_reuse), len(cand)))
         for i, k in enumerate(cand):
             acts[k][1] = int(row[i])
+        env.__dict__.setdefault("_ja_t", []).append(time.perf_counter() - t_start)
+        if env.__dict__.get("_ja_diag_on", True):
+            env.__dict__.setdefault("_ja_diag", []).extend(
+                (float(a), float(b), _realised_los(env, k)) for a, b, k in zip(prior, used, cand))
         return [tuple(a) for a in acts]
 
-    pol.__name__ = f"JA:{info}:{'R' if reuse else 'NR'}:a{alpha:g}:m{margin_db:g}"
+    pol.__name__ = f"JA:{info}:{'R' if reuse else 'NR'}:a{alpha:g}:m{margin_db:g}" + (f":n{n_mc}" if n_mc != N_MC else "")
     return pol
 
 
@@ -151,9 +187,12 @@ def family(info):
 
 
 def parse(name):
-    """'JA:causal:R:a1:m3' -> dict(info, reuse, alpha, margin_db)"""
-    _, info, r, a, m = name.split(":")
-    return dict(info=info, reuse=r == "R", alpha=float(a[1:]), margin_db=float(m[1:]))
+    """'JA:stat:R:a1:m3[:n8]' -> dict(info, reuse, alpha, margin_db[, n_mc])"""
+    f = name.split(":")
+    d = dict(info=f[1], reuse=f[2] == "R", alpha=float(f[3][1:]), margin_db=float(f[4][1:]))
+    if len(f) > 5:
+        d["n_mc"] = int(f[5][1:])
+    return d
 
 
 def from_name(name, base_slot):
