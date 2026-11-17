@@ -59,6 +59,10 @@ REGIMES = {
     # A-X2 (review #37) bounded wireless-realism stress: K5 contention with the interference-blind MCS PHY
     "K5_mcs": dict(K=5, phy="mcs_blind"),       # worst case: link adaptation blind to co-channel interference
     "K5_mcsg": dict(K=5, phy="mcs"),            # realistic: MCS with interference-aware (genie) link adaptation
+    # review #38 robustness ladder: link adaptation sees a fraction lambda of the co-channel interference
+    "K5_mcs_l75": dict(K=5, phy="mcs_partial", phy_lambda=0.75),
+    "K5_mcs_l50": dict(K=5, phy="mcs_partial", phy_lambda=0.5),
+    "K5_mcs_l25": dict(K=5, phy="mcs_partial", phy_lambda=0.25),
 }
 for _k, _v in URBAN.items():
     assert E.DEFAULT[_k] == _v
