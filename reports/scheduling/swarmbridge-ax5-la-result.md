@@ -12,6 +12,10 @@ Checkpoint không đưa lên git. Báo cáo này tiếp nối [swarmbridge-ax2b-
 Câu hỏi trung tâm của phản biện #39: *scheduler học được có khai thác được việc dùng chung kênh khi có lợi, và lùi lại
 khi link không tin cậy, mà không làm hỏng mode controller hiện có không?*
 
+> **Đọc cùng [A-X6](swarmbridge-ax6-opportunity-result.md) (18/11).** Lỗi tính bit đã sửa; chạy lại ghép cặp chỉ đổi
+> ≤ 2 điểm. Nhưng "không dùng chung kênh là tốt nhất" chỉ đúng trong tập luật đã thử ở đây: một scheduler không dùng chung
+> kênh mạnh hơn (JA) hơn luật đó +6…+8, và lợi ích RL ở A-X2b chủ yếu đến từ chọn UAV chứ không từ dùng chung kênh.
+
 ## Trả lời ngắn
 
 **Trong môi trường này: chưa.**

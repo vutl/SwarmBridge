@@ -60,11 +60,12 @@ def _metrics(core, info_ret, t_slot):
     return m
 
 
-def episode(spec, env_regime, i, seed, gate_regime):
+def episode(spec, env_regime, i, seed, gate_regime, extra=None):
+    """extra: cfg overrides on top of the regime (review #41: e.g. la_atomic False reproduces A-X5)."""
     gate = spec.endswith("+gate")
     base = spec[:-5] if gate else spec
     th, cool = gate_params(gate_regime) if gate else (None, None)
-    cfg = C.regime_cfg(env_regime)
+    cfg = C.regime_cfg(env_regime, **(extra or {}))
     if base.startswith(("H:", "T:")):
         if base.startswith("H:"):
             name = base[2:]
@@ -102,12 +103,13 @@ def episode(spec, env_regime, i, seed, gate_regime):
 
 
 def job(j):
-    spec, envr, i, seeds, gate_regime = j
+    spec, envr, i, seeds, gate_regime = j[:5]
+    extra = j[5] if len(j) > 5 else None
     import torch
     torch.set_num_threads(1)
     rows, dl = [], []
     for s in seeds:
-        m, d = episode(spec, envr, i, s, gate_regime)
+        m, d = episode(spec, envr, i, s, gate_regime, extra)
         rows.append(m)
         dl.append(d)
     return dict(spec=spec, env_regime=envr, ckpt=i, seeds=seeds, rows=rows), dl

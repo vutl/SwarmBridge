@@ -1,0 +1,239 @@
+/mnt/c/Users/USER/Documents/SwarmBridge/swarmbridge/experiments/uav_semcom/ax6_summary.py:81: RuntimeWarning: Mean of empty slice
+  t = {k: float(np.nanmean([x.get(k, np.nan) for x in rows])) for k in KEYS}
+reproduction of stored A-X5 rows (la_atomic False): max |return diff| = 0
+===== K5_la: old -> atomic (paired atomic - old)
+  C:K5_la                      -66.30 ->   -66.25  d  +0.05 [ -0.05, +0.16]  ok 0.746->0.747 goodput  325.2-> 325.3 late 0.000->0.000 reopened 0.0 rolledback 0.0001  vs ref old  +8.04 [ +6.41, +9.67] atomic  +8.09 [ +6.45, +9.74]
+  C:K5_la_rand                -108.01 ->  -108.60  d  -0.59 [ -1.20, +0.01]  ok 0.683->0.682 goodput   91.0->  90.8 late 0.000->0.000 reopened 0.9 rolledback 0.0041  vs ref old -33.67 [-35.23,-32.11] atomic -34.26 [-35.77,-32.75]
+  C:K5_la_rand+gate            -78.42 ->   -78.42  d  -0.00 [ -0.33, +0.33]  ok 0.735->0.735 goodput  234.7-> 234.2 late 0.000->0.000 reopened 0.2 rolledback 0.0008  vs ref old  -4.08 [ -5.30, -2.86] atomic  -4.08 [ -5.27, -2.89]
+  C:K5_mcsg                   -176.34 ->  -176.62  d  -0.28 [ -1.06, +0.49]  ok 0.551->0.550 goodput  178.0-> 177.6 late 0.000->0.000 reopened 0.1 rolledback 0.0004  vs ref old -102.00 [-106.61,-97.38] atomic -102.28 [-106.84,-97.73]
+  C:K5_mcsg+gate               -89.70 ->   -89.76  d  -0.07 [ -0.43, +0.30]  ok 0.765->0.765 goodput  338.1-> 338.2 late 0.000->0.000 reopened 0.0 rolledback 0.0001  vs ref old -15.36 [-21.13, -9.59] atomic -15.42 [-21.20, -9.65]
+  T:best@K5_la                 -64.93 ->   -64.93  d  -0.00 [ -0.00, -0.00]  ok 0.752->0.752 goodput  328.9-> 328.9 late 0.000->0.000 reopened 0.0 rolledback 0.0000  vs ref old  +9.41 [ +7.49,+11.33] atomic  +9.41 [ +7.49,+11.33]
+  T:best@K5_la_rand            -74.34 ->   -74.34  d  -0.00 [ -0.00, +0.00]  ok 0.742->0.742 goodput  292.5-> 292.5 late 0.000->0.000 reopened 0.0 rolledback 0.0000
+  T:reuse@K5_la_rand          -107.52 ->  -108.35  d  -0.83 [ -1.82, +0.16]  ok 0.678->0.676 goodput   88.3->  88.0 late 0.000->0.000 reopened 0.8 rolledback 0.0037  vs ref old -33.18 [-34.98,-31.38] atomic -34.01 [-35.72,-32.31]
+  T:reuse@K5_la_rand+gate      -98.96 ->   -99.58  d  -0.62 [ -1.88, +0.64]  ok 0.681->0.680 goodput  223.7-> 222.3 late 0.000->0.000 reopened 0.2 rolledback 0.0012  vs ref old -24.62 [-27.08,-22.16] atomic -25.24 [-27.60,-22.88]
+===== K5_la_good: old -> atomic (paired atomic - old)
+  C:K5_la                      -56.99 ->   -57.12  d  -0.14 [ -0.31, +0.04]  ok 0.757->0.757 goodput  375.9-> 375.6 late 0.000->0.000 reopened 0.0 rolledback 0.0001  vs ref old +11.26 [+10.14,+12.38] atomic +11.12 [ +9.99,+12.26]
+  C:K5_la_rand                -100.70 ->  -102.69  d  -1.98 [ -2.78, -1.18]  ok 0.694->0.691 goodput   95.0->  94.3 late 0.000->0.000 reopened 1.6 rolledback 0.0063  vs ref old -32.46 [-34.07,-30.85] atomic -34.44 [-36.06,-32.82]
+  C:K5_la_rand+gate            -71.26 ->   -71.44  d  -0.19 [ -0.60, +0.22]  ok 0.742->0.742 goodput  257.7-> 257.5 late 0.000->0.000 reopened 0.4 rolledback 0.0018  vs ref old  -3.01 [ -4.29, -1.73] atomic  -3.20 [ -4.55, -1.84]
+  C:K5_mcsg                   -155.78 ->  -155.41  d  +0.37 [ -0.88, +1.63]  ok 0.599->0.600 goodput  192.7-> 193.0 late 0.000->0.000 reopened 0.3 rolledback 0.0012  vs ref old -87.53 [-92.55,-82.51] atomic -87.16 [-92.17,-82.14]
+  C:K5_mcsg+gate               -53.68 ->   -54.96  d  -1.28 [ -2.55, -0.02]  ok 0.844->0.841 goodput  382.2-> 380.3 late 0.000->0.000 reopened 0.2 rolledback 0.0005  vs ref old +14.57 [ +8.74,+20.40] atomic +13.29 [ +7.44,+19.13]
+  T:best@K5_la                 -55.90 ->   -55.90  d  +0.00 [ -0.00, +0.00]  ok 0.760->0.760 goodput  373.4-> 373.4 late 0.000->0.000 reopened 0.0 rolledback 0.0000  vs ref old +12.35 [+10.86,+13.83] atomic +12.35 [+10.86,+13.83]
+  T:best@K5_la_rand            -68.25 ->   -68.25  d  +0.00 [ -0.00, +0.00]  ok 0.747->0.747 goodput  332.2-> 332.2 late 0.000->0.000 reopened 0.0 rolledback 0.0000
+  T:reuse@K5_la_rand          -102.34 ->  -102.45  d  -0.11 [ -0.97, +0.75]  ok 0.686->0.685 goodput   94.3->  94.1 late 0.000->0.000 reopened 1.1 rolledback 0.0047  vs ref old -34.09 [-35.64,-32.55] atomic -34.20 [-35.79,-32.62]
+  T:reuse@K5_la_rand+gate      -89.23 ->   -88.87  d  +0.36 [ -0.92, +1.64]  ok 0.696->0.696 goodput  250.8-> 248.8 late 0.000->0.000 reopened 0.2 rolledback 0.0016  vs ref old -20.98 [-23.31,-18.65] atomic -20.62 [-23.06,-18.18]
+===== K5_la_rand: old -> atomic (paired atomic - old)
+  C:K5_la                     -126.26 ->  -126.06  d  +0.19 [ -0.10, +0.49]  ok 0.637->0.637 goodput  214.3-> 214.6 late 0.000->0.000 reopened 0.0 rolledback 0.0001  vs ref old -22.35 [-26.58,-18.12] atomic -22.16 [-26.40,-17.92]
+  C:K5_la_rand                -146.81 ->  -147.40  d  -0.58 [ -1.37, +0.20]  ok 0.606->0.605 goodput   80.3->  80.1 late 0.000->0.000 reopened 0.5 rolledback 0.0024  vs ref old -42.91 [-46.88,-38.94] atomic -43.49 [-47.47,-39.51]
+  C:K5_la_rand+gate           -114.36 ->  -114.42  d  -0.06 [ -0.41, +0.29]  ok 0.677->0.677 goodput  191.7-> 191.6 late 0.000->0.000 reopened 0.0 rolledback 0.0003  vs ref old -10.45 [-13.25, -7.65] atomic -10.51 [-13.29, -7.73]
+  C:K5_mcsg                   -243.45 ->  -243.23  d  +0.21 [ -0.10, +0.53]  ok 0.382->0.382 goodput  131.0-> 131.1 late 0.000->0.000 reopened 0.0 rolledback 0.0002  vs ref old -139.54 [-145.34,-133.74] atomic -139.32 [-145.20,-133.45]
+  C:K5_mcsg+gate              -182.93 ->  -182.92  d  +0.02 [ -0.02, +0.05]  ok 0.542->0.542 goodput  249.9-> 249.9 late 0.000->0.000 reopened 0.0 rolledback 0.0000  vs ref old -79.03 [-86.38,-71.67] atomic -79.01 [-86.37,-71.65]
+  T:best@K5_la                -113.62 ->  -113.62  d  -0.00 [ -0.00, +0.00]  ok 0.682->0.682 goodput  244.3-> 244.3 late 0.000->0.000 reopened 0.0 rolledback 0.0000  vs ref old  -9.72 [-13.37, -6.06] atomic  -9.72 [-13.37, -6.06]
+  T:best@K5_la_rand           -103.91 ->  -103.91  d  -0.00 [ -0.00, +0.00]  ok 0.703->0.703 goodput  222.6-> 222.6 late 0.000->0.000 reopened 0.0 rolledback 0.0000
+  T:reuse@K5_la_rand          -134.40 ->  -134.43  d  -0.03 [ -0.91, +0.85]  ok 0.632->0.631 goodput   72.4->  72.7 late 0.000->0.000 reopened 0.5 rolledback 0.0023  vs ref old -30.50 [-34.56,-26.43] atomic -30.52 [-34.52,-26.53]
+  T:reuse@K5_la_rand+gate     -131.37 ->  -132.01  d  -0.63 [ -1.55, +0.28]  ok 0.627->0.625 goodput  181.7-> 181.0 late 0.000->0.000 reopened 0.1 rolledback 0.0005  vs ref old -27.47 [-31.06,-23.87] atomic -28.10 [-31.67,-24.53]
+===== blockfade_sched_bursty
+  NR       fixed_avif_20                ret  -118.80 ok 0.677 drop 0.118 bler 0.153 shbler 0.000 unpred 0.00 cochan 0.000 goodput  236.2 E 68.9 pad 0 jain 0.990 minUAV 0.590 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -165.54 ok 0.560 drop 0.277 bler 0.322 shbler 0.324 unpred 0.00 cochan 0.968 goodput   78.9 E 68.3 pad 0 jain 0.930 minUAV 0.346 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret  -114.74 ok 0.685 drop 0.111 bler 0.180 shbler 0.422 unpred 0.00 cochan 0.095 goodput  226.8 E 68.8 pad 0 jain 0.991 minUAV 0.599 reusefrac nan
+  JA-NR-c  JA:stat:NR:a2:m0             ret  -111.92 ok 0.690 drop 0.102 bler 0.152 shbler 0.000 unpred 0.00 cochan 0.000 goodput  236.3 E 68.9 pad 0 jain 0.992 minUAV 0.610 reusefrac 0.00
+  JA-R-c   JA:stat:R:a1:m6              ret  -105.98 ok 0.705 drop 0.083 bler 0.218 shbler 0.380 unpred 0.00 cochan 0.297 goodput  185.3 E 68.7 pad 0 jain 0.991 minUAV 0.620 reusefrac 0.27
+  JA-NR-o  JA:oracle:NR:a1:m0           ret  -109.47 ok 0.692 drop 0.100 bler 0.153 shbler 0.000 unpred 0.00 cochan 0.000 goodput  237.8 E 68.7 pad 0 jain 0.989 minUAV 0.599 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m6            ret  -111.21 ok 0.696 drop 0.094 bler 0.203 shbler 0.319 unpred 0.01 cochan 0.306 goodput  188.0 E 68.7 pad 0 jain 0.989 minUAV 0.601 reusefrac 0.33
+  selection gain, causal (JA-NR-c - NR)             +6.88 [ +4.16, +9.60]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +5.94 [ +3.50, +8.38]
+  JA-R-c - NR                                      +12.82 [+10.19,+15.45]
+  selection gain, ORACLE (JA-NR-o - NR)             +9.32 [ +6.83,+11.81]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             -1.73 [ -4.45, +0.99]
+  information gain, no reuse (JA-NR-o - JA-NR-c)    +2.44 [ +0.12, +4.77]
+  RU - NR                                          -46.75 [-52.12,-41.37]
+  RUG - NR                                          +4.05 [ +1.23, +6.88]
+===== blockfade_sched_persist
+  NR       fixed_avif_20                ret  -118.80 ok 0.677 drop 0.118 bler 0.153 shbler 0.000 unpred 0.00 cochan 0.000 goodput  236.2 E 68.9 pad 3 jain 0.990 minUAV 0.590 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -167.19 ok 0.556 drop 0.283 bler 0.324 shbler 0.325 unpred 0.00 cochan 0.972 goodput   78.4 E 68.3 pad 3 jain 0.928 minUAV 0.342 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret  -115.37 ok 0.683 drop 0.112 bler 0.180 shbler 0.427 unpred 0.00 cochan 0.096 goodput  225.8 E 68.8 pad 3 jain 0.991 minUAV 0.600 reusefrac nan
+  JA-NR-c  JA:stat:NR:a2:m0             ret  -111.92 ok 0.690 drop 0.102 bler 0.152 shbler 0.000 unpred 0.00 cochan 0.000 goodput  236.3 E 68.9 pad 2 jain 0.992 minUAV 0.610 reusefrac 0.00
+  JA-R-c   JA:stat:R:a1:m0              ret  -117.04 ok 0.694 drop 0.099 bler 0.227 shbler 0.282 unpred 0.00 cochan 0.524 goodput  159.7 E 68.9 pad 1 jain 0.991 minUAV 0.609 reusefrac 0.57
+  JA-NR-o  JA:oracle:NR:a1:m0           ret  -109.47 ok 0.692 drop 0.100 bler 0.153 shbler 0.000 unpred 0.00 cochan 0.000 goodput  237.8 E 68.7 pad 2 jain 0.989 minUAV 0.599 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m3            ret  -106.31 ok 0.698 drop 0.092 bler 0.177 shbler 0.353 unpred 0.01 cochan 0.121 goodput  221.9 E 68.5 pad 2 jain 0.990 minUAV 0.607 reusefrac 0.13
+  selection gain, causal (JA-NR-c - NR)             +6.88 [ +4.16, +9.60]
+  reuse gain, causal (JA-R-c - JA-NR-c)             -5.13 [ -7.72, -2.54]
+  JA-R-c - NR                                       +1.75 [ -0.89, +4.39]
+  selection gain, ORACLE (JA-NR-o - NR)             +9.32 [ +6.83,+11.81]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             +3.16 [ +0.97, +5.35]
+  information gain, no reuse (JA-NR-o - JA-NR-c)    +2.44 [ +0.12, +4.77]
+  RU - NR                                          -48.39 [-53.71,-43.07]
+  RUG - NR                                          +3.42 [ +0.70, +6.14]
+===== good_sched_bursty
+  NR       fixed_avif_20                ret   -55.90 ok 0.760 drop 0.011 bler 0.126 shbler 0.000 unpred 0.00 cochan 0.000 goodput  373.4 E 65.7 pad 0 jain 0.996 minUAV 0.693 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -100.13 ok 0.682 drop 0.115 bler 0.272 shbler 0.285 unpred 0.01 cochan 0.912 goodput  110.3 E 67.1 pad 0 jain 0.978 minUAV 0.535 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret   -54.40 ok 0.760 drop 0.010 bler 0.147 shbler 0.302 unpred 0.02 cochan 0.137 goodput  343.7 E 65.7 pad 0 jain 0.996 minUAV 0.694 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret   -49.77 ok 0.764 drop 0.004 bler 0.125 shbler 0.000 unpred 0.00 cochan 0.000 goodput  372.1 E 65.7 pad 0 jain 0.996 minUAV 0.700 reusefrac 0.00
+  JA-R-c   JA:stat:R:a2:m6              ret   -49.66 ok 0.765 drop 0.003 bler 0.208 shbler 0.301 unpred 0.01 cochan 0.496 goodput  226.8 E 65.6 pad 0 jain 0.996 minUAV 0.701 reusefrac 0.53
+  JA-NR-o  JA:oracle:NR:a1:m0           ret   -40.74 ok 0.767 drop 0.000 bler 0.113 shbler 0.000 unpred 0.00 cochan 0.000 goodput  450.1 E 65.0 pad 0 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a2:m6            ret   -43.83 ok 0.767 drop 0.001 bler 0.124 shbler 0.133 unpred 0.01 cochan 0.589 goodput  224.3 E 65.3 pad 0 jain 0.996 minUAV 0.704 reusefrac 0.74
+  selection gain, causal (JA-NR-c - NR)             +6.13 [ +4.75, +7.51]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +0.11 [ -1.11, +1.33]
+  JA-R-c - NR                                       +6.24 [ +4.75, +7.73]
+  selection gain, ORACLE (JA-NR-o - NR)            +15.16 [+13.42,+16.91]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             -3.10 [ -3.60, -2.60]
+  information gain, no reuse (JA-NR-o - JA-NR-c)    +9.03 [ +7.65,+10.41]
+  RU - NR                                          -44.23 [-48.01,-40.45]
+  RUG - NR                                          +1.50 [ +0.17, +2.83]
+===== good_sched_persist
+  NR       fixed_avif_20                ret   -55.90 ok 0.760 drop 0.011 bler 0.126 shbler 0.000 unpred 0.00 cochan 0.000 goodput  373.4 E 65.7 pad 7 jain 0.996 minUAV 0.693 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -103.65 ok 0.676 drop 0.124 bler 0.279 shbler 0.290 unpred 0.00 cochan 0.926 goodput  108.3 E 67.0 pad 7 jain 0.977 minUAV 0.529 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret   -55.42 ok 0.759 drop 0.011 bler 0.149 shbler 0.303 unpred 0.01 cochan 0.142 goodput  339.3 E 65.7 pad 7 jain 0.996 minUAV 0.692 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret   -49.77 ok 0.764 drop 0.004 bler 0.125 shbler 0.000 unpred 0.00 cochan 0.000 goodput  372.1 E 65.7 pad 6 jain 0.996 minUAV 0.700 reusefrac 0.00
+  JA-R-c   JA:stat:R:a1:m3              ret   -46.76 ok 0.766 drop 0.002 bler 0.156 shbler 0.244 unpred 0.01 cochan 0.279 goodput  302.6 E 65.4 pad 7 jain 0.996 minUAV 0.703 reusefrac 0.34
+  JA-NR-o  JA:oracle:NR:a1:m0           ret   -40.74 ok 0.767 drop 0.000 bler 0.113 shbler 0.000 unpred 0.00 cochan 0.000 goodput  450.1 E 65.0 pad 8 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m6            ret   -40.74 ok 0.767 drop 0.000 bler 0.113 shbler 0.031 unpred 0.00 cochan 0.006 goodput  448.5 E 65.0 pad 8 jain 0.996 minUAV 0.704 reusefrac 0.01
+  selection gain, causal (JA-NR-c - NR)             +6.13 [ +4.75, +7.51]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +3.00 [ +1.99, +4.01]
+  JA-R-c - NR                                       +9.14 [ +7.72,+10.55]
+  selection gain, ORACLE (JA-NR-o - NR)            +15.16 [+13.42,+16.91]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             -0.01 [ -0.10, +0.09]
+  information gain, no reuse (JA-NR-o - JA-NR-c)    +9.03 [ +7.65,+10.41]
+  RU - NR                                          -47.74 [-51.32,-44.17]
+  RUG - NR                                          +0.49 [ -0.95, +1.93]
+===== nom_blind_bursty
+  NR       fixed_avif_20                ret   -64.93 ok 0.752 drop 0.021 bler 0.136 shbler 0.000 unpred 0.00 cochan 0.000 goodput  328.9 E 66.2 pad 0 jain 0.995 minUAV 0.685 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -143.17 ok 0.601 drop 0.224 bler 0.288 shbler 0.302 unpred 0.01 cochan 0.935 goodput   87.9 E 67.9 pad 0 jain 0.943 minUAV 0.393 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret   -73.49 ok 0.741 drop 0.035 bler 0.142 shbler 0.413 unpred 0.01 cochan 0.114 goodput  282.9 E 66.7 pad 0 jain 0.994 minUAV 0.668 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret   -56.75 ok 0.761 drop 0.008 bler 0.134 shbler 0.000 unpred 0.00 cochan 0.000 goodput  328.1 E 66.0 pad 0 jain 0.996 minUAV 0.695 reusefrac 0.00
+  JA-R-c   JA:stat:R:a2:m6              ret   -82.45 ok 0.738 drop 0.040 bler 0.154 shbler 0.394 unpred 0.01 cochan 0.250 goodput  214.5 E 67.0 pad 0 jain 0.994 minUAV 0.661 reusefrac 0.26
+  JA-NR-o  JA:oracle:NR:a1:m0           ret   -44.26 ok 0.767 drop 0.000 bler 0.124 shbler 0.000 unpred 0.00 cochan 0.000 goodput  392.4 E 65.2 pad 0 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a2:m6            ret   -59.23 ok 0.764 drop 0.005 bler 0.120 shbler 0.203 unpred 0.01 cochan 0.485 goodput  201.2 E 66.0 pad 0 jain 0.996 minUAV 0.700 reusefrac 0.58
+  selection gain, causal (JA-NR-c - NR)             +8.18 [ +6.13,+10.22]
+  reuse gain, causal (JA-R-c - JA-NR-c)            -25.69 [-27.97,-23.42]
+  JA-R-c - NR                                      -17.52 [-19.68,-15.35]
+  selection gain, ORACLE (JA-NR-o - NR)            +20.67 [+18.17,+23.17]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)            -14.97 [-15.90,-14.05]
+  information gain, no reuse (JA-NR-o - JA-NR-c)   +12.49 [+10.75,+14.24]
+  RU - NR                                          -78.24 [-81.44,-75.04]
+  RUG - NR                                          -8.56 [-10.58, -6.54]
+===== nom_blind_persist
+  NR       fixed_avif_20                ret   -64.93 ok 0.752 drop 0.021 bler 0.136 shbler 0.000 unpred 0.00 cochan 0.000 goodput  328.9 E 66.2 pad 6 jain 0.995 minUAV 0.685 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -145.98 ok 0.596 drop 0.232 bler 0.292 shbler 0.305 unpred 0.00 cochan 0.945 goodput   86.7 E 68.0 pad 4 jain 0.939 minUAV 0.380 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret   -73.13 ok 0.743 drop 0.033 bler 0.143 shbler 0.431 unpred 0.01 cochan 0.114 goodput  283.5 E 66.8 pad 5 jain 0.995 minUAV 0.669 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret   -56.75 ok 0.761 drop 0.008 bler 0.134 shbler 0.000 unpred 0.00 cochan 0.000 goodput  328.1 E 66.0 pad 5 jain 0.996 minUAV 0.695 reusefrac 0.00
+  JA-R-c   JA:stat:R:a1:m6              ret   -56.91 ok 0.761 drop 0.008 bler 0.134 shbler 0.014 unpred 0.00 cochan 0.000 goodput  327.9 E 66.0 pad 5 jain 0.996 minUAV 0.695 reusefrac 0.00
+  JA-NR-o  JA:oracle:NR:a1:m0           ret   -44.26 ok 0.767 drop 0.000 bler 0.124 shbler 0.000 unpred 0.00 cochan 0.000 goodput  392.4 E 65.2 pad 7 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m6            ret   -44.25 ok 0.767 drop 0.000 bler 0.124 shbler 0.080 unpred 0.00 cochan 0.007 goodput  390.4 E 65.2 pad 7 jain 0.996 minUAV 0.704 reusefrac 0.01
+  selection gain, causal (JA-NR-c - NR)             +8.18 [ +6.13,+10.22]
+  reuse gain, causal (JA-R-c - JA-NR-c)             -0.16 [ -0.46, +0.14]
+  JA-R-c - NR                                       +8.02 [ +5.91,+10.12]
+  selection gain, ORACLE (JA-NR-o - NR)            +20.67 [+18.17,+23.17]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             +0.00 [ -0.12, +0.13]
+  information gain, no reuse (JA-NR-o - JA-NR-c)   +12.49 [+10.75,+14.24]
+  RU - NR                                          -81.05 [-83.96,-78.13]
+  RUG - NR                                          -8.20 [-10.30, -6.10]
+===== nom_oracle_bursty
+  NR       fixed_avif_20                ret   -42.57 ok 0.766 drop 0.002 bler 0.108 shbler 0.000 unpred 0.00 cochan 0.000 goodput  548.2 E 65.0 pad 0 jain 0.996 minUAV 0.703 reusefrac nan
+  RU       fixed_avif_20+reuse          ret   -32.18 ok 0.767 drop 0.000 bler 0.251 shbler 0.287 unpred 0.02 cochan 0.735 goodput  242.8 E 64.6 pad 0 jain 0.996 minUAV 0.704 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret   -41.25 ok 0.766 drop 0.001 bler 0.134 shbler 0.282 unpred 0.02 cochan 0.157 goodput  483.3 E 64.9 pad 0 jain 0.996 minUAV 0.703 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret   -38.37 ok 0.767 drop 0.000 bler 0.106 shbler 0.000 unpred 0.00 cochan 0.000 goodput  539.8 E 64.9 pad 0 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-c   JA:stat:R:a1:m0              ret   -31.80 ok 0.767 drop 0.000 bler 0.246 shbler 0.284 unpred 0.01 cochan 0.719 goodput  239.3 E 64.7 pad 0 jain 0.996 minUAV 0.704 reusefrac 1.00
+  JA-NR-o  JA:oracle:NR:a1:m0           ret   -36.30 ok 0.767 drop 0.000 bler 0.059 shbler 0.000 unpred 0.00 cochan 0.000 goodput  612.2 E 64.8 pad 0 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m6            ret   -34.39 ok 0.767 drop 0.000 bler 0.106 shbler 0.131 unpred 0.01 cochan 0.620 goodput  295.5 E 64.8 pad 0 jain 0.996 minUAV 0.704 reusefrac 0.84
+  selection gain, causal (JA-NR-c - NR)             +4.20 [ +3.83, +4.57]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +6.57 [ +6.22, +6.92]
+  JA-R-c - NR                                      +10.77 [+10.27,+11.27]
+  selection gain, ORACLE (JA-NR-o - NR)             +6.27 [ +5.84, +6.71]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             +1.90 [ +1.67, +2.14]
+  information gain, no reuse (JA-NR-o - JA-NR-c)    +2.07 [ +1.81, +2.33]
+  RU - NR                                          +10.39 [ +9.92,+10.86]
+  RUG - NR                                          +1.32 [ +1.02, +1.62]
+===== nom_oracle_persist
+  NR       fixed_avif_20                ret   -42.57 ok 0.766 drop 0.002 bler 0.108 shbler 0.000 unpred 0.00 cochan 0.000 goodput  548.2 E 65.0 pad 10 jain 0.996 minUAV 0.703 reusefrac nan
+  RU       fixed_avif_20+reuse          ret   -32.83 ok 0.767 drop 0.000 bler 0.259 shbler 0.295 unpred 0.01 cochan 0.759 goodput  237.8 E 64.7 pad 20 jain 0.996 minUAV 0.704 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret   -41.35 ok 0.767 drop 0.001 bler 0.139 shbler 0.307 unpred 0.01 cochan 0.166 goodput  481.5 E 64.9 pad 11 jain 0.996 minUAV 0.703 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret   -38.37 ok 0.767 drop 0.000 bler 0.106 shbler 0.000 unpred 0.00 cochan 0.000 goodput  539.8 E 64.9 pad 10 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-c   JA:stat:R:a1:m0              ret   -32.90 ok 0.767 drop 0.000 bler 0.215 shbler 0.259 unpred 0.01 cochan 0.641 goodput  282.9 E 64.7 pad 18 jain 0.996 minUAV 0.704 reusefrac 0.94
+  JA-NR-o  JA:oracle:NR:a1:m0           ret   -36.30 ok 0.767 drop 0.000 bler 0.059 shbler 0.000 unpred 0.00 cochan 0.000 goodput  612.2 E 64.8 pad 11 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m3            ret   -35.19 ok 0.767 drop 0.000 bler 0.066 shbler 0.079 unpred 0.00 cochan 0.386 goodput  430.7 E 64.9 pad 13 jain 0.996 minUAV 0.704 reusefrac 0.43
+  selection gain, causal (JA-NR-c - NR)             +4.20 [ +3.83, +4.57]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +5.47 [ +5.14, +5.81]
+  JA-R-c - NR                                       +9.67 [ +9.20,+10.15]
+  selection gain, ORACLE (JA-NR-o - NR)             +6.27 [ +5.84, +6.71]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             +1.10 [ +0.89, +1.32]
+  information gain, no reuse (JA-NR-o - JA-NR-c)    +2.07 [ +1.81, +2.33]
+  RU - NR                                           +9.74 [ +9.27,+10.20]
+  RUG - NR                                          +1.22 [ +0.93, +1.51]
+===== nom_sched_bursty
+  NR       fixed_avif_20                ret   -64.93 ok 0.752 drop 0.021 bler 0.136 shbler 0.000 unpred 0.00 cochan 0.000 goodput  328.9 E 66.2 pad 0 jain 0.995 minUAV 0.685 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -112.55 ok 0.662 drop 0.143 bler 0.285 shbler 0.296 unpred 0.01 cochan 0.928 goodput  101.4 E 67.3 pad 0 jain 0.972 minUAV 0.502 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret   -62.68 ok 0.754 drop 0.018 bler 0.160 shbler 0.335 unpred 0.01 cochan 0.126 goodput  308.0 E 66.2 pad 0 jain 0.995 minUAV 0.683 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret   -56.75 ok 0.761 drop 0.008 bler 0.134 shbler 0.000 unpred 0.00 cochan 0.000 goodput  328.1 E 66.0 pad 0 jain 0.996 minUAV 0.695 reusefrac 0.00
+  JA-R-c   JA:stat:R:a2:m6              ret   -56.59 ok 0.761 drop 0.008 bler 0.211 shbler 0.315 unpred 0.01 cochan 0.441 goodput  220.8 E 66.0 pad 0 jain 0.996 minUAV 0.695 reusefrac 0.46
+  JA-NR-o  JA:oracle:NR:a1:m0           ret   -44.26 ok 0.767 drop 0.000 bler 0.124 shbler 0.000 unpred 0.00 cochan 0.000 goodput  392.4 E 65.2 pad 0 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m6            ret   -49.83 ok 0.767 drop 0.001 bler 0.135 shbler 0.140 unpred 0.01 cochan 0.598 goodput  200.9 E 65.6 pad 0 jain 0.996 minUAV 0.703 reusefrac 0.72
+  selection gain, causal (JA-NR-c - NR)             +8.18 [ +6.13,+10.22]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +0.17 [ -1.72, +2.05]
+  JA-R-c - NR                                       +8.34 [ +6.35,+10.33]
+  selection gain, ORACLE (JA-NR-o - NR)            +20.67 [+18.17,+23.17]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             -5.57 [ -6.18, -4.97]
+  information gain, no reuse (JA-NR-o - JA-NR-c)   +12.49 [+10.75,+14.24]
+  RU - NR                                          -47.62 [-51.45,-43.79]
+  RUG - NR                                          +2.25 [ +0.62, +3.89]
+===== nom_sched_persist
+  NR       fixed_avif_20                ret   -64.93 ok 0.752 drop 0.021 bler 0.136 shbler 0.000 unpred 0.00 cochan 0.000 goodput  328.9 E 66.2 pad 6 jain 0.995 minUAV 0.685 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -116.86 ok 0.653 drop 0.153 bler 0.290 shbler 0.298 unpred 0.00 cochan 0.939 goodput   99.7 E 67.2 pad 6 jain 0.968 minUAV 0.478 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret   -62.61 ok 0.753 drop 0.019 bler 0.163 shbler 0.350 unpred 0.01 cochan 0.133 goodput  307.8 E 66.1 pad 6 jain 0.995 minUAV 0.684 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret   -56.75 ok 0.761 drop 0.008 bler 0.134 shbler 0.000 unpred 0.00 cochan 0.000 goodput  328.1 E 66.0 pad 5 jain 0.996 minUAV 0.695 reusefrac 0.00
+  JA-R-c   JA:stat:R:a0:m3              ret   -55.17 ok 0.761 drop 0.009 bler 0.169 shbler 0.263 unpred 0.01 cochan 0.284 goodput  268.3 E 66.0 pad 6 jain 0.996 minUAV 0.695 reusefrac 0.32
+  JA-NR-o  JA:oracle:NR:a1:m0           ret   -44.26 ok 0.767 drop 0.000 bler 0.124 shbler 0.000 unpred 0.00 cochan 0.000 goodput  392.4 E 65.2 pad 7 jain 0.996 minUAV 0.704 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m6            ret   -44.25 ok 0.767 drop 0.000 bler 0.124 shbler 0.047 unpred 0.00 cochan 0.006 goodput  391.0 E 65.2 pad 7 jain 0.996 minUAV 0.704 reusefrac 0.01
+  selection gain, causal (JA-NR-c - NR)             +8.18 [ +6.13,+10.22]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +1.59 [ -0.04, +3.21]
+  JA-R-c - NR                                       +9.76 [ +7.84,+11.68]
+  selection gain, ORACLE (JA-NR-o - NR)            +20.67 [+18.17,+23.17]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             +0.01 [ -0.14, +0.16]
+  information gain, no reuse (JA-NR-o - JA-NR-c)   +12.49 [+10.75,+14.24]
+  RU - NR                                          -51.93 [-55.56,-48.30]
+  RUG - NR                                          +2.32 [ +0.78, +3.87]
+===== slow_sched_bursty
+  NR       fixed_avif_20                ret  -138.36 ok 0.639 drop 0.169 bler 0.174 shbler 0.000 unpred 0.00 cochan 0.000 goodput  214.9 E 68.5 pad 0 jain 0.986 minUAV 0.543 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -204.11 ok 0.475 drop 0.389 bler 0.343 shbler 0.345 unpred 0.00 cochan 0.972 goodput   67.4 E 69.2 pad 0 jain 0.891 minUAV 0.268 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret  -135.50 ok 0.643 drop 0.165 bler 0.204 shbler 0.411 unpred 0.01 cochan 0.124 goodput  201.8 E 68.8 pad 0 jain 0.985 minUAV 0.540 reusefrac nan
+  JA-NR-c  JA:stat:NR:a0:m0             ret  -135.40 ok 0.636 drop 0.174 bler 0.173 shbler 0.000 unpred 0.00 cochan 0.000 goodput  216.9 E 68.5 pad 0 jain 0.978 minUAV 0.513 reusefrac 0.00
+  JA-R-c   JA:stat:R:a0:m6              ret  -132.35 ok 0.644 drop 0.164 bler 0.225 shbler 0.418 unpred 0.00 cochan 0.224 goodput  182.7 E 68.6 pad 0 jain 0.979 minUAV 0.523 reusefrac 0.18
+  JA-NR-o  JA:oracle:NR:a0:m0           ret   -73.91 ok 0.743 drop 0.033 bler 0.152 shbler 0.000 unpred 0.00 cochan 0.000 goodput  277.7 E 66.5 pad 0 jain 0.995 minUAV 0.672 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a0:m6            ret   -76.83 ok 0.742 drop 0.035 bler 0.168 shbler 0.174 unpred 0.01 cochan 0.482 goodput  187.8 E 66.6 pad 0 jain 0.995 minUAV 0.669 reusefrac 0.55
+  selection gain, causal (JA-NR-c - NR)             +2.96 [ -1.84, +7.75]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +3.05 [ -2.08, +8.19]
+  JA-R-c - NR                                       +6.01 [ +1.31,+10.71]
+  selection gain, ORACLE (JA-NR-o - NR)            +64.45 [+59.10,+69.79]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             -2.92 [ -5.16, -0.67]
+  information gain, no reuse (JA-NR-o - JA-NR-c)   +61.49 [+55.79,+67.19]
+  RU - NR                                          -65.75 [-72.31,-59.19]
+  RUG - NR                                          +2.86 [ -1.54, +7.26]
+===== slow_sched_persist
+  NR       fixed_avif_20                ret  -138.36 ok 0.639 drop 0.169 bler 0.174 shbler 0.000 unpred 0.00 cochan 0.000 goodput  214.9 E 68.5 pad 2 jain 0.986 minUAV 0.543 reusefrac nan
+  RU       fixed_avif_20+reuse          ret  -205.27 ok 0.472 drop 0.393 bler 0.344 shbler 0.345 unpred 0.00 cochan 0.975 goodput   67.2 E 69.2 pad 2 jain 0.887 minUAV 0.261 reusefrac nan
+  RUG      fixed_avif_20+reuse+gate0.15c30 ret  -133.62 ok 0.647 drop 0.160 bler 0.202 shbler 0.406 unpred 0.00 cochan 0.128 goodput  203.1 E 68.7 pad 2 jain 0.986 minUAV 0.549 reusefrac nan
+  JA-NR-c  JA:stat:NR:a0:m0             ret  -135.40 ok 0.636 drop 0.174 bler 0.173 shbler 0.000 unpred 0.00 cochan 0.000 goodput  216.9 E 68.5 pad 1 jain 0.978 minUAV 0.513 reusefrac 0.00
+  JA-R-c   JA:stat:R:a0:m3              ret  -131.34 ok 0.644 drop 0.164 bler 0.186 shbler 0.412 unpred 0.01 cochan 0.065 goodput  211.1 E 68.4 pad 1 jain 0.978 minUAV 0.523 reusefrac 0.07
+  JA-NR-o  JA:oracle:NR:a0:m0           ret   -73.91 ok 0.743 drop 0.033 bler 0.152 shbler 0.000 unpred 0.00 cochan 0.000 goodput  277.7 E 66.5 pad 3 jain 0.995 minUAV 0.672 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a0:m3            ret   -71.20 ok 0.747 drop 0.026 bler 0.165 shbler 0.228 unpred 0.00 cochan 0.185 goodput  251.0 E 66.4 pad 3 jain 0.995 minUAV 0.677 reusefrac 0.19
+  selection gain, causal (JA-NR-c - NR)             +2.96 [ -1.84, +7.75]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +4.06 [ -1.09, +9.21]
+  JA-R-c - NR                                       +7.02 [ +2.17,+11.87]
+  selection gain, ORACLE (JA-NR-o - NR)            +64.45 [+59.10,+69.79]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             +2.71 [ +0.79, +4.64]
+  information gain, no reuse (JA-NR-o - JA-NR-c)   +61.49 [+55.79,+67.19]
+  RU - NR                                          -66.91 [-73.35,-60.48]
+  RUG - NR                                          +4.74 [ +0.27, +9.20]
+===== mcsg
+  NR       fixed_mbt2018-mean_q3        ret    -0.51 ok 0.944 drop 0.029 bler nan shbler nan unpred nan cochan 0.000 goodput    nan E 66.7 pad nan jain 0.999 minUAV 0.900 reusefrac nan
+  RU       fixed_mbt2018-mean_q3+reuse  ret    -4.21 ok 0.918 drop 0.056 bler nan shbler nan unpred nan cochan 0.874 goodput    nan E 66.2 pad nan jain 0.993 minUAV 0.798 reusefrac nan
+  JA-NR-c  JA:stat:NR:a1:m0             ret    11.85 ok 0.961 drop 0.011 bler nan shbler nan unpred nan cochan 0.000 goodput    nan E 66.5 pad nan jain 0.999 minUAV 0.925 reusefrac 0.00
+  JA-R-c   JA:stat:R:a1:m0              ret    15.01 ok 0.963 drop 0.009 bler nan shbler nan unpred nan cochan 0.664 goodput    nan E 66.3 pad nan jain 0.999 minUAV 0.930 reusefrac 0.83
+  JA-NR-o  JA:oracle:NR:a1:m0           ret    23.89 ok 0.969 drop 0.003 bler nan shbler nan unpred nan cochan 0.000 goodput    nan E 65.9 pad nan jain 0.999 minUAV 0.938 reusefrac 0.00
+  JA-R-o   JA:oracle:R:a1:m6            ret    24.50 ok 0.969 drop 0.003 bler nan shbler nan unpred nan cochan 0.209 goodput    nan E 65.9 pad nan jain 0.999 minUAV 0.938 reusefrac 0.25
+  selection gain, causal (JA-NR-c - NR)            +12.36 [+11.15,+13.58]
+  reuse gain, causal (JA-R-c - JA-NR-c)             +3.16 [ +1.96, +4.35]
+  JA-R-c - NR                                      +15.52 [+14.08,+16.96]
+  selection gain, ORACLE (JA-NR-o - NR)            +24.41 [+22.63,+26.19]
+  reuse gain, ORACLE (JA-R-o - JA-NR-o)             +0.60 [ +0.27, +0.93]
+  information gain, no reuse (JA-NR-o - JA-NR-c)   +12.04 [+10.62,+13.47]
+  RU - NR                                           -3.69 [ -5.75, -1.64]

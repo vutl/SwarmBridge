@@ -1,6 +1,6 @@
 # SwarmBridge: báo cáo
 
-Cập nhật 18/11/2026 (sau phản biện #40). Trang này là điểm bắt đầu:
+Cập nhật 18/11/2026 (sau phản biện #41, A-X6). Trang này là điểm bắt đầu:
 - **Mục 1** cho biết đang ở đâu.
 - **Mục 2–3** là dòng thời gian của hai hướng.
 - **Mục 4** liệt kê mọi kết luận đã bị sửa ở báo cáo sau. Đọc mục này trước khi trích một con số cũ.
@@ -14,7 +14,7 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 | Thư mục / file | Nội dung |
 |---|---|
 | [swarmbridge-paperA-method-draft.md](swarmbridge-paperA-method-draft.md) | Bản nháp Method của Paper A (v2, phản biện #35): PPO + MPC chọn lọc, chỉ chọn mode. Chưa viết lại theo yêu cầu phản biện |
-| [scheduling/](scheduling/) | **Đang mở.** Nhánh lập lịch kênh của Paper A: A-X2, A-X2b, A-X5 (phản biện #37–#39) |
+| [scheduling/](scheduling/) | **Đang mở.** Nhánh lập lịch kênh của Paper A: A-X2, A-X2b, A-X5, A-X6 (phản biện #37–#41) |
 | [two-track/](two-track/) | Kế hoạch hai hướng (phản biện #26) và các vòng A-E1…A-E11 / B-E0…B-E9 (phản biện #27–#36). Mỗi file chứa cả phần A và phần B của một vòng |
 | [archive/](archive/README.md) | Các nhánh đã đóng, chia theo giai đoạn (30/10–15/11) |
 | [figures/](figures/), [metadata/](metadata/README.md) | Hình; JSON kiểm toán và bảng chuyển đường dẫn |
@@ -30,16 +30,21 @@ ngân sách 50 ms.
 - Chỉ đã kiểm trên PHY Shannon / MCS cấp slot. **Chưa thử dưới link adaptation thực tế.**
 
 **(b) Lập lịch kênh** (A-X):
-- Scheduler học được hơn heuristic tune khi PHY lý tưởng: +2,5 / +3,1 (Shannon), +11,3 (MCS biết nhiễu).
-- Với link adaptation thực tế (CQI trễ, OLLA, ACK/NACK, ARQ), không dùng chung kênh là tốt nhất ở cả 7 điều kiện.
-- Scheduler train ngẫu nhiên hoá kẹt ở việc dùng chung kênh khoảng 86% thời gian phát (−42,9).
+- Scheduler học được hơn heuristic tune khi PHY lý tưởng: +2,5 / +3,1 (Shannon), +11,3 (MCS biết nhiễu, A-X2b).
+- **A-X6 đọc lại A-X2b:** một heuristic gán tổ hợp kênh, nhân quả, không dùng chung kênh, đạt +12,4 trên K5_mcsg (ngang
+  RL). Lợi ích RL ở đó chủ yếu là chọn UAV nào phát, không phải dùng chung kênh.
+- Với link adaptation thực tế:
+  - mù lịch: dùng chung kênh luôn hại;
+  - biết lịch (nhân quả): lợi ích riêng của dùng chung kênh nhỏ và không ổn định (−5…+6);
+  - chọn UAV tốt hơn: +6…+8;
+  - biết trước kênh của slot tới (không nhân quả, vì fading và LoS rút độc lập mỗi slot): thêm +12,5.
 
-**Phản biện #40 (đang làm):**
-1. Link adaptation biết lịch: BS dùng lịch ghép kênh của chính nó và CQI trễ (chỉ thông tin nhân quả).
-2. Audit PHY: bit trong block hỏng, SINR xấu nhất trong block, OLLA so với goodput, thiếu HARQ.
-3. So sánh không dùng chung / dùng chung có kiểm soát / dùng chung học được.
-4. Chỉ so PPO factorised với PPO chọn kênh tuần tự (autoregressive) nếu thật sự có cơ hội dùng chung kênh.
-5. Riêng: hiệu chỉnh goodput cho bộ điều khiển mode.
+**Đề xuất cho phản biện #42 (chưa chạy):**
+- Không train RL cho dùng chung kênh.
+- Thêm LoS/shadowing tương quan theo quãng đường bay, rồi đo xem bao nhiêu phần lợi ích thông tin trở thành nhân quả.
+- Dùng JA làm baseline lập lịch mạnh.
+- Kiểm lại A-X2 bằng JA.
+- Hiệu chỉnh goodput cho bộ điều khiển mode.
 
 Không viết lại Method.
 
@@ -68,6 +73,7 @@ Không viết lại Method.
 | A-X2 (#37) | Học chọn kênh (C-only) | +2,52 (K5) / +3,07 (ref); học thêm mode không ổn định; luật kiểu bài báo thua +10…+170; khảo sát 19 bài: khác biệt chính là baseline đã tune | [scheduling/ax2](scheduling/swarmbridge-ax2-result.md) |
 | A-X2b (#38) | C-only train trên MCS biết nhiễu | +11,28; λ = 0,75 → −32, λ = 0 → −131 | [scheduling/ax2b](scheduling/swarmbridge-ax2b-mcs-result.md) |
 | A-X5 (#39) | Link adaptation thực tế + train ngẫu nhiên hoá | Không dùng chung kênh tốt nhất ở cả 7 điều kiện; C-only ngẫu nhiên hoá −42,9 (dùng chung kênh khoảng 0,86, không thích ứng); C-only danh nghĩa ≈ T:best; cổng NACK cứu nhưng vẫn thua | [scheduling/ax5](scheduling/swarmbridge-ax5-la-result.md) |
+| A-X6 (#41) | Sửa PHY, link adaptation biết lịch, cơ hội lập lịch | Sửa block không đổi A-X5 (≤ 2 điểm); chọn UAV (JA, không dùng chung kênh) +8,2 nhân quả; dùng chung kênh −5…+6 tuỳ giả định; biết trước kênh +12,5 (không nhân quả); K5_mcsg: JA không dùng chung kênh +12,4 ≈ RL A-X2b | [scheduling/ax6](scheduling/swarmbridge-ax6-opportunity-result.md) |
 
 ## 3. Paper B: dòng thời gian (tạm dừng)
 
@@ -99,7 +105,9 @@ Cột trái là điều từng được báo. Cột giữa là báo cáo đã s�
 | A-E10: warm-start là nguồn lợi ích | A-E11 | Sửa bằng cửa sổ 30 quan sát; lợi ích chủ yếu từ hiệu chỉnh trong episode (warm chỉ +0,4 / +0,9 so với cold) |
 | A-X2: học chọn kênh +2,5 / +3,1 | A-X2 stress | Lợi thế dùng chung kênh ở K5 phụ thuộc Shannon lý tưởng |
 | A-X2b: C-only trên MCS +11,3 | A-X2b (λ), A-X5 | Chỉ khi link adaptation biết trước nhiễu; với link adaptation thực tế không còn dùng chung kênh có lợi |
-| A-X5: PHY link adaptation đã kiểm chứng | Audit #40 (18/11) | Bit gửi trước khi block bị lật sang NACK vẫn được tính: 0,3–0,5 % số bit, khoảng 1 ảnh / episode, chỉ ở block dùng chung, **lệch có lợi cho dùng chung kênh** → kết luận A-X5 không đổi; sẽ sửa trong #40 |
+| A-X5: PHY link adaptation đã kiểm chứng | Audit #40, A-X6 | Bit gửi trước khi block bị lật sang NACK vẫn được tính (0,3–0,5 % số bit). Đã sửa (`la_atomic`); chạy lại ghép cặp: thay đổi ≤ 2 điểm, kết luận A-X5 giữ nguyên |
+| A-X5: không dùng chung kênh là tốt nhất ở cả 7 điều kiện | A-X6 | Chỉ đúng trong tập luật đã thử. Một scheduler không dùng chung kênh mạnh hơn (JA, nhân quả) hơn luật đó +6…+8; dùng chung kênh có kiểm soát dưới link adaptation biết lịch: −5…+6 |
+| A-X2b: lợi ích +11,3 của RL đến từ dùng chung kênh (link adaptation lý tưởng) | A-X6 | Heuristic JA không dùng chung kênh đạt +12,4 (RL hơn nó −1,1, n.s.); dùng chung kênh chỉ thêm +3,2. RL thắng vì họ heuristic đã tune quá yếu, không vì heuristic dùng mô hình tốc độ sai |
 | B-E3: JEPA-32 hơn non-JEPA +0,02 | B-E4, B-E5 | CI chứa 0 qua 3 seed; bằng với chỉ làm mượt theo thời gian |
 | B-E3: mã học được hơn AVIF | B-E7 | Đúng so với AVIF ảnh đơn, nhưng thua codec video liên khung ở ≤ 12 kbit |
 | B-E8: số hạng sự kiện | B-E9 | Bản B-E8 gần như không kích hoạt (lỗi thiết kế phân bổ theo hạng); B-E9 sửa, trần khoảng +0,01 |
