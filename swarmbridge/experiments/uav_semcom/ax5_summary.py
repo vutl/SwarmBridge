@@ -7,7 +7,8 @@ seed) against the reference REF (default T:best@K5_la_rand, the tuned heuristic 
 Adaptation (the review's criterion "adapt, not merely disable reuse"): on K5_la_rand (hidden parameters drawn per
 episode), Spearman correlation of each policy's per-episode co-channel airtime with the hidden CQI error, feedback
 delay, OLLA step and CQI bias, and its mean co-channel airtime per fixed condition (good -> bad).
-Usage: python ax5_summary.py runs/uav_semcom/ax5/eval.json [REF]"""
+Usage: python ax5_summary.py runs/uav_semcom/ax5/eval.json.gz [REF]   (plain .json also accepted)"""
+import gzip
 import json
 import sys
 
@@ -21,7 +22,7 @@ KEYS = ("return", "ok_rate", "late_rate", "bler", "shared_bler", "shared_block_f
 
 
 def main(path, ref="T:best@K5_la_rand"):
-    d = json.load(open(path))
+    d = json.load(gzip.open(path, "rt") if path.endswith(".gz") else open(path))
     by = {}
     for r in d["results"]:
         by.setdefault(r["env_regime"], {}).setdefault(r["spec"], {})[r["ckpt"]] = r["rows"]
@@ -80,7 +81,7 @@ def main(path, ref="T:best@K5_la_rand"):
         out["reuse_by_condition"] = {s: {c: float(np.mean(arr(c, s, "cochannel_air_frac"))) for c in conds} for s in specs}
         for s in specs:
             print(f"  {s:26s} " + " ".join(f"{c[6:] or 'nom'}:{out['reuse_by_condition'][s][c]:.3f}" for c in conds))
-    json.dump(out, open(path.replace(".json", "_summary.json"), "w"), indent=1)
+    json.dump(out, open(path.replace(".gz", "").replace(".json", "_summary.json"), "w"), indent=1)
 
 
 if __name__ == "__main__":
