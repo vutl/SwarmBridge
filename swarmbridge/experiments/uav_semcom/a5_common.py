@@ -56,6 +56,9 @@ REGIMES = {
     # A8 mismatch ladder (reports/archive/a7-a8-b1/swarmbridge-a8-b1-preregistration.md): link adaptation sees lambda x interference
     "phy_mcs_l75": dict(phy="mcs_partial", phy_lambda=0.75), "phy_mcs_l50": dict(phy="mcs_partial", phy_lambda=0.5),
     "phy_mcs_l25": dict(phy="mcs_partial", phy_lambda=0.25),
+    # A-X2 (review #37) bounded wireless-realism stress: K5 contention with the interference-blind MCS PHY
+    "K5_mcs": dict(K=5, phy="mcs_blind"),       # worst case: link adaptation blind to co-channel interference
+    "K5_mcsg": dict(K=5, phy="mcs"),            # realistic: MCS with interference-aware (genie) link adaptation
 }
 for _k, _v in URBAN.items():
     assert E.DEFAULT[_k] == _v

@@ -1,0 +1,202 @@
+{
+ "regime": "K5",
+ "cfg": {
+  "mode_info": "predicted",
+  "v_max": 20.0,
+  "w_time": 0.3,
+  "K": 5
+ },
+ "variant": "c",
+ "heur": "pacedB2+budget1+reuse",
+ "seed": 2,
+ "steps": 2000000.0,
+ "val_seeds": [
+  3000,
+  3001,
+  3002,
+  3003,
+  3004,
+  3005,
+  3006,
+  3007,
+  3008,
+  3009,
+  3010,
+  3011,
+  3012,
+  3013,
+  3014,
+  3015,
+  3016,
+  3017,
+  3018,
+  3019
+ ],
+ "val_pool": "val",
+ "train_pool": "train",
+ "time_discount": true,
+ "log": [
+  {
+   "steps": 200000,
+   "sec": 644.2525367736816,
+   "val_return": 77.06533372738927,
+   "val_ok": 0.9884615384615385,
+   "experience": {
+    "rl_steps_slot": 202752,
+    "episodes": 2527,
+    "env_s": 202476.0,
+    "uav_s": 972163.0,
+    "rl_slot": 202476,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 657020
+   }
+  },
+  {
+   "steps": 400000,
+   "sec": 1140.2434701919556,
+   "val_return": 78.20978394480031,
+   "val_ok": 0.989423076923077,
+   "experience": {
+    "rl_steps_slot": 405504,
+    "episodes": 5090,
+    "env_s": 405128.0,
+    "uav_s": 1947004.0,
+    "rl_slot": 405128,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 1323400
+   }
+  },
+  {
+   "steps": 600000,
+   "sec": 1638.4409170150757,
+   "val_return": 79.49864800964153,
+   "val_ok": 0.9876923076923078,
+   "experience": {
+    "rl_steps_slot": 608256,
+    "episodes": 7663,
+    "env_s": 608048.0,
+    "uav_s": 2922643.0,
+    "rl_slot": 608048,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 1992380
+   }
+  },
+  {
+   "steps": 800000,
+   "sec": 2131.6571078300476,
+   "val_return": 79.28551231129474,
+   "val_ok": 0.9890384615384618,
+   "experience": {
+    "rl_steps_slot": 811008,
+    "episodes": 10238,
+    "env_s": 810787.0,
+    "uav_s": 3897985.0,
+    "rl_slot": 810787,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 2661880
+   }
+  },
+  {
+   "steps": 1000000,
+   "sec": 2621.6795675754547,
+   "val_return": 79.67681739247192,
+   "val_ok": 0.9890384615384615,
+   "experience": {
+    "rl_steps_slot": 1013760,
+    "episodes": 12815,
+    "env_s": 1013543.0,
+    "uav_s": 4873719.0,
+    "rl_slot": 1013543,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 3331900
+   }
+  },
+  {
+   "steps": 1200000,
+   "sec": 3111.599368095398,
+   "val_return": 79.25630612325459,
+   "val_ok": 0.9880769230769232,
+   "experience": {
+    "rl_steps_slot": 1216512,
+    "episodes": 15393,
+    "env_s": 1216209.0,
+    "uav_s": 5849466.0,
+    "rl_slot": 1216209,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 4002180
+   }
+  },
+  {
+   "steps": 1400000,
+   "sec": 3601.2525737285614,
+   "val_return": 78.46418890654061,
+   "val_ok": 0.9867307692307692,
+   "experience": {
+    "rl_steps_slot": 1419264,
+    "episodes": 17978,
+    "env_s": 1419044.0,
+    "uav_s": 6827176.0,
+    "rl_slot": 1419044,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 4674280
+   }
+  },
+  {
+   "steps": 1600000,
+   "sec": 4093.3525388240814,
+   "val_return": 79.64727298220086,
+   "val_ok": 0.9880769230769231,
+   "experience": {
+    "rl_steps_slot": 1622016,
+    "episodes": 20561,
+    "env_s": 1621855.0,
+    "uav_s": 7804326.0,
+    "rl_slot": 1621855,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 5345860
+   }
+  },
+  {
+   "steps": 1800000,
+   "sec": 4406.7293219566345,
+   "val_return": 78.36328159124285,
+   "val_ok": 0.986923076923077,
+   "experience": {
+    "rl_steps_slot": 1824768,
+    "episodes": 23143,
+    "env_s": 1824602.0,
+    "uav_s": 8781249.0,
+    "rl_slot": 1824602,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 6017180
+   }
+  },
+  {
+   "steps": 2000000,
+   "sec": 4716.741052389145,
+   "val_return": 79.51859709781893,
+   "val_ok": 0.9886538461538461,
+   "experience": {
+    "rl_steps_slot": 2027520,
+    "episodes": 25723,
+    "env_s": 2027166.0,
+    "uav_s": 9757433.0,
+    "rl_slot": 2027166,
+    "rl_mode": 0,
+    "heur_slot": 0,
+    "heur_mode": 6687980
+   }
+  }
+ ],
+ "best_steps": 1000000,
+ "last_steps": 2000000
+}
