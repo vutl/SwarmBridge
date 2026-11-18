@@ -49,7 +49,7 @@ lựa chọn tốt nhất trong ngân sách tính toán 50 ms.
 | # | Nội dung | Có sẵn? |
 |---|---|---|
 | Hình 1 | Sơ đồ hệ thống (UAV → encoder → LA → BS) | Vẽ mới |
-| Bảng 1 | **Kết luận đổi chiều:** cùng chính sách trên Shannon và trên LA | **Thiếu, chạy R1** |
+| Bảng 1 | **Kết luận đổi chiều:** cùng chính sách trên Shannon và trên LA | **Đã có (R1, [kết quả](paperA-r1-result.md))** |
 | Hình 2 | Luật bài báo không tune / tune / JA / RL (return) | Có (A-X2, A-X6), cần vẽ |
 | Hình 3 | Hiệu chỉnh từ ACK: MPC danh nghĩa / hiệu chỉnh / không MPC dưới LA | Có (A-X9: −16,95), cần vẽ |
 | Bảng 2 | So sánh cuối đăng ký trước (A-X9) + latency p99 | Có |
@@ -58,7 +58,7 @@ lựa chọn tốt nhất trong ngân sách tính toán 50 ms.
 
 ## Việc còn thiếu (theo thứ tự)
 
-1. **R1, bảng "kết luận đổi chiều"** (CPU, khoảng nửa ngày):
+1. **[XONG 18/11]** **R1, bảng "kết luận đổi chiều"** ([kết quả](paperA-r1-result.md)):
    - **Chính sách:** luật bài báo không tune, heuristic tune (H\*), JA + H\*, PPO-Shannon, PPO-LA, H\* + MPC hiệu
      chỉnh, PPO + MPC hiệu chỉnh.
    - **Môi trường:** Shannon K5 và LA K5 (persistent, LA biết lịch), cùng seed mới.

@@ -1,0 +1,505 @@
+{
+ "seeds": [
+  9800,
+  9801,
+  9802,
+  9803,
+  9804,
+  9805,
+  9806,
+  9807,
+  9808,
+  9809,
+  9810,
+  9811,
+  9812,
+  9813,
+  9814,
+  9815,
+  9816,
+  9817,
+  9818,
+  9819,
+  9820,
+  9821,
+  9822,
+  9823,
+  9824,
+  9825,
+  9826,
+  9827,
+  9828,
+  9829,
+  9830,
+  9831,
+  9832,
+  9833,
+  9834,
+  9835,
+  9836,
+  9837,
+  9838,
+  9839,
+  9840,
+  9841,
+  9842,
+  9843,
+  9844,
+  9845,
+  9846,
+  9847,
+  9848,
+  9849,
+  9850,
+  9851,
+  9852,
+  9853,
+  9854,
+  9855,
+  9856,
+  9857,
+  9858,
+  9859,
+  9860,
+  9861,
+  9862,
+  9863,
+  9864,
+  9865,
+  9866,
+  9867,
+  9868,
+  9869,
+  9870,
+  9871,
+  9872,
+  9873,
+  9874,
+  9875,
+  9876,
+  9877,
+  9878,
+  9879,
+  9880,
+  9881,
+  9882,
+  9883,
+  9884,
+  9885,
+  9886,
+  9887,
+  9888,
+  9889,
+  9890,
+  9891,
+  9892,
+  9893,
+  9894,
+  9895,
+  9896,
+  9897,
+  9898,
+  9899
+ ],
+ "H_star": {
+  "S": "fixed_avif_50",
+  "L": "fixed_mbt2018-mean_q3"
+ },
+ "sched": "ja~JA:stat:R:a1:m3@pacedB3",
+ "arms": {
+  "S": {
+   "A (A5 slot rule, mission flight)|Random (untuned)": {
+    "combo": "lit:std_rand",
+    "ret": -109.9998942778832,
+    "delta_vs_ref": [
+     -172.69918602621792,
+     -175.42042230088578,
+     -169.97794975155006
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.5922307692307691,
+    "rec_qmin": 0.3193125065118067,
+    "rec_ontime": NaN,
+    "energy_kj": 65.73497373692368,
+    "p99_ms": NaN
+   },
+   "A (A5 slot rule, mission flight)|Round robin (untuned)": {
+    "combo": "lit:std_rr",
+    "ret": -79.05400056145508,
+    "delta_vs_ref": [
+     -141.75329230978977,
+     -149.42057717712058,
+     -134.08600744245896
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.6794615384615383,
+    "rec_qmin": 0.4068065205740854,
+    "rec_ontime": NaN,
+    "energy_kj": 69.18451658395159,
+    "p99_ms": NaN
+   },
+   "A (A5 slot rule, mission flight)|Max rate (untuned)": {
+    "combo": "lit:std_maxrate",
+    "ret": -112.25767852812064,
+    "delta_vs_ref": [
+     -174.9569702764554,
+     -178.21051737250056,
+     -171.70342318041023
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.5506923076923076,
+    "rec_qmin": 0.3302195964144991,
+    "rec_ontime": NaN,
+    "energy_kj": 67.30432074796096,
+    "p99_ms": NaN
+   },
+   "A (A5 slot rule, mission flight)|Greedy (untuned)": {
+    "combo": "lit:greedy",
+    "ret": -73.04852736794938,
+    "delta_vs_ref": [
+     -135.74781911628403,
+     -143.22068229837822,
+     -128.27495593418985
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.7156923076923077,
+    "rec_qmin": 0.42913068986517755,
+    "rec_ontime": NaN,
+    "energy_kj": 69.8269152558034,
+    "p99_ms": NaN
+   },
+   "A (A5 slot rule, mission flight)|T:best (tuned on Shannon)": {
+    "combo": "tbest|heur",
+    "ret": 62.69929174833467,
+    "delta_vs_ref": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.9689999999999998,
+    "rec_qmin": 0.5672840555787144,
+    "rec_ontime": 0.577571804460072,
+    "energy_kj": 66.76866492599905,
+    "p99_ms": 0.92226510189912
+   },
+   "A (A5 slot rule, mission flight)|PPO-S (trained on Shannon)": {
+    "combo": "tbest|ppo",
+    "ret": 64.82307156360605,
+    "delta_vs_ref": [
+     2.123779815271357,
+     1.3867158372269748,
+     2.8608437933157393
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.9898205128205128,
+    "rec_qmin": 0.5787660245007753,
+    "rec_ontime": 0.5819296728969156,
+    "energy_kj": 65.96071756856048,
+    "p99_ms": 5.233763182732199
+   },
+   "B (frozen JA scheduler @ pacedB3)|H*_S = fixed_avif_50": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_50",
+    "ret": 66.9076870188349,
+    "delta_vs_ref": [
+     0.3435843373165605,
+     -0.6664372872169235,
+     1.3536059618500447
+    ],
+    "ref": "H*_S + MPC (calibrated)",
+    "ok": 0.997076923076923,
+    "rec_qmin": 0.5878299766991067,
+    "rec_ontime": 0.5878299766991067,
+    "energy_kj": 66.26859527839602,
+    "p99_ms": 4.045125519999519
+   },
+   "B (frozen JA scheduler @ pacedB3)|H*_S + MPC (calibrated)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_50+mpc",
+    "ret": 66.56410268151836,
+    "delta_vs_ref": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ref": "H*_S + MPC (calibrated)",
+    "ok": 0.9916153846153845,
+    "rec_qmin": 0.5760522028788732,
+    "rec_ontime": 0.5802047527358629,
+    "energy_kj": 65.60452419833881,
+    "p99_ms": 45.02431588549964
+   },
+   "B (frozen JA scheduler @ pacedB3)|H*_S + MPC (uncalibrated)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_50+mpcnc",
+    "ret": 66.77484868076299,
+    "delta_vs_ref": [
+     0.21074599924464252,
+     -1.1895876746176177,
+     1.6110796731069028
+    ],
+    "ref": "H*_S + MPC (calibrated)",
+    "ok": 0.9906923076923075,
+    "rec_qmin": 0.5839472815654257,
+    "rec_ontime": 0.5857040149791476,
+    "energy_kj": 67.33694062256423,
+    "p99_ms": 45.11963119430091
+   },
+   "B (frozen JA scheduler @ pacedB3)|H*_L = fixed_mbt2018-mean_q3 (tuned on other PHY)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3",
+    "ret": 42.8183389198827,
+    "delta_vs_ref": [
+     -23.74576376163567,
+     -25.017517613953355,
+     -22.47400990931798
+    ],
+    "ref": "H*_S + MPC (calibrated)",
+    "ok": 0.9719999999999998,
+    "rec_qmin": 0.5587774226660525,
+    "rec_ontime": 0.5675856866775019,
+    "energy_kj": 64.96224975648158,
+    "p99_ms": 3.8807709421051984
+   },
+   "B (frozen JA scheduler @ pacedB3)|PPO-S": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|ppo",
+    "ret": 63.87150029877873,
+    "delta_vs_ref": [
+     -2.6926023827396257,
+     -3.4728221349588946,
+     -1.9123826305203568
+    ],
+    "ref": "H*_S + MPC (calibrated)",
+    "ok": 0.9893717948717948,
+    "rec_qmin": 0.5784661298594282,
+    "rec_ontime": 0.5817935888242475,
+    "energy_kj": 65.23820363646328,
+    "p99_ms": 7.4612900221672795
+   },
+   "B (frozen JA scheduler @ pacedB3)|PPO-S + MPC (calibrated)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|ppo+mpc",
+    "ret": 62.77644480858423,
+    "delta_vs_ref": [
+     -3.787657872934136,
+     -4.561884939225379,
+     -3.0134308066428925
+    ],
+    "ref": "H*_S + MPC (calibrated)",
+    "ok": 0.9858846153846155,
+    "rec_qmin": 0.5694286027988287,
+    "rec_ontime": 0.5758070570215871,
+    "energy_kj": 65.31398387407347,
+    "p99_ms": 47.72334600493569
+   }
+  },
+  "L": {
+   "A (A5 slot rule, mission flight)|Random (untuned)": {
+    "combo": "lit:std_rand",
+    "ret": -217.58816518030994,
+    "delta_vs_ref": [
+     -60.813829529568395,
+     -66.99695542194021,
+     -54.63070363719658
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.3966538461538461,
+    "rec_qmin": 0.20656744538820468,
+    "rec_ontime": NaN,
+    "energy_kj": 68.27960799856699,
+    "p99_ms": NaN
+   },
+   "A (A5 slot rule, mission flight)|Round robin (untuned)": {
+    "combo": "lit:std_rr",
+    "ret": -286.0556884001165,
+    "delta_vs_ref": [
+     -129.28135274937492,
+     -135.0258350786617,
+     -123.53687042008816
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.23699999999999996,
+    "rec_qmin": 0.13671108864470236,
+    "rec_ontime": NaN,
+    "energy_kj": 70.97717046363923,
+    "p99_ms": NaN
+   },
+   "A (A5 slot rule, mission flight)|Max rate (untuned)": {
+    "combo": "lit:std_maxrate",
+    "ret": -220.972628017652,
+    "delta_vs_ref": [
+     -64.19829236691041,
+     -69.80600898818953,
+     -58.590575745631284
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.35373076923076924,
+    "rec_qmin": 0.21094747939039366,
+    "rec_ontime": NaN,
+    "energy_kj": 69.89644893557833,
+    "p99_ms": NaN
+   },
+   "A (A5 slot rule, mission flight)|Greedy (untuned)": {
+    "combo": "lit:greedy",
+    "ret": -288.4990817386495,
+    "delta_vs_ref": [
+     -131.724746087908,
+     -137.6252734291622,
+     -125.82421874665378
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.24261538461538457,
+    "rec_qmin": 0.13972952846831702,
+    "rec_ontime": NaN,
+    "energy_kj": 71.20128193887147,
+    "p99_ms": NaN
+   },
+   "A (A5 slot rule, mission flight)|T:best (tuned on Shannon)": {
+    "combo": "tbest|heur",
+    "ret": -156.77433565074156,
+    "delta_vs_ref": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.6187307692307692,
+    "rec_qmin": 0.3190428548839368,
+    "rec_ontime": 0.37246015377612623,
+    "energy_kj": 76.5548862502398,
+    "p99_ms": 0.8936381259988481
+   },
+   "A (A5 slot rule, mission flight)|PPO-S (trained on Shannon)": {
+    "combo": "tbest|ppo",
+    "ret": -180.2441159151908,
+    "delta_vs_ref": [
+     -23.469780264449245,
+     -27.776600557389614,
+     -19.162959971508876
+    ],
+    "ref": "T:best (tuned on Shannon)",
+    "ok": 0.6051923076923077,
+    "rec_qmin": 0.33465099314348634,
+    "rec_ontime": 0.35230221895764785,
+    "energy_kj": 87.48701039093588,
+    "p99_ms": 4.067960862270259
+   },
+   "B (frozen JA scheduler @ pacedB3)|H*_L = fixed_mbt2018-mean_q3": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3",
+    "ret": -39.90580701072265,
+    "delta_vs_ref": [
+     -7.978067553836885,
+     -11.310888026691643,
+     -4.645247080982127
+    ],
+    "ref": "H*_L + MPC (calibrated)",
+    "ok": 0.8953461538461539,
+    "rec_qmin": 0.5138451902430388,
+    "rec_ontime": 0.5219067292480869,
+    "energy_kj": 72.89311211104133,
+    "p99_ms": 3.7747428632973423
+   },
+   "B (frozen JA scheduler @ pacedB3)|H*_L + MPC (calibrated)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpc",
+    "ret": -31.927739456885764,
+    "delta_vs_ref": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ref": "H*_L + MPC (calibrated)",
+    "ok": 0.9092692307692307,
+    "rec_qmin": 0.5094629763246206,
+    "rec_ontime": 0.5227814400694558,
+    "energy_kj": 71.8847112965094,
+    "p99_ms": 44.9277203390087
+   },
+   "B (frozen JA scheduler @ pacedB3)|H*_L + MPC (uncalibrated)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcnc",
+    "ret": -51.76856130231571,
+    "delta_vs_ref": [
+     -19.840821845429954,
+     -24.359675837646936,
+     -15.321967853212971
+    ],
+    "ref": "H*_L + MPC (calibrated)",
+    "ok": 0.8726923076923075,
+    "rec_qmin": 0.4921623016622555,
+    "rec_ontime": 0.502430668261621,
+    "energy_kj": 75.18598987549267,
+    "p99_ms": 45.37090080869952
+   },
+   "B (frozen JA scheduler @ pacedB3)|H*_S = fixed_avif_50 (tuned on other PHY)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_50",
+    "ret": -130.80793300256065,
+    "delta_vs_ref": [
+     -98.88019354567487,
+     -106.19847324297697,
+     -91.56191384837277
+    ],
+    "ref": "H*_L + MPC (calibrated)",
+    "ok": 0.7479615384615382,
+    "rec_qmin": 0.43795352654648434,
+    "rec_ontime": 0.43795352654648434,
+    "energy_kj": 96.2017464437516,
+    "p99_ms": 4.065286263406643
+   },
+   "B (frozen JA scheduler @ pacedB3)|PPO-S": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|ppo",
+    "ret": -54.74269653663772,
+    "delta_vs_ref": [
+     -22.814957079751967,
+     -25.696458550773492,
+     -19.93345560873044
+    ],
+    "ref": "H*_L + MPC (calibrated)",
+    "ok": 0.8593717948717949,
+    "rec_qmin": 0.48942739989359885,
+    "rec_ontime": 0.5076883575739898,
+    "energy_kj": 74.38728197731746,
+    "p99_ms": 7.278966796792048
+   },
+   "B (frozen JA scheduler @ pacedB3)|PPO-S + MPC (calibrated)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|ppo+mpc",
+    "ret": -38.42916001496862,
+    "delta_vs_ref": [
+     -6.501420558082861,
+     -9.212112215088904,
+     -3.790728901076818
+    ],
+    "ref": "H*_L + MPC (calibrated)",
+    "ok": 0.8926794871794871,
+    "rec_qmin": 0.4965950141690947,
+    "rec_ontime": 0.5147531323491136,
+    "energy_kj": 72.51317430688044,
+    "p99_ms": 48.34021802987165
+   },
+   "B (frozen JA scheduler @ pacedB3)|PPO-LA (trained on LA)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|ppola",
+    "ret": -38.01526590242067,
+    "delta_vs_ref": [
+     -6.0875264455349125,
+     -9.053412887221501,
+     -3.1216400038483245
+    ],
+    "ref": "H*_L + MPC (calibrated)",
+    "ok": 0.859076923076923,
+    "rec_qmin": 0.4679667943216019,
+    "rec_ontime": 0.5191527919103794,
+    "energy_kj": 69.52565402708687,
+    "p99_ms": 7.700407551838421
+   },
+   "B (frozen JA scheduler @ pacedB3)|PPO-LA + MPC (calibrated)": {
+    "combo": "ja~JA:stat:R:a1:m3@pacedB3|ppola+mpc",
+    "ret": -30.413267362448764,
+    "delta_vs_ref": [
+     1.514472094437005,
+     -1.5503766388473639,
+     4.579320827721373
+    ],
+    "ref": "H*_L + MPC (calibrated)",
+    "ok": 0.8878333333333335,
+    "rec_qmin": 0.479489527825611,
+    "rec_ontime": 0.5165955614644548,
+    "energy_kj": 69.9078298816368,
+    "p99_ms": 48.18396152270074
+   }
+  }
+ }
+}

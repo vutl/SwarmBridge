@@ -37,6 +37,12 @@ phase reports. Two recent review rounds made factual errors that this file answe
   - The cooperative multi-UAV direction (tracking on UAV3D + realistic LA; ChatGPT's post-#48 proposal) is Paper 2,
     started after Paper A is submitted.
 - Other branches are closed or paused.
+- **R1 done (18/11, seeds 9800–9899, `phases/2026-11-18_paperA-writeup/paperA-r1-result.md`):** the same frozen
+  policies on Shannon vs LA.
+  - Designs made for Shannon lose on LA: tuned heuristic −98.9, PPO-S −22.8, A5 slot rule below −150.
+  - ACK calibration of the MPC: +19.8 (vs the same MPC uncalibrated).
+  - On LA, PPO-LA + MPC vs H* + MPC: +1.51 [−1.55, +4.58].
+  - On Shannon, with the literature-style setup, PPO-S beats the tuned heuristic by +2.1.
 - **Open:** a problem reset (`phases/2026-11-18_design-reset/swarmbridge-design-review-2026-11-18.md`).
   - Proposal: realistic link-adaptation (LA) wireless stack from Paper A + UAV3D cooperative pipeline + receiver state
     (track uncertainty / age).

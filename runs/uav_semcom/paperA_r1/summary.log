@@ -1,0 +1,40 @@
+  rec_ontime=float(np.nanmean(a["rec_on"])), energy_kj=float(a["energy"].mean()),
+  p99_ms=float(np.nanmean(a["p99"])))
+
+===== PHY S (Shannon), seeds 9800..9899
+-- block A (A5 slot rule, mission flight); paired deltas vs T:best (tuned on Shannon)
+   arm                                            return           delta [95% CI]     ok   recQ  recOn   E kJ  p99ms
+   Random (untuned)                              -110.00 -172.70 [-175.42,-169.98]  0.592  31.93    nan   65.7    nan
+   Round robin (untuned)                          -79.05 -141.75 [-149.42,-134.09]  0.679  40.68    nan   69.2    nan
+   Max rate (untuned)                            -112.26 -174.96 [-178.21,-171.70]  0.551  33.02    nan   67.3    nan
+   Greedy (untuned)                               -73.05 -135.75 [-143.22,-128.27]  0.716  42.91    nan   69.8    nan
+   T:best (tuned on Shannon)                       62.70    +0.00 [ +0.00, +0.00]  0.969  56.73  57.76   66.8    0.9
+   PPO-S (trained on Shannon)                      64.82    +2.12 [ +1.39, +2.86]  0.990  57.88  58.19   66.0    5.2
+-- block B (frozen JA scheduler @ pacedB3); paired deltas vs H*_S + MPC (calibrated)
+   arm                                            return           delta [95% CI]     ok   recQ  recOn   E kJ  p99ms
+   H*_S = fixed_avif_50                            66.91    +0.34 [ -0.67, +1.35]  0.997  58.78  58.78   66.3    4.0
+   H*_S + MPC (calibrated)                         66.56    +0.00 [ +0.00, +0.00]  0.992  57.61  58.02   65.6   45.0
+   H*_S + MPC (uncalibrated)                       66.77    +0.21 [ -1.19, +1.61]  0.991  58.39  58.57   67.3   45.1
+   H*_L = fixed_mbt2018-mean_q3 (tuned on other PHY)    42.82   -23.75 [-25.02,-22.47]  0.972  55.88  56.76   65.0    3.9
+   PPO-S                                           63.87    -2.69 [ -3.47, -1.91]  0.989  57.85  58.18   65.2    7.5
+   PPO-S + MPC (calibrated)                        62.78    -3.79 [ -4.56, -3.01]  0.986  56.94  57.58   65.3   47.7
+
+===== PHY L (realistic LA), seeds 9800..9899
+-- block A (A5 slot rule, mission flight); paired deltas vs T:best (tuned on Shannon)
+   arm                                            return           delta [95% CI]     ok   recQ  recOn   E kJ  p99ms
+   Random (untuned)                              -217.59   -60.81 [-67.00,-54.63]  0.397  20.66    nan   68.3    nan
+   Round robin (untuned)                         -286.06 -129.28 [-135.03,-123.54]  0.237  13.67    nan   71.0    nan
+   Max rate (untuned)                            -220.97   -64.20 [-69.81,-58.59]  0.354  21.09    nan   69.9    nan
+   Greedy (untuned)                              -288.50 -131.72 [-137.63,-125.82]  0.243  13.97    nan   71.2    nan
+   T:best (tuned on Shannon)                     -156.77    +0.00 [ +0.00, +0.00]  0.619  31.90  37.25   76.6    0.9
+   PPO-S (trained on Shannon)                    -180.24   -23.47 [-27.78,-19.16]  0.605  33.47  35.23   87.5    4.1
+-- block B (frozen JA scheduler @ pacedB3); paired deltas vs H*_L + MPC (calibrated)
+   arm                                            return           delta [95% CI]     ok   recQ  recOn   E kJ  p99ms
+   H*_L = fixed_mbt2018-mean_q3                   -39.91    -7.98 [-11.31, -4.65]  0.895  51.38  52.19   72.9    3.8
+   H*_L + MPC (calibrated)                        -31.93    +0.00 [ +0.00, +0.00]  0.909  50.95  52.28   71.9   44.9
+   H*_L + MPC (uncalibrated)                      -51.77   -19.84 [-24.36,-15.32]  0.873  49.22  50.24   75.2   45.4
+   H*_S = fixed_avif_50 (tuned on other PHY)     -130.81  -98.88 [-106.20,-91.56]  0.748  43.80  43.80   96.2    4.1
+   PPO-S                                          -54.74   -22.81 [-25.70,-19.93]  0.859  48.94  50.77   74.4    7.3
+   PPO-S + MPC (calibrated)                       -38.43    -6.50 [ -9.21, -3.79]  0.893  49.66  51.48   72.5   48.3
+   PPO-LA (trained on LA)                         -38.02    -6.09 [ -9.05, -3.12]  0.859  46.80  51.92   69.5    7.7
+   PPO-LA + MPC (calibrated)                      -30.41    +1.51 [ -1.55, +4.58]  0.888  47.95  51.66   69.9   48.2

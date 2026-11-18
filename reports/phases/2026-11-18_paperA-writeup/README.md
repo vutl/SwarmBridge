@@ -7,6 +7,7 @@
 - Không làm song song, không đổi hướng giữa chừng.
 
 - Khung bài và danh sách việc: [paperA-outline.md](paperA-outline.md).
+- R1 (cùng chính sách, kênh Shannon so với LA, seed 9800–9899): [paperA-r1-result.md](paperA-r1-result.md).
 - Thiết kế Paper 2: [rà soát thiết kế](../2026-11-18_design-reset/swarmbridge-design-review-2026-11-18.md).
 
 Tổng quan: [reports/README.md](../../README.md).
