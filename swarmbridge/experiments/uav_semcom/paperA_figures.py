@@ -29,6 +29,59 @@ def get(phy, key_end):
     return next(v for k, v in A[phy].items() if k.endswith(key_end))
 
 
+def architecture(out):
+    """Fig. 1 (draft): system and control loop. Independent image offloading; no inter-UAV exchange is drawn."""
+    from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+    fig, ax = plt.subplots(figsize=(7.0, 3.0))
+    ax.set_xlim(0, 101.5)
+    ax.set_ylim(0, 46)
+    ax.axis("off")
+    LS = 2.3                                       # line spacing (data units)
+
+    def box(x, ytop, w, title, lines=(), fc="#f4f6fa", ec=MUTED, bold=True, tsize=6.4):
+        h = 4.2 + LS * len(lines) + (1.0 if lines else 0.0)
+        ax.add_patch(FancyBboxPatch((x, ytop - h), w, h, boxstyle="round,pad=0.25,rounding_size=1.0", fc=fc, ec=ec,
+                                    lw=0.8))
+        ax.text(x + w / 2, ytop - 1.4, title, ha="center", va="top", fontsize=tsize, color=INK,
+                fontweight="bold" if bold else "normal")
+        for i, s in enumerate(lines):
+            ax.text(x + w / 2, ytop - 4.6 - LS * i, s, ha="center", va="top", fontsize=5.6, color=INK)
+        return ytop - h
+
+    def arrow(p0, p1, col=INK, ls="-", rad=0.0, lw=1.0):
+        ax.add_patch(FancyArrowPatch(p0, p1, arrowstyle="-|>", mutation_scale=8, color=col, lw=lw, linestyle=ls,
+                                     connectionstyle=f"arc3,rad={rad}"))
+
+    for lab, yt in (("UAV 1", 38.5), ("UAV 2", 32.5), ("$\\vdots$", 26.5), ("UAV 5", 20.5)):
+        box(1, yt, 11, lab, (), fc="white", bold=False)
+    ax.text(6.5, 14.5, "disjoint survey\nsectors;\nindependent\nimages", ha="center", va="top", fontsize=5.8,
+            color=MUTED)
+    ym = box(15.5, 41, 28.5, "Mode decision (per image)",
+             ("incumbent: tuned rule $H^*$ or PPO", "$\\downarrow$ selective MPC (8 channel paths,",
+              "4-image lookahead, 50 ms budget);", "overrides if gain > 1 std. error",
+              "$\\rightarrow$ mode $m$ of 14 (AVIF, mbt2018,", "JPEG2000, thumbnail, generative)"))
+    box(47.3, 37, 12.4, "Encoder +", ("FIFO queue", "payload, PSNR,", "enc. time", "(measured)"))
+    yu = box(62.7, 41, 24, "Uplink: 2 shared channels",
+             ("slot policy: movement, channel,", "power (JA or T:best)",
+              "S: $(B/M)\\log_2(1+\\mathrm{SNR})$", "L: delayed CQI $\\rightarrow$ MCS, BLER,",
+              "ACK/NACK + OLLA, ARQ,", "co-channel interference"))
+    box(89.6, 36, 10.4, "Ground BS", ("decode;", "utility $u$:", "PSNR vs $Q^{\\min}$,", "delay vs $D^{\\max}$",
+                                    "(drop: $-1$)"))
+    yc = box(46, 12.5, 24, "Online rate calibration", ("cold start each episode",), fc="#fdf1ec", ec=ORANGE)
+    for x0, x1 in ((12.3, 15.2), (44.3, 47.0), (60.0, 62.4), (87.0, 89.3)):
+        arrow((x0, 30), (x1, 30), col=BLUE, lw=1.3)
+    arrow((75, yu - 0.4), (70.4, 9.0), col=ORANGE, ls="--", rad=-0.25)
+    ax.text(86.5, 13.0, "delivered (ACKed) bits per slot,\nread at the slot boundary;\nfeedback delay and\noverhead "
+            "not modelled", ha="center", va="top", fontsize=5.6, color=ORANGE)
+    arrow((45.6, 7.5), (32, ym - 0.4), col=ORANGE, ls="--", rad=-0.3)
+    ax.text(33.5, 8.0, "updated rate model", ha="center", va="center", fontsize=5.8, color=ORANGE)
+    ax.plot([], [], color=BLUE, lw=1.3, label="data path")
+    ax.plot([], [], color=ORANGE, lw=1.0, ls="--", label="feedback / control")
+    ax.legend(loc="upper right", bbox_to_anchor=(1.0, 1.04), ncol=2, frameon=False, fontsize=6.3)
+    fig.savefig(out / "fig_system.pdf", bbox_inches="tight")
+    fig.savefig(out / "fig_system.png", bbox_inches="tight", dpi=200)
+
+
 def forest(out):
     rows = [("H* (tuned on this PHY)", "H*_{p} = {h}", True), ("H* + MPC, uncalibrated", "H*_{p} + MPC (uncalibrated)", True),
             ("H* tuned on the other PHY", "(tuned on other PHY)", False), ("PPO-S", "B (frozen JA scheduler @ pacedB3)|PPO-S", None),
@@ -109,6 +162,7 @@ def recall(out):
 if __name__ == "__main__":
     o = Path(sys.argv[1])
     o.mkdir(parents=True, exist_ok=True)
+    architecture(o)
     forest(o)
     block_a(o)
     recall(o)

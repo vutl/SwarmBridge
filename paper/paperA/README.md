@@ -15,7 +15,7 @@
   python paperA_figures.py <repo>/paper/paperA/figs
   ```
 - **Số liệu:** `runs/uav_semcom/paperA_r1/summary.json` (R1, seed 9800–9899).
-- **Biên dịch:** máy này không có LaTeX. Tải cả thư mục `paperA/` lên Overleaf và biên dịch bằng pdfLaTeX. Kiểm tra số
+- **Biên dịch:** `bash paper/paperA/build.sh` trong WSL (đã cài texlive) → `paper/paperA/main.pdf` (hiện 4 trang). Hoặc tải `paperA/` lên Overleaf. Kiểm tra số
   trang: phải ≤ 4.
 - **Kế hoạch và kết quả:**
   - [paperA-outline.md](../../reports/phases/2026-11-18_paperA-writeup/paperA-outline.md);

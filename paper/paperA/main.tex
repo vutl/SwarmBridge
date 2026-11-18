@@ -66,8 +66,19 @@ and its conclusions are limited to the evaluated PPO policies, simulator and bas
 
 \section{System model and methods}\label{sec:model}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figs/fig_system.pdf}
+\caption{System and control loop. Each UAV offloads its own images (no information is exchanged between UAVs). The
+mode policy proposes an incumbent mode, which the selective MPC may override; the slot policy sets movement, channel
+and power. Under the LA PHY, the calibrator updates the MPC rate model from the bits delivered (acknowledged) in each
+past slot; this feedback is observed ideally at slot boundaries, without modelled delay or overhead.}
+\label{fig:system}
+\end{figure*}
+
 \subsection{Network, images and objective}
-Five UAVs survey disjoint sectors at \SI{100}{m} altitude and offload each captured image to a BS over two channels
+Fig.~\ref{fig:system} summarises the system. Five UAVs survey disjoint sectors at \SI{100}{m} altitude and offload
+each captured image to a BS over two channels
 sharing \SI{1}{MHz} at \SI{2.4}{GHz}; an episode has 260 images. The air-to-ground channel follows the urban
 line-of-sight model of \cite{alhourani2014} with Rician fading, and propulsion energy follows \cite{zeng2019}. Images
 are VisDrone frames \cite{visdrone}, split by video into train, validation and test pools. Each image can be sent in one
@@ -75,10 +86,10 @@ of 14 modes (AVIF at four qualities, the learned codec of \cite{minnen2018} at f
 a thumbnail and three generative modes); payload, PSNR and encoding time are measured for every image--mode pair, and
 the UAV predicts them from a cheap AVIF probe. Each image has a deadline $D^{\max}\sim U(4,12)$\,s and a quality floor
 $Q^{\min}\sim U(22,30)$\,dB. A delivered image with PSNR $q$ and delay $D$ obtains
-\begin{equation}
-u = 0.5\,\mathrm{clip}\!\left(\frac{q-Q^{\min}}{15},-1,1\right) + 0.5\,\frac{\max(D^{\max}-D,0)}{D^{\max}}
-    - \mathbb{1}\!\left[q<Q^{\min} \lor D>D^{\max}\right],
-\end{equation}
+\begin{multline}
+u = 0.5\,\mathrm{clip}\!\left(\frac{q-Q^{\min}}{15},-1,1\right) + 0.5\,\frac{\max(D^{\max}-D,0)}{D^{\max}}\\
+    - \mathbf{1}\!\left[q<Q^{\min} \lor D>D^{\max}\right],
+\end{multline}
 and a dropped image obtains $u=-1$. The return sums the utilities minus energy and mission-time costs. The objective
 thus combines reconstruction quality, delay and energy; we evaluate detector recall separately (YOLO11s, IoU
 $\ge 0.5$), counting only images delivered on time with PSNR $\ge Q^{\min}$ (Qmin-compliant recall).
@@ -123,7 +134,7 @@ confidence intervals (CI); PPO results average the three training seeds.
 modes); block B fixes the JA scheduler. $\Delta$: return difference [95\% CI] to the block reference on the same PHY
 (T:best in block A, $H^*$ + calibrated MPC in block B). recQ: Qmin-compliant recall (\%). ZS: zero-shot.}
 \label{tab:r1}
-\footnotesize
+\scriptsize
 \setlength{\tabcolsep}{2.5pt}
 \begin{tabular}{@{}llrrr@{}}
 \toprule
@@ -153,20 +164,25 @@ L & PPO-LA + cal.\ MPC & $-30.4$ & $+1.5$ [$-1.6$, $+4.6$] & 48.0\\
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figs/fig_r1_forest.pdf}
-\caption{Block B: paired return differences to $H^*$ + calibrated MPC on the same PHY (95\% CI). Triangles: controller
-designed on the other PHY (zero-shot). PPO-LA needs link-adaptation features and is not defined on the Shannon PHY.}
+\caption{Block B (JA scheduler): paired return differences of each mode policy to $H^*$ + calibrated MPC on the same
+PHY (95\% CI). Each panel has its own same-PHY reference, so differences across panels are not estimates of a
+controller's degradation between PHYs. Triangles: controller designed on the other PHY (zero-shot). PPO-LA needs
+link-adaptation features and is not defined on the Shannon PHY.}
 \label{fig:forest}
 \end{figure*}
 
 \textbf{Shannon PHY, whole policies.} Under S, PPO-S exceeds the tuned whole policy T:best by $+2.1$ [$+1.4$, $+2.9$],
 and both exceed the untuned literature-style rules by 136--175 (Table~\ref{tab:r1}, Fig.~\ref{fig:blockA}). The latter
 gap reflects whole-policy differences (flight, channel reuse and mode rule), not tuning alone; the untuned rules
-choose high-quality modes whose queues miss deadlines.
+choose high-quality modes whose queues miss deadlines. The ranking of PPO-S and T:best reverses under L, where PPO-S
+trails T:best by $23.5$ [$19.2$, $27.8$].
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figs/fig_r1_blockA.pdf}
-\caption{Block A (whole policies): return of the untuned rules, the tuned heuristic T:best and PPO-S under both PHYs.}
+\caption{Block A (whole-policy comparison): return of the untuned literature-style rules, the tuned heuristic T:best
+and PPO-S under both PHYs. The untuned rules differ from T:best in flight policy, channel reuse and mode selection, so
+their gap to T:best is not attributable to tuning alone.}
 \label{fig:blockA}
 \end{figure}
 
@@ -186,15 +202,8 @@ model is correct, calibration has no measurable effect ($+0.2$ [$-1.2$, $+1.6$])
 statistically distinguishable ($+1.5$ [$-1.6$, $+4.6$]), consistent with an earlier pre-registered test on other seeds
 ($-0.1$ [$-2.8$, $+2.6$]).
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/fig_r1_recall.pdf}
-\caption{Under L (block B): return versus Qmin-compliant detector recall.}
-\label{fig:recall}
-\end{figure}
-
 \textbf{Return is not the task metric.} The highest-return controller, PPO-LA with MPC, has a lower Qmin-compliant
-recall (48.0\%) than $H^*_L$ (51.4\%) and $H^*_L$ with MPC (51.0\%) (Fig.~\ref{fig:recall}): it selects cheaper modes,
+recall (48.0\%) than $H^*_L$ (51.4\%) and $H^*_L$ with MPC (51.0\%) (Table~\ref{tab:r1}): it selects cheaper modes,
 which the utility rewards through delay but the detector penalises.
 
 \section{Discussion and conclusions}\label{sec:conclusion}
