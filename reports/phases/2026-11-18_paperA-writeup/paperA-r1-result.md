@@ -15,8 +15,9 @@ Ngày chạy: 18/11/2026.
   - H\*_S = `fixed_avif_50`;
   - H\*_L = `fixed_mbt2018-mean_q3`, trùng A-X9.
 - **Hai khối:**
-  - **A:** luật bay / kênh / công suất của A5 (T:best, bay theo nhiệm vụ). Đây là kiểu đánh giá của các bài DRL cho
-    UAV SemCom, với các luật chưa tune làm đối chứng.
+  - **A:** luật bay / kênh / công suất của A5: T:best của K5 = `pacedB2+budget1+reuse`, tức bay có điều nhịp, mode
+    theo ngân sách hàng đợi τ = 1, có dùng chung kênh. Các luật chưa tune dùng cách bay theo nhiệm vụ, công suất tối
+    đa, không dùng chung kênh. Đây là kiểu đánh giá của các bài DRL cho UAV SemCom.
   - **B:** scheduler JA và cách bay pacedB3, đóng băng từ A-X9 stage 1.
 - **Hai loại kênh:**
   - **S:** tốc độ Shannon (PHY tham chiếu của A5).
@@ -75,7 +76,7 @@ Ngày chạy: 18/11/2026.
 1. **Mô hình kênh dùng lúc thiết kế quyết định kết quả trên kênh LA, cho mọi loại phương pháp.**
    - Heuristic tune trên S, chạy trên L: −98,9 so với tham chiếu L.
    - PPO train trên S, chạy trên L: −22,8.
-   - Luật bay / kênh của A5 (thiết kế trên S): toàn khối A trên L đều dưới −150.
+   - Luật slot T:best của A5 (thiết kế trên S): toàn khối A trên L đều dưới −150.
    - Ngược lại, heuristic tune trên L chạy trên S: −23,8.
 2. **Hiệu chỉnh online từ ACK:**
    - Trên L, MPC hiệu chỉnh so với chính MPC đó không hiệu chỉnh, cùng incumbent: +19,8.

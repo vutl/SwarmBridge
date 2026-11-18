@@ -49,7 +49,7 @@ def main():
                     rec_q=rq, rec_on=ro)
 
     blocks = {
-        "A (A5 slot rule, mission flight)": [("Random (untuned)", "lit:std_rand"), ("Round robin (untuned)", "lit:std_rr"),
+        "A (A5 T:best slot rule)": [("Random (untuned)", "lit:std_rand"), ("Round robin (untuned)", "lit:std_rr"),
                                              ("Max rate (untuned)", "lit:std_maxrate"), ("Greedy (untuned)", "lit:greedy"),
                                              ("T:best (tuned on Shannon)", "tbest|heur"), ("PPO-S (trained on Shannon)", "tbest|ppo")],
     }

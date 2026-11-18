@@ -1,8 +1,6 @@
-  rec_ontime=float(np.nanmean(a["rec_on"])), energy_kj=float(a["energy"].mean()),
-  p99_ms=float(np.nanmean(a["p99"])))
 
 ===== PHY S (Shannon), seeds 9800..9899
--- block A (A5 slot rule, mission flight); paired deltas vs T:best (tuned on Shannon)
+-- block A (A5 T:best slot rule); paired deltas vs T:best (tuned on Shannon)
    arm                                            return           delta [95% CI]     ok   recQ  recOn   E kJ  p99ms
    Random (untuned)                              -110.00 -172.70 [-175.42,-169.98]  0.592  31.93    nan   65.7    nan
    Round robin (untuned)                          -79.05 -141.75 [-149.42,-134.09]  0.679  40.68    nan   69.2    nan
@@ -20,7 +18,7 @@
    PPO-S + MPC (calibrated)                        62.78    -3.79 [ -4.56, -3.01]  0.986  56.94  57.58   65.3   47.7
 
 ===== PHY L (realistic LA), seeds 9800..9899
--- block A (A5 slot rule, mission flight); paired deltas vs T:best (tuned on Shannon)
+-- block A (A5 T:best slot rule); paired deltas vs T:best (tuned on Shannon)
    arm                                            return           delta [95% CI]     ok   recQ  recOn   E kJ  p99ms
    Random (untuned)                              -217.59   -60.81 [-67.00,-54.63]  0.397  20.66    nan   68.3    nan
    Round robin (untuned)                         -286.06 -129.28 [-135.03,-123.54]  0.237  13.67    nan   71.0    nan

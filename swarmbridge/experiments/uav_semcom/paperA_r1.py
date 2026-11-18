@@ -4,7 +4,8 @@ Plan: reports/phases/2026-11-18_paperA-writeup/paperA-outline.md (R1).
 
 PHYs:  S = regime K5 (Shannon rate, A5 reference PHY)
        L = regime K5_la + scheduler-aware LA, persistent co-channel interference (A-X9 environment)
-Block A, "literature-style evaluation" (movement / power / channels = the A5 K5 T:best slot rule, mission flight):
+Block A, "literature-style evaluation" (movement / power / channels of the A5 K5 T:best = pacedB2+budget1+reuse;
+       the untuned literature rules use their own mission flight, max power, no reuse):
        untuned literature rules (std_rand, std_rr, std_maxrate, untuned greedy), T:best (tuned on S in A5),
        PPO-S mode-only (A5 K5 checkpoints, trained on S)
 Block B, "final stack" (scheduler / movement frozen by A-X9 stage 1: JA:stat:R:a1:m3 @ pacedB3):

@@ -108,7 +108,7 @@
  "sched": "ja~JA:stat:R:a1:m3@pacedB3",
  "arms": {
   "S": {
-   "A (A5 slot rule, mission flight)|Random (untuned)": {
+   "A (A5 T:best slot rule)|Random (untuned)": {
     "combo": "lit:std_rand",
     "ret": -109.9998942778832,
     "delta_vs_ref": [
@@ -123,7 +123,7 @@
     "energy_kj": 65.73497373692368,
     "p99_ms": NaN
    },
-   "A (A5 slot rule, mission flight)|Round robin (untuned)": {
+   "A (A5 T:best slot rule)|Round robin (untuned)": {
     "combo": "lit:std_rr",
     "ret": -79.05400056145508,
     "delta_vs_ref": [
@@ -138,7 +138,7 @@
     "energy_kj": 69.18451658395159,
     "p99_ms": NaN
    },
-   "A (A5 slot rule, mission flight)|Max rate (untuned)": {
+   "A (A5 T:best slot rule)|Max rate (untuned)": {
     "combo": "lit:std_maxrate",
     "ret": -112.25767852812064,
     "delta_vs_ref": [
@@ -153,7 +153,7 @@
     "energy_kj": 67.30432074796096,
     "p99_ms": NaN
    },
-   "A (A5 slot rule, mission flight)|Greedy (untuned)": {
+   "A (A5 T:best slot rule)|Greedy (untuned)": {
     "combo": "lit:greedy",
     "ret": -73.04852736794938,
     "delta_vs_ref": [
@@ -168,7 +168,7 @@
     "energy_kj": 69.8269152558034,
     "p99_ms": NaN
    },
-   "A (A5 slot rule, mission flight)|T:best (tuned on Shannon)": {
+   "A (A5 T:best slot rule)|T:best (tuned on Shannon)": {
     "combo": "tbest|heur",
     "ret": 62.69929174833467,
     "delta_vs_ref": [
@@ -183,7 +183,7 @@
     "energy_kj": 66.76866492599905,
     "p99_ms": 0.92226510189912
    },
-   "A (A5 slot rule, mission flight)|PPO-S (trained on Shannon)": {
+   "A (A5 T:best slot rule)|PPO-S (trained on Shannon)": {
     "combo": "tbest|ppo",
     "ret": 64.82307156360605,
     "delta_vs_ref": [
@@ -290,7 +290,7 @@
    }
   },
   "L": {
-   "A (A5 slot rule, mission flight)|Random (untuned)": {
+   "A (A5 T:best slot rule)|Random (untuned)": {
     "combo": "lit:std_rand",
     "ret": -217.58816518030994,
     "delta_vs_ref": [
@@ -305,7 +305,7 @@
     "energy_kj": 68.27960799856699,
     "p99_ms": NaN
    },
-   "A (A5 slot rule, mission flight)|Round robin (untuned)": {
+   "A (A5 T:best slot rule)|Round robin (untuned)": {
     "combo": "lit:std_rr",
     "ret": -286.0556884001165,
     "delta_vs_ref": [
@@ -320,7 +320,7 @@
     "energy_kj": 70.97717046363923,
     "p99_ms": NaN
    },
-   "A (A5 slot rule, mission flight)|Max rate (untuned)": {
+   "A (A5 T:best slot rule)|Max rate (untuned)": {
     "combo": "lit:std_maxrate",
     "ret": -220.972628017652,
     "delta_vs_ref": [
@@ -335,7 +335,7 @@
     "energy_kj": 69.89644893557833,
     "p99_ms": NaN
    },
-   "A (A5 slot rule, mission flight)|Greedy (untuned)": {
+   "A (A5 T:best slot rule)|Greedy (untuned)": {
     "combo": "lit:greedy",
     "ret": -288.4990817386495,
     "delta_vs_ref": [
@@ -350,7 +350,7 @@
     "energy_kj": 71.20128193887147,
     "p99_ms": NaN
    },
-   "A (A5 slot rule, mission flight)|T:best (tuned on Shannon)": {
+   "A (A5 T:best slot rule)|T:best (tuned on Shannon)": {
     "combo": "tbest|heur",
     "ret": -156.77433565074156,
     "delta_vs_ref": [
@@ -365,7 +365,7 @@
     "energy_kj": 76.5548862502398,
     "p99_ms": 0.8936381259988481
    },
-   "A (A5 slot rule, mission flight)|PPO-S (trained on Shannon)": {
+   "A (A5 T:best slot rule)|PPO-S (trained on Shannon)": {
     "combo": "tbest|ppo",
     "ret": -180.2441159151908,
     "delta_vs_ref": [
