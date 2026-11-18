@@ -1,4 +1,4 @@
-"""Review #46 step C (C0 + C1). Protocol (pre-registered): reports/scheduling/swarmbridge-atc-protocol.md.
+"""Review #46 step C (C0 + C1). Protocol (pre-registered): reports/phases/2026-11-17_paperA-scheduling/swarmbridge-atc-protocol.md.
 
 Environment as A-T1 (K5_la, scheduler-aware LA, persistent interference, no SRS), scheduler / movement frozen by A-X9
 stage 1, env table WITH the test-dev profiles (a5_eval.init(True)).

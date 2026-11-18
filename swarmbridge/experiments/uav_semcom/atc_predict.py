@@ -1,4 +1,4 @@
-"""Review #46 step C, D1: causal on-board object-count predictors (protocol reports/scheduling/swarmbridge-atc-protocol.md).
+"""Review #46 step C, D1: causal on-board object-count predictors (protocol reports/phases/2026-11-17_paperA-scheduling/swarmbridge-atc-protocol.md).
 
 Target log(1 + n_gt) (labels of the TRAIN pool only). Ridge on standardised features, alpha in {0.1, 1, 10, 100, 1000}
 by 5-fold GroupKFold over train sequences.

@@ -1,4 +1,4 @@
-"""B-E0 (reports/two-track/swarmbridge-two-track-plan.md, review #27): minimal predictive token-transmission pipeline.
+"""B-E0 (reports/phases/2026-11-15_two-track/swarmbridge-two-track-plan.md, review #27): minimal predictive token-transmission pipeline.
 
   video frame -> frozen DINOv2-S patch tokens (22 x 39 grid at 308 x 546) -> receiver-synchronised predictor
   (B-E0: hold-last) -> top-k innovation patches -> per-token quantisation -> real bitstream -> decode ->

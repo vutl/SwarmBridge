@@ -1,4 +1,4 @@
-"""A-E1 (reports/two-track/swarmbridge-two-track-plan.md, review #27): online decision cost of PPO mode-only vs H* vs SC.
+"""A-E1 (reports/phases/2026-11-15_two-track/swarmbridge-two-track-plan.md, review #27): online decision cost of PPO mode-only vs H* vs SC.
 
 Same code paths as A5.5 (a55_eval.job): heuristics via a55_heur.from_name + env_ev loop; PPO mode-only via
 gym_env_ev.GymUavSemcomEv(slot_pol = slot part of the A5 T:best heuristic) and the A5.5 best-val checkpoints.

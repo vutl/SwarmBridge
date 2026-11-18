@@ -1,4 +1,4 @@
-"""Review #44 (A-X9) summary and the PRE-REGISTERED decision gate (reports/scheduling/swarmbridge-ax9-protocol.md).
+"""Review #44 (A-X9) summary and the PRE-REGISTERED decision gate (reports/phases/2026-11-17_paperA-scheduling/swarmbridge-ax9-protocol.md).
 Usage: python ax9_summary.py runs/uav_semcom/ax9
 """
 import gzip

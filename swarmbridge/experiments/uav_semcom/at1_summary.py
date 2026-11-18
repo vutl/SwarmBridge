@@ -1,4 +1,4 @@
-"""Review #45 (A-T1) summary and the PRE-REGISTERED gate (reports/scheduling/swarmbridge-at1-protocol.md).
+"""Review #45 (A-T1) summary and the PRE-REGISTERED gate (reports/phases/2026-11-17_paperA-scheduling/swarmbridge-at1-protocol.md).
 Usage: python at1_summary.py runs/uav_semcom/at1
 """
 import collections

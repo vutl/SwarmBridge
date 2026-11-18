@@ -3,7 +3,7 @@
 Reference regime = the A4 configuration (K = 3 UAVs, M = 2 channels, 1 MHz, survey at 20 m/s, `predicted` mode info,
 w_T = 0.3, deadlines U(4, 12) s, Qmin U(22, 30) dB, urban air-to-ground channel, Shannon rate), now on the A5 image
 pools. Every other regime changes ONE group of parameters (one-dimensional sweeps, no Cartesian product), each with
-a physical reason (report reports/archive/uav-semcom-a/uav-semcom-a5.md section 3):
+a physical reason (report reports/phases/2026-11-06_uav-semcom-a/uav-semcom-a5.md section 3):
   K2/K4/K5        : number of UAVs sharing M = 2 channels (contention; K2 = no contention)
   v10/v15         : survey speed (frame rate per UAV, 0.4 / 0.6 / 0.8 frames/s)
   env_*           : air-to-ground propagation environment, Al-Hourani et al. IEEE WCL 2014 (a, b, eta_LoS, eta_NLoS)
@@ -53,7 +53,7 @@ REGIMES = {
     "q_low": dict(qmin=(18.0, 26.0)), "q_high": dict(qmin=(28.0, 36.0)),
     "wt0": dict(w_time=0.0), "wt0.1": dict(w_time=0.1), "wt1": dict(w_time=1.0),
     "phy_gap3": dict(phy="gap", phy_gap_db=3.0), "phy_mcs": dict(phy="mcs"), "phy_mcs_blind": dict(phy="mcs_blind"),
-    # A8 mismatch ladder (reports/archive/a7-a8-b1/swarmbridge-a8-b1-preregistration.md): link adaptation sees lambda x interference
+    # A8 mismatch ladder (reports/phases/2026-11-13_a7-a8-b1/swarmbridge-a8-b1-preregistration.md): link adaptation sees lambda x interference
     "phy_mcs_l75": dict(phy="mcs_partial", phy_lambda=0.75), "phy_mcs_l50": dict(phy="mcs_partial", phy_lambda=0.5),
     "phy_mcs_l25": dict(phy="mcs_partial", phy_lambda=0.25),
     # A-X2 (review #37) bounded wireless-realism stress: K5 contention with the interference-blind MCS PHY

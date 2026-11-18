@@ -1,4 +1,4 @@
-"""Review #46 step C summary and the PRE-REGISTERED C1 gate (reports/scheduling/swarmbridge-atc-protocol.md).
+"""Review #46 step C summary and the PRE-REGISTERED C1 gate (reports/phases/2026-11-17_paperA-scheduling/swarmbridge-atc-protocol.md).
 Run in the WSL env (workload AP50 uses the cached per-image matching of a6l1_ap on the stored test-dev detections).
 Usage: python atc_summary.py [--boot 10000]
 """

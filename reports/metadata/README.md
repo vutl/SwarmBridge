@@ -3,8 +3,8 @@
 JSON gốc được giữ nguyên từng byte khi chuyển vào thư mục này. Thời điểm và trạng thái ghi trong từng manifest là của lần tạo nó, không phải kiểm kê trực tiếp hiện tại. Các đường dẫn ghi trong JSON lịch sử có thể là đường dẫn trước khi tổ chức lại; tra bảng chuyển đường dẫn nếu cần.
 
 - [Tổng quan báo cáo](../README.md)
-- [Danh mục paper/repo](../archive/tai-lieu/tai-lieu-va-ma-nguon.md)
-- [Đường dẫn report cũ → mới và SHA-256 trước khi chuyển](report-moves-2026-11-04.json); các lần sau: [10/11](report-moves-2026-11-10.json), [14/11](report-moves-2026-11-14.json), [18/11](report-moves-2026-11-18.json) (chỉ đường dẫn)
+- [Danh mục paper/repo](../literature/tai-lieu-va-ma-nguon.md)
+- [Đường dẫn report cũ → mới và SHA-256 trước khi chuyển](report-moves-2026-11-04.json); các lần sau: [10/11](report-moves-2026-11-10.json), [14/11](report-moves-2026-11-14.json), [18/11](report-moves-2026-11-18.json), [18/11b: thư mục phases/ theo ngày](report-moves-2026-11-18b.json) (chỉ đường dẫn)
 
 ## JSON có sẵn
 

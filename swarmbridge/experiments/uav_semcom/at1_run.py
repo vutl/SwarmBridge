@@ -1,5 +1,5 @@
 """Review #45 (A-T1): task-utility headroom study. Protocol (pre-registered before the test stage):
-reports/scheduling/swarmbridge-at1-protocol.md.
+reports/phases/2026-11-17_paperA-scheduling/swarmbridge-at1-protocol.md.
 
 Environment as A-X9 (K5_la, scheduler-aware LA, persistent interference, no SRS, obs K5), scheduler / movement frozen
 by A-X9 stage 1 (runs/uav_semcom/ax9/sched.json). Metric: full-workload on-time recall = sum of TP of frames delivered

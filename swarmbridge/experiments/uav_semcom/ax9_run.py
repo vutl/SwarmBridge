@@ -1,5 +1,5 @@
 """Review #44 (A-X9): the final bounded test of the DRL hypothesis. Protocol (pre-registered):
-reports/scheduling/swarmbridge-ax9-protocol.md.
+reports/phases/2026-11-17_paperA-scheduling/swarmbridge-ax9-protocol.md.
 
 Environment: K5_la, scheduler-aware LA, persistent interference. The observation includes the causal link-adaptation
 features (delayed CQI report, report age, measured INR, OLLA offset, NACK rates; obs_la = true) for the LA-trained PPO;

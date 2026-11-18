@@ -1,4 +1,4 @@
-"""A-E2 / A-E3 (reports/two-track/swarmbridge-two-track-plan.md, reviews #27-#28): mode-only sampling MPC vs PPO mode-only.
+"""A-E2 / A-E3 (reports/phases/2026-11-15_two-track/swarmbridge-two-track-plan.md, reviews #27-#28): mode-only sampling MPC vs PPO mode-only.
 
 Control authority: the MPC chooses ONLY the compression mode of the image whose mode decision is due; movement,
 channel and power come from the SAME heuristic slot policy that drives PPO mode-only (slot part of the A5 T:best
