@@ -1,0 +1,44 @@
+== stage 1 (train): frozen ja~JA:stat:R:a1:m3 @ pacedB3  score -67.44; A-X8 setting -73.41; least-slack same movement -83.33
+   mission    best ja~JA:stat:R:a1:m3@mission                 -77.28   least-slack   -92.55
+   pacedB1.5  best ja~JA:stat:R:a1:m3@pacedB1.5               -73.53   least-slack   -88.18
+   pacedB2    best ja~JA:stat:R:a1:m3@pacedB2                 -72.47   least-slack   -87.39
+   pacedB3    best ja~JA:stat:R:a1:m3@pacedB3                 -67.44   least-slack   -83.33
+== stage 2 (train): best heuristic h=fixed_mbt2018-mean_q3 (-63.47); MPC incumbent I* h=fixed_mbt2018-mean_q3
+   h=fixed_mbt2018-mean_q3          alone   -63.47  +MPC   -54.37
+   h=greedy+budget1                 alone   -70.22  +MPC   -54.89
+   h=fixed_avif_20                  alone   -68.62  +MPC   -57.95
+   h=greedy+budget0.75              alone   -79.48  +MPC   -58.19
+   h=fixed_mbt2018-mean_q1          alone   -79.36  +MPC   -60.75
+== stage 3 (PPO on LA): validation curves
+   seed 0: best@800000 val -32.2 -8.2 -9.2 -7.9 -9.5 -13.2 -14.6 -13.3 -17.5 -13.2
+   seed 1: best@400000 val -11.6 -3.5 -7.8 -7.4 -7.3 -10.2 -6.7 -10.3 -12.4 -14.3
+   seed 2: best@400000 val -15.3 -5.2 -9.0 -14.7 -20.6 -10.3 -13.2 -13.5 -18.6 -12.2
+== stage 4 test (held-out seeds 8300..8399), scheduler ja~JA:stat:R:a1:m3@pacedB3
+   H*               h=fixed_mbt2018-mean_q3            ret   -39.31 [-39.3] ok 0.898 drop 0.078 goodput  409.8 E 72.9 jain 0.995 minUAV 0.812 recall 0.514 | ms slot p99 3.6 mode p99 0.0 int p99 3.6 >50 0.0000
+   I*               h=fixed_mbt2018-mean_q3            ret   -39.31 [-39.3] ok 0.898 drop 0.078 goodput  409.8 E 72.9 jain 0.995 minUAV 0.812 recall 0.514 | ms slot p99 3.6 mode p99 0.0 int p99 3.6 >50 0.0000
+   I*+MPC           h=fixed_mbt2018-mean_q3+mpc        ret   -32.27 [-32.3] ok 0.908 drop 0.056 goodput  407.2 E 71.6 jain 0.996 minUAV 0.834 recall 0.507 | ms slot p99 3.8 mode p99 39.6 int p99 43.0 >50 0.0000
+   I*+MPC no-cal    h=fixed_mbt2018-mean_q3+mpcnc      ret   -49.22 [-49.2] ok 0.877 drop 0.100 goodput  472.3 E 74.9 jain 0.993 minUAV 0.778 recall 0.494 | ms slot p99 3.9 mode p99 40.5 int p99 44.2 >50 0.0002
+   PPO-LA           ppola                              ret   -38.96 [-38.8 -38.1 -40. ] ok 0.856 drop 0.028 goodput  372.6 E 69.3 jain 0.995 minUAV 0.776 recall 0.465 | ms slot p99 3.8 mode p99 3.4 int p99 7.2 >50 0.0000
+   PPO-LA+MPC       ppola+mpc                          ret   -32.41 [-31.5 -33.  -32.7] ok 0.884 drop 0.028 goodput  382.4 E 69.8 jain 0.996 minUAV 0.812 recall 0.477 | ms slot p99 3.9 mode p99 43.7 int p99 47.1 >50 0.0005
+   PPO-Shannon      ppo                                ret   -55.78 [-47.2 -75.4 -44.8] ok 0.858 drop 0.092 goodput  425.3 E 74.4 jain 0.991 minUAV 0.749 recall 0.487 | ms slot p99 3.8 mode p99 3.4 int p99 7.2 >50 0.0000
+   PPO-Shannon+MPC  ppo+mpc                            ret   -40.41 [-39.1 -43.6 -38.6] ok 0.890 drop 0.065 goodput  422.1 E 72.5 jain 0.995 minUAV 0.801 recall 0.493 | ms slot p99 3.8 mode p99 43.3 int p99 46.8 >50 0.0005
+== PRIMARY (gate): (PPO-LA + MPC) - (I* + MPC)
+   PRIMARY PPO-LA+MPC - I*+MPC                         -0.14 [ -2.83, +2.56] recall  -0.03 [ -0.03, -0.03]  per seed [ 0.75 -0.71 -0.45]  train-seed CI  -0.14 [ -2.07, +1.80]
+      FAIL  mean >= +2.0
+      FAIL  env-seed CI lower bound > 0
+      FAIL  all 3 training seeds > 0
+      FAIL  recall not significantly worse (CI upper >= 0)
+      PASS  integrated latency p99 <= 50 ms
+   DECISION: STOP the DRL line
+== secondary
+   calibration: I*+MPC - I*+MPC no-cal                +16.95 [+12.79,+21.11] recall  +0.01 [ +0.01, +0.02]
+   MPC on incumbent: I*+MPC - I*                       +7.03 [ +3.96,+10.11] recall  -0.01 [ -0.01, -0.00]
+   PPO-LA - H*                                         +0.35 [ -3.19, +3.88] recall  -0.05 [ -0.05, -0.04]  per seed [ 0.5   1.22 -0.68]  train-seed CI  +0.35 [ -2.03, +2.73]
+   PPO-LA - PPO-Shannon                               +16.82 [+13.78,+19.86] recall  -0.02 [ -0.03, -0.02]  per seed [16.97 17.69 15.79]  train-seed CI +16.82 [+14.44,+19.20]
+   distribution shift: PPO-LA+MPC - PPO-Shannon+MPC    +8.00 [ +5.56,+10.43] recall  -0.02 [ -0.02, -0.01]  per seed [8.88 7.42 7.68]  train-seed CI  +8.00 [ +6.06, +9.93]
+   I*+MPC - H*                                         +7.03 [ +3.96,+10.11] recall  -0.01 [ -0.01, -0.00]
+   recall/return vs H*: I*+MPC                         +7.03 [ +3.96,+10.11] recall  -0.01 [ -0.01, -0.00]
+   recall/return vs H*: PPO-LA                         +0.35 [ -3.19, +3.88] recall  -0.05 [ -0.05, -0.04]  per seed [ 0.5   1.22 -0.68]  train-seed CI  +0.35 [ -2.03, +2.73]
+   recall/return vs H*: PPO-LA+MPC                     +6.90 [ +3.36,+10.43] recall  -0.04 [ -0.04, -0.03]  per seed [7.78 6.32 6.58]  train-seed CI  +6.90 [ +4.96, +8.83]
+   recall/return vs H*: PPO-Shannon+MPC                -1.10 [ -4.52, +2.32] recall  -0.02 [ -0.03, -0.02]  per seed [ 0.21 -4.25  0.74]  train-seed CI  -1.10 [ -7.91, +5.71]
+   recall/return vs H*: I*+MPC no-cal                  -9.92 [-14.49, -5.34] recall  -0.02 [ -0.03, -0.01]
