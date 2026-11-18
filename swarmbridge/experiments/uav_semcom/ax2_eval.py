@@ -20,6 +20,11 @@ Combination  SCHED|MODE[+mpc]
          calibration: the planner uses the nominal rate model of the environment (env.link_rate; for the LA PHY the
          genie CQI rate x (1 - BLER target)), plans from the first decision on, no bias-derived scales (lo = hi = 1)
   ppola  (review #44) PPO mode-only trained on the LA PHY (checkpoint I from runs/uav_semcom/ax9/ppo_la_ckpts.json)
+  t=SPEC / tc=SPEC (review #45, at1_task.py): task-utility mode rules rv:SRC:LAM / tb:SRC:TAU, SRC in {mean, gt,
+         flip} (gt / flip = non-deployable task-utility oracles); tc= uses the calibrated rate as hc=
+  +tmpc=SRC (review #45) the same calibrated selective MPC with the objective "sum of on-time TP" (task utility from
+         SRC) instead of the A5 utility; incumbent = the h= / t= rule
+  DELIV_EXT = True (module flag): deliveries carry a 4th field, on time (delivered, delay <= deadline, any PSNR)
 Scheduler options (review #44): SCHED[~JAMEMBER][@MOVE] with SCHED in {ja, ls}: MOVE = mission (the slot rule of
 fixed_avif_20: mission flight) or a paced slot rule name (pacedB1.5, pacedB2, pacedB3); default movement as before.
   +mpc   the mode head proposes, the A-E8 selective controller (cals np-any, N 8, H 4, causal, Z 1, kappa 2, H1 1,
@@ -121,6 +126,14 @@ def calibrated(mode_pol, rate_fn):
 
 
 MOVE_NAMES = {"mission": "fixed_avif_20"}
+DELIV_EXT = False
+
+
+def deliveries(core):
+    if not DELIV_EXT:
+        return AE.deliveries(core)
+    return [[int(AE.G["man_idx"][tk.img]), int(tk.mode), int(tk.ok),
+             int(tk.mode >= 0 and not getattr(tk, "dropped", False) and tk.delay <= tk.dmax)] for tk in core.finished]
 
 
 def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="test"):
@@ -130,13 +143,20 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
         sched, move = sched.split("@")
     if "~" in sched:
         sched, ja = sched.split("~")
+    tutil = None
+    if "+tmpc=" in mode:
+        mode, tutil = mode.split("+tmpc=")
     nocal = mode.endswith("+mpcnc")
-    use_mpc = mode.endswith("+mpc") or nocal
-    mode = mode[:-6] if nocal else (mode[:-4] if use_mpc else mode)
+    use_mpc = mode.endswith("+mpc") or nocal or tutil is not None
+    mode = mode[:-6] if nocal else (mode[:-4] if mode.endswith("+mpc") else mode)
     mp_h, cal_h = None, False
     if mode.startswith(("h=", "hc=")):
         cal_h = mode.startswith("hc=")
         mp_h = MH.from_name(mode.split("=", 1)[1], C.MODES)[1]
+    elif mode.startswith(("t=", "tc=")):
+        import at1_task as AT
+        cal_h = mode.startswith("tc=")
+        mp_h = AT.rule(mode.split("=", 1)[1], AE.G["table"], AE.G["pools"])
     sp_t, mp_t = MH.from_name(AE.tuned(ctrl_regime, "best"), C.MODES)
     sp_e, mp_e = (MH.from_name(AE.tuned(env_regime, "best"), C.MODES) if env_regime != ctrl_regime else (sp_t, mp_t))
     sp_s = XS.from_name(XS.tuned(ctrl_regime), ctrl_regime)[0] if sched == "sch" else None
@@ -177,7 +197,12 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     if (use_mpc and not nocal) or cal_h:
         assert mmod is not None or mp_h is not None, "+mpc needs an incumbent (learned mode head or h= / hc= rule)"
         cal = M.CalRates(persistent=False, slot_weight=True)
-        mpc = M.MPCMode("cal", 8, 4, None, fallback=mp_t, seed=12345, rollout="causal", cal=cal, margin_z=1.0)
+        if tutil is not None:
+            import at1_task as AT
+            mpc = AT.TaskMPC(AT.Utility(tutil, AE.G["table"], AE.G["pools"]), "cal", 8, 4, None, fallback=mp_t,
+                             seed=12345, rollout="causal", cal=cal, margin_z=1.0)
+        else:
+            mpc = M.MPCMode("cal", 8, 4, None, fallback=mp_t, seed=12345, rollout="causal", cal=cal, margin_z=1.0)
         trk = M.RateErrTracker(mpc, persistent=False)
         dl = M.Deadline(50.0, margin_ms=3.0) if use_mpc else None
     elif nocal:
@@ -283,7 +308,7 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     if use_mpc:
         m.update(switched=int(mpc.switched), gated=gated, planned=planned, aborts=aborts, t_first_plan=t_first_plan,
                  bias_q=[float(x) for x in np.percentile(biases, [10, 50, 90])] if biases else None)
-    return m, AE.deliveries(core)
+    return m, deliveries(core)
 
 
 def job(j):
