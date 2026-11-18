@@ -3,7 +3,9 @@
 Cập nhật 18/11/2026. Cách đọc:
 1. **[CONTEXT.md](CONTEXT.md)**: tóm tắt một trang để dán vào phiên mới hoặc gửi phản biện (mục tiêu, trạng thái, điều
    đã biết, ràng buộc).
-2. Trang này:
+2. **[HISTORY.md](HISTORY.md)** (tiếng Anh): toàn bộ lịch sử, từng giai đoạn từ mới tới cũ kèm số liệu chính. Gửi
+   file này cho phản biện (ChatGPT) để nó biết mọi thứ đã làm.
+3. Trang này:
    - mục 1: đang ở đâu;
    - mục 2: các giai đoạn **từ mới tới cũ**, mỗi giai đoạn một thư mục có README riêng;
    - mục 3: mọi kết luận đã bị sửa. **Đọc mục 3 trước khi trích một con số cũ.**
@@ -17,6 +19,7 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 | Thư mục / file | Nội dung |
 |---|---|
 | [CONTEXT.md](CONTEXT.md) | Ngữ cảnh ngắn cho phiên mới |
+| [HISTORY.md](HISTORY.md) | Lịch sử đầy đủ cho phản biện (tiếng Anh), mới → cũ |
 | [phases/](phases/) | Mỗi giai đoạn một thư mục `YYYY-MM-DD_tên` (ngày bắt đầu), nên sắp theo tên là theo thời gian. README của mỗi thư mục tóm tắt câu hỏi, kết luận và danh sách tài liệu |
 | [literature/](literature/README.md) | Danh mục paper / repo, bản đồ bằng chứng, các lần tải tài liệu (30/10–04/11) |
 | [figures/](figures/), [metadata/](metadata/README.md) | Hình; JSON kiểm toán và bảng chuyển đường dẫn |
@@ -52,7 +55,7 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 | [2026-11-11_h1-mdmt](phases/2026-11-11_h1-mdmt/README.md) | 11–13/11 | Báo cáo hợp tác theo vật thể duy nhất trên MDMT (2 drone) | Crop +1–3 F1, chủ yếu một chuỗi | Đóng |
 | [2026-11-10_r1-visdrone](phases/2026-11-10_r1-visdrone/README.md) | 10–11/11 | G-L2 tiện ích từng ảnh; R0–R1b phản hồi ngữ nghĩa | G-L2 FAIL; R1b H1 FAIL (không dư địa) | Đóng |
 | [2026-11-06_uav-semcom-a](phases/2026-11-06_uav-semcom-a/README.md) | 06–10/11 | Hướng Huang: UAV gửi ảnh về BS, PPO chọn bay / kênh / công suất / mode | Joint PPO lợi nhỏ, bay chỉ canh nhịp; A5: PPO chọn mode +3…+12 ở vài cấu hình (sau đó bị A-X8/A-X9 đọc lại) | Đóng |
-| [2026-11-04_uav3d](phases/2026-11-04_uav3d/README.md) | 04/11 | 5 UAV đồng bộ: gửi box hay đặc trưng, trễ / mất gói | Hợp tác +15 mAP / AMOTA; trễ 2 khung xóa lợi ích. Dừng do chuyển hướng, không do kết quả âm | Đóng băng |
+| [2026-11-04_uav3d](phases/2026-11-04_uav3d/README.md) | 04/11 | 5 UAV đồng bộ: gửi box hay đặc trưng, trễ / mất gói | Hợp tác +15 mAP / AMOTA; trễ 2 khung xóa lợi ích. Trên 3 cảnh dev: "chỉ gửi cái bên nhận chưa có" sai cho tracking (giá trị là xác nhận); feedback bên nhận không hơn luật bỏ trùng; còn dư địa thứ tự gửi +0,03–0,04 AMOTA chưa lấy được. Gác do chuyển hướng 06/11 | Đóng băng |
 | [2026-11-04_huang-abc](phases/2026-11-04_huang-abc/README.md) | 04–06/11 | Proposal A/B/C; Huang JSAC bước 0 | Chọn mode của Huang là tra bảng; không thấy dư địa cho RL ở bước 0 | Đóng |
 | [2026-10-30_sb-town3](phases/2026-10-30_sb-town3/README.md) | 30/10–03/11 | Schrödinger Bridge khôi phục latent BEV (CoPerception-UAV Town3); chọn block theo thời gian | SB ≤ ánh xạ; thiết lập một nguồn mỗi vùng (N = 1), chưa thử bằng chứng từ UAV khác | Đóng |
 

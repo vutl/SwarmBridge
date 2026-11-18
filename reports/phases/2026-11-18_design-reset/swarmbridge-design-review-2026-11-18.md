@@ -22,9 +22,11 @@ Ngày 18/11/2026, sau phản biện #47–#48 và bản sửa của #48 ("giữ 
 - **Phần đích gốc đã được thử thì chưa bao giờ được thử đúng:**
   - Town3 (30/10) chạy với một nguồn mỗi vùng (N = 1), tức không có bằng chứng bổ sung.
   - MDMT (11–14/11) chỉ có 2 drone, và góc nhìn tốt hầu như cố định.
-  - **UAV3D (04/11) là nơi duy nhất có 5 UAV đồng bộ.** Ở đó hợp tác có giá trị lớn (mAP 0,512 → 0,665; AMOTA
-    0,542 → 0,690), và giá trị đó **phụ thuộc mạnh vào truyền thông**: trễ 2 khung là mất gần hết. Nhánh này bị dừng
-    sau một ngày vì chuyển hướng, không phải vì kết quả âm.
+  - **UAV3D (04/11) là nơi duy nhất có 5 UAV đồng bộ.** Ở đó hợp tác có giá trị lớn: hợp nhất box mAP 0,512 → 0,665
+    (AMOTA 0,594); message KF có vận tốc cho AMOTA 0,542 → 0,690. Giá trị đó **phụ thuộc mạnh vào truyền thông**:
+    trễ 2 khung là mất gần hết.
+  - **Đính chính (khi tổng hợp lại):** UAV3D cũng đã thử một phần chính ý "trạng thái bên nhận", và phần đó ra
+    **âm** (xem mục 5c). Nhánh bị gác do chuyển hướng 06/11, nhưng không phải chưa có kết quả âm nào.
 - **Có thể khôi phục đích gốc mà không xây lại từ đầu.**
   - Ghép phần vô tuyến LA đã kiểm chứng của Paper A với pipeline hợp tác UAV3D đã có (box / KF / hợp nhất / sổ cái
     nhân quả).
@@ -216,6 +218,34 @@ Mới phải viết: trạng thái bên nhận, giá trị có điều kiện c�
    quyền dùng và có góc nhìn bổ sung mạnh.
 5. **Novelty:** nếu SchedCP hoặc các bài tracking hợp tác đã có trạng thái bên nhận + kênh thực tế, phải thu hẹp
    đóng góp.
+
+## 5c. UAV3D đã thử gì về trạng thái bên nhận (đính chính, bổ sung khi tổng hợp lại)
+
+Nguồn: [`uav3d-proto-v1.1-budget-queue-2026-11-04.md`](../2026-11-04_uav3d/uav3d-proto-v1.1-budget-queue-2026-11-04.md).
+Đây là kết quả thăm dò, không phải kết quả cuối:
+- 3 cảnh dev, 60 khung;
+- chưa có CI;
+- kênh tổng hợp độc lập giữa các link, không nhiễu đồng kênh, không LA.
+
+| Ý tưởng | Kết quả trên UAV3D dev | Hệ quả cho mục 5.1 |
+|---|---|---|
+| "Chỉ gửi cái bên nhận chưa có" (kiểu Where2comm / novelty / AoI) | **Sai cho tracking.** Giá trị chủ yếu là **xác nhận** track (khoảng 65 so với 7,5 xe / message). Bỏ phần bên nhận đã thấy làm AMOTA tụt **dưới mức tự nhìn** | Giá trị có điều kiện không đơn giản là "mới so với BS". H1 phải định nghĩa giá trị qua tracking loss, không qua độ mới |
+| Feedback "bên nhận đã chắc" để bên gửi bỏ bớt | Chỉ giúp ở ngân sách cực chặt. **Khi trừ bit feedback vào ngân sách, không hơn luật bỏ trùng giữa các UAV trợ giúp** (+0,005…0,008, cỡ nhiễu) | Luật bỏ trùng giữa các UAV trợ giúp là baseline bắt buộc cho H1 |
+| Học kích thước / thời điểm gửi | Message lũy tiến có hạn chót ≈ oracle biết kênh | Không đặt đóng góp vào "chọn bao nhiêu bit / khi nào", **trong mô hình kênh tổng hợp đó** |
+| Nội dung / thứ tự gửi | Còn dư địa +0,025…0,044 AMOTA so với heuristic tốt nhất. Hai bộ ước lượng nhân quả đơn giản (logistic, train trên 2 cảnh) **không** lấy được | Câu hỏi còn mở lúc đó: bên gửi có suy ra được bên nhận đang bỏ sót gì không. Phép thử với feedback giàu hơn và bộ ước lượng mạnh hơn (17 cảnh train, cần GPU) **chưa chạy** |
+| Bù trễ ở bên nhận (Kalman) | Ở trễ 2 khung chỉ giữ 28–33 % lợi ích mAP, 0 % lợi ích AMOTA | Phần mất nằm ở bên gửi (gửi gì, khi nào) |
+| Nội dung message | Track KF có vận tốc +0,07 AMOTA ngay cả khi không trễ | Biểu diễn message quan trọng |
+
+**Điều thay đổi trong đề xuất mục 5:**
+- H1 không còn là giả thuyết mới hoàn toàn: dạng đơn giản đã âm trên UAV3D dev.
+- Những gì **chưa** được thử:
+  1. kênh thực tế: LA, nhiễu đồng kênh, tranh chấp giữa 5 UAV trên ít kênh, mà Paper A cho thấy đổi kết luận;
+  2. bộ ước lượng mạnh hơn trên đủ cảnh train;
+  3. phụ thuộc dài hạn (H2);
+  4. đánh giá trên test với CI.
+- Nếu (1) và (3) không tạo khác biệt, nhánh hợp tác trên UAV3D có thể chỉ cho đóng góp về biểu diễn message (track có
+  vận tốc), không phải về lập lịch.
+- Đây là rủi ro lớn nhất của đề xuất và phải được nói trước khi chọn hướng.
 
 ## 5b. Câu hỏi "sao không mở thêm biến trong bài toán khảo sát cũ?" (bổ sung sau tin nhắn mới)
 

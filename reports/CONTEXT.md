@@ -1,6 +1,7 @@
 # SwarmBridge: ngữ cảnh ngắn
 
 Cập nhật 18/11/2026. Dán file này vào đầu phiên mới hoặc gửi kèm khi nhờ phản biện. Chi tiết:
+- [HISTORY.md](HISTORY.md): lịch sử đầy đủ bằng tiếng Anh, để gửi phản biện;
 - [README.md](README.md): các giai đoạn từ mới tới cũ, bảng sửa kết luận;
 - `phases/*/README.md`: từng giai đoạn.
 
@@ -38,6 +39,11 @@ Schrödinger Bridge ban đầu là ứng viên cho bộ hoàn thiện, không ph
 1. **Hợp tác có giá trị khi có góc nhìn bổ sung thật.**
    - UAV3D mini: một UAV tự nhìn → hợp nhất box: mAP 0,512 → 0,665; AMOTA 0,542 → 0,690 (KF).
    - Trễ 2 khung xóa gần hết lợi ích; mất 50 % gói −5,5 AMOTA.
+   - Cũng trên UAV3D (3 cảnh dev, chưa có CI, kênh tổng hợp):
+     - "chỉ gửi cái bên nhận chưa có" là sai cho tracking (giá trị chủ yếu là xác nhận track);
+     - feedback "bên nhận đã chắc" không hơn luật bỏ trùng giữa các UAV khi tính bit feedback;
+     - message lũy tiến có hạn chót ≈ oracle biết kênh.
+     Chi tiết: mục 5c của bản rà soát thiết kế.
    - MDMT (2 drone): góc tốt hầu như cố định, lợi ích crop nhỏ.
    - Town3 từng chạy với một nguồn mỗi vùng, nên chưa thử hợp tác.
 2. **PHY thực tế đổi kết luận.**

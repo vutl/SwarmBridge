@@ -1,0 +1,305 @@
+# SwarmBridge: full research history (for reviewers)
+
+Last updated 2026-11-18. Written for an external reviewer (e.g. ChatGPT) who needs to know everything that has been
+tried before proposing anything.
+- Sections 1–3 are the state of the project.
+- Section 4 is every phase, **newest first**, with the question, what was built and run, the key numbers, the
+  conclusion, and later corrections.
+- Sections 5–6 are assets and process lessons.
+
+Detailed reports: `reports/phases/<date>_<name>/` (one folder per phase, each with a README). Corrections table:
+`reports/README.md` section 3. Short version: `reports/CONTEXT.md`.
+
+**Reviewer rule (agreed 18/11):** before proposing a direction or saying "X was never tried", check this file and the
+phase reports. Two recent review rounds made factual errors that this file answers (section 6).
+
+## 1. Goal and original thesis
+
+- **Goal:** multi-UAV + semantic communication + swarm intelligence, aiming at a Q1 paper with an algorithmic
+  contribution.
+- **Original thesis** (29/10, `pdf/Swarm-Conditioned Schrödinger Bridge cho Task-Oriented Multi-UAV Semantic
+  Communications.pdf`): *Can a distributed UAV swarm communicate only the complementary evidence required to reduce
+  the receiver's task uncertainty?*
+  - Several UAVs have complementary views.
+  - Message value is conditional on what the receiver already knows: I(Y; M_i | C), oracle Δ = L(C) − L(C, M_i), then
+    a learned value predictor.
+  - Wireless cost.
+  - Closed loop: uncertainty → request evidence → completion.
+  - A conditional Schrödinger Bridge (SB) was the candidate completion model, with an early kill criterion against
+    mapping / OT-CFM.
+  - MARL was explicitly deferred; active flight (AirSim) was a later stage.
+
+## 2. Current status (18/11)
+
+- **All implementation branches are closed or paused. No experiment is running.**
+- **Open:** a problem reset (`phases/2026-11-18_design-reset/swarmbridge-design-review-2026-11-18.md`).
+  - Proposal: realistic link-adaptation (LA) wireless stack from Paper A + UAV3D cooperative pipeline + receiver state
+    (track uncertainty / age).
+  - Movement in stage 2, where observation value depends on position.
+  - The same report (section 5c) lists what UAV3D already showed against simple receiver-state rules.
+- **Waiting for the user to decide:**
+  1. the stage-1/2 framing;
+  2. a cheap "greedy receiver-state rule vs lookahead oracle" property check on UAV3D mini;
+  3. whether full UAV3D can be obtained;
+  4. keep or drop SB.
+- **Paper A** (independent image offloading; DRL / MPC mode and scheduling control): closed at review #47.
+- **Paper B** (JEPA semantic codec on VisDrone-VID): paused since review #35.
+
+## 3. Facts that stand after all corrections
+
+1. **Cooperation helps when views are complementary, and it is communication-sensitive.**
+   - UAV3D mini (5 synchronized UAVs, 3 dev scenes, no CI):
+     - ego mAP 0.512 → box fusion 0.665 (AMOTA 0.594);
+     - Kalman (KF) track messages with velocity: AMOTA 0.542 → 0.690;
+     - 2-frame delay removes almost all of the gain; 50 % loss costs 5.5 AMOTA.
+   - MDMT (2 drones): the good view is almost always the same drone, so cooperative gains are small.
+   - Town3 was run with one source per region (N = 1), so cooperation was never tested there.
+2. **Simple receiver-state rules were already tested on UAV3D dev** (synthetic independent links, no interference,
+   no LA):
+   - "Send only what the receiver lacks" is wrong for tracking. Value is mostly confirmation (about 65 vs 7.5 cars per
+     message), and dropping already-seen objects pushes AMOTA below ego.
+   - Receiver-certainty feedback is no better than inter-helper de-duplication once the feedback bits are charged.
+   - Progressive deadline-bounded messages ≈ a channel oracle.
+   - A content/order headroom of +0.025..0.044 AMOTA remains. Two simple causal estimators did not capture it; a
+     stronger estimator on 17 train scenes was never run.
+3. **The PHY assumption changes conclusions.**
+   - A policy trained on a Shannon channel loses 16.8 return under realistic LA (delayed CQI, OLLA at 10 % BLER, ARQ,
+     persistent co-channel interference, scheduler-aware LA).
+   - Channel-reuse gains vanish under realistic LA.
+4. **Baselines must be tuned.**
+   - Untuned literature-style rules lose by 10..170 to tuned heuristics.
+   - The JA heuristic scheduler matches or beats every RL scheduler we trained.
+   - This is evidence from the specific papers and baselines we reproduced, not a claim about the field.
+5. **Independent image offloading is close to myopic.**
+   - PPO trained on the correct PHY + calibrated MPC vs heuristic + the same MPC: −0.14 [−2.83, +2.56] (pre-registered
+     A-X9).
+   - Joint movement + channel + power + mode PPO was tried (A3.2 / A4 / A5): small gains. RL-chosen movement adds
+     nothing in A4, because image content does not depend on position (frames are drawn from a pool).
+6. **Online ACK-based calibration fixes a mismatched planner model** (+17 vs nominal MPC). Calibrated,
+   compute-bounded MPC already exists in video streaming (RobustMPC / FastMPC, Oboe, Fugu).
+7. **Per-image task value is neither predictable from cheap features nor transferable.**
+   - The object-count oracle gives +1.53 recall on same-source content and −0.97 on held-out VisDrone test-dev.
+   - The per-mode detector-outcome oracle gives +2.17 but cannot be approximated.
+8. **With a fixed detection task at the receiver, sending box lists usually beats sending features or latents**
+   (hybrid pilot, LIF, Codex gate A, UAV3D, Town3 map baseline).
+9. **Novelty landscape:**
+   - DRL selecting SemCom mode + resources (+ trajectory) for UAVs exists: Si et al. Globecom 2023, Huang et al. JSAC
+     2025, Li et al. JSAC 2026.
+   - "Who/what to send" for collaborative perception exists: Where2comm, CoSDH, CodeFilling, How2comm, SchedCP, semantic
+     HARQ for CP, CCSRA; most assume a Shannon channel or perfect CSI.
+   - "Send when value > cost" exists: GOSC, AoII.
+   - SB for semantic communication exists (SBGSC 2026).
+   - Combining these is not by itself novel.
+
+## 4. Phases, newest first
+
+Format: **dates (review numbers)** | question | what was done | key numbers | conclusion | later corrections.
+
+### 4.1 Design reset: 18/11 (#47–#48), OPEN
+
+- **Question:** where did the project drift from the original thesis, and can it be restored without rebuilding?
+- **Done:** read the original proposals in `pdf/` and traced every phase.
+- **Findings:**
+  - The 06/11 pivot to the Huang-style setting dropped cooperation and receiver state.
+  - Movement, power and channel were never "forgotten": they were RL actions in A3–A5.
+  - Cooperation was tested only on weak data (Town3 N = 1, MDMT 2 drones) or briefly (UAV3D, 1 day, dev only).
+- **Proposal:** LA stack + UAV3D + receiver state; movement in stage 2. Hypotheses:
+  - H1: receiver-state-conditioned allocation beats unconditioned rules at equal airtime (simple forms already negative
+    on UAV3D dev);
+  - H2: lookahead beats greedy-conditioned;
+  - H3: Shannon-designed policies lose under LA.
+- **Biggest risk:** if neither realistic LA nor lookahead creates a difference, cooperation on UAV3D gives a
+  message-representation contribution, not a scheduling one.
+
+### 4.2 Paper A, scheduling + realistic LA + task utility: 17–18/11 (#37–#47), CLOSED
+
+`phases/2026-11-17_paperA-scheduling/`. Setting: 5 UAVs, 2 channels, BS; images from a VisDrone pool; 14 codec modes
+(AVIF, mbt2018, JPEG2000, thumbnails, 3 caption-generative modes); deadlines 4–12 s; Qmin 22–30 dB.
+
+| Round | Question | Key result |
+|---|---|---|
+| A-X2 (#37) | Learned channel scheduler (C-only PPO) | +2.5 / +3.1 vs tuned heuristic on Shannon. Learning channel + mode unstable. Literature-style untuned rules lose by 10..170 |
+| A-X2b (#38) | C-only on MCS with genie (interference-aware) LA | +11.3; with partial LA knowledge λ = 0.75 → −32 |
+| A-X5 (#39) | Block-level realistic LA (`env_la`: delayed CQI, OLLA, ARQ) + randomised training | No-reuse heuristic best in all 7 conditions; randomised C-only stuck at 0.86 reuse (−42.9) |
+| A-X6 (#41) | PHY audit; scheduler-aware LA; opportunity decomposition | Atomic-block fix changes A-X5 by ≤ 2. Causal joint assignment (JA) +8.2 vs least-slack; reuse −5..+6; non-causal channel oracle +12.5. JA without reuse = A-X2b RL |
+| A-X7 (#42) | Information value; correlated channels; mode controller on LA | The oracle gap is slot-frozen fast fading (LoS-only oracle ≈ 0); SRS probing +3. Calibrated PPO–MPC +12..17 vs zero-shot PPO; an initial "+19 interaction" was a movement confound |
+| A-X8 (#43) | Fair baseline (heuristics retuned with JA and movement) | PPO–MPC − best heuristic = −1.25 n.s. MPC seeded with a heuristic incumbent is best (PPO incumbent −5.0). JA +8..16 robust |
+| A-X9 (#44) | Pre-registered final DRL test (seeds 8300–8399) | LA-trained PPO + MPC vs heuristic + MPC −0.14 [−2.83, +2.56]; recall −0.031; gate FAIL 4/5 → **DRL line stopped** |
+| Novelty + A-T1 (#45) | Novelty matrix; per-image detector-utility oracle inside the network | No defensible algorithmic gap. Oracle cross-checked +1.71 [1.29, 2.14] recall vs q3 + MPC (gate PASS); ≈ object-count knowledge via congestion relief; violates Qmin (−2.15 compliant recall) |
+| Step C (#46) | Causal object-count predictor on held-out test-dev (49 videos, seeds 9600–9699) | Selected light-detector predictor +0.20 [−0.94, +1.63], macro recall −3.0 → gate FAIL. Count oracle itself −0.97 on new content (fewer objects per frame: 46.9 vs 68.6). Detector oracle still +2.17 |
+| #47 | — | Independent-offloading line closed; LA stack kept as an asset |
+
+### 4.3 Two tracks (Paper A DRL + MPC under model mismatch; Paper B JEPA): 15–17/11 (#26–#36), CLOSED / PAUSED
+
+`phases/2026-11-15_two-track/`.
+
+**Paper A rounds:**
+- **A-E1:** PPO costs 1.2–1.7 ms per decision vs 40–60 µs for a heuristic.
+- **A-E2/E3:** correct-model MPC +2.7 vs PPO at 30–100× the cost; Shannon MPC −8.6.
+- **A-E4:** non-clairvoyant rollout ≈ PPO; ACK calibration fixes model mismatch; PPO + correct MPC +2.0.
+- **A-E5:** slot-weighted calibration; error gate; +1.69 / +1.86.
+- **A-E6:** decision-aware gate +2.82 / +2.23 (bias robustness: Shannon +1.30 instead of −8.67).
+- **A-E7:** two-stage screen at 20–25 ms.
+- **A-E8:** 50 ms budget held (p99 40–44 ms).
+- **A-E9:** fresh seeds +2.18 / +1.91; robust to feedback delay or loss thanks to warm start.
+- **A-E10:** mismatched warm start −6 / −12.
+- **A-E11:** a 30-observation window fixes it.
+- **A-X1:** channel × mode coupling exists at K5.
+- **Corrected later:** all A-E gains were measured **against PPO**, not against heuristic + MPC. Under realistic LA
+  (A-X8/A-X9) PPO ≈ tuned heuristic.
+
+**Paper B rounds:**
+- **B-E0:** the DINOv2 token pipeline works; raw tokens cost about as much as AVIF.
+- **B-E1/E2:** PCA codec; learned / JEPA-style predictors ≤ "hold".
+- **B-E3:** learned codec beats AVIF; JEPA-32 +0.02 mAP.
+- **B-E4:** 3 seeds, confidence intervals include 0.
+- **B-E5:** smoothing alone ≥ JEPA, so the JEPA gain = temporal stability.
+- **B-E6:** a rate-only surrogate +0.03 mAP.
+- **B-E7:** inter-frame HEVC/AV1 → DINOv2 beats the semantic codec at ≤ 12 kbit, so Paper B as designed is not viable.
+- **B-E8/E9:** task-aware ROI-QP ceiling ≈ +0.01 AP.
+
+### 4.4 Songdo + JEPA proposal: 14–15/11, CLOSED
+
+UAV command-and-control (C&C) state streams on Songdo Traffic: fleet maximum 11.2 kbit/s vs ≥ 60 kbit/s for the C&C
+channel alone, so communication is not constrained. NO-GO.
+
+### 4.5 Novelty review + RQ1 on MDMT: 13–14/11, CLOSED
+
+- **Novelty:** PPO / MAPPO choosing TOKEN / CROP / FRAME messages is already covered (CCSRA, HyComm, SchedCP,
+  Where2comm, CodeFilling, CoSDH).
+- **RQ1** (cross-view association as the reason to transmit):
+  - Phase 0, geometry only: NOT IDENTIFIABLE (GT-free registration works on only 3/8 sequences).
+  - RQ1-E (DINOv2 zero-shot re-identification on real frames): E0 FAIL 0/8.
+
+### 4.6 A7 / A8 / B1: 13–14/11, CLOSED
+
+- **A7-S0** (TOKEN / CROP / FRAME families in the A5 env): information upper bound +6..11 % return, +8..10 recall.
+  The headroom is content-driven, not link-driven; the causal heuristic is unstable.
+- **A7-S1:** the headroom is scene-level GT knowledge (previous-frame values keep 48–83 %).
+- **A7-S2:** a label-free BS proxy ranks scenes well, but gives false positives in dense scenes → NO-GO.
+- **A8** (model-mismatch ladder): **INVALID**, because the compared policies had no co-channel interference.
+- **B1** (view choice on MDMT, 8 sequences):
+  - NO-GO for the view-choice rule;
+  - the label-free "most detections" rule picks the same view 8/8;
+  - view-aware allocation +2.5 F1 vs alternating;
+  - the good view is drone 2 in 7/8 sequences.
+- **Data:** MDMT rights are verbal only; M3OT is CC BY but only 3/9 sequences pass the ID screen; CrossTrack-UAV needs a
+  signed agreement.
+
+### 4.7 H1 on MDMT (cooperative unique-object reporting): 11–13/11, CLOSED
+
+- **Gate 0A:**
+  - token headroom only near budget ≈ token stream (+3..6 points);
+  - crop headroom +4..9 at 100–500 kbit/epoch with perfect crops.
+- **Audit:** token NO-GO, crop conditional GO.
+- **Pilot 0B** (real AVIF + YOLO11n/s):
+  - crop +1..3 F1, 70–99 % of it from one sequence;
+  - full frame +8 F1 but over 1 s CPU.
+- Not stable enough for RL.
+
+### 4.8 R0 → R1b on VisDrone: 10–11/11, CLOSED
+
+- **G-L2** (per-image task value predictable?): FAIL.
+  - Static oracle headroom +1..2 points, cross-checked +0.95 / +0.21 / −0.40.
+  - Causal predictors did not beat a payload-aware rule.
+- **R1a** (token / hybrid / ROI vs image by bit budget): INCONCLUSIVE.
+- **R1b-0a** (semantic feedback loop): H1 FAIL, no headroom (CPU-bound, the trigger never skipped).
+
+### 4.9 Huang-style UAV image delivery (Direction A, A2–A6-L1): 06–10/11, CLOSED
+
+`phases/2026-11-06_uav-semcom-a/`. The basis of Paper A.
+
+- **Environment:** UAV camera → onboard encoder → air-to-ground link → BS. Per-UAV action:
+  - move (11 options: hover, 8 compass directions, next waypoint, return to BS);
+  - channel, power level;
+  - mode vector.
+- **A3 correction:** a slot bug (one image per UAV per slot) created a fake "pacing" story.
+- **A3.2** (3 seeds): joint PPO +2.6 vs tuned heuristic. Movement +1.0..1.9 (detours instead of hovering), channel +
+  power ≈ +1, mode 0.
+- **A4** (native-resolution survey, 20 m/s): joint PPO +4.9.
+  - Mode adapted to the queue (+4.2) + 3 UAVs on 2 channels.
+  - **RL-chosen movement and power contribute nothing.**
+  - Two rules extracted from PPO get within 0.5.
+- **A5:** joint PPO loses to mode-only PPO in all 3 regimes, so mode-only RL from then on. Mode-only +3..+12 in some
+  regimes (later explained by weak baselines, A-X8).
+- **A5.5:** robustness audit of A5.
+- **A6-L1:** a task reward (TP − 0.5 FP) only moved the policy to a cheaper fixed mode.
+- **Novelty audit:** Li et al. JSAC 2026 (Huang modes + trajectory + WPT + DSAC) and Si 2023 are close; "Huang + Si"
+  is not novel.
+
+### 4.10 Huang JSAC step 0 + proposal A/B/C: 04–06/11, CLOSED
+
+- In Huang's MDP, mode choice is a table lookup: no ≥ 0.02 headroom for RL over the best heuristic, and knowing future
+  tasks did not help.
+- FloodNet and UAVBench dropped: questions are generated from labels, and a compact summary answers 94–99 %.
+- `reports/wireless-abc.md`: synthesis of directions A/B/C (06/11).
+
+### 4.11 UAV3D cooperative perception: 04/11, FROZEN by the 06/11 pivot
+
+`phases/2026-11-04_uav3d/`.
+- **Data:** UAV3D v1.0-mini, 20 scenes × 20 frames, 5 UAVs, synthetic (CARLA + AirSim), fixed trajectories; 3 dev scenes used.
+- **Pipeline:** real codec, causal ledger, 3-frame cache, noisy-OR fusion, KF tracking.
+- **Results:** see facts 1–2 in section 3.
+  - Velocity in the message: +0.07 AMOTA even without delay.
+  - Receiver-side delay compensation keeps only 28–33 % of the mAP gain and 0 % of the AMOTA gain at 2-frame delay.
+- **The stronger-estimator test was never run** (it needed a GPU detection dump on 17 train scenes).
+
+### 4.12 Schrödinger Bridge on CoPerception-UAV Town3: 30/10–03/11, CLOSED
+
+`phases/2026-10-30_sb-town3/`.
+- **SB decoder vs mapping** (3 seeds): no SB variant passes. At 15 % sending:
+  - mapping 0.610 mIoU;
+  - best SB 0.602.
+- **Temporal memory** at 15 %: U-Net 0.685 vs per-frame mapping 0.609; simple memory fill 0.679.
+- **Block selection at 15 % budget:**
+  - UAV-side replica of the receiver 0.760 mIoU vs random 0.676;
+  - GT receiver state 0.763;
+  - with all ACKs lost 0.744.
+- **Map baseline:** about 0.771 mIoU at about 0.35 kbit/frame (ideal code length) vs about 8.4 kbit for latents.
+- **Setup limit:** one source per region (N = 1); the complementary-evidence question was never tested.
+
+## 5. Assets and constraints
+
+**Code** (`swarmbridge/experiments/`):
+- `uav_semcom/`:
+  - `env.py`, `env_la` (block LA PHY), `ja_sched.py`;
+  - `a9_mpc.py` (calibrated selective MPC);
+  - A-X / A-T1 / step C runners;
+  - 14-mode table with measured payload / PSNR / detector TP.
+- `uav3d_comm/`: box / KF messages, fusion, ledger, AMOTA.
+- `jepa_semcom/`.
+
+**Results:** `runs/uav_semcom/`, `runs/jepa_semcom/`.
+
+**Local data (not in git):**
+- UAV3D mini (`data/v1.0-mini`, 7.1 GB);
+- CoPerception-UAV Town3 (20 GB);
+- VisDrone DET val / test-dev / VID;
+- MDMT (verbal permission only, unofficial mirror: never publish images, crops or embeddings);
+- CrossTrack-UAV requires a signed agreement.
+
+**Operations:**
+- The repo is public.
+- PPO runs on CPU; GPU jobs go through a lock.
+- `runs/active_recovery/` is another agent's branch and is off-limits.
+
+**Used test seeds** (do not reuse for new tests): 7000–7099, 8000–8999, 9000–9099, 9200–9299, 9600–9699.
+
+## 6. Process lessons (agreed with the user)
+
+1. **The problem was narrowed step by step.**
+   - Cooperation was dropped (06/11), then movement frozen (A5), then the scheduler frozen (A-X9).
+   - Each narrowed sub-problem was then gated with pre-registered tests.
+   - The resulting "no RL advantage" results hold only for a near-myopic problem.
+   - Rule from now on: reduce scale, never the mechanism under study.
+2. **Exploration stage:** prototype with a few meaningful baselines. Only fatal flaws block (leakage, using the future,
+   unfair comparisons). Publication-level gates are for the validation stage.
+3. **Reviewer errors to avoid:**
+   - Review #48 first switched the topic to target tracking, then retracted it.
+   - It then claimed joint mobility + communication + compression "was never tried", based on the A-X2 report only.
+     It was tried in A3.2 / A4 / A5 (section 4.9).
+   - The design review itself first called UAV3D "frozen without negative results"; section 5c of that review corrects
+     this.
+   - Check claims against the phase reports first.
+4. Keep all negative results and the corrections table. Report in Vietnamese to the user, explaining the flow before
+   the numbers.
