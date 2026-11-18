@@ -1,0 +1,5 @@
+train: {'t=rv:count:0': 22.45, 't=rv:count:2': 36.06, 't=rv:count:5': 41.61, 't=rv:count:10': 45.79, 't=rv:count:20': 49.34, 't=rv:count:40': 50.02, 't=rv:count:80': 44.98} best t=rv:count:40
+test t=rv:count:40: on-time recall 53.29  Qmin-recall 48.82  on-time 0.971  Mbit 45.3  E 69.8
+   count-RV - q3+MPC (I*+MPC, A5 objective)     +1.53 [ +1.06, +2.00]
+   count-RV - RV-mean                           +1.13 [ +0.56, +1.70]
+   count-RV - RV-gt                             -1.47 [ -1.74, -1.20]

@@ -1,6 +1,6 @@
 # SwarmBridge: báo cáo
 
-Cập nhật 18/11/2026 (sau phản biện #44, A-X9: dừng nhánh DRL). Trang này là điểm bắt đầu:
+Cập nhật 18/11/2026 (sau phản biện #45: rà soát tính mới + A-T1, oracle tiện ích tác vụ). Trang này là điểm bắt đầu:
 - **Mục 1** cho biết đang ở đâu.
 - **Mục 2–3** là dòng thời gian của hai hướng.
 - **Mục 4** liệt kê mọi kết luận đã bị sửa ở báo cáo sau. Đọc mục này trước khi trích một con số cũ.
@@ -14,7 +14,7 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 | Thư mục / file | Nội dung |
 |---|---|
 | [swarmbridge-paperA-method-draft.md](swarmbridge-paperA-method-draft.md) | Bản nháp Method của Paper A (v2, phản biện #35): PPO + MPC chọn lọc, chỉ chọn mode. Chưa viết lại theo yêu cầu phản biện |
-| [scheduling/](scheduling/) | **Đang mở.** Nhánh lập lịch kênh của Paper A: A-X2, A-X2b, A-X5, A-X6, A-X7, A-X8, A-X9 (phản biện #37–#44) |
+| [scheduling/](scheduling/) | **Đang mở.** Nhánh lập lịch kênh của Paper A: A-X2, A-X2b, A-X5, A-X6, A-X7, A-X8, A-X9, A-T1 và rà soát tính mới (phản biện #37–#45) |
 | [two-track/](two-track/) | Kế hoạch hai hướng (phản biện #26) và các vòng A-E1…A-E11 / B-E0…B-E9 (phản biện #27–#36). Mỗi file chứa cả phần A và phần B của một vòng |
 | [archive/](archive/README.md) | Các nhánh đã đóng, chia theo giai đoạn (30/10–15/11) |
 | [figures/](figures/), [metadata/](metadata/README.md) | Hình; JSON kiểm toán và bảng chuyển đường dẫn |
@@ -70,6 +70,23 @@ ngân sách 50 ms.
 - JA + MPC chưa phải tính mới. Cần chọn một cơ chế mới có giá trị cho tác vụ trước; ứng viên trong
   [báo cáo A-X9](scheduling/swarmbridge-ax9-final-drl-test-result.md#quyết-định-theo-quy-tắc-đã-đăng-ký).
 
+**Phản biện #45 (18/11): rà soát tính mới + A-T1.**
+- **Rà soát tính mới** ([bản rà soát](scheduling/swarmbridge-task-utility-novelty-review-2026-11-18.md)):
+  - Không có khoảng trống thuật toán nào được bảo vệ chắc chắn.
+  - MPC hiệu chỉnh online, giới hạn tính toán đã có ở ABR (RobustMPC, Oboe, Fugu).
+  - Ước lượng giá trị ảnh không nhãn đã có (ORIC, DAO).
+  - Còn lại: giả định LA thay cho Shannon, và độ chặt của đánh giá.
+- **A-T1** ([báo cáo](scheduling/swarmbridge-at1-task-utility-result.md)): oracle biết TP thật từng ảnh, kênh vẫn
+  nhân quả, seed mới 9200–9299.
+  - So với q3 + MPC: +3,00; kiểm chéo bằng ảnh lật **+1,71 [1,29, 2,14]**.
+  - Cổng đăng ký trước qua cả 4 điều kiện → bước C.
+  - Phần lặp lại được ≈ biết **số vật thể** của ảnh (oracle chỉ biết số vật thể: +1,53). Ảnh ít vật thể được gửi rẻ,
+    kênh được giải phóng; lợi nhất khi tắc nghẽn (+5,1).
+  - "Mode nào hợp ảnh nào" vẫn không lặp lại được.
+  - Lợi ích vượt sàn PSNR: recall tuân thủ Qmin −2,15.
+  - MPC với mục tiêu TP đúng hạn không dùng được thông tin tiện ích (+0,2 kiểm chéo).
+  - Bước C (bộ dự đoán số vật thể nhân quả) chờ phản biện quyết định về Qmin và chỉ số.
+
 **Paper B** (JEPA-SemCom trên VisDrone-VID) **tạm dừng** từ phản biện #35.
 - Codec video liên khung (HEVC/AV1) → DINOv2 thắng codec ngữ nghĩa ở ≤ 12 kbit (B-E7).
 - ROI-QP trong HEVC có trần khoảng +0,01 AP (B-E8, B-E9).
@@ -99,6 +116,7 @@ ngân sách 50 ms.
 | A-X7 (#42) | Tách cơ hội thông tin, kênh tương quan, bộ điều khiển mode trên PHY mới | Oracle chỉ LoS khoảng 0 (khoảng cách oracle là fading nhỏ); bộ lọc LoS tương quan +0; SRS +3; JA ≥ mọi RL lập lịch; PPO–MPC hiệu chỉnh +12…+17 so với PPO; tương tác lập lịch × mode +4…+5; JA + PPO–MPC hơn heuristic tốt nhất +13,3 (heuristic chưa tune cùng JA) | [scheduling/ax7](scheduling/swarmbridge-ax7-information-mode-result.md) |
 | A-X8 (#43) | Đối chứng công bằng cho tổ hợp lập lịch + mode | PPO–MPC ≈ heuristic tune cùng JA và cách bay (−1,25 n.s.); MPC lấy heuristic làm incumbent tốt nhất (+5,0 so với PPO–MPC); JA +8…+16 dưới mọi mode; hiệu chỉnh luật thiển cận không giúp; tương tác không ổn định; latency tích hợp p99 ≤ 46 ms | [scheduling/ax8](scheduling/swarmbridge-ax8-fair-baseline-result.md) |
 | A-X9 (#44) | Phép thử DRL cuối (protocol đăng ký trước): PPO train trên LA làm incumbent cho MPC | (PPO-LA + MPC) − (heuristic + MPC) = −0,14 [−2,83, +2,56], recall −0,031 → cổng FAIL 4/5, **dừng nhánh DRL**; PPO-LA hơn PPO-Shannon +16,8 nhưng ≈ H\*; hiệu chỉnh +17 so với MPC danh nghĩa | [scheduling/ax9](scheduling/swarmbridge-ax9-final-drl-test-result.md) |
+| A-T1 (#45) | Thông tin tiện ích detector từng ảnh đáng bao nhiêu trong mạng (oracle, kênh nhân quả) | Kiểm chéo +1,71 [1,29, 2,14] so với q3 + MPC → cổng qua; ≈ toàn bộ là biết số vật thể (+1,53), qua giảm tắc nghẽn; vượt Qmin (−2,15 recall tuân thủ Qmin); MPC mục tiêu TP không dùng được thông tin | [scheduling/at1](scheduling/swarmbridge-at1-task-utility-result.md) |
 
 ## 3. Paper B: dòng thời gian (tạm dừng)
 
@@ -138,6 +156,7 @@ Cột trái là điều từng được báo. Cột giữa là báo cáo đã s�
 | A-X7 (chạy đầu): tương tác lập lịch × mode +19 | A-X7 (chạy lại) | Lẫn với khác biệt cách bay (paced vs mission); so cùng cách bay: +4,3…+4,9 |
 | A-X7: JA + PPO–MPC hơn tổ hợp heuristic tốt nhất +13,3; tương tác lập lịch × mode +4…+5 | A-X8 | Heuristic chưa tune cùng JA và cách bay. Tune công bằng: PPO–MPC − heuristic = −1,25 n.s.; MPC lấy heuristic làm incumbent hơn PPO–MPC +5,0; tương tác so với heuristic hiệu chỉnh: −2,4 (paced) / +5,4 (mission) |
 | Paper A (A5…A-E11): PPO là thành phần đóng góp của bộ điều khiển mode | A-X8, A-X9 | Dưới LA thực tế, PPO kể cả khi train đúng PHY chỉ ngang mode cố định đã tune; kèm MPC thì −0,14 so với MPC lấy heuristic làm incumbent, và recall thấp hơn. Lợi ích A-E đo so với PPO, không so với heuristic + MPC |
+| G-L2: dư địa tiện ích từng ảnh khoảng +1 điểm (tĩnh, khớp bit) | A-T1 | Trong simulator mạng có tắc nghẽn, dư địa kiểm chéo +1,71, chủ yếu từ biết số vật thể; phần "mode nào hợp ảnh nào" vẫn không lặp lại được. Recall A-X9 dùng file fidelity thiếu dòng mode sinh ảnh (ảnh hưởng không đáng kể); A-T1 dùng file L1 đầy đủ |
 | B-E3: JEPA-32 hơn non-JEPA +0,02 | B-E4, B-E5 | CI chứa 0 qua 3 seed; bằng với chỉ làm mượt theo thời gian |
 | B-E3: mã học được hơn AVIF | B-E7 | Đúng so với AVIF ảnh đơn, nhưng thua codec video liên khung ở ≤ 12 kbit |
 | B-E8: số hạng sự kiện | B-E9 | Bản B-E8 gần như không kích hoạt (lỗi thiết kế phân bổ theo hạng); B-E9 sửa, trần khoảng +0,01 |

@@ -7,6 +7,8 @@ ground-truth objects it is the full-workload recall (an image delivered late or 
 Utility sources (what a controller is allowed to know about the CURRENT image's task value):
   mean : mu_m = mean TP of mode m over the TRAIN pool images (causal, deployable: no per-image knowledge)
   gt   : TP_i(m) of this image (NON-DEPLOYABLE diagnostic oracle; uses ground truth)
+  count: n_gt_i / mean_train(n_gt) * mu_m (EXPLORATORY, added after the A-T1 test: knows how many objects the image
+         holds, not how each mode affects this image; non-deployable, but no detector measurement involved)
   flip : TP_i(m) from the flipped-image re-measurement (G-L2 0.4; runs/uav_semcom/g_l2/flip for train/val images,
          runs/uav_semcom/at1/flip for test images). An oracle with a second, independent-ish detector measurement:
          select with one measurement, score with the other (cross-check against selection on detector noise).
@@ -32,7 +34,7 @@ import policies as P
 FID = C.REPO / "runs" / "uav_semcom" / "a6l1" / "fidelity" / "per_image_val.jsonl"
 FLIP = [C.REPO / "runs" / "uav_semcom" / "g_l2" / "flip" / "per_image_flip.jsonl",
         C.REPO / "runs" / "uav_semcom" / "at1" / "flip" / "per_image_flip_test.jsonl"]
-SOURCES = ("mean", "gt", "flip")
+SOURCES = ("mean", "gt", "flip", "count")
 _T = {}
 
 
@@ -65,7 +67,8 @@ def tables(table, pools):
                 fl[r, m] = y["tp"] if y is not None else gt[r, m]
         tr = np.asarray(pools["train"])
         mu = np.nanmean(gt[tr], 0)
-        _T[key] = dict(gt=gt, flip=fl, ngt=ngt, mu=mu,
+        cnt = ngt[:, None] / np.nanmean(ngt[tr]) * mu[None, :]
+        _T[key] = dict(gt=gt, flip=fl, ngt=ngt, mu=mu, count=cnt,
                        flip_measured=np.array([any((name, mode) in flip for name in table.images) for mode in C.MODES]))
     return _T[key]
 

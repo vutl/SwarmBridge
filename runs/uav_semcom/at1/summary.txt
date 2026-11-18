@@ -1,0 +1,54 @@
+== tune (train seeds 0..29): F_task = h=fixed_mbt2018-mean_q3; rules {'rv:mean': 't=rv:mean:20', 'rv:gt': 't=rv:gt:40', 'tb:mean': 'tc=tb:mean:3', 'tb:gt': 'tc=tb:gt:2'}
+   q3 (H*)                          h=fixed_mbt2018-mean_q3                  train on-time recall  48.02
+   F_task                           h=fixed_mbt2018-mean_q3                  train on-time recall  48.02
+   q3+MPC (I*+MPC, A5 objective)    h=fixed_mbt2018-mean_q3+mpc              train on-time recall  48.21
+   RV-mean                          t=rv:mean:20                             train on-time recall  47.85
+   TB-mean                          tc=tb:mean:3                             train on-time recall  38.21
+   TMPC-mean                        h=fixed_mbt2018-mean_q3+tmpc=mean        train on-time recall  47.34
+   RV-gt                            t=rv:gt:40                               train on-time recall  51.29
+   TB-gt                            tc=tb:gt:2                               train on-time recall  41.70
+   TMPC-gt                          h=fixed_mbt2018-mean_q3+tmpc=gt          train on-time recall  47.86
+   C* = q3+MPC (I*+MPC, A5 objective)   O* = RV-gt  (selection rules of the protocol)
+== test (fresh seeds 9200..9299), scheduler ja~JA:stat:R:a1:m3@pacedB3
+   arm                               rec_gt rec_flip rec_Qmin  ontime   drop   Mbit   E kJ  A5 ret int p99
+   q3 (H*)                            51.84    51.87    51.12   0.914  0.086   59.7   73.5  -43.71     3.6 | mbt2018-mean_q3 1.00
+   F_task                             51.84    51.87    51.12   0.914  0.086   59.7   73.5  -43.71     3.6 | mbt2018-mean_q3 1.00
+   q3+MPC (I*+MPC, A5 objective)      51.76    51.76    50.45   0.941  0.059   57.5   72.2  -35.93    42.9 | mbt2018-mean_q3 0.81, avif_5 0.09, mbt2018-mean_q1 0.05, avif_20 0.02, avif_50 0.02
+   RV-mean                            52.16    52.15    51.19   0.919  0.081   58.8   73.0  -42.58     3.5 | mbt2018-mean_q3 0.97, avif_20 0.02, mbt2018-mean_q5 0.02
+   TB-mean                            41.96    41.91    37.74   0.946  0.054   59.2   71.6 -113.53     3.6 | mbt2018-mean_q3 0.28, mbt2018-mean_q5 0.16, avif_20 0.14, cap_t2i 0.14, cap_thumb128_i2i_t0.3 0.05
+   TMPC-mean                          52.05    52.06    51.19   0.917  0.083   62.2   73.8  -43.69    36.2 | mbt2018-mean_q3 0.96, mbt2018-mean_q5 0.02, mbt2018-mean_q8 0.01, avif_50 0.00, avif_20 0.00
+   RV-gt                              54.77    53.66    48.31   0.975  0.025   43.2   69.4  -51.90     3.7 | mbt2018-mean_q3 0.36, avif_20 0.24, mbt2018-mean_q1 0.23, avif_5 0.09, mbt2018-mean_q5 0.04
+   TB-gt                              45.15    44.69    38.28   0.985  0.015   44.3   68.3  -92.96     3.8 | mbt2018-mean_q3 0.25, avif_20 0.23, mbt2018-mean_q1 0.11, cap_t2i 0.09, avif_5 0.08
+   TMPC-gt                            52.60    52.33    51.40   0.920  0.080   62.2   73.3  -45.75    35.8 | mbt2018-mean_q3 0.87, avif_20 0.03, mbt2018-mean_q5 0.03, avif_50 0.02, jpeg2000_100 0.02
+   RV-flip                            53.30    54.42    46.31   0.975  0.025   42.5   69.2  -55.79     3.7 | mbt2018-mean_q3 0.31, avif_20 0.29, mbt2018-mean_q1 0.22, avif_5 0.08, mbt2018-mean_q5 0.03
+   TB-flip                            45.03    45.56    38.14   0.985  0.015   44.0   68.4  -90.38     3.8 | mbt2018-mean_q3 0.28, avif_20 0.25, mbt2018-mean_q1 0.10, cap_t2i 0.09, avif_50 0.08
+   TMPC-flip                          52.19    52.40    50.88   0.917  0.083   61.9   73.4  -47.01    32.6 | mbt2018-mean_q3 0.88, avif_20 0.03, mbt2018-mean_q5 0.02, avif_50 0.02, mbt2018-mean_q1 0.01
+== PRIMARY: O* = RV-gt vs C* = q3+MPC (I*+MPC, A5 objective)  (recall points, paired CI over env seeds)
+   H   (select and score with the same measurement):  +3.00 [ +2.54, +3.46]
+   H_x (select with one, score with the other):       +1.71 [ +1.29, +2.14]
+   frame on-time rate diff  +3.39 [ +2.72, +4.06] pts; energy -3.80 %
+      PASS  H_x >= +1.0 point
+      PASS  H_x CI lower bound > 0
+      PASS  matched: on-time rate not lower by > 1 pt
+      PASS  matched: energy not higher by > 2 %
+   DECISION: GO to step C (causal utility predictor)
+== secondary: same-controller information value (gt / cross-checked), recall points
+   TMPC-gt  - TMPC-mean  gt  +0.55 [ +0.06, +1.04]   cross-checked  +0.20 [ -0.18, +0.59]
+   RV-gt    - RV-mean    gt  +2.60 [ +2.03, +3.17]   cross-checked  +1.32 [ +0.80, +1.84]
+   TB-gt    - TB-mean    gt  +3.19 [ +2.70, +3.68]   cross-checked  +2.92 [ +2.49, +3.36]
+   q3 (H*)                          - C*  gt  +0.08 [ -0.37, +0.53]  Qmin-recall  +0.67 [ +0.22, +1.12]
+   F_task                           - C*  gt  +0.08 [ -0.37, +0.53]  Qmin-recall  +0.67 [ +0.22, +1.12]
+   RV-mean                          - C*  gt  +0.40 [ -0.12, +0.92]  Qmin-recall  +0.73 [ +0.21, +1.25]
+   TB-mean                          - C*  gt  -9.80 [-10.26, -9.35]  Qmin-recall -12.72 [-13.23,-12.21]
+   TMPC-mean                        - C*  gt  +0.29 [ -0.16, +0.74]  Qmin-recall  +0.73 [ +0.28, +1.18]
+   RV-gt                            - C*  gt  +3.00 [ +2.54, +3.46]  Qmin-recall  -2.15 [ -2.70, -1.60]
+   TB-gt                            - C*  gt  -6.62 [ -7.18, -6.05]  Qmin-recall -12.18 [-12.83,-11.52]
+   TMPC-gt                          - C*  gt  +0.84 [ +0.45, +1.22]  Qmin-recall  +0.95 [ +0.55, +1.35]
+== concentration (O* - C*, per episode x image instance, gt TP): total 51977 TP over 11089 instances; positive 84033, negative -32056; top 10 % of instances carry 55776 TP = 66 % of the positive gain
+   n_gt tercile few objects  gain     6062 TP (+12 % of total)
+   n_gt tercile mid          gain    14476 TP (+28 % of total)
+   n_gt tercile many objects gain    31439 TP (+60 % of total)
+   C* drop-rate tercile low congestion  H  +1.39 [ +0.99, +1.80]
+   C* drop-rate tercile mid             H  +2.67 [ +2.05, +3.30]
+   C* drop-rate tercile high congestion H  +5.14 [ +4.38, +5.90]
+   per test video (largest |gain|): 0000330 +8688, 0000115 +5845, 0000215 +5729, 0000194 +4631, 0000277 +4016
