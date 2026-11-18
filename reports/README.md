@@ -1,6 +1,6 @@
 # SwarmBridge: báo cáo
 
-Cập nhật 18/11/2026 (sau phản biện #42, A-X7). Trang này là điểm bắt đầu:
+Cập nhật 18/11/2026 (sau phản biện #43, A-X8). Trang này là điểm bắt đầu:
 - **Mục 1** cho biết đang ở đâu.
 - **Mục 2–3** là dòng thời gian của hai hướng.
 - **Mục 4** liệt kê mọi kết luận đã bị sửa ở báo cáo sau. Đọc mục này trước khi trích một con số cũ.
@@ -14,7 +14,7 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 | Thư mục / file | Nội dung |
 |---|---|
 | [swarmbridge-paperA-method-draft.md](swarmbridge-paperA-method-draft.md) | Bản nháp Method của Paper A (v2, phản biện #35): PPO + MPC chọn lọc, chỉ chọn mode. Chưa viết lại theo yêu cầu phản biện |
-| [scheduling/](scheduling/) | **Đang mở.** Nhánh lập lịch kênh của Paper A: A-X2, A-X2b, A-X5, A-X6, A-X7 (phản biện #37–#42) |
+| [scheduling/](scheduling/) | **Đang mở.** Nhánh lập lịch kênh của Paper A: A-X2, A-X2b, A-X5, A-X6, A-X7, A-X8 (phản biện #37–#43) |
 | [two-track/](two-track/) | Kế hoạch hai hướng (phản biện #26) và các vòng A-E1…A-E11 / B-E0…B-E9 (phản biện #27–#36). Mỗi file chứa cả phần A và phần B của một vòng |
 | [archive/](archive/README.md) | Các nhánh đã đóng, chia theo giai đoạn (30/10–15/11) |
 | [figures/](figures/), [metadata/](metadata/README.md) | Hình; JSON kiểm toán và bảng chuyển đường dẫn |
@@ -49,11 +49,18 @@ ngân sách 50 ms.
   - tương tác lập lịch × mode +4…+5;
   - JA + PPO–MPC hơn tổ hợp heuristic tốt nhất +13,3, **nhưng heuristic mode chưa được tune lại cùng JA**.
 
-**Đề xuất cho phản biện #43 (chưa chạy):**
-- Tune lại họ heuristic mode cùng JA dưới LA, rồi so lại tổ hợp.
-- Thêm heuristic mode có hiệu chỉnh online, để tách phần hiệu chỉnh khỏi phần PPO + MPC.
-- Tuỳ chọn: bộ lọc shadowing.
-- Không train RL lập lịch.
+**A-X8 (phản biện #43, đối chứng công bằng):**
+- Khi heuristic mode được tune cùng JA và cùng tập cách bay: PPO–MPC − heuristic tốt nhất = −1,25 (n.s., paced).
+- Stack tốt nhất là MPC chọn lọc hiệu chỉnh online lấy heuristic (mode cố định) làm incumbent; PPO làm incumbent thua
+  −5,0.
+- JA bền: +8…+16 dưới mọi mode.
+- Hiệu chỉnh cho luật mode thiển cận không giúp.
+- Tương tác lập lịch × mode không ổn định (−2,4 / +5,4).
+- Lợi thế +13,3 của A-X7 là so với baseline yếu.
+
+**Đề xuất cho phản biện #44 (chưa chạy):**
+- Một thí nghiệm có giới hạn: train PPO mode-only trên LA (JA + paced, 3 seed) và so làm incumbent cho MPC.
+- Nếu không hơn, viết lại Paper A quanh lập kế hoạch hiệu chỉnh online + lập lịch tổ hợp thay vì DRL.
 
 Không viết lại Method.
 
@@ -84,6 +91,7 @@ Không viết lại Method.
 | A-X5 (#39) | Link adaptation thực tế + train ngẫu nhiên hoá | Không dùng chung kênh tốt nhất ở cả 7 điều kiện; C-only ngẫu nhiên hoá −42,9 (dùng chung kênh khoảng 0,86, không thích ứng); C-only danh nghĩa ≈ T:best; cổng NACK cứu nhưng vẫn thua | [scheduling/ax5](scheduling/swarmbridge-ax5-la-result.md) |
 | A-X6 (#41) | Sửa PHY, link adaptation biết lịch, cơ hội lập lịch | Sửa block không đổi A-X5 (≤ 2 điểm); chọn UAV (JA, không dùng chung kênh) +8,2 nhân quả; dùng chung kênh −5…+6 tuỳ giả định; biết trước kênh +12,5 (không nhân quả); K5_mcsg: JA không dùng chung kênh +12,4 ≈ RL A-X2b | [scheduling/ax6](scheduling/swarmbridge-ax6-opportunity-result.md) |
 | A-X7 (#42) | Tách cơ hội thông tin, kênh tương quan, bộ điều khiển mode trên PHY mới | Oracle chỉ LoS khoảng 0 (khoảng cách oracle là fading nhỏ); bộ lọc LoS tương quan +0; SRS +3; JA ≥ mọi RL lập lịch; PPO–MPC hiệu chỉnh +12…+17 so với PPO; tương tác lập lịch × mode +4…+5; JA + PPO–MPC hơn heuristic tốt nhất +13,3 (heuristic chưa tune cùng JA) | [scheduling/ax7](scheduling/swarmbridge-ax7-information-mode-result.md) |
+| A-X8 (#43) | Đối chứng công bằng cho tổ hợp lập lịch + mode | PPO–MPC ≈ heuristic tune cùng JA và cách bay (−1,25 n.s.); MPC lấy heuristic làm incumbent tốt nhất (+5,0 so với PPO–MPC); JA +8…+16 dưới mọi mode; hiệu chỉnh luật thiển cận không giúp; tương tác không ổn định; latency tích hợp p99 ≤ 46 ms | [scheduling/ax8](scheduling/swarmbridge-ax8-fair-baseline-result.md) |
 
 ## 3. Paper B: dòng thời gian (tạm dừng)
 
@@ -121,6 +129,7 @@ Cột trái là điều từng được báo. Cột giữa là báo cáo đã s�
 | A-X6: khoảng +12,5 thông tin kênh có thể lấy lại phần nào bằng LoS tương quan | A-X7 | Oracle chỉ LoS cho khoảng 0; khoảng cách gần như toàn bộ là fading nhỏ bị đóng băng theo slot (giả định simulator, không nhân quả); LoS tương quan + bộ lọc: +0 |
 | A-X2 (K5 / ref): học chọn kênh +2,5 / +3,1 so với T:best | A-X7 | JA (có dùng chung kênh) hơn RL +1,3 / +0,8: lợi ích có thật nhưng heuristic mạnh làm được |
 | A-X7 (chạy đầu): tương tác lập lịch × mode +19 | A-X7 (chạy lại) | Lẫn với khác biệt cách bay (paced vs mission); so cùng cách bay: +4,3…+4,9 |
+| A-X7: JA + PPO–MPC hơn tổ hợp heuristic tốt nhất +13,3; tương tác lập lịch × mode +4…+5 | A-X8 | Heuristic chưa tune cùng JA và cách bay. Tune công bằng: PPO–MPC − heuristic = −1,25 n.s.; MPC lấy heuristic làm incumbent hơn PPO–MPC +5,0; tương tác so với heuristic hiệu chỉnh: −2,4 (paced) / +5,4 (mission) |
 | B-E3: JEPA-32 hơn non-JEPA +0,02 | B-E4, B-E5 | CI chứa 0 qua 3 seed; bằng với chỉ làm mượt theo thời gian |
 | B-E3: mã học được hơn AVIF | B-E7 | Đúng so với AVIF ảnh đơn, nhưng thua codec video liên khung ở ≤ 12 kbit |
 | B-E8: số hạng sự kiện | B-E9 | Bản B-E8 gần như không kích hoạt (lỗi thiết kế phân bổ theo hạng); B-E9 sửa, trần khoảng +0,01 |

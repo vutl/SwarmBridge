@@ -11,6 +11,11 @@ Combination  SCHED|MODE[+mpc]
          | ls (movement / power of the controller regime's T:best, channels = least-slack M UAVs, no reuse)
          | jae (as ja, but movement / power of the ENVIRONMENT regime's T:best, i.e. matched with tbest_env)
   MODE   heur (T:best mode rule) | ppo (A5 mode-only PPO I) | jm (A5 joint PPO mode head I) | cmm (A-X2 C+Mo mode head I)
+         | h=NAME (review #43: any mode_heur mode rule, e.g. h=fixed_avif_20, h=greedy, h=greedy+budget1.5)
+         | hc=NAME (the same rule with its expected rate replaced by the CALIBRATED rate of the MPC's own online
+           calibrator: RateErrTracker.predict with the cold slot-weighted CalRates, x channel share; fixed rules do not
+           use a rate and are unaffected)
+  +mpc   also allowed after h= / hc= : the heuristic is the incumbent of the selective MPC (heuristic-seeded)
   +mpc   the mode head proposes, the A-E8 selective controller (cals np-any, N 8, H 4, causal, Z 1, kappa 2, H1 1,
          stacked, 50 ms cooperative budget started before the mode head's inference) may override; calibration
          COLD (per episode, as recommended in review #37: a warm start made under T:best could be stale under a
@@ -97,10 +102,26 @@ def types_ns(cal):
     return types.SimpleNamespace(model="cal", cal=cal)
 
 
-def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None):
+def calibrated(mode_pol, rate_fn):
+    """mode rule whose expected rate (policies.expected_rate, used by greedy / budget rules) is rate_fn(env, k)."""
+    def f(env, k, task):
+        orig = P.expected_rate
+        P.expected_rate = lambda env_, k_, p_level=-1: rate_fn(env_, k_)
+        try:
+            return mode_pol(env, k, task)
+        finally:
+            P.expected_rate = orig
+    return f
+
+
+def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="test"):
     sched, mode = combo.split("|")
     use_mpc = mode.endswith("+mpc")
-    mode = mode.replace("+mpc", "")
+    mode = mode[:-4] if use_mpc else mode
+    mp_h, cal_h = None, False
+    if mode.startswith(("h=", "hc=")):
+        cal_h = mode.startswith("hc=")
+        mp_h = MH.from_name(mode.split("=", 1)[1], C.MODES)[1]
     sp_t, mp_t = MH.from_name(AE.tuned(ctrl_regime, "best"), C.MODES)
     sp_e, mp_e = (MH.from_name(AE.tuned(env_regime, "best"), C.MODES) if env_regime != ctrl_regime else (sp_t, mp_t))
     sp_s = XS.from_name(XS.tuned(ctrl_regime), ctrl_regime)[0] if sched == "sch" else None
@@ -125,7 +146,7 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None):
         def sp_s(env):
             ch = P.assign_channels(env)
             return [(a[0], ch[k], a[2]) for k, a in enumerate(sp_mp(env))]
-    e = X.GymSchedEv(AE.G["table"], AE.G["pools"]["test"], C.regime_cfg(env_regime, **(extra or {})), seed=seed, seeds=[seed],
+    e = X.GymSchedEv(AE.G["table"], AE.G["pools"][pool], C.regime_cfg(env_regime, **(extra or {})), seed=seed, seeds=[seed],
                      core_cls=SV.UavSurveyEnv, sp_heur=sp_mp, mp_heur=mp_t, learn_mode=True)
     for f in (smod, mmod):
         if f is not None:
@@ -134,12 +155,15 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None):
             assert list(m_.action_space.nvec) == list(e.action_space.nvec)
     audit = ServiceAudit()
     mpc = trk = cal = dl = None
-    if use_mpc:
-        assert mmod is not None, "+mpc needs a learned mode head as the incumbent"
+    if use_mpc or cal_h:
+        assert mmod is not None or mp_h is not None, "+mpc needs an incumbent (learned mode head or h= / hc= rule)"
         cal = M.CalRates(persistent=False, slot_weight=True)
         mpc = M.MPCMode("cal", 8, 4, None, fallback=mp_t, seed=12345, rollout="causal", cal=cal, margin_z=1.0)
         trk = M.RateErrTracker(mpc, persistent=False)
-        dl = M.Deadline(50.0, margin_ms=3.0)
+        dl = M.Deadline(50.0, margin_ms=3.0) if use_mpc else None
+    if mp_h is not None and cal_h:
+        mp_h = calibrated(mp_h, lambda env_, k_: trk.predict(env_, k_))
+    slot_of_mode = []
     obs, _ = e.reset()
     done, tot = False, 0.0
     t_slot, t_mode, biases, aborts = [], [], [], 0
@@ -174,8 +198,11 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None):
             elif mode == "heur_env":
                 m_sel = mp_e(core, k, task)
             else:
-                pa, _ = mmod().predict(obs, deterministic=True, action_masks=e.action_masks())
-                m_sel = int(np.asarray(pa)[-1])
+                if mp_h is not None:
+                    m_sel = int(mp_h(core, k, task))
+                else:
+                    pa, _ = mmod().predict(obs, deterministic=True, action_masks=e.action_masks())
+                    m_sel = int(np.asarray(pa)[-1])
                 if use_mpc:
                     st = trk.stats(core, k)
                     if st is None:
@@ -194,6 +221,7 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None):
                         aborts += int(mpc.last_abort is not None)
             a[-1] = m_sel
             t_mode.append(time.perf_counter() - t0)
+            slot_of_mode.append(len(t_slot) - 1)
         obs, r, done, _, info = e.step(a)
         tot += r
     core = e.core
@@ -208,7 +236,19 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None):
              chan_util=float(air / (core.c["M"] * max(m["makespan_s"], 1e-9))),
              ms_slot_mean=float(ts.mean()), ms_slot_p99=float(np.percentile(ts, 99)),
              ms_mode_mean=float(tm.mean()) if len(tm) else 0.0, ms_mode_p99=float(np.percentile(tm, 99)) if len(tm) else 0.0,
-             mode_over50=float((tm > 50).mean()) if len(tm) else 0.0, service=audit.stats())
+             mode_over50=float((tm > 50).mean()) if len(tm) else 0.0, service=audit.stats(),
+             ms_slot_p50=float(np.percentile(ts, 50)), ms_mode_p50=float(np.percentile(tm, 50)) if len(tm) else 0.0)
+    # integrated latency per slot: the slot decision plus the mode decisions taken during that slot
+    mx, sm = np.zeros(len(ts)), np.zeros(len(ts))
+    for s_i, x in zip(slot_of_mode, tm):
+        if 0 <= s_i < len(ts):
+            mx[s_i] = max(mx[s_i], x)
+            sm[s_i] += x
+    m.update(ms_int_max_p99=float(np.percentile(ts + mx, 99)), ms_int_sum_p99=float(np.percentile(ts + sm, 99)),
+             ms_int_max_p50=float(np.percentile(ts + mx, 50)), int_over50=float(((ts + mx) > 50).mean()))
+    if hasattr(core, "la_metrics"):
+        lm = core.la_metrics()
+        m.update(goodput_kbps=lm["goodput_kbps"], bler=lm["bler"], delivered_mbit=lm["delivered_mbit"])
     if use_mpc:
         m.update(switched=int(mpc.switched), gated=gated, planned=planned, aborts=aborts, t_first_plan=t_first_plan,
                  bias_q=[float(x) for x in np.percentile(biases, [10, 50, 90])] if biases else None)
@@ -218,11 +258,12 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None):
 def job(j):
     ctrl, envr, combo, i, seeds = j[:5]
     extra, ja = (j[5], j[6]) if len(j) > 5 else (None, None)
+    pool = j[7] if len(j) > 7 else "test"
     import torch
     torch.set_num_threads(1)
     rows, dl = [], []
     for s in seeds:
-        m, d = episode(ctrl, envr, combo, i, s, extra, ja)
+        m, d = episode(ctrl, envr, combo, i, s, extra, ja, pool)
         rows.append(m)
         dl.append(d)
     return dict(ctrl_regime=ctrl, env_regime=envr, combo=combo, ckpt=i, seeds=seeds, rows=rows), dl
@@ -243,13 +284,14 @@ def main():
     ap.add_argument("--procs", type=int, default=6)       # WSL has 6 CPUs: more processes break the 50 ms budget
     ap.add_argument("--env-extra", default=None)
     ap.add_argument("--ja", default=None)
+    ap.add_argument("--pool", default="test", choices=("train", "test"))
     a = ap.parse_args()
     extra = json.loads(a.env_extra) if a.env_extra else None
     envr = a.env_regime or a.regime
     lo, hi = map(int, a.seeds.split(":"))
     seeds = list(range(lo, hi))
     chunks = [seeds[x:x + 25] for x in range(0, len(seeds), 25)]
-    jobs = [(a.regime, envr, c, i, ch, extra, a.ja) for c in a.combos.split(",")
+    jobs = [(a.regime, envr, c, i, ch, extra, a.ja, a.pool) for c in a.combos.split(",")
             for i in (range(3) if needs_ckpt(c) else [-1]) for ch in chunks]
     t0 = time.time()
     with Pool(a.procs, initializer=AE.init, initargs=(False,)) as pool:
@@ -274,7 +316,8 @@ def main():
             ck[v] = [ax2_path(a.regime, v, i) for i in range(3)]
         except OSError:
             pass
-    meta = dict(wall_s=time.time() - t0, ctrl_regime=a.regime, env_regime=envr, ax2_ckpts=ck, env_extra=extra, ja=a.ja)
+    meta = dict(wall_s=time.time() - t0, ctrl_regime=a.regime, env_regime=envr, ax2_ckpts=ck, env_extra=extra, ja=a.ja,
+                pool=a.pool)
     json.dump(dict(meta, results=out), open(a.out, "w"), indent=1)
     json.dump(deliv, gzip.open(a.out.replace(".json", ".deliv.json.gz"), "wt"))
 
