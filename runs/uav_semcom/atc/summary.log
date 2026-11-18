@@ -1,0 +1,65 @@
+== dev (frozen before test): C* = h=fixed_mbt2018-mean_q3+mpc, Q-C* = h=fixed_mbt2018-mean_q3, P* = pC
+   pA: val spearman -0.024, rmse log1p 0.925 (constant 0.618)
+   pB: val spearman 0.070, rmse log1p 0.945 (constant 0.618)
+   pC: val spearman 0.621, rmse log1p 0.294 (constant 0.618)
+   val recall: h=fixed_mbt2018-mean_q3+mpc 47.80, t=rv:pA:20 47.06, t=rv:pB:20 47.86, t=rv:pC:40 49.43, t=rv:count:40 49.22
+   after pB check: pA; val count headroom +1.42 pts; recovery of pA -0.52; pC considered True; P* = pC
+== test (test-dev pool, fresh seeds 9600..9699, 49 videos)
+   arm       recall  macro  FP/fr   AP50  Qmin-r  ontime   drop   Mbit   E kJ  p99ms  combo | modes
+   q3         40.19  46.62   9.56  26.89   40.07   0.872  0.128   75.3   78.4    3.5  h=fixed_mbt2018-mean_q3 | mbt2018-mean_q3 1.00
+   F_task     40.19  46.62   9.56  26.89   40.07   0.872  0.128   75.3   78.4    3.5  h=fixed_mbt2018-mean_q3 | mbt2018-mean_q3 1.00
+   q3+MPC     39.77  46.18   9.73  26.41   39.36   0.911  0.089   68.0   74.4   42.8  h=fixed_mbt2018-mean_q3+mpc | mbt2018-mean_q3 0.76, avif_5 0.16, mbt2018-mean_q1 0.06, avif_20 0.02
+   C*         39.77  46.18   9.73  26.41   39.36   0.911  0.089   68.0   74.4   42.8  h=fixed_mbt2018-mean_q3+mpc | mbt2018-mean_q3 0.76, avif_5 0.16, mbt2018-mean_q1 0.06, avif_20 0.02
+   RV-mean    40.60  47.61   9.85  27.16   38.38   0.901  0.099   66.1   74.2    3.5  t=rv:mean:20 | mbt2018-mean_q3 0.83, avif_20 0.17
+   RV-pA      40.67  47.03  10.03  27.08   39.09   0.922  0.078   64.1   73.2    3.7  t=rv:pA:20 | mbt2018-mean_q3 0.53, avif_20 0.35, mbt2018-mean_q1 0.10, avif_5 0.02
+   RV-pB      39.49  46.07   9.58  26.55   38.05   0.916  0.084   65.3   74.1    3.7  t=rv:pB:20 | mbt2018-mean_q3 0.49, avif_20 0.35, mbt2018-mean_q1 0.13, avif_5 0.02
+   RV-pC      39.97  43.18  10.70  25.73   32.94   0.986  0.014   40.1   68.1    3.7  t=rv:pC:40 | avif_20 0.35, mbt2018-mean_q1 0.26, avif_5 0.22, mbt2018-mean_q3 0.12
+   RV-count   38.80  40.13  10.03  25.80   31.92   0.990  0.010   36.9   67.9    3.8  t=rv:count:40 | mbt2018-mean_q1 0.33, avif_5 0.26, avif_20 0.22, mbt2018-mean_q3 0.11
+   RV-gt      41.94  45.92  12.17  27.27   33.07   0.989  0.011   36.7   67.6    3.7  t=rv:gt:40 | avif_5 0.36, avif_20 0.28, mbt2018-mean_q1 0.15, mbt2018-mean_q3 0.07
+   Q-C*       40.19  46.62   9.56  26.89   40.07   0.872  0.128   75.3   78.4    3.5  h=fixed_mbt2018-mean_q3 | mbt2018-mean_q3 1.00
+   RVQ-mean   40.20  46.78   9.66  26.94   40.11   0.880  0.120   73.0   77.2    3.7  t=rvq:mean:20:1 | mbt2018-mean_q3 0.91, avif_20 0.08, avif_50 0.01, mbt2018-mean_q5 0.00
+   RVQ-pA     40.23  46.41   9.81  26.85   40.13   0.899  0.101   71.0   76.1    3.7  t=rvq:pA:20:1 | mbt2018-mean_q3 0.67, avif_20 0.21, mbt2018-mean_q1 0.07, avif_5 0.03
+   RVQ-pB     39.49  45.94   9.55  26.54   39.33   0.901  0.099   68.4   75.2    3.7  t=rvq:pB:20:0 | mbt2018-mean_q3 0.59, avif_20 0.26, mbt2018-mean_q1 0.10, avif_5 0.04
+   RVQ-pC     40.28  45.50   9.85  26.83   39.99   0.935  0.065   60.0   72.6    3.7  t=rvq:pC:40:1 | mbt2018-mean_q3 0.41, avif_20 0.23, mbt2018-mean_q1 0.20, avif_5 0.14
+   RVQ-count   41.58  46.19  10.43  27.67   40.76   0.928  0.072   61.4   72.8    3.7  t=rvq:count:20:0 | mbt2018-mean_q3 0.47, avif_20 0.28, mbt2018-mean_q1 0.17, avif_5 0.05
+   RVQ-gt     43.35  49.86  10.64  28.61   42.43   0.931  0.069   61.0   72.6    3.4  t=rvq:gt:20:0 | mbt2018-mean_q3 0.36, avif_20 0.30, avif_5 0.15, mbt2018-mean_q1 0.13
+== C1 GATE: P* = pC: RV-pC vs C* (h=fixed_mbt2018-mean_q3+mpc)
+   dR  two-way  +0.20 [ -0.94, +1.63]   seed-paired  +0.16 [ -0.29, +0.62]
+   H_cnt (RV-count - C*) two-way  -0.97 [ -2.64, +1.10]; recovery -0.20
+   macro -3.00 pts; FP/frame 10.70 vs 9.73; on-time +7.42 pts; energy -8.47 %; p99 3.7 ms
+      FAIL  1  dR >= +1.0 point
+      FAIL  2  two-way 95% CI lower bound > 0
+      PASS  3  dR >= 0.5 * H_cnt
+      FAIL  4  macro recall not lower by > 1.0 pt
+      PASS  5  FP per frame not higher by > 10 %
+      PASS  6  on-time rate not lower by > 1 pt
+      PASS  7  energy not higher by > 2 %
+      PASS  8  integrated decision latency p99 <= 50 ms
+   DECISION: STOP the task-value direction
+== secondary contrasts (recall points; two-way CI | seed CI)
+   RV-pA     - C*        +0.90 [ -0.57, +1.70] |  +0.90 [ +0.52, +1.27]   macro +0.85
+   RV-pB     - C*        -0.28 [ -2.35, +0.82] |  -0.27 [ -0.67, +0.12]   macro -0.11
+   RV-pC     - C*        +0.20 [ -0.94, +1.63] |  +0.16 [ -0.29, +0.62]   macro -3.00
+   RV-pC     - RV-pA     -0.70 [ -2.16, +1.75] |  -0.73 [ -1.13, -0.34]   macro -3.85
+   RV-mean   - C*        +0.82 [ -0.09, +1.57] |  +0.82 [ +0.39, +1.26]   macro +1.43
+   RV-count  - RV-mean   -1.79 [ -3.70, +0.79] |  -1.83 [ -2.35, -1.31]   macro -7.48
+   RV-gt     - C*        +2.17 [ +1.13, +4.07] |  +2.14 [ +1.70, +2.59]   macro -0.26
+   RV-gt     - RV-count  +3.14 [ +2.23, +4.74] |  +3.15 [ +2.98, +3.33]   macro +5.79
+   q3+MPC    - q3        -0.42 [ -1.26, +0.29] |  -0.42 [ -0.76, -0.08]   macro -0.44
+== C0 (Qmin-constrained; Q-C* = h=fixed_mbt2018-mean_q3), Qmin-compliant recall points
+   RVQ-count - Q-C*  H_Q  +0.69 [ -0.27, +2.34]   (its detector-only recall vs C*:  +1.81 [ +0.99, +3.05])
+   RVQ-pC    - Q-C*  H_Q  -0.08 [ -0.91, +1.09]   (its detector-only recall vs C*:  +0.51 [ -0.10, +1.43])
+   RVQ-gt    - Q-C*  H_Q  +2.36 [ +1.46, +3.90]   (its detector-only recall vs C*:  +3.58 [ +2.78, +4.89])
+   RVQ-mean  - Q-C*  H_Q  +0.03 [ -0.75, +0.61]   (its detector-only recall vs C*:  +0.43 [ -0.31, +1.09])
+   reading (fixed in the protocol): materially different: the detector-only headroom depends on dropping the floor
+   test-dev offline pA: spearman 0.276, rmse log1p 0.910
+   test-dev offline pB: spearman 0.209, rmse log1p 1.059
+   test-dev offline pC: spearman 0.824, rmse log1p 0.459
+== concentration of RV-P* - C* (TP summed over episodes)
+   per video (largest |gain|): 9999973 -4241, 9999979 +1862, 0000066 +1601, 9999938 -1017, 0000006 -972, 9999986 -962; total +2425, videos with gain > 0: 33/49
+   n_gt tercile few objects  gain    -7782 TP
+   n_gt tercile mid          gain    -4298 TP
+   n_gt tercile many         gain    14505 TP
+   C* drop-rate tercile low congestion  dR  -1.91 [ -2.32, -1.51]
+   C* drop-rate tercile mid             dR  -0.19 [ -0.58, +0.21]
+   C* drop-rate tercile high congestion dR  +2.74 [ +2.21, +3.28]
