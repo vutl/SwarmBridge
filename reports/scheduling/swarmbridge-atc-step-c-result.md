@@ -212,6 +212,20 @@ bao nhiêu vật thể".
 - **Không đề xuất thuật toán mới.** Bước tiếp theo là quyết định của phản biện. Mình không đề xuất mở lại hướng này
   bằng cách hiệu chỉnh λ theo phân phối: đó là cứu kết quả sau khi đã thấy test.
 
+## Ghi chú sau phản biện #47 (không chạy thêm; không đổi quyết định)
+
+- **Điều kiện 3 của cổng bị vô nghĩa khi oracle âm.**
+  - "ΔR ≥ 0,5·H_cnt" giả định H_cnt > 0. Với H_cnt = −0,97, mọi ΔR > −0,49 đều qua.
+  - "qua" ở điều kiện 3 không mang thông tin. Quyết định DỪNG đến từ điều kiện 1, 2 và 4.
+- **3,7 ms không phải độ trễ đầu-cuối.**
+  - `ms_int_max_p99` là thời gian chạy bộ điều khiển (wall-clock).
+  - 35 ms của detector nhẹ (pC) được tính vào động học mô phỏng qua `info_extra_s` (quyết định mode bị trễ 35 ms),
+    nhưng không nằm trong con số 3,7 ms.
+  - Độ trễ ra quyết định thực của pC ≈ probe AVIF-5 + 35 ms + 3,7 ms.
+  - Năng lượng tính toán trên UAV không được mô hình hóa.
+- Phản biện #47 chấp nhận DỪNG và đóng nhánh tối ưu offloading ảnh độc lập (Paper A hiện tại). Hệ thống LA được giữ
+  làm tài sản nghiên cứu.
+
 ## Giới hạn
 
 - Một detector ở một ngưỡng hoạt động; menu mode A5.

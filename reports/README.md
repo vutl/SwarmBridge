@@ -98,6 +98,17 @@ ngân sách 50 ms.
 - Oracle kết quả detector thật vẫn +2,17 [+1,13, +4,07], nhưng không đặc trưng rẻ nào xấp xỉ được.
 - C0: có ràng buộc Qmin, oracle số vật thể +0,69 [−0,27, +2,34] → hai bài toán khác nhau đáng kể.
 
+**Phản biện #47 (18/11): đóng nhánh tối ưu offloading ảnh độc lập.**
+- Chấp nhận DỪNG bước C.
+- Không A-T2, không bộ dự đoán mới, không hiệu chỉnh λ sau test, không quay lại RL cho bài toán này, không viết lại
+  Method.
+- Hệ thống LA (PHY, CQI/OLLA, hàng đợi, deadline, scheduler) giữ làm tài sản nghiên cứu.
+- Việc tiếp theo là memo đặt lại bài toán:
+  - (A) bài đánh giá LA thực tế;
+  - (B) cảm biến ngữ nghĩa phối hợp nhiều UAV.
+- Chưa được duyệt train hay mô phỏng mới.
+- Hai ghi chú tài liệu đã thêm vào [báo cáo bước C](scheduling/swarmbridge-atc-step-c-result.md#ghi-chú-sau-phản-biện-47-không-chạy-thêm-không-đổi-quyết-định).
+
 **Paper B** (JEPA-SemCom trên VisDrone-VID) **tạm dừng** từ phản biện #35.
 - Codec video liên khung (HEVC/AV1) → DINOv2 thắng codec ngữ nghĩa ở ≤ 12 kbit (B-E7).
 - ROI-QP trong HEVC có trần khoảng +0,01 AP (B-E8, B-E9).
