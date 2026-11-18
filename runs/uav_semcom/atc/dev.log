@@ -1,0 +1,9 @@
+D2 (477s): best fixed h=fixed_mbt2018-mean_q3 0.4802; C* h=fixed_mbt2018-mean_q3+mpc 0.4821; Q-C* h=fixed_mbt2018-mean_q3 0.4733
+   rv  mean   t=rv:mean:20               train recall 0.4785   rvq t=rvq:mean:20:1              train Qmin-recall 0.4729
+   rv  pA     t=rv:pA:20                 train recall 0.4832   rvq t=rvq:pA:20:1                train Qmin-recall 0.4787
+   rv  pB     t=rv:pB:20                 train recall 0.4801   rvq t=rvq:pB:20:0                train Qmin-recall 0.4687
+   rv  pC     t=rv:pC:40                 train recall 0.4988   rvq t=rvq:pC:40:1                train Qmin-recall 0.4795
+   rv  count  t=rv:count:40              train recall 0.5002   rvq t=rvq:count:20:0             train Qmin-recall 0.4807
+   rv  gt     t=rv:gt:40                 train recall 0.5129   rvq t=rvq:gt:20:0                train Qmin-recall 0.4918
+D3 val recall: {'h=fixed_mbt2018-mean_q3+mpc': 47.8, 't=rv:pA:20': 47.06, 't=rv:pB:20': 47.86, 't=rv:pC:40': 49.43, 't=rv:count:40': 49.22}
+D3 after pB check: pA; val count headroom +1.42 pts; recovery of pA -0.52; pC considered True; P* = pC
