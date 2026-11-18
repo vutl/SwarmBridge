@@ -51,6 +51,8 @@ DEFAULT = dict(
     q_span=15.0, xi_q=0.5, xi_d=0.5, w_energy=0.02, w_time=0.0,
     # controller knowledge of per-image x per-mode (bits, PSNR): oracle | predicted | mean
     mode_info="oracle", probe_mode="avif_5",
+    # extra on-board compute (s) before the mode decision, e.g. a content predictor run after the probe (review #46)
+    info_extra_s=0.0,
     # observation: number of queue entries described individually
     q_obs=6,
     # mechanism switches (ablation)
@@ -288,7 +290,7 @@ class UavSemcomEnv:
         return self.tab.predict(task.img)
 
     def probe_s(self):
-        return self.tab.enc_s[self.tab.probe_j] if self.c["mode_info"] == "predicted" else 0.0
+        return self.tab.enc_s[self.tab.probe_j] + self.c["info_extra_s"] if self.c["mode_info"] == "predicted" else 0.0
 
     def awaiting(self, u):
         """Images of UAV u that await a mode decision AND whose per-mode info is available now (capture order)."""

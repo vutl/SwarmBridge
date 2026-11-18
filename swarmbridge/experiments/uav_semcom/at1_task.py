@@ -9,6 +9,8 @@ Utility sources (what a controller is allowed to know about the CURRENT image's 
   gt   : TP_i(m) of this image (NON-DEPLOYABLE diagnostic oracle; uses ground truth)
   count: n_gt_i / mean_train(n_gt) * mu_m (EXPLORATORY, added after the A-T1 test: knows how many objects the image
          holds, not how each mode affects this image; non-deployable, but no detector measurement involved)
+  pA/pB/pC: n_hat_i / mean_train(n_gt) * mu_m with n_hat_i a CAUSAL on-board object-count estimate (review #46, step C:
+         atc_predict.py -> runs/uav_semcom/atc/pred.json; out-of-fold on the train pool, train-fitted elsewhere)
   flip : TP_i(m) from the flipped-image re-measurement (G-L2 0.4; runs/uav_semcom/g_l2/flip for train/val images,
          runs/uav_semcom/at1/flip for test images). An oracle with a second, independent-ish detector measurement:
          select with one measurement, score with the other (cross-check against selection on detector noise).
@@ -17,6 +19,7 @@ Channel information is the same as for every other controller (causal; the MPC's
 
 Controllers (mode rules; the slot scheduler and movement are fixed by the caller):
   rv:SRC:LAM  argmax_m U(m) - LAM * b_hat(m) [Mbit]  (b_hat = probe-predicted payload; payload-aware rule, G-L2 RV)
+  rvq:SRC:LAM:DELTA  the same over the modes with probe-predicted PSNR >= Qmin + DELTA (highest predicted PSNR if none)
   tb:SRC:TAU  backlog-budgeted rule (mode_heur.budget_mode) with value U(m) if predicted on time, else 0
   TaskMPC     the A-E8 calibrated selective MPC with the objective "sum of on-time TP" instead of the A5 utility
 """
@@ -32,9 +35,12 @@ import policies as P
 # the L1 measurement: identical TP to runs/uav_semcom/a5/fidelity on every common row, but complete for the 3
 # caption-generative modes (the A5 file has them for 100 of 548 images only)
 FID = C.REPO / "runs" / "uav_semcom" / "a6l1" / "fidelity" / "per_image_val.jsonl"
+FID_TD = C.REPO / "runs" / "uav_semcom" / "a6l1" / "fidelity" / "per_image_testdev.jsonl"     # test-dev pool (step C)
+PRED = C.REPO / "runs" / "uav_semcom" / "atc" / "pred.json"
 FLIP = [C.REPO / "runs" / "uav_semcom" / "g_l2" / "flip" / "per_image_flip.jsonl",
         C.REPO / "runs" / "uav_semcom" / "at1" / "flip" / "per_image_flip_test.jsonl"]
-SOURCES = ("mean", "gt", "flip", "count")
+PRED_SOURCES = ("pA", "pB", "pC")
+SOURCES = ("mean", "gt", "flip", "count") + PRED_SOURCES
 _T = {}
 
 
@@ -49,12 +55,14 @@ def _rows(paths):
 
 
 def tables(table, pools):
-    """TP matrices (table rows x modes) for 'gt' and 'flip', n_gt per row, mu (train mean). NaN = not measured."""
+    """TP matrices (table rows x modes) for 'gt' and 'flip', FP (n_det - TP at conf >= 0.25), n_gt per row, mu (train
+    mean), and the step-C predicted-count utilities if runs/uav_semcom/atc/pred.json exists. NaN = not measured."""
     key = id(table)
     if key not in _T:
-        fid, flip = _rows([FID]), _rows(FLIP)
+        fid, flip = _rows([FID, FID_TD]), _rows(FLIP)
         n, nm = len(table.images), len(C.MODES)
         gt, fl, ngt = np.full((n, nm), np.nan), np.full((n, nm), np.nan), np.full(n, np.nan)
+        fp = np.full((n, nm), np.nan)
         for r, name in enumerate(table.images):
             o = fid.get((name, "original"))
             if o is not None:
@@ -63,13 +71,20 @@ def tables(table, pools):
                 x = fid.get((name, mode))
                 if x is not None:
                     gt[r, m] = x["tp"]
+                    fp[r, m] = x["n_det"] - x["tp"]
                 y = flip.get((name, mode))
                 fl[r, m] = y["tp"] if y is not None else gt[r, m]
         tr = np.asarray(pools["train"])
         mu = np.nanmean(gt[tr], 0)
         cnt = ngt[:, None] / np.nanmean(ngt[tr]) * mu[None, :]
-        _T[key] = dict(gt=gt, flip=fl, ngt=ngt, mu=mu, count=cnt,
+        _T[key] = dict(gt=gt, flip=fl, fp=fp, ngt=ngt, mu=mu, count=cnt, nbar=float(np.nanmean(ngt[tr])),
                        flip_measured=np.array([any((name, mode) in flip for name in table.images) for mode in C.MODES]))
+        if PRED.exists():
+            pr = json.loads(PRED.read_text())["n_hat"]
+            for src in PRED_SOURCES:
+                if src in pr:
+                    nh = np.array([pr[src].get(name, np.nan) for name in table.images], float)
+                    _T[key][src] = nh[:, None] / _T[key]["nbar"] * mu[None, :]
     return _T[key]
 
 
@@ -127,10 +142,25 @@ def tb_rule(util, tau):
     return f
 
 
+def rvq_rule(util, lam, delta):
+    """rv over the modes whose probe-predicted PSNR meets the image's quality floor (+ delta dB); C0 of step C."""
+    def f(env, k, task):
+        u = util(env, task)
+        b, q = env.mode_info(task)
+        ok = q >= task.qmin + delta
+        if not ok.any():
+            return int(np.argmax(q))
+        return int(np.argmax(np.where(ok, u - lam * b / 1e6, -np.inf)))
+    f.__name__ = f"rvq:{util.src}:{lam:g}:{delta:g}"
+    return f
+
+
 def rule(spec, table, pools):
-    kind, src, x = spec.split(":")
+    kind, src, *x = spec.split(":")
     util = Utility(src, table, pools)
-    return {"rv": rv_rule, "tb": tb_rule}[kind](util, float(x))
+    if kind == "rvq":
+        return rvq_rule(util, float(x[0]), float(x[1]))
+    return {"rv": rv_rule, "tb": tb_rule}[kind](util, float(x[0]))
 
 
 class TaskMPC(M.MPCMode):
