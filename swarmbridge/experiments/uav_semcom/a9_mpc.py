@@ -188,6 +188,60 @@ class CalRates:
 C_RHO = 5e6
 
 
+class HarmRates(CalRates):
+    """Paper A E2 (review of 2026-11-19): RobustMPC-style throughput predictor (Yin et al., SIGCOMM 2015) with the
+    same interface as CalRates, so the planner, incumbent, budget and gate are unchanged. Per UAV it keeps the last
+    `hist` observed per-slot rates (same slot-weighted ACKed observations as CalRates) and predicts the harmonic mean
+    divided by (1 + the max relative prediction error over the last `hist` predictions). It ignores the UAV's
+    position / expected SNR (history only), which is the difference to the SNR-binned CalRates. Deterministic:
+    every sampled path gets the same rate. Before any observation of a UAV: the rho-scaled Shannon fallback."""
+
+    def __init__(self, hist=5, **kw):
+        super().__init__(**kw)
+        self.hist = hist
+        self.h, self.err, self.last_pred = {}, {}, {}
+
+    def update(self, env):
+        new_ep = self.tasks is not env.tasks
+        if new_ep and not self.persistent:
+            self.h, self.err, self.last_pred = {}, {}, {}
+        n0 = self.seg_i if not new_ep else 0
+        segs_before = len(env.segments)
+        prev = self.prev
+        super().update(env)                                  # keeps rho / bins bookkeeping and the segment cursor
+        if prev is None or new_ep or prev[0] == env.t:
+            return
+        acc = {}
+        for k, ch, a, b, interf, r in env.segments[n0:segs_before]:
+            if b - a > 0:
+                x = acc.setdefault(k, [0.0, 0.0])
+                x[0] += r * (b - a); x[1] += b - a
+        for k, (rd, d) in acc.items():
+            r = rd / d
+            if k in self.last_pred and r > 0:
+                e = self.err.setdefault(k, [])
+                e.append(abs(self.last_pred[k] - r) / r)
+                del e[:-self.hist]
+            hk = self.h.setdefault(k, [])
+            hk.append(max(r, 1.0))
+            del hk[:-self.hist]
+            self.last_pred[k] = self._pred(k)
+
+    def _pred(self, k):
+        hk = self.h.get(k)
+        if not hk:
+            return None
+        hm = len(hk) / sum(1.0 / x for x in hk)
+        return hm / (1.0 + max(self.err.get(k, [0.0]) or [0.0]))
+
+    def sample(self, env, k, shape, rng):
+        p = self._pred(k)
+        return None if p is None else np.full(shape, p)
+
+    def mean(self, env, k):
+        return self._pred(k)
+
+
 def slot_obs(env, owner, slot_dt=None):
     """consume the new segments of env (owner.seg_i cursor) -> list of (uav, rate, weight). slot_dt None: one entry
     per segment weighted by its duration; else one entry per UAV (the slot's airtime-weighted mean rate), weight

@@ -50,6 +50,10 @@ Unmanned aerial vehicle (UAV) swarms that survey an area must deliver many image
 under deadlines and limited bandwidth. Semantic and task-oriented communication adapts the representation of each
 image (compression level, learned or generative codec) to the receiver, and deep reinforcement learning (DRL) is
 increasingly used to choose these modes jointly with channels, power and trajectories \cite{huang2025,si2023,zhao2026}.
+In 20 closely related works that we examined, including
+\cite{huang2025,si2023,zhao2026,hu2025,zhou2026,zheng2026,xu2026}, 13 compute link rates with capacity formulas, and
+none evaluates a resource controller under MCS selection from delayed channel reports with outer-loop correction and
+retransmissions.
 
 Practical links behave differently. A UAV transmits with a discrete modulation and coding scheme (MCS) chosen from
 delayed channel quality reports, blocks fail and are retransmitted, and outer-loop link adaptation (OLLA) corrects the
@@ -234,6 +238,14 @@ reinforcement learning, in: Proc. IEEE Global Commun. Conf. (GLOBECOM), 2023.
 \bibitem{zhao2026} A. Zhao, M. Sun, X. Xu, Z. Fang, S. Han, B. Wang, C. Dong, Y. Liu, P. Zhang, Adaptive task-oriented
 semantic communication for UAVs with joint trajectory and resource optimization, IEEE Trans. Netw. Sci. Eng. 13 (2026)
 11622--11642.
+\bibitem{hu2025} H. Hu, X. Zhu, F. Zhou, W. Wu, R. Q. Hu, H. Zhu, Resource allocation for multi-modal semantic
+communication in UAV collaborative networks, IEEE Trans. Commun. 73 (9) (2025) 7599--7616.
+\bibitem{zhou2026} Y. Zhou, P. Dai, B. He, M. Ren, M. Luo, J. Chen, Joint optimization of adaptive semantic compression
+and resource allocation for semantic-enabled UAV communications, EURASIP J. Wirel. Commun. Netw. 2026 (2026) 93.
+\bibitem{zheng2026} W. Zheng, J. Li, Y. Zuo, Confidence-calibrated semantic resource allocation for multi-UAV
+low-altitude networks, EURASIP J. Wirel. Commun. Netw. (2026), doi:10.1186/s13638-026-02655-0.
+\bibitem{xu2026} J. Xu, K. Ota, M. Dong, Airtalking: Aerial D2D for multi-UAV systems based on semantic communication,
+IEEE Internet Things J. 13 (17) (2026) 38392--38404.
 \bibitem{3gpp36213} 3GPP, Evolved Universal Terrestrial Radio Access (E-UTRA); Physical layer procedures, TS 36.213,
 Release 8.
 \bibitem{pedersen2007} K. I. Pedersen, G. Monghal, I. Z. Kov\'acs, T. E. Kolding, A. Pokhariyal, F. Frederiksen,

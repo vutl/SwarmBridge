@@ -146,9 +146,10 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     tutil = None
     if "+tmpc=" in mode:
         mode, tutil = mode.split("+tmpc=")
+    harm = mode.endswith("+mpcrh")          # Paper A E2: same MPC, RobustMPC-style history-only rate predictor
     nocal = mode.endswith("+mpcnc")
-    use_mpc = mode.endswith("+mpc") or nocal or tutil is not None
-    mode = mode[:-6] if nocal else (mode[:-4] if mode.endswith("+mpc") else mode)
+    use_mpc = mode.endswith("+mpc") or nocal or harm or tutil is not None
+    mode = mode[:-6] if (nocal or harm) else (mode[:-4] if mode.endswith("+mpc") else mode)
     mp_h, cal_h = None, False
     if mode.startswith(("h=", "hc=")):
         cal_h = mode.startswith("hc=")
@@ -196,7 +197,8 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     mpc = trk = cal = dl = None
     if (use_mpc and not nocal) or cal_h:
         assert mmod is not None or mp_h is not None, "+mpc needs an incumbent (learned mode head or h= / hc= rule)"
-        cal = M.CalRates(persistent=False, slot_weight=True)
+        cal = (M.HarmRates(persistent=False, slot_weight=True) if harm
+               else M.CalRates(persistent=False, slot_weight=True))
         if tutil is not None:
             import at1_task as AT
             mpc = AT.TaskMPC(AT.Utility(tutil, AE.G["table"], AE.G["pools"]), "cal", 8, 4, None, fallback=mp_t,
@@ -327,7 +329,7 @@ def job(j):
 
 def needs_ckpt(combo):
     s, m = combo.split("|")
-    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         m.replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm")
+    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         m.replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm")
 
 
 def main():

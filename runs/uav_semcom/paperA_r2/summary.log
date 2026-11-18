@@ -1,0 +1,89 @@
+
+######## e12: pool test, seeds 9900..9999
+== S: returns tb 61.8, tbp 64.1, h 66.2, hm 65.3, hn 64.7, hr 66.1, ho 42.2, p 63.1, pm 61.7
+   PPO-S - T:best (block A, same slot rule)        +2.25 [ +1.30, +3.20]
+   H* + cal. MPC - H* + nominal MPC                +0.57 [ -0.92, +2.07]
+   H* + cal. MPC - H* + RobustMPC-style            -0.89 [ -1.94, +0.16]
+   H* + RobustMPC-style - H* + nominal MPC         +1.46 [ +0.13, +2.79]
+   H* + cal. MPC - H* (no MPC)                     -0.92 [ -1.97, +0.13]
+   H* tuned on other PHY - H* + cal. MPC          -23.07 [-24.10,-22.04]
+   PPO-S (JA) - H* + cal. MPC                      -2.13 [ -2.80, -1.47]
+   PPO-S + cal. MPC - H* + cal. MPC                -3.59 [ -4.21, -2.98]
+   recall (Qmin / on-time): tb 56.7/57.7, tbp 57.8/58.2, h 58.8/58.8, hm 57.5/57.9, hr 58.8/58.8
+== L: returns tb -160.1, tbp -183.5, h -40.4, hm -32.1, hn -49.1, hr -38.7, ho -131.7, p -55.0, pm -40.1, la -38.8, lam -31.7, lar -38.6
+   PPO-S - T:best (block A, same slot rule)       -23.41 [-26.93,-19.89]
+   H* + cal. MPC - H* + nominal MPC               +16.96 [+12.71,+21.22]
+   H* + cal. MPC - H* + RobustMPC-style            +6.62 [ +3.12,+10.13]
+   H* + RobustMPC-style - H* + nominal MPC        +10.34 [ +5.85,+14.83]
+   H* + cal. MPC - H* (no MPC)                     +8.25 [ +4.83,+11.66]
+   H* tuned on other PHY - H* + cal. MPC          -99.61 [-106.37,-92.84]
+   PPO-S (JA) - H* + cal. MPC                     -22.90 [-26.08,-19.73]
+   PPO-S + cal. MPC - H* + cal. MPC                -7.97 [-10.89, -5.05]
+   PPO-LA - H* + cal. MPC                          -6.68 [ -9.44, -3.92]
+   PPO-LA + cal. MPC - H* + cal. MPC               +0.46 [ -2.27, +3.18]
+   PPO-LA + cal. MPC - PPO-LA + RobustMPC-style    +6.91 [ +5.52, +8.30]
+   recall (Qmin / on-time): tb 31.5/37.1, tbp 33.0/34.8, h 51.3/52.2, hm 50.9/52.2, hr 51.5/52.3, lam 47.9/51.6
+== L_fade: returns tb -193.3, tbp -232.3, h -183.7, hm -167.8, hn -204.2, hr -177.9, ho -314.7, p -190.1, pm -165.9, la -121.8, lam -106.6, lar -116.9
+   PPO-S - T:best (block A, same slot rule)       -38.98 [-42.34,-35.62]
+   H* + cal. MPC - H* + nominal MPC               +36.43 [+31.19,+41.67]
+   H* + cal. MPC - H* + RobustMPC-style           +10.12 [ +7.28,+12.97]
+   H* + RobustMPC-style - H* + nominal MPC        +26.30 [+21.30,+31.30]
+   H* + cal. MPC - H* (no MPC)                    +15.89 [+13.20,+18.58]
+   H* tuned on other PHY - H* + cal. MPC          -146.93 [-151.14,-142.72]
+   PPO-S (JA) - H* + cal. MPC                     -22.28 [-25.56,-19.00]
+   PPO-S + cal. MPC - H* + cal. MPC                +1.93 [ -1.55, +5.40]
+   PPO-LA - H* + cal. MPC                         +46.01 [+42.52,+49.50]
+   PPO-LA + cal. MPC - H* + cal. MPC              +61.21 [+57.15,+65.26]
+   PPO-LA + cal. MPC - PPO-LA + RobustMPC-style   +10.33 [ +8.68,+11.99]
+   recall (Qmin / on-time): tb 27.6/33.2, tbp 27.1/28.9, h 33.9/34.3, hm 35.0/35.9, hr 34.4/34.9, lam 38.4/44.3
+== L_bursty: returns tb -156.0, tbp -178.0, h -35.8, hm -27.7, hn -48.7, hr -35.9, ho -130.9, p -52.7, pm -37.2, la -39.8, lam -37.0, lar -39.6
+   PPO-S - T:best (block A, same slot rule)       -22.08 [-26.20,-17.96]
+   H* + cal. MPC - H* + nominal MPC               +20.92 [+16.40,+25.44]
+   H* + cal. MPC - H* + RobustMPC-style            +8.16 [ +4.35,+11.97]
+   H* + RobustMPC-style - H* + nominal MPC        +12.76 [ +8.65,+16.87]
+   H* + cal. MPC - H* (no MPC)                     +8.06 [ +4.09,+12.03]
+   H* tuned on other PHY - H* + cal. MPC          -103.18 [-111.00,-95.37]
+   PPO-S (JA) - H* + cal. MPC                     -24.98 [-28.87,-21.10]
+   PPO-S + cal. MPC - H* + cal. MPC                -9.42 [-12.72, -6.12]
+   PPO-LA - H* + cal. MPC                         -12.01 [-14.78, -9.24]
+   PPO-LA + cal. MPC - H* + cal. MPC               -9.22 [-12.35, -6.10]
+   PPO-LA + cal. MPC - PPO-LA + RobustMPC-style    +2.68 [ +1.14, +4.21]
+   recall (Qmin / on-time): tb 32.0/37.6, tbp 33.8/35.5, h 51.9/52.7, hm 50.7/52.3, hr 51.9/52.7, lam 45.9/50.7
+== L_badfb: returns tb -221.1, tbp -258.9, h -198.9, hm -185.7, hn -213.9, hr -199.4, ho -329.6, p -207.8, pm -189.2, la -143.7, lam -134.7, lar -144.0
+   PPO-S - T:best (block A, same slot rule)       -37.88 [-41.98,-33.79]
+   H* + cal. MPC - H* + nominal MPC               +28.22 [+21.12,+35.32]
+   H* + cal. MPC - H* + RobustMPC-style           +13.73 [ +9.10,+18.36]
+   H* + RobustMPC-style - H* + nominal MPC        +14.49 [ +8.39,+20.59]
+   H* + cal. MPC - H* (no MPC)                    +13.14 [ +8.42,+17.87]
+   H* tuned on other PHY - H* + cal. MPC          -143.91 [-150.08,-137.74]
+   PPO-S (JA) - H* + cal. MPC                     -22.05 [-27.56,-16.53]
+   PPO-S + cal. MPC - H* + cal. MPC                -3.53 [ -8.82, +1.76]
+   PPO-LA - H* + cal. MPC                         +42.06 [+36.92,+47.20]
+   PPO-LA + cal. MPC - H* + cal. MPC              +50.97 [+45.85,+56.10]
+   PPO-LA + cal. MPC - PPO-LA + RobustMPC-style    +9.22 [ +6.87,+11.58]
+   recall (Qmin / on-time): tb 24.1/29.1, tbp 23.4/25.3, h 31.6/32.0, hm 32.5/33.2, hr 31.6/31.9, lam 34.5/40.7
+
+######## e3: pool testdev, seeds 12000..12099
+== S: returns tb 39.5, tbp 53.5, h 32.4, hm 44.6, hn 42.8, hr 32.6, ho 49.2, p 52.5, pm 52.7
+   PPO-S - T:best (block A, same slot rule)       +13.99 [+12.96,+15.02]
+   H* + cal. MPC - H* + nominal MPC                +1.79 [ +0.34, +3.23]
+   H* + cal. MPC - H* + RobustMPC-style           +12.05 [ +9.97,+14.13]
+   H* + RobustMPC-style - H* + nominal MPC        -10.27 [-12.53, -8.00]
+   H* + cal. MPC - H* (no MPC)                    +12.21 [+10.10,+14.32]
+   H* tuned on other PHY - H* + cal. MPC           +4.58 [ +2.38, +6.77]
+   PPO-S (JA) - H* + cal. MPC                      +7.84 [ +6.14, +9.54]
+   PPO-S + cal. MPC - H* + cal. MPC                +8.02 [ +6.28, +9.75]
+   recall (Qmin / on-time): tb 43.8/46.9, tbp 48.1/48.2, h 48.8/48.8, hm 47.8/47.9, hr 48.8/48.8
+== L: returns tb -162.3, tbp -221.9, h -71.1, hm -52.5, hn -57.7, hr -70.5, ho -208.2, p -88.2, pm -58.9, la -55.6, lam -45.1, lar -56.0
+   PPO-S - T:best (block A, same slot rule)       -59.67 [-64.46,-54.88]
+   H* + cal. MPC - H* + nominal MPC                +5.24 [ +1.04, +9.43]
+   H* + cal. MPC - H* + RobustMPC-style           +18.04 [+13.12,+22.95]
+   H* + RobustMPC-style - H* + nominal MPC        -12.80 [-18.01, -7.59]
+   H* + cal. MPC - H* (no MPC)                    +18.68 [+14.11,+23.24]
+   H* tuned on other PHY - H* + cal. MPC          -155.75 [-163.41,-148.09]
+   PPO-S (JA) - H* + cal. MPC                     -35.74 [-39.55,-31.92]
+   PPO-S + cal. MPC - H* + cal. MPC                -6.47 [ -9.58, -3.37]
+   PPO-LA - H* + cal. MPC                          -3.14 [ -6.46, +0.17]
+   PPO-LA + cal. MPC - H* + cal. MPC               +7.39 [ +4.04,+10.73]
+   PPO-LA + cal. MPC - PPO-LA + RobustMPC-style   +10.92 [ +9.23,+12.60]
+   recall (Qmin / on-time): tb 22.9/28.9, tbp 24.9/25.9, h 40.1/40.2, hm 39.6/40.0, hr 40.1/40.2, lam 37.1/39.6
