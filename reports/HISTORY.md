@@ -36,6 +36,13 @@ phase reports. Two recent review rounds made factual errors that this file answe
     (`phases/2026-11-18_paperA-writeup/paperA-outline.md`).
   - The cooperative multi-UAV direction (tracking on UAV3D + realistic LA; ChatGPT's post-#48 proposal) is Paper 2,
     started after Paper A is submitted.
+- **Robustness round E1–E3 + E1b (19/11, `phases/2026-11-18_paperA-writeup/paperA-r2-robustness-result.md`):**
+  - Rank reversal PPO-S/T:best holds on 4 LA variants and on test-dev.
+  - SNR-conditioned calibration beats a RobustMPC-style history-only predictor on every LA configuration
+    (+6.6..+18.0).
+  - The best fixed mode changes with LA conditions (q3 -> q1). PPO-LA transfers better than the frozen heuristic
+    (+61 / +51) but trails the re-tuned heuristic (−31 / −29; PPO not retrained).
+  - On test-dev content, PPO + MPC beats train-tuned heuristic + MPC (+7.4 L, +8.0 S).
 - Other branches are closed or paused.
 - **R1 done (18/11, seeds 9800–9899, `phases/2026-11-18_paperA-writeup/paperA-r1-result.md`):** the same frozen
   policies on Shannon vs LA.

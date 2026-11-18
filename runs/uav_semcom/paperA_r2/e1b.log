@@ -1,0 +1,8 @@
+re-tuned H*: {'L_fade': 'fixed_mbt2018-mean_q1', 'L_bursty': 'fixed_mbt2018-mean_q3', 'L_badfb': 'fixed_mbt2018-mean_q1'}
+L_fade   ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1         ret   -82.75
+L_bursty ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3         ret   -35.81
+L_badfb  ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1         ret  -110.92
+L_fade   ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1+mpc     ret   -75.25
+L_bursty ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpc     ret   -27.75
+L_badfb  ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1+mpc     ret  -105.47
+e1b done 454s

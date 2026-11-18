@@ -1,0 +1,15 @@
+== L_fade: re-tuned H* = fixed_mbt2018-mean_q1
+   H*_V (re-tuned) + cal. MPC - H*_L (frozen) + cal. MPC +92.56 [+85.98,+99.14]
+   PPO-LA + cal. MPC - H*_V (re-tuned) + cal. MPC       -31.35 [-35.30,-27.40]
+   PPO-LA - H*_V (re-tuned)                             -39.05 [-42.98,-35.12]
+   H*_V + cal. MPC - H*_V                                +7.50 [ +5.77, +9.23]
+== L_bursty: re-tuned H* = fixed_mbt2018-mean_q3
+   H*_V (re-tuned) + cal. MPC - H*_L (frozen) + cal. MPC  +0.00 [ +0.00, +0.00]
+   PPO-LA + cal. MPC - H*_V (re-tuned) + cal. MPC        -9.22 [-12.35, -6.10]
+   PPO-LA - H*_V (re-tuned)                              -3.95 [ -7.66, -0.23]
+   H*_V + cal. MPC - H*_V                                +8.06 [ +4.09,+12.03]
+== L_badfb: re-tuned H* = fixed_mbt2018-mean_q1
+   H*_V (re-tuned) + cal. MPC - H*_L (frozen) + cal. MPC +80.25 [+73.48,+87.01]
+   PPO-LA + cal. MPC - H*_V (re-tuned) + cal. MPC       -29.27 [-33.39,-25.16]
+   PPO-LA - H*_V (re-tuned)                             -32.73 [-37.03,-28.43]
+   H*_V + cal. MPC - H*_V                                +5.45 [ +2.19, +8.71]
