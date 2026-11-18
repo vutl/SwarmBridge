@@ -1,6 +1,7 @@
 %% Paper A -- ICT Express letter (template: paper/ICT Express Submission Template_191231.zip, elsarticle 3p twocolumn).
 %% Limits: ~4 pages incl. references; figures + tables <= 4; abstract 75-100 words; 3-5 keywords, alphabetical.
-%% Numbers: R1 = runs/uav_semcom/paperA_r1/summary.json (fresh seeds 9800-9899). \todo{} = to verify before submission.
+%% Numbers: R1 = runs/uav_semcom/paperA_r1/summary.json (fresh seeds 9800-9899). \todo{} = to fill before submission.
+%% Revised after review #52: title, abstract, exact utility, block-A confound, cross-PHY wording, scope, calibration.
 \documentclass[final,3p,times,twocolumn]{elsarticle}
 \usepackage{graphicx, amsmath, amssymb, booktabs, float, xcolor, siunitx}
 \usepackage[utf8]{inputenc}
@@ -18,7 +19,7 @@
 \begin{document}
 \begin{frontmatter}
 
-\title{Physical-layer mismatch matters more than the learning method in multi-UAV semantic image offloading}
+\title{Revisiting multi-UAV semantic image offloading: Physical-layer mismatch and ACK-calibrated planning}
 
 \author{\todo{Author 1}\corref{cor1}}
 \ead{\todo{email}}
@@ -28,13 +29,13 @@
 \cortext[cor1]{Corresponding author}
 
 \begin{abstract}
-Deep reinforcement learning (DRL) is often proposed for compression and resource control in multi-UAV semantic
-communication, but is usually evaluated with Shannon-rate links and untuned baselines. We evaluate identical frozen
-controllers in a multi-UAV image-offloading simulator under a Shannon model and under realistic link adaptation with
-delayed channel feedback, retransmissions and co-channel interference. Controllers designed under the Shannon model,
-both tuned heuristics and DRL policies, lose substantially under link adaptation. Online acknowledgement-based
-calibration of a model-predictive planner substantially reduces this loss, while DRL trained under link adaptation shows no
-significant advantage over a calibrated heuristic planner.
+We examine how physical-layer assumptions affect resource-control performance in multi-UAV semantic image offloading.
+Using measured codec profiles and paired scenarios, we compare frozen PPO and heuristic controllers under Shannon-rate
+and block-level link-adaptation models with delayed feedback, retransmissions, and interference. Under link
+adaptation, a Shannon-tuned heuristic and Shannon-trained PPO trail an LA-tuned calibrated planner by 98.9 and 22.8
+return points, respectively. ACK-based calibration improves the same planner by 19.8 points over nominal-rate planning.
+LA-trained PPO shows no statistically established return advantage over the calibrated heuristic-based planner and
+yields lower detector recall.
 \end{abstract}
 
 \begin{keyword}
@@ -47,22 +48,21 @@ Unmanned aerial vehicles
 \section{Introduction}\label{sec:intro}
 Unmanned aerial vehicle (UAV) swarms that survey an area must deliver many images to a ground base station (BS)
 under deadlines and limited bandwidth. Semantic and task-oriented communication adapts the representation of each
-image (compression level, learned or generative codec) to what the receiver needs, and deep reinforcement learning
-(DRL) has become the default tool for choosing these modes jointly with channels, power and trajectories
-\cite{huang2025,si2023,li2026}. Such studies typically compute link rates with the Shannon formula and compare the
-learned policy with simple rules such as random, round-robin or nearest-UAV scheduling.
+image (compression level, learned or generative codec) to the receiver, and deep reinforcement learning (DRL) is
+increasingly used to choose these modes jointly with channels, power and trajectories \cite{huang2025,si2023,zhao2026}.
 
-Practical links do not follow the Shannon formula. A UAV transmits with a discrete modulation and coding scheme (MCS)
-chosen from delayed channel quality reports, blocks fail and are retransmitted, and outer-loop link adaptation (OLLA)
-corrects the MCS choice from acknowledgements \cite{3gpp36213,olla}. A controller designed under one model and deployed
-under the other faces a model mismatch, whatever its design method.
+Practical links behave differently. A UAV transmits with a discrete modulation and coding scheme (MCS) chosen from
+delayed channel quality reports, blocks fail and are retransmitted, and outer-loop link adaptation (OLLA) corrects the
+MCS choice from acknowledgements (ACKs) \cite{3gpp36213,pedersen2007}. A controller designed under one PHY model and
+deployed under another faces a model mismatch, whatever its design method.
 
-This letter asks whether the advantages reported for DRL survive this mismatch and a fair, tuned baseline. Its
-contributions are: (i) a multi-UAV image-offloading simulator with measured codec modes and block-level link
-adaptation; (ii) a controlled evaluation of the same frozen controllers under both physical-layer (PHY) models; and
-(iii) an acknowledgement (ACK)-calibrated selective model-predictive control (MPC) planner, adapted from throughput
-calibration in adaptive video streaming \cite{yin2015}, as a baseline that reduces the mismatch. Our conclusions are
-limited to the tested proximal policy optimization (PPO) policies, simulator and baselines.
+This letter evaluates the same frozen controllers under both models in an independent-image offloading setting.
+Its contributions are: (i) a five-UAV image-offloading simulator with measured codec modes and block-level link
+adaptation; (ii) a paired evaluation of tuned heuristics and proximal policy optimization (PPO) \cite{schulman2017}
+policies under a Shannon-rate and a link-adaptation (LA) PHY; and (iii) an ACK-calibrated selective model-predictive
+control (MPC) planner, adapted from throughput calibration in adaptive video streaming \cite{yin2015}, used as a
+baseline that reduces the mismatch. The study concerns independent image offloading, not collaborative perception,
+and its conclusions are limited to the evaluated PPO policies, simulator and baselines.
 
 \section{System model and methods}\label{sec:model}
 
@@ -74,49 +74,54 @@ are VisDrone frames \cite{visdrone}, split by video into train, validation and t
 of 14 modes (AVIF at four qualities, the learned codec of \cite{minnen2018} at four qualities, JPEG2000 at two rates,
 a thumbnail and three generative modes); payload, PSNR and encoding time are measured for every image--mode pair, and
 the UAV predicts them from a cheap AVIF probe. Each image has a deadline $D^{\max}\sim U(4,12)$\,s and a quality floor
-$Q^{\min}\sim U(22,30)$\,dB; its utility is
+$Q^{\min}\sim U(22,30)$\,dB. A delivered image with PSNR $q$ and delay $D$ obtains
 \begin{equation}
-u = 0.5\,\mathrm{clip}\!\left(\frac{q-Q^{\min}}{15},-1,1\right) + 0.5\,\frac{\max(D^{\max}-D,0)}{D^{\max}},
+u = 0.5\,\mathrm{clip}\!\left(\frac{q-Q^{\min}}{15},-1,1\right) + 0.5\,\frac{\max(D^{\max}-D,0)}{D^{\max}}
+    - \mathbb{1}\!\left[q<Q^{\min} \lor D>D^{\max}\right],
 \end{equation}
-and the return sums utilities minus energy and mission-time costs. \todo{state the penalty of a missed deadline}
-We also report the detector recall of the delivered images (YOLO11s, IoU $\ge 0.5$) counting only images delivered
-on time with PSNR $\ge Q^{\min}$ (Qmin-compliant recall).
+and a dropped image obtains $u=-1$. The return sums the utilities minus energy and mission-time costs. The objective
+thus combines reconstruction quality, delay and energy; we evaluate detector recall separately (YOLO11s, IoU
+$\ge 0.5$), counting only images delivered on time with PSNR $\ge Q^{\min}$ (Qmin-compliant recall).
 
 \subsection{Physical-layer models}
-Under the \emph{Shannon PHY} (S), a UAV alone on a channel obtains $(B/M)\log_2(1+\mathrm{SNR})$. Under \emph{realistic
-link adaptation} (L), transmission uses \SI{0.1}{s} blocks; each block uses one MCS of the LTE channel quality
-indicator (CQI) table \cite{3gpp36213}, chosen from an SNR report delayed by two blocks with \SI{1}{dB} error, the BS's
-knowledge of co-scheduled UAVs, and an OLLA offset ($\pm$\SI{0.5}{dB} steps, 10\% block error target). Block errors
-follow a logistic curve evaluated at the worst signal-to-interference-plus-noise ratio in the block; failed blocks are
-retransmitted until the deadline, and co-scheduled UAVs interfere for the whole slot.
+Under the \emph{Shannon PHY} (S), a UAV alone on a channel obtains $(B/M)\log_2(1+\mathrm{SNR})$. Under the \emph{LA
+PHY} (L), transmission uses \SI{0.1}{s} blocks; each block uses one MCS of the LTE channel quality indicator (CQI)
+table \cite{3gpp36213}, chosen from an SNR report delayed by two blocks with \SI{1}{dB} error, the BS's knowledge of
+co-scheduled UAVs, and an OLLA offset ($\pm$\SI{0.5}{dB} steps, 10\% block error target). Block errors follow an
+assumed logistic curve evaluated at the worst signal-to-interference-plus-noise ratio in the block; bits count only
+when their block is acknowledged, failed blocks are retransmitted until the deadline, and co-scheduled UAVs interfere
+for the whole slot. The LA parameters are modelling assumptions, not over-the-air measurements.
 
 \subsection{Controllers}
 Every slot a \emph{slot policy} sets movement, channel and power of each UAV, and a \emph{mode policy} chooses the mode
-of each new image. We use: untuned literature-style rules (random, round robin, max rate, greedy); the tuned heuristic
-of earlier work (T:best: paced flight, backlog-budget modes, channel reuse); and a joint-assignment (JA) scheduler that
-enumerates channel assignments of busy UAVs and maximises urgency-weighted predicted goodput, with paced flight.
-Mode policies are: $H^*$, the best of 22 rules (fixed modes and backlog-budget rules) tuned on train seeds of the
-target PHY ($H^*_S$: AVIF-50, $H^*_L$: learned codec, quality 3); PPO \cite{schulman2017} with action masking, 2M steps,
-three training seeds, trained either on S (PPO-S) or on L with link-adaptation features in its observation (PPO-LA);
-and the \emph{calibrated selective MPC}. For the image whose mode is due, the MPC evaluates candidate modes over 8
-sampled channel paths and a lookahead of 4 images, within a \SI{50}{ms} anytime budget that starts from the incumbent
-($H^*$ or PPO). Its rate model is calibrated online from the bits acknowledged in each slot, and it overrides the
-incumbent only when the predicted gain is reliable under the calibrated rate uncertainty. The uncalibrated variant
-plans with the nominal rate model. \todo{one-line gate definition}
+of each new image. Whole-policy baselines are untuned literature-style rules (random, round robin, max rate, greedy;
+mission flight, maximum power, no channel reuse) and the tuned heuristic of earlier work, T:best (paced flight,
+backlog-budget modes, channel reuse). The joint-assignment (JA) scheduler enumerates channel assignments of the busy
+UAVs and maximises urgency-weighted predicted goodput, with paced flight. Mode policies are: $H^*$, the best of 22
+rules (fixed modes and backlog-budget rules) tuned on train seeds of the target PHY ($H^*_S$: AVIF-50; $H^*_L$:
+learned codec, quality 3); PPO with action masking, 2M steps and three training seeds, trained either on S with the
+T:best slot rule (PPO-S) or on L with the JA scheduler and link-adaptation features in its observation (PPO-LA); and
+the \emph{calibrated selective MPC}. For the image whose mode is due, the MPC evaluates candidate modes over 8 sampled
+channel paths and a lookahead of 4 images within a \SI{50}{ms} anytime budget that starts from the incumbent ($H^*$
+or PPO), and switches away from the incumbent only if the mean paired value gain over the sampled paths exceeds one
+standard error. Its rate model is calibrated online, from a cold start in every episode, using the throughput
+delivered in each past slot (under L, acknowledged bits); the delay and overhead of the feedback channel are not
+modelled. The uncalibrated variant plans with the nominal rate model.
 
 \subsection{Evaluation protocol}
 No controller is retrained. All controllers run on the test pool with 100 fresh paired seeds on both PHYs. Block A
-uses the T:best slot rule (the literature-style setting); block B uses the JA scheduler. A controller designed on one
-PHY and run on the other is \emph{zero-shot}. We report paired return differences with 95\% confidence intervals
-(CI); PPO results average the three training seeds.
+compares whole policies as originally designed: the untuned rules and T:best differ in flight, reuse and mode rule, and
+PPO-S uses the T:best slot rule. Block B fixes the JA scheduler and paced flight and varies the mode policy. A
+controller designed on one PHY and run on the other is \emph{zero-shot}. We report paired return differences with 95\%
+confidence intervals (CI); PPO results average the three training seeds.
 
 \section{Results}\label{sec:results}
 
 \begin{table}[t]
 \centering
-\caption{Same frozen controllers on both PHYs (100 paired seeds). $\Delta$: return difference [95\% CI] to the block
-reference on the same PHY (T:best in block A, $H^*$ + calibrated MPC in block B). recQ: Qmin-compliant recall (\%).
-ZS: zero-shot.}
+\caption{Same frozen controllers on both PHYs (100 paired seeds). Block A compares whole policies (flight, channels,
+modes); block B fixes the JA scheduler. $\Delta$: return difference [95\% CI] to the block reference on the same PHY
+(T:best in block A, $H^*$ + calibrated MPC in block B). recQ: Qmin-compliant recall (\%). ZS: zero-shot.}
 \label{tab:r1}
 \footnotesize
 \setlength{\tabcolsep}{2.5pt}
@@ -124,13 +129,14 @@ ZS: zero-shot.}
 \toprule
 PHY & Controller & Return & $\Delta$ [95\% CI] & recQ\\
 \midrule
-\multicolumn{5}{@{}l}{\emph{Block A (T:best slot rule)}}\\
+\multicolumn{5}{@{}l}{\emph{Block A (whole policies)}}\\
 S & Best untuned rule & $-73.1$ & $-135.8$ [$-143.2$, $-128.3$] & 42.9\\
+S & T:best & 62.7 & 0 & 56.7\\
 S & PPO-S & 64.8 & $+2.1$ [$+1.4$, $+2.9$] & 57.9\\
 L & T:best (ZS) & $-156.8$ & 0 & 31.9\\
 L & PPO-S (ZS) & $-180.2$ & $-23.5$ [$-27.8$, $-19.2$] & 33.5\\
 \midrule
-\multicolumn{5}{@{}l}{\emph{Block B (JA scheduler)}}\\
+\multicolumn{5}{@{}l}{\emph{Block B (JA scheduler, mode policies)}}\\
 S & $H^*_S$ + cal.\ MPC & 66.6 & 0 & 57.6\\
 S & PPO-S & 63.9 & $-2.7$ [$-3.5$, $-1.9$] & 57.9\\
 L & $H^*_L$ + cal.\ MPC & $-31.9$ & 0 & 51.0\\
@@ -152,33 +158,33 @@ designed on the other PHY (zero-shot). PPO-LA needs link-adaptation features and
 \label{fig:forest}
 \end{figure*}
 
-\textbf{The literature-style setting reproduces a DRL advantage.} Under the Shannon PHY and the T:best slot rule,
-PPO-S exceeds the tuned heuristic by $+2.1$ and the untuned rules by 136--175 (Table~\ref{tab:r1}, Fig.~\ref{fig:blockA}).
-Most of the gap to the untuned rules is closed by tuning alone: the untuned rules choose high-quality modes whose
-queues miss deadlines.
+\textbf{Shannon PHY, whole policies.} Under S, PPO-S exceeds the tuned whole policy T:best by $+2.1$ [$+1.4$, $+2.9$],
+and both exceed the untuned literature-style rules by 136--175 (Table~\ref{tab:r1}, Fig.~\ref{fig:blockA}). The latter
+gap reflects whole-policy differences (flight, channel reuse and mode rule), not tuning alone; the untuned rules
+choose high-quality modes whose queues miss deadlines.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figs/fig_r1_blockA.pdf}
-\caption{Block A: return of untuned rules, the tuned heuristic T:best and PPO-S under both PHYs.}
+\caption{Block A (whole policies): return of the untuned rules, the tuned heuristic T:best and PPO-S under both PHYs.}
 \label{fig:blockA}
 \end{figure}
 
-\textbf{Shannon-designed controllers lose under link adaptation, whatever their design method.} Under L, the
-Shannon-tuned heuristic $H^*_S$ is $98.9$ below the LA reference and PPO-S $22.8$ below (Fig.~\ref{fig:forest}b); every
-block-A controller falls below $-150$. The heuristic, not the learned policy, degrades the most, so the loss is a
-property of the design model rather than of learning. Conversely, $H^*_L$ loses $23.8$ when run under S. For PPO-S the
-block-B numbers include a change of slot policy (trained with T:best, run with JA); the heuristic rows isolate the
-PHY effect.
+\textbf{Controllers designed under the Shannon PHY trail LA-designed controllers under L.} Under L, the Shannon-tuned
+heuristic $H^*_S$ trails the LA reference ($H^*_L$ with calibrated MPC) by $98.9$ and the Shannon-trained PPO-S by
+$22.8$ (Fig.~\ref{fig:forest}b); in block A, both whole policies designed under S fall below $-150$. Conversely,
+$H^*_L$ trails $H^*_S$ + MPC by $23.8$ under S. These gaps are measured against a reference on the same PHY; they are
+not the per-controller degradation between PHYs, and for PPO-S they also include a change of slot policy (trained with
+T:best, run with JA).
 
 \textbf{ACK calibration mitigates the mismatch.} Under L, the calibrated planner improves on the same planner with
-the nominal rate model by $19.8$ [$15.3$, $24.4$] and on $H^*_L$ without planning by $8.0$. Applied to the zero-shot
-PPO-S, it reduces the loss from $22.8$ to $6.5$, without removing it. Under S, where the nominal model is correct,
-calibration has no measurable effect ($+0.2$ [$-1.2$, $+1.6$]).
+the nominal rate model by $19.8$ [$15.3$, $24.4$] (same incumbent $H^*_L$) and on $H^*_L$ without planning by $8.0$.
+Applied to the zero-shot PPO-S, it reduces the gap from $22.8$ to $6.5$ without removing it. Under S, where the nominal
+model is correct, calibration has no measurable effect ($+0.2$ [$-1.2$, $+1.6$]).
 
-\textbf{Training on the target PHY does not establish a DRL advantage.} PPO-LA with the calibrated planner and $H^*_L$
-with the same planner are statistically indistinguishable ($+1.5$ [$-1.6$, $+4.6$]), consistent with an earlier
-pre-registered test on other seeds ($-0.1$ [$-2.8$, $+2.6$]).
+\textbf{Training on the target PHY.} PPO-LA with the calibrated planner and $H^*_L$ with the same planner are not
+statistically distinguishable ($+1.5$ [$-1.6$, $+4.6$]), consistent with an earlier pre-registered test on other seeds
+($-0.1$ [$-2.8$, $+2.6$]).
 
 \begin{figure}[t]
 \centering
@@ -192,13 +198,17 @@ recall (48.0\%) than $H^*_L$ (51.4\%) and $H^*_L$ with MPC (51.0\%) (Fig.~\ref{f
 which the utility rewards through delay but the detector penalises.
 
 \section{Discussion and conclusions}\label{sec:conclusion}
-In the studied multi-UAV semantic image-offloading setting, the PHY model used at design time determined controller
-performance more than the choice between a tuned heuristic and DRL. Online ACK-based calibration of a planner reduced
-the mismatch substantially, and the evaluated LA-trained PPO policies did not establish a significant advantage over a
-calibrated heuristic planner. Two practical recommendations follow: evaluate controllers under link adaptation, and
-compare against tuned baselines with the same information. Limitations: one simulator with i.i.d.\ image arrivals, the
-tested PPO policies only, assumed link-adaptation parameters, and a \SI{50}{ms} decision budget that assumes parallel
-mode decisions. Cooperative multi-UAV perception, where messages from different UAVs interact, is left for future work.
+In the studied multi-UAV image-offloading setting, every controller designed under the Shannon PHY, heuristic or
+learned, trailed controllers designed under link adaptation when deployed with link adaptation. Online calibration of a
+planner from delivered throughput reduced this gap substantially, and the evaluated LA-trained PPO policies showed no
+statistically established return advantage over a calibrated heuristic-based planner. Evaluating controllers under
+link adaptation and against tuned baselines with the same information is therefore advisable.
+
+Our conclusions are limited to the evaluated PPO policies and a five-UAV independent-image-offloading simulator. Link
+adaptation uses assumed CQI/BLER dynamics rather than over-the-air measurements. The optimization objective combines
+reconstruction quality, delay, and energy; detector recall is evaluated separately. The zero-shot PPO comparison under
+the JA scheduler also introduces a scheduling-policy shift. The reported 50-ms decision latency assumes parallel mode
+decisions. Cooperative multi-UAV perception, where messages from different UAVs interact, is left for future work.
 
 \section*{Acknowledgments}
 \todo{funding}
@@ -207,14 +217,21 @@ mode decisions. Cooperative multi-UAV perception, where messages from different 
 The authors declare that there is no conflict of interest in this paper.
 
 \begin{thebibliography}{99}
-\bibitem{huang2025} \todo{author list}, DRL-based resource allocation for hybrid bit and generative semantic
-communications in space-air-ground integrated networks, IEEE J. Sel. Areas Commun. 43 (12) (2025) \todo{pages}.
-\bibitem{si2023} P. Si, \todo{co-authors}, UAV-assisted semantic communication with hybrid action reinforcement learning,
-in: Proc. IEEE GLOBECOM, 2023, \todo{pages}.
-\bibitem{li2026} \todo{Li et al., IEEE JSAC 2026 (arXiv 2606.00668): verify title, authors, pages}.
-\bibitem{3gpp36213} 3GPP, Evolved Universal Terrestrial Radio Access (E-UTRA); Physical layer procedures, TS 36.213
-\todo{release / version}.
-\bibitem{olla} \todo{outer-loop link adaptation reference (e.g. Pedersen et al.)}.
+\bibitem{huang2025} C. Huang, X. Chen, G. Chen, P. Xiao, G. Y. Li, W. Huang, Deep reinforcement learning-based
+resource allocation for hybrid bit and generative semantic communications in space-air-ground integrated networks,
+IEEE J. Sel. Areas Commun. 43 (12) (2025) 3942--3954.
+\bibitem{si2023} P. Si, J. Zhao, K.-Y. Lam, Q. Yang, UAV-assisted semantic communication with hybrid action
+reinforcement learning, in: Proc. IEEE Global Commun. Conf. (GLOBECOM), 2023.
+\bibitem{zhao2026} A. Zhao, M. Sun, X. Xu, Z. Fang, S. Han, B. Wang, C. Dong, Y. Liu, P. Zhang, Adaptive task-oriented
+semantic communication for UAVs with joint trajectory and resource optimization, IEEE Trans. Netw. Sci. Eng. 13 (2026)
+11622--11642.
+\bibitem{3gpp36213} 3GPP, Evolved Universal Terrestrial Radio Access (E-UTRA); Physical layer procedures, TS 36.213,
+Release 8.
+\bibitem{pedersen2007} K. I. Pedersen, G. Monghal, I. Z. Kov\'acs, T. E. Kolding, A. Pokhariyal, F. Frederiksen,
+P. Mogensen, Frequency domain scheduling for OFDMA with limited and noisy channel feedback, in: Proc. IEEE 66th Veh.
+Technol. Conf. (VTC-Fall), 2007, pp. 1792--1796.
+\bibitem{schulman2017} J. Schulman, F. Wolski, P. Dhariwal, A. Radford, O. Klimov, Proximal policy optimization
+algorithms, arXiv:1707.06347, 2017.
 \bibitem{yin2015} X. Yin, A. Jindal, V. Sekar, B. Sinopoli, A control-theoretic approach for dynamic adaptive video
 streaming over HTTP, in: Proc. ACM SIGCOMM, 2015, pp. 325--338.
 \bibitem{alhourani2014} A. Al-Hourani, S. Kandeepan, S. Lardner, Optimal LAP altitude for maximum coverage, IEEE
@@ -224,8 +241,6 @@ Trans. Wireless Commun. 18 (4) (2019) 2329--2345.
 \bibitem{visdrone} P. Zhu, L. Wen, D. Du, X. Bian, H. Fan, Q. Hu, H. Ling, Detection and tracking meet drones
 challenge, IEEE Trans. Pattern Anal. Mach. Intell. 44 (11) (2022) 7380--7399.
 \bibitem{minnen2018} D. Minnen, J. Ball\'e, G. Toderici, Joint autoregressive and hierarchical priors for learned image
-compression, in: Proc. NeurIPS, 2018.
-\bibitem{schulman2017} J. Schulman, F. Wolski, P. Dhariwal, A. Radford, O. Klimov, Proximal policy optimization
-algorithms, arXiv:1707.06347, 2017.
+compression, in: Adv. Neural Inf. Process. Syst. (NeurIPS), 2018.
 \end{thebibliography}
 \end{document}
