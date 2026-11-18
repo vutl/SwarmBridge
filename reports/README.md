@@ -106,6 +106,13 @@ ngân sách 50 ms.
 - Việc tiếp theo là memo đặt lại bài toán:
   - (A) bài đánh giá LA thực tế;
   - (B) cảm biến ngữ nghĩa phối hợp nhiều UAV.
+- **Rà soát thiết kế (18/11, sau bản sửa #48):** [swarmbridge-design-review-2026-11-18.md](swarmbridge-design-review-2026-11-18.md).
+  - Đề xuất gốc (29/10): truyền bằng chứng bổ sung theo giá trị có điều kiện cho bên nhận, giữa nhiều UAV.
+  - Từ 06/11 (hướng Huang), hợp tác và trạng thái bên nhận bị bỏ.
+  - Điều khiển chung bay + kênh + công suất + mode **đã thử** ở A3.2 / A4 / A5. Lợi ích nhỏ; bay không đóng góp
+    vì nội dung ảnh không phụ thuộc vị trí.
+  - Đề xuất: ghép LA + pipeline hợp tác UAV3D, thêm trạng thái bên nhận. Bay ở giai đoạn 2, với giá trị quan sát theo
+    vị trí.
 - Chưa được duyệt train hay mô phỏng mới.
 - Hai ghi chú tài liệu đã thêm vào [báo cáo bước C](scheduling/swarmbridge-atc-step-c-result.md#ghi-chú-sau-phản-biện-47-không-chạy-thêm-không-đổi-quyết-định).
 
