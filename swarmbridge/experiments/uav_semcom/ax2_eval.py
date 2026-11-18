@@ -16,6 +16,12 @@ Combination  SCHED|MODE[+mpc]
            calibrator: RateErrTracker.predict with the cold slot-weighted CalRates, x channel share; fixed rules do not
            use a rate and are unaffected)
   +mpc   also allowed after h= / hc= : the heuristic is the incumbent of the selective MPC (heuristic-seeded)
+  +mpcnc (review #44) the same selective MPC (same N, H, causal rollout, 50 ms budget, incumbent) WITHOUT online
+         calibration: the planner uses the nominal rate model of the environment (env.link_rate; for the LA PHY the
+         genie CQI rate x (1 - BLER target)), plans from the first decision on, no bias-derived scales (lo = hi = 1)
+  ppola  (review #44) PPO mode-only trained on the LA PHY (checkpoint I from runs/uav_semcom/ax9/ppo_la_ckpts.json)
+Scheduler options (review #44): SCHED[~JAMEMBER][@MOVE] with SCHED in {ja, ls}: MOVE = mission (the slot rule of
+fixed_avif_20: mission flight) or a paced slot rule name (pacedB1.5, pacedB2, pacedB3); default movement as before.
   +mpc   the mode head proposes, the A-E8 selective controller (cals np-any, N 8, H 4, causal, Z 1, kappa 2, H1 1,
          stacked, 50 ms cooperative budget started before the mode head's inference) may override; calibration
          COLD (per episode, as recommended in review #37: a warm start made under T:best could be stale under a
@@ -114,10 +120,19 @@ def calibrated(mode_pol, rate_fn):
     return f
 
 
+MOVE_NAMES = {"mission": "fixed_avif_20"}
+
+
 def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="test"):
     sched, mode = combo.split("|")
-    use_mpc = mode.endswith("+mpc")
-    mode = mode[:-4] if use_mpc else mode
+    move = None
+    if "@" in sched:
+        sched, move = sched.split("@")
+    if "~" in sched:
+        sched, ja = sched.split("~")
+    nocal = mode.endswith("+mpcnc")
+    use_mpc = mode.endswith("+mpc") or nocal
+    mode = mode[:-6] if nocal else (mode[:-4] if use_mpc else mode)
     mp_h, cal_h = None, False
     if mode.startswith(("h=", "hc=")):
         cal_h = mode.startswith("hc=")
@@ -134,11 +149,15 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     smod = {"jc": lambda: mdl("joint", lambda: XP.joint_path(ctrl_regime, i)),
             "c": lambda: mdl("c", lambda: ax2_path(ctrl_regime, "c", i)),
             "cm": lambda: mdl("cm", lambda: ax2_path(ctrl_regime, "cm", i))}.get(sched)
-    mmod = {"ppo": lambda: mdl("mode", lambda: XP.mode_path(ctrl_regime, i)),
+    mmod = {"ppola": lambda: mdl("ppola", lambda: json.loads(
+                (C.REPO / "runs" / "uav_semcom" / "ax9" / "ppo_la_ckpts.json").read_text())[i]),
+            "ppo": lambda: mdl("mode", lambda: XP.mode_path(ctrl_regime, i)),
             "jm": lambda: mdl("joint", lambda: XP.joint_path(ctrl_regime, i)),
             "cmm": lambda: mdl("cm", lambda: ax2_path(ctrl_regime, "cm", i))}.get(mode)
     # movement + power: the controller regime's T:best (tbest_env: the env regime's own tuned heuristic, whole slot)
     sp_mp = sp_e if sched in ("tbest_env", "jae") else sp_t
+    if move is not None:
+        sp_mp = MH.from_name(MOVE_NAMES.get(move, move), C.MODES)[0]
     if sched in ("ja", "jae"):
         import ja_sched as JA
         sp_s = JA.from_name(ja, sp_mp)
@@ -155,12 +174,16 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
             assert list(m_.action_space.nvec) == list(e.action_space.nvec)
     audit = ServiceAudit()
     mpc = trk = cal = dl = None
-    if use_mpc or cal_h:
+    if (use_mpc and not nocal) or cal_h:
         assert mmod is not None or mp_h is not None, "+mpc needs an incumbent (learned mode head or h= / hc= rule)"
         cal = M.CalRates(persistent=False, slot_weight=True)
         mpc = M.MPCMode("cal", 8, 4, None, fallback=mp_t, seed=12345, rollout="causal", cal=cal, margin_z=1.0)
         trk = M.RateErrTracker(mpc, persistent=False)
         dl = M.Deadline(50.0, margin_ms=3.0) if use_mpc else None
+    elif nocal:
+        assert mmod is not None or mp_h is not None
+        mpc = M.MPCMode("env", 8, 4, None, fallback=mp_t, seed=12345, rollout="causal", margin_z=1.0)
+        dl = M.Deadline(50.0, margin_ms=3.0)
     if mp_h is not None and cal_h:
         mp_h = calibrated(mp_h, lambda env_, k_: trk.predict(env_, k_))
     slot_of_mode = []
@@ -203,7 +226,15 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
                 else:
                     pa, _ = mmod().predict(obs, deterministic=True, action_masks=e.action_masks())
                     m_sel = int(np.asarray(pa)[-1])
-                if use_mpc:
+                if use_mpc and nocal:
+                    planned += 1
+                    if t_first_plan is None:
+                        t_first_plan = float(core.t)
+                    mpc.scales = [1.0, 1.0]
+                    m_sel = mpc.selective(core, k, task, m_sel, 1.0, cand="np", trig="any", h1=1, n_cand=2,
+                                          stack=True, dl=dl)
+                    aborts += int(mpc.last_abort is not None)
+                elif use_mpc:
                     st = trk.stats(core, k)
                     if st is None:
                         gated += 1
@@ -271,7 +302,7 @@ def job(j):
 
 def needs_ckpt(combo):
     s, m = combo.split("|")
-    return s in ("jc", "c", "cm") or m.replace("+mpc", "") in ("ppo", "jm", "cmm")
+    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         m.replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm")
 
 
 def main():

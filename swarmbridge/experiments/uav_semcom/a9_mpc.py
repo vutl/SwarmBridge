@@ -431,6 +431,10 @@ class MPCMode:
             i = np.searchsorted(E.CQI_THR_DB, 10 * np.log10(np.maximum(snr, 1e-30)), side="right")
             eff = np.r_[0.0, E.CQI_EFF][i]
             return bw * eff * (1 - c["phy_bler"])
+        if phy == "la":                                        # review #44: env_la.link_rate (genie CQI x (1 - target))
+            i = np.searchsorted(E.CQI_THR_DB, 10 * np.log10(np.maximum(snr, 1e-30)), side="right")
+            eff = np.r_[0.0, E.CQI_EFF][i]
+            return bw * eff * (1 - c["la_bler_target"])
         raise ValueError(phy)
 
     def _rates(self, env, k):

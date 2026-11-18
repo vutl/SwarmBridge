@@ -41,6 +41,7 @@ env._ja_log, which measures how often the policy's own predictor sees reuse as a
 """
 import itertools
 import math
+import os
 import time
 
 import numpy as np
@@ -84,6 +85,7 @@ def _realised_los(env, k):
 
 
 N_MC = 32
+LOG = os.environ.get("SB_JA_LOG", "1") != "0"   # per-call diagnostics on the env; SB_JA_LOG=0 for training runs
 
 
 def _stat_samples(env, cand, n_mc=N_MC, p_los_override=None):
@@ -166,11 +168,13 @@ def joint_assign(base_slot, info="stat", reuse=True, alpha=1.0, margin_db=3.0, n
         v_nr = float(value(A_nr).max())
         row = A_all[best]
         used_reuse = any(np.sum(row == ch) > 1 for ch in range(1, M + 1))
-        env.__dict__.setdefault("_ja_log", []).append((float(v_all[best]), v_nr, bool(used_reuse), len(cand)))
+        if LOG:
+            env.__dict__.setdefault("_ja_log", []).append((float(v_all[best]), v_nr, bool(used_reuse), len(cand)))
         for i, k in enumerate(cand):
             acts[k][1] = int(row[i])
-        env.__dict__.setdefault("_ja_t", []).append(time.perf_counter() - t_start)
-        if env.__dict__.get("_ja_diag_on", True):
+        if LOG:
+            env.__dict__.setdefault("_ja_t", []).append(time.perf_counter() - t_start)
+        if LOG and env.__dict__.get("_ja_diag_on", True):
             env.__dict__.setdefault("_ja_diag", []).extend(
                 (float(a), float(b), _realised_los(env, k)) for a, b, k in zip(prior, used, cand))
         return [tuple(a) for a in acts]

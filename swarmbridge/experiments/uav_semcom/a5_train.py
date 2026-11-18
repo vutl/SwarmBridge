@@ -10,6 +10,9 @@ Same network, PPO hyper-parameters, 6 parallel envs and 2M decision steps as the
     heuristics).
   --rl-part joint | mode | movement; --heur NAME | T:FAMILY: for mode-only RL its slot part drives the slots
   (A5: the slot part of the regime's best tuned heuristic, T:best), for movement-only RL its mode part drives the modes.
+Review #44 (A-X9) options, all default off (A5 runs unchanged): --cfg-extra JSON (cfg overrides, e.g. the LA PHY with
+causal CQI / ACK features obs_la), --slot-move NAME (slot rule providing movement + power for mode-only RL),
+--slot-ja MEMBER (channels by the ja_sched joint-assignment heuristic on top of that slot rule).
 Usage: python a5_train.py OUT --regime ref --rl-part joint --seed 0 [--heur T:reuse] [--steps 2e6]
 """
 import argparse
@@ -46,16 +49,27 @@ def main():
     ap.add_argument("--n-env", type=int, default=6)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--eval-every", type=float, default=2e5)
+    ap.add_argument("--cfg-extra", default=None)
+    ap.add_argument("--slot-move", default=None)
+    ap.add_argument("--slot-ja", default=None)
     ap.add_argument("--resume", default="", help="run dir: continue its last checkpoint (extended-training "
                     "experiment); episodes use env seeds offset by +50 so the start of training is not replayed")
     args = ap.parse_args()
     torch.set_num_threads(1)
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
-    cfg = C.regime_cfg(args.regime)
+    cfg = C.regime_cfg(args.regime, **(json.loads(args.cfg_extra) if args.cfg_extra else {}))
     table, pools = C.load_table(False)
     heur = AE.tuned(args.regime, args.heur[2:]) if args.heur.startswith("T:") else args.heur
     sp, mp = MH.from_name(heur, C.MODES)
+    if args.slot_move:
+        sp = MH.from_name({"mission": "fixed_avif_20"}.get(args.slot_move, args.slot_move), C.MODES)[0]
+    if args.slot_ja:
+        import os
+        os.environ["SB_JA_LOG"] = "0"      # no per-call diagnostics during training (inherited by the env workers)
+        import ja_sched as JA
+        JA.LOG = False
+        sp = JA.from_name(args.slot_ja, sp)
     kw = dict(joint={}, mode=dict(slot_pol=sp), movement=dict(mode_pol=mp))[args.rl_part]
     off = 50 if args.resume else 0
     venv = SubprocVecEnv([make(table, pools["train"], cfg, args.seed * 100 + off + i, kw) for i in range(args.n_env)])
@@ -63,6 +77,7 @@ def main():
                                     gae_lambda=0.95, learning_rate=3e-4, ent_coef=0.01,
                                     policy_kwargs=dict(net_arch=[256, 256]), seed=args.seed, verbose=0, device="cpu")
     meta = dict(regime=args.regime, cfg=cfg, rl_part=args.rl_part, heur=heur, seed=args.seed, steps=args.steps,
+                cfg_extra=args.cfg_extra, slot_move=args.slot_move, slot_ja=args.slot_ja,
                 val_seeds=C.PPO_VAL_SEEDS, val_pool="val", train_pool="train", time_discount=True)
     t0, log, done_steps, exp = time.time(), [], 0, Experience()
     if args.resume:
