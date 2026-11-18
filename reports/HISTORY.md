@@ -31,7 +31,12 @@ phase reports. Two recent review rounds made factual errors that this file answe
 
 ## 2. Current status (18/11)
 
-- **All implementation branches are closed or paused. No experiment is running.**
+- **Decision (18/11, after review #48):**
+  - Write Paper A now as an evaluation study + calibrated planning baseline, from existing data
+    (`phases/2026-11-18_paperA-writeup/paperA-outline.md`).
+  - The cooperative multi-UAV direction (tracking on UAV3D + realistic LA; ChatGPT's post-#48 proposal) is Paper 2,
+    started after Paper A is submitted.
+- Other branches are closed or paused.
 - **Open:** a problem reset (`phases/2026-11-18_design-reset/swarmbridge-design-review-2026-11-18.md`).
   - Proposal: realistic link-adaptation (LA) wireless stack from Paper A + UAV3D cooperative pipeline + receiver state
     (track uncertainty / age).

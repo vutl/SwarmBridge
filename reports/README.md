@@ -27,7 +27,8 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 
 ## 1. Đang ở đâu (18/11)
 
-- **Đang mở:** [đặt lại bài toán](phases/2026-11-18_design-reset/README.md). Không có thí nghiệm nào đang chạy.
+- **Đang làm:** [viết Paper A](phases/2026-11-18_paperA-writeup/paperA-outline.md) từ dữ liệu đã có. Hướng hợp tác nhiều UAV là Paper 2, làm sau.
+- **Thiết kế cho Paper 2:** [đặt lại bài toán](phases/2026-11-18_design-reset/README.md).
   - Rà soát thiết kế: so đề xuất SwarmBridge gốc (29/10, truyền bằng chứng bổ sung giữa nhiều UAV theo giá trị có
     điều kiện cho bên nhận) với hệ thống đã chạy.
   - Đề xuất khôi phục: bộ vô tuyến LA + pipeline hợp tác UAV3D + trạng thái bên nhận; quyết định bay ở giai đoạn 2.
@@ -46,6 +47,7 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 
 | Giai đoạn | Thời gian (phản biện) | Câu hỏi | Kết luận | Trạng thái |
 |---|---|---|---|---|
+| [2026-11-18_paperA-writeup](phases/2026-11-18_paperA-writeup/README.md) | 18/11 → | Viết Paper A với luận điểm đánh giá (LA thực tế + baseline công bằng xóa ưu thế DRL; MPC hiệu chỉnh từ ACK) | Khung bài + việc còn thiếu (R1 bảng Shannon so với LA; R2 tái lập phương pháp đã công bố) | **Đang làm** |
 | [2026-11-18_design-reset](phases/2026-11-18_design-reset/README.md) | 18/11 (#47–#48) | Đề xuất gốc bị lệch ở đâu; khôi phục thế nào | Hợp tác và trạng thái bên nhận bị bỏ từ 06/11; đề xuất LA + UAV3D + trạng thái bên nhận | **Đang mở** |
 | [2026-11-17_paperA-scheduling](phases/2026-11-17_paperA-scheduling/README.md) | 17–18/11 (#37–#47) | Lập lịch kênh, LA thực tế, đối chứng công bằng, DRL cuối, tiện ích tác vụ | JA heuristic ≥ RL; PPO-LA + MPC ≈ heuristic + MPC (−0,14); tiện ích từng ảnh không tổng quát | Đóng |
 | [2026-11-15_two-track](phases/2026-11-15_two-track/README.md) | 15–17/11 (#26–#36) | Paper A: PPO + MPC hiệu chỉnh khi mô hình kênh sai; Paper B: JEPA-SemCom | MPC hiệu chỉnh từ ACK + PPO +1,2…+2,2 so với PPO (đo so với PPO, không so heuristic); Paper B: codec video thắng | Đóng / tạm dừng |

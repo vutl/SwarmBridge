@@ -20,7 +20,8 @@ Schrödinger Bridge ban đầu là ứng viên cho bộ hoàn thiện, không ph
 
 ## Trạng thái (18/11)
 
-- **Đang mở:** đặt lại bài toán ([rà soát thiết kế](phases/2026-11-18_design-reset/swarmbridge-design-review-2026-11-18.md)).
+- **Đang làm (18/11):** viết Paper A với luận điểm đánh giá ([khung bài](phases/2026-11-18_paperA-writeup/paperA-outline.md)). Hướng dưới đây là Paper 2, làm sau.
+- **Thiết kế Paper 2:** đặt lại bài toán ([rà soát thiết kế](phases/2026-11-18_design-reset/swarmbridge-design-review-2026-11-18.md)).
   - Đề xuất khôi phục: bộ vô tuyến LA đã kiểm chứng + pipeline hợp tác UAV3D (5 UAV đồng bộ) + trạng thái bên nhận
     (bất định / tuổi track).
   - Giai đoạn 2: quyết định bay, với giá trị quan sát phụ thuộc vị trí (mô hình cảm biến hiệu chỉnh trên UAV3D;
