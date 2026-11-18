@@ -196,7 +196,7 @@ T:best, run with JA).
 \textbf{ACK calibration mitigates the mismatch.} Under L, the calibrated planner improves on the same planner with
 the nominal rate model by $19.8$ [$15.3$, $24.4$] (same incumbent $H^*_L$) and on $H^*_L$ without planning by $8.0$.
 Applied to the zero-shot PPO-S, it reduces the gap from $22.8$ to $6.5$ without removing it. Under S, where the nominal
-model is correct, calibration has no measurable effect ($+0.2$ [$-1.2$, $+1.6$]).
+model is correct, calibration has no measurable effect (calibrated minus uncalibrated: $-0.2$ [$-1.6$, $+1.2$]).
 
 \textbf{Training on the target PHY.} PPO-LA with the calibrated planner and $H^*_L$ with the same planner are not
 statistically distinguishable ($+1.5$ [$-1.6$, $+4.6$]), consistent with an earlier pre-registered test on other seeds
