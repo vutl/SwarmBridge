@@ -38,8 +38,11 @@ phase reports. Two recent review rounds made factual errors that this file answe
     started after Paper A is submitted.
 - **Robustness round E1–E3 + E1b (19/11, `phases/2026-11-18_paperA-writeup/paperA-r2-robustness-result.md`):**
   - Rank reversal PPO-S/T:best holds on 4 LA variants and on test-dev.
-  - SNR-conditioned calibration beats a RobustMPC-style history-only predictor on every LA configuration
-    (+6.6..+18.0).
+  - The calibrated MPC beats a RobustMPC-style history-only predictor on every LA configuration (+3.4..+17.8).
+    E2b ablation: removing the SNR bins changes nothing (11/12 CIs include 0), so the gain is NOT from SNR
+    conditioning (an earlier claim of ours, now corrected).
+  - MPC p99 decision latency 39–48 ms (episode max up to 64 ms; <= 0.31 % slots over 50 ms).
+  - On test-dev, video-level (seed x video) recall CIs: PPO-LA + MPC − H* + MPC −2.5 recall despite +7.4 return.
   - The best fixed mode changes with LA conditions (q3 -> q1). PPO-LA transfers better than the frozen heuristic
     (+61 / +51) but trails the re-tuned heuristic (−31 / −29; PPO not retrained).
   - On test-dev content, PPO + MPC beats train-tuned heuristic + MPC (+7.4 L, +8.0 S).

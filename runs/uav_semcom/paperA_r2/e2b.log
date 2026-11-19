@@ -1,0 +1,24 @@
+L        ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ckpt -1 ret   -32.07
+L        ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  0 ret   -33.15
+L        ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  1 ret   -33.46
+L        ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  2 ret   -31.80
+L_badfb  ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ckpt -1 ret  -185.33
+L_badfb  ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  0 ret  -123.58
+L_badfb  ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  1 ret  -145.96
+L_badfb  ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  2 ret  -134.49
+L_bursty ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ckpt -1 ret   -29.37
+L_bursty ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  0 ret   -36.62
+L_bursty ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  1 ret   -33.42
+L_bursty ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  2 ret   -38.79
+L_fade   ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ckpt -1 ret  -167.15
+L_fade   ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  0 ret   -96.42
+L_fade   ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  1 ret  -122.01
+L_fade   ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  2 ret  -107.96
+S        ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_50+mpcpl           ckpt -1 ret    65.79
+e2b_test done 1741s
+L        ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ckpt -1 ret   -52.70
+L        ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  0 ret   -42.87
+L        ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  1 ret   -47.37
+L        ja~JA:stat:R:a1:m3@pacedB3|ppola+mpcpl                     ckpt  2 ret   -46.29
+S        ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_50+mpcpl           ckpt -1 ret    45.37
+e2b_testdev done 538s

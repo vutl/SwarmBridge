@@ -188,6 +188,14 @@ class CalRates:
 C_RHO = 5e6
 
 
+class PoolRates(CalRates):
+    """Paper A E2b ablation: CalRates WITHOUT SNR conditioning. Same slot-weighted ACKed observations, same sampling
+    of the empirical rate distribution, same MIN_AIR rule and rho fallback, but all observations of all UAVs share
+    one bin (expected SNR at UAV positions is above -1e6 dB, so the bin key is 0, or -1 for negative-dB SNR, and
+    the neighbour pooling merges both). Isolates the value of conditioning on the UAV's expected SNR."""
+    BIN_DB = 1e6
+
+
 class HarmRates(CalRates):
     """Paper A E2 (review of 2026-11-19): RobustMPC-style throughput predictor (Yin et al., SIGCOMM 2015) with the
     same interface as CalRates, so the planner, incumbent, budget and gate are unchanged. Per UAV it keeps the last

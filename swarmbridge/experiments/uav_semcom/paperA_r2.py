@@ -128,13 +128,39 @@ def retune(procs):
     print(f"e1b done {time.time() - t0:.0f}s", flush=True)
 
 
+def ablation(procs):
+    """E2b: calibrated MPC WITHOUT SNR bins (a9_mpc.PoolRates, suffix +mpcpl), same seeds as e12 / e3 for pairing."""
+    S = sched()
+    for name, phys, seeds, pool, td in (("e2b_test", ["S", "L", "L_fade", "L_bursty", "L_badfb"], list(range(9900, 10000)),
+                                         "test", False),
+                                        ("e2b_testdev", ["S", "L"], list(range(12000, 12100)), "testdev", True)):
+        t0 = time.time()
+        items = []
+        for p in phys:
+            items.append((p, f"{S}|h={H['S'] if p == 'S' else H['L']}+mpcpl"))
+            if p != "S":
+                items.append((p, f"{S}|ppola+mpcpl"))
+        res = run(items, seeds, pool, procs, 25, td)
+        json.dump(dict(wall_s=time.time() - t0, sched=S, seeds=seeds, pool=pool, H=H,
+                       results=[{k: v for k, v in r.items() if k != "deliv"} for r in res]), open(OUT / f"{name}.json", "w"))
+        json.dump({f"{r['phy']}|{r['combo']}|{r['ckpt']}": r["deliv"] for r in res},
+                  gzip.open(OUT / f"{name}.deliv.json.gz", "wt"))
+        for r in sorted(res, key=lambda r: (r["phy"], r["combo"], r["ckpt"])):
+            print(f"{r['phy']:8s} {r['combo']:58s} ckpt {r['ckpt']:2d} ret {np.mean([x['return'] for x in r['rows']]):8.2f}",
+                  flush=True)
+        print(f"{name} done {time.time() - t0:.0f}s", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=("e12", "e3", "e1b", "smoke"))
+    ap.add_argument("cmd", choices=("e12", "e3", "e1b", "e2b", "smoke"))
     ap.add_argument("--procs", type=int, default=6)
     a = ap.parse_args()
     if a.cmd == "e1b":
         retune(a.procs)
+        return
+    if a.cmd == "e2b":
+        ablation(a.procs)
         return
     if a.cmd == "smoke":
         stage("smoke", ["L_fade"], [9900], "test", False, a.procs)

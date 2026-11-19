@@ -55,7 +55,7 @@ Mọi Δ là chênh lệch return ghép cặp theo seed, kèm CI 95 %.
 | test-dev, S | +1,79 [+0,34, +3,23] | +12,05 [+9,97, +14,13] | −10,27 [−12,53, −8,00] |
 | test-dev, L | +5,24 [+1,04, +9,43] | **+18,04** [+13,12, +22,95] | −12,80 [−18,01, −7,59] |
 
-- Hiệu chỉnh theo SNR thắng baseline kiểu RobustMPC ở mọi cấu hình LA và trên test-dev.
+- Hiệu chỉnh theo phân phối thực nghiệm thắng baseline kiểu RobustMPC ở mọi cấu hình LA và trên test-dev. **Nhưng xem mục 5:** lợi thế này không đến từ việc chia theo SNR.
 - Trên test-dev, baseline kiểu RobustMPC còn tệ hơn MPC danh nghĩa.
 - Với PPO-LA làm incumbent, hiệu chỉnh − kiểu RobustMPC = +6,9 / +10,3 / +2,7 / +9,2 (L / fade / bursty / badfb) và
   +10,9 (test-dev).
@@ -96,10 +96,64 @@ Return và recall không luôn cùng chiều.
 
 - **Đóng góp 2 vững hơn nhiều:** bộ điều khiển thiết kế trên Shannon tụt ở mọi biến thể LA và trên nội dung mới; đảo
   thứ hạng PPO-S/T:best giữ nguyên ở 6/6 cấu hình LA.
-- **Đóng góp 3 có cơ chế riêng:** hiệu chỉnh theo SNR kỳ vọng tại vị trí UAV thắng dự báo chỉ dựa trên lịch sử (kiểu
-  RobustMPC) ở mọi cấu hình LA (+6,6 đến +18,0).
+- **Đóng góp 3 (đã sửa sau ablation E2b):** bộ hiệu chỉnh thắng dự báo kiểu RobustMPC ở mọi cấu hình LA (+3,4 đến
+  +17,8 khi bỏ chia SNR), nhưng **chia theo SNR không đóng góp gì**. Chưa tách được phần nào của bộ hiệu chỉnh tạo ra
+  lợi thế.
 - **Câu "PPO không hơn heuristic + MPC" chỉ đúng ở LA gốc.** Kết quả đầy đủ:
   - bộ điều khiển nào cũng phụ thuộc vào điều kiện lúc thiết kế;
   - chính sách học chuyển sang điều kiện mới (ảnh mới, suy giảm kênh chưa thấy) tốt hơn heuristic chọn mode cố định
     đã đóng băng;
   - nhưng heuristic được tune lại cho đúng điều kiện thì tốt nhất trong các phép so đã có.
+
+## 5. E2b: hiệu chỉnh không chia theo SNR (ablation do phản biện đề nghị)
+
+- **Cấu hình:** cùng bộ hiệu chỉnh (cùng quan sát số bit đã ACK mỗi slot, cùng cách lấy mẫu phân phối thực nghiệm, cùng
+  planner và cổng), chỉ gộp mọi quan sát của mọi UAV vào một ngăn (`a9_mpc.PoolRates`, hậu tố `+mpcpl`).
+- **Seed:** giống E1 / E3, ghép cặp.
+
+| Cấu hình | Incumbent | Chia SNR − không chia | Không chia − kiểu RobustMPC | Không chia − danh nghĩa |
+|---|---|---|---|---|
+| L | H\*_L | −0,05 [−3,10, +3,00] | +6,67 [+2,60, +10,75] | +17,01 |
+| L | PPO-LA | +1,15 [−0,03, +2,33] | +5,76 [+4,40, +7,13] | |
+| L_fade | H\*_L | −0,66 [−3,62, +2,30] | +10,78 [+8,06, +13,49] | +37,08 |
+| L_fade | PPO-LA | +2,19 [+0,77, +3,62] | +8,14 [+6,58, +9,69] | |
+| L_bursty | H\*_L | +1,62 [−1,71, +4,94] | +6,54 [+3,33, +9,75] | +19,30 |
+| L_bursty | PPO-LA | −0,70 [−1,96, +0,57] | +3,37 [+1,77, +4,97] | |
+| L_badfb | H\*_L | −0,38 [−5,44, +4,68] | +14,11 [+10,02, +18,21] | +28,60 |
+| L_badfb | PPO-LA | −0,07 [−2,14, +2,01] | +9,29 [+7,15, +11,43] | |
+| S | H\*_S | −0,53 [−1,23, +0,16] | −0,35 [−1,33, +0,62] | +1,11 (n.s.) |
+| test-dev L | H\*_L | +0,25 [−3,10, +3,59] | +17,79 [+13,15, +22,43] | +4,99 |
+| test-dev L | PPO-LA | +0,45 [−1,19, +2,08] | +10,47 [+8,55, +12,38] | |
+| test-dev S | H\*_S | −0,74 [−1,88, +0,41] | +12,79 [+10,98, +14,59] | +2,52 |
+
+**Kết luận:**
+- Chia theo SNR kỳ vọng **không** tạo ra lợi ích: 11/12 CI chứa 0; chỉ PPO-LA trên L_fade +2,2.
+- **Đính chính:** ở trên mình từng viết "hiệu chỉnh theo vị trí/SNR là cơ chế riêng". Điều đó **sai**.
+- Lợi thế so với baseline kiểu RobustMPC đến từ chính bộ hiệu chỉnh theo phân phối thực nghiệm. Chưa tách được phần
+  nào quyết định: lấy mẫu cả phân phối thay vì một giá trị, gộp dữ liệu nhiều UAV và nhớ lâu hơn, hay không có hệ số
+  bi quan (1 + sai số lớn nhất).
+
+## 6. Độ trễ quyết định (mọi arm có MPC, E1–E3, E1b, E2b)
+
+- p99 trung bình theo episode: 39–48 ms.
+- p99 lớn nhất của một episode: 44–64 ms. Riêng PPO-S + MPC trên L lên tới 64,0 ms.
+- Tỉ lệ slot vượt 50 ms ≤ 0,31 %.
+- Như R1: giả định các quyết định mode trong một slot chạy song song.
+- Chi tiết trong `runs/uav_semcom/paperA_r2/summary_c.log`.
+
+## 7. Test-dev: CI theo video (bootstrap hai chiều seed × 49 video, recall tuân thủ Qmin, điểm %)
+
+| Kênh | Phép so | Δ recall [95 % CI] |
+|---|---|---|
+| S | PPO-S − T:best (khối A) | +4,24 [+1,13, +9,88] |
+| S | H\* + MPC hiệu chỉnh − kiểu RobustMPC | −1,08 [−1,74, −0,64] |
+| L | PPO-S − T:best (khối A) | +2,01 [+0,71, +3,15] |
+| L | H\* + MPC hiệu chỉnh − kiểu RobustMPC | −0,54 [−1,31, +0,29] |
+| L | PPO-LA + MPC − H\* + MPC | −2,48 [−3,50, −1,58] |
+
+**Ghi chú:**
+- Return là tổng của cả episode nên không tách được theo video; phân tích theo video vì vậy làm trên recall.
+- Trên test-dev L, PPO-LA + MPC có return cao hơn (+7,4) nhưng recall tuân thủ Qmin thấp hơn (−2,5, có ý nghĩa
+  thống kê theo cả seed lẫn video).
+- PPO-S có return thấp hơn T:best trên L (−59,7) nhưng recall cao hơn (+2,0).
+- Return và recall đi ngược chiều.

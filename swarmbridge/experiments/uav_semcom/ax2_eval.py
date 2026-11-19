@@ -147,9 +147,10 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     if "+tmpc=" in mode:
         mode, tutil = mode.split("+tmpc=")
     harm = mode.endswith("+mpcrh")          # Paper A E2: same MPC, RobustMPC-style history-only rate predictor
+    pool_cal = mode.endswith("+mpcpl")      # Paper A E2b: same calibrated MPC without SNR bins
     nocal = mode.endswith("+mpcnc")
-    use_mpc = mode.endswith("+mpc") or nocal or harm or tutil is not None
-    mode = mode[:-6] if (nocal or harm) else (mode[:-4] if mode.endswith("+mpc") else mode)
+    use_mpc = mode.endswith("+mpc") or nocal or harm or pool_cal or tutil is not None
+    mode = mode[:-6] if (nocal or harm or pool_cal) else (mode[:-4] if mode.endswith("+mpc") else mode)
     mp_h, cal_h = None, False
     if mode.startswith(("h=", "hc=")):
         cal_h = mode.startswith("hc=")
@@ -198,6 +199,7 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     if (use_mpc and not nocal) or cal_h:
         assert mmod is not None or mp_h is not None, "+mpc needs an incumbent (learned mode head or h= / hc= rule)"
         cal = (M.HarmRates(persistent=False, slot_weight=True) if harm
+               else M.PoolRates(persistent=False, slot_weight=True) if pool_cal
                else M.CalRates(persistent=False, slot_weight=True))
         if tutil is not None:
             import at1_task as AT
@@ -329,7 +331,7 @@ def job(j):
 
 def needs_ckpt(combo):
     s, m = combo.split("|")
-    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         m.replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm")
+    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         m.replace("+mpcpl", "").replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm")
 
 
 def main():
