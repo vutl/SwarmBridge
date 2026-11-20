@@ -126,6 +126,10 @@ Return và recall không luôn cùng chiều.
 | test-dev L | PPO-LA | +0,45 [−1,19, +2,08] | +10,47 [+8,55, +12,38] | |
 | test-dev S | H\*_S | −0,74 [−1,88, +0,41] | +12,79 [+10,98, +14,59] | +2,52 |
 
+**Kiểm tra số ngăn (20/11):** SNR kỳ vọng mà bộ hiệu chỉnh thấy nằm trong 10,8–18,9 dB (không có giá trị âm; 3 seed ×
+S/L, script ghi nhận SNR trong `CalRates._snr_db`). Vì `BIN_DB = 1e6`, `PoolRates` đúng là một ngăn duy nhất. Với dải
+SNR hẹp như vậy, ngăn 2 dB chỉ chia thành khoảng 5 ngăn, nên ablation này chỉ kiểm tra được trong dải đó.
+
 **Kết luận:**
 - Chia theo SNR kỳ vọng **không** tạo ra lợi ích: 11/12 CI chứa 0; chỉ PPO-LA trên L_fade +2,2.
 - **Đính chính:** ở trên mình từng viết "hiệu chỉnh theo vị trí/SNR là cơ chế riêng". Điều đó **sai**.

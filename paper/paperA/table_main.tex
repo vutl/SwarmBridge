@@ -1,0 +1,15 @@
+\begin{tabular}{@{}lrrrrrrrr@{}}
+\toprule
+ & \multicolumn{2}{c}{A: PPO-S $-$ T:best} & \multicolumn{2}{c}{B: learned $-$ frozen $H^*$} & C: vs.\ re-tuned & D: cal.\ $-$ nominal & E: cal.\ $-$ RobustMPC-style & F: binned $-$ pooled\\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Configuration & return & recall & return & recall & return & return & return & return\\
+\midrule
+Shannon & $\mathbf{+2.3}\pm0.9$ & $\mathbf{+1.1}\pm0.2$ & $\mathbf{-3.6}\pm0.6$ & $\mathbf{-0.7}\pm0.1$ & -- & $+0.6\pm1.5$ & $-0.9\pm1.1$ & $-0.5\pm0.7$ \\
+LA & $\mathbf{-23.4}\pm3.5$ & $\mathbf{+1.5}\pm0.4$ & $+0.5\pm2.7$ & $\mathbf{-2.9}\pm0.3$ & -- & $\mathbf{+17.0}\pm4.3$ & $\mathbf{+6.6}\pm3.5$ & $-0.0\pm3.1$ \\
+LA, block fading & $\mathbf{-39.0}\pm3.4$ & $\mathbf{-0.6}\pm0.4$ & $\mathbf{+61.2}\pm4.1$ & $\mathbf{+3.4}\pm0.6$ & $\mathbf{-31.4}\pm3.9$ & $\mathbf{+36.4}\pm5.2$ & $\mathbf{+10.1}\pm2.8$ & $-0.7\pm3.0$ \\
+LA, bursty interf. & $\mathbf{-22.1}\pm4.1$ & $\mathbf{+1.8}\pm0.4$ & $\mathbf{-9.2}\pm3.1$ & $\mathbf{-4.8}\pm0.4$ & $\mathbf{-9.2}\pm3.1$ & $\mathbf{+20.9}\pm4.5$ & $\mathbf{+8.2}\pm3.8$ & $+1.6\pm3.3$ \\
+LA, degraded CQI & $\mathbf{-37.9}\pm4.1$ & $\mathbf{-0.7}\pm0.4$ & $\mathbf{+51.0}\pm5.1$ & $\mathbf{+2.0}\pm0.7$ & $\mathbf{-29.3}\pm4.1$ & $\mathbf{+28.2}\pm7.1$ & $\mathbf{+13.7}\pm4.6$ & $-0.4\pm5.1$ \\
+Shannon, test-dev & $\mathbf{+14.0}\pm1.0$ & $\mathbf{+4.2}\pm0.3$ & $\mathbf{+8.0}\pm1.7$ & $\mathbf{-1.4}\pm0.2$ & -- & $\mathbf{+1.8}\pm1.4$ & $\mathbf{+12.1}\pm2.1$ & $-0.7\pm1.1$ \\
+LA, test-dev & $\mathbf{-59.7}\pm4.8$ & $\mathbf{+2.0}\pm0.4$ & $\mathbf{+7.4}\pm3.3$ & $\mathbf{-2.5}\pm0.4$ & -- & $\mathbf{+5.2}\pm4.2$ & $\mathbf{+18.0}\pm4.9$ & $+0.2\pm3.3$ \\
+\bottomrule
+\end{tabular}

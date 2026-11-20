@@ -159,9 +159,40 @@ def recall(out):
     fig.savefig(out / "fig_r1_recall.png", bbox_inches="tight", dpi=200)
 
 
+def misalignment(out):
+    """Fig. 2 (rewrite): per configuration, paired return difference (a) and Qmin-compliant recall difference (b)
+    of two controller pairs; from runs/uav_semcom/paperA_r2/paper_numbers.json (robustness round)."""
+    N = json.loads((C.REPO / "runs" / "uav_semcom" / "paperA_r2" / "paper_numbers.json").read_text())
+    confs = ["S", "L", "L_fade", "L_bursty", "L_badfb", "TD-S", "TD-L"]
+    names = {"S": "Shannon", "L": "LA", "L_fade": "LA, block fading", "L_bursty": "LA, bursty interf.",
+             "L_badfb": "LA, degraded CQI", "TD-S": "Shannon, test-dev", "TD-L": "LA, test-dev"}
+    fig, axs = plt.subplots(1, 2, figsize=(7.0, 2.35), sharey=True)
+    series = (("A", BLUE, "o", -0.14, "PPO-S $-$ T:best (same slot rule)"),
+              ("B", ORANGE, "^", 0.14, "learned + MPC $-$ $H^*$ + MPC ($H^*$ frozen)"))
+    for ax, metric, title in zip(axs, ("return", "recall"), ("(a) Return difference", "(b) Qmin-compliant recall difference (points)")):
+        for key, col, mk, off, lab in series:
+            for i, c in enumerate(confs):
+                d, lo, hi = N[c][f"{key}_{metric}"]
+                y = len(confs) - 1 - i + off
+                ax.errorbar(d, y, xerr=[[d - lo], [hi - d]], fmt=mk, ms=4.5, color=col, ecolor=col, elinewidth=1.2,
+                            capsize=0, label=lab if i == 0 else None)
+        ax.axvline(0, color=MUTED, lw=0.9)
+        ax.grid(axis="x", color=GRID, lw=0.6)
+        ax.set_title(title, fontsize=7.5, color=INK)
+        ax.tick_params(labelsize=7)
+    axs[0].set_yticks(range(len(confs)))
+    axs[0].set_yticklabels([names[c] for c in reversed(confs)], fontsize=7)
+    h, l = axs[0].get_legend_handles_labels()
+    fig.legend(h, l, loc="lower center", ncol=2, frameon=False, fontsize=7, bbox_to_anchor=(0.55, -0.03))
+    fig.tight_layout(rect=(0, 0.09, 1, 1))
+    fig.savefig(out / "fig_misalign.pdf", bbox_inches="tight")
+    fig.savefig(out / "fig_misalign.png", bbox_inches="tight", dpi=200)
+
+
 if __name__ == "__main__":
     o = Path(sys.argv[1])
     o.mkdir(parents=True, exist_ok=True)
+    misalignment(o)
     architecture(o)
     forest(o)
     block_a(o)
