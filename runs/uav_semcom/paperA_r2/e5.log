@@ -1,0 +1,7 @@
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb10l0 ret   -32.75
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb1l0 ret   -29.55
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb1l30 ret   -30.13
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb3l0 ret   -31.95
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb3l30 ret   -31.82
+e5 done 472s
+EXIT 0

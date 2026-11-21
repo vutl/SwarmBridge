@@ -49,4 +49,9 @@
      +mpcrh   ret     17.4 (+0.067/img) recall  55.1 ok 0.960 drop 0.014 late 0.000 qviol 0.026 sched p99  38.3 ms  int p99  75.2 ms  >50ms 0.378
      +mpcpl   ret     19.2 (+0.074/img) recall  54.9 ok 0.962 drop 0.012 late 0.000 qviol 0.026 sched p99  41.3 ms  int p99  80.7 ms  >50ms 0.425
 PASS counts (CI > 0): H1 3/5  H2 4/5  H3 5/5  (rule: H1 and H2 in >= 4/5 -> 'persisted across the evaluated network sizes')
-== E5: e5.json not there yet (the superseded +mpcfb arms of e4.json are NOT reported)
+== E5 (N5x2): delayed / lossy rate reports (e5.json, calibrator AND tracker delayed)
+   fb1l0   - immediate   +1.81 [  -1.46,  +5.07]    - nominal  +21.31 [ +17.37, +25.25]*   - H*   +4.47 [  +1.43,  +7.50]*
+   fb3l0   - immediate   -0.60 [  -3.83,  +2.63]    - nominal  +18.91 [ +14.79, +23.03]*   - H*   +2.06 [  -0.57,  +4.70] 
+   fb10l0  - immediate   -1.40 [  -4.54,  +1.75]    - nominal  +18.11 [ +13.97, +22.25]*   - H*   +1.27 [  -1.76,  +4.29] 
+   fb1l30  - immediate   +1.22 [  -2.11,  +4.55]    - nominal  +20.73 [ +16.77, +24.68]*   - H*   +3.88 [  +0.73,  +7.03]*
+   fb3l30  - immediate   -0.47 [  -3.70,  +2.75]    - nominal  +19.03 [ +15.09, +22.98]*   - H*   +2.19 [  -0.76,  +5.14] 

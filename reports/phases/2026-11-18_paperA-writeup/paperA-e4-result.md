@@ -63,3 +63,25 @@ báo như ablation, đúng như phản biện yêu cầu.
 
 **File:** `runs/uav_semcom/paperA_r2/e4.json`, `e4.deliv.json.gz`, `summary_e4.json/.log`; script
 `paperA_e4_summary.py`.
+
+## E5: phản hồi tốc độ bị trễ hoặc mất (chạy lại sau khi sửa lỗi, 22/11)
+
+Bộ hiệu chỉnh **và** bộ theo dõi sai số cùng nhận lịch trễ/mất báo cáo giống nhau (commit 2f11b15b, có test). Cấu hình
+N5x2, cùng seed 13000–13099 với E4, ghép cặp. Một slot = 1 s.
+
+| Báo cáo | − báo cáo tức thì | − MPC danh nghĩa | − H\* |
+|---|---|---|---|
+| Trễ 1 slot | +1,8 [−1,5; +5,1] | **+21,3*** | **+4,5*** |
+| Trễ 3 slot | −0,6 [−3,8; +2,6] | **+18,9*** | +2,1 [−0,6; +4,7] |
+| Trễ 10 slot | −1,4 [−4,5; +1,8] | **+18,1*** | +1,3 [−1,8; +4,3] |
+| Trễ 1 slot, mất 30% | +1,2 [−2,1; +4,6] | **+20,7*** | **+3,9*** |
+| Trễ 3 slot, mất 30% | −0,5 [−3,7; +2,8] | **+19,0*** | +2,2 [−0,8; +5,1] |
+
+**Theo quy tắc đã đăng ký** (chỉ được nói "chịu được trễ d / mất p" với những thiết lập có CI so với MPC danh nghĩa
+hoàn toàn trên 0):
+- **Đạt ở cả 5 thiết lập.** Lợi thế so với mô hình danh nghĩa giữ được khi báo cáo trễ tới 10 slot (10 s) hoặc mất 30%.
+- So với báo cáo tức thì, không thiết lập nào khác biệt có ý nghĩa.
+- So với H\* không có MPC, kết quả lẫn lộn, giống E4: ngay cả báo cáo tức thì cũng chỉ +2,7, CI chứa 0.
+
+**Phạm vi:** chỉ báo cáo throughput dùng cho lập kế hoạch bị trễ/mất. ACK của ARQ và quan sát hàng đợi của bộ lập lịch
+giữ nguyên. Kết quả `+mpcfb` cũ trong `e4.json` (lỗi bộ theo dõi) không được dùng.
