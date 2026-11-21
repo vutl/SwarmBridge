@@ -250,6 +250,98 @@ class HarmRates(CalRates):
         return self._pred(k)
 
 
+class AblRates(CalRates):
+    """Paper A E2c ablation ladder between HarmRates (RobustMPC-style) and PoolRates (pooled calibrator), one factor
+    at a time. Observations are the same slot-weighted ACKed per-UAV slot rates (weight dt). Factors:
+      per_uav  True: one history per UAV; False: all UAVs pooled
+      hist     None: the whole episode; n: the last n observations of the key
+      pred     'hmean' harmonic mean (rates floored at 1 bit/s, as HarmRates) | 'amean' mean | 'sample' empirical
+               distribution (independent draws per path and slot, as CalRates)
+      pess     divide a point prediction by 1 + max relative error of the last `hist or 5` predictions (HarmRates)
+      drop0    leave zero-rate slots (every block of the UAV failed) out of the history
+      min_air  observed weight (s) needed before the predictor is used; before that the rho-scaled Shannon fallback
+    The SNR-bin-free planner interface is the same as CalRates / HarmRates; persistent=False (cold start)."""
+
+    def __init__(self, per_uav, hist, pred, pess=False, drop0=False, min_air=None, **kw):
+        super().__init__(persistent=False, slot_weight=True, **kw)
+        self.per_uav, self.hist, self.pred, self.pess, self.drop0 = per_uav, hist, pred, pess, drop0
+        self.min_air = min_air
+        self.obs, self.err, self.last_pred = {}, {}, {}
+
+    def update(self, env):
+        if self.tasks is not env.tasks:
+            self.tasks, self.seg_i, self.prev = env.tasks, 0, None
+            self.bins, self.num, self.den, self.rho_hist = {}, 0.0, 0.0, []
+            self.obs, self.err, self.last_pred = {}, {}, {}
+        if self.prev is not None and self.prev[0] != env.t:
+            t0, snr = self.prev
+            for k, r, dur in slot_obs(env, self, env.c["dt"]):
+                sh = env.c["B_total"] / env.c["M"] * math.log2(1 + 10 ** (snr[k] / 10))
+                self.num += r * dur; self.den += sh * dur
+                if self.drop0 and r <= 0:
+                    continue
+                key = k if self.per_uav else 0
+                if self.pess and key in self.last_pred and self.last_pred[key] is not None and r > 0:
+                    e = self.err.setdefault(key, [])
+                    e.append(abs(self.last_pred[key] - r) / r)
+                    del e[:-(self.hist or 5)]
+                lst = self.obs.setdefault(key, [])
+                lst.append((r, dur))
+                if self.hist:
+                    del lst[:-self.hist]
+                self.last_pred[key] = self._point(key)
+        self.prev = (env.t, [self._snr_db(env, k) for k in range(len(env.uavs))])
+
+    def _ready(self, key):
+        lst = self.obs.get(key)
+        if not lst:
+            return None
+        if self.min_air is not None and sum(w for _, w in lst) < self.min_air:
+            return None
+        return lst
+
+    def _point(self, key):
+        lst = self._ready(key)
+        if lst is None:
+            return None
+        r = np.array([x for x, _ in lst]); w = np.array([x for _, x in lst])
+        p = (w.sum() / float(np.sum(w / np.maximum(r, 1.0)))) if self.pred == "hmean" else float(np.dot(r, w) / w.sum())
+        if self.pess:
+            p /= 1.0 + max(self.err.get(key, [0.0]) or [0.0])
+        return p
+
+    def sample(self, env, k, shape, rng):
+        key = k if self.per_uav else 0
+        if self.pred != "sample":
+            p = self._point(key)
+            return None if p is None else np.full(shape, p)
+        lst = self._ready(key)
+        if lst is None:
+            return None
+        r = np.array([x for x, _ in lst]); w = np.array([x for _, x in lst])
+        return r[rng.choice(len(r), size=shape, p=w / w.sum())]
+
+    def mean(self, env, k):
+        key = k if self.per_uav else 0
+        if self.pred != "sample":
+            return self._point(key)
+        lst = self._ready(key)
+        return None if lst is None else float(np.dot([x for x, _ in lst], [x for _, x in lst]) / sum(x for _, x in lst))
+
+
+# E2c ladder, HarmRates -> PoolRates, one factor per step (rh = HarmRates, pl = PoolRates are the existing ends):
+ABL = {
+    "ab0": dict(per_uav=True, hist=5, pred="hmean", pess=True, drop0=True),     # rh without zero-rate slots
+    "ab1": dict(per_uav=True, hist=5, pred="hmean"),                            # rh without the pessimistic factor
+    "ab2": dict(per_uav=True, hist=5, pred="amean"),                            # ab1, mean instead of harmonic mean
+    "ab3": dict(per_uav=True, hist=5, pred="sample"),                           # ab2, sample the last 5 instead
+    "ab4": dict(per_uav=True, hist=None, pred="sample"),                        # ab3, whole-episode memory
+    "ab5": dict(per_uav=False, hist=None, pred="sample"),                       # ab4, all UAVs pooled
+    "ab6": dict(per_uav=False, hist=None, pred="amean", min_air=CalRates.MIN_AIR),  # pl, mean instead of sampling
+    "ab7": dict(per_uav=False, hist=None, pred="sample", min_air=CalRates.MIN_AIR),  # = pl re-implemented (check)
+}
+
+
 def slot_obs(env, owner, slot_dt=None):
     """consume the new segments of env (owner.seg_i cursor) -> list of (uav, rate, weight). slot_dt None: one entry
     per segment weighted by its duration; else one entry per UAV (the slot's airtime-weighted mean rate), weight

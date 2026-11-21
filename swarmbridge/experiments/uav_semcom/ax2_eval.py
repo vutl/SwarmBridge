@@ -44,6 +44,7 @@ Diagnostics per episode, besides the A5 metrics:
 --env-extra JSON: cfg overrides of the environment (review #42: e.g. the link-adaptation PHY of A-X6 / A-X7 with
 obs_la false, so that controllers trained on K5 see their own observation layout).
 Usage: python ax2_eval.py OUT --regime K5 [--env-regime K5_mcs] --combos A,B,.. --seeds 8800:8900 --procs 6"""
+import re
 import argparse
 import gzip
 import json
@@ -149,8 +150,15 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     harm = mode.endswith("+mpcrh")          # Paper A E2: same MPC, RobustMPC-style history-only rate predictor
     pool_cal = mode.endswith("+mpcpl")      # Paper A E2b: same calibrated MPC without SNR bins
     nocal = mode.endswith("+mpcnc")
-    use_mpc = mode.endswith("+mpc") or nocal or harm or pool_cal or tutil is not None
-    mode = mode[:-6] if (nocal or harm or pool_cal) else (mode[:-4] if mode.endswith("+mpc") else mode)
+    abl = re.search(r"\+mpc(ab\d)$", mode)    # Paper A E2c: ablation ladder HarmRates -> PoolRates (a9_mpc.ABL)
+    abl = abl.group(1) if abl else None
+    fbm = re.search(r"[+]mpcfb(\d+)l(\d+)$", mode)    # Paper A E5: calibrated MPC with delayed / lossy rate reports
+    fb_cfg = (int(fbm.group(1)), int(fbm.group(2)) / 100.0) if fbm else None
+    if fbm:
+        mode = mode[:fbm.start()] + "+mpc"
+    use_mpc = mode.endswith("+mpc") or nocal or harm or pool_cal or abl is not None or tutil is not None
+    mode = (mode[:-7] if abl else mode[:-6] if (nocal or harm or pool_cal)
+            else (mode[:-4] if mode.endswith("+mpc") else mode))
     mp_h, cal_h = None, False
     if mode.startswith(("h=", "hc=")):
         cal_h = mode.startswith("hc=")
@@ -198,7 +206,9 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     mpc = trk = cal = dl = None
     if (use_mpc and not nocal) or cal_h:
         assert mmod is not None or mp_h is not None, "+mpc needs an incumbent (learned mode head or h= / hc= rule)"
-        cal = (M.HarmRates(persistent=False, slot_weight=True) if harm
+        cal = (M.CalRates(persistent=False, slot_weight=True, fb=M.Feedback(*fb_cfg, seed=31)) if fb_cfg
+               else M.AblRates(**M.ABL[abl]) if abl
+               else M.HarmRates(persistent=False, slot_weight=True) if harm
                else M.PoolRates(persistent=False, slot_weight=True) if pool_cal
                else M.CalRates(persistent=False, slot_weight=True))
         if tutil is not None:
@@ -331,7 +341,7 @@ def job(j):
 
 def needs_ckpt(combo):
     s, m = combo.split("|")
-    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         m.replace("+mpcpl", "").replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm")
+    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         re.sub(r"[+]mpc(ab\d|fb\d+l\d+)$", "", m).replace("+mpcpl", "").replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm")
 
 
 def main():

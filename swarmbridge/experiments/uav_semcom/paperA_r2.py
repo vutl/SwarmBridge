@@ -24,6 +24,7 @@ import numpy as np
 
 import a5_common as C
 import a5_eval as AE
+import a9_mpc as M9
 import ax2_eval as X2
 
 OUT = C.REPO / "runs" / "uav_semcom" / "paperA_r2"
@@ -32,6 +33,12 @@ PHY = {"S": ("K5", {}), "L": ("K5_la", LA),
        "L_fade": ("K5_la", dict(LA, la_fade="block")),
        "L_bursty": ("K5_la", dict(LA, la_interf="bursty")),
        "L_badfb": ("K5_la", dict(LA, la_cqi_sigma=3.0, la_fb_delay=10))}
+# E4 network-size sweep (nominal LA PHY, total bandwidth fixed at 1 MHz split into M channels)
+NET = {"N3x2": dict(K=3, M=2), "N5x2": dict(K=5, M=2), "N7x2": dict(K=7, M=2), "N5x3": dict(K=5, M=3),
+       "N5x4": dict(K=5, M=4)}
+PHY.update({n: ("K5_la", dict(LA, **km)) for n, km in NET.items()})
+E4_SEEDS = list(range(13000, 13100))
+FB = ["fb1l0", "fb3l0", "fb10l0", "fb1l30", "fb3l30"]     # E5: report delay (slots of 1 s) and loss (%)
 H = {"S": "fixed_avif_50", "L": "fixed_mbt2018-mean_q3"}
 
 
@@ -151,9 +158,56 @@ def ablation(procs):
         print(f"{name} done {time.time() - t0:.0f}s", flush=True)
 
 
+def ladder(procs):
+    """E2c: one-factor ablation ladder between the RobustMPC-style predictor (+mpcrh) and the pooled calibrator
+    (+mpcpl), a9_mpc.ABL ab0..ab7, incumbent H*, same seeds as e12 / e3 for pairing (review after the 2026-11-20
+    rewrite: which element of the calibration produces the gain)."""
+    S = sched()
+    for name, phys, seeds, pool, td in (("e2c_test", ["S", "L", "L_fade", "L_bursty", "L_badfb"], list(range(9900, 10000)),
+                                         "test", False),
+                                        ("e2c_testdev", ["S", "L"], list(range(12000, 12100)), "testdev", True)):
+        t0 = time.time()
+        items = [(p, f"{S}|h={H['S'] if p == 'S' else H['L']}+mpc{a}") for p in phys for a in sorted(M9.ABL)]
+        res = run(items, seeds, pool, procs, 25, td)
+        json.dump(dict(wall_s=time.time() - t0, sched=S, seeds=seeds, pool=pool, H=H, ladder=M9.ABL,
+                       results=[{k: v for k, v in r.items() if k != "deliv"} for r in res]), open(OUT / f"{name}.json", "w"))
+        json.dump({f"{r['phy']}|{r['combo']}|{r['ckpt']}": r["deliv"] for r in res},
+                  gzip.open(OUT / f"{name}.deliv.json.gz", "wt"))
+        for r in sorted(res, key=lambda r: (r["phy"], r["combo"], r["ckpt"])):
+            print(f"{r['phy']:8s} {r['combo']:58s} ckpt {r['ckpt']:2d} ret {np.mean([x['return'] for x in r['rows']]):8.2f}",
+                  flush=True)
+        print(f"{name} done {time.time() - t0:.0f}s", flush=True)
+
+
+def sweep(procs):
+    """E4 + E5 (pre-registered in reports/phases/2026-11-18_paperA-writeup/paperA-e4-e5-prereg.md).
+    E4: per network configuration, H* re-tuned on the train seeds 0..29 (same 22-rule family), then H*, H* + calibrated
+    MPC (the method as in the manuscript, unchanged), + nominal MPC, + RobustMPC-style, + pooled calibration on the
+    fresh seeds 13000..13099. E5: on N5x2 the calibrated MPC with delayed / lossy rate reports (same seeds, paired)."""
+    import ax9_run as A9
+    S = sched()
+    t0 = time.time()
+    tr = run([(n, f"{S}|h={h}") for n in NET for h in A9.H_FAMILY], list(C.TRAIN_SEEDS), "train", procs, 10, False)
+    tune = {n: {} for n in NET}
+    for r in tr:
+        tune[r["phy"]][r["combo"].split("|h=")[1]] = float(np.mean([x["return"] for x in r["rows"]]))
+    best = {n: max(tune[n], key=tune[n].get) for n in NET}
+    print("re-tuned H* per network:", best, f"{time.time() - t0:.0f}s", flush=True)
+    items = [(n, f"{S}|h={best[n]}{suf}") for n in NET for suf in ("", "+mpc", "+mpcnc", "+mpcrh", "+mpcpl")]
+    items += [("N5x2", f"{S}|h={best['N5x2']}+mpc{f}") for f in FB]
+    res = run(items, E4_SEEDS, "test", procs, 25, False)
+    json.dump(dict(wall_s=time.time() - t0, sched=S, seeds=E4_SEEDS, pool="test", net=NET, H_net=best,
+                   train_return=tune, fb=FB, results=[{k: v for k, v in r.items() if k != "deliv"} for r in res]),
+              open(OUT / "e4.json", "w"))
+    json.dump({f"{r['phy']}|{r['combo']}|{r['ckpt']}": r["deliv"] for r in res}, gzip.open(OUT / "e4.deliv.json.gz", "wt"))
+    for r in sorted(res, key=lambda r: (r["phy"], r["combo"])):
+        print(f"{r['phy']:8s} {r['combo']:58s} ret {np.mean([x['return'] for x in r['rows']]):8.2f}", flush=True)
+    print(f"e4 done {time.time() - t0:.0f}s", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=("e12", "e3", "e1b", "e2b", "smoke"))
+    ap.add_argument("cmd", choices=("e12", "e3", "e1b", "e2b", "e2c", "e4", "smoke"))
     ap.add_argument("--procs", type=int, default=6)
     a = ap.parse_args()
     if a.cmd == "e1b":
@@ -161,6 +215,12 @@ def main():
         return
     if a.cmd == "e2b":
         ablation(a.procs)
+        return
+    if a.cmd == "e2c":
+        ladder(a.procs)
+        return
+    if a.cmd == "e4":
+        sweep(a.procs)
         return
     if a.cmd == "smoke":
         stage("smoke", ["L_fade"], [9900], "test", False, a.procs)
