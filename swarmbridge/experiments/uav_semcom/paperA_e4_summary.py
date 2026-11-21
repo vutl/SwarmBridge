@@ -85,6 +85,10 @@ def main():
     print(f"PASS counts (CI > 0): H1 {pass_h1}/5  H2 {pass_h2}/5  H3 {pass_h3}/5  "
           f"(rule: H1 and H2 in >= 4/5 -> 'persisted across the evaluated network sizes')")
     # E5: the +mpcfb arms of e4.json are superseded (tracker saw immediate reports); use e5.json (fixed)
+    if not (R.OUT / "e5.json").exists():
+        print("== E5: e5.json not there yet (the superseded +mpcfb arms of e4.json are NOT reported)")
+        json.dump(out, open(R.OUT / "summary_e4.json", "w"), indent=1)
+        return
     e5 = json.loads((R.OUT / "e5.json").read_text())
     by.update({(r["phy"], r["combo"]): r for r in e5["results"]})
     print("== E5 (N5x2): delayed / lossy rate reports (e5.json, calibrator AND tracker delayed)")

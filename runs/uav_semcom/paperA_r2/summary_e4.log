@@ -1,0 +1,52 @@
+== N3x2 (K=3, M=2, H*=fixed_mbt2018-mean_q3)
+   H1 cal - H*        +1.71 [  +0.59,  +2.82]*   recall   -0.33 [  -0.55,  -0.11]*
+   H2 cal - RobMPC    +1.74 [  +0.69,  +2.80]*   recall   -0.31 [  -0.53,  -0.09]*
+   H3 cal - nominal   +7.00 [  +4.74,  +9.27]*
+   pooled - cal       -1.68 [  -2.70,  -0.66]*
+     H*       ret      9.5 (+0.061/img) recall  55.0 ok 0.956 drop 0.017 late 0.000 qviol 0.026 sched p99   1.2 ms  int p99   1.2 ms  >50ms 0.000
+     +mpc     ret     11.2 (+0.072/img) recall  54.7 ok 0.959 drop 0.015 late 0.000 qviol 0.026 sched p99   1.5 ms  int p99  40.9 ms  >50ms 0.000
+     +mpcnc   ret      4.2 (+0.027/img) recall  54.0 ok 0.929 drop 0.058 late 0.000 qviol 0.013 sched p99   1.4 ms  int p99  41.4 ms  >50ms 0.000
+     +mpcrh   ret      9.4 (+0.060/img) recall  55.0 ok 0.957 drop 0.017 late 0.000 qviol 0.027 sched p99   1.4 ms  int p99  41.1 ms  >50ms 0.000
+     +mpcpl   ret      9.5 (+0.061/img) recall  54.6 ok 0.955 drop 0.017 late 0.000 qviol 0.028 sched p99   1.4 ms  int p99  41.3 ms  >50ms 0.000
+== N5x2 (K=5, M=2, H*=fixed_mbt2018-mean_q3)
+   H1 cal - H*        +2.66 [  -0.52,  +5.84]    recall   -1.10 [  -1.46,  -0.75]*
+   H2 cal - RobMPC    +3.25 [  +0.21,  +6.29]*   recall   -1.03 [  -1.38,  -0.67]*
+   H3 cal - nominal  +19.51 [ +15.72, +23.29]*
+   pooled - cal       -1.45 [  -4.29,  +1.39] 
+     H*       ret    -34.0 (-0.131/img) recall  52.1 ok 0.908 drop 0.068 late 0.000 qviol 0.024 sched p99   3.6 ms  int p99   3.6 ms  >50ms 0.000
+     +mpc     ret    -31.4 (-0.121/img) recall  51.0 ok 0.911 drop 0.054 late 0.000 qviol 0.035 sched p99   4.2 ms  int p99  45.2 ms  >50ms 0.005
+     +mpcnc   ret    -50.9 (-0.196/img) recall  49.3 ok 0.876 drop 0.099 late 0.000 qviol 0.025 sched p99   4.2 ms  int p99  44.9 ms  >50ms 0.005
+     +mpcrh   ret    -34.6 (-0.133/img) recall  52.1 ok 0.907 drop 0.069 late 0.000 qviol 0.024 sched p99   3.9 ms  int p99  42.5 ms  >50ms 0.000
+     +mpcpl   ret    -32.8 (-0.126/img) recall  51.0 ok 0.909 drop 0.057 late 0.000 qviol 0.034 sched p99   3.9 ms  int p99  43.7 ms  >50ms 0.000
+== N7x2 (K=7, M=2, H*=fixed_mbt2018-mean_q1)
+   H1 cal - H*       +12.59 [  +9.72, +15.47]*   recall   +1.90 [  +1.65,  +2.14]*
+   H2 cal - RobMPC   +12.04 [  +9.09, +14.99]*   recall   +1.86 [  +1.63,  +2.10]*
+   H3 cal - nominal  +17.92 [ +12.83, +23.02]*
+   pooled - cal       -1.36 [  -4.20,  +1.48] 
+     H*       ret   -127.7 (-0.351/img) recall  35.3 ok 0.741 drop 0.020 late 0.000 qviol 0.239 sched p99  35.3 ms  int p99  35.3 ms  >50ms 0.000
+     +mpc     ret   -115.1 (-0.316/img) recall  37.2 ok 0.776 drop 0.021 late 0.000 qviol 0.203 sched p99  34.9 ms  int p99  71.8 ms  >50ms 0.277
+     +mpcnc   ret   -133.0 (-0.365/img) recall  42.0 ok 0.804 drop 0.121 late 0.000 qviol 0.075 sched p99  35.6 ms  int p99  73.7 ms  >50ms 0.466
+     +mpcrh   ret   -127.2 (-0.349/img) recall  35.4 ok 0.742 drop 0.020 late 0.000 qviol 0.238 sched p99  35.2 ms  int p99  71.1 ms  >50ms 0.264
+     +mpcpl   ret   -116.5 (-0.320/img) recall  37.0 ok 0.773 drop 0.022 late 0.000 qviol 0.205 sched p99  34.9 ms  int p99  72.4 ms  >50ms 0.271
+== N5x3 (K=5, M=3, H*=fixed_mbt2018-mean_q3)
+   H1 cal - H*        +1.49 [  -0.25,  +3.24]    recall   -0.77 [  -0.97,  -0.58]*
+   H2 cal - RobMPC    +1.66 [  -0.16,  +3.49]    recall   -0.72 [  -0.92,  -0.51]*
+   H3 cal - nominal  +15.98 [ +13.19, +18.78]*
+   pooled - cal       -0.73 [  -2.13,  +0.66] 
+     H*       ret      5.4 (+0.021/img) recall  54.7 ok 0.952 drop 0.022 late 0.000 qviol 0.026 sched p99  11.1 ms  int p99  11.1 ms  >50ms 0.000
+     +mpc     ret      6.9 (+0.026/img) recall  54.0 ok 0.953 drop 0.016 late 0.000 qviol 0.031 sched p99  11.0 ms  int p99  50.0 ms  >50ms 0.021
+     +mpcnc   ret     -9.1 (-0.035/img) recall  53.3 ok 0.928 drop 0.053 late 0.000 qviol 0.019 sched p99  10.9 ms  int p99  50.1 ms  >50ms 0.019
+     +mpcrh   ret      5.2 (+0.020/img) recall  54.7 ok 0.952 drop 0.022 late 0.000 qviol 0.026 sched p99  11.0 ms  int p99  49.4 ms  >50ms 0.010
+     +mpcpl   ret      6.2 (+0.024/img) recall  54.0 ok 0.953 drop 0.017 late 0.000 qviol 0.029 sched p99  11.2 ms  int p99  51.0 ms  >50ms 0.029
+== N5x4 (K=5, M=4, H*=fixed_mbt2018-mean_q3)
+   H1 cal - H*        +2.65 [  +1.75,  +3.56]*   recall   -0.31 [  -0.44,  -0.19]*
+   H2 cal - RobMPC    +2.96 [  +2.06,  +3.86]*   recall   -0.21 [  -0.33,  -0.08]*
+   H3 cal - nominal  +10.55 [  +8.22, +12.88]*
+   pooled - cal       -1.17 [  -2.07,  -0.28]*
+     H*       ret     17.7 (+0.068/img) recall  55.2 ok 0.960 drop 0.014 late 0.000 qviol 0.026 sched p99  37.9 ms  int p99  38.0 ms  >50ms 0.001
+     +mpc     ret     20.4 (+0.078/img) recall  54.9 ok 0.963 drop 0.011 late 0.000 qviol 0.026 sched p99  38.0 ms  int p99  75.5 ms  >50ms 0.402
+     +mpcnc   ret      9.9 (+0.038/img) recall  54.7 ok 0.946 drop 0.040 late 0.000 qviol 0.014 sched p99  38.1 ms  int p99  76.5 ms  >50ms 0.525
+     +mpcrh   ret     17.4 (+0.067/img) recall  55.1 ok 0.960 drop 0.014 late 0.000 qviol 0.026 sched p99  38.3 ms  int p99  75.2 ms  >50ms 0.378
+     +mpcpl   ret     19.2 (+0.074/img) recall  54.9 ok 0.962 drop 0.012 late 0.000 qviol 0.026 sched p99  41.3 ms  int p99  80.7 ms  >50ms 0.425
+PASS counts (CI > 0): H1 3/5  H2 4/5  H3 5/5  (rule: H1 and H2 in >= 4/5 -> 'persisted across the evaluated network sizes')
+== E5: e5.json not there yet (the superseded +mpcfb arms of e4.json are NOT reported)

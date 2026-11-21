@@ -1,0 +1,33 @@
+re-tuned H* per network: {'N3x2': 'fixed_mbt2018-mean_q3', 'N5x2': 'fixed_mbt2018-mean_q3', 'N7x2': 'fixed_mbt2018-mean_q1', 'N5x3': 'fixed_mbt2018-mean_q3', 'N5x4': 'fixed_mbt2018-mean_q3'} 738s
+N3x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3         ret     9.45
+N3x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpc     ret    11.16
+N3x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcnc   ret     4.15
+N3x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ret     9.48
+N3x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcrh   ret     9.41
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3         ret   -34.01
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpc     ret   -31.35
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb10l0 ret   -30.29
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb1l0 ret   -31.02
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb1l30 ret   -30.32
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb3l0 ret   -29.86
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcfb3l30 ret   -29.24
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcnc   ret   -50.86
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ret   -32.80
+N5x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcrh   ret   -34.60
+N5x3     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3         ret     5.39
+N5x3     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpc     ret     6.89
+N5x3     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcnc   ret    -9.09
+N5x3     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ret     6.16
+N5x3     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcrh   ret     5.22
+N5x4     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3         ret    17.74
+N5x4     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpc     ret    20.40
+N5x4     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcnc   ret     9.85
+N5x4     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ret    19.22
+N5x4     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcrh   ret    17.44
+N7x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1         ret  -127.70
+N7x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1+mpc     ret  -115.11
+N7x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1+mpcnc   ret  -133.03
+N7x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1+mpcpl   ret  -116.47
+N7x2     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q1+mpcrh   ret  -127.15
+e4 done 3409s
+EXIT 0
