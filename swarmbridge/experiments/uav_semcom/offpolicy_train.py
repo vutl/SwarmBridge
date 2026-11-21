@@ -64,7 +64,7 @@ def main():
     if a.algo == "qrdqn":
         agent = OP.QRDQN(obs_dim, n_act, lr=a.lr or 1e-4, seed=a.seed)
     else:
-        agent = OP.DSAC(obs_dim, n_act, lr=a.lr or 3e-4, ent_ratio=a.ent_ratio, seed=a.seed)
+        agent = OP.DiscreteSAC(obs_dim, n_act, lr=a.lr or 3e-4, ent_ratio=a.ent_ratio, seed=a.seed)
     rep = OP.Replay(a.buffer, obs_dim, seed=a.seed)
     rng = np.random.default_rng(1000 + a.seed)
     meta = dict(algo=a.algo, hp=agent.hp, seed=a.seed, steps=a.steps, n_env=a.n_env, buffer=a.buffer, batch=a.batch,

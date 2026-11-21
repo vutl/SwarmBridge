@@ -126,7 +126,9 @@ class QRDQN:
         return dict(algo=self.algo, obs_dim=self.obs_dim, n_act=self.n_act, hp=self.hp, net=self.q.state_dict())
 
 
-class DSAC:
+class DiscreteSAC:
+    """Discrete SAC (Christodoulou 2019). NOT the Distributional SAC ("DSAC") of Huang et al. JSAC 2025 / Duan et al.;
+    the paper calls it "Discrete SAC" and does not present it as a reproduction of Huang."""
     algo = "dsac"
 
     def __init__(self, obs_dim, n_act, lr=3e-4, ent_ratio=0.6, gamma=0.99, tau=0.005, seed=0):
@@ -192,7 +194,7 @@ class ModePolicy:
     """Evaluation wrapper with the SB3 predict() interface: deterministic greedy mode, other entries 0."""
 
     def __init__(self, agent_or_path, nvec):
-        if isinstance(agent_or_path, (QRDQN, DSAC)):
+        if isinstance(agent_or_path, (QRDQN, DiscreteSAC)):
             st = agent_or_path.state()
         else:
             st = torch.load(agent_or_path, map_location="cpu", weights_only=False)
@@ -217,3 +219,6 @@ class ModePolicy:
         a = np.zeros(len(self.nvec), dtype=np.int64)
         a[-1] = m
         return a, None
+
+
+DSAC = DiscreteSAC      # backward-compatible alias (checkpoint key "dsac" = Discrete SAC)

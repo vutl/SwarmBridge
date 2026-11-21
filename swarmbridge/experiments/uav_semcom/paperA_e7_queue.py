@@ -27,6 +27,18 @@ def busy():
     return bool(r.stdout.strip())
 
 
+def check_prior():
+    """review 2026-11-22: E4-E6 must have FINISHED SUCCESSFULLY (log ends with 'EXIT 0', result files present with the
+    expected arms), not merely stopped."""
+    out = C.REPO / "runs" / "uav_semcom" / "paperA_r2"
+    for name, n_arms in (("e4", 30), ("e5", 5), ("e6", 10)):
+        log = (out / f"{name}.log").read_text().strip().splitlines()
+        assert log and log[-1].strip() == "EXIT 0", f"{name} did not finish successfully: {log[-1:] if log else 'empty'}"
+        res = json.loads((out / f"{name}.json").read_text())["results"]
+        assert len(res) == n_arms and all(len(r["rows"]) == 100 for r in res), f"{name}.json incomplete"
+    print("E4-E6 finished successfully (EXIT 0, complete result files)", flush=True)
+
+
 def run_parallel(jobs, width=2):
     """jobs: list of (name, argv); runs `width` at a time; each job logs to REC/logs/<name>.log."""
     (REC / "logs").mkdir(parents=True, exist_ok=True)
@@ -61,7 +73,8 @@ def best_val(d):
 def main():
     while busy():
         time.sleep(60)
-    print("E4-E6 finished; starting E7 training", flush=True)
+    check_prior()
+    print("starting E7 training", flush=True)
     WORK.mkdir(parents=True, exist_ok=True)
     t1 = {a: [job(a, tag, args, 0) for tag, args in T1[a]] for a in T1}
     run_parallel([j for a in t1 for j, _ in t1[a]])
@@ -93,6 +106,13 @@ def main():
     with open(C.REPO / "runs" / "uav_semcom" / "paperA_r2" / "e7.log", "w") as f:
         r = subprocess.run([PY, "paperA_r2.py", "e7", "--procs", "6"], stdout=f, stderr=subprocess.STDOUT)
     print(f"e7 evaluation exit {r.returncode}", flush=True)
+    if r.returncode != 0:
+        raise SystemExit(f"e7 evaluation failed (exit {r.returncode}); see runs/uav_semcom/paperA_r2/e7.log")
+    for name in ("e7_test", "e7_testdev"):
+        res = json.loads((C.REPO / "runs" / "uav_semcom" / "paperA_r2" / f"{name}.json").read_text())["results"]
+        n_exp = 3 + 3 * 3 * 3                       # H* x 3 arms + 3 learned incumbents x 3 arms x 3 training seeds
+        assert len(res) == n_exp and all(len(r["rows"]) == 100 for r in res), f"{name}.json incomplete ({len(res)})"
+    print("e7 evaluation complete (all arms, 100 seeds each)", flush=True)
 
 
 if __name__ == "__main__":

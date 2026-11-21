@@ -104,3 +104,35 @@ Contrasts reported:
 
 - Up to 8 training runs of 2M decisions; two run at a time with 2 environment workers each.
 - Training starts only after E4–E6 finish, so their latency numbers are not disturbed.
+
+## Addendum 2026-11-22 (ChatGPT review of 61f2c489; written before any E7 training started)
+
+This is the pre-registration of the **main** E7 run. The smoke tests listed above were run before it and are reported publicly.
+
+### Queue fixes (operational only; the experiment design is unchanged)
+
+- E7 now starts only if E4, E5 and E6 **finished successfully**:
+  - each log ends with `EXIT 0`;
+  - each result file holds the expected number of arms, with 100 seeds per arm.
+- The queue now raises an error if the E7 evaluation exits non-zero or its result files are incomplete. It no longer only prints the exit code.
+
+### Naming
+
+- The class is `offpolicy_rl.DiscreteSAC`; `DSAC` remains as an alias for old checkpoints.
+- The paper says "Discrete SAC", not DSAC. It is not Distributional SAC, and it is not a reproduction of Huang et al.
+
+### Reporting (added, no new runs)
+
+- Every learned incumbent is also reported **per training seed**:
+  - the return of each seed;
+  - each seed's B1/B2 contrasts with their environment-seed CIs.
+- The registered CI (the 3 training seeds averaged per environment seed, then a paired t-CI over 100 environment seeds) measures environment variability only. Training-seed spread is reported next to it, not folded into it.
+- When the MPC lifts a weak policy, the absolute return of X + MPC is also compared with H\* + MPC. A rescued weak policy does not make the final system better.
+
+### Test-dev status
+
+The test-dev pool was already used in earlier SwarmBridge rounds (E3, step C). The fresh *seeds* 14000–14099 do not make the content "never seen". It is held-out content, not an untouched dataset.
+
+### Stop rule (restated)
+
+After E7, the Paper A scope is frozen whatever the RL results. There will be no further algorithm round to rescue a claim.
