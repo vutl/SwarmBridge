@@ -357,3 +357,37 @@ def test_online_monitor_alarms_on_stale_not_on_matched():
         assert seen[0] == 0                               # starts empty in the test episode (no historical ratios)
         mon2, _ = _monitor_run("phy_mcs_blind", "phy_mcs_blind", seed)
         assert mon2.alarm_t is None and mon2.n >= mon2.n_min
+
+
+def test_feedback_delay10_neither_model_uses_early_reports(env_at_decision):
+    """review 2026-11-22: with a 10-slot report delay, neither the calibrator nor the error tracker holds a report
+    before it is allowed (counts per slot boundary are the immediate counts shifted by exactly 10 slots)."""
+    _, _, h0 = _fb_episode(None, None)
+    _, _, h10 = _fb_episode(M.Feedback(10, 0.0), M.Feedback(10, 0.0))
+    assert all(x == (0, 0) for x in h10[:10])
+    assert h10[10:] == h0[:-10]
+
+
+def test_ax2_eval_feedback_reaches_both_rate_models(env_at_decision, monkeypatch):
+    """review 2026-11-22: the +mpcfb arms give the calibrator AND the error tracker the same delayed report schedule."""
+    import ax2_eval as X2
+    seen = {}
+    orig_c, orig_t = M.CalRates.__init__, M.RateErrTracker.__init__
+
+    def cal_init(self, *a, **kw):
+        seen["cal"] = kw.get("fb")
+        orig_c(self, *a, **kw)
+
+    def trk_init(self, *a, **kw):
+        seen["trk"] = kw.get("fb")
+        orig_t(self, *a, **kw)
+
+    monkeypatch.setattr(M.CalRates, "__init__", cal_init)
+    monkeypatch.setattr(M.RateErrTracker, "__init__", trk_init)
+    S = "ja~JA:stat:R:a1:m3@pacedB3"
+    X2.episode("K5", "K5_la", f"{S}|h=fixed_mbt2018-mean_q3+mpcfb10l30", -1, 9900,
+               dict(la_mode="sched", la_interf="persistent", obs_la=False), None, "test")
+    fc, ft = seen["cal"], seen["trk"]
+    assert fc is not None and ft is not None and fc is not ft
+    assert (fc.delay, fc.loss, fc.seed) == (ft.delay, ft.loss, ft.seed) == (10, 0.3, 31)
+    assert fc.n_sent == ft.n_sent > 0 and fc.n_lost == ft.n_lost

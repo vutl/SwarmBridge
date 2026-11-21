@@ -38,6 +38,9 @@ NET = {"N3x2": dict(K=3, M=2), "N5x2": dict(K=5, M=2), "N7x2": dict(K=7, M=2), "
        "N5x4": dict(K=5, M=4)}
 PHY.update({n: ("K5_la", dict(LA, **km)) for n, km in NET.items()})
 E4_SEEDS = list(range(13000, 13100))
+# E6 total-bandwidth sweep at K=5, M=2 (nominal LA); the 1 MHz point is N5x2 of E4 (same seeds, paired)
+BW = {"B0.5": dict(K=5, M=2, B_total=0.5e6), "B2": dict(K=5, M=2, B_total=2e6)}
+PHY.update({n: ("K5_la", dict(LA, **km)) for n, km in BW.items()})
 FB = ["fb1l0", "fb3l0", "fb10l0", "fb1l30", "fb3l30"]     # E5: report delay (slots of 1 s) and loss (%)
 H = {"S": "fixed_avif_50", "L": "fixed_mbt2018-mean_q3"}
 
@@ -205,9 +208,49 @@ def sweep(procs):
     print(f"e4 done {time.time() - t0:.0f}s", flush=True)
 
 
+def feedback(procs):
+    """E5 rerun (review 2026-11-22): in e4.json the +mpcfb arms delayed / dropped the reports of the calibrator only;
+    the error tracker that gates planning and sets the rate band still saw immediate reports. Fixed in ax2_eval
+    (tracker gets the same Feedback schedule); the five E5 arms are rerun here on the same seeds with the same
+    per-network H* (from e4.json). The +mpcfb results inside e4.json are superseded by e5.json."""
+    S = sched()
+    best = json.loads((OUT / "e4.json").read_text())["H_net"]
+    t0 = time.time()
+    res = run([("N5x2", f"{S}|h={best['N5x2']}+mpc{f}") for f in FB], E4_SEEDS, "test", procs, 25, False)
+    json.dump(dict(wall_s=time.time() - t0, sched=S, seeds=E4_SEEDS, pool="test", H_net=best, fb=FB,
+                   note="tracker and calibrator share the delayed / lossy report schedule (fixed 2026-11-22)",
+                   results=[{k: v for k, v in r.items() if k != "deliv"} for r in res]), open(OUT / "e5.json", "w"))
+    json.dump({f"{r['phy']}|{r['combo']}|{r['ckpt']}": r["deliv"] for r in res}, gzip.open(OUT / "e5.deliv.json.gz", "wt"))
+    for r in sorted(res, key=lambda r: r["combo"]):
+        print(f"{r['phy']:8s} {r['combo']:58s} ret {np.mean([x['return'] for x in r['rows']]):8.2f}", flush=True)
+    print(f"e5 done {time.time() - t0:.0f}s", flush=True)
+
+
+def bandwidth(procs):
+    """E6 (pre-registered addendum in paperA-e4-e5-prereg.md): H* re-tuned per bandwidth on the train seeds, then
+    H*, + calibrated MPC, + nominal, + RobustMPC-style, + pooled on the E4 seeds 13000..13099."""
+    import ax9_run as A9
+    S = sched()
+    t0 = time.time()
+    tr = run([(n, f"{S}|h={h}") for n in BW for h in A9.H_FAMILY], list(C.TRAIN_SEEDS), "train", procs, 10, False)
+    tune = {n: {} for n in BW}
+    for r in tr:
+        tune[r["phy"]][r["combo"].split("|h=")[1]] = float(np.mean([x["return"] for x in r["rows"]]))
+    best = {n: max(tune[n], key=tune[n].get) for n in BW}
+    print("re-tuned H* per bandwidth:", best, f"{time.time() - t0:.0f}s", flush=True)
+    items = [(n, f"{S}|h={best[n]}{suf}") for n in BW for suf in ("", "+mpc", "+mpcnc", "+mpcrh", "+mpcpl")]
+    res = run(items, E4_SEEDS, "test", procs, 25, False)
+    json.dump(dict(wall_s=time.time() - t0, sched=S, seeds=E4_SEEDS, pool="test", bw=BW, H_bw=best, train_return=tune,
+                   results=[{k: v for k, v in r.items() if k != "deliv"} for r in res]), open(OUT / "e6.json", "w"))
+    json.dump({f"{r['phy']}|{r['combo']}|{r['ckpt']}": r["deliv"] for r in res}, gzip.open(OUT / "e6.deliv.json.gz", "wt"))
+    for r in sorted(res, key=lambda r: (r["phy"], r["combo"])):
+        print(f"{r['phy']:8s} {r['combo']:58s} ret {np.mean([x['return'] for x in r['rows']]):8.2f}", flush=True)
+    print(f"e6 done {time.time() - t0:.0f}s", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=("e12", "e3", "e1b", "e2b", "e2c", "e4", "smoke"))
+    ap.add_argument("cmd", choices=("e12", "e3", "e1b", "e2b", "e2c", "e4", "e5", "e6", "smoke"))
     ap.add_argument("--procs", type=int, default=6)
     a = ap.parse_args()
     if a.cmd == "e1b":
@@ -221,6 +264,12 @@ def main():
         return
     if a.cmd == "e4":
         sweep(a.procs)
+        return
+    if a.cmd == "e5":
+        feedback(a.procs)
+        return
+    if a.cmd == "e6":
+        bandwidth(a.procs)
         return
     if a.cmd == "smoke":
         stage("smoke", ["L_fade"], [9900], "test", False, a.procs)

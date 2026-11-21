@@ -217,7 +217,10 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
                              seed=12345, rollout="causal", cal=cal, margin_z=1.0)
         else:
             mpc = M.MPCMode("cal", 8, 4, None, fallback=mp_t, seed=12345, rollout="causal", cal=cal, margin_z=1.0)
-        trk = M.RateErrTracker(mpc, persistent=False)
+        # E5 fix (review 2026-11-22): the error tracker gates planning and sets the rate band (trk.stats), so it must
+        # see the SAME delayed / lossy report schedule as the calibrator (own Feedback, same delay / loss / seed;
+        # loss draws depend only on (seed, episode, slot, UAV), so both lose the same reports)
+        trk = M.RateErrTracker(mpc, persistent=False, fb=M.Feedback(*fb_cfg, seed=31) if fb_cfg else None)
         dl = M.Deadline(50.0, margin_ms=3.0) if use_mpc else None
     elif nocal:
         assert mmod is not None or mp_h is not None
