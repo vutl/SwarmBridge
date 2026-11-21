@@ -79,9 +79,17 @@ N5x2, cùng seed 13000–13099 với E4, ghép cặp. Một slot = 1 s.
 
 **Theo quy tắc đã đăng ký** (chỉ được nói "chịu được trễ d / mất p" với những thiết lập có CI so với MPC danh nghĩa
 hoàn toàn trên 0):
-- **Đạt ở cả 5 thiết lập.** Lợi thế so với mô hình danh nghĩa giữ được khi báo cáo trễ tới 10 slot (10 s) hoặc mất 30%.
-- So với báo cáo tức thì, không thiết lập nào khác biệt có ý nghĩa.
+- **Đạt ở cả 5 thiết lập.** Câu được phép viết: "trong các thiết lập E5 đã thử, lợi thế so với MPC danh nghĩa vẫn có ý
+  nghĩa khi báo cáo throughput dùng cho lập kế hoạch trễ tới 10 s, hoặc trễ 1–3 s kèm mất 30%".
+- So với báo cáo tức thì, **chưa phát hiện** khác biệt có ý nghĩa (CI chứa 0). Điều này **không** chứng minh hai điều
+  kiện tương đương.
 - So với H\* không có MPC, kết quả lẫn lộn, giống E4: ngay cả báo cáo tức thì cũng chỉ +2,7, CI chứa 0.
 
-**Phạm vi:** chỉ báo cáo throughput dùng cho lập kế hoạch bị trễ/mất. ACK của ARQ và quan sát hàng đợi của bộ lập lịch
-giữ nguyên. Kết quả `+mpcfb` cũ trong `e4.json` (lỗi bộ theo dõi) không được dùng.
+**Phạm vi và những gì chưa kiểm tra:**
+- Chỉ báo cáo throughput dùng cho lập kế hoạch bị trễ/mất. ACK của ARQ và quan sát hàng đợi của bộ lập lịch giữ nguyên.
+- **Chưa kiểm tra:**
+  - mất ACK ở tầng truyền dẫn;
+  - trễ 10 s kết hợp mất 30%;
+  - chi phí overhead của báo cáo.
+- Giả định phản hồi trong bài vì vậy **được nới một phần**, chưa được gỡ bỏ hoàn toàn.
+- Kết quả `+mpcfb` cũ trong `e4.json` (lỗi bộ theo dõi) không được dùng.
