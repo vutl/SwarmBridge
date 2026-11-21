@@ -184,6 +184,14 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
             "ppo": lambda: mdl("mode", lambda: XP.mode_path(ctrl_regime, i)),
             "jm": lambda: mdl("joint", lambda: XP.joint_path(ctrl_regime, i)),
             "cmm": lambda: mdl("cm", lambda: ax2_path(ctrl_regime, "cm", i))}.get(mode)
+    if mode in ("qrla", "dsla"):             # Paper A E7: QR-DQN / Discrete SAC trained on the LA PHY (offpolicy_train)
+        import offpolicy_rl as OPR
+
+        def mmod():
+            if mode not in models:
+                paths = json.loads((C.REPO / "runs" / "uav_semcom" / "paperA_rl" / "ckpts.json").read_text())[mode]
+                models[mode] = OPR.ModePolicy(paths[i], e.action_space.nvec)
+            return models[mode]
     # movement + power: the controller regime's T:best (tbest_env: the env regime's own tuned heuristic, whole slot)
     sp_mp = sp_e if sched in ("tbest_env", "jae") else sp_t
     if move is not None:
@@ -344,7 +352,7 @@ def job(j):
 
 def needs_ckpt(combo):
     s, m = combo.split("|")
-    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         re.sub(r"[+]mpc(ab\d|fb\d+l\d+)$", "", m).replace("+mpcpl", "").replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm")
+    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         re.sub(r"[+]mpc(ab\d|fb\d+l\d+)$", "", m).replace("+mpcpl", "").replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm", "qrla", "dsla")
 
 
 def main():

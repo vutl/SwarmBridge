@@ -43,6 +43,7 @@ BW = {"B0.5": dict(K=5, M=2, B_total=0.5e6), "B2": dict(K=5, M=2, B_total=2e6)}
 PHY.update({n: ("K5_la", dict(LA, **km)) for n, km in BW.items()})
 FB = ["fb1l0", "fb3l0", "fb10l0", "fb1l30", "fb3l30"]     # E5: report delay (slots of 1 s) and loss (%)
 H = {"S": "fixed_avif_50", "L": "fixed_mbt2018-mean_q3"}
+LA_OBS = ("ppola", "qrla", "dsla")      # learned incumbents trained with the causal LA observation features
 
 
 def sched():
@@ -74,7 +75,7 @@ def _job(j):
     env_regime, extra = PHY[phy]
     rows, dl = [], []
     for s in seeds:
-        ex = dict(extra, obs_la=("ppola" in combo.split("|")[1])) if phy != "S" else None
+        ex = dict(extra, obs_la=any(x in combo.split("|")[1] for x in LA_OBS)) if phy != "S" else None
         m, d = X2.episode("K5", env_regime, combo, i, s, ex, None, pool)
         rows.append(m)
         dl.append(d)
@@ -248,9 +249,30 @@ def bandwidth(procs):
     print(f"e6 done {time.time() - t0:.0f}s", flush=True)
 
 
+def rl_families(procs):
+    """E7 (pre-registered in reports/phases/2026-11-18_paperA-writeup/paperA-e7-rl-families-prereg.md): H*, PPO-LA,
+    QR-DQN, Discrete SAC, each alone, + calibrated MPC and + nominal MPC, nominal LA PHY; test pool seeds 13000..13099
+    (shared with E4) and test-dev seeds 14000..14099 (fresh). Checkpoints: runs/uav_semcom/paperA_rl/ckpts.json."""
+    S = sched()
+    inc = [f"h={H['L']}", "ppola", "qrla", "dsla"]
+    items = [("L", f"{S}|{x}{suf}") for x in inc for suf in ("", "+mpc", "+mpcnc")]
+    for name, seeds, pool, td in (("e7_test", E4_SEEDS, "test", False),
+                                  ("e7_testdev", list(range(14000, 14100)), "testdev", True)):
+        t0 = time.time()
+        res = run(items, seeds, pool, procs, 25, td)
+        json.dump(dict(wall_s=time.time() - t0, sched=S, seeds=seeds, pool=pool, H=H, incumbents=inc,
+                       ckpts=json.loads((C.REPO / "runs" / "uav_semcom" / "paperA_rl" / "ckpts.json").read_text()),
+                       results=[{k: v for k, v in r.items() if k != "deliv"} for r in res]), open(OUT / f"{name}.json", "w"))
+        json.dump({f"{r['phy']}|{r['combo']}|{r['ckpt']}": r["deliv"] for r in res},
+                  gzip.open(OUT / f"{name}.deliv.json.gz", "wt"))
+        for r in sorted(res, key=lambda r: (r["combo"], r["ckpt"])):
+            print(f"{r['combo']:58s} ckpt {r['ckpt']:2d} ret {np.mean([x['return'] for x in r['rows']]):8.2f}", flush=True)
+        print(f"{name} done {time.time() - t0:.0f}s", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=("e12", "e3", "e1b", "e2b", "e2c", "e4", "e5", "e6", "smoke"))
+    ap.add_argument("cmd", choices=("e12", "e3", "e1b", "e2b", "e2c", "e4", "e5", "e6", "e7", "smoke"))
     ap.add_argument("--procs", type=int, default=6)
     a = ap.parse_args()
     if a.cmd == "e1b":
@@ -270,6 +292,9 @@ def main():
         return
     if a.cmd == "e6":
         bandwidth(a.procs)
+        return
+    if a.cmd == "e7":
+        rl_families(a.procs)
         return
     if a.cmd == "smoke":
         stage("smoke", ["L_fade"], [9900], "test", False, a.procs)
