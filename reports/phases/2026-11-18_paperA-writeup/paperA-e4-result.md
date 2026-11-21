@@ -93,3 +93,31 @@ hoàn toàn trên 0):
   - chi phí overhead của báo cáo.
 - Giả định phản hồi trong bài vì vậy **được nới một phần**, chưa được gỡ bỏ hoàn toàn.
 - Kết quả `+mpcfb` cũ trong `e4.json` (lỗi bộ theo dõi) không được dùng.
+
+## E6: tổng băng thông 0,5 / 1 / 2 MHz (K = 5, M = 2; 22/11)
+
+Đăng ký trước trong phụ lục của pre-registration. Seed 13000–13099; điểm 1 MHz là N5x2 của E4 (ghép cặp). H\* tune lại
+theo băng thông trên seed train: AVIF-20 ở 0,5 MHz, q3 ở 1 và 2 MHz.
+
+| Băng thông | H1: cal − H\* | H2: cal − RobustMPC-style | H3: cal − danh nghĩa | Recall: cal − H\* | Gộp − cal |
+|---|---|---|---|---|---|
+| 0,5 MHz | **+9,7*** [+7,7; +11,8] | **+9,8*** | **+5,8*** | **+2,6*** | +1,1 |
+| 1 MHz | +2,7 [−0,5; +5,8] | **+3,3*** | **+19,5*** | −1,1* | −1,5 |
+| 2 MHz | **+4,4*** [+0,7; +8,1] | **+5,0*** | **+30,3*** | −0,6* | +0,0 |
+| **Đạt** | **2/3** | **3/3** | **3/3** | | |
+
+**Theo quy tắc đã đăng ký** (H1 và H2 đạt ở cả ba mức băng thông): **KHÔNG ĐẠT**.
+- Lý do duy nhất: H1 ở 1 MHz, chính là điểm N5x2 của E4.
+- Câu được phép viết:
+  - MPC hiệu chỉnh tốt hơn MPC danh nghĩa và RobustMPC-style ở cả ba mức băng thông;
+  - tốt hơn incumbent không có MPC ở 0,5 và 2 MHz, nhưng không có ý nghĩa ở 1 MHz.
+
+**Ghi nhận khác:**
+- Ở 0,5 MHz, MPC hiệu chỉnh tăng cả return (+9,7) lẫn recall (+2,6). Ở 1 và 2 MHz, recall giảm nhẹ. Lệch return/recall
+  phụ thuộc mức tải.
+- Lợi thế so với mô hình danh nghĩa tăng theo băng thông (+5,8 → +19,5 → +30,3).
+- Không có slot nào vượt 50 ms ở cả ba mức băng thông (p99 41–45 ms).
+- Gộp − chia SNR: CI chứa 0 ở cả ba mức.
+
+**File:** `runs/uav_semcom/paperA_r2/e6.json`, `e6.deliv.json.gz`, `summary_e6.json/.log`; script
+`paperA_e6_summary.py`.

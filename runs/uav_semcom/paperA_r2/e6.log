@@ -1,0 +1,13 @@
+re-tuned H* per bandwidth: {'B0.5': 'fixed_avif_20', 'B2': 'fixed_mbt2018-mean_q3'} 98s
+B0.5     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_20                 ret   -68.02
+B0.5     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_20+mpc             ret   -58.29
+B0.5     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_20+mpcnc           ret   -64.13
+B0.5     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_20+mpcpl           ret   -57.16
+B0.5     ja~JA:stat:R:a1:m3@pacedB3|h=fixed_avif_20+mpcrh           ret   -68.11
+B2       ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3         ret   -27.46
+B2       ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpc     ret   -23.08
+B2       ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcnc   ret   -53.42
+B2       ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcpl   ret   -23.05
+B2       ja~JA:stat:R:a1:m3@pacedB3|h=fixed_mbt2018-mean_q3+mpcrh   ret   -28.12
+e6 done 883s
+EXIT 0

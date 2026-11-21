@@ -1,0 +1,31 @@
+== 0.5 MHz (B0.5, H*=fixed_avif_20)
+   H1 cal - H*        +9.72 [  +7.67, +11.78]*   recall   +2.58 [  +2.25,  +2.91]*
+   H2 cal - RobMPC    +9.82 [  +7.91, +11.73]*
+   H3 cal - nominal   +5.84 [  +2.66,  +9.01]*
+   pooled - cal       +1.13 [  -0.88,  +3.14] 
+     H        ret    -68.0 recall  38.9 ok 0.762 drop 0.007 qviol 0.232 int p99   3.5 ms >50ms 0.000
+     +mpc     ret    -58.3 recall  41.5 ok 0.816 drop 0.010 qviol 0.174 int p99  43.0 ms >50ms 0.000
+     +mpcnc   ret    -64.1 recall  45.7 ok 0.863 drop 0.055 qviol 0.082 int p99  43.4 ms >50ms 0.000
+     +mpcrh   ret    -68.1 recall  38.9 ok 0.763 drop 0.007 qviol 0.230 int p99  42.4 ms >50ms 0.000
+     +mpcpl   ret    -57.2 recall  41.7 ok 0.818 drop 0.008 qviol 0.174 int p99  43.1 ms >50ms 0.000
+== 1.0 MHz (N5x2, H*=fixed_mbt2018-mean_q3)
+   H1 cal - H*        +2.66 [  -0.52,  +5.84]    recall   -1.10 [  -1.46,  -0.75]*
+   H2 cal - RobMPC    +3.25 [  +0.21,  +6.29]*
+   H3 cal - nominal  +19.51 [ +15.72, +23.29]*
+   pooled - cal       -1.45 [  -4.29,  +1.39] 
+     H        ret    -34.0 recall  52.1 ok 0.908 drop 0.068 qviol 0.024 int p99   3.6 ms >50ms 0.000
+     +mpc     ret    -31.4 recall  51.0 ok 0.911 drop 0.054 qviol 0.035 int p99  45.2 ms >50ms 0.005
+     +mpcnc   ret    -50.9 recall  49.3 ok 0.876 drop 0.099 qviol 0.025 int p99  44.9 ms >50ms 0.005
+     +mpcrh   ret    -34.6 recall  52.1 ok 0.907 drop 0.069 qviol 0.024 int p99  42.5 ms >50ms 0.000
+     +mpcpl   ret    -32.8 recall  51.0 ok 0.909 drop 0.057 qviol 0.034 int p99  43.7 ms >50ms 0.000
+== 2.0 MHz (B2, H*=fixed_mbt2018-mean_q3)
+   H1 cal - H*        +4.38 [  +0.68,  +8.09]*   recall   -0.57 [  -1.00,  -0.14]*
+   H2 cal - RobMPC    +5.04 [  +1.37,  +8.71]*
+   H3 cal - nominal  +30.34 [ +25.15, +35.54]*
+   pooled - cal       +0.02 [  -3.33,  +3.38] 
+     H        ret    -27.5 recall  51.9 ok 0.904 drop 0.072 qviol 0.024 int p99   3.7 ms >50ms 0.000
+     +mpc     ret    -23.1 recall  51.3 ok 0.912 drop 0.056 qviol 0.032 int p99  43.6 ms >50ms 0.000
+     +mpcnc   ret    -53.4 recall  48.3 ok 0.842 drop 0.141 qviol 0.017 int p99  43.5 ms >50ms 0.000
+     +mpcrh   ret    -28.1 recall  51.8 ok 0.903 drop 0.073 qviol 0.024 int p99  42.5 ms >50ms 0.000
+     +mpcpl   ret    -23.1 recall  51.6 ok 0.914 drop 0.056 qviol 0.030 int p99  41.2 ms >50ms 0.000
+PASS counts (CI > 0): H1 2/3  H2 3/3  H3 3/3  (rule: H1 and H2 at all three bandwidths)
