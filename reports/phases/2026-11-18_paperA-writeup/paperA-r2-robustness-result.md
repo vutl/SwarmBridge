@@ -161,3 +161,51 @@ SNR hẹp như vậy, ngăn 2 dB chỉ chia thành khoảng 5 ngăn, nên ablati
   thống kê theo cả seed lẫn video).
 - PPO-S có return thấp hơn T:best trên L (−59,7) nhưng recall cao hơn (+2,0).
 - Return và recall đi ngược chiều.
+
+## 8. E2c: thành phần nào của bộ hiệu chỉnh tạo ra lợi thế (21/11)
+
+**Câu hỏi** (phản biện sau bản viết lại 20/11): bộ hiệu chỉnh hơn baseline kiểu RobustMPC từ +6,5 đến +17,8. Lợi thế
+đó đến từ đâu? Hai bộ dự báo khác nhau ở nhiều điểm cùng lúc.
+
+**Cách làm:**
+- Đi từ RobustMPC-style (`rh`) sang bộ hiệu chỉnh gộp (`pl`, = bộ hiệu chỉnh không chia SNR, E2b), mỗi bước đổi đúng
+  một yếu tố (`a9_mpc.AblRates`, hậu tố `+mpcab0..7`).
+- Incumbent H\*, cùng planner, cùng ngân sách, cùng seed với E1/E3 (ghép cặp), 7 cấu hình.
+- **Kiểm tra cài đặt:**
+  - `ab7` (cài lại `pl`) trùng `pl` ở 680/700 episode; chênh trung bình ≤ 0,06. Vài episode lệch do sai khác số thực
+    trong xác suất lấy mẫu làm đổi một lần rút, sau đó episode rẽ nhánh.
+  - Bỏ các slot tốc độ 0 khỏi RobustMPC-style (`ab0`): không đổi gì (mọi CI chứa 0, phần lớn trùng hệt), nên baseline
+    không bị yếu giả do trung bình điều hòa gặp giá trị 0.
+
+**Kết quả** (chênh return, CI 95% ghép cặp; * = CI không chứa 0):
+
+| Bước (đổi một yếu tố) | S | L | L_fade | L_bursty | L_badfb | TD-S | TD-L |
+|---|---|---|---|---|---|---|---|
+| Bỏ hệ số bi quan | −1,0* | +0,3 | +7,2* | +0,3 | +0,8 | +2,1* | +2,7 |
+| Trung bình cộng thay điều hòa | −1,2* | +1,4 | −2,7* | +1,9 | +0,0 | +7,5* | +8,7* |
+| Lấy mẫu thay một giá trị (5 slot gần nhất) | +0,4 | +2,1 | −0,6 | +1,2 | +2,1* | −1,7* | +0,2 |
+| Nhớ cả episode thay 5 slot | +1,8* | −1,1 | +4,9* | +0,0 | +0,0 | +1,0 | −0,2 |
+| Gộp mọi UAV thay từng UAV | −0,5 | +1,8 | +3,9* | +4,0* | +9,0* | +4,3* | +2,9 |
+| Chờ đủ 20 s dữ liệu | +0,2 | +2,2 | −1,8 | −1,0 | +2,2 | −0,4 | +3,6* |
+| **Tổng (pl − rh)** | −0,4 | **+6,7*** | **+10,8*** | **+6,5*** | **+14,1*** | **+12,8*** | **+17,8*** |
+| Lấy mẫu − trung bình (ở đầu đã gộp, `pl − ab6`) | +1,6* | −0,6 | +1,8 | +2,1 | +4,5 | −1,7* | −1,1 |
+| Chia SNR (cal − pl) | −0,5 | −0,1 | −0,7 | +1,6 | −0,4 | −0,7 | +0,3 |
+
+**Kết luận:**
+- **Không có một yếu tố duy nhất.** Lợi thế cộng dồn từ vài bước nhỏ.
+- **Yếu tố ổn định nhất là gộp quan sát của mọi UAV:** dương ở 6/7 cấu hình, có ý nghĩa ở 4 (+3,9 đến +9,0).
+- **Thứ hai là tránh ước lượng quá bi quan:**
+  - trung bình điều hòa → trung bình cộng: +7,5 / +8,7 trên ảnh test-dev;
+  - bỏ hệ số bi quan: +7,2 trên L_fade.
+  - Cả hai làm ngược lại trên S (−1,0 / −1,2) và L_fade (−2,7).
+- **Lấy mẫu cả phân phối KHÔNG phải cơ chế:** so với dùng trung bình ở cùng điểm gộp, dấu đổi theo cấu hình (+1,6 trên
+  S, −1,7 trên TD-S, còn lại CI chứa 0). Chia SNR cũng không (E2b).
+- **Hệ quả cho Paper A** (theo quy tắc phản biện đã nêu trước khi chạy):
+  - Mô tả phương pháp là **một bộ ước lượng tốc độ thực nghiệm đơn giản**: trung bình các tốc độ đã ACK, gộp mọi UAV,
+    nhớ cả episode.
+  - **Không** nhấn mạnh lập kế hoạch ngẫu nhiên (stochastic planning) hay điều kiện theo SNR.
+  - Lý do RobustMPC-style kém hơn: mỗi UAV chỉ có 5 quan sát, cộng thêm hai lớp bảo thủ (điều hòa, hệ số bi quan), nên
+    ước lượng nhiễu và thấp.
+
+**File:** `runs/uav_semcom/paperA_r2/e2c_test*.json`, `e2c_testdev*.json`, `summary_e2c.json/.log`; script
+`paperA_r2d_summary.py`.

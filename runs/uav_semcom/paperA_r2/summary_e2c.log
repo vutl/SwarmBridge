@@ -1,0 +1,84 @@
+   [check] ab7 vs pl: 1 / 100 episodes differ, mean diff -0.021
+== S  levels: rh 66.1  ab1 65.1  ab2 64.0  ab3 64.3  ab4 66.1  ab5 65.6  pl 65.8  ab6 64.2  cal 65.3
+   no pessimism                 -1.04 [  -1.85,   -0.22] *
+   mean vs harmonic             -1.15 [  -2.18,   -0.13] *
+   sample vs mean (last 5)      +0.36 [  -0.41,   +1.14]
+   episode memory               +1.81 [  +1.03,   +2.58] *
+   pool UAVs                    -0.49 [  -1.14,   +0.16]
+   20 s warm-up                 +0.16 [  -0.42,   +0.74]
+   TOTAL pl - rh                -0.35 [  -1.33,   +0.62]
+   sample vs mean (pooled)      +1.62 [  +0.93,   +2.32] *
+   zero slots out               +0.00 [  +0.00,   +0.00]
+   SNR bins (cal - pl)          -0.53 [  -1.23,   +0.16]
+   [check] ab7 vs pl: 1 / 100 episodes differ, mean diff -0.051
+== L  levels: rh -38.7  ab1 -38.4  ab2 -37.0  ab3 -35.0  ab4 -36.0  ab5 -34.3  pl -32.1  ab6 -31.4  cal -32.1
+   no pessimism                 +0.31 [  -3.18,   +3.80]
+   mean vs harmonic             +1.39 [  -2.13,   +4.91]
+   sample vs mean (last 5)      +2.09 [  -0.77,   +4.95]
+   episode memory               -1.09 [  -4.14,   +1.97]
+   pool UAVs                    +1.79 [  -1.41,   +4.99]
+   20 s warm-up                 +2.18 [  -1.06,   +5.43]
+   TOTAL pl - rh                +6.67 [  +2.60,  +10.75] *
+   sample vs mean (pooled)      -0.64 [  -4.14,   +2.85]
+   zero slots out               -0.03 [  -0.46,   +0.40]
+   SNR bins (cal - pl)          -0.05 [  -3.10,   +3.00]
+   [check] ab7 vs pl: 1 / 100 episodes differ, mean diff +0.012
+== L_fade  levels: rh -177.9  ab1 -170.7  ab2 -173.4  ab3 -174.0  ab4 -169.2  ab5 -165.3  pl -167.2  ab6 -169.0  cal -167.8
+   no pessimism                 +7.20 [  +4.61,   +9.79] *
+   mean vs harmonic             -2.68 [  -5.14,   -0.22] *
+   sample vs mean (last 5)      -0.64 [  -3.25,   +1.98]
+   episode memory               +4.85 [  +2.34,   +7.36] *
+   pool UAVs                    +3.88 [  +0.58,   +7.19] *
+   20 s warm-up                 -1.84 [  -5.01,   +1.32]
+   TOTAL pl - rh               +10.78 [  +8.06,  +13.49] *
+   sample vs mean (pooled)      +1.83 [  -0.86,   +4.53]
+   zero slots out               +0.00 [  +0.00,   +0.00]
+   SNR bins (cal - pl)          -0.66 [  -3.62,   +2.30]
+   [check] ab7 vs pl: 0 / 100 episodes differ, mean diff +0.000
+== L_bursty  levels: rh -35.9  ab1 -35.6  ab2 -33.7  ab3 -32.5  ab4 -32.4  ab5 -28.4  pl -29.4  ab6 -31.5  cal -27.7
+   no pessimism                 +0.33 [  -1.45,   +2.12]
+   mean vs harmonic             +1.92 [  -1.40,   +5.23]
+   sample vs mean (last 5)      +1.17 [  -1.79,   +4.13]
+   episode memory               +0.04 [  -2.71,   +2.79]
+   pool UAVs                    +4.03 [  +0.74,   +7.32] *
+   20 s warm-up                 -0.95 [  -3.94,   +2.04]
+   TOTAL pl - rh                +6.54 [  +3.33,   +9.75] *
+   sample vs mean (pooled)      +2.11 [  -0.59,   +4.81]
+   zero slots out               -0.16 [  -0.45,   +0.14]
+   SNR bins (cal - pl)          +1.62 [  -1.71,   +4.94]
+   [check] ab7 vs pl: 0 / 100 episodes differ, mean diff +0.000
+== L_badfb  levels: rh -199.4  ab1 -198.7  ab2 -198.6  ab3 -196.5  ab4 -196.5  ab5 -187.5  pl -185.3  ab6 -189.8  cal -185.7
+   no pessimism                 +0.78 [  -0.42,   +1.98]
+   mean vs harmonic             +0.02 [  -2.40,   +2.43]
+   sample vs mean (last 5)      +2.14 [  +0.21,   +4.07] *
+   episode memory               +0.04 [  -2.29,   +2.37]
+   pool UAVs                    +8.98 [  +4.90,  +13.06] *
+   20 s warm-up                 +2.16 [  -2.54,   +6.85]
+   TOTAL pl - rh               +14.11 [ +10.02,  +18.21] *
+   sample vs mean (pooled)      +4.47 [  -0.45,   +9.40]
+   zero slots out               +0.93 [  -0.81,   +2.67]
+   SNR bins (cal - pl)          -0.38 [  -5.44,   +4.68]
+   [check] ab7 vs pl: 2 / 100 episodes differ, mean diff +0.046
+== TD-S  levels: rh 32.6  ab1 34.6  ab2 42.2  ab3 40.5  ab4 41.5  ab5 45.8  pl 45.4  ab6 47.0  cal 44.6
+   no pessimism                 +2.06 [  +0.70,   +3.43] *
+   mean vs harmonic             +7.53 [  +5.64,   +9.43] *
+   sample vs mean (last 5)      -1.66 [  -2.97,   -0.35] *
+   episode memory               +0.96 [  -0.21,   +2.13]
+   pool UAVs                    +4.33 [  +2.84,   +5.82] *
+   20 s warm-up                 -0.44 [  -1.51,   +0.63]
+   TOTAL pl - rh               +12.79 [ +10.98,  +14.59] *
+   sample vs mean (pooled)      -1.67 [  -2.88,   -0.47] *
+   zero slots out               +0.00 [  +0.00,   +0.00]
+   SNR bins (cal - pl)          -0.74 [  -1.88,   +0.41]
+   [check] ab7 vs pl: 10 / 100 episodes differ, mean diff -0.058
+== TD-L  levels: rh -70.5  ab1 -67.7  ab2 -59.1  ab3 -58.9  ab4 -59.1  ab5 -56.3  pl -52.7  ab6 -51.6  cal -52.5
+   no pessimism                 +2.74 [  -0.55,   +6.03]
+   mean vs harmonic             +8.67 [  +5.19,  +12.14] *
+   sample vs mean (last 5)      +0.18 [  -3.71,   +4.07]
+   episode memory               -0.21 [  -3.43,   +3.00]
+   pool UAVs                    +2.86 [  -0.65,   +6.37]
+   20 s warm-up                 +3.56 [  +0.27,   +6.85] *
+   TOTAL pl - rh               +17.79 [ +13.15,  +22.43] *
+   sample vs mean (pooled)      -1.11 [  -4.58,   +2.36]
+   zero slots out               -0.65 [  -1.73,   +0.42]
+   SNR bins (cal - pl)          +0.25 [  -3.10,   +3.59]
