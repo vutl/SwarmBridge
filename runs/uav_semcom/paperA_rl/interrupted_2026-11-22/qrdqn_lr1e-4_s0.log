@@ -1,0 +1,2 @@
+STEP 200000 val_return -59.32 ok 0.834 1280s episodes 768 updates 45000 loss 32.669564836502076 best@200000
+STEP 400000 val_return -94.71 ok 0.751 2612s episodes 1538 updates 95000 loss 30.948226570129396 best@200000

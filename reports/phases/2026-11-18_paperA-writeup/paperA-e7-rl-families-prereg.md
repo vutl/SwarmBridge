@@ -136,3 +136,15 @@ The test-dev pool was already used in earlier SwarmBridge rounds (E3, step C). T
 ### Stop rule (restated)
 
 After E7, the Paper A scope is frozen whatever the RL results. There will be no further algorithm round to rescue a claim.
+
+## Operational note 2026-11-22 12:30 (no design change)
+
+- **What happened:** the first E7 launch died at about 02:00, after 400k of 2M steps of the two T1 QR-DQN runs.
+  - The job was tied to the Claude Code session. When the session ended, `wsl.exe` was closed and WSL shut down.
+  - The partial logs are kept in `runs/uav_semcom/paperA_rl/interrupted_2026-11-22/`.
+  - The partial runs are not used: an off-policy run cannot be resumed exactly, because the replay buffer and optimiser state are not saved.
+- **The queue now:**
+  - skips runs that are already complete;
+  - moves interrupted runs aside and restarts them from scratch.
+- **Launch:** the job is now started detached from the session (Windows `Start-Process`), so it survives the session ending.
+- **Unchanged:** seeds, hyper-parameters and selection rules.

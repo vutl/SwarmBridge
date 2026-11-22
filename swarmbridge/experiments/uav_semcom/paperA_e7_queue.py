@@ -42,7 +42,20 @@ def check_prior():
 def run_parallel(jobs, width=2):
     """jobs: list of (name, argv); runs `width` at a time; each job logs to REC/logs/<name>.log."""
     (REC / "logs").mkdir(parents=True, exist_ok=True)
-    pending, running = list(jobs), []
+    pending, running = [], []
+    for name, argv in jobs:
+        d = Path(argv[2])
+        tj = d / "train.json"
+        if tj.exists() and json.loads(tj.read_text())["last_steps"] >= 2_000_000:
+            print(f"[{time.strftime('%H:%M')}] skip {name} (already complete)", flush=True)
+            continue
+        if d.exists():
+            # an interrupted off-policy run cannot be resumed exactly (replay buffer / optimiser state are not
+            # saved), so it restarts from scratch; the partial run is kept aside, not used
+            dst = d.with_name(d.name + time.strftime("_interrupted_%m%d%H%M"))
+            d.rename(dst)
+            print(f"[{time.strftime('%H:%M')}] {name}: partial run moved to {dst.name}, restarting", flush=True)
+        pending.append((name, argv))
     while pending or running:
         while pending and len(running) < width:
             name, argv = pending.pop(0)
