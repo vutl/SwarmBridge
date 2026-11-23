@@ -122,6 +122,32 @@ phase reports. Two recent review rounds made factual errors that this file answe
 
 Format: **dates (review numbers)** | question | what was done | key numbers | conclusion | later corrections.
 
+### 4.0 Paper A write-up and robustness rounds: 18–23/11, SCOPE FROZEN
+
+`phases/2026-11-18_paperA-writeup/`, manuscript `paper/paperA/` (claims → sources in `paper/paperA/CLAIMS.md`).
+
+- **Reframing (21–23/11):** from an evaluation study ("wireless model and task metric disagree") to a method letter.
+  - Method: ACK-calibrated selective MPC on top of any incumbent mode policy.
+- **Rounds:**
+  - E1–E3 (PHY variants, test-dev);
+  - E2c ladder: no single factor; pooling over UAVs is the most consistent step;
+  - E4 network size: rule FAIL, cal > H\* in only 3/5;
+  - E5 feedback delay/loss: holds vs nominal in all 5 settings; E5 tracker bug found and fixed first;
+  - E6 bandwidth: rule FAIL, cal > H\* in 2/3;
+  - E7 RL families (QR-DQN, Discrete SAC): RQ-B 6/6 test, 5/6 test-dev. The new families were weak, so X+cal is
+    still below H\*+cal. PPO-LA vs H\* flips sign between pools.
+- **Robust claims:**
+  - calibrated > nominal in 12/12 LA configurations;
+  - calibrated > RobustMPC-style in 11/12.
+- **Condition-dependent:** gain over the incumbent alone, 10/12.
+- **Return vs recall:** recall falls in 8/12 configurations with H\*.
+- **Also reported:**
+  - JA latency limits at K=7 / M=4;
+  - MPC results are not bit-reproducible (wall-clock budget).
+- **Operational lesson:** the first E7 launch died with the Claude session (10 h lost). Long jobs are now launched
+  detached via WMI.
+- **Stop rule:** no further algorithm rounds for Paper A. Next: final review of the 4-page draft, then Paper 2.
+
 ### 4.1 Design reset: 18/11 (#47–#48), OPEN
 
 - **Question:** where did the project drift from the original thesis, and can it be restored without rebuilding?

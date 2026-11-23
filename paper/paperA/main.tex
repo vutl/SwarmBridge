@@ -1,7 +1,7 @@
 %% Paper A -- ICT Express letter (template: paper/ICT Express Submission Template_191231.zip, elsarticle 3p twocolumn).
 %% Limits: ~4 pages incl. references; figures + tables <= 4; abstract 75-100 words; 3-5 keywords, alphabetical.
-%% Rewritten 2026-11-20 after the robustness round (E1-E3, E1b, E2b). All numbers: runs/uav_semcom/paperA_r2/
-%% (paper_numbers.json -> table_main.tex via paperA_table.py; summary_c.log for latency and video-level CIs).
+%% Method-letter rewrite 2026-11-23 after E7 (ChatGPT review of 617840e1). Every number: CLAIMS.md (claim -> source).
+%% Tables: paperA_letter_numbers.py -> table_robust.tex, table_e7.tex; figures: paperA_letter_figures.py.
 \documentclass[final,3p,times,twocolumn]{elsarticle}
 \usepackage{graphicx, amsmath, amssymb, booktabs, float, xcolor, siunitx}
 \usepackage[utf8]{inputenc}
@@ -19,7 +19,8 @@
 \begin{document}
 \begin{frontmatter}
 
-\title{When wireless models and task metrics disagree: Revisiting multi-UAV semantic image offloading}
+\title{ACK-calibrated selective model-predictive control for multi-UAV semantic image offloading under link
+adaptation}
 
 \author{\todo{Author 1}\corref{cor1}}
 \ead{\todo{email}}
@@ -29,166 +30,184 @@
 \cortext[cor1]{Corresponding author}
 
 \begin{abstract}
-We evaluate frozen heuristic, proximal policy optimization (PPO) and model-predictive controllers for multi-UAV
-semantic image offloading under a Shannon-rate model and four block-level link-adaptation (LA) configurations, on two
-image sets. A PPO policy that exceeds a tuned heuristic by 2.3 return points under the Shannon model trails it by 22 to
-60 points under every LA configuration, yet attains higher detector recall in three of them. Conversely, an LA-trained
-PPO controller gains return on held-out images but loses recall. Online empirical rate calibration improves a
-model-predictive planner by 5 to 36 return points under LA.
+Capacity-formula rate models misestimate goodput under link adaptation (LA). We propose a selective
+model-predictive control (MPC) layer that may override the compression mode chosen by an existing mode policy,
+planning with per-slot rates calibrated online from acknowledged bits. In a multi-UAV image-offloading simulator with
+block-level LA, it outperforms the same planner with nominal rates in all 12 evaluated LA configurations and with a
+RobustMPC-style predictor in 11, and improves policies from three reinforcement-learning families. Gains over the
+policy without MPC depend on the configuration, and higher return does not always mean higher detector recall.
 \end{abstract}
 
 \begin{keyword}
-Deep reinforcement learning \sep Link adaptation \sep Model predictive control \sep Semantic communication \sep
+Link adaptation \sep Model predictive control \sep Rate calibration \sep Semantic communication \sep
 Unmanned aerial vehicles
 \end{keyword}
 
 \end{frontmatter}
 
 \section{Introduction}\label{sec:intro}
-Unmanned aerial vehicle (UAV) swarms that survey an area must deliver many images to a ground base station (BS)
-under deadlines and limited bandwidth. Semantic and task-oriented communication adapts the representation of each
-image (compression level, learned or generative codec), and deep reinforcement learning (DRL) is increasingly used to
-choose these modes jointly with channels, power and trajectories \cite{huang2025,si2023,zhao2026}. In 20 closely
-related works that we examined, including \cite{huang2025,si2023,zhao2026,hu2025,zhou2026,zheng2026,xu2026}, 13
-compute link rates with capacity formulas, and none evaluates a resource controller under MCS selection from delayed
-channel reports with outer-loop correction and retransmissions \cite{3gpp36213,pedersen2007}. Controllers are also
-usually ranked by the training objective alone, although the receiver's task may value images differently.
+UAV swarms that survey an area deliver many images to a ground base station (BS) under deadlines and limited
+bandwidth. Semantic communication adapts each image's representation (compression level, learned or generative
+codec), often chosen by deep reinforcement learning (DRL) jointly with channels, power and trajectories
+\cite{huang2025,si2023,zhao2026}. Most such controllers compute link rates with capacity
+formulas. Under practical link adaptation (LA), where the modulation and coding scheme (MCS) is chosen from delayed
+channel reports, corrected by an outer loop and protected by retransmissions \cite{3gpp36213}, the
+delivered rate differs from the formula: in our simulator, a PPO \cite{schulman2017} policy that exceeds a tuned
+heuristic by 2.3 return points under a Shannon model trails it by 22 to 60 points under LA.
 
-This letter asks how such rankings change with the wireless model and with the metric. Its contributions are:
-(i) a paired evaluation of the same frozen controllers, including PPO \cite{schulman2017} policies, under a Shannon
-model, four LA configurations and held-out image content, separating the robustness of frozen controllers from tuning
-for the target condition; (ii) evidence that rankings by the training return and by detector recall disagree; and
-(iii) empirical rate calibration of a model-predictive planner as a baseline, compared with a RobustMPC-style predictor
-\cite{yin2015} and ablated. The study concerns independent image offloading, not collaborative perception, and its
-conclusions are limited to the evaluated controllers and simulator.
+Model-predictive control (MPC) with online throughput prediction is established in adaptive video streaming:
+RobustMPC predicts a harmonic mean of recent throughput discounted by the recent prediction error \cite{yin2015}, CS2P
+and Fugu learn throughput or transmission-time predictors \cite{sun2016,yan2020}, and Oboe tunes the controller to the
+network state \cite{akhtar2018}. We adapt this idea to a multi-UAV uplink whose rate is set by a scheduler, co-channel
+interference and SNR-dependent MCS selection, and place the planner \emph{on top of} an existing mode policy.
+Contributions: (i) a method combining an SNR-binned empirical rate model calibrated from acknowledged (ACKed) bits, an
+error tracker that gates planning and sets an uncertainty band, and a selective, compute-bounded MPC over any incumbent
+mode policy; (ii) a matched-planner evaluation over 14 configurations, delayed or lost reports and incumbents from
+three RL families; (iii) its limits: condition-dependent gains over the incumbent alone, return--recall disagreement
+and scheduler latency. It is not a new RL algorithm, and each UAV offloads its own images.
 
-\section{System model and methods}\label{sec:model}
+\section{System model}\label{sec:model}
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.86\textwidth]{figs/fig_system.pdf}
-\caption{System and control loop. Each UAV offloads its own images (no information is exchanged between UAVs). The
-mode policy proposes an incumbent mode, which the selective MPC may override; the slot policy sets movement, channel
-and power. The calibrator updates the MPC rate model from the bits delivered (acknowledged) in each past slot; this
-feedback is observed ideally at slot boundaries, without modelled delay or overhead.}
-\label{fig:system}
+\includegraphics[width=0.88\textwidth]{figs/fig_method.pdf}
+\caption{System and method. The incumbent mode policy proposes a mode for each image; the selective MPC may override
+it, planning with rate paths sampled from the ACK-calibrated model. The error tracker compares past predictions with
+delivered rates; it gates planning and sets the band $[\ell,h]$ of the robustness check.}
+\label{fig:method}
 \end{figure*}
 
-\subsection{Network, images and objective}
-Five UAVs survey disjoint sectors at \SI{100}{m} altitude and offload each captured image to a BS over two channels
-sharing \SI{1}{MHz} at \SI{2.4}{GHz} (Fig.~\ref{fig:system}); an episode has 260 images. The air-to-ground channel
-follows \cite{alhourani2014} with Rician fading, and propulsion energy follows \cite{zeng2019}. Images are VisDrone
-frames \cite{visdrone}: a test pool split by video from the training images, and a held-out test-dev pool (49 videos
-of the VisDrone test-dev split). Each image can be sent in one of 14 modes (AVIF at four qualities, the learned codec
-of \cite{minnen2018} at four qualities, JPEG2000 at two rates, a thumbnail and three generative modes); payload, PSNR
-and encoding time are measured for every image--mode pair, and the UAV predicts them from a cheap AVIF probe. Each
-image has a deadline $D^{\max}\sim U(4,12)$\,s and a quality floor $Q^{\min}\sim U(22,30)$\,dB. A delivered image
-with PSNR $q$ and delay $D$ obtains
+$K$ UAVs survey disjoint sectors at \SI{100}{m} altitude and offload each captured image (52 per UAV) to a BS over
+$M$ channels sharing $B$ at \SI{2.4}{GHz} (Fig.~\ref{fig:method}); by default $K{=}5$, $M{=}2$, $B{=}\SI{1}{MHz}$.
+The air-to-ground channel follows \cite{alhourani2014} with Rician fading; propulsion energy follows \cite{zeng2019}.
+Images are VisDrone frames \cite{visdrone} (a test pool split by video from the training images; a held-out test-dev
+pool of 49 videos), each sent in one of 14 modes (AVIF, a learned codec \cite{minnen2018} and JPEG2000 at several
+qualities, a thumbnail, three generative modes) with measured payload, PSNR and encoding time. Each image has a deadline $D^{\max}\sim U(4,12)$\,s and a quality floor
+$Q^{\min}\sim U(22,30)$\,dB; a delivered image with PSNR $q$ and delay $D$ obtains
 \begin{multline}
 u = 0.5\,\mathrm{clip}\!\left(\frac{q-Q^{\min}}{15},-1,1\right) + 0.5\,\frac{\max(D^{\max}-D,0)}{D^{\max}}\\
     - \mathbf{1}\!\left[q<Q^{\min} \lor D>D^{\max}\right],
 \end{multline}
-a dropped image $u=-1$, and the return sums the utilities minus energy and mission-time costs. As the task metric we
-report the recall of a YOLO11s detector on the delivered images (IoU $\ge 0.5$), counting only images delivered on time
-with PSNR $\ge Q^{\min}$ (Qmin-compliant recall).
+a dropped image $u=-1$, and the return sums the utilities minus energy and mission-time costs. The task metric is the
+recall of a YOLO11s detector (IoU $\ge 0.5$) over images delivered on time with PSNR $\ge Q^{\min}$.
 
-\subsection{Physical-layer models}
-Under the \emph{Shannon model} (S), a UAV alone on a channel obtains $(B/M)\log_2(1+\mathrm{SNR})$. Under \emph{link
-adaptation} (LA), each \SI{0.1}{s} block uses one MCS of the LTE CQI table \cite{3gpp36213}, chosen from an SNR report
-delayed by two blocks with \SI{1}{dB} error, the BS's knowledge of co-scheduled UAVs and an OLLA offset (10\% block
-error target); block errors follow an assumed logistic curve at the worst SINR in the block, bits count only when
-acknowledged, failed blocks are retransmitted until the deadline, and co-scheduled UAVs interfere for the whole slot.
-Three variants change one assumption each: small-scale fading redrawn every block instead of every \SI{1}{s} slot
-(\emph{block fading}), interference only while a co-channel UAV sends data (\emph{bursty}), and \SI{3}{dB} report
-error with \SI{1}{s} delay (\emph{degraded CQI}). All LA parameters are modelling assumptions.
+Under LA, each \SI{0.1}{s} block uses one MCS of the LTE CQI table \cite{3gpp36213}, chosen from an SNR report delayed
+by two blocks with \SI{1}{dB} error, the BS's knowledge of co-scheduled UAVs and an outer-loop offset (10\% block error
+target); block errors follow an assumed logistic curve at the worst SINR in the block, bits count only when ACKed,
+failed blocks are retransmitted until the deadline, and co-channel UAVs interfere for the whole \SI{1}{s} slot.
+Variants change one assumption: fading redrawn every block (\emph{block fading}), interference only while a co-channel
+UAV sends data (\emph{bursty}), or \SI{3}{dB} report error with \SI{1}{s} delay (\emph{degraded CQI}); a Shannon
+model, $(B/M)\log_2(1+\mathrm{SNR})$, is a reference. All LA parameters are assumptions. A fixed slot policy sets paced
+flight and channels by a joint-assignment (JA) scheduler that enumerates the $(M{+}1)^K$ channel assignments.
 
-\subsection{Controllers}
-A \emph{slot policy} sets movement, channel and power, and a \emph{mode policy} chooses the mode of each image.
-T:best is a tuned whole policy of earlier work (paced flight, backlog-budget modes, channel reuse); the joint-assignment
-(JA) scheduler enumerates channel assignments of the busy UAVs to maximise urgency-weighted predicted goodput. Mode
-policies are $H^*$, the best of 22 fixed or backlog-budget rules on the training seeds of a condition
-($H^*_S$: AVIF-50; $H^*_L$: learned codec, quality 3); PPO with action masking (2M steps, three training seeds),
-trained on S with the T:best slot rule (PPO-S) or on nominal LA with JA and link-adaptation features (PPO-LA); and a
-selective MPC that evaluates the candidate modes of the current image over 8 sampled rate paths and a 4-image
-lookahead within a \SI{50}{ms} anytime budget, starting from an incumbent ($H^*$ or PPO) and switching only if the mean
-paired gain exceeds one standard error. Its rate model is either nominal, calibrated, or RobustMPC-style. The
-calibrated model samples from the empirical distribution of per-slot delivered rates, collected online from a cold
-start in every episode and binned by the UAV's expected SNR; the RobustMPC-style model predicts the harmonic mean of a
-UAV's last five slot rates divided by one plus the maximum relative error of its last five predictions \cite{yin2015}.
+\section{ACK-calibrated selective MPC}\label{sec:method}
+\emph{Rate model.} At the end of each slot $t$, every UAV $k$ that transmitted knows from ACKs the bits delivered in
+the slot and forms one observation $r_{k,t}$ (bits per second of airtime). It is stored, pooled over UAVs, in the
+\SI{2}{dB} bin of the UAV's expected SNR (path loss and line-of-sight probability at its position; no instantaneous
+channel state). The planner samples rate paths, i.i.d.\ per slot, from the empirical distribution of the current bin,
+merging neighbouring bins until \SI{20}{s} of observations are available, and otherwise uses the Shannon rate scaled
+by the observed-to-Shannon ratio. All statistics restart in every episode (cold start).
 
-\subsection{Evaluation protocol}
-No controller is retrained. Controllers run on the test pool (seeds 9900--9999) under S and the four LA
-configurations, and on the test-dev pool (seeds 12000--12099) under S and nominal LA, with the same seeds for every
-controller. Robustness is measured with all controllers frozen; in addition, $H^*$ is re-tuned on the training seeds
-of each LA variant ($H^*_V$), whereas PPO-LA is not retrained, which favours the heuristic. We report paired
-differences with 95\% confidence intervals over environment seeds; PPO results average the three training seeds.
+\emph{Error tracker.} The predicted mean rate $\hat r_{k,t}$ of each slot is stored and, after the slot, the ratio
+$r_{k,t}/\hat r_{k,t}$ is added to the same SNR bins. Once \SI{20}{s} of observations exist, it gives the relative bias
+$b$ and the standard error $\sigma$ of the ratio; before that, planning is gated off and the incumbent's mode is kept.
+The band is $\ell=\max(\min(1,1{+}b)-2\sigma,\,0.05)$, $h=\max(1,1{+}b)+2\sigma$.
+
+\emph{Selective MPC.} For the image whose mode is due, the incumbent $X$ proposes $m_{\mathrm{inc}}$. A screen
+evaluates all 14 modes on the sampled paths scaled by 1 and by $\ell$, looking one image ahead; the best mode at each
+scale becomes a candidate, and planning continues only if a candidate beats $m_{\mathrm{inc}}$. The full plan uses
+$N{=}8$ rate paths over the next \SI{40}{s} and simulates the UAV's encoder and transmitter queues with the current
+image, the queued images and the next four images, whose modes are chosen greedily and identically on all paths
+(non-anticipative). The MPC switches only if the mean paired gain over the paths exceeds one standard error and remains
+resolvable with all paths scaled by $\ell$ and by $h$. A \SI{50}{ms} budget per decision, including the incumbent's
+inference, is checked before each stage from measured stage costs; if a stage does not fit, the incumbent's mode (or
+the best mode evaluated) is returned.
+
+\emph{Matched planners.} The \emph{nominal} MPC uses the same planner with the LA rate mapping applied to fading
+samples of the statistical channel model (no report delay, outer loop, retransmissions or interference), without gate
+or band. The \emph{RobustMPC-style} MPC predicts, per UAV, the harmonic mean of its last five slot rates divided by one
+plus the maximum relative error of its last five predictions \cite{yin2015}, with the same gate and band.
+
+\section{Evaluation protocol}\label{sec:protocol}
+Incumbents: $H^*$, the best of 22 fixed or backlog-budget rules on training seeds (frozen across PHY variants,
+re-tuned per network size and bandwidth); PPO-LA, trained with LA features; and QR-DQN \cite{dabney2018} and Discrete
+SAC \cite{christodoulou2019}, implemented by us (two hyper-parameter settings each, chosen on validation). Each
+learned family has three training seeds of 2M decisions, with the checkpoint selected on validation seeds. We report
+paired differences with 95\% confidence intervals (CIs) over 100 environment seeds; learned incumbents are averaged
+over training seeds. The network-size, bandwidth, feedback and RL-family experiments were pre-registered.
 
 \section{Results}\label{sec:results}
 
+\begin{table}[t]
+\centering
+\caption{Calibrated MPC with incumbent $H^*$: paired differences (mean $\pm$ half-width of the 95\% CI over 100
+environment seeds; bold: CI excludes 0). Recall: Qmin-compliant recall points.}
+\label{tab:robust}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\input{table_robust.tex}
+\end{table}
+
 \begin{table*}[t]
 \centering
-\caption{Paired differences (mean $\pm$ half-width of the 95\% CI over 100 environment seeds; bold: CI excludes 0).
-A: PPO-S minus T:best (same slot rule). B: learned mode policy + calibrated MPC minus $H^*$ + calibrated MPC, $H^*$
-frozen (learned: PPO-LA; PPO-S under Shannon). C: as B with $H^*$ re-tuned on the variant. D, E, F: calibrated MPC
-minus nominal MPC, minus RobustMPC-style MPC, and minus the same calibration without SNR bins (incumbent $H^*$).
-Return in A5 utility points; recall in Qmin-compliant recall points.}
-\label{tab:main}
-\scriptsize
-\setlength{\tabcolsep}{2.4pt}
-\input{table_main.tex}
+\caption{RL-family experiment ($K{=}5$, $M{=}2$, nominal LA; test seeds 13000--13099, test-dev seeds 14000--14099).
+Return and recall: means on the test pool; B1 $=$ $X$+cal $-$ $X$, B2 $=$ $X$+cal $-$ $X$+nominal (paired, as in
+Table~\ref{tab:robust}); learned $X$ averaged over three training seeds.}
+\label{tab:e7}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\input{table_e7.tex}
 \end{table*}
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.92\textwidth]{figs/fig_misalign.pdf}
-\caption{Return (a) and Qmin-compliant recall (b) differences of two controller pairs per configuration (95\% CI).
-Opposite signs in the two panels mark configurations in which the training return and the detector metric rank the
-pair differently.}
-\label{fig:misalign}
-\end{figure*}
+\textbf{Calibration versus matched planners.} In all 12 LA configurations the calibrated MPC outperforms the nominal
+MPC, by 5.2 to 36.4 return points (Table~\ref{tab:robust}); under the Shannon model, where the nominal model is nearly
+correct, the difference is $+0.6$ (n.s.) on the test pool and $+1.8$ on test-dev images. It outperforms the
+RobustMPC-style MPC in 11 of 12 LA configurations ($K{=}5$, $M{=}3$: $+1.7$, n.s.); in the network-size and bandwidth
+experiments the RobustMPC-style MPC stayed within 0.7 points of $H^*$ alone. In a one-factor ladder from the
+RobustMPC-style to the calibrated predictor (seven configurations of Table~\ref{tab:robust}), no single step was
+responsible; pooling observations across UAVs was the most consistent step ($+3.9$ to $+9.0$, significant in four).
+SNR binning made no measurable difference there, but the unbinned model was lower in all five network sizes ($-0.7$
+to $-1.7$; significant in two).
 
-\textbf{Return rankings depend on the wireless model.} With the same slot rule, PPO-S exceeds T:best by $2.3$ return
-points under S and by $14.0$ on test-dev images, but trails it by $22.1$ to $59.7$ points under every LA configuration
-(Table~\ref{tab:main}, column A). The reversal persists across the link-adaptation configurations within the evaluated
-simulator and on held-out content.
+\textbf{Gains over the incumbent alone depend on the condition.} The calibrated MPC improves on $H^*$ without MPC in
+10 of 12 LA configurations, by amounts that vary: under nominal LA, $+8.2$ on seeds 9900--9999, $+2.7$ (n.s.) on seeds
+13000--13099 and $+16.4$ on test-dev seeds 14000--14099 (Table~\ref{tab:e7}). The pre-registered claims of a benefit
+over the incumbent across network sizes and bandwidths therefore failed (3 of 5 and 2 of 3 settings), whereas the
+advantage over the nominal model held in all of them.
 
-\textbf{Return and detector recall disagree.} In three LA configurations PPO-S trails T:best in return but attains
-higher recall ($+1.5$ to $+2.0$ points; Fig.~\ref{fig:misalign}). In the opposite direction, PPO-LA with the
-calibrated MPC has higher return than $H^*_L$ with the same MPC on test-dev images ($+7.4$) but lower recall ($-2.5$;
-a two-way bootstrap over seeds and the 49 videos gives $[-3.5, -1.6]$), and equal return but $2.9$ points lower recall
-under nominal LA. Under block fading and degraded CQI both metrics favour PPO-LA. The return trades PSNR margin, delay
-and energy, which detector recall does not reward in the same proportion.
+\textbf{Delayed or lost reports.} With rate reports delayed by 1, 3 or 10 slots, or by 1 or 3 slots with 30\% lost,
+the calibrated MPC exceeds the nominal MPC by 18.1 to 21.3 points, and no difference from immediate reports was
+detected (all CIs include 0). Link-layer ACK loss, 10-slot delay with 30\% loss, and report overhead were not tested.
 
-\textbf{Frozen versus re-tuned heuristics.} PPO-LA, trained under nominal LA only, outperforms the frozen $H^*_L$ by
-$61.2$ and $51.0$ return points under block fading and degraded CQI, but trails it by $9.2$ under bursty interference
-(column B). Re-tuning on the variant changes the best fixed mode from quality 3 to quality 1 under block fading and
-degraded CQI, after which the heuristic leads PPO-LA by $31.4$ and $29.3$ points (column C). On test-dev images, where
-tuning on test content is not allowed, the learned policy with MPC leads the train-tuned heuristic in return under both
-models ($+7.4$, $+8.0$). Robustness to an unseen condition and performance after target-condition tuning thus rank the
-controllers differently.
+\textbf{Incumbents from three RL families.} On the test pool the calibrated layer improves PPO-LA, QR-DQN and Discrete
+SAC both over the incumbent alone (B1) and over the nominal MPC (B2), satisfying the pre-registered rule (6 of 6 CIs
+above 0; Table~\ref{tab:e7}); on test-dev images 5 of 6 hold (Discrete SAC B2: $+1.2$, n.s.). Per training seed, B1 is
+significant in all 18 seed--pool--family cases, and B2 is not significant in 4, all for weaker seeds of QR-DQN and
+Discrete SAC. These two families were weaker than PPO-LA with the evaluated budget and settings, so their large B1
+values mainly correct a weak policy: with the calibrated MPC they still trail $H^*$ with the calibrated MPC on the test
+pool ($-13.6$, $-15.9$). PPO-LA trails $H^*$ on the test pool ($-4.4$; $-0.4$, n.s., both with the
+calibrated MPC) but leads it on test-dev images ($+13.7$; $+8.1$): the ranking of learned and heuristic incumbents
+depends on the image content.
 
-\textbf{Empirical rate calibration.} Under LA, the calibrated planner improves on the nominal planner by $5.2$ to
-$36.4$ return points and on the RobustMPC-style planner by $6.6$ to $18.0$ points (columns D, E); under S, where the
-nominal model is correct, neither difference is significant on the test pool. SNR binning provided no consistent
-measurable benefit (column F): the expected SNR seen by the calibrator spans only \SI{10.8}{}--\SI{18.9}{dB}. Which
-element of the calibration produces the gain over the RobustMPC-style predictor (distributional sampling, longer pooled
-memory or the absence of a pessimistic discount) is not resolved. The integrated decision time has a per-episode 99th
-percentile of 39--48\,ms (episode maximum 64\,ms; at most 0.31\% of slots exceed 50\,ms), assuming that the mode
-decisions of a slot run in parallel.
+\textbf{Return and recall disagree.} With $H^*$ as incumbent, the calibrated MPC raises return but lowers recall in 8
+of 12 LA configurations ($-0.3$ to $-1.2$ points) and raises recall in 4 ($+0.9$ to $+2.6$; Table~\ref{tab:robust}).
+With learned incumbents it raises recall (B1: $+0.6$ to $+6.1$), yet for QR-DQN and Discrete SAC the nominal MPC
+attains higher recall than the calibrated one (Table~\ref{tab:e7}) despite lower return. The return trades PSNR margin,
+delay and energy, which recall does not reward in the same proportion.
 
-\section{Discussion and conclusions}\label{sec:conclusion}
-In the studied multi-UAV image-offloading setting, the ranking of controllers changed with the wireless model, with
-the image content, with whether controllers were frozen or re-tuned for the condition, and with the metric. Controllers
-designed under the Shannon model trailed LA-designed ones in every LA configuration, and the training return and
-detector recall frequently ranked the same pair differently. Evaluations of semantic-communication controllers should
-therefore state the PHY abstraction and the tuning protocol, and report the task metric alongside the return. Empirical
-rate calibration was a useful planning baseline, although the source of its advantage over a RobustMPC-style predictor
-remains open.
+\textbf{Decision time and reproducibility.} For $K{=}5$, $M{=}2$ the per-episode 99th percentile of the integrated
+decision time is 40--64\,ms (parallel per-UAV decisions assumed), and at most 0.5\% of slots exceed 50\,ms on average.
+With $K{=}7$ or $M{=}4$ the JA scheduler alone takes 35--38\,ms (99th percentile) and 28\% or 40\% of slots exceed
+50\,ms. As the budget is wall-clock time, MPC results are not bit-reproducible: a rerun of $H^*$ with the calibrated MPC
+changed 16 of 100 episodes (mean $-0.4$, CI $[-1.3, +0.5]$), consistent with load-dependent budget truncation.
 
-Limitations: one simulator with independent image arrivals and assumed link-adaptation dynamics (no over-the-air
-validation); PPO was not retrained per LA variant; one detector and one utility, whose quality floor is not task-derived;
-and a decision-time budget that assumes parallel mode decisions. Cooperative multi-UAV perception, where messages from
-different UAVs interact, is left for future work.
+\section{Conclusions}\label{sec:conclusion}
+Planning with ACK-calibrated rate samples outperformed the same planner with nominal or RobustMPC-style rates in
+almost every evaluated LA configuration, tolerated delayed or lost reports, and improved incumbents from three RL
+families. It did not consistently improve a tuned heuristic or turn weak learned policies into the best system, and
+its return gains were not always recall gains. Limitations: one simulator with assumed LA dynamics (no over-the-air
+validation); one detector and a utility whose quality floor is not task-derived; an exhaustive scheduler; and
+wall-clock-dependent planning. Cooperative perception is left for future work.
 
 \section*{Acknowledgments}
 \todo{funding}
@@ -205,23 +224,18 @@ reinforcement learning, in: Proc. IEEE Global Commun. Conf. (GLOBECOM), 2023.
 \bibitem{zhao2026} A. Zhao, M. Sun, X. Xu, Z. Fang, S. Han, B. Wang, C. Dong, Y. Liu, P. Zhang, Adaptive task-oriented
 semantic communication for UAVs with joint trajectory and resource optimization, IEEE Trans. Netw. Sci. Eng. 13 (2026)
 11622--11642.
-\bibitem{hu2025} H. Hu, X. Zhu, F. Zhou, W. Wu, R. Q. Hu, H. Zhu, Resource allocation for multi-modal semantic
-communication in UAV collaborative networks, IEEE Trans. Commun. 73 (9) (2025) 7599--7616.
-\bibitem{zhou2026} Y. Zhou, P. Dai, B. He, M. Ren, M. Luo, J. Chen, Joint optimization of adaptive semantic compression
-and resource allocation for semantic-enabled UAV communications, EURASIP J. Wirel. Commun. Netw. 2026 (2026) 93.
-\bibitem{zheng2026} W. Zheng, J. Li, Y. Zuo, Confidence-calibrated semantic resource allocation for multi-UAV
-low-altitude networks, EURASIP J. Wirel. Commun. Netw. (2026), doi:10.1186/s13638-026-02655-0.
-\bibitem{xu2026} J. Xu, K. Ota, M. Dong, Airtalking: Aerial D2D for multi-UAV systems based on semantic communication,
-IEEE Internet Things J. 13 (17) (2026) 38392--38404.
 \bibitem{3gpp36213} 3GPP, Evolved Universal Terrestrial Radio Access (E-UTRA); Physical layer procedures, TS 36.213,
 Release 8.
-\bibitem{pedersen2007} K. I. Pedersen, G. Monghal, I. Z. Kov\'acs, T. E. Kolding, A. Pokhariyal, F. Frederiksen,
-P. Mogensen, Frequency domain scheduling for OFDMA with limited and noisy channel feedback, in: Proc. IEEE 66th Veh.
-Technol. Conf. (VTC-Fall), 2007, pp. 1792--1796.
 \bibitem{schulman2017} J. Schulman, F. Wolski, P. Dhariwal, A. Radford, O. Klimov, Proximal policy optimization
 algorithms, arXiv:1707.06347, 2017.
 \bibitem{yin2015} X. Yin, A. Jindal, V. Sekar, B. Sinopoli, A control-theoretic approach for dynamic adaptive video
 streaming over HTTP, in: Proc. ACM SIGCOMM, 2015, pp. 325--338.
+\bibitem{sun2016} Y. Sun, X. Yin, J. Jiang, V. Sekar, F. Lin, N. Wang, T. Liu, B. Sinopoli, CS2P: Improving video
+bitrate selection and adaptation with data-driven throughput prediction, in: Proc. ACM SIGCOMM, 2016, pp. 272--285.
+\bibitem{yan2020} F. Y. Yan, H. Ayers, C. Zhu, S. Fouladi, J. Hong, K. Zhang, P. Levis, K. Winstein, Learning in situ:
+a randomized experiment in video streaming, in: Proc. USENIX NSDI, 2020, pp. 495--511.
+\bibitem{akhtar2018} Z. Akhtar, Y. S. Nam, R. Govindan, S. Rao, J. Chen, E. Katz-Bassett, B. Ribeiro, J. Zhan,
+H. Zhang, Oboe: Auto-tuning video ABR algorithms to network conditions, in: Proc. ACM SIGCOMM, 2018, pp. 44--58.
 \bibitem{alhourani2014} A. Al-Hourani, S. Kandeepan, S. Lardner, Optimal LAP altitude for maximum coverage, IEEE
 Wireless Commun. Lett. 3 (6) (2014) 569--572.
 \bibitem{zeng2019} Y. Zeng, J. Xu, R. Zhang, Energy minimization for wireless communication with rotary-wing UAV, IEEE
@@ -230,5 +244,8 @@ Trans. Wireless Commun. 18 (4) (2019) 2329--2345.
 challenge, IEEE Trans. Pattern Anal. Mach. Intell. 44 (11) (2022) 7380--7399.
 \bibitem{minnen2018} D. Minnen, J. Ball\'e, G. Toderici, Joint autoregressive and hierarchical priors for learned image
 compression, in: Adv. Neural Inf. Process. Syst. (NeurIPS), 2018.
+\bibitem{dabney2018} W. Dabney, M. Rowland, M. G. Bellemare, R. Munos, Distributional reinforcement learning with
+quantile regression, in: Proc. AAAI Conf. Artif. Intell., 2018.
+\bibitem{christodoulou2019} P. Christodoulou, Soft actor-critic for discrete action settings, arXiv:1910.07207, 2019.
 \end{thebibliography}
 \end{document}

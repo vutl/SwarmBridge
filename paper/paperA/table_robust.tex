@@ -1,0 +1,26 @@
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+ & \multicolumn{3}{c}{Return: calibrated MPC minus} & Recall\\
+\cmidrule(lr){2-4}
+Configuration & nominal & RobustMPC-st. & $H^*$ alone & vs.\ $H^*$\\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Test pool, seeds 9900--9999 ($K{=}5$, $M{=}2$, 1 MHz)}}\\
+\quad Shannon & $+0.6\pm1.5$ & $-0.9\pm1.1$ & $-0.9\pm1.1$ & $\mathbf{-1.3}\pm0.1$\\
+\quad LA (nominal) & $\mathbf{+17.0}\pm4.3$ & $\mathbf{+6.6}\pm3.5$ & $\mathbf{+8.2}\pm3.4$ & $\mathbf{-0.5}\pm0.4$\\
+\quad LA, block fading & $\mathbf{+36.4}\pm5.2$ & $\mathbf{+10.1}\pm2.8$ & $\mathbf{+15.9}\pm2.7$ & $\mathbf{+1.1}\pm0.4$\\
+\quad LA, bursty interf. & $\mathbf{+20.9}\pm4.5$ & $\mathbf{+8.2}\pm3.8$ & $\mathbf{+8.1}\pm4.0$ & $\mathbf{-1.2}\pm0.5$\\
+\quad LA, degraded CQI & $\mathbf{+28.2}\pm7.1$ & $\mathbf{+13.7}\pm4.6$ & $\mathbf{+13.1}\pm4.7$ & $\mathbf{+0.9}\pm0.7$\\
+\multicolumn{5}{@{}l}{\textit{Test-dev pool, seeds 12000--12099}}\\
+\quad Shannon & $\mathbf{+1.8}\pm1.4$ & $\mathbf{+12.1}\pm2.1$ & $\mathbf{+12.2}\pm2.1$ & $\mathbf{-1.1}\pm0.2$\\
+\quad LA (nominal) & $\mathbf{+5.2}\pm4.2$ & $\mathbf{+18.0}\pm4.9$ & $\mathbf{+18.7}\pm4.6$ & $\mathbf{-0.5}\pm0.4$\\
+\multicolumn{5}{@{}l}{\textit{Network size (1 MHz), LA, seeds 13000--13099}}\\
+\quad $K{=}3$, $M{=}2$ & $\mathbf{+7.0}\pm2.3$ & $\mathbf{+1.7}\pm1.1$ & $\mathbf{+1.7}\pm1.1$ & $\mathbf{-0.3}\pm0.2$\\
+\quad $K{=}5$, $M{=}2$ & $\mathbf{+19.5}\pm3.8$ & $\mathbf{+3.2}\pm3.0$ & $+2.7\pm3.2$ & $\mathbf{-1.1}\pm0.4$\\
+\quad $K{=}7$, $M{=}2$ & $\mathbf{+17.9}\pm5.1$ & $\mathbf{+12.0}\pm3.0$ & $\mathbf{+12.6}\pm2.9$ & $\mathbf{+1.9}\pm0.2$\\
+\quad $K{=}5$, $M{=}3$ & $\mathbf{+16.0}\pm2.8$ & $+1.7\pm1.8$ & $+1.5\pm1.7$ & $\mathbf{-0.8}\pm0.2$\\
+\quad $K{=}5$, $M{=}4$ & $\mathbf{+10.5}\pm2.3$ & $\mathbf{+3.0}\pm0.9$ & $\mathbf{+2.7}\pm0.9$ & $\mathbf{-0.3}\pm0.1$\\
+\multicolumn{5}{@{}l}{\textit{Bandwidth ($K{=}5$, $M{=}2$), LA, seeds 13000--13099}}\\
+\quad 0.5 MHz & $\mathbf{+5.8}\pm3.2$ & $\mathbf{+9.8}\pm1.9$ & $\mathbf{+9.7}\pm2.1$ & $\mathbf{+2.6}\pm0.3$\\
+\quad 2 MHz & $\mathbf{+30.3}\pm5.2$ & $\mathbf{+5.0}\pm3.7$ & $\mathbf{+4.4}\pm3.7$ & $\mathbf{-0.6}\pm0.4$\\
+\bottomrule
+\end{tabular}
