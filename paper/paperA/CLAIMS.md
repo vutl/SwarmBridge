@@ -10,7 +10,7 @@ Numbers come from three files under `runs/uav_semcom/paperA_r2/`:
 | `summary_e7.json` | `paperA_e7_summary.py` | E7 |
 | `paper_numbers.json` | `paperA_paper_numbers.py` | old Table 1; used only for the motivation sentence |
 
-The manuscript shows the results as figures, all drawn by `paperA_letter_figures.py`:
+The manuscript shows the results as figures. Fig. 1 is drawn by `paperA_letter_figures.py`; Figs. 2–4 are IEEE-style versions drawn by `paperA_ieee_figures.py` (`fig_sweeps.pdf`, `fig_phy.pdf`, `fig_rl.pdf`) from the same data as listed below; Fig. 4a also plots the validation curves in `summary_e7.json["val_curves"]`.
 - Fig. 2 `figs/fig_lines.pdf`: return per image (level ÷ 52K) of H\*, +RobustMPC-style, +nominal and +calibrated MPC.
   - x-axes: bandwidth (BW rows plus NET:N5x2), K (NET N3x2/N5x2/N7x2) and M (NET N5x2/N5x3/N5x4).
   - Data: `T1[...]["level"][arm]["ret"]`; bands from `["ret_ci"]`.
