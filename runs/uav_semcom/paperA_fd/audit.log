@@ -1,0 +1,18 @@
+train {'n_img': 6471, 'n_ann': 6471, 'n_seq': 208, 'n_clip': 2128, 'frames_per_seq': {'min': 1, 'median': 7, 'max': 434}}
+val {'n_img': 548, 'n_ann': 548, 'n_seq': 76, 'n_clip': 548, 'frames_per_seq': {'min': 1, 'median': 4, 'max': 35}}
+testdev {'n_img': 1610, 'n_ann': 1610, 'n_seq': 61, 'n_clip': 266, 'frames_per_seq': {'min': 1, 'median': 5, 'max': 516}}
+seq overlap train-val: 24 seqs; frames in train: 297, in val: 28
+seq overlap testdev-train: 0 seqs; frames in testdev: 0, in train: 0
+seq overlap testdev-val: 0 seqs; frames in testdev: 0, in val: 0
+YOLO train: 5903 frames, 166 seqs; overlap with val seqs 0, with testdev seqs 0
+YOLO holdout: 271 frames, 18 seqs; overlap with val seqs 0, with testdev seqs 0
+A5 pool train 304 seqs 32
+A5 pool test_a4_excluded 32 seqs 16
+A5 pool test 128 seqs 28
+A5 pool val 84 seqs 14
+A5 pool testdev 403 seqs 49
+test-dev seqs touched by A5 test-dev pool: 49 of 61
+test-dev frames in touched seqs: 1592 untouched seqs: 12 frames: 18
+DET-train frames NOT in YOLO training (dropped because seq shared with val): 297
+train objects/frame mean 53.0 total 343205
+testdev objects/frame mean 46.6 total 75102
