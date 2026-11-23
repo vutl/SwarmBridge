@@ -1,9 +1,14 @@
 """Paper A method letter figures (no experiment is re-run).
   fig_method.pdf   : system and method (incumbent mode policy, selective MPC, ACK-calibrated rate model, LA uplink)
-  fig_recall.pdf   : return gain vs Qmin-compliant recall change of the calibrated MPC layer (Table 1 LA rows:
-                     H*+cal - H*; E7: X+cal - X and X+cal - X+nominal), from runs/uav_semcom/paperA_r2/letter_numbers.json
-Palette: dataviz reference categorical slots (blue #2a78d6, orange #eb6834, + muted ink); marker shape as a second
-encoding. Usage: python paperA_letter_figures.py OUTDIR"""
+  fig_robust.pdf   : forest plot over the 14 configurations (incumbent H*): calibrated MPC minus nominal MPC, minus
+                     RobustMPC-style MPC, minus H* alone (return) and recall change vs H* (95% CIs; hollow = CI incl. 0)
+  fig_e7.pdf       : RL-family experiment: return and recall of X, X + calibrated MPC, X + nominal MPC per incumbent,
+                     test and test-dev pools (per-training-seed returns as small dots)
+  fig_recall.pdf   : return gain vs Qmin-compliant recall change of the calibrated MPC layer (not in the 4-page letter)
+All data from runs/uav_semcom/paperA_r2/letter_numbers.json (paperA_letter_numbers.py).
+Palette: dataviz reference categorical slots 1-3 (blue #2a78d6, orange #eb6834, aqua #1baf7a; documented to pass the
+all-pairs CVD / normal-vision checks in light mode), marker shape as a second encoding, text in ink colours.
+Usage: python paperA_letter_figures.py OUTDIR"""
 import json
 import sys
 from pathlib import Path
@@ -16,7 +21,95 @@ import matplotlib.pyplot as plt  # noqa: E402
 import a5_common as C  # noqa: E402
 
 BLUE, ORANGE, INK, MUTED, GRID = "#2a78d6", "#eb6834", "#0b0b0b", "#52514e", "#e4e3df"
-GREEN = "#2f9e6e"
+GREEN = "#1baf7a"                                   # reference slot 3 (aqua)
+NUMS = C.REPO / "runs" / "uav_semcom" / "paperA_r2" / "letter_numbers.json"
+ROWLAB = {"PHY:S": "Shannon", "PHY:L": "LA (nominal)", "PHY:L_fade": "LA, block fading",
+          "PHY:L_bursty": "LA, bursty interf.", "PHY:L_badfb": "LA, degraded CQI",
+          "TD:S": "Shannon", "TD:L": "LA (nominal)",
+          "NET:N3x2": "$K$=3, $M$=2", "NET:N5x2": "$K$=5, $M$=2", "NET:N7x2": "$K$=7, $M$=2",
+          "NET:N5x3": "$K$=5, $M$=3", "NET:N5x4": "$K$=5, $M$=4", "BW:B0.5": "0.5 MHz", "BW:B2": "2 MHz"}
+GRPLAB = {"PHY": "Test pool", "TD": "Test-dev pool", "NET": "Network size", "BW": "Bandwidth"}
+
+
+def forest(out):
+    """Fig. 2: one row per configuration (grouped), four panels; filled marker = CI excludes 0."""
+    N = json.loads(NUMS.read_text())["table1"]
+    keys = list(N)
+    ys, y, ylab, gpos, last = [], 0.0, [], [], None
+    for k in keys:
+        g = k.split(":")[0]
+        if g != last:
+            if last is not None:
+                y += 0.7
+            gpos.append((y, GRPLAB[g]))
+            last = g
+        ys.append(y)
+        ylab.append(ROWLAB[k])
+        y += 1
+    panels = (("cal_minus_nom", "(a) vs. nominal MPC", BLUE, "o"),
+              ("cal_minus_rh", "(b) vs. RobustMPC-style", BLUE, "o"),
+              ("cal_minus_H", "(c) vs. $H^*$ alone", BLUE, "o"),
+              ("recall_cal_minus_H", "(d) recall vs. $H^*$ alone", ORANGE, "D"))
+    fig, axs = plt.subplots(1, 4, figsize=(7.0, 2.05), sharey=True,
+                            gridspec_kw=dict(width_ratios=[1.25, 1, 1, 0.8], wspace=0.08))
+    for ax, (key, title, col, mk) in zip(axs, panels):
+        for k, yy in zip(keys, ys):
+            m, lo, hi = N[k][key]
+            sig = lo > 0 or hi < 0
+            ax.plot([lo, hi], [yy, yy], color=col, lw=1.4, solid_capstyle="round")
+            ax.plot(m, yy, mk, ms=4.2, mfc=col if sig else "white", mec=col, mew=1.1)
+        ax.axvline(0, color=MUTED, lw=0.8)
+        ax.grid(axis="x", color=GRID, lw=0.5)
+        ax.set_title(title, fontsize=7.2, color=INK, loc="left")
+        ax.tick_params(labelsize=6.5, length=2)
+        ax.spines["left"].set_visible(False)
+        ax.tick_params(axis="y", length=0)
+    axs[0].set_yticks(ys)
+    axs[0].set_yticklabels(ylab, fontsize=6.5, color=INK)
+    for gy, glab in gpos:
+        axs[0].text(-0.02, gy - 0.75, glab, transform=axs[0].get_yaxis_transform(), ha="right", va="center",
+                    fontsize=6.5, color=MUTED, style="italic")
+    axs[0].set_ylim(ys[-1] + 0.7, -1.4)
+    for ax in axs[:3]:
+        ax.set_xlabel("return difference", fontsize=6.8, color=MUTED)
+    axs[3].set_xlabel("recall points", fontsize=6.8, color=MUTED)
+    fig.savefig(out / "fig_robust.pdf", bbox_inches="tight")
+    fig.savefig(out / "fig_robust.png", bbox_inches="tight", dpi=200)
+
+
+def e7(out):
+    """Fig. 3: per incumbent, X / X+cal / X+nominal on test and test-dev; return (with per-training-seed dots) and recall."""
+    E = json.loads(NUMS.read_text())["E7"]
+    inc = [("H*", "$H^*$"), ("PPO-LA", "PPO-LA"), ("QR-DQN", "QR-DQN"), ("Discrete SAC", "Discrete SAC")]
+    arms = (("X", "$X$ alone", BLUE, "o", -0.22), ("X+cal", "$X$ + calibrated MPC", ORANGE, "s", 0.0),
+            ("X+nom", "$X$ + nominal MPC", GREEN, "^", 0.22))
+    fig, axg = plt.subplots(2, 2, figsize=(3.45, 2.35), sharey=True, gridspec_kw=dict(wspace=0.08, hspace=0.62))
+    axs = [axg[0, 0], axg[0, 1], axg[1, 0], axg[1, 1]]
+    pan = (("test", "ret", "(a) return, test"), ("testdev", "ret", "(b) return, test-dev"),
+           ("test", "recall", "(c) recall (%), test"), ("testdev", "recall", "(d) recall (%), test-dev"))
+    for ax, (pool, met, title) in zip(axs, pan):
+        lv = E[pool]["levels"]
+        for i, (key, _) in enumerate(inc):
+            for a, lab, col, mk, off in arms:
+                L = lv[f"{key}|{a}"]
+                if met == "ret" and key != "H*":
+                    ax.plot(L["ret_per_seed"], [i + off] * 3, "|", ms=4, color=col, alpha=0.6, mew=0.9)
+                ax.plot(L[met], i + off, mk, ms=4.6, color=col, mec="white", mew=0.5,
+                        label=lab if (i == 0 and pool == "test" and met == "ret") else None)
+        ax.grid(axis="x", color=GRID, lw=0.5)
+        ax.set_title(title, fontsize=7.2, color=INK, loc="left")
+        ax.tick_params(labelsize=6.5, length=2)
+        ax.spines["left"].set_visible(False)
+        ax.tick_params(axis="y", length=0)
+    for ax in (axs[0], axs[2]):
+        ax.set_yticks(range(len(inc)))
+        ax.set_yticklabels([l for _, l in inc], fontsize=6.5, color=INK)
+    axs[0].set_ylim(len(inc) - 0.5, -0.5)
+    h, lab = axs[0].get_legend_handles_labels()
+    fig.legend(h, lab, loc="lower center", ncol=3, frameon=False, fontsize=6.2, bbox_to_anchor=(0.5, -0.07),
+               handletextpad=0.2, columnspacing=0.8)
+    fig.savefig(out / "fig_e7.pdf", bbox_inches="tight")
+    fig.savefig(out / "fig_e7.png", bbox_inches="tight", dpi=200)
 plt.rcParams.update({"font.family": "serif", "font.size": 8, "axes.edgecolor": MUTED, "axes.labelcolor": INK,
                      "xtick.color": MUTED, "ytick.color": MUTED, "axes.spines.top": False, "axes.spines.right": False,
                      "pdf.fonttype": 42})
@@ -62,7 +155,7 @@ def method(out):
              ("per (UAV, slot) delivered rate in 2 dB bins of expected SNR;",
               "MPC samples rate paths from the bin; error tracker gives",
               "bias $b$ and s.e. $\\sigma$ $\\rightarrow$ band $[\\ell, h]$ around $1{+}b$"), fc="#fdf1ec", ec=ORANGE,
-             lsize=5.6)
+             lsize=5.3)
     for x0, x1, y in ((10.4, 11.7, 33), (25.9, 27.7, 33), (60.9, 62.7, 33), (72.9, 74.7, 33), (90.9, 93.0, 33)):
         arrow((x0, y), (x1, y), col=BLUE, lw=1.3)
     arrow((83, yu - 0.4), (74.6, 8.5), col=ORANGE, ls="--", rad=-0.3)
@@ -119,5 +212,7 @@ if __name__ == "__main__":
     o = Path(sys.argv[1])
     o.mkdir(parents=True, exist_ok=True)
     method(o)
+    forest(o)
+    e7(o)
     recall(o)
     print("figures ->", o)
