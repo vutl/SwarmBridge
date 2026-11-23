@@ -1,6 +1,7 @@
 # Paper A extended evaluation: Phase 0 dataset audit and protocol (23/11)
 
-**Status:** audit done; protocol PROPOSED for review. No profiling, training or test run has been started.
+**Status:** audit done; protocol reviewed (ChatGPT, CONDITIONAL GO for Phase 1). See the amendments in section 8 and
+the Phase 1 record in [paperA-fd-phase1.md](paperA-fd-phase1.md). No Phase 2–4 run has been started.
 
 **Brief:** ChatGPT review of 23/11 (two workstreams: dataset generalization, and wireless sensitivity on the new data
 protocol).
@@ -80,7 +81,7 @@ The uncapped test-dev pool is a pre-registered secondary analysis.
 | `F` (fresh) | YOLO hold-out | 168 | 18 | **test** | yes (small checkpoint-selection bias) | none in SwarmBridge |
 | `TD` (primary test) | DET-test-dev, all 61 sequences | 582 | 61 | **test** | yes | 403 frames used earlier (E3, step C, E7) |
 | `TD_all` (secondary) | DET-test-dev, uncapped | 1,610 | 61 | test | yes | as above |
-| `V` (replication) | DET-val, all frames (maximum 35 per sequence, so the cap does not bind) | 548 | 76 | test | yes | used for development |
+| `V` (historical replication) | DET-val, all frames, intentionally UNCAPPED (up to 35 frames per sequence, so a 30-frame cap would bind) | 548 | 76 | test | yes | used for development |
 
 **Primary test pool: TD.** It is the largest, has the most sequences, is unseen by the detector, and was only partly
 used before. F (the only unused pool) and V are replications. F is small (18 sequences), so its scene-level CIs will be
@@ -221,3 +222,41 @@ Phase 2 is run.
 - Phase 1 smoke test: 5 DET-val images for the reproduction check, and 20 `rl_train` images for timing;
 - then the full detached profiling run;
 - then the Phase 1 report: coverage, failures, timing, and predictor error per pool.
+
+## 8. Amendments after the review of 50ce9022 (23/11)
+
+1. **Names of the test pools.** None of the pools is a fully independent confirmatory test.
+   - **TD** = expanded primary evaluation. 49 of its 61 sequences appeared in earlier rounds.
+   - **F** = method-unseen supplementary evaluation. Unseen by RL and MPC development, but used to select the YOLO
+     checkpoint. The size of that bias is unknown and is not assumed small.
+   - **V** = historical replication. Used during the development of E1–E7.
+2. **What "full data" means here.** The protocol is an *extended, sequence-balanced* dataset (at most 30 frames per
+   sequence). It does not train on every DET-train frame.
+   - TD_all (uncapped test-dev) is reported next to TD, so that sequence-balanced and frame-weighted results can be
+     compared.
+   - V is uncapped on purpose.
+3. **Manifest.** `runs/uav_semcom/paperA_fd/manifest_fd_v1.json`, built by `fd_manifest.py`; checks in
+   `integrity_fd_v1.log` and `neardup_fd_v1.log`.
+   - The manifest becomes immutable once profiling starts: the profiler records its sha256 and refuses a changed one.
+   - Actual pool sizes:
+     - rl_train: 1,523 frames, 141 sequences;
+     - rl_val: 374 frames, 25 sequences;
+     - F: 168 frames, 18 sequences;
+     - TD: 582 frames, 61 sequences;
+     - TD_extra: 1,028 frames, 8 sequences;
+     - V: 548 frames, 76 sequences;
+     - excluded: x_valshared 297 frames, x_cap 4,109 frames.
+4. **Generative cache.** Each row is keyed by (image sha256, mode, generator seed for the generative modes, config
+   hash).
+   - The config hash covers: the code sha256s, the YOLO weights sha256, the BLIP and SD-Turbo snapshot revisions, every
+     codec, generator and detector parameter, and the manifest sha256.
+   - No A5 row is reused: every fd_v1 image, including V and the 403 old test-dev frames, is profiled anew with its
+     fd_v1 seed.
+5. **Phase 2 statistics and `+mpcng`.** Both are to be specified in the Phase 2 pre-registration, following the
+   review:
+   - episode return: paired CIs over environment seeds;
+   - per-image recall: a video-cluster estimator with stated units and weights;
+   - a scene-level claim about episode return: only with a scene-stratified or explicitly resampled design.
+   - `+mpcng` shares the gate and band *algorithm* with the calibrated arm, not their realised values. Its contrast is
+     the effect of substituting the rate model within a common control design. Gate, switch, band, abort and
+     decision-time statistics will be logged.

@@ -1,0 +1,16 @@
+repro smoke: 5 DET-val images, old A5 seeds; wall 14.84 s/img (with detector)
+  original                 bytes equal 0/0  max|dPSNR| nan  max|dLPIPS| nan  max|dTP| 0
+  cap_t2i                  bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  thumb64_up               bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  cap_thumb64_i2i_t0.6     bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  cap_thumb128_i2i_t0.3    bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  avif_5                   bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  avif_20                  bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  avif_50                  bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  avif_80                  bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  mbt2018-mean_q1          bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  mbt2018-mean_q3          bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  mbt2018-mean_q5          bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  mbt2018-mean_q8          bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  jpeg2000_100             bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  jpeg2000_25              bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0

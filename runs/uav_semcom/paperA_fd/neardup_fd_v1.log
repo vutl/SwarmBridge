@@ -1,0 +1,10 @@
+images 8629, threshold 20/256 on both hashes
+nearest cross-pool max(dHash, aHash) distance percentiles (0, 0.1, 1, 5, 50 %): [0.0, 16.0, 56.0, 70.0, 88.0]
+near-duplicate pairs: 16 (within pool 10, across pools 6)
+across-pool pairs by pool pair: {('rl_train', 'x_cap'): 5, ('rl_val', 'x_cap'): 1}
+   {'a': '9999950_00000_d_1007223.jpg', 'b': '9999937_00000_d_0000015.jpg', 'pool_a': 'rl_train', 'pool_b': 'x_cap', 'dhash': 0, 'ahash': 0, 'cross': True}
+   {'a': '9999960_00000_d_0000077.jpg', 'b': '9999960_00000_d_0000076.jpg', 'pool_a': 'rl_train', 'pool_b': 'x_cap', 'dhash': 20, 'ahash': 11, 'cross': True}
+   {'a': '9999981_00000_d_0000098.jpg', 'b': '9999981_00000_d_0000009.jpg', 'pool_a': 'rl_train', 'pool_b': 'x_cap', 'dhash': 16, 'ahash': 4, 'cross': True}
+   {'a': '9999981_00000_d_0000114.jpg', 'b': '9999981_00000_d_0000019.jpg', 'pool_a': 'rl_train', 'pool_b': 'x_cap', 'dhash': 11, 'ahash': 10, 'cross': True}
+   {'a': '9999997_00000_d_0000020.jpg', 'b': '9999997_00000_d_0000021.jpg', 'pool_a': 'rl_train', 'pool_b': 'x_cap', 'dhash': 14, 'ahash': 2, 'cross': True}
+   {'a': '9999998_00002_d_0000001.jpg', 'b': '9999998_00003_d_0000002.jpg', 'pool_a': 'rl_val', 'pool_b': 'x_cap', 'dhash': 16, 'ahash': 12, 'cross': True}

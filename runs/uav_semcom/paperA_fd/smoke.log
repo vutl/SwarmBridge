@@ -1,0 +1,164 @@
+== repro 23:12:16
+Loading weights:   0%|          | 0/616 [00:00<?, ?it/s]Loading weights:  20%|█▉        | 122/616 [00:00<00:00, 1216.94it/s]Loading weights:  40%|███▉      | 244/616 [00:00<00:00, 1172.22it/s]Loading weights:  59%|█████▉    | 362/616 [00:00<00:00, 762.43it/s] Loading weights:  73%|███████▎  | 451/616 [00:00<00:00, 576.37it/s]Loading weights:  84%|████████▍ | 520/616 [00:00<00:00, 431.74it/s]Loading weights:  93%|█████████▎| 573/616 [00:01<00:00, 424.45it/s]Loading weights: 100%|██████████| 616/616 [00:01<00:00, 525.12it/s]
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/diffusers/utils/deprecation_utils.py:23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]Loading pipeline components...:  20%|██        | 1/5 [00:01<00:07,  1.76s/it]Loading pipeline components...:  60%|██████    | 3/5 [00:01<00:00,  2.00it/s]
+Loading weights:   0%|          | 0/372 [00:00<?, ?it/s][A
+Loading weights:   7%|▋         | 27/372 [00:00<00:01, 245.09it/s][A
+Loading weights:  14%|█▍        | 52/372 [00:00<00:01, 196.36it/s][A
+Loading weights:  20%|█▉        | 73/372 [00:00<00:01, 187.78it/s][A
+Loading weights:  26%|██▌       | 95/372 [00:00<00:01, 191.03it/s][A
+Loading weights:  32%|███▏      | 120/372 [00:00<00:01, 195.69it/s][A
+Loading weights:  38%|███▊      | 141/372 [00:00<00:01, 199.76it/s][A
+Loading weights:  44%|████▎     | 162/372 [00:00<00:01, 197.02it/s][A
+Loading weights:  49%|████▉     | 182/372 [00:00<00:00, 190.94it/s][A
+Loading weights:  57%|█████▋    | 211/372 [00:01<00:00, 212.65it/s][A
+Loading weights:  65%|██████▌   | 243/372 [00:01<00:00, 235.30it/s][ALoading weights: 100%|██████████| 372/372 [00:01<00:00, 320.11it/s]
+Loading pipeline components...: 100%|██████████| 5/5 [00:03<00:00,  1.47it/s]Loading pipeline components...: 100%|██████████| 5/5 [00:03<00:00,  1.40it/s]
+You have disabled the safety checker for <class 'diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline'> by passing `safety_checker=None`. Ensure that you abide to the conditions of the Stable Diffusion license and do not expose unfiltered results in services or applications open to the public. Both the diffusers team and Hugging Face strongly recommend to keep the safety filter enabled in all public facing circumstances, disabling it only for use-cases that involve analyzing network behavior or auditing its results. For more information, please have a look at https://github.com/huggingface/diffusers/pull/254 .
+You have disabled the safety checker for <class 'diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion_img2img.StableDiffusionImg2ImgPipeline'> by passing `safety_checker=None`. Ensure that you abide to the conditions of the Stable Diffusion license and do not expose unfiltered results in services or applications open to the public. Both the diffusers team and Hugging Face strongly recommend to keep the safety filter enabled in all public facing circumstances, disabling it only for use-cases that involve analyzing network behavior or auditing its results. For more information, please have a look at https://github.com/huggingface/diffusers/pull/254 .
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00,  9.56it/s]100%|██████████| 2/2 [00:00<00:00,  9.52it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 23.93it/s]
+/mnt/c/Users/USER/Documents/SwarmBridge/swarmbridge/experiments/uav_semcom/metrics.py:18: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
+  return torch.from_numpy(img).permute(2, 0, 1).float().div(255).unsqueeze(0).to(self.device)
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00,  8.48it/s]100%|██████████| 2/2 [00:00<00:00,  8.45it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 21.72it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00,  8.29it/s]100%|██████████| 2/2 [00:00<00:00,  8.26it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 17.07it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00,  8.50it/s]100%|██████████| 2/2 [00:00<00:00,  8.47it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 23.45it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00,  8.51it/s]100%|██████████| 2/2 [00:00<00:00,  8.48it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 22.71it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00,  8.40it/s]100%|██████████| 2/2 [00:00<00:00,  8.38it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 22.50it/s]
+repro smoke: 5 DET-val images, old A5 seeds; wall 14.84 s/img (with detector)
+  original                 bytes equal 0/0  max|dPSNR| nan  max|dLPIPS| nan  max|dTP| 0
+  cap_t2i                  bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  thumb64_up               bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  cap_thumb64_i2i_t0.6     bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  cap_thumb128_i2i_t0.3    bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  avif_5                   bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  avif_20                  bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  avif_50                  bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  avif_80                  bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  mbt2018-mean_q1          bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  mbt2018-mean_q3          bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  mbt2018-mean_q5          bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  mbt2018-mean_q8          bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  jpeg2000_100             bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+  jpeg2000_25              bytes equal 5/5  max|dPSNR| 0.0000  max|dLPIPS| 0.0000  max|dTP| 0
+== timing rl_train 23:14:18
+config 83dec04d2a674e9c: 20 selected, 0 cached, 20 to do
+Loading weights:   0%|          | 0/616 [00:00<?, ?it/s]Loading weights:  25%|██▍       | 152/616 [00:00<00:00, 1477.93it/s]Loading weights:  49%|████▊     | 300/616 [00:00<00:00, 1457.83it/s]Loading weights:  72%|███████▏  | 446/616 [00:00<00:00, 696.08it/s] Loading weights:  88%|████████▊ | 545/616 [00:00<00:00, 586.70it/s]Loading weights: 100%|██████████| 616/616 [00:00<00:00, 652.11it/s]
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/diffusers/utils/deprecation_utils.py:23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]Loading pipeline components...:  40%|████      | 2/5 [00:00<00:00, 14.23it/s]
+Loading weights:   0%|          | 0/372 [00:00<?, ?it/s][A
+Loading weights:  15%|█▌        | 56/372 [00:00<00:00, 528.38it/s][A
+Loading weights:  29%|██▉       | 109/372 [00:00<00:00, 522.72it/s][A
+Loading weights:  45%|████▌     | 168/372 [00:00<00:00, 535.29it/s][A
+Loading weights:  60%|█████▉    | 222/372 [00:00<00:00, 448.92it/s][A
+Loading weights:  72%|███████▏  | 269/372 [00:00<00:00, 437.43it/s][ALoading weights: 100%|██████████| 372/372 [00:00<00:00, 612.35it/s]
+Loading pipeline components...:  80%|████████  | 4/5 [00:00<00:00,  4.03it/s]Loading pipeline components...: 100%|██████████| 5/5 [00:01<00:00,  2.21it/s]Loading pipeline components...: 100%|██████████| 5/5 [00:01<00:00,  2.74it/s]
+You have disabled the safety checker for <class 'diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline'> by passing `safety_checker=None`. Ensure that you abide to the conditions of the Stable Diffusion license and do not expose unfiltered results in services or applications open to the public. Both the diffusers team and Hugging Face strongly recommend to keep the safety filter enabled in all public facing circumstances, disabling it only for use-cases that involve analyzing network behavior or auditing its results. For more information, please have a look at https://github.com/huggingface/diffusers/pull/254 .
+You have disabled the safety checker for <class 'diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion_img2img.StableDiffusionImg2ImgPipeline'> by passing `safety_checker=None`. Ensure that you abide to the conditions of the Stable Diffusion license and do not expose unfiltered results in services or applications open to the public. Both the diffusers team and Hugging Face strongly recommend to keep the safety filter enabled in all public facing circumstances, disabling it only for use-cases that involve analyzing network behavior or auditing its results. For more information, please have a look at https://github.com/huggingface/diffusers/pull/254 .
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.39it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 36.01it/s]
+/mnt/c/Users/USER/Documents/SwarmBridge/swarmbridge/experiments/uav_semcom/metrics.py:18: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
+  return torch.from_numpy(img).permute(2, 0, 1).float().div(255).unsqueeze(0).to(self.device)
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.30it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 34.12it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.34it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 35.07it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.33it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 39.09it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.34it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 33.40it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.28it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 36.96it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.29it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 30.69it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.29it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 21.96it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.50it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 39.15it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.40it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 38.28it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.47it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 32.10it/s]
+IMG 10/20 43s (4.32 s/img)
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.44it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 33.17it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.54it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 33.70it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.54it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 35.29it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.57it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 32.36it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.34it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 25.39it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.61it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 26.20it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.52it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 36.84it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.42it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 32.22it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.41it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 37.97it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.39it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 30.30it/s]
+IMG 20/20 76s (3.81 s/img)
+RUN_DONE 20 images 76s
+== timing F (with detector) 23:15:55
+config 83dec04d2a674e9c: 5 selected, 0 cached, 5 to do
+Loading weights:   0%|          | 0/616 [00:00<?, ?it/s]Loading weights:  21%|██        | 130/616 [00:00<00:00, 1272.49it/s]Loading weights:  43%|████▎     | 264/616 [00:00<00:00, 1307.57it/s]Loading weights:  64%|██████▍   | 395/616 [00:00<00:00, 869.37it/s] Loading weights:  80%|████████  | 495/616 [00:00<00:00, 663.00it/s]Loading weights:  93%|█████████▎| 573/616 [00:00<00:00, 547.35it/s]Loading weights: 100%|██████████| 616/616 [00:01<00:00, 580.16it/s]
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/diffusers/utils/deprecation_utils.py:23: FutureWarning: `torch_dtype` is deprecated and will be removed in version 1.0.0. Please use `dtype` instead.
+  deprecate("torch_dtype", "1.0.0", _TORCH_DTYPE_DEPRECATION_MESSAGE)
+Loading pipeline components...:   0%|          | 0/5 [00:00<?, ?it/s]Loading pipeline components...:  20%|██        | 1/5 [00:00<00:02,  1.53it/s]Loading pipeline components...:  40%|████      | 2/5 [00:00<00:00,  3.04it/s]
+Loading weights:   0%|          | 0/372 [00:00<?, ?it/s][A
+Loading weights:  31%|███       | 114/372 [00:00<00:00, 1122.71it/s][A
+Loading weights:  61%|██████    | 227/372 [00:00<00:00, 827.69it/s] [ALoading weights: 100%|██████████| 372/372 [00:00<00:00, 1036.62it/s]
+Loading pipeline components...:  80%|████████  | 4/5 [00:01<00:00,  3.78it/s]Loading pipeline components...: 100%|██████████| 5/5 [00:01<00:00,  4.08it/s]
+You have disabled the safety checker for <class 'diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion.StableDiffusionPipeline'> by passing `safety_checker=None`. Ensure that you abide to the conditions of the Stable Diffusion license and do not expose unfiltered results in services or applications open to the public. Both the diffusers team and Hugging Face strongly recommend to keep the safety filter enabled in all public facing circumstances, disabling it only for use-cases that involve analyzing network behavior or auditing its results. For more information, please have a look at https://github.com/huggingface/diffusers/pull/254 .
+You have disabled the safety checker for <class 'diffusers.pipelines.stable_diffusion.pipeline_stable_diffusion_img2img.StableDiffusionImg2ImgPipeline'> by passing `safety_checker=None`. Ensure that you abide to the conditions of the Stable Diffusion license and do not expose unfiltered results in services or applications open to the public. Both the diffusers team and Hugging Face strongly recommend to keep the safety filter enabled in all public facing circumstances, disabling it only for use-cases that involve analyzing network behavior or auditing its results. For more information, please have a look at https://github.com/huggingface/diffusers/pull/254 .
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/uservutl/envs/semcom-a/lib/python3.12/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=AlexNet_Weights.IMAGENET1K_V1`. You can also use `weights=AlexNet_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.24it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 33.25it/s]
+/mnt/c/Users/USER/Documents/SwarmBridge/swarmbridge/experiments/uav_semcom/metrics.py:18: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at /pytorch/torch/csrc/utils/tensor_numpy.cpp:213.)
+  return torch.from_numpy(img).permute(2, 0, 1).float().div(255).unsqueeze(0).to(self.device)
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.28it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 27.84it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.00it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 32.95it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.25it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 27.89it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.24it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 21.92it/s]
+  0%|          | 0/2 [00:00<?, ?it/s]100%|██████████| 2/2 [00:00<00:00, 24.28it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 34.21it/s]
+IMG 5/5 27s (5.39 s/img)
+RUN_DONE 5 images 27s
+== resume check (must be 'nothing to do') 23:16:40
+config 83dec04d2a674e9c: 20 selected, 20 cached, 0 to do
+RUN_DONE nothing to do
+EXIT 0 23:16:46

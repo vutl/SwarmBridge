@@ -1,0 +1,156 @@
+{
+"threshold": 20,
+"pairs": [
+{
+"a": "0000239_06450_d_0000017.jpg",
+"b": "0000239_06950_d_0000018.jpg",
+"pool_a": "rl_train",
+"pool_b": "rl_train",
+"dhash": 0,
+"ahash": 0,
+"cross": false
+},
+{
+"a": "9999950_00000_d_1007223.jpg",
+"b": "9999937_00000_d_0000015.jpg",
+"pool_a": "rl_train",
+"pool_b": "x_cap",
+"dhash": 0,
+"ahash": 0,
+"cross": true
+},
+{
+"a": "9999960_00000_d_0000077.jpg",
+"b": "9999960_00000_d_0000076.jpg",
+"pool_a": "rl_train",
+"pool_b": "x_cap",
+"dhash": 20,
+"ahash": 11,
+"cross": true
+},
+{
+"a": "9999981_00000_d_0000098.jpg",
+"b": "9999981_00000_d_0000009.jpg",
+"pool_a": "rl_train",
+"pool_b": "x_cap",
+"dhash": 16,
+"ahash": 4,
+"cross": true
+},
+{
+"a": "9999981_00000_d_0000114.jpg",
+"b": "9999981_00000_d_0000019.jpg",
+"pool_a": "rl_train",
+"pool_b": "x_cap",
+"dhash": 11,
+"ahash": 10,
+"cross": true
+},
+{
+"a": "9999997_00000_d_0000020.jpg",
+"b": "9999997_00000_d_0000021.jpg",
+"pool_a": "rl_train",
+"pool_b": "x_cap",
+"dhash": 14,
+"ahash": 2,
+"cross": true
+},
+{
+"a": "0000195_01418_d_0000133.jpg",
+"b": "0000195_01518_d_0000134.jpg",
+"pool_a": "rl_val",
+"pool_b": "rl_val",
+"dhash": 19,
+"ahash": 11,
+"cross": false
+},
+{
+"a": "9999998_00002_d_0000001.jpg",
+"b": "9999998_00003_d_0000002.jpg",
+"pool_a": "rl_val",
+"pool_b": "x_cap",
+"dhash": 16,
+"ahash": 12,
+"cross": true
+},
+{
+"a": "0000022_00000_d_0000004.jpg",
+"b": "0000023_00000_d_0000008.jpg",
+"pool_a": "V",
+"pool_b": "V",
+"dhash": 0,
+"ahash": 0,
+"cross": false
+},
+{
+"a": "9999950_00000_d_0000079.jpg",
+"b": "9999950_00000_d_10000080.jpg",
+"pool_a": "x_cap",
+"pool_b": "x_cap",
+"dhash": 0,
+"ahash": 0,
+"cross": false
+},
+{
+"a": "9999951_00000_d_0000317.jpg",
+"b": "9999951_00000_d_0000318.jpg",
+"pool_a": "x_cap",
+"pool_b": "x_cap",
+"dhash": 19,
+"ahash": 18,
+"cross": false
+},
+{
+"a": "9999951_00000_d_0000318.jpg",
+"b": "9999951_00000_d_0000319.jpg",
+"pool_a": "x_cap",
+"pool_b": "x_cap",
+"dhash": 20,
+"ahash": 18,
+"cross": false
+},
+{
+"a": "9999981_00000_d_0000013.jpg",
+"b": "9999981_00000_d_0000067.jpg",
+"pool_a": "x_cap",
+"pool_b": "x_cap",
+"dhash": 9,
+"ahash": 9,
+"cross": false
+},
+{
+"a": "9999981_00000_d_0000030.jpg",
+"b": "9999981_00000_d_0000108.jpg",
+"pool_a": "x_cap",
+"pool_b": "x_cap",
+"dhash": 10,
+"ahash": 7,
+"cross": false
+},
+{
+"a": "9999981_00000_d_0000111.jpg",
+"b": "9999981_00000_d_0000132.jpg",
+"pool_a": "x_cap",
+"pool_b": "x_cap",
+"dhash": 9,
+"ahash": 0,
+"cross": false
+},
+{
+"a": "9999999_00338_d_0000148.jpg",
+"b": "9999999_00340_d_0000149.jpg",
+"pool_a": "x_cap",
+"pool_b": "x_cap",
+"dhash": 13,
+"ahash": 8,
+"cross": false
+}
+],
+"nearest_pct": [
+0.0,
+16.0,
+56.0,
+70.0,
+88.0
+]
+}

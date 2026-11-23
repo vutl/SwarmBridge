@@ -1,0 +1,19 @@
+VisDrone2019-DET-train: 6471 images, 6471 annotations, stems equal: True (images without ann 0, ann without image 0)
+VisDrone2019-DET-val: 548 images, 548 annotations, stems equal: True (images without ann 0, ann without image 0)
+VisDrone2019-DET-test-dev: 1610 images, 1610 annotations, stems equal: True (images without ann 0, ann without image 0)
+exact-duplicate image contents: 3 groups (6 files), across splits: 0
+   dup 382de736b27a: ['0000239_06450_d_0000017.jpg', '0000239_06950_d_0000018.jpg']
+   dup 094db39c7c57: ['9999950_00000_d_0000079.jpg', '9999950_00000_d_10000080.jpg']
+   dup 0bea9d13456e: ['0000022_00000_d_0000004.jpg', '0000023_00000_d_0000008.jpg']
+DET-train seqs 208, shared with DET-val 24 (297 frames), YOLO hold-out seqs 18 (271 frames), test-dev seqs shared with train/val: 0/0
+YOLO hold-out list == DET-train frames of the hold-out seqs: True; YOLO train list == DET-train minus val-shared minus hold-out: True
+pools are sequence-disjoint (TD and TD_extra form one pool, TD_all)
+rl_train     {'frames': 1523, 'sequences': 141, 'objects': 97506, 'max_frames_per_seq': 30, 'resolutions': {'1400x1050': 462, '1360x765': 395, '1920x1080': 189, '960x540': 176}}
+rl_val       {'frames': 374, 'sequences': 25, 'objects': 20298, 'max_frames_per_seq': 30, 'resolutions': {'1400x1050': 131, '1920x1080': 79, '1360x765': 46, '960x540': 39}}
+F            {'frames': 168, 'sequences': 18, 'objects': 11202, 'max_frames_per_seq': 30, 'resolutions': {'1360x765': 67, '1400x1050': 60, '960x540': 28, '1920x1080': 13}}
+TD           {'frames': 582, 'sequences': 61, 'objects': 32070, 'max_frames_per_seq': 30, 'resolutions': {'1400x1050': 177, '1360x765': 167, '1400x788': 123, '960x540': 49}}
+TD_extra     {'frames': 1028, 'sequences': 8, 'objects': 43032, 'max_frames_per_seq': 486, 'resolutions': {'1400x788': 810, '1916x1078': 121, '1400x1050': 97}}
+V            {'frames': 548, 'sequences': 76, 'objects': 38759, 'max_frames_per_seq': 35, 'resolutions': {'1360x765': 408, '960x540': 121, '1920x1080': 19}}
+x_valshared  {'frames': 297, 'sequences': 24, 'objects': 18772, 'max_frames_per_seq': 26, 'resolutions': {'1360x765': 233, '1920x1080': 58, '960x540': 6}}
+x_cap        {'frames': 4109, 'sequences': 36, 'objects': 195426, 'max_frames_per_seq': 404, 'resolutions': {'1400x1050': 1845, '1400x788': 1119, '2000x1500': 713, '1916x1078': 416}}
+manifest written: manifest_fd_v1.json sha256 f0760601515f9663f2b7747bd247eddabc3ab8c997755c73ae8bf2f2339d4d50 (4223 profiled images, 4406 excluded)
