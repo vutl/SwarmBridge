@@ -52,3 +52,37 @@ To be written when the run finishes:
 - timing;
 - probe-predictor error per pool;
 - artifact hashes.
+
+## 1b. Checks after the review of 33aae4a9 (23/11, 23:30; the run continues)
+
+1. **Config hash.**
+   - The running job uses config `f9d361f37bc386c8`.
+   - Recomputing `fd_profile.config()` from the working tree gives the same hash.
+   - The last change to `fd_profile.py` (`e5b9a5cd`) was committed at 23:18:06; the run was launched at 23:18:19.
+   - None of the hashed files (`fd_profile.py`, `imcodecs.py`, `metrics.py`, `a5_fidelity.py`, `profile_a11.py`)
+     differs from git, and none will be edited until the run ends.
+   - At 23:29, `profile.jsonl` held one config and no duplicate (image, mode, config) key.
+2. **Learned-codec UAV latency.**
+   - `env.ModeTable` replaces the learned codecs' encode time by a CPU measurement. The A5 file was measured with
+     `torch.set_num_threads(os.cpu_count())` = 6 threads.
+   - The `fd_profile.py cpu` step of `run_phase1.sh` would measure with torch's default thread count, which is 3 in this
+     WSL. This would be a silent protocol change. Its output is therefore kept as `cpu_learned_default_threads.jsonl`
+     and not used.
+   - `fd_cpu_timing.py` repeats the A5 protocol: 6 threads, warm-up image discarded, first 10 `rl_train` images. It
+     runs after the GPU job (`run_after_phase1.sh`, a detached waiter), so the CPU timing is not disturbed.
+   - The fd_v1 ModeTable will use these CPU encode times for MBT2018. The GPU timings of the main profile (MBT2018
+     encode 0.07–0.28 s) are reported separately and never used as the UAV encode time.
+3. **Record integrity** (`fd_phase1_summary.py`):
+   - exactly one accepted record per (image, mode, config);
+   - if a resumed image was written twice, the last complete write is kept, deterministically, and the raw file is not
+     changed;
+   - sha256, split and gen_seed must match the manifest;
+   - coverage of the 14 modes, plus the original frame in the recall pools;
+   - non-finite PSNR is counted.
+4. **Near-duplicates.** The wording is "no near-duplicate pair between used pools *at the tested threshold* (dHash and
+   aHash both ≤ 20/256)". This is evidence, not proof of scene independence.
+5. **Predictor comparison.**
+   - The old predictor was fitted on 304 DET-val frames, so its error on V is not out-of-sample.
+   - Comparisons are made on rl_val, F, TD and TD_extra.
+6. **The A5 generative discrepancy** (test-dev PSNR and recall from differently seeded samples) is documented. The old
+   metrics are not treated as paired measurements of one output. E1–E7 are unchanged.

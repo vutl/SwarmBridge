@@ -6,7 +6,9 @@ Probe predictor = env.ModeTable.fit_info ('predicted' mode info): per-mode least
 log(bits of the avif_5 probe of the same image). Fitted on rl_train rows of fd_v1 ('new'), evaluated on every pool;
 compared with the A5 predictor fitted on the 304 A5 train frames ('old', DET-val), evaluated on the same fd_v1 rows.
 Errors: median / mean absolute error of log(bits) (reported as a multiplicative factor exp(MAE)) and of PSNR (dB),
-over all (image, non-probe mode) pairs; also sequence-weighted (each sequence counts once)."""
+over all (image, non-probe mode) pairs; also sequence-weighted (each sequence counts once).
+NOTE: the old predictor was fitted on 304 DET-val frames, so its error on V is NOT out-of-sample; compare on F / TD /
+TD_extra / rl_val (images unseen by both fits)."""
 import hashlib
 import json
 from collections import Counter, defaultdict
@@ -37,8 +39,20 @@ def main():
     cfgs = Counter(r["config"] for r in rows)
     lines = [f"rows {len(rows)}, configs {dict(cfgs)}"]
     assert len(cfgs) == 1, "more than one config hash in the main profile"
+    # record integrity (review of 33aae4a9): one accepted record per (image, mode, config); rows of an image
+    # interrupted mid-write and redone on resume would appear twice -> keep the LAST complete write of that image
+    # (deterministic; the raw file is kept unchanged); sha256 and split must match the manifest
+    ent = {e["name"]: e for e in man}
+    keys = Counter((r["image"], r["mode"], r["config"]) for r in rows)
+    dup = {k: v for k, v in keys.items() if v > 1}
+    bad_sha = sum(r["sha256"] != ent[r["image"]]["sha256"] for r in rows)
+    bad_split = sum(r["split"] != ent[r["image"]]["split"] for r in rows)
+    bad_seed = sum(r.get("gen_seed") not in (None, ent[r["image"]]["gen_seed"]) for r in rows)
+    lines.append(f"integrity: duplicate (image, mode, config) keys {len(dup)}, sha256 mismatches {bad_sha}, "
+                 f"split mismatches {bad_split}, gen_seed mismatches {bad_seed}")
+    assert bad_sha == bad_split == bad_seed == 0
     by = defaultdict(dict)
-    for r in rows:
+    for r in rows:                                     # later rows overwrite earlier ones (resume = last write)
         by[r["image"]][r["mode"]] = r
     # coverage
     cov = {}
@@ -59,8 +73,29 @@ def main():
     tim = {p: dict(mean_s=float(np.mean(v)), total_h=float(np.sum(v) / 3600)) for p, v in wall.items()}
     lines.append("wall per image: " + ", ".join(f"{p} {t['mean_s']:.2f}s ({t['total_h']:.2f} h)" for p, t in tim.items()))
     tr = [n for n in by if split[n] == "rl_train" and all(m in by[n] for m in C.MODES)]
-    lat = {m: dict(enc_s=float(np.mean([by[n][m]["enc_s"] for n in tr])), dec_s=float(np.mean([by[n][m]["dec_s"] for n in tr])))
-           for m in C.MODES}
+    # latency (review of 33aae4a9): the main profile has GPU timings for the learned codecs; env.ModeTable replaces
+    # their ENCODE time by the UAV-CPU timing (cpu_learned.jsonl, A5 protocol: os.cpu_count() threads). Both reported.
+    lat = {m: dict(device=by[tr[0]][m]["device"], enc_s_profile=float(np.mean([by[n][m]["enc_s"] for n in tr])),
+                   dec_s_profile=float(np.mean([by[n][m]["dec_s"] for n in tr]))) for m in C.MODES}
+    for fname, key in (("cpu_learned.jsonl", "enc_s_cpu_uav"), ("cpu_learned_default_threads.jsonl",
+                                                                "enc_s_cpu_default_threads_unused")):
+        f = OUT / "profile" / fname
+        if f.exists():
+            cr = defaultdict(list)
+            for l in open(f):
+                r = json.loads(l)
+                cr[r["mode"]].append(r["enc_s"])
+            for m, v in cr.items():
+                lat[m][key] = float(np.mean(v))
+    for m, d in lat.items():
+        d["enc_s_table"] = d.get("enc_s_cpu_uav", d["enc_s_profile"])     # what the fd_v1 ModeTable will use
+    old_t = C.load_table(False)[0]
+    for i, m in enumerate(C.MODES):
+        lat[m]["enc_s_table_A5"], lat[m]["dec_s_table_A5"] = float(old_t.enc_s[i]), float(old_t.dec_s[i])
+    for m, d in lat.items():
+        lines.append(f"latency {m:24s} {d['device']:4s} enc profile {d['enc_s_profile']:.3f}s  "
+                     f"cpu(UAV) {d.get('enc_s_cpu_uav', float('nan')):.3f}s  table {d['enc_s_table']:.3f}s "
+                     f"(A5 {d['enc_s_table_A5']:.3f}s)  dec {d['dec_s_profile']:.3f}s (A5 {d['dec_s_table_A5']:.3f}s)")
     # predictor
     modes = list(C.MODES)
     j = modes.index("avif_5")
