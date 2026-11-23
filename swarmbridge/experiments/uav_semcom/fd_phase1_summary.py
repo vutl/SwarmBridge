@@ -39,21 +39,47 @@ def main():
     cfgs = Counter(r["config"] for r in rows)
     lines = [f"rows {len(rows)}, configs {dict(cfgs)}"]
     assert len(cfgs) == 1, "more than one config hash in the main profile"
-    # record integrity (review of 33aae4a9): one accepted record per (image, mode, config); rows of an image
-    # interrupted mid-write and redone on resume would appear twice -> keep the LAST complete write of that image
-    # (deterministic; the raw file is kept unchanged); sha256 and split must match the manifest
+    # record integrity (reviews of 33aae4a9 / ab2860e0):
+    #  * sha256 and split must match the manifest; gen_seed must EQUAL the manifest seed for the seeded generative
+    #    modes and be None for every other mode (incl. 'original');
+    #  * reconciliation by IMAGE-LEVEL ATTEMPT: fd_profile writes all rows of an image in one contiguous block, so
+    #    the rows of an image are split into attempts = contiguous runs in file order; the LAST attempt that is
+    #    complete (every required mode exactly once) is accepted as a whole, never a mix of modes from different
+    #    attempts. Images with > 1 attempt are listed, with whether the accepted attempt agrees with earlier complete
+    #    ones on bytes (deterministic codecs). The raw profile.jsonl is not modified.
     ent = {e["name"]: e for e in man}
-    keys = Counter((r["image"], r["mode"], r["config"]) for r in rows)
-    dup = {k: v for k, v in keys.items() if v > 1}
+    SEEDED = {"cap_t2i", "cap_thumb64_i2i_t0.6", "cap_thumb128_i2i_t0.3"}
     bad_sha = sum(r["sha256"] != ent[r["image"]]["sha256"] for r in rows)
     bad_split = sum(r["split"] != ent[r["image"]]["split"] for r in rows)
-    bad_seed = sum(r.get("gen_seed") not in (None, ent[r["image"]]["gen_seed"]) for r in rows)
-    lines.append(f"integrity: duplicate (image, mode, config) keys {len(dup)}, sha256 mismatches {bad_sha}, "
-                 f"split mismatches {bad_split}, gen_seed mismatches {bad_seed}")
+    bad_seed = sum(r.get("gen_seed") != (ent[r["image"]]["gen_seed"] if r["mode"] in SEEDED else None) for r in rows)
+    lines.append(f"integrity: sha256 mismatches {bad_sha}, split mismatches {bad_split}, gen_seed mismatches "
+                 f"{bad_seed} (seeded modes must equal the manifest seed, others None)")
     assert bad_sha == bad_split == bad_seed == 0
-    by = defaultdict(dict)
-    for r in rows:                                     # later rows overwrite earlier ones (resume = last write)
-        by[r["image"]][r["mode"]] = r
+    attempts = defaultdict(list)
+    prev = None
+    for r in rows:
+        if r["image"] != prev:
+            attempts[r["image"]].append([])
+            prev = r["image"]
+        attempts[r["image"]][-1].append(r)
+    by, multi, incomplete = {}, [], []
+    for n, att in attempts.items():
+        need = list(C.MODES) + (["original"] if split[n] in ("F", "TD", "TD_extra", "V") else [])
+        ok = [a for a in att if sorted(r["mode"] for r in a) == sorted(need)]
+        if not ok:
+            incomplete.append(n)
+            continue
+        by[n] = {r["mode"]: r for r in ok[-1]}
+        if len(att) > 1:
+            same = all({r["mode"]: r["bytes"] for r in a} == {r["mode"]: r["bytes"] for r in ok[-1]} for a in ok[:-1])
+            multi.append(dict(image=n, attempts=len(att), complete=len(ok), bytes_consistent=same))
+    n_acc = sum(len(d) for d in by.values())
+    n_exp = sum(14 + (1 if e["split"] in ("F", "TD", "TD_extra", "V") else 0) for e in man)
+    lines.append(f"attempts: images with >1 attempt {len(multi)}, images without a complete attempt "
+                 f"{len(incomplete)}; accepted unique records {n_acc} / expected {n_exp} "
+                 f"(4,223 x 14 + 2,326 'original')")
+    for m in multi[:20]:
+        lines.append(f"   multi-attempt {m}")
     # coverage
     cov = {}
     for p in POOLS:
@@ -89,6 +115,13 @@ def main():
                 lat[m][key] = float(np.mean(v))
     for m, d in lat.items():
         d["enc_s_table"] = d.get("enc_s_cpu_uav", d["enc_s_profile"])     # what the fd_v1 ModeTable will use
+    cm = OUT / "profile" / "cpu_learned.meta.json"
+    if cm.exists():                     # representativeness of the 10-image CPU sample (review of ab2860e0)
+        cims = json.loads(cm.read_text())["images"]
+        lines.append(f"CPU learned-codec timing: {len(cims)} rl_train images (A5 protocol), resolutions "
+                     f"{dict(Counter(f'{ent[n][chr(119)]}x{ent[n][chr(104)]}' for n in cims))} vs rl_train "
+                     f"{dict(Counter(f'{ent[n][chr(119)]}x{ent[n][chr(104)]}' for n in tr).most_common(5))}; "
+                     f"a per-mode estimate from 10 images, not a characterisation of every resolution")
     old_t = C.load_table(False)[0]
     for i, m in enumerate(C.MODES):
         lat[m]["enc_s_table_A5"], lat[m]["dec_s_table_A5"] = float(old_t.enc_s[i]), float(old_t.dec_s[i])

@@ -86,3 +86,22 @@ To be written when the run finishes:
    - Comparisons are made on rl_val, F, TD and TD_extra.
 6. **The A5 generative discrepancy** (test-dev PSNR and recall from differently seeded samples) is documented. The old
    metrics are not treated as paired measurements of one output. E1–E7 are unchanged.
+
+## 1c. Aggregation corrections after the review of ab2860e0 (23/11, 23:45; the run continues)
+
+**Changes to `fd_phase1_summary.py`** (post-processing only; the profiler is untouched):
+- **Seed check.** `gen_seed` must equal the manifest seed for cap_t2i, cap_thumb64_i2i_t0.6 and cap_thumb128_i2i_t0.3,
+  and must be `None` for every other mode, including `original`.
+- **Reconciliation by image-level attempt.** The rows of an image are written as one contiguous block, so each
+  contiguous run of an image's rows is one attempt.
+  - The last *complete* attempt (every required mode exactly once) is accepted as a whole. Modes are never mixed from
+    different attempts.
+  - Images with more than one attempt are listed, together with a bytes-consistency check across complete attempts.
+- **Expected count** of accepted unique records: 4,223 × 14 + 2,326 originals = **61,448**.
+- **CPU timing sample.** The 10-image CPU timing is reported as a per-mode estimate from 10 rl_train images, with their
+  resolutions listed next to the rl_train mix. It does not characterise every resolution.
+
+**Runtime.** The time per image grows with resolution:
+- 960×540: about 3 s; 1360×765: about 3.9 s; 1920×1080: about 11 s (GPU memory close to the 8 GB limit at that size);
+- the recall pools add about 1.5 s for the detector;
+- revised estimate: **about 7.7 h** in total, finishing around 07:00 on 24/11.
