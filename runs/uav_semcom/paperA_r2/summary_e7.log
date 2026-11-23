@@ -1,0 +1,101 @@
+
+######## e7_test (seeds 13000..13099)
+levels (mean over env seeds; learned = mean of 3 training seeds; per-seed returns in brackets)
+  H*           X      ret   -34.0 [                       ] recall  52.1 ok 0.908 drop 0.068 mode p99   0.00 ms int p99   3.5 ms >50ms 0.000
+  H*           X+cal  ret   -31.8 [                       ] recall  51.0 ok 0.910 drop 0.055 mode p99  38.86 ms int p99  42.3 ms >50ms 0.000
+  H*           X+nom  ret   -52.2 [                       ] recall  49.1 ok 0.874 drop 0.101 mode p99  39.60 ms int p99  43.0 ms >50ms 0.000
+  PPO-LA       X      ret   -38.4 [  -38.3   -38.8   -38.2] recall  46.9 ok 0.860 drop 0.028 mode p99   3.22 ms int p99   6.9 ms >50ms 0.000
+  PPO-LA       X+cal  ret   -32.2 [  -30.8   -33.3   -32.5] recall  47.9 ok 0.886 drop 0.027 mode p99  43.00 ms int p99  46.4 ms >50ms 0.000
+  PPO-LA       X+nom  ret   -52.4 [  -51.7   -53.9   -51.6] recall  47.8 ok 0.865 drop 0.091 mode p99  43.10 ms int p99  46.5 ms >50ms 0.001
+  QR-DQN       X      ret   -69.2 [  -58.8   -59.0   -90.0] recall  39.1 ok 0.755 drop 0.023 mode p99   0.43 ms int p99   4.2 ms >50ms 0.000
+  QR-DQN       X+cal  ret   -45.3 [  -42.8   -38.7   -54.4] recall  43.6 ok 0.839 drop 0.023 mode p99  40.20 ms int p99  43.6 ms >50ms 0.000
+  QR-DQN       X+nom  ret   -56.0 [  -56.6   -56.2   -55.1] recall  47.1 ok 0.858 drop 0.097 mode p99  40.26 ms int p99  43.8 ms >50ms 0.000
+  Discrete SAC X      ret   -76.9 [  -84.7   -64.5   -81.4] recall  36.7 ok 0.720 drop 0.021 mode p99   0.36 ms int p99   4.1 ms >50ms 0.000
+  Discrete SAC X+cal  ret   -47.6 [  -48.9   -44.4   -49.6] recall  42.8 ok 0.829 drop 0.023 mode p99  40.23 ms int p99  43.5 ms >50ms 0.001
+  Discrete SAC X+nom  ret   -56.7 [  -57.4   -57.9   -54.7] recall  47.2 ok 0.859 drop 0.099 mode p99  39.91 ms int p99  43.3 ms >50ms 0.000
+RQ-B (registered): B1 = X+cal - X, B2 = X+cal - X+nominal; recall difference for B1
+  (ref) H*       B1   +2.26 [  -1.01,  +5.53]   B2  +20.44 [ +16.55, +24.33]*  recall B1   -1.17 [  -1.54,  -0.81]*
+  PPO-LA         B1   +6.21 [  +4.88,  +7.55]*  B2  +20.22 [ +17.52, +22.93]*  recall B1   +0.94 [  +0.76,  +1.13]*
+      seed 0     B1   +7.48 [  +5.42,  +9.55]*  B2  +20.96 [ +16.88, +25.04]*  recall B1   +1.72 [  +1.42,  +2.02]*
+      seed 1     B1   +5.48 [  +3.02,  +7.94]*  B2  +20.62 [ +16.24, +25.01]*  recall B1   +0.03 [  -0.28,  +0.34] 
+      seed 2     B1   +5.67 [  +3.55,  +7.80]*  B2  +19.09 [ +15.35, +22.82]*  recall B1   +1.08 [  +0.76,  +1.41]*
+  QR-DQN         B1  +23.92 [ +22.03, +25.82]*  B2  +10.64 [  +7.27, +14.00]*  recall B1   +4.53 [  +4.15,  +4.91]*
+      seed 0     B1  +15.95 [ +13.83, +18.07]*  B2  +13.77 [  +9.07, +18.48]*  recall B1   +3.74 [  +3.37,  +4.11]*
+      seed 1     B1  +20.28 [ +16.39, +24.17]*  B2  +17.46 [ +13.21, +21.72]*  recall B1   +3.02 [  +2.31,  +3.72]*
+      seed 2     B1  +35.53 [ +32.58, +38.47]*  B2   +0.67 [  -3.56,  +4.90]   recall B1   +6.84 [  +6.33,  +7.36]*
+  Discrete SAC   B1  +29.23 [ +27.33, +31.13]*  B2   +9.04 [  +6.13, +11.94]*  recall B1   +6.13 [  +5.76,  +6.51]*
+      seed 0     B1  +35.81 [ +32.41, +39.21]*  B2   +8.46 [  +4.10, +12.82]*  recall B1   +8.06 [  +7.43,  +8.70]*
+      seed 1     B1  +20.14 [ +17.14, +23.14]*  B2  +13.52 [  +8.82, +18.22]*  recall B1   +4.11 [  +3.54,  +4.68]*
+      seed 2     B1  +31.74 [ +28.79, +34.69]*  B2   +5.13 [  +0.91,  +9.34]*  recall B1   +6.22 [  +5.80,  +6.64]*
+  RQ-B CIs > 0: 6/6 (claim needs 6/6 on test)
+RQ-A (descriptive): return and recall differences
+  PPO-LA       X - H*   -4.38 [  -8.00,  -0.76]*  X+cal - H*+cal   -0.43 [  -3.56,  +2.70] 
+               recall X - H*   -5.20 [  -5.64,  -4.77]*  recall X+cal - H*+cal   -3.09 [  -3.47,  -2.70]*
+               per seed X - H*:   -4.26 [  -8.47,  -0.05]*    -4.74 [  -8.83,  -0.65]*    -4.15 [  -7.99,  -0.31]*
+               per seed X+cal - H*+cal:   +0.96 [  -2.61,  +4.54]     -1.52 [  -5.12,  +2.08]     -0.74 [  -4.15,  +2.68] 
+  QR-DQN       X - H*  -35.24 [ -40.27, -30.20]*  X+cal - H*+cal  -13.57 [ -17.30,  -9.85]*  X - PPO-LA  -30.85 [ -33.69, -28.01]*
+               recall X - H*  -13.03 [ -13.90, -12.17]*  recall X+cal - H*+cal   -7.33 [  -7.93,  -6.72]*
+               per seed X - H*:  -24.77 [ -29.82, -19.72]*   -24.98 [ -30.89, -19.07]*   -55.95 [ -62.03, -49.88]*
+               per seed X+cal - H*+cal:  -11.08 [ -15.10,  -7.06]*    -6.96 [ -10.74,  -3.18]*   -22.69 [ -27.13, -18.24]*
+  Discrete SAC X - H*  -42.86 [ -47.21, -38.50]*  X+cal - H*+cal  -15.89 [ -19.43, -12.35]*  X - PPO-LA  -38.47 [ -41.09, -35.86]*
+               recall X - H*  -15.47 [ -16.26, -14.69]*  recall X+cal - H*+cal   -8.17 [  -8.75,  -7.59]*
+               per seed X - H*:  -50.73 [ -55.84, -45.62]*   -30.51 [ -35.55, -25.46]*   -47.34 [ -52.54, -42.13]*
+               per seed X+cal - H*+cal:  -17.18 [ -21.30, -13.06]*   -12.62 [ -17.19,  -8.05]*   -17.86 [ -21.62, -14.11]*
+
+[check] H* arms vs E4 N5x2 (max |diff| over 100 seeds): {'X': 0.0, 'X+cal': 40.78546629127469, 'X+nom': 51.680028838280336}
+
+######## e7_testdev (seeds 14000..14099)
+levels (mean over env seeds; learned = mean of 3 training seeds; per-seed returns in brackets)
+  H*           X      ret   -67.2 [                       ] recall  39.8 ok 0.864 drop 0.133 mode p99   0.00 ms int p99   3.5 ms >50ms 0.000
+  H*           X+cal  ret   -50.8 [                       ] recall  39.2 ok 0.896 drop 0.093 mode p99  39.33 ms int p99  42.9 ms >50ms 0.000
+  H*           X+nom  ret   -57.3 [                       ] recall  38.4 ok 0.887 drop 0.103 mode p99  39.73 ms int p99  43.1 ms >50ms 0.000
+  PPO-LA       X      ret   -53.5 [  -50.1   -57.2   -53.1] recall  36.4 ok 0.855 drop 0.062 mode p99   3.33 ms int p99   7.1 ms >50ms 0.000
+  PPO-LA       X+cal  ret   -42.8 [  -40.3   -44.6   -43.4] recall  36.9 ok 0.893 drop 0.051 mode p99  43.09 ms int p99  46.5 ms >50ms 0.000
+  PPO-LA       X+nom  ret   -53.5 [  -53.2   -54.4   -52.9] recall  37.7 ok 0.892 drop 0.088 mode p99  43.13 ms int p99  46.6 ms >50ms 0.000
+  QR-DQN       X      ret   -76.2 [  -70.6   -63.6   -94.4] recall  32.0 ok 0.783 drop 0.050 mode p99   0.46 ms int p99   4.2 ms >50ms 0.000
+  QR-DQN       X+cal  ret   -51.4 [  -52.0   -42.7   -59.6] recall  34.5 ok 0.863 drop 0.040 mode p99  40.16 ms int p99  43.5 ms >50ms 0.000
+  QR-DQN       X+nom  ret   -56.2 [  -57.5   -54.8   -56.3] recall  37.2 ok 0.886 drop 0.092 mode p99  40.23 ms int p99  43.7 ms >50ms 0.000
+  Discrete SAC X      ret   -90.9 [  -94.7   -81.5   -96.5] recall  29.5 ok 0.735 drop 0.050 mode p99   0.35 ms int p99   4.1 ms >50ms 0.000
+  Discrete SAC X+cal  ret   -55.9 [  -56.8   -52.7   -58.1] recall  33.6 ok 0.847 drop 0.039 mode p99  39.97 ms int p99  43.3 ms >50ms 0.000
+  Discrete SAC X+nom  ret   -57.1 [  -57.3   -58.4   -55.5] recall  37.3 ok 0.886 drop 0.093 mode p99  39.87 ms int p99  43.4 ms >50ms 0.000
+RQ-B (registered): B1 = X+cal - X, B2 = X+cal - X+nominal; recall difference for B1
+  (ref) H*       B1  +16.36 [ +11.66, +21.06]*  B2   +6.46 [  +1.38, +11.55]*  recall B1   -0.64 [  -1.11,  -0.17]*
+  PPO-LA         B1  +10.73 [  +8.60, +12.86]*  B2  +10.76 [  +8.12, +13.41]*  recall B1   +0.58 [  +0.33,  +0.82]*
+      seed 0     B1   +9.80 [  +6.69, +12.91]*  B2  +12.94 [  +8.83, +17.05]*  recall B1   +1.34 [  +0.94,  +1.74]*
+      seed 1     B1  +12.62 [  +9.21, +16.03]*  B2   +9.78 [  +5.09, +14.48]*  recall B1   +0.07 [  -0.28,  +0.41] 
+      seed 2     B1   +9.76 [  +6.58, +12.95]*  B2   +9.57 [  +5.39, +13.74]*  recall B1   +0.32 [  -0.06,  +0.70] 
+  QR-DQN         B1  +24.78 [ +22.94, +26.62]*  B2   +4.78 [  +2.04,  +7.51]*  recall B1   +2.57 [  +2.25,  +2.90]*
+      seed 0     B1  +18.58 [ +15.00, +22.16]*  B2   +5.47 [  +1.31,  +9.63]*  recall B1   +1.74 [  +1.32,  +2.15]*
+      seed 1     B1  +20.93 [ +17.42, +24.43]*  B2  +12.13 [  +8.43, +15.82]*  recall B1   +1.33 [  +0.83,  +1.83]*
+      seed 2     B1  +34.83 [ +31.03, +38.63]*  B2   -3.26 [  -7.54,  +1.01]   recall B1   +4.65 [  +4.17,  +5.13]*
+  Discrete SAC   B1  +35.05 [ +32.88, +37.21]*  B2   +1.19 [  -1.42,  +3.81]   recall B1   +4.14 [  +3.86,  +4.43]*
+      seed 0     B1  +37.93 [ +33.53, +42.33]*  B2   +0.47 [  -4.05,  +5.00]   recall B1   +5.44 [  +4.86,  +6.02]*
+      seed 1     B1  +28.83 [ +25.09, +32.57]*  B2   +5.74 [  +1.66,  +9.82]*  recall B1   +2.86 [  +2.44,  +3.28]*
+      seed 2     B1  +38.39 [ +33.67, +43.10]*  B2   -2.64 [  -7.02,  +1.75]   recall B1   +4.14 [  +3.71,  +4.56]*
+  RQ-B CIs > 0: 5/6 (claim needs 6/6 on test)
+RQ-A (descriptive): return and recall differences
+  PPO-LA       X - H*  +13.68 [  +9.13, +18.24]*  X+cal - H*+cal   +8.05 [  +3.95, +12.15]*
+               recall X - H*   -3.46 [  -3.94,  -2.98]*  recall X+cal - H*+cal   -2.24 [  -2.66,  -1.82]*
+               per seed X - H*:  +17.08 [ +12.19, +21.97]*    +9.92 [  +5.12, +14.73]*   +14.04 [  +8.86, +19.22]*
+               per seed X+cal - H*+cal:  +10.52 [  +5.71, +15.32]*    +6.18 [  +1.65, +10.72]*    +7.45 [  +2.86, +12.04]*
+  QR-DQN       X - H*   -9.02 [ -15.04,  -3.01]*  X+cal - H*+cal   -0.60 [  -5.43,  +4.23]   X - PPO-LA  -22.70 [ -26.05, -19.36]*
+               recall X - H*   -7.85 [  -8.46,  -7.25]*  recall X+cal - H*+cal   -4.64 [  -5.15,  -4.13]*
+               per seed X - H*:   -3.40 [  -9.03,  +2.23]     +3.59 [  -2.41,  +9.59]    -27.26 [ -36.00, -18.52]*
+               per seed X+cal - H*+cal:   -1.18 [  -5.88,  +3.53]     +8.16 [  +2.91, +13.40]*    -8.79 [ -14.53,  -3.05]*
+  Discrete SAC X - H*  -23.74 [ -28.28, -19.20]*  X+cal - H*+cal   -5.05 [  -9.66,  -0.44]*  X - PPO-LA  -37.42 [ -40.53, -34.32]*
+               recall X - H*  -10.35 [ -10.89,  -9.81]*  recall X+cal - H*+cal   -5.56 [  -6.06,  -5.06]*
+               per seed X - H*:  -27.54 [ -33.01, -22.06]*   -14.33 [ -20.80,  -7.86]*   -29.36 [ -34.84, -23.89]*
+               per seed X+cal - H*+cal:   -5.97 [ -11.99,  +0.05]     -1.86 [  -6.90,  +3.18]     -7.33 [ -11.88,  -2.79]*
+
+validation learning curves (val return per 200k decisions; * = selected checkpoint)
+  ppo_la_s0.json                -32.2    -8.2    -9.2    -7.9*   -9.5   -13.2   -14.6   -13.3   -17.5   -13.2 
+  ppo_la_s1.json                -11.6    -3.5*   -7.8    -7.4    -7.3   -10.2    -6.7   -10.3   -12.4   -14.3 
+  ppo_la_s2.json                -15.3    -5.2*   -9.0   -14.7   -20.6   -10.3   -13.2   -13.5   -18.6   -12.2 
+  qrdqn_lr1e-4_s0.train.json    -59.3   -94.7  -108.0   -87.5   -65.3   -63.9   -53.9   -51.5   -30.0*  -55.0 
+  qrdqn_lr1e-4_s1.train.json    -29.2  -114.0   -55.6   -64.6   -84.3   -85.2   -28.6*  -54.3   -50.0   -48.3 
+  qrdqn_lr1e-4_s2.train.json    -95.2   -63.1   -69.4   -82.4   -89.0   -55.3*  -94.3   -77.2   -60.5   -74.3 
+  qrdqn_lr5e-4_s0.train.json   -113.8   -83.7   -87.2  -129.8  -119.6  -121.0   -96.9   -68.7  -112.5   -53.7*
+  dsac_ent0.3_s0.train.json    -119.6   -70.7  -101.2   -80.9  -121.4   -97.3   -75.6   -56.3*  -73.5   -65.3 
+  dsac_ent0.3_s1.train.json    -120.5   -90.4   -80.9   -73.7   -92.8   -86.9   -80.9   -64.1   -54.1   -36.0*
+  dsac_ent0.3_s2.train.json    -109.1  -142.2   -65.0   -85.1   -85.5   -63.5   -59.4   -55.1   -46.7*  -61.2 
+  dsac_ent0.6_s0.train.json     -99.4  -143.7  -114.1  -123.3   -95.6  -105.6  -103.9   -73.4*  -81.9   -77.6 

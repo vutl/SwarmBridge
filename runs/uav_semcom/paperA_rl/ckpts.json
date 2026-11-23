@@ -1,0 +1,12 @@
+{
+ "qrla": [
+  "/home/uservutl/work/e7/qrdqn_lr1e-4_s0/ckpt_1800000.pt",
+  "/home/uservutl/work/e7/qrdqn_lr1e-4_s1/ckpt_1400000.pt",
+  "/home/uservutl/work/e7/qrdqn_lr1e-4_s2/ckpt_1200000.pt"
+ ],
+ "dsla": [
+  "/home/uservutl/work/e7/dsac_ent0.3_s0/ckpt_1600000.pt",
+  "/home/uservutl/work/e7/dsac_ent0.3_s1/ckpt_2000000.pt",
+  "/home/uservutl/work/e7/dsac_ent0.3_s2/ckpt_1800000.pt"
+ ]
+}

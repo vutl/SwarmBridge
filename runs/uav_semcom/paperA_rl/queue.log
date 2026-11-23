@@ -1,0 +1,26 @@
+E4-E6 finished successfully (EXIT 0, complete result files)
+starting E7 training
+[12:26] qrdqn_lr1e-4_s0: partial run moved to qrdqn_lr1e-4_s0_interrupted_11221226, restarting
+[12:26] qrdqn_lr5e-4_s0: partial run moved to qrdqn_lr5e-4_s0_interrupted_11221226, restarting
+[12:26] start qrdqn_lr1e-4_s0
+[12:26] start qrdqn_lr5e-4_s0
+[16:21] done qrdqn_lr1e-4_s0 exit 0
+[16:21] start dsac_ent0.3_s0
+[16:28] done qrdqn_lr5e-4_s0 exit 0
+[16:28] start dsac_ent0.6_s0
+[19:45] done dsac_ent0.3_s0 exit 0
+[19:53] done dsac_ent0.6_s0 exit 0
+T1 qrdqn: {'lr1e-4': -30.04689595356249, 'lr5e-4': -53.69488599126348} -> lr1e-4
+T1 dsac: {'ent0.3': -56.26723857438782, 'ent0.6': -73.41965027707542} -> ent0.3
+[19:53] start qrdqn_lr1e-4_s1
+[19:53] start qrdqn_lr1e-4_s2
+[23:46] done qrdqn_lr1e-4_s2 exit 0
+[23:46] start dsac_ent0.3_s1
+[23:49] done qrdqn_lr1e-4_s1 exit 0
+[23:49] start dsac_ent0.3_s2
+[03:10] done dsac_ent0.3_s1 exit 0
+[03:14] done dsac_ent0.3_s2 exit 0
+checkpoints: {'qrla': ['/home/uservutl/work/e7/qrdqn_lr1e-4_s0/ckpt_1800000.pt', '/home/uservutl/work/e7/qrdqn_lr1e-4_s1/ckpt_1400000.pt', '/home/uservutl/work/e7/qrdqn_lr1e-4_s2/ckpt_1200000.pt'], 'dsla': ['/home/uservutl/work/e7/dsac_ent0.3_s0/ckpt_1600000.pt', '/home/uservutl/work/e7/dsac_ent0.3_s1/ckpt_2000000.pt', '/home/uservutl/work/e7/dsac_ent0.3_s2/ckpt_1800000.pt']}
+e7 evaluation exit 0
+e7 evaluation complete (all arms, 100 seeds each)
+EXIT 0
