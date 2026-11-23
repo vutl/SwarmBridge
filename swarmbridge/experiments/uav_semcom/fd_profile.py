@@ -53,6 +53,11 @@ def sha_file(p):
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
+def sha_text(p):
+    """sha256 with CRLF -> LF, so a Windows git checkout (autocrlf) does not change code / manifest identities."""
+    return hashlib.sha256(Path(p).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 def hf_rev(repo):
     p = Path.home() / ".cache" / "huggingface" / "hub" / ("models--" + repo.replace("/", "--")) / "refs" / "main"
     return p.read_text().strip() if p.exists() else "unknown"
@@ -63,9 +68,9 @@ def config():
     import diffusers
     import transformers
     import ultralytics
-    cfg = dict(code={f: sha_file(HERE / f) for f in ("fd_profile.py", "imcodecs.py", "metrics.py", "a5_fidelity.py",
+    cfg = dict(code={f: sha_text(HERE / f) for f in ("fd_profile.py", "imcodecs.py", "metrics.py", "a5_fidelity.py",
                                                      "profile_a11.py")},
-               manifest_sha256=sha_file(MANIFEST), yolo_sha256=sha_file(YOLO_W), blip=[BLIP, hf_rev(BLIP)],
+               manifest_sha256=sha_text(MANIFEST), yolo_sha256=sha_file(YOLO_W), blip=[BLIP, hf_rev(BLIP)],
                sd=[SD, hf_rev(SD)], steps=STEPS, thumb_q=THUMB_Q, thumbs=[64, 128], strengths={"64": 0.6, "128": 0.3},
                guidance=0.0, gen_size="shorter side 512, width multiple of 8; output bicubic to native",
                caption="max_new_tokens 40, num_beams 3, fp16", preprocessing="native resolution",
