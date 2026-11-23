@@ -89,11 +89,13 @@ def pool_summary(name, testdev, seeds):
                   f">50ms {lv['int_over50']:.3f}")
     print("RQ-B (registered): B1 = X+cal - X, B2 = X+cal - X+nominal; recall difference for B1")
     out["H_ref"] = dict(B1=L(ci(m("H*", "X+cal") - m("H*", "X"))), B2=L(ci(m("H*", "X+cal") - m("H*", "X+nom"))),
-                        B1_recall=L(ci(m("H*", "X+cal", "rec") - m("H*", "X", "rec"))))
+                        B1_recall=L(ci(m("H*", "X+cal", "rec") - m("H*", "X", "rec"))),
+                        B2_recall=L(ci(m("H*", "X+cal", "rec") - m("H*", "X+nom", "rec"))))
     print(f"  (ref) H*       B1 {f(out['H_ref']['B1'])}  B2 {f(out['H_ref']['B2'])}  recall B1 {f(out['H_ref']['B1_recall'])}")
     for lab, _ in INC[1:]:
         b = dict(B1=L(ci(m(lab, "X+cal") - m(lab, "X"))), B2=L(ci(m(lab, "X+cal") - m(lab, "X+nom"))),
-                 B1_recall=L(ci(m(lab, "X+cal", "rec") - m(lab, "X", "rec"))))
+                 B1_recall=L(ci(m(lab, "X+cal", "rec") - m(lab, "X", "rec"))),
+                 B2_recall=L(ci(m(lab, "X+cal", "rec") - m(lab, "X+nom", "rec"))))
         out["B"][lab] = b
         print(f"  {lab:12s}   B1 {f(b['B1'])}  B2 {f(b['B2'])}  recall B1 {f(b['B1_recall'])}")
         ps = []

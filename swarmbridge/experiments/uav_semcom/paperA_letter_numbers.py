@@ -90,7 +90,8 @@ def main():
                    over50_cal=a["+mpc"]["over50"], p99_cal_mean=float(a["+mpc"]["p99"].mean()),
                    p99_cal_max=float(a["+mpc"]["p99"].max()),
                    level={s or "H": dict(ret=float(a[s]["ret"].mean()), recall=float(a[s]["rec"].mean()),
-                                         drop=a[s]["drop"]) for s in a})
+                                         drop=a[s]["drop"], ret_ci=L(ci(a[s]["ret"])), recall_ci=L(ci(a[s]["rec"])))
+                          for s in a})
         out["table1"][f"{grp}:{phy}"] = row
         if grp != last:
             lines.append(f"\\multicolumn{{5}}{{@{{}}l}}{{\\textit{{{GROUP[grp]}}}}}\\\\")
@@ -133,7 +134,8 @@ def main():
     out["E5"] = {}
     for fb in load("e5")[0]["fb"]:
         v = arm("e5", "N5x2", f"{S}|h={h}+mpc{fb}")["ret"]
-        out["E5"][fb] = dict(minus_immediate=L(ci(v - imm)), minus_nominal=L(ci(v - nom)), minus_H=L(ci(v - H0)))
+        out["E5"][fb] = dict(minus_immediate=L(ci(v - imm)), minus_nominal=L(ci(v - nom)), minus_H=L(ci(v - H0)),
+                             level=L(ci(v)))
         print("E5", fb, {k: fmt(x) for k, x in out["E5"][fb].items()})
 
     # E2c ladder and E7 (copied from their summaries)

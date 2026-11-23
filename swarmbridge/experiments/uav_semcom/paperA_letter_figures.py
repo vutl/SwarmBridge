@@ -208,6 +208,148 @@ def recall(out):
     fig.savefig(out / "fig_recall.png", bbox_inches="tight", dpi=200)
 
 
+# ---- line / bar versions (23/11 revision): colour = rate model of the planner, used consistently in all figures
+GRAY = "#8a8985"
+ARMSTYLE = {"+mpc": ("calibrated MPC (ours)", BLUE, "o", "-", 1.8),
+            "+mpcnc": ("nominal MPC", ORANGE, "s", "-", 1.3),
+            "+mpcrh": ("RobustMPC-style MPC", GREEN, "^", "-", 1.3),
+            "H": ("$H^*$ alone (no MPC)", GRAY, "D", "--", 1.1)}
+
+
+def _style(ax):
+    ax.grid(axis="y", color=GRID, lw=0.5)
+    ax.tick_params(labelsize=6.5, length=2)
+
+
+def lines(out):
+    """Fig. 2: return per image vs an ordered setting (95% CI of the mean as band; differences are paired, see text)."""
+    N = json.loads(NUMS.read_text())
+    T = N["table1"]
+    pan = (("(a) bandwidth", "total bandwidth (MHz)", [("BW:B0.5", 0.5), ("NET:N5x2", 1.0), ("BW:B2", 2.0)], 5),
+           ("(b) UAVs ($M$=2)", "number of UAVs $K$", [("NET:N3x2", 3), ("NET:N5x2", 5), ("NET:N7x2", 7)], None),
+           ("(c) channels ($K$=5)", "number of channels $M$", [("NET:N5x2", 2), ("NET:N5x3", 3), ("NET:N5x4", 4)], 5))
+    fig, axs = plt.subplots(1, 4, figsize=(7.0, 1.95), gridspec_kw=dict(wspace=0.42))
+    for ax, (title, xl, pts, kfix) in zip(axs, pan):
+        for arm in ("H", "+mpcrh", "+mpcnc", "+mpc"):
+            lab, col, mk, ls, lw = ARMSTYLE[arm]
+            xs, ys, lo, hi = [], [], [], []
+            for key, x in pts:
+                K = kfix or x
+                L = T[key]["level"][arm]
+                xs.append(x); ys.append(L["ret"] / (52 * K))
+                lo.append(L["ret_ci"][1] / (52 * K)); hi.append(L["ret_ci"][2] / (52 * K))
+            ax.fill_between(xs, lo, hi, color=col, alpha=0.12, lw=0)
+            ax.plot(xs, ys, ls, color=col, lw=lw, marker=mk, ms=4, mec="white", mew=0.6, label=lab)
+        ax.set_xticks([x for _, x in pts])
+        ax.set_xticklabels([f"{x:g}" for _, x in pts])
+        ax.set_xlabel(xl, fontsize=7, color=MUTED)
+        ax.set_title(title, fontsize=7.2, color=INK, loc="left")
+        _style(ax)
+    axs[0].set_ylabel("return per image", fontsize=7, color=MUTED)
+    # (d) feedback delay: calibrated MPC with delayed reports (no loss / 30% loss); references are flat lines
+    ax = axs[3]
+    n5 = T["NET:N5x2"]["level"]
+    E5 = N["E5"]
+    xs = [0, 1, 3, 10]
+    ys = [n5["+mpc"]["ret"]] + [E5[f"fb{d}l0"]["level"][0] for d in (1, 3, 10)]
+    cis = [n5["+mpc"]["ret_ci"]] + [E5[f"fb{d}l0"]["level"] for d in (1, 3, 10)]
+    for arm in ("H", "+mpcnc"):
+        lab, col, mk, ls, lw = ARMSTYLE[arm]
+        ax.axhline(n5[arm]["ret"] / 260, color=col, ls=ls, lw=lw)
+    lab, col, mk, ls, lw = ARMSTYLE["+mpc"]
+    ax.fill_between(xs, [c[1] / 260 for c in cis], [c[2] / 260 for c in cis], color=col, alpha=0.12, lw=0)
+    ax.plot(xs, [y / 260 for y in ys], ls, color=col, lw=lw, marker=mk, ms=4, mec="white", mew=0.6)
+    ax.plot([1, 3], [E5[f"fb{d}l30"]["level"][0] / 260 for d in (1, 3)], "o", ms=4.2, mfc="white", mec=col, mew=1.1,
+            label="calibrated, 30% reports lost")
+    ax.set_xticks(xs)
+    ax.set_xlabel("report delay (slots)", fontsize=7, color=MUTED)
+    ax.set_title("(d) report delay ($K$=5, $M$=2)", fontsize=7.2, color=INK, loc="left")
+    _style(ax)
+    h, l = axs[0].get_legend_handles_labels()
+    h2, l2 = ax.get_legend_handles_labels()
+    fig.legend(h[::-1] + h2, l[::-1] + l2, loc="lower center", ncol=5, frameon=False, fontsize=6.6,
+               bbox_to_anchor=(0.5, -0.2), handlelength=2.2, columnspacing=1.2)
+    fig.savefig(out / "fig_lines.pdf", bbox_inches="tight")
+    fig.savefig(out / "fig_lines.png", bbox_inches="tight", dpi=200)
+
+
+def phy_bars(out):
+    """Fig. 3: gain of the calibrated MPC over each comparator (colour = comparator) under PHY variants and on test-dev
+    images, and its recall change vs H* alone; whiskers = paired 95% CIs; hatched = CI includes 0."""
+    T = json.loads(NUMS.read_text())["table1"]
+    rows = [("PHY:L", "LA (nominal)"), ("PHY:L_fade", "block fading"), ("PHY:L_bursty", "bursty interf."),
+            ("PHY:L_badfb", "degraded CQI"), ("TD:L", "LA, test-dev"), ("PHY:S", "Shannon"), ("TD:S", "Shannon, test-dev")]
+    comp = (("cal_minus_nom", "+mpcnc", "vs. nominal MPC"), ("cal_minus_rh", "+mpcrh", "vs. RobustMPC-style"),
+            ("cal_minus_H", "H", "vs. $H^*$ alone"))
+    fig, (ax, axr) = plt.subplots(1, 2, figsize=(3.45, 2.45), sharey=True, gridspec_kw=dict(width_ratios=[2.3, 1],
+                                                                                            wspace=0.08))
+    bh = 0.26
+    for j, (key, arm, lab) in enumerate(comp):
+        col = ARMSTYLE[arm][1]
+        for i, (r, _) in enumerate(rows):
+            m, lo, hi = T[r][key]
+            sig = lo > 0 or hi < 0
+            y = i + (j - 1) * bh
+            ax.barh(y, m, height=bh * 0.92, color=col if sig else "white", edgecolor=col, lw=0.8,
+                    hatch=None if sig else "////", label=lab if i == 0 else None)
+            ax.plot([lo, hi], [y, y], color=INK, lw=0.6)
+    for i, (r, _) in enumerate(rows):
+        m, lo, hi = T[r]["recall_cal_minus_H"]
+        axr.barh(i, m, height=0.5, color=GRAY, edgecolor=GRAY, lw=0.8)
+        axr.plot([lo, hi], [i, i], color=INK, lw=0.6)
+    for a in (ax, axr):
+        a.axvline(0, color=MUTED, lw=0.8)
+        a.grid(axis="x", color=GRID, lw=0.5)
+        a.tick_params(labelsize=6.5, length=2)
+        a.spines["left"].set_visible(False)
+        a.tick_params(axis="y", length=0)
+    ax.axhline(4.5, color=GRID, lw=0.8)
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels([l for _, l in rows], fontsize=6.5, color=INK)
+    ax.set_ylim(len(rows) - 0.5, -0.6)
+    ax.set_xlabel("return gain of calibrated MPC", fontsize=6.8, color=MUTED)
+    axr.set_xlabel("recall change vs. $H^*$", fontsize=6.8, color=MUTED)
+    ax.legend(fontsize=5.8, frameon=False, loc="lower right", handlelength=1.2)
+    fig.savefig(out / "fig_phy.pdf", bbox_inches="tight")
+    fig.savefig(out / "fig_phy.png", bbox_inches="tight", dpi=200)
+
+
+def e7_bars(out):
+    """Fig. 4: B1 (vs incumbent alone, grey) and B2 (vs nominal MPC, orange) for each incumbent; solid = test,
+    hatched = test-dev; (a) return, (b) recall; whiskers = paired 95% CIs over environment seeds."""
+    E = json.loads(NUMS.read_text())["E7"]
+    inc = [("H*", "$H^*$"), ("PPO-LA", "PPO-LA"), ("QR-DQN", "QR-DQN"), ("Discrete SAC", "Discr. SAC")]
+
+    def get(pool, key):
+        return E[pool]["H_ref"] if key == "H*" else E[pool]["B"][key]
+
+    fig, axs = plt.subplots(2, 1, figsize=(3.45, 2.75), sharex=True, gridspec_kw=dict(hspace=0.25))
+    bw = 0.19
+    bars = (("B1", "test", GRAY, None, "vs. $X$ alone, test"), ("B1", "testdev", GRAY, "////", "vs. $X$ alone, test-dev"),
+            ("B2", "test", ORANGE, None, "vs. $X$ + nominal MPC, test"),
+            ("B2", "testdev", ORANGE, "////", "vs. $X$ + nominal MPC, test-dev"))
+    for ax, suf, yl in ((axs[0], "", "return gain"), (axs[1], "_recall", "recall change")):
+        for j, (b, pool, col, hatch, lab) in enumerate(bars):
+            for i, (key, _) in enumerate(inc):
+                m, lo, hi = get(pool, key)[b + suf]
+                x = i + (j - 1.5) * bw
+                ax.bar(x, m, width=bw * 0.92, color=col if hatch is None else "white", edgecolor=col, lw=0.8,
+                       hatch=hatch, label=lab if i == 0 else None)
+                ax.plot([x, x], [lo, hi], color=INK, lw=0.6)
+        ax.axhline(0, color=MUTED, lw=0.8)
+        ax.set_ylabel(yl, fontsize=6.8, color=MUTED)
+        _style(ax)
+    axs[0].set_title("(a) calibrated MPC on incumbent $X$: return", fontsize=7, color=INK, loc="left")
+    axs[1].set_title("(b) recall (points)", fontsize=7, color=INK, loc="left")
+    axs[1].set_xticks(range(len(inc)))
+    axs[1].set_xticklabels([l for _, l in inc], fontsize=6.8, color=INK)
+    h, l = axs[0].get_legend_handles_labels()
+    fig.legend(h, l, loc="lower center", ncol=2, frameon=False, fontsize=5.9, bbox_to_anchor=(0.5, -0.1),
+               handlelength=1.6, columnspacing=1.0)
+    fig.savefig(out / "fig_e7bars.pdf", bbox_inches="tight")
+    fig.savefig(out / "fig_e7bars.png", bbox_inches="tight", dpi=200)
+
+
 if __name__ == "__main__":
     o = Path(sys.argv[1])
     o.mkdir(parents=True, exist_ok=True)
@@ -215,4 +357,7 @@ if __name__ == "__main__":
     forest(o)
     e7(o)
     recall(o)
+    lines(o)
+    phy_bars(o)
+    e7_bars(o)
     print("figures ->", o)

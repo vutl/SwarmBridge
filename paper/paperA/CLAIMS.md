@@ -10,9 +10,15 @@ Numbers come from three files under `runs/uav_semcom/paperA_r2/`:
 | `summary_e7.json` | `paperA_e7_summary.py` | E7 |
 | `paper_numbers.json` | `paperA_paper_numbers.py` | old Table 1; used only for the motivation sentence |
 
-The manuscript shows the results as figures, both drawn by `paperA_letter_figures.py`:
-- Fig. 2 `figs/fig_robust.pdf` holds the "Table 1" data below (`letter_numbers.json["table1"]`);
-- Fig. 3 `figs/fig_e7.pdf` holds the E7 levels (`letter_numbers.json["E7"]`, a copy of `summary_e7.json`).
+The manuscript shows the results as figures, all drawn by `paperA_letter_figures.py`:
+- Fig. 2 `figs/fig_lines.pdf`: return per image (level ÷ 52K) of H\*, +RobustMPC-style, +nominal and +calibrated MPC.
+  - x-axes: bandwidth (BW rows plus NET:N5x2), K (NET N3x2/N5x2/N7x2) and M (NET N5x2/N5x3/N5x4).
+  - Data: `T1[...]["level"][arm]["ret"]`; bands from `["ret_ci"]`.
+  - Panel (d): `letter_numbers.json["E5"][fb]["level"]`.
+- Fig. 3 `figs/fig_phy.pdf`: the PHY and TD rows. `cal_minus_nom`, `cal_minus_rh` and `cal_minus_H` (bars + CI), and `recall_cal_minus_H`.
+- Fig. 4 `figs/fig_e7bars.pdf`: E7 B1, B2, B1_recall and B2_recall, for test and test-dev (`summary_e7.json` `B` / `H_ref`).
+  - `B2_recall` was added on 23/11 from the same delivery files; no new runs.
+- Figures drawn earlier but no longer in the PDF: `fig_robust.pdf` (forest plot), `fig_e7.pdf` (dot plot) and `fig_recall.pdf`.
 
 The tables `table_robust.tex` and `table_e7.tex` (from `paperA_letter_numbers.py`) carry the same numbers. They are
 not in the PDF.
@@ -116,7 +122,7 @@ Each design fact is checked against code.
 |---|---|
 | H\* incumbent: recall lower in 8/12 LA rows (−0.3 to −1.2), higher in 4 (+0.9 to +2.6) | `recall_cal_minus_H` per row: negative −0.31 … −1.21; positive +0.90, +1.08, +1.90, +2.58 |
 | learned incumbents: B1 recall +0.6 to +6.1 | `B[...].B1_recall` on test (+0.94, +4.53, +6.13) and test-dev (+0.58, +2.57, +4.14) |
-| nominal MPC has higher recall than cal for QR-DQN and Discrete SAC (Fig. 3c) | `test.levels`: QR-DQN X+nom 47.1 vs X+cal 43.6; Discrete SAC 47.2 vs 42.8 |
+| nominal MPC has higher recall than cal for QR-DQN and Discrete SAC, by 3.5 and 4.4 points (Fig. 4b) | `test.levels`: QR-DQN X+nom 47.1 vs X+cal 43.6; Discrete SAC 47.2 vs 42.8 |
 
 ## Results: decision time and reproducibility
 

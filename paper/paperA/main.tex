@@ -138,38 +138,51 @@ network-size, bandwidth, feedback and RL-family experiments were pre-registered.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{figs/fig_robust.pdf}
-\caption{Calibrated MPC with incumbent $H^*$: paired differences in return (a--c) and Qmin-compliant recall (d), 95\%
-CIs over 100 environment seeds (hollow: CI includes 0). Seeds 9900--9999 (test pool), 12000--12099 (test-dev),
-13000--13099 (network size, bandwidth).}
-\label{fig:robust}
+\includegraphics[width=0.97\textwidth]{figs/fig_lines.pdf}
+\caption{Return per image with incumbent $H^*$ under LA versus bandwidth, network size and rate-report delay (seeds
+13000--13099; $H^*$ re-tuned per setting). Bands: 95\% CIs of the mean over environment seeds; the paired differences
+quoted in the text have much narrower CIs. In (d), the planner's rate reports are delayed (filled) or also 30\% lost
+(hollow); horizontal lines: nominal MPC and $H^*$ alone with immediate information.}
+\label{fig:lines}
 \end{figure*}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/fig_e7.pdf}
-\caption{RL-family experiment ($K{=}5$, $M{=}2$, nominal LA; seeds 13000--13099 test, 14000--14099 test-dev): mean
-return and recall of each incumbent alone and with each MPC; ticks: individual training seeds.}
+\includegraphics[width=\columnwidth]{figs/fig_phy.pdf}
+\caption{Return gain of the calibrated MPC (incumbent $H^*$, $K{=}5$, $M{=}2$) over each comparator, and its recall
+change versus $H^*$ alone, under LA variants and the Shannon model (seeds 9900--9999; test-dev 12000--12099). Whiskers:
+paired 95\% CIs; hatched: CI includes 0.}
+\label{fig:phy}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/fig_e7bars.pdf}
+\caption{Calibrated MPC on incumbents from three RL families and on $H^*$ ($K{=}5$, $M{=}2$, nominal LA; test seeds
+13000--13099, test-dev 14000--14099): paired gains over the incumbent alone (B1, grey) and over the nominal MPC (B2,
+orange), learned incumbents averaged over three training seeds; whiskers: 95\% CIs.}
 \label{fig:e7}
 \end{figure}
 
 \textbf{Calibration versus matched planners.} In all 12 LA configurations the calibrated MPC outperforms the nominal
-MPC, by 5.2 to 36.4 return points (Fig.~\ref{fig:robust}a); under the Shannon model, where the nominal model is nearly
-correct, the difference is $+0.6$ (n.s.) on the test pool and $+1.8$ on test-dev images. It outperforms the
-RobustMPC-style MPC in 11 of 12 LA configurations, by $+1.7$ to $+18.0$ ($K{=}5$, $M{=}3$: $+1.7$, n.s.;
-Fig.~\ref{fig:robust}b). In a one-factor ladder from the RobustMPC-style to the calibrated predictor (first seven
-rows of Fig.~\ref{fig:robust}) no single step was responsible; pooling observations across UAVs was the most
+MPC, by 5.2 to 36.4 return points (Figs.~\ref{fig:lines} and \ref{fig:phy}); under the Shannon model, where the
+nominal model is nearly correct, the difference is $+0.6$ (n.s.) on the test pool and $+1.8$ on test-dev images. It
+outperforms the RobustMPC-style MPC in 11 of 12 LA configurations, by $+1.7$ to $+18.0$ ($K{=}5$, $M{=}3$: $+1.7$,
+n.s.). In a one-factor ladder from the RobustMPC-style to the calibrated predictor (the seven configurations of
+Fig.~\ref{fig:phy}) no single step was responsible; pooling observations across UAVs was the most
 consistent ($+3.9$ to $+9.0$, significant in four). SNR binning made no difference there, but the unbinned model was
 lower in all five network sizes ($-0.7$ to $-1.7$; significant in two).
 
 \textbf{Gains over the incumbent alone depend on the condition.} The calibrated MPC improves on $H^*$ without MPC in
-10 of 12 LA configurations (Fig.~\ref{fig:robust}c), by varying amounts: under nominal LA, $+8.2$ on seeds 9900--9999,
-$+2.7$ (n.s.) on 13000--13099 and $+16.4$ on test-dev seeds 14000--14099 (Fig.~\ref{fig:e7}b). The pre-registered
+10 of 12 LA configurations, by varying amounts: under nominal LA, $+8.2$ on seeds 9900--9999 (Fig.~\ref{fig:phy}),
+$+2.7$ (n.s.) on 13000--13099 (Fig.~\ref{fig:lines}a, 1\,MHz) and $+16.4$ on test-dev seeds 14000--14099
+(Fig.~\ref{fig:e7}a). The pre-registered
 claims of a benefit over the incumbent across network sizes and bandwidths failed (3 of 5, 2 of 3 settings); the
 advantage over the nominal model held in all.
 
 \textbf{Delayed or lost reports.} With reports delayed by 1, 3 or 10 slots, or by 1--3 slots with 30\% lost, the
-calibrated MPC exceeds the nominal MPC by 18.1 to 21.3 points, with no detected difference from immediate reports.
+calibrated MPC exceeds the nominal MPC by 18.1 to 21.3 points, with no detected difference from immediate reports
+(Fig.~\ref{fig:lines}d).
 ACK loss, 10-slot delay with loss, and report overhead were not tested.
 
 \textbf{Incumbents from three RL families.} On the test pool the calibrated layer improves PPO-LA, QR-DQN and Discrete
@@ -184,10 +197,10 @@ calibrated MPC) but leads it on test-dev images ($+13.7$; $+8.1$): the ranking o
 depends on the image content.
 
 \textbf{Return and recall disagree.} With $H^*$ as incumbent, the calibrated MPC raises return but lowers recall in 8
-of 12 LA configurations ($-0.3$ to $-1.2$ points) and raises recall in 4 ($+0.9$ to $+2.6$; Fig.~\ref{fig:robust}c,d).
+of 12 LA configurations ($-0.3$ to $-1.2$ points) and raises recall in 4 ($+0.9$ to $+2.6$; Fig.~\ref{fig:phy}).
 With learned incumbents it raises recall (B1: $+0.6$ to $+6.1$), yet for QR-DQN and Discrete SAC the nominal MPC
-attains higher recall than the calibrated one (47.1 vs.\ 43.6 and 47.2 vs.\ 42.8 on the test pool;
-Fig.~\ref{fig:e7}c) despite lower return: the return also rewards PSNR margin, delay and energy.
+attains higher recall than the calibrated one ($3.5$ and $4.4$ points on the test pool; Fig.~\ref{fig:e7}b) despite
+lower return: the return also rewards PSNR margin, delay and energy.
 
 \textbf{Decision time and reproducibility.} For $K{=}5$, $M{=}2$ the per-episode 99th percentile of the decision time
 is 40--64\,ms (parallel per-UAV decisions), and at most 0.5\% of slots exceed 50\,ms. With $K{=}7$ or $M{=}4$ the JA
