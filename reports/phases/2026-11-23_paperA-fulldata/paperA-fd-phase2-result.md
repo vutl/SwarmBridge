@@ -119,3 +119,61 @@ mechanism, not from the calibration.
 - **Phase 3 (RL) and Phase 4 (network/bandwidth grid)** need their own pre-registrations. Given result 2, the reviewer
   may want Phase 4 to carry `+mpcng` as well.
 - **E1–E7 are unchanged.** Their interpretation (sections 5.2 and 5.3) must be corrected in the manuscript.
+
+## 7. Corrections after the review of 50835621 (descriptive; no rerun)
+
+### 7.1 Latency: the statement in section 3 was wrong
+
+Section 3 said "no slot over 50 ms in any pool (`int_over50` = 0.000 for all arms on TD)". The rounded mean hid
+non-zero episodes. The code also records two integrated-latency metrics:
+- **max** = scheduler time + the largest mode decision of the slot. This assumes the mode decisions of a slot run in
+  parallel.
+- **sum** = scheduler time + all mode decisions of the slot. This is how the simulation actually executes them:
+  sequentially.
+
+In both, the timer starts **after** the calibrator and tracker updates of the slot, so their overhead is excluded.
+
+Means over 100 episodes of the per-episode p99; slots over 50 ms use the max metric and are not rounded:
+
+| Pool | Arm | p99, max metric | p99, sum metric | Share of slots > 50 ms: mean (largest episode) | Episodes with any slot > 50 ms |
+|---|---|---|---|---|---|
+| TD | H\* | 3.7 ms | 3.7 ms | 0 | 0 |
+| TD | +mpc | 42.4 ms | **147.6 ms** | 0 | 0 |
+| TD | +mpcnc | 43.5 ms | **154.7 ms** | 0 | 0 |
+| TD | +mpcng | 43.6 ms | **152.9 ms** | 0.00012 (1.18%) | 1 |
+| TD | +mpcrh | 42.3 ms | 137.3 ms | 0.00011 (1.15%) | 1 |
+| TD | +mpcrhnb | 37.2 ms | 124.0 ms | 0 | 0 |
+| F | +mpc / +mpcng | 42.4 / 43.1 ms | 149.3 / 152.8 ms | 0 / 0.00012 (1.23%) | 0 / 1 |
+| V | +mpc / +mpcng | 42.8 / 42.9 ms | 150.3 / 157.0 ms | 0.00036 (2.35%) / 0 | 2 / 0 |
+| TD_all | +mpc / +mpcng / +mpcnc | 42.5 / 43.1 / 43.2 ms | 149.0 / 153.7 / 155.5 ms | 0 / 0 / 0.00011 (1.12%) | 0 / 0 / 1 |
+
+**Claims allowed:**
+- Each **mode decision** has a 50 ms planning budget, which is checked before each planning stage.
+- The **per-slot total** is about 150 ms at p99 if the 5 decisions of a slot run sequentially. It is about 43 ms only
+  if they run fully in parallel, an execution architecture that is assumed, not demonstrated.
+- No strict real-time compliance is claimed. Tracker and calibrator overhead is not yet measured. It will be
+  instrumented in the next phases.
+
+### 7.2 Post-hoc contrasts (from the review; recomputed here from the raw per-episode returns and identical)
+
+These are unadjusted, post-hoc supporting analyses, not pre-registered findings.
+
+| Pool | Matched nominal − H\* | Matched nominal − nominal (no gate / band) |
+|---|---|---|
+| TD | +7.38 [+5.09, +9.66] | +18.69 [+14.88, +22.50] |
+| F | +3.40 [+0.98, +5.83] | +8.12 [+4.44, +11.80] |
+| V | +2.11 [+0.14, +4.08] | +10.83 [+7.53, +14.13] |
+| TD_all | +8.14 [+5.43, +10.85] | +11.58 [+8.20, +14.97] |
+
+Even without the ACK-calibrated empirical predictor, the error-tracked, gated, band-checked selective MPC improves on
+H\* and on the unguarded nominal planner in all four pools.
+
+### 7.3 Wording
+
+- **What is not shown:** an additional return benefit of the ACK-calibrated *empirical rate predictor* on TD, once
+  error tracking exists.
+- **ACK feedback is still used:** the matched-nominal design relies on observed service feedback through its error
+  tracker. "ACK feedback is unnecessary" must therefore not be claimed.
+- **Scope for E1–E7:** Phase 2 shows that the earlier nominal-versus-calibrated comparisons confounded the substitution
+  of the rate model with the intervention mechanism. It does not identify retrospectively how much each component
+  contributed in each E1–E7 setting.
