@@ -161,8 +161,9 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     # RateErrTracker on the nominal model's predictions -> same gate (>= MIN_AIR of observations) and same band rule
     # [lo, hi]; only the rate model differs (realised gate / band values can still differ, they are logged)
     # mechanism ablation (review of 50835621): +mpcngg gate only (band fixed [1, 1]); +mpcngb band only (no cold-start
-    # gate: before the tracker has data the band is [1, 1], i.e. unguarded planning); +mpcngh1 matched design, H = 1
-    ngv = re.search(r"\+mpcng(g|b|h1)?$", mode)
+    # gate: before the tracker has data the band is [1, 1], i.e. unguarded planning); +mpcngh1 / +mpcngh0 matched design
+    # with H = 1 / 0 anticipated FUTURE arrivals (current + queued images are always rolled out; H0 also screens with H 0)
+    ngv = re.search(r"\+mpcng(g|b|h1|h0)?$", mode)
     nomgate = ngv is not None
     ng_kind = ngv.group(1) if ngv else None
     if ngv:
@@ -242,7 +243,7 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     mpc = trk = cal = dl = None
     if nomgate:
         assert not cal_h and tutil is None
-        mpc = M.MPCMode("env", 8, 1 if ng_kind == "h1" else 4, None, fallback=mp_t, seed=12345, rollout="causal",
+        mpc = M.MPCMode("env", 8, {"h1": 1, "h0": 0}.get(ng_kind, 4), None, fallback=mp_t, seed=12345, rollout="causal",
                         margin_z=1.0)
         trk = M.RateErrTracker(mpc, persistent=False)
         dl = M.Deadline(50.0, margin_ms=3.0)
@@ -343,7 +344,8 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
                             lo = hi = 1.0
                         mpc.scales = [lo, hi]
                         bands.append((lo, hi))
-                        m_sel = mpc.selective(core, k, task, m_sel, lo, cand="np", trig="any", h1=1, n_cand=2,
+                        m_sel = mpc.selective(core, k, task, m_sel, lo, cand="np", trig="any",
+                                              h1=0 if ng_kind == "h0" else 1, n_cand=2,
                                               stack=True, dl=dl)
                         aborts += int(mpc.last_abort is not None)
             a[-1] = m_sel

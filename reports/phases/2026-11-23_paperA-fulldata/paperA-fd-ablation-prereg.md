@@ -91,3 +91,43 @@ All other parameters are as in Phase 2: N 8, screen at [1, ℓ], two candidates,
 - After approval: `runs/uav_semcom/paperA_fd/ablation/AUTHORIZED`, then `fd_next.py ablation test`: 7 arms × 3 pools × 100 seeds = 2,100 episodes,
   about 40 min, detached, with nothing else on the machine.
 - The analysis script follows the Phase 2 summary pattern. It is committed before the run.
+
+## 6. Amendment after the review of 1c8023c4 — the FROZEN version
+
+**Meaning of the horizon.**
+- In `a9_mpc.MPCMode`, H counts the **anticipated future arrivals** added to the rollout.
+- The current image and the images already queued at the UAV are always rolled out.
+- So H4 = up to 4 anticipated future arrivals; H1 = up to 1; H0 = none, but still queue-aware. H1 is not a myopic
+  controller.
+
+**New arm `+mpcngh0`:**
+- the matched nominal design with H = 0 in **both** the screen (h1 = 0) and the full planner;
+- the rollout of queued images is unchanged.
+
+The arm set is now 8: H\*, `+mpcnc`, `+mpcngg`, `+mpcngb`, `+mpcng`, `+mpcngh1`, `+mpcngh0`, `+mpc`.
+
+**Confirmatory family (Holm over 4, TD, family-wise α = 0.05, two-sided):**
+- A1: gate only − unguarded;
+- A2: band only − unguarded;
+- A4: gate + band H4 − gate + band H1;
+- A4b: gate + band H4 − gate + band H0.
+
+**Supporting contrasts:**
+- A3, A5 (the band given the gate) and A6 (the gate given the band). A component that is useless alone may still help
+  through its interaction with the other;
+- A7 calibrated − matched; A8 matched − H\*; A9 H1 − H0.
+
+**Wording for the horizon:**
+- Non-rejections of A4 or A4b are "no detected difference", never "equivalent". Effect sizes, CIs **and latency
+  savings** are reported.
+- The robustness test checks the paired mean gain at the two endpoint scales ℓ and h only. It does not establish
+  robustness over every sampled path or every rate inside the band. The method description will say so.
+
+**Validation smoke with the H0 arm** (rl_val 3000–3004; not interpreted):
+- H0 return −98.2; p99 full-sum 16.0 ms (H4: 141.9 ms; H1: 95.9 ms).
+- Wall-clock noise moved the gate-only arm from −77.9 to −82.6 between two smoke runs.
+
+**Analysis:** `fd_next_summary.py ablation`, committed before the run. It was exercised on synthetic remapped data; the
+integrity, Holm, recall and latency paths all run.
+
+**Run size:** 8 arms × 3 pools × 100 seeds = 2,400 episodes.

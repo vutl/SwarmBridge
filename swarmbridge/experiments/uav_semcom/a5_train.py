@@ -100,7 +100,8 @@ def main():
         done_steps += int(args.eval_every)
         model.save(out / f"ckpt_{done_steps}")
         ev = evaluate_rl(model, table, pools["val"], cfg, C.PPO_VAL_SEEDS, SV.UavSurveyEnv, kw)
-        rec = dict(steps=done_steps, sec=time.time() - t0, val_return=float(np.mean([m["return"] for m in ev])),
+        rec = dict(steps=done_steps, num_timesteps=int(model.num_timesteps),          # actual (review 1c8023c4)
+                   n_updates=int(getattr(model, "_n_updates", -1)), sec=time.time() - t0, val_return=float(np.mean([m["return"] for m in ev])),
                    val_ok=float(np.mean([m["ok_rate"] for m in ev])), experience=dict(exp.c))
         log.append(rec)
         best = max(log, key=lambda r: (r["val_return"], -r["steps"]))

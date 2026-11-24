@@ -34,8 +34,14 @@ predictive control for deadline-constrained UAV image communications under uncer
 **Important for positioning:** the matched-nominal arm is *not* feedback-free.
 - ACK feedback still enters through the E2 tracker and the E4 band. Its median bias is about −0.35, so the band
   absorbs the nominal model's over-prediction.
-- The finding is therefore "error feedback through a conservative band can replace calibrating the rate model". This
-  is close in spirit to RobustMPC's error-normalised throughput and to OLLA's ACK-driven offset (see §1c, §1d).
+- The finding is therefore best stated as: "error-aware intervention substantially reduces the observed performance
+  gap between nominal and empirically calibrated rate models". This wording was revised after the review of 1c8023c4.
+  - Do *not* write "replaces calibration": H3b was not rejected, which is not equivalence, and calibration had a
+    positive result on F.
+  - The mechanism is close in spirit to RobustMPC's error-normalised throughput and to OLLA's ACK-driven offset (see
+    §1c, §1d).
+  - The paired CRN / SE switch rule is not a formal confidence guarantee, the ±2σ band has no coverage guarantee, and
+    the endpoint checks at ℓ and h do not prove robustness over the uncertainty set.
 
 ## 1. Verified references and their overlap
 

@@ -107,3 +107,45 @@ See the submission reply; the numbers are not interpreted.
 4. The pre-committed summary script.
 
 Everything runs detached, with resume, and `phase3/AUTHORIZED` is required.
+
+## 6. Amendment after the review of 1c8023c4 — the FROZEN version
+
+1. **Zero-shot wording:** the old checkpoints are frozen, but their mode-info features use the fd_v1 probe predictor,
+   fitted on rl_train. This is *frozen-policy transfer under an updated image workload and observation estimator*,
+   not an unchanged old pipeline.
+2. **Training budget:**
+   - `a5_train.py` now logs `num_timesteps` (actual) and `n_updates` at every checkpoint, next to the nominal
+     200k-step counter.
+   - PPO rollout collection in blocks of n_steps × n_env can exceed the nominal interval. The A-X9 procedure itself is
+     unchanged.
+   - QR-DQN and Discrete SAC log the transitions and gradient updates they already counted.
+3. **Checkpoint integrity:**
+   - `fd_phase3_queue.py` writes `phase3/selection.json` with, per run: the selected checkpoint path and **sha256**,
+     the exact command, the seed, the nominal and actual steps, the updates, the training wall time, the table tag, and
+     the dependency versions.
+   - Copies of every train.json (validation logs) are kept.
+   - `fd_next.py rl retrained` verifies every checkpoint's sha256 before evaluating.
+   - Interrupted runs are moved aside, kept identifiable, and restarted from scratch; their optimiser, replay and RNG
+     states are not restored.
+4. **Statistical scope:**
+   - The environment-seed CIs, computed after averaging the 3 checkpoints, are conditional on those trained policies.
+   - Every training-seed contrast (R1, R2 per seed) is reported.
+   - The 3 × 100 evaluation episodes are not 300 independent training replicates.
+5. **Claims:**
+   - R1 and R2 are central. R5 (versus the heuristic) is reported whatever its direction.
+   - Nothing is claimed about joint trajectory / resource DRL or general RL superiority.
+6. **Analysis:** `fd_next_summary.py rl --name zeroshot | retrained`, committed before the runs and exercised on
+   synthetic data. R5 uses the Phase 2 H\* rows, which have the same seeds.
+
+## 7. Execution after approval (all three phases, review of 1c8023c4)
+
+**Order:** ablation → Phase 4 → Phase 3 (zero-shot, then training, then the retrained evaluation).
+
+**One detached chain** (`run_next.sh`):
+- the steps run sequentially; RL training never overlaps an MPC benchmark;
+- the chain stops at the first failure;
+- each step needs its `<phase>/AUTHORIZED`, created only after this frozen amendment, the analysis code, the tests and
+  the smokes are committed.
+
+If a correctness bug appears: the affected run is stopped, the evidence preserved, and the deviation documented
+before anything continues.

@@ -20,7 +20,7 @@ LA = dict(la_mode="sched", la_interf="persistent")
 CFG = {"N5x2": dict(K=5, M=2), "N3x2": dict(K=3, M=2), "N7x2": dict(K=7, M=2), "N5x3": dict(K=5, M=3),
        "N5x4": dict(K=5, M=4), "B0.5": dict(K=5, M=2, B_total=0.5e6), "B2": dict(K=5, M=2, B_total=2e6)}
 LEARNED = ("ppola", "qrla", "dsla", "ppofd", "qrfd", "dsfd")
-AB_ARMS = ["", "+mpcnc", "+mpcngg", "+mpcngb", "+mpcng", "+mpcngh1", "+mpc"]
+AB_ARMS = ["", "+mpcnc", "+mpcngg", "+mpcngb", "+mpcng", "+mpcngh1", "+mpcngh0", "+mpc"]
 AB_TEST = {"TD": range(24000, 24100), "V": range(25000, 25100), "F": range(26000, 26100)}
 GRID_ARMS = ["", "+mpcnc", "+mpcng", "+mpc"]
 GRID_TEST = {"TD": range(20000, 20100), "F": range(22000, 22100)}
@@ -158,6 +158,13 @@ def rl(cmd, procs):
         return
     authorized("phase3")
     which = ("ppola", "qrla", "dsla") if cmd == "zeroshot" else ("ppofd", "qrfd", "dsfd")
+    if cmd == "retrained":                   # checkpoint integrity before evaluation (review of 1c8023c4)
+        import hashlib
+        sel = json.loads((phase_dir("phase3") / "selection.json").read_text())["selection"]
+        for key in which:
+            for s, v in sel[key].items():
+                assert hashlib.sha256(open(v["ckpt"], "rb").read()).hexdigest() == v["ckpt_sha256"], (key, s)
+        print("retrained checkpoints verified (sha256)", flush=True)
     pools = {"TD": RL_TEST["TD"]} if cmd == "zeroshot" else RL_TEST
     for pool, seeds in pools.items():
         t0 = time.time()

@@ -86,3 +86,29 @@ two-sided.
 **Integrity asserts:** as in Phase 2, with K × 52 tasks per episode.
 
 **Analysis script:** committed before the run.
+
+## 4. Amendment after the review of 1c8023c4 — the FROZEN version
+
+**Latency reporting:**
+- The **sequential full-sum p99** is the primary measured controller timing: scheduler + all mode decisions of the
+  slot + tracker / calibrator update.
+- The max metric is reported only as hypothetical parallel execution.
+- The scheduler (`ms_slot_p99`), mode-decision (`ms_mode_p99`) and update (`ms_upd_p99`) components are reported
+  separately.
+- Over-budget shares are unrounded: means, the largest episode, and the number of episodes with any.
+- Every unfavourable or over-budget configuration is reported.
+
+**The reference N5x2 is reused from Phase 2.** The update overhead and the full-sum / sequential violation statistics
+were not instrumented then. They are marked **"not available"** and are not reconstructed.
+
+**Seeds across configurations.** The same environment seeds across different K / M configurations do **not** give
+identical workloads: the number of images and the task streams differ. The paired inference is only between arms
+within a configuration. Cross-configuration comparisons are descriptive and use return per image.
+
+**Frozen scope:**
+- The arms, configurations, H\* and hypotheses are frozen.
+- They do not change after the ablation results.
+- No regime is added to look for a calibration win.
+- A later simplified-controller experiment would be a separately identified study.
+
+**Analysis:** `fd_next_summary.py grid`, committed before the run and exercised on synthetic data.

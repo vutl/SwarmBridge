@@ -6,6 +6,7 @@
      seeds 3000..3019; ties: earlier) + selection.json + copies of every train.json.
 Resumable: runs whose train.json reaches 2M decisions are skipped; interrupted runs are moved aside and restarted.
 Weights stay in /home/uservutl/work/fd_phase3 (not in git)."""
+import hashlib
 import json
 import shutil
 import subprocess
@@ -88,10 +89,30 @@ def main():
         assert tj["last_steps"] >= 2_000_000
         ext = ".zip" if key == "ppofd" else ".pt"
         ck.setdefault(key, []).append(str(d / f"ckpt_{tj['best_steps']}{ext}"))
-        sel.setdefault(key, {})[s] = dict(best_steps=tj["best_steps"], best_val=max(r["val_return"] for r in tj["log"]))
+        ckp = d / f"ckpt_{tj['best_steps']}{ext}"
+        assert ckp.exists(), ckp
+        last = tj["log"][-1]
+        sel.setdefault(key, {})[s] = dict(best_steps=tj["best_steps"], best_val=max(r["val_return"] for r in tj["log"]),
+                                          ckpt=str(ckp), ckpt_sha256=hashlib.sha256(ckp.read_bytes()).hexdigest(),
+                                          command=argv, seed=s, last_steps=tj["last_steps"],
+                                          actual_timesteps=last.get("num_timesteps"), n_updates=last.get("n_updates",
+                                                                                                         last.get("updates")),
+                                          train_wall_s=last.get("sec"), table=tj.get("table"))
         shutil.copy(d / "train.json", REC / "train" / f"{key}_s{s}.train.json")
     (REC / "ckpts.json").write_text(json.dumps(ck, indent=1))
-    (REC / "selection.json").write_text(json.dumps(sel, indent=1))
+    import platform
+    import sys
+    import torch
+    vers = dict(python=sys.version.split()[0], torch=torch.__version__, platform=platform.platform())
+    try:
+        import sb3_contrib
+        import stable_baselines3
+        vers.update(sb3=stable_baselines3.__version__, sb3_contrib=sb3_contrib.__version__)
+    except Exception:
+        pass
+    (REC / "selection.json").write_text(json.dumps(dict(selection=sel, versions=vers,
+                                                        rule="best mean validation return on rl_val seeds 3000..3019, "
+                                                             "ties -> earlier checkpoint"), indent=1))
     print("checkpoints:", ck, flush=True)
 
 
