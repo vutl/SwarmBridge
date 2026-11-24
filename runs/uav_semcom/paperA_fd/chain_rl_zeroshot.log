@@ -1,0 +1,36 @@
+  N5x2  TD     dsla                               ck  0 ret   -82.60 p99 max   4.0 sum    4.7 full-sum    4.7 upd 0.00 ms
+  N5x2  TD     dsla                               ck  1 ret   -73.58 p99 max   4.0 sum    4.8 full-sum    4.8 upd 0.00 ms
+  N5x2  TD     dsla                               ck  2 ret   -89.52 p99 max   4.0 sum    4.7 full-sum    4.7 upd 0.00 ms
+  N5x2  TD     dsla+mpc                           ck  0 ret   -52.44 planned 211.7 gated  48.3 cold   0.0 sw  89.2 rej/chk 59/148 p99 max  43.0 sum  147.8 full-sum  148.0 upd 0.46 ms
+  N5x2  TD     dsla+mpc                           ck  1 ret   -49.50 planned 212.8 gated  47.2 cold   0.0 sw  79.9 rej/chk 64/144 p99 max  43.1 sum  147.5 full-sum  147.7 upd 0.44 ms
+  N5x2  TD     dsla+mpc                           ck  2 ret   -54.88 planned 213.1 gated  46.9 cold   0.0 sw  89.1 rej/chk 60/150 p99 max  42.4 sum  143.9 full-sum  144.1 upd 0.45 ms
+  N5x2  TD     dsla+mpcnc                         ck  0 ret   -59.83 planned 260.0 gated   0.0 cold   0.0 sw 189.7 rej/chk 0/190 p99 max  43.4 sum  153.8 full-sum  153.8 upd 0.00 ms
+  N5x2  TD     dsla+mpcnc                         ck  1 ret   -61.39 planned 260.0 gated   0.0 cold   0.0 sw 177.5 rej/chk 0/178 p99 max  43.5 sum  152.3 full-sum  152.3 upd 0.00 ms
+  N5x2  TD     dsla+mpcnc                         ck  2 ret   -61.41 planned 260.0 gated   0.0 cold   0.0 sw 177.1 rej/chk 0/177 p99 max  43.6 sum  152.1 full-sum  152.1 upd 0.00 ms
+  N5x2  TD     dsla+mpcng                         ck  0 ret   -60.16 planned 211.7 gated  48.4 cold   0.0 sw  82.6 rej/chk 79/162 p99 max  43.5 sum  149.3 full-sum  149.7 upd 0.59 ms
+  N5x2  TD     dsla+mpcng                         ck  1 ret   -56.32 planned 212.8 gated  47.2 cold   0.0 sw  66.8 rej/chk 85/152 p99 max  43.7 sum  151.7 full-sum  152.1 upd 0.59 ms
+  N5x2  TD     dsla+mpcng                         ck  2 ret   -61.66 planned 213.0 gated  47.0 cold   0.0 sw  78.5 rej/chk 79/158 p99 max  43.7 sum  148.6 full-sum  149.0 upd 0.59 ms
+  N5x2  TD     ppola                              ck  0 ret   -48.24 p99 max   6.8 sum   16.9 full-sum   16.9 upd 0.00 ms
+  N5x2  TD     ppola                              ck  1 ret   -58.95 p99 max   6.9 sum   17.2 full-sum   17.2 upd 0.00 ms
+  N5x2  TD     ppola                              ck  2 ret   -51.63 p99 max   7.1 sum   17.5 full-sum   17.5 upd 0.00 ms
+  N5x2  TD     ppola+mpc                          ck  0 ret   -38.99 planned 209.0 gated  51.0 cold   0.0 sw  68.3 rej/chk 68/136 p99 max  46.9 sum  162.4 full-sum  162.6 upd 0.47 ms
+  N5x2  TD     ppola+mpc                          ck  1 ret   -43.69 planned 208.6 gated  51.4 cold   0.0 sw  65.9 rej/chk 68/134 p99 max  46.6 sum  160.0 full-sum  160.1 upd 0.48 ms
+  N5x2  TD     ppola+mpc                          ck  2 ret   -40.45 planned 208.5 gated  51.5 cold   0.0 sw  70.0 rej/chk 71/141 p99 max  46.6 sum  159.4 full-sum  159.5 upd 0.48 ms
+  N5x2  TD     ppola+mpcnc                        ck  0 ret   -56.61 planned 260.0 gated   0.0 cold   0.0 sw 154.4 rej/chk 0/154 p99 max  47.1 sum  170.0 full-sum  170.0 upd 0.00 ms
+  N5x2  TD     ppola+mpcnc                        ck  1 ret   -60.85 planned 260.0 gated   0.0 cold   0.0 sw 137.3 rej/chk 0/137 p99 max  47.1 sum  164.5 full-sum  164.5 upd 0.00 ms
+  N5x2  TD     ppola+mpcnc                        ck  2 ret   -58.03 planned 260.0 gated   0.0 cold   0.0 sw 162.8 rej/chk 0/163 p99 max  47.0 sum  170.4 full-sum  170.4 upd 0.00 ms
+  N5x2  TD     ppola+mpcng                        ck  0 ret   -41.65 planned 209.1 gated  50.9 cold   0.0 sw  56.7 rej/chk 86/143 p99 max  47.2 sum  164.3 full-sum  164.7 upd 0.61 ms
+  N5x2  TD     ppola+mpcng                        ck  1 ret   -49.68 planned 208.7 gated  51.3 cold   0.0 sw  47.1 rej/chk 81/128 p99 max  47.5 sum  166.2 full-sum  166.6 upd 0.61 ms
+  N5x2  TD     ppola+mpcng                        ck  2 ret   -44.71 planned 208.5 gated  51.5 cold   0.0 sw  54.8 rej/chk 87/142 p99 max  47.4 sum  168.5 full-sum  168.9 upd 0.61 ms
+  N5x2  TD     qrla                               ck  0 ret   -65.71 p99 max   4.2 sum    5.2 full-sum    5.2 upd 0.00 ms
+  N5x2  TD     qrla                               ck  1 ret   -61.11 p99 max   4.3 sum    5.3 full-sum    5.3 upd 0.00 ms
+  N5x2  TD     qrla                               ck  2 ret   -89.93 p99 max   4.1 sum    5.1 full-sum    5.1 upd 0.00 ms
+  N5x2  TD     qrla+mpc                           ck  0 ret   -51.52 planned 210.8 gated  49.2 cold   0.0 sw  75.9 rej/chk 70/146 p99 max  44.0 sum  153.9 full-sum  154.1 upd 0.46 ms
+  N5x2  TD     qrla+mpc                           ck  1 ret   -41.55 planned 210.1 gated  49.9 cold   0.0 sw  74.8 rej/chk 67/142 p99 max  43.9 sum  153.8 full-sum  154.0 upd 0.46 ms
+  N5x2  TD     qrla+mpc                           ck  2 ret   -55.71 planned 218.5 gated  41.5 cold   0.0 sw  89.7 rej/chk 60/149 p99 max  44.1 sum  152.3 full-sum  152.4 upd 0.45 ms
+  N5x2  TD     qrla+mpcnc                         ck  0 ret   -60.66 planned 260.0 gated   0.0 cold   0.0 sw 174.3 rej/chk 0/174 p99 max  46.4 sum  164.7 full-sum  164.7 upd 0.00 ms
+  N5x2  TD     qrla+mpcnc                         ck  1 ret   -59.60 planned 260.0 gated   0.0 cold   0.0 sw 157.7 rej/chk 0/158 p99 max  45.0 sum  160.1 full-sum  160.1 upd 0.00 ms
+  N5x2  TD     qrla+mpcnc                         ck  2 ret   -56.95 planned 260.0 gated   0.0 cold   0.0 sw 182.3 rej/chk 0/182 p99 max  44.6 sum  160.3 full-sum  160.3 upd 0.00 ms
+  N5x2  TD     qrla+mpcng                         ck  0 ret   -57.65 planned 210.7 gated  49.3 cold   0.0 sw  64.2 rej/chk 86/150 p99 max  44.3 sum  151.3 full-sum  151.7 upd 0.60 ms
+  N5x2  TD     qrla+mpcng                         ck  1 ret   -48.40 planned 209.9 gated  50.1 cold   0.0 sw  58.6 rej/chk 83/141 p99 max  44.2 sum  155.3 full-sum  155.7 upd 0.60 ms
+  N5x2  TD     qrla+mpcng                         ck  2 ret   -59.94 planned 218.4 gated  41.6 cold   0.0 sw  83.2 rej/chk 84/167 p99 max  44.0 sum  153.4 full-sum  153.9 upd 0.59 ms

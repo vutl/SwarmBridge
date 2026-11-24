@@ -1,0 +1,53 @@
+== rl/zeroshot TD (seeds 20000..20099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+== rl/zeroshot TD (seeds 20000..20099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   R1_ppola                    ppola+mpcng - ppola                  return   +7.59 [  +5.71,  +9.48]*  p 0.0000 [supporting]
+                    recall seed   +1.00 [  +0.78,  +1.22]*  video-cluster   +1.00 [  +0.49,  +1.51]* (61 seq)
+   R2_ppola                      ppola+mpc - ppola+mpcng            return   +4.31 [  +2.48,  +6.13]*  p 0.0000 [supporting]
+                    recall seed   -0.33 [  -0.54,  -0.12]*  video-cluster   -0.33 [  -0.50,  -0.13]* (61 seq)
+   R3_ppola                      ppola+mpc - ppola                  return  +11.90 [  +9.89, +13.91]*  p 0.0000 [supporting]
+   R4_ppola                    ppola+mpcng - ppola+mpcnc            return  +13.15 [ +10.92, +15.38]*  p 0.0000 [supporting]
+   R1_qrla                      qrla+mpcng - qrla                   return  +16.92 [ +14.82, +19.01]*  p 0.0000 [supporting]
+                    recall seed   +2.75 [  +2.44,  +3.07]*  video-cluster   +2.76 [  +2.21,  +3.34]* (61 seq)
+   R2_qrla                        qrla+mpc - qrla+mpcng             return   +5.74 [  +3.93,  +7.54]*  p 0.0000 [supporting]
+                    recall seed   -0.39 [  -0.62,  -0.17]*  video-cluster   -0.40 [  -0.63,  -0.15]* (61 seq)
+   R3_qrla                        qrla+mpc - qrla                   return  +22.65 [ +21.03, +24.28]*  p 0.0000 [supporting]
+   R4_qrla                      qrla+mpcng - qrla+mpcnc             return   +3.74 [  +1.23,  +6.25]*  p 0.0039 [supporting]
+   R1_dsla                      dsla+mpcng - dsla                   return  +22.52 [ +20.12, +24.93]*  p 0.0000 [supporting]
+                    recall seed   +4.46 [  +4.14,  +4.78]*  video-cluster   +4.45 [  +3.71,  +5.25]* (61 seq)
+   R2_dsla                        dsla+mpc - dsla+mpcng             return   +7.10 [  +5.19,  +9.02]*  p 0.0000 [supporting]
+                    recall seed   -0.57 [  -0.81,  -0.33]*  video-cluster   -0.56 [  -0.78,  -0.31]* (61 seq)
+   R3_dsla                        dsla+mpc - dsla                   return  +29.63 [ +27.36, +31.89]*  p 0.0000 [supporting]
+   R4_dsla                      dsla+mpcng - dsla+mpcnc             return   +1.50 [  -1.26,  +4.26]   p 0.2835 [supporting]
+   R5 ppola: alone - H*   -4.85 [  -7.56,  -2.15]*   matched - H*matched   -4.64 [  -7.40,  -1.87]*
+   R5 qrla: alone - H*  -24.16 [ -27.21, -21.11]*   matched - H*matched  -14.62 [ -17.45, -11.79]*
+   R5 dsla: alone - H*  -33.81 [ -36.83, -30.79]*   matched - H*matched  -18.67 [ -21.43, -15.90]*
+   per training seed R1_ppola_s0:   +6.60 [  +4.10,  +9.09]*
+   per training seed R1_ppola_s1:   +9.27 [  +5.93, +12.61]*
+   per training seed R1_ppola_s2:   +6.92 [  +3.61, +10.22]*
+   per training seed R2_ppola_s0:   +2.66 [  +0.03,  +5.29]*
+   per training seed R2_ppola_s1:   +6.00 [  +2.61,  +9.38]*
+   per training seed R2_ppola_s2:   +4.27 [  +1.42,  +7.11]*
+   per training seed R1_qrla_s0:   +8.06 [  +4.31, +11.81]*
+   per training seed R1_qrla_s1:  +12.71 [  +9.33, +16.08]*
+   per training seed R1_qrla_s2:  +29.99 [ +26.56, +33.41]*
+   per training seed R2_qrla_s0:   +6.13 [  +3.14,  +9.13]*
+   per training seed R2_qrla_s1:   +6.85 [  +3.76,  +9.95]*
+   per training seed R2_qrla_s2:   +4.22 [  +1.78,  +6.66]*
+   per training seed R1_dsla_s0:  +22.44 [ +18.94, +25.94]*
+   per training seed R1_dsla_s1:  +17.27 [ +12.96, +21.58]*
+   per training seed R1_dsla_s2:  +27.86 [ +23.22, +32.50]*
+   per training seed R2_dsla_s0:   +7.72 [  +4.50, +10.93]*
+   per training seed R2_dsla_s1:   +6.81 [  +3.38, +10.25]*
+   per training seed R2_dsla_s2:   +6.78 [  +3.39, +10.18]*
+     ppola                        ret   -52.94 (per img -0.204) ok 0.863 | full-sum p99   17.2 sum   17.2 max   6.9 sched   3.7 mode   3.2 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     ppola+mpcnc                  ret   -58.50 (per img -0.225) ok 0.872 | full-sum p99  168.3 sum  168.3 max  47.1 sched   3.8 mode  43.6 upd 0.00 ms | >50 full-sum 0.7181 (eps 300) | sw 151.5 gated 0.0 rej/chk 0/152
+     ppola+mpcng                  ret   -45.35 (per img -0.174) ok 0.886 | full-sum p99  166.7 sum  166.3 max  47.4 sched   3.8 mode  43.9 upd 0.61 ms | >50 full-sum 0.6304 (eps 300) | sw 52.9 gated 51.2 rej/chk 85/138
+     ppola+mpc                    ret   -41.04 (per img -0.158) ok 0.892 | full-sum p99  160.7 sum  160.6 max  46.7 sched   3.8 mode  43.2 upd 0.47 ms | >50 full-sum 0.6301 (eps 300) | sw 68.1 gated 51.3 rej/chk 69/137
+     qrla                         ret   -72.25 (per img -0.278) ok 0.799 | full-sum p99    5.2 sum    5.2 max   4.2 sched   3.8 mode   0.5 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     qrla+mpcnc                   ret   -59.07 (per img -0.227) ok 0.868 | full-sum p99  161.7 sum  161.7 max  45.3 sched   4.3 mode  41.2 upd 0.00 ms | >50 full-sum 0.7219 (eps 300) | sw 171.4 gated 0.0 rej/chk 0/171
+     qrla+mpcng                   ret   -55.33 (per img -0.213) ok 0.855 | full-sum p99  153.8 sum  153.4 max  44.2 sched   3.8 mode  40.7 upd 0.59 ms | >50 full-sum 0.6110 (eps 300) | sw 68.6 gated 47.0 rej/chk 84/153
+     qrla+mpc                     ret   -49.59 (per img -0.191) ok 0.861 | full-sum p99  153.5 sum  153.3 max  44.0 sched   3.8 mode  40.6 upd 0.46 ms | >50 full-sum 0.6050 (eps 300) | sw 80.1 gated 46.9 rej/chk 66/146
+     dsla                         ret   -81.90 (per img -0.315) ok 0.760 | full-sum p99    4.7 sum    4.7 max   4.0 sched   3.7 mode   0.3 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     dsla+mpcnc                   ret   -60.88 (per img -0.234) ok 0.865 | full-sum p99  152.7 sum  152.7 max  43.5 sched   3.8 mode  40.0 upd 0.00 ms | >50 full-sum 0.7081 (eps 300) | sw 181.5 gated 0.0 rej/chk 0/181
+     dsla+mpcng                   ret   -59.38 (per img -0.228) ok 0.841 | full-sum p99  150.3 sum  149.9 max  43.6 sched   3.7 mode  40.3 upd 0.59 ms | >50 full-sum 0.6115 (eps 300) | sw 76.0 gated 47.5 rej/chk 81/157
+     dsla+mpc                     ret   -52.27 (per img -0.201) ok 0.849 | full-sum p99  146.6 sum  146.4 max  42.9 sched   3.7 mode  39.6 upd 0.45 ms | >50 full-sum 0.6070 (eps 300) | sw 86.1 gated 47.5 rej/chk 61/147

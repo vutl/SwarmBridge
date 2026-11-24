@@ -1,0 +1,72 @@
+== ablation/test TD (seeds 24000..24099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+== ablation/test V (seeds 25000..25099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+== ablation/test F (seeds 26000..26099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+== ablation/test TD (seeds 24000..24099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   A1               h=fixed_avif_20+mpcngg - h=fixed_avif_20+mpcnc  return   -1.19 [  -5.63,  +3.25]   p 0.5955 [confirmatory]  Holm p 0.5955 not rejected (-)
+                    recall seed   -0.77 [  -1.27,  -0.27]*  video-cluster   -0.77 [  -1.22,  -0.32]* (61 seq)
+   A2               h=fixed_avif_20+mpcngb - h=fixed_avif_20+mpcnc  return  +15.15 [ +11.41, +18.89]*  p 0.0000 [confirmatory]  Holm p 0.0000 REJECT (+)
+                    recall seed   -0.71 [  -1.12,  -0.30]*  video-cluster   -0.69 [  -1.75,  +0.15]  (61 seq)
+   A4                h=fixed_avif_20+mpcng - =fixed_avif_20+mpcngh1 return   +5.05 [  +2.57,  +7.53]*  p 0.0001 [confirmatory]  Holm p 0.0002 REJECT (+)
+                    recall seed   -0.21 [  -0.47,  +0.04]   video-cluster   -0.22 [  -0.59,  +0.15]  (61 seq)
+   A4b               h=fixed_avif_20+mpcng - =fixed_avif_20+mpcngh0 return  +25.49 [ +22.28, +28.71]*  p 0.0000 [confirmatory]  Holm p 0.0000 REJECT (+)
+                    recall seed   +0.53 [  +0.17,  +0.90]*  video-cluster   +0.54 [  +0.10,  +0.89]* (61 seq)
+   A3                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcnc  return  +18.05 [ +13.79, +22.32]*  p 0.0000 [supporting]
+   A5                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcngg return  +19.25 [ +16.04, +22.45]*  p 0.0000 [supporting]
+   A6                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcngb return   +2.90 [  +0.08,  +5.73]*  p 0.0443 [supporting]
+   A7                  h=fixed_avif_20+mpc - h=fixed_avif_20+mpcng  return   -0.75 [  -2.87,  +1.38]   p 0.4868 [supporting]
+   A8                h=fixed_avif_20+mpcng - h=fixed_avif_20        return   +7.44 [  +5.12,  +9.76]*  p 0.0000 [supporting]
+   A9               =fixed_avif_20+mpcngh1 - =fixed_avif_20+mpcngh0 return  +20.44 [ +17.30, +23.58]*  p 0.0000 [supporting]
+     H                            ret   -46.36 (per img -0.178) ok 0.835 | full-sum p99    3.8 sum    3.8 max   3.8 sched   3.8 mode   0.0 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     nc                           ret   -56.98 (per img -0.219) ok 0.866 | full-sum p99  152.8 sum  152.8 max  43.6 sched   3.8 mode  39.7 upd 0.00 ms | >50 full-sum 0.7266 (eps 100) | sw 180.0 gated 0.0 rej/chk 0/180
+     gate                         ret   -58.17 (per img -0.224) ok 0.856 | full-sum p99  148.9 sum  148.5 max  43.6 sched   3.9 mode  39.8 upd 0.63 ms | >50 full-sum 0.6019 (eps 100) | sw 146.4 gated 51.1 rej/chk 0/146
+     band                         ret   -41.82 (per img -0.161) ok 0.876 | full-sum p99  164.0 sum  163.6 max  45.1 sched   3.9 mode  41.4 upd 0.63 ms | >50 full-sum 0.7677 (eps 100) | sw 94.9 gated 0.0 rej/chk 90/185
+     ng                           ret   -38.92 (per img -0.150) ok 0.867 | full-sum p99  159.9 sum  159.4 max  43.7 sched   3.8 mode  40.3 upd 0.60 ms | >50 full-sum 0.6261 (eps 100) | sw 54.4 gated 50.7 rej/chk 94/148
+     h1                           ret   -43.97 (per img -0.169) ok 0.863 | full-sum p99  111.5 sum  111.1 max  30.6 sched   3.7 mode  27.3 upd 0.58 ms | >50 full-sum 0.4940 (eps 100) | sw 62.4 gated 50.7 rej/chk 108/170
+     h0                           ret   -64.42 (per img -0.248) ok 0.829 | full-sum p99   16.0 sum   15.5 max   6.6 sched   3.7 mode   3.2 upd 0.57 ms | >50 full-sum 0.0000 (eps 0) | sw 56.0 gated 51.0 rej/chk 121/177
+     cal                          ret   -39.67 (per img -0.153) ok 0.861 | full-sum p99  145.4 sum  145.2 max  40.1 sched   3.5 mode  37.1 upd 0.40 ms | >50 full-sum 0.5932 (eps 100) | sw 71.5 gated 50.6 rej/chk 70/141
+== ablation/test V (seeds 25000..25099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   A1               h=fixed_avif_20+mpcngg - h=fixed_avif_20+mpcnc  return   -2.86 [  -7.19,  +1.48]   p 0.1939 [confirmatory]
+                    recall seed   -1.41 [  -1.88,  -0.93]*  video-cluster   -1.40 [  -1.87,  -0.95]* (76 seq)
+   A2               h=fixed_avif_20+mpcngb - h=fixed_avif_20+mpcnc  return  +13.36 [  +9.98, +16.74]*  p 0.0000 [confirmatory]
+                    recall seed   -2.41 [  -2.79,  -2.04]*  video-cluster   -2.40 [  -3.52,  -1.33]* (76 seq)
+   A4                h=fixed_avif_20+mpcng - =fixed_avif_20+mpcngh1 return   -2.51 [  -4.84,  -0.17]*  p 0.0354 [confirmatory]
+                    recall seed   -0.74 [  -0.97,  -0.51]*  video-cluster   -0.74 [  -1.05,  -0.47]* (76 seq)
+   A4b               h=fixed_avif_20+mpcng - =fixed_avif_20+mpcngh0 return  +14.59 [ +11.99, +17.20]*  p 0.0000 [confirmatory]
+                    recall seed   -0.61 [  -0.94,  -0.29]*  video-cluster   -0.62 [  -1.25,  -0.07]* (76 seq)
+   A3                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcnc  return   +9.10 [  +5.09, +13.11]*  p 0.0000 [supporting]
+   A5                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcngg return  +11.96 [  +8.41, +15.51]*  p 0.0000 [supporting]
+   A6                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcngb return   -4.26 [  -7.07,  -1.45]*  p 0.0034 [supporting]
+   A7                  h=fixed_avif_20+mpc - h=fixed_avif_20+mpcng  return   +2.48 [  +0.70,  +4.26]*  p 0.0068 [supporting]
+   A8                h=fixed_avif_20+mpcng - h=fixed_avif_20        return   +2.28 [  +0.23,  +4.33]*  p 0.0299 [supporting]
+   A9               =fixed_avif_20+mpcngh1 - =fixed_avif_20+mpcngh0 return  +17.10 [ +14.33, +19.87]*  p 0.0000 [supporting]
+     H                            ret   -64.53 (per img -0.248) ok 0.760 | full-sum p99    3.6 sum    3.6 max   3.6 sched   3.6 mode   0.0 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     nc                           ret   -71.35 (per img -0.274) ok 0.818 | full-sum p99  161.7 sum  161.7 max  43.7 sched   3.8 mode  40.1 upd 0.00 ms | >50 full-sum 0.7219 (eps 100) | sw 167.8 gated 0.0 rej/chk 0/168
+     gate                         ret   -74.21 (per img -0.285) ok 0.802 | full-sum p99  151.7 sum  151.3 max  43.2 sched   3.8 mode  39.9 upd 0.59 ms | >50 full-sum 0.6051 (eps 100) | sw 136.3 gated 48.7 rej/chk 0/136
+     band                         ret   -58.00 (per img -0.223) ok 0.805 | full-sum p99  163.9 sum  163.5 max  43.4 sched   3.8 mode  40.1 upd 0.58 ms | >50 full-sum 0.7617 (eps 100) | sw 74.6 gated 0.0 rej/chk 103/178
+     ng                           ret   -62.25 (per img -0.239) ok 0.781 | full-sum p99  164.0 sum  163.6 max  44.6 sched   3.9 mode  41.0 upd 0.64 ms | >50 full-sum 0.6347 (eps 100) | sw 31.3 gated 48.2 rej/chk 112/143
+     h1                           ret   -59.75 (per img -0.230) ok 0.788 | full-sum p99  115.8 sum  115.4 max  31.9 sched   3.8 mode  28.3 upd 0.61 ms | >50 full-sum 0.5188 (eps 100) | sw 36.3 gated 48.4 rej/chk 139/175
+     h0                           ret   -76.85 (per img -0.296) ok 0.769 | full-sum p99   15.9 sum   15.4 max   6.6 sched   3.7 mode   3.1 upd 0.56 ms | >50 full-sum 0.0000 (eps 0) | sw 53.1 gated 48.6 rej/chk 130/183
+     cal                          ret   -59.77 (per img -0.230) ok 0.783 | full-sum p99  143.4 sum  143.3 max  39.5 sched   3.5 mode  36.6 upd 0.38 ms | >50 full-sum 0.6032 (eps 100) | sw 45.8 gated 48.3 rej/chk 73/118
+== ablation/test F (seeds 26000..26099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   A1               h=fixed_avif_20+mpcngg - h=fixed_avif_20+mpcnc  return   +0.61 [  -3.92,  +5.13]   p 0.7910 [confirmatory]
+                    recall seed   -0.96 [  -1.58,  -0.35]*  video-cluster   -0.97 [  -1.81,  -0.31]* (18 seq)
+   A2               h=fixed_avif_20+mpcngb - h=fixed_avif_20+mpcnc  return  +16.19 [ +12.10, +20.29]*  p 0.0000 [confirmatory]
+                    recall seed   -1.05 [  -1.59,  -0.51]*  video-cluster   -1.06 [  -3.97,  +0.93]  (18 seq)
+   A4                h=fixed_avif_20+mpcng - =fixed_avif_20+mpcngh1 return   +0.38 [  -2.56,  +3.32]   p 0.7975 [confirmatory]
+                    recall seed   -0.66 [  -1.03,  -0.28]*  video-cluster   -0.66 [  -1.04,  -0.38]* (18 seq)
+   A4b               h=fixed_avif_20+mpcng - =fixed_avif_20+mpcngh0 return  +21.20 [ +18.16, +24.24]*  p 0.0000 [confirmatory]
+                    recall seed   +0.63 [  +0.24,  +1.02]*  video-cluster   +0.64 [  -0.51,  +1.38]  (18 seq)
+   A3                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcnc  return  +14.05 [  +9.37, +18.73]*  p 0.0000 [supporting]
+   A5                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcngg return  +13.45 [  +9.89, +17.01]*  p 0.0000 [supporting]
+   A6                h=fixed_avif_20+mpcng - h=fixed_avif_20+mpcngb return   -2.14 [  -6.03,  +1.75]   p 0.2780 [supporting]
+   A7                  h=fixed_avif_20+mpc - h=fixed_avif_20+mpcng  return   +2.62 [  +0.11,  +5.14]*  p 0.0410 [supporting]
+   A8                h=fixed_avif_20+mpcng - h=fixed_avif_20        return   +5.42 [  +2.63,  +8.21]*  p 0.0002 [supporting]
+   A9               =fixed_avif_20+mpcngh1 - =fixed_avif_20+mpcngh0 return  +20.82 [ +17.92, +23.72]*  p 0.0000 [supporting]
+     H                            ret   -74.76 (per img -0.288) ok 0.767 | full-sum p99    3.8 sum    3.8 max   3.8 sched   3.8 mode   0.0 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     nc                           ret   -83.40 (per img -0.321) ok 0.821 | full-sum p99  160.4 sum  160.4 max  43.6 sched   3.8 mode  40.0 upd 0.00 ms | >50 full-sum 0.7159 (eps 100) | sw 175.5 gated 0.0 rej/chk 0/176
+     gate                         ret   -82.79 (per img -0.318) ok 0.807 | full-sum p99  149.0 sum  148.6 max  43.3 sched   3.8 mode  39.8 upd 0.60 ms | >50 full-sum 0.5965 (eps 100) | sw 141.5 gated 50.4 rej/chk 0/141
+     band                         ret   -67.20 (per img -0.258) ok 0.822 | full-sum p99  164.3 sum  163.9 max  43.3 sched   3.8 mode  39.9 upd 0.58 ms | >50 full-sum 0.7505 (eps 100) | sw 84.1 gated 0.0 rej/chk 94/178
+     ng                           ret   -69.34 (per img -0.267) ok 0.800 | full-sum p99  156.7 sum  156.2 max  43.2 sched   3.7 mode  40.0 upd 0.59 ms | >50 full-sum 0.6186 (eps 100) | sw 46.3 gated 50.1 rej/chk 96/143
+     h1                           ret   -69.72 (per img -0.268) ok 0.806 | full-sum p99  112.9 sum  112.5 max  30.6 sched   3.7 mode  27.4 upd 0.57 ms | >50 full-sum 0.4834 (eps 100) | sw 49.9 gated 50.2 rej/chk 115/165
+     h0                           ret   -90.54 (per img -0.348) ok 0.769 | full-sum p99   15.9 sum   15.4 max   6.6 sched   3.7 mode   3.2 upd 0.57 ms | >50 full-sum 0.0000 (eps 0) | sw 48.0 gated 50.1 rej/chk 124/172
+     cal                          ret   -66.72 (per img -0.257) ok 0.803 | full-sum p99  143.0 sum  142.9 max  39.9 sched   3.5 mode  36.8 upd 0.40 ms | >50 full-sum 0.6033 (eps 100) | sw 62.4 gated 50.1 rej/chk 75/137

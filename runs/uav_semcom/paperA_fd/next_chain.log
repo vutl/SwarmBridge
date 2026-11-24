@@ -1,0 +1,16 @@
+[2026-11-24 14:59:42] chain start at commit c4a5e299
+[2026-11-24 14:59:42] start ablation_test
+[2026-11-24 18:19:40] chain start at commit 899eed2c
+[2026-11-24 18:19:40] start ablation_test
+[2026-11-24 18:51:49] end ablation_test exit 0
+[2026-11-24 18:51:49] start ablation_summary
+[2026-11-24 18:51:55] end ablation_summary exit 0
+[2026-11-24 18:51:55] start grid_test
+[2026-11-24 20:01:08] end grid_test exit 0
+[2026-11-24 20:01:08] start grid_summary
+[2026-11-24 20:01:15] end grid_summary exit 0
+[2026-11-24 20:01:15] start rl_zeroshot
+[2026-11-24 20:50:58] end rl_zeroshot exit 0
+[2026-11-24 20:50:58] start rl_zs_summary
+[2026-11-24 20:51:04] end rl_zs_summary exit 0
+[2026-11-24 20:51:04] start rl_training
