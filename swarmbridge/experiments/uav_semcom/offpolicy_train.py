@@ -25,10 +25,14 @@ from train_ev import evaluate_rl
 BASE_EXTRA = dict(la_mode="sched", la_interf="persistent", obs_la=True)
 
 
-def setup():
+def setup(fd=False):
     f = json.loads((C.REPO / "runs" / "uav_semcom" / "ax9" / "sched.json").read_text())["frozen"]
     cfg = C.regime_cfg("K5_la", **BASE_EXTRA)
-    table, pools = C.load_table(False)
+    if fd:                            # Paper A full-data Phase 3: fd_v1 table / pools (fd_common.load)
+        import fd_common as FD
+        table, pools = FD.load()[:2]
+    else:
+        table, pools = C.load_table(False)
     os.environ["SB_JA_LOG"] = "0"
     import ja_sched as JA
     JA.LOG = False
@@ -51,12 +55,13 @@ def main():
     ap.add_argument("--batch", type=int, default=256)
     ap.add_argument("--learning-starts", type=int, default=20_000)
     ap.add_argument("--train-every", type=int, default=4, help="RL decisions (transitions) per gradient step")
+    ap.add_argument("--fd", action="store_true", help="train / validate on the fd_v1 pools (rl_train / rl_val)")
     ap.add_argument("--eps-frac", type=float, default=0.1, help="QR-DQN: epsilon 1 -> 0.05 over this share of steps")
     a = ap.parse_args()
     torch.set_num_threads(1)
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-    cfg, table, pools, kw, frozen = setup()
+    cfg, table, pools, kw, frozen = setup(a.fd)
     venv = SubprocVecEnv([make(table, pools["train"], cfg, a.seed * 100 + i, kw) for i in range(a.n_env)])
     obs_dim = venv.observation_space.shape[0]
     nvec = list(venv.action_space.nvec)
@@ -69,7 +74,7 @@ def main():
     rng = np.random.default_rng(1000 + a.seed)
     meta = dict(algo=a.algo, hp=agent.hp, seed=a.seed, steps=a.steps, n_env=a.n_env, buffer=a.buffer, batch=a.batch,
                 learning_starts=a.learning_starts, train_every=a.train_every, eps_frac=a.eps_frac, cfg=cfg,
-                slot_move=frozen["move"], slot_ja=frozen["member"], val_seeds=C.PPO_VAL_SEEDS, val_pool="val",
+                slot_move=frozen["move"], slot_ja=frozen["member"], val_seeds=C.PPO_VAL_SEEDS, val_pool="val", table="fd_v1 (rl_train / rl_val)" if a.fd else "A5",
                 train_pool="train", time_discount=True, obs_dim=obs_dim, nvec=[int(x) for x in nvec])
     obs = venv.reset()
     t = upd = 0

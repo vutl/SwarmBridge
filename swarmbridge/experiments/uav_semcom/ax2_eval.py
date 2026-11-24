@@ -160,7 +160,13 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     # Paper A fd_v1 Phase 2 (+mpcng): the nominal rate model inside the SAME control design as the calibrated MPC:
     # RateErrTracker on the nominal model's predictions -> same gate (>= MIN_AIR of observations) and same band rule
     # [lo, hi]; only the rate model differs (realised gate / band values can still differ, they are logged)
-    nomgate = mode.endswith("+mpcng")
+    # mechanism ablation (review of 50835621): +mpcngg gate only (band fixed [1, 1]); +mpcngb band only (no cold-start
+    # gate: before the tracker has data the band is [1, 1], i.e. unguarded planning); +mpcngh1 matched design, H = 1
+    ngv = re.search(r"\+mpcng(g|b|h1)?$", mode)
+    nomgate = ngv is not None
+    ng_kind = ngv.group(1) if ngv else None
+    if ngv:
+        mode = mode[:ngv.start()] + "+mpcng"
     abl = re.search(r"\+mpc(ab\d)$", mode)    # Paper A E2c: ablation ladder HarmRates -> PoolRates (a9_mpc.ABL)
     abl = abl.group(1) if abl else None
     fbm = re.search(r"[+]mpcfb(\d+)l(\d+)$", mode)    # Paper A E5: calibrated MPC with delayed / lossy rate reports
@@ -195,6 +201,17 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
             "ppo": lambda: mdl("mode", lambda: XP.mode_path(ctrl_regime, i)),
             "jm": lambda: mdl("joint", lambda: XP.joint_path(ctrl_regime, i)),
             "cmm": lambda: mdl("cm", lambda: ax2_path(ctrl_regime, "cm", i))}.get(mode)
+    if mode == "ppofd":                      # Paper A full-data Phase 3: PPO-LA retrained on fd_v1 (a5_train.py --fd)
+        mmod = lambda: mdl("ppofd", lambda: json.loads(
+            (C.REPO / "runs" / "uav_semcom" / "paperA_fd" / "phase3" / "ckpts.json").read_text())["ppofd"][i])
+    if mode in ("qrfd", "dsfd"):             # Paper A full-data Phase 3: QR-DQN / Discrete SAC retrained on fd_v1
+        import offpolicy_rl as OPR
+
+        def mmod():
+            if mode not in models:
+                paths = json.loads((C.REPO / "runs" / "uav_semcom" / "paperA_fd" / "phase3" / "ckpts.json").read_text())[mode]
+                models[mode] = OPR.ModePolicy(paths[i], e.action_space.nvec)
+            return models[mode]
     if mode in ("qrla", "dsla"):             # Paper A E7: QR-DQN / Discrete SAC trained on the LA PHY (offpolicy_train)
         import offpolicy_rl as OPR
 
@@ -225,7 +242,8 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     mpc = trk = cal = dl = None
     if nomgate:
         assert not cal_h and tutil is None
-        mpc = M.MPCMode("env", 8, 4, None, fallback=mp_t, seed=12345, rollout="causal", margin_z=1.0)
+        mpc = M.MPCMode("env", 8, 1 if ng_kind == "h1" else 4, None, fallback=mp_t, seed=12345, rollout="causal",
+                        margin_z=1.0)
         trk = M.RateErrTracker(mpc, persistent=False)
         dl = M.Deadline(50.0, margin_ms=3.0)
     elif (use_mpc and not nocal) or cal_h:
@@ -257,6 +275,8 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     done, tot = False, 0.0
     t_slot, t_mode, biases, aborts = [], [], [], 0
     gated = planned = 0
+    cold_unguarded = 0
+    t_upd = []
     bands = []                                     # (lo, hi) of every planned decision (fd_v1 Phase 2 logging)
     t_first_plan = None
     K = e.K
@@ -264,10 +284,12 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
         core = e.core
         if e.phase == "slot":
             audit.update(core)
+            t_u = time.perf_counter()            # calibrator / tracker update overhead (review of 50835621)
             if cal is not None:
                 cal.update(core)
             if trk is not None:                  # (+mpcng: tracker without calibrator; other arms: unchanged order)
                 trk.update(core)
+            t_upd.append(time.perf_counter() - t_u)
             t0 = time.perf_counter()
             a = np.zeros(len(e.action_space.nvec), dtype=np.int64)
             if sched in ("tbest", "tbest_env", "sch", "ja", "jae", "ls"):
@@ -304,6 +326,9 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
                     aborts += int(mpc.last_abort is not None)
                 elif use_mpc:
                     st = trk.stats(core, k)
+                    if st is None and ng_kind == "b":
+                        st = (0.0, 0.0)              # band-only ablation: no gate; cold start -> band [1, 1]
+                        cold_unguarded += 1
                     if st is None:
                         gated += 1
                     else:
@@ -314,7 +339,7 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
                         biases.append(b)
                         lo = max(min(1.0, 1.0 + b) - 2.0 * se, 0.05)
                         hi = max(1.0, 1.0 + b) + 2.0 * se
-                        if rh_noband:
+                        if rh_noband or ng_kind == "g":
                             lo = hi = 1.0
                         mpc.scales = [lo, hi]
                         bands.append((lo, hi))
@@ -348,6 +373,14 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
             sm[s_i] += x
     m.update(ms_int_max_p99=float(np.percentile(ts + mx, 99)), ms_int_sum_p99=float(np.percentile(ts + sm, 99)),
              ms_int_max_p50=float(np.percentile(ts + mx, 50)), int_over50=float(((ts + mx) > 50).mean()))
+    # review of 50835621: per-slot totals INCLUDING the calibrator / tracker update; sum = sequential mode decisions
+    tu = np.asarray(t_upd) * 1e3
+    if len(tu) == len(ts):
+        m.update(ms_upd_p99=float(np.percentile(tu, 99)), ms_upd_mean=float(tu.mean()),
+                 ms_full_max_p99=float(np.percentile(tu + ts + mx, 99)),
+                 ms_full_sum_p99=float(np.percentile(tu + ts + sm, 99)),
+                 full_max_over50=float(((tu + ts + mx) > 50).mean()), full_sum_over50=float(((tu + ts + sm) > 50).mean()),
+                 int_sum_over50=float(((ts + sm) > 50).mean()))
     if hasattr(core, "la_metrics"):
         lm = core.la_metrics()
         m.update(goodput_kbps=lm["goodput_kbps"], bler=lm["bler"], delivered_mbit=lm["delivered_mbit"])
@@ -356,7 +389,8 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
                  bias_q=[float(x) for x in np.percentile(biases, [10, 50, 90])] if biases else None,
                  band_lo_q=[float(x) for x in np.percentile([b[0] for b in bands], [10, 50, 90])] if bands else None,
                  band_hi_q=[float(x) for x in np.percentile([b[1] for b in bands], [10, 50, 90])] if bands else None,
-                 robust_rejects=int(getattr(mpc, "robust_rejects", 0)), robust_checks=int(getattr(mpc, "robust_checks", 0)))
+                 robust_rejects=int(getattr(mpc, "robust_rejects", 0)), robust_checks=int(getattr(mpc, "robust_checks", 0)),
+                 cold_unguarded=cold_unguarded)
     return m, deliveries(core)
 
 
@@ -376,7 +410,9 @@ def job(j):
 
 def needs_ckpt(combo):
     s, m = combo.split("|")
-    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         re.sub(r"[+]mpc(ab\d|fb\d+l\d+)$", "", m).replace("+mpcpl", "").replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpcng", "").replace("+mpcrhnb", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm", "qrla", "dsla")
+    base = re.sub(r"[+]mpc[a-z0-9]*$", "", m)         # strip any MPC arm suffix (+mpc, +mpcnc, +mpcng*, +mpcrh*, ...)
+    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or base in (
+        "ppo", "ppola", "jm", "cmm", "qrla", "dsla", "ppofd", "qrfd", "dsfd")
 
 
 def main():

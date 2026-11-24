@@ -52,6 +52,7 @@ def main():
     ap.add_argument("--cfg-extra", default=None)
     ap.add_argument("--slot-move", default=None)
     ap.add_argument("--slot-ja", default=None)
+    ap.add_argument("--fd", action="store_true", help="train / validate on the fd_v1 pools (rl_train / rl_val)")
     ap.add_argument("--resume", default="", help="run dir: continue its last checkpoint (extended-training "
                     "experiment); episodes use env seeds offset by +50 so the start of training is not replayed")
     args = ap.parse_args()
@@ -59,7 +60,11 @@ def main():
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     cfg = C.regime_cfg(args.regime, **(json.loads(args.cfg_extra) if args.cfg_extra else {}))
-    table, pools = C.load_table(False)
+    if args.fd:                       # Paper A full-data Phase 3: fd_v1 table / pools (fd_common.load)
+        import fd_common as FD
+        table, pools = FD.load()[:2]
+    else:
+        table, pools = C.load_table(False)
     heur = AE.tuned(args.regime, args.heur[2:]) if args.heur.startswith("T:") else args.heur
     sp, mp = MH.from_name(heur, C.MODES)
     if args.slot_move:
@@ -78,7 +83,8 @@ def main():
                                     policy_kwargs=dict(net_arch=[256, 256]), seed=args.seed, verbose=0, device="cpu")
     meta = dict(regime=args.regime, cfg=cfg, rl_part=args.rl_part, heur=heur, seed=args.seed, steps=args.steps,
                 cfg_extra=args.cfg_extra, slot_move=args.slot_move, slot_ja=args.slot_ja,
-                val_seeds=C.PPO_VAL_SEEDS, val_pool="val", train_pool="train", time_discount=True)
+                val_seeds=C.PPO_VAL_SEEDS, val_pool="val", train_pool="train", time_discount=True,
+                table="fd_v1 (rl_train / rl_val)" if args.fd else "A5")
     t0, log, done_steps, exp = time.time(), [], 0, Experience()
     if args.resume:
         prev = json.loads((Path(args.resume) / "train.json").read_text())
