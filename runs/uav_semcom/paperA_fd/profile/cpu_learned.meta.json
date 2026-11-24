@@ -1,0 +1,33 @@
+{
+ "protocol": "A5 profile_a11.py CPU timing: set_num_threads(os.cpu_count()), warm-up image discarded",
+ "threads": 6,
+ "k": 10,
+ "images": [
+  "0000002_00005_d_0000014.jpg",
+  "0000002_00448_d_0000015.jpg",
+  "0000003_00231_d_0000016.jpg",
+  "0000008_00889_d_0000039.jpg",
+  "0000008_01999_d_0000040.jpg",
+  "0000008_02499_d_0000041.jpg",
+  "0000008_02999_d_0000042.jpg",
+  "0000008_03499_d_0000043.jpg",
+  "0000008_03999_d_0000044.jpg",
+  "0000008_04499_d_0000045.jpg"
+ ],
+ "hardware": {
+  "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.12.16",
+  "torch": "2.12.1+cu130",
+  "cpu_count": 6,
+  "torch_threads": 6,
+  "cpu": "Intel(R) Core(TM) i5-14400F",
+  "gpu": "NVIDIA GeForce RTX 3070",
+  "pillow": {
+   "jpg": "6.2",
+   "jpg_2000": "2.5.4",
+   "avif": "1.4.2"
+  },
+  "compressai": "1.2.8"
+ },
+ "wall_s": 52.800315141677856
+}

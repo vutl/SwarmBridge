@@ -1,0 +1,56 @@
+{
+ "code": {
+  "fd_profile.py": "a0ce9eb26b354ec37283017948ea0e115e3a9fdc20a939b8b1a42869d8892354",
+  "imcodecs.py": "0c14819f2ffe8face67bc4240328c643db59c5735a22779fd47800ad2b6bd575",
+  "metrics.py": "5b13620ccb8863584c475c4ee77475b86fc809218cc164e5b7159226523f9d8b",
+  "a5_fidelity.py": "a12f55e85112fb03c0174a959ea77808a1009acbc50f7410641e4eda1a421f14",
+  "profile_a11.py": "d356f260274e398f0d9dc91ea91a32eeb18901c5b2d5257e013afad74e573576"
+ },
+ "manifest_sha256": "f0760601515f9663f2b7747bd247eddabc3ab8c997755c73ae8bf2f2339d4d50",
+ "yolo_sha256": "21dd82f8d29d7d20ee44de8ec7a6f868e77277a98f045b428ff0323bea535829",
+ "blip": [
+  "Salesforce/blip-image-captioning-large",
+  "353689b859fcf0523410b1806dace5fb46ecdf41"
+ ],
+ "sd": [
+  "stabilityai/sd-turbo",
+  "b261bac6fd2cf515557d5d0707481eafa0485ec2"
+ ],
+ "steps": 4,
+ "thumb_q": 50,
+ "thumbs": [
+  64,
+  128
+ ],
+ "strengths": {
+  "64": 0.6,
+  "128": 0.3
+ },
+ "guidance": 0.0,
+ "gen_size": "shorter side 512, width multiple of 8; output bicubic to native",
+ "caption": "max_new_tokens 40, num_beams 3, fp16",
+ "preprocessing": "native resolution",
+ "detector": "imgsz 960, conf 0.01, NMS IoU 0.7, max_det 500; op conf 0.25 IoU 0.5",
+ "versions": {
+  "torch": "2.12.1+cu130",
+  "diffusers": "0.42.1",
+  "transformers": "5.22.1",
+  "ultralytics": "8.4.204",
+  "compressai": "1.2.8"
+ },
+ "hardware": {
+  "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.12.16",
+  "torch": "2.12.1+cu130",
+  "cpu_count": 6,
+  "torch_threads": 3,
+  "cpu": "Intel(R) Core(TM) i5-14400F",
+  "gpu": "NVIDIA GeForce RTX 3070",
+  "pillow": {
+   "jpg": "6.2",
+   "jpg_2000": "2.5.4",
+   "avif": "1.4.2"
+  },
+  "compressai": "1.2.8"
+ }
+}

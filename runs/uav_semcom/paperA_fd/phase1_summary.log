@@ -1,0 +1,32 @@
+rows 61448, configs {'f9d361f37bc386c8': 61448}
+integrity: sha256 mismatches 0, split mismatches 0, gen_seed mismatches 0 (seeded modes must equal the manifest seed, others None)
+attempts: images with >1 attempt 0, images without a complete attempt 0; accepted unique records 61448 / expected 61448 (4,223 x 14 + 2,326 'original')
+coverage rl_train  {'images': 1523, 'missing_rows': 0, 'nonfinite_psnr': 0, 'missing_examples': []}
+coverage rl_val    {'images': 374, 'missing_rows': 0, 'nonfinite_psnr': 0, 'missing_examples': []}
+coverage F         {'images': 168, 'missing_rows': 0, 'nonfinite_psnr': 0, 'missing_examples': []}
+coverage TD        {'images': 582, 'missing_rows': 0, 'nonfinite_psnr': 0, 'missing_examples': []}
+coverage TD_extra  {'images': 1028, 'missing_rows': 0, 'nonfinite_psnr': 0, 'missing_examples': []}
+coverage V         {'images': 548, 'missing_rows': 0, 'nonfinite_psnr': 0, 'missing_examples': []}
+wall per image: rl_train 6.40s (2.71 h), rl_val 6.72s (0.70 h), F 5.58s (0.26 h), TD 5.69s (0.92 h), TD_extra 5.57s (1.59 h), V 4.59s (0.70 h)
+CPU learned-codec timing: 10 rl_train images (A5 protocol), resolutions {'960x540': 3, '1360x765': 7} vs rl_train {'1400x1050': 462, '1360x765': 395, '1920x1080': 189, '960x540': 176, '1400x788': 150}; a per-mode estimate from 10 images, not a characterisation of every resolution
+latency cap_t2i                  cuda enc profile 0.239s  cpu(UAV) nans  table 0.239s (A5 0.211s)  dec 0.732s (A5 0.496s)
+latency thumb64_up               cuda enc profile 0.017s  cpu(UAV) nans  table 0.017s (A5 0.016s)  dec 0.008s (A5 0.006s)
+latency cap_thumb64_i2i_t0.6     cuda enc profile 0.256s  cpu(UAV) nans  table 0.256s (A5 0.227s)  dec 0.583s (A5 0.477s)
+latency cap_thumb128_i2i_t0.3    cuda enc profile 0.269s  cpu(UAV) nans  table 0.269s (A5 0.240s)  dec 0.451s (A5 0.407s)
+latency avif_5                   cpu  enc profile 0.091s  cpu(UAV) nans  table 0.091s (A5 0.072s)  dec 0.006s (A5 0.004s)
+latency avif_20                  cpu  enc profile 0.118s  cpu(UAV) nans  table 0.118s (A5 0.091s)  dec 0.006s (A5 0.005s)
+latency avif_50                  cpu  enc profile 0.177s  cpu(UAV) nans  table 0.177s (A5 0.134s)  dec 0.008s (A5 0.006s)
+latency avif_80                  cpu  enc profile 0.176s  cpu(UAV) nans  table 0.176s (A5 0.129s)  dec 0.009s (A5 0.007s)
+latency mbt2018-mean_q1          cuda enc profile 0.106s  cpu(UAV) 0.374s  table 0.374s (A5 0.463s)  dec 0.119s (A5 0.068s)
+latency mbt2018-mean_q3          cuda enc profile 0.097s  cpu(UAV) 0.386s  table 0.386s (A5 0.476s)  dec 0.116s (A5 0.068s)
+latency mbt2018-mean_q5          cuda enc profile 0.369s  cpu(UAV) 0.735s  table 0.735s (A5 0.912s)  dec 0.419s (A5 0.110s)
+latency mbt2018-mean_q8          cuda enc profile 0.364s  cpu(UAV) 0.718s  table 0.718s (A5 0.894s)  dec 0.544s (A5 0.113s)
+latency jpeg2000_100             cpu  enc profile 0.276s  cpu(UAV) nans  table 0.276s (A5 0.198s)  dec 0.028s (A5 0.020s)
+latency jpeg2000_25              cpu  enc profile 0.275s  cpu(UAV) nans  table 0.275s (A5 0.199s)  dec 0.044s (A5 0.031s)
+predictor rl_train  new: x1.190 bits, 1.69 dB (seq-w x1.202, 1.86 dB) | old: x1.205, 1.80 dB
+predictor rl_val    new: x1.193 bits, 1.71 dB (seq-w x1.218, 2.17 dB) | old: x1.235, 2.10 dB
+predictor F         new: x1.158 bits, 1.44 dB (seq-w x1.184, 1.75 dB) | old: x1.162, 1.44 dB
+predictor TD        new: x1.166 bits, 1.47 dB (seq-w x1.183, 1.77 dB) | old: x1.181, 1.71 dB
+predictor TD_extra  new: x1.175 bits, 1.47 dB (seq-w x1.149, 1.21 dB) | old: x1.183, 1.67 dB
+predictor V         new: x1.177 bits, 1.73 dB (seq-w x1.181, 1.77 dB) | old: x1.146, 1.54 dB
+hashes {'manifest_fd_v1.json': 'f0760601515f9663f2b7747bd247eddabc3ab8c997755c73ae8bf2f2339d4d50', 'profile/profile.jsonl': '078e0e231dfeadaf9c9c84f8db2cb2a0d2c4166e4c3470cd35907d10f898781c', 'profile/cpu_learned.jsonl': 'd40ed56853b98c06160b027726df3c0ff07c00955d49a704933f8aa18b3b95ba'}

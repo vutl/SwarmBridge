@@ -44,14 +44,101 @@
 - `run_phase1.sh`, launched detached (WMI) through `fd_gpulock_win.py`, which holds the GPU lock;
 - log `runs/uav_semcom/paperA_fd/phase1.log`, rows in `runs/uav_semcom/paperA_fd/profile/profile.jsonl`.
 
-## 2. Results
+## 2. Results (run 23/11 23:18 – 24/11 06:15, EXIT 0; summary 06:17)
 
-To be written when the run finishes:
-- coverage per pool and mode;
-- failures;
-- timing;
-- probe-predictor error per pool;
-- artifact hashes.
+**Sources:**
+- `runs/uav_semcom/paperA_fd/phase1.log`, `after_phase1.log`;
+- `phase1_summary.log` / `.json` (from `fd_phase1_summary.py`).
+
+### 2.1 Completeness and integrity
+
+**Config:** each of the six pool runs and the final coverage pass logged config `f9d361f37bc386c8`. `profile.jsonl`
+holds 61,448 rows, all with that config.
+
+**Coverage and integrity:**
+- **Accepted unique records: 61,448 of the expected 61,448** (4,223 × 14 + 2,326 originals).
+- No image had more than one attempt.
+- Every image has a complete attempt.
+- Missing rows: 0 in every pool and mode.
+- Non-finite PSNR: 0.
+- Mismatches against the manifest: 0 for sha256, 0 for split, 0 for gen_seed (seeded modes equal the manifest seed;
+  all other modes have none).
+- No failure, no imputation.
+
+**Artifact hashes** (sha256 after CRLF→LF normalisation):
+
+| File | sha256 |
+|---|---|
+| manifest_fd_v1.json | `f0760601515f9663f2b7747bd247eddabc3ab8c997755c73ae8bf2f2339d4d50` |
+| profile/profile.jsonl | `078e0e231dfeadaf9c9c84f8db2cb2a0d2c4166e4c3470cd35907d10f898781c` |
+| profile/cpu_learned.jsonl | `d40ed56853b98c06160b027726df3c0ff07c00955d49a704933f8aa18b3b95ba` |
+
+### 2.2 Runtime
+
+| Pool | Images | Mean wall time per image | Total |
+|---|---|---|---|
+| rl_train | 1,523 | 6.40 s | 2.71 h |
+| rl_val | 374 | 6.72 s | 0.70 h |
+| F | 168 | 5.58 s | 0.26 h |
+| TD | 582 | 5.69 s | 0.92 h |
+| TD_extra | 1,028 | 5.57 s | 1.59 h |
+| V | 548 | 4.59 s | 0.70 h |
+
+- The recall pools include the detector.
+- The total is 6.9 h, against the 7.7 h estimate.
+
+### 2.3 Latency used by the simulator (means over rl_train)
+
+| Mode | Encode, profile device | Encode, UAV CPU (6 threads) | Table encode | A5 table encode | Decode (BS) | A5 decode |
+|---|---|---|---|---|---|---|
+| mbt2018 q1 | 0.106 s (GPU) | **0.374 s** | 0.374 s | 0.463 s | 0.119 s | 0.068 s |
+| mbt2018 q3 | 0.097 s (GPU) | **0.386 s** | 0.386 s | 0.476 s | 0.116 s | 0.068 s |
+| mbt2018 q5 | 0.369 s (GPU) | **0.735 s** | 0.735 s | 0.912 s | 0.419 s | 0.110 s |
+| mbt2018 q8 | 0.364 s (GPU) | **0.718 s** | 0.718 s | 0.894 s | 0.544 s | 0.113 s |
+| avif 5 / 20 / 50 / 80 | 0.091 / 0.118 / 0.177 / 0.176 s (CPU) | — | same | 0.072 / 0.091 / 0.134 / 0.129 s | 0.006–0.009 s | 0.004–0.007 s |
+| jpeg2000 100 / 25 | 0.276 / 0.275 s (CPU) | — | same | 0.198 / 0.199 s | 0.028 / 0.044 s | 0.020 / 0.031 s |
+| cap_t2i, cap_thumb i2i | 0.24–0.27 s (GPU caption) | — | same | 0.21–0.24 s | 0.45–0.73 s | 0.41–0.50 s |
+| thumb64_up | 0.017 s | — | same | 0.016 s | 0.008 s | 0.006 s |
+
+**Diagnostic (not used):** the 3-thread CPU file gives 0.53 / 0.53 / 1.04 / 1.02 s for MBT2018 q1 / q3 / q5 / q8,
+about 40% slower than the 6-thread A5 protocol. Separating the two measurements was therefore needed.
+
+**Issue for the Phase 2 pre-registration: representativeness of the CPU sample.**
+- The frozen A5 protocol times the first 10 rl_train images in manifest order. Here these are 3 frames at 960×540 and
+  7 at 1360×765, a mean of 0.88 MP.
+- The rl_train mean is 1.36 MP, and 43% of rl_train frames are 1400×1050 or 1920×1080.
+- Encode time grows with pixel count, so the table's MBT2018 encode time likely **underestimates** the rl_train mean.
+- This contrasts with every other codec's latency, which is a mean over all rl_train frames.
+- Options for the reviewer:
+  - (a) keep the frozen A5 rule and state the limitation;
+  - (b) a pre-registered resolution-stratified CPU sample, for example 2 frames from each of the 5 main resolutions
+    in proportion, run before any Phase 2 test.
+- In both A5 and fd_v1, the simulator uses one encode time per mode, not per image. That simplification is unchanged.
+
+### 2.4 Probe-predictor error
+
+Mean absolute error over (image, non-probe mode) pairs. "bits" is the multiplicative factor exp(MAE of log bits).
+"seq-w" weights each sequence equally.
+
+| Pool | New fit (rl_train): bits / PSNR | seq-w | Old A5 fit (304 DET-val frames): bits / PSNR | Out-of-sample for |
+|---|---|---|---|---|
+| rl_train | ×1.190 / 1.69 dB | ×1.202 / 1.86 dB | ×1.205 / 1.80 dB | old fit only |
+| rl_val | ×1.193 / 1.71 dB | ×1.218 / 2.17 dB | ×1.235 / 2.10 dB | both |
+| F | ×1.158 / 1.44 dB | ×1.184 / 1.75 dB | ×1.162 / 1.44 dB | both |
+| TD | ×1.166 / 1.47 dB | ×1.183 / 1.77 dB | ×1.181 / 1.71 dB | both |
+| TD_extra | ×1.175 / 1.47 dB | ×1.149 / 1.21 dB | ×1.183 / 1.67 dB | both |
+| V | ×1.177 / 1.73 dB | ×1.181 / 1.77 dB | ×1.146 / 1.54 dB | new fit only (the old fit was trained on V frames) |
+
+- On the pools that are out-of-sample for both fits (rl_val, F, TD, TD_extra), the new fit is equal or better:
+  - payload error ×1.16–1.19 against ×1.16–1.24;
+  - PSNR error 1.44–1.71 dB against 1.44–2.10 dB.
+- The old fit's advantage on V is in-sample and is not interpreted.
+
+### 2.5 Status
+
+- **Phase 1 is complete.** All mechanical checks pass.
+- **Open decision for the review:** the CPU-sample rule (section 2.3).
+- **Next deliverable:** the Phase 2 pre-registration. Phase 2–4 have not been started.
 
 ## 1b. Checks after the review of 33aae4a9 (23/11, 23:30; the run continues)
 
