@@ -16,12 +16,14 @@ import gzip
 import json
 
 import numpy as np
+from scipy import stats
 
 import fd_common as FD
 from ax2_summary import ci
 
 ARMS = {"H": "", "cal": "+mpc", "nom": "+mpcnc", "ng": "+mpcng", "rh": "+mpcrh", "rhnb": "+mpcrhnb"}
 HYP = [("H1", "cal", "H"), ("H2", "cal", "rh"), ("H2b", "cal", "rhnb"), ("H3", "cal", "nom"), ("H3b", "cal", "ng")]
+PRIMARY = ["H1", "H3b"]                           # confirmatory family, Holm (review of 2cd2ec77)
 RECALL_HYP = [("H1", "cal", "H"), ("H3", "cal", "nom"), ("H3b", "cal", "ng")]
 POOLS = ["TD", "F", "V", "TD_all"]
 B = 2000
@@ -56,9 +58,38 @@ def main():
         ret = {k: np.array([x["return"] for x in by[s]["rows"]]) for k, s in ARMS.items()}
         o = {"H": te["H"], "seeds": [seeds[0], seeds[-1]], "return": {}, "levels": {}, "mechanism": {}}
         lines.append(f"== {pool} (seeds {seeds[0]}..{seeds[-1]}, H* = {te['H']})")
+        # integrity (review of 2cd2ec77): every episode accounts for K x 52 = 260 image tasks; arms with the same seed
+        # have identical image occurrences; every delivered index maps to a table row of this pool
+        n_task = 5 * 52
+        eps = {k: dl[f"{pool}|{by[s]['combo']}"] for k, s in ARMS.items()}
+        assert all(len(eps[k]) == len(seeds) for k in ARMS)
+        bad_n = sum(len(ep) != n_task for k in ARMS for ep in eps[k])
+        bad_set = sum(len({tuple(sorted(x[0] for x in eps[k][e])) for k in ARMS}) != 1 for e in range(len(seeds)))
+        pool_rows = set(int(i) for i in pools[pool])
+        bad_idx = sum(row_of_man.get(x[0]) not in pool_rows for k in ARMS for ep in eps[k] for x in ep)
+        o["integrity"] = dict(episodes_not_260=bad_n, seeds_with_different_images=bad_set, deliveries_outside_pool=bad_idx)
+        lines.append(f"   integrity: episodes != 260 tasks {bad_n}, seeds with differing image sets {bad_set}, "
+                     f"deliveries outside the pool {bad_idx}")
+        print(lines[-1], flush=True)
+        assert bad_n == bad_set == bad_idx == 0
         for h, x, y in HYP:
-            o["return"][h] = [float(v) for v in ci(ret[x] - ret[y])]
-            lines.append(f"   {h:4s} {x}-{y:5s} return {f(o['return'][h])}")
+            d = ret[x] - ret[y]
+            o["return"][h] = [float(v) for v in ci(d)]
+            o.setdefault("p", {})[h] = float(stats.ttest_1samp(d, 0.0).pvalue)
+            lines.append(f"   {h:4s} {x}-{y:5s} return {f(o['return'][h])}  p {o['p'][h]:.4f}"
+                         + ("  [confirmatory, Holm]" if h in PRIMARY else "  [supporting]"))
+        # Holm over the two confirmatory contrasts (H1, H3b), two-sided, family-wise alpha 0.05
+        ps = sorted(PRIMARY, key=lambda h: o["p"][h])
+        holm, stop = {}, False
+        for i, h in enumerate(ps):
+            adj = min(1.0, max(o["p"][g] * (len(ps) - j) for j, g in enumerate(ps[:i + 1])))
+            rej = (not stop) and o["p"][h] <= 0.05 / (len(ps) - i)
+            stop = stop or not rej
+            holm[h] = dict(p=o["p"][h], p_holm=adj, rejected=bool(rej), direction="+" if o["return"][h][0] > 0 else "-")
+        o["holm"] = holm
+        lines.append("   Holm (H1, H3b): " + ", ".join(f"{h} p_holm {holm[h]['p_holm']:.4f} "
+                                                      f"{'REJECT' if holm[h]['rejected'] else 'not rejected'} "
+                                                      f"({holm[h]['direction']})" for h in PRIMARY))
         has_recall = pool in ("TD", "F", "V", "TD_all")
         if has_recall:
             # per (arm, episode, sequence): TP and GT sums
@@ -122,16 +153,24 @@ def main():
                             if k in o["mechanism"] else "") + f" | p99 {L['ms_int_max_p99']:.1f} ms")
         out[pool] = o
     if "TD" in out:
-        r = out["TD"]["return"]
+        # confirmatory family {H1, H3b}: Holm-rejected + sign (review of 2cd2ec77); supporting H2 / H2b / H3: 95% CIs,
+        # effect sizes only, never an additional confirmatory claim; a non-rejection is "no detected difference",
+        # never equivalence
+        r, hm = out["TD"]["return"], out["TD"]["holm"]
+        cpos = lambda h: hm[h]["rejected"] and hm[h]["direction"] == "+"
+        cneg = lambda h: hm[h]["rejected"] and hm[h]["direction"] == "-"
         pos = lambda h: r[h][1] > 0
-        neg = lambda h: r[h][2] < 0
-        v = {"H3b": "calibration improved return within a common control design" if pos("H3b") else
-             ("calibration reduced return relative to the nominal model in the same design" if neg("H3b") else
-              "no detected benefit of calibration beyond the control design"),
-             "H1": "improves the tuned incumbent" if pos("H1") else "not shown to improve the tuned incumbent",
-             "H2/H2b": "better than a RobustMPC-style baseline" if (pos("H2") and pos("H2b")) else
-             ("RobustMPC-style comparison not informative in this design" if pos("H2") else
-              "not shown to be better than RobustMPC-style")}
+        v = {"H3b": "CONFIRMATORY: the ACK-calibrated rate model improved return within a common control design" if cpos("H3b")
+             else ("CONFIRMATORY: calibration reduced return relative to the nominal model in the same design" if cneg("H3b")
+                   else "no detected difference between calibrated and nominal rate models within the common design "
+                        "(not evidence of equivalence)"),
+             "H1": "CONFIRMATORY: the calibrated selective-MPC stack improved the tuned incumbent" if cpos("H1")
+             else ("CONFIRMATORY: the stack reduced return relative to the incumbent" if cneg("H1")
+                   else "no detected difference from the tuned incumbent"),
+             "H2/H2b (supporting)": "better than both implemented RobustMPC-style variants" if (pos("H2") and pos("H2b"))
+             else ("better only than the band-limited RobustMPC-style variant (near-inactive baseline)" if pos("H2")
+                   else "not shown better than the implemented RobustMPC-style variants"),
+             "H3 (supporting)": "full stack vs nominal planner: " + ("CI>0" if pos("H3") else "CI incl./below 0")}
         v["replication_H3b"] = {p: ("CI>0" if out[p]["return"]["H3b"][1] > 0 else "CI<0" if out[p]["return"]["H3b"][2] < 0
                                     else "CI incl. 0") for p in out if p != "TD"}
         out["verdict_TD"] = v

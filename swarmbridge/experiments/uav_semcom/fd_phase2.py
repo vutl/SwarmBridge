@@ -4,7 +4,7 @@ fd_v1 table (fd_common). Arms (incumbent H*): H*, +mpc (calibrated, the method),
 the same gate / band design), +mpcrh (RobustMPC-style).
   tune  : H* = best of the 22-rule family (ax9_run.H_FAMILY) on rl_train, seeds 0..29 (mean return; ties: first listed)
   smoke : all arms on rl_val, seeds 3000..3004 (no test pool)
-  test  : all arms on TD 20000..20099, V 21000..21099, F 22000..22099, TD_all 23000..23099 (ONLY after approval)
+  test  : all arms on TD 20000..20099, V 21000..21099, F 22000..22099, TD_all 20000..20099 (ONLY after approval)
 Outputs: runs/uav_semcom/paperA_fd/phase2/<name>.json (+ .deliv.json.gz: per delivery [manifest idx, mode, ok, ontime])."""
 import argparse
 import gzip
@@ -21,7 +21,8 @@ import fd_common as FD
 OUT = FD.OUT / "phase2"
 LA = dict(la_mode="sched", la_interf="persistent")
 SUFFIX = ["", "+mpc", "+mpcnc", "+mpcng", "+mpcrh", "+mpcrhnb"]
-TEST = {"TD": range(20000, 20100), "V": range(21000, 21100), "F": range(22000, 22100), "TD_all": range(23000, 23100)}
+# TD_all shares the TD environment seeds (review of 2cd2ec77): TD vs TD_all differs only in the image pool
+TEST = {"TD": range(20000, 20100), "V": range(21000, 21100), "F": range(22000, 22100), "TD_all": range(20000, 20100)}
 
 
 def sched():

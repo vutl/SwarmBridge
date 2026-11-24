@@ -210,3 +210,81 @@ analyses.
 **Outside Phase 2:**
 - RL (Phase 3) and the network/bandwidth grid (Phase 4) need their own pre-registrations.
 - E1–E7 stay unchanged.
+
+## 9. Amendments after the review of 2cd2ec77 (CONDITIONAL GO), 24/11 — the FROZEN version
+
+These amendments override sections 1–8 where they differ. Everything below was done before any test-pool simulation.
+
+**A. CPU latency estimator** (`fd_cpu_stratified.py estimate`):
+- The sample takes one frame per distinct sequence, so the plain within-stratum mean is sequence-balanced.
+- The frame-weighted ratio estimator is μ_h = Σ_s n_sh t_s / Σ_s n_sh, where n_sh is the number of rl_train frames of
+  sequence s in stratum h. The strata are then combined with the weights N_h / 1523.
+- **Primary: frame-weighted.** This was chosen before computing, because the target is the rl_train frame mean, as for
+  every other codec.
+- Both estimates are stored in `profile/cpu_learned_stratified_estimators.json`. The raw measurements and their metadata
+  are unchanged.
+
+| Mode | Frame-weighted (**used**) | Sequence-balanced | Difference |
+|---|---|---|---|
+| mbt2018 q1 | **0.600 s** | 0.593 s | +1.2% |
+| mbt2018 q3 | **0.591 s** | 0.591 s | −0.0% |
+| mbt2018 q5 | **1.194 s** | 1.203 s | −0.8% |
+| mbt2018 q8 | **1.127 s** | 1.139 s | −1.0% |
+
+- **H\* re-tuned on rl_train only** (seeds 0–29, same rule): **unchanged, fixed_avif_20** (−71.2).
+- **Smoke rerun on rl_val** (5 seeds, validation only):
+  - H\* −72.4; +mpc −64.0; +mpcnc −66.8; +mpcng −68.6; +mpcrh −73.1; +mpcrhnb −117.2.
+  - The MPC arms moved by up to 11 points from the first smoke after a latency change of at most 1.2%, which shows how
+    noisy 5 seeds are. Nothing was tuned.
+
+**B. Inference family.**
+- **Confirmatory: H1 and H3b only**, two-sided paired t-tests on episode return over the 100 TD seeds, with **Holm**
+  correction (family-wise α = 0.05).
+- A confirmatory statement needs a Holm rejection, and its direction comes from the mean difference.
+- **Supporting: H2, H2b and H3.** Effect sizes and unadjusted 95% CIs are reported. They never yield an additional
+  confirmatory claim.
+- A non-rejection is written "no detected difference", never "equivalent".
+- The automated verdict in `fd_phase2_summary.py` implements this.
+
+**C. Claims about RobustMPC-style:**
+- Superiority may be claimed only against **the two implemented RobustMPC-style variants** (`+mpcrh`, `+mpcrhnb`), never
+  against RobustMPC methods in general.
+- The E1–E7 statements about RobustMPC-style must disclose that the original baseline was almost inactive.
+- Neither variant is tuned after the tests.
+
+**D. Artifact integrity.** `fd_common.verify()` now also checks `cpu_stratified_sample.json`,
+`cpu_learned_stratified.jsonl` and `cpu_learned_stratified_estimators.json`.
+
+| Artifact | sha256 |
+|---|---|
+| manifest_fd_v1.json | `f0760601515f9663f2b7747bd247eddabc3ab8c997755c73ae8bf2f2339d4d50` |
+| profile/profile.jsonl | `078e0e231dfeadaf9c9c84f8db2cb2a0d2c4166e4c3470cd35907d10f898781c` |
+| profile/cpu_stratified_sample.json | `977290ed4450540b50f187f0c8147921016b880d77c69cf84cec2bed5b82cd07` |
+| profile/cpu_learned_stratified.jsonl | `9ca0f392642ad9960f2195fba7d72b5dd50d2afce743c9ca5d73e97773772074` |
+| profile/cpu_learned_stratified.meta.json | `ac063091b501516c7edb8f0cb1e596306012fc288d1fbb33b5005d92a2832341` |
+| profile/cpu_learned_stratified_estimators.json | `9b578542d100ca7e87af216be1d56b2ec2aaada1780d81acf6d6cfcb64ef7730` |
+
+**E. Recall and episode integrity.** `fd_phase2_summary.py` asserts, per pool, before any analysis:
+- every episode of every arm accounts for 5 × 52 = 260 image tasks;
+- arms with the same seed have identical image occurrences, and the GT per (episode, sequence) is identical across arms;
+- every delivered index maps to a table row of that pool.
+
+The recall denominator counts the GT objects of every captured image, delivered or not (dropped, late, below Qmin).
+Its numerator counts only on-time deliveries with PSNR ≥ Qmin. The video-cluster analysis is a supplementary
+scene-composition sensitivity analysis, conditional on the simulated outcomes. It is not a scene-generalisation CI for
+episode return.
+
+**F. TD_all seeds = 20000–20099**, the same as TD.
+- TD and TD_all then differ only in the image pool (capped and uncapped test-dev).
+- The comparison is still descriptive: the images drawn differ, so it is not a paired isolated effect of the frame cap.
+- Seed range 23000–23099 is no longer used.
+
+**G. Checks after the amendments:**
+- 31 existing unit tests pass;
+- the analysis script was exercised on synthetic remapped smoke data. The integrity asserts and the Holm and
+  recall paths run; the asserts also caught a deliberately inconsistent synthetic pool;
+- no test pool has been simulated.
+
+**H. Frozen and run.** Approval for the run was given conditionally on A–G. After this amendment is committed,
+`phase2/AUTHORIZED` is created and the 6 arms × 4 pools × 100 seeds are run. All results, favourable or not, are
+reported in `paperA-fd-phase2-result.md`.

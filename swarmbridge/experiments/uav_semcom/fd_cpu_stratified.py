@@ -117,7 +117,38 @@ def measure():
     print(f"STRATIFIED_DONE {time.time() - t0:.0f}s", flush=True)
 
 
+def estimate():
+    """Review of 2cd2ec77 (condition A): the sample takes one frame per distinct sequence, so the plain within-stratum
+    mean is SEQUENCE-balanced. Frame-weighted ratio estimator within stratum h:
+        mu_h = sum_s n_sh t_s / sum_s n_sh,   n_sh = rl_train frames of sequence s in stratum h,
+    then sum_h (N_h / 1523) mu_h. PRIMARY (chosen before computing, because the target is the rl_train frame mean, as
+    for every other codec's latency): the frame-weighted estimate. Both are written; the raw measurements and
+    cpu_learned_stratified.meta.json are unchanged. Output: profile/cpu_learned_stratified_estimators.json."""
+    meta = json.loads(SAMPLE.read_text())
+    man = json.loads((OUT / "manifest_fd_v1.json").read_text())["images"]
+    tr = [e for e in man if e["split"] == "rl_train"]
+    n_sh = Counter((stratum(e), e["seq"]) for e in tr)
+    rows = [json.loads(l) for l in open(OUT / "profile" / "cpu_learned_stratified.jsonl")]
+    seq = {p["name"]: p["seq"] for p in meta["sample"]}
+    est = {}
+    for m in MODES:
+        sb, fw, per = 0.0, 0.0, {}
+        for h, _ in STRATA:
+            rs = [r for r in rows if r["mode"] == m and r["stratum"] == h]
+            w = np.array([n_sh[(h, seq[r["image"]])] for r in rs], float)
+            t = np.array([r["enc_s"] for r in rs])
+            per[h] = dict(seq_balanced=float(t.mean()), frame_weighted=float((w * t).sum() / w.sum()),
+                          frames_represented=int(w.sum()), N_h=meta["strata"][h]["N_h"])
+            sb += meta["strata"][h]["weight"] * per[h]["seq_balanced"]
+            fw += meta["strata"][h]["weight"] * per[h]["frame_weighted"]
+        est[m] = dict(primary="frame_weighted", frame_weighted=fw, seq_balanced=sb, diff_pct=100 * (fw / sb - 1),
+                      strata=per)
+        print(f"{m}: frame-weighted {fw:.3f}s  sequence-balanced {sb:.3f}s  ({100 * (fw / sb - 1):+.1f}%)", flush=True)
+    (OUT / "profile" / "cpu_learned_stratified_estimators.json").write_text(json.dumps(dict(
+        rule=estimate.__doc__, estimates=est), indent=1))
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=("select", "measure"))
-    dict(select=select, measure=measure)[ap.parse_args().cmd]()
+    ap.add_argument("cmd", choices=("select", "measure", "estimate"))
+    dict(select=select, measure=measure, estimate=estimate)[ap.parse_args().cmd]()

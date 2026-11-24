@@ -1,0 +1,181 @@
+{
+ "rule": "Review of 2cd2ec77 (condition A): the sample takes one frame per distinct sequence, so the plain within-stratum\n    mean is SEQUENCE-balanced. Frame-weighted ratio estimator within stratum h:\n        mu_h = sum_s n_sh t_s / sum_s n_sh,   n_sh = rl_train frames of sequence s in stratum h,\n    then sum_h (N_h / 1523) mu_h. PRIMARY (chosen before computing, because the target is the rl_train frame mean, as\n    for every other codec's latency): the frame-weighted estimate. Both are written; the raw measurements and\n    cpu_learned_stratified.meta.json are unchanged. Output: profile/cpu_learned_stratified_estimators.json.",
+ "estimates": {
+  "mbt2018-mean_q1": {
+   "primary": "frame_weighted",
+   "frame_weighted": 0.6000777235121179,
+   "seq_balanced": 0.5932011589343391,
+   "diff_pct": 1.1592297948527674,
+   "strata": {
+    "1400x1050": {
+     "seq_balanced": 0.6270548867142846,
+     "frame_weighted": 0.6276547900215039,
+     "frames_represented": 372,
+     "N_h": 462
+    },
+    "1360x765": {
+     "seq_balanced": 0.44888084866666605,
+     "frame_weighted": 0.43451652126190204,
+     "frames_represented": 126,
+     "N_h": 395
+    },
+    "1920x1080": {
+     "seq_balanced": 0.9039650970000016,
+     "frame_weighted": 0.98284459281818,
+     "frames_represented": 33,
+     "N_h": 189
+    },
+    "960x540": {
+     "seq_balanced": 0.23791496933333178,
+     "frame_weighted": 0.23736883000000153,
+     "frames_represented": 21,
+     "N_h": 176
+    },
+    "1400x788": {
+     "seq_balanced": 0.494119832399997,
+     "frame_weighted": 0.494119832399997,
+     "frames_represented": 150,
+     "N_h": 150
+    },
+    "other": {
+     "seq_balanced": 0.9907129759999975,
+     "frame_weighted": 0.9977173313770434,
+     "frames_represented": 122,
+     "N_h": 151
+    }
+   }
+  },
+  "mbt2018-mean_q3": {
+   "primary": "frame_weighted",
+   "frame_weighted": 0.5910238474525469,
+   "seq_balanced": 0.5911287674970779,
+   "diff_pct": -0.017749101431019376,
+   "strata": {
+    "1400x1050": {
+     "seq_balanced": 0.6572150179999982,
+     "frame_weighted": 0.6582857040779546,
+     "frames_represented": 372,
+     "N_h": 462
+    },
+    "1360x765": {
+     "seq_balanced": 0.4509443567500024,
+     "frame_weighted": 0.4378141039127031,
+     "frames_represented": 126,
+     "N_h": 395
+    },
+    "1920x1080": {
+     "seq_balanced": 0.840909477333336,
+     "frame_weighted": 0.8475742116060622,
+     "frames_represented": 33,
+     "N_h": 189
+    },
+    "960x540": {
+     "seq_balanced": 0.2491254579999899,
+     "frame_weighted": 0.24652285004760816,
+     "frames_represented": 21,
+     "N_h": 176
+    },
+    "1400x788": {
+     "seq_balanced": 0.4938253194000026,
+     "frame_weighted": 0.4938253194000026,
+     "frames_represented": 150,
+     "N_h": 150
+    },
+    "other": {
+     "seq_balanced": 0.938284661800003,
+     "frame_weighted": 0.9629894558196757,
+     "frames_represented": 122,
+     "N_h": 151
+    }
+   }
+  },
+  "mbt2018-mean_q5": {
+   "primary": "frame_weighted",
+   "frame_weighted": 1.1939688194772584,
+   "seq_balanced": 1.20327806064592,
+   "diff_pct": -0.7736566861083038,
+   "strata": {
+    "1400x1050": {
+     "seq_balanced": 1.3441070873571448,
+     "frame_weighted": 1.3397314449408624,
+     "frames_represented": 372,
+     "N_h": 462
+    },
+    "1360x765": {
+     "seq_balanced": 0.8830253773333349,
+     "frame_weighted": 0.8623291302698433,
+     "frames_represented": 126,
+     "N_h": 395
+    },
+    "1920x1080": {
+     "seq_balanced": 1.7341476773333397,
+     "frame_weighted": 1.6529900821818229,
+     "frames_represented": 33,
+     "N_h": 189
+    },
+    "960x540": {
+     "seq_balanced": 0.47281584833333073,
+     "frame_weighted": 0.4736535706666565,
+     "frames_represented": 21,
+     "N_h": 176
+    },
+    "1400x788": {
+     "seq_balanced": 0.9302185074000022,
+     "frame_weighted": 0.9302185074000022,
+     "frames_represented": 150,
+     "N_h": 150
+    },
+    "other": {
+     "seq_balanced": 2.0683292154000013,
+     "frame_weighted": 2.1425672050655757,
+     "frames_represented": 122,
+     "N_h": 151
+    }
+   }
+  },
+  "mbt2018-mean_q8": {
+   "primary": "frame_weighted",
+   "frame_weighted": 1.1269398480425505,
+   "seq_balanced": 1.1388495387439475,
+   "diff_pct": -1.0457650722265122,
+   "strata": {
+    "1400x1050": {
+     "seq_balanced": 1.2449547242857126,
+     "frame_weighted": 1.2391994797983852,
+     "frames_represented": 372,
+     "N_h": 462
+    },
+    "1360x765": {
+     "seq_balanced": 0.8571238740000027,
+     "frame_weighted": 0.8437102580476203,
+     "frames_represented": 126,
+     "N_h": 395
+    },
+    "1920x1080": {
+     "seq_balanced": 1.7178810768333268,
+     "frame_weighted": 1.6242639070302962,
+     "frames_represented": 33,
+     "N_h": 189
+    },
+    "960x540": {
+     "seq_balanced": 0.43217029266665463,
+     "frame_weighted": 0.4301670418571326,
+     "frames_represented": 21,
+     "N_h": 176
+    },
+    "1400x788": {
+     "seq_balanced": 0.895319255600009,
+     "frame_weighted": 0.895319255600009,
+     "frames_represented": 150,
+     "N_h": 150
+    },
+    "other": {
+     "seq_balanced": 1.8920228562000034,
+     "frame_weighted": 1.9441093432950844,
+     "frames_represented": 122,
+     "N_h": 151
+    }
+   }
+  }
+ }
+}

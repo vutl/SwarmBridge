@@ -25,10 +25,15 @@ from fd_manifest import OUT
 
 PROFILE = OUT / "profile" / "profile.jsonl"
 CPU_META = OUT / "profile" / "cpu_learned_stratified.meta.json"
+CPU_EST = OUT / "profile" / "cpu_learned_stratified_estimators.json"
 MANIFEST = OUT / "manifest_fd_v1.json"
 EXPECT = {"manifest_fd_v1.json": "f0760601515f9663f2b7747bd247eddabc3ab8c997755c73ae8bf2f2339d4d50",
           "profile/profile.jsonl": "078e0e231dfeadaf9c9c84f8db2cb2a0d2c4166e4c3470cd35907d10f898781c",
-          "profile/cpu_learned_stratified.meta.json": "ac063091b501516c7edb8f0cb1e596306012fc288d1fbb33b5005d92a2832341"}
+          "profile/cpu_stratified_sample.json": "977290ed4450540b50f187f0c8147921016b880d77c69cf84cec2bed5b82cd07",
+          "profile/cpu_learned_stratified.jsonl": "9ca0f392642ad9960f2195fba7d72b5dd50d2afce743c9ca5d73e97773772074",
+          "profile/cpu_learned_stratified.meta.json": "ac063091b501516c7edb8f0cb1e596306012fc288d1fbb33b5005d92a2832341",
+          "profile/cpu_learned_stratified_estimators.json":
+              "9b578542d100ca7e87af216be1d56b2ec2aaada1780d81acf6d6cfcb64ef7730"}
 RECALL_POOLS = ("F", "TD", "TD_extra", "V")
 
 
@@ -54,10 +59,10 @@ def load():
     tr = [n for n in t.images if split[n] == "rl_train"]
     t.enc_s = np.array([np.mean([rows[n][m]["enc_s"] for n in tr]) for m in C.MODES])
     t.dec_s = np.array([np.mean([rows[n][m]["dec_s"] for n in tr]) for m in C.MODES])
-    est = json.loads(CPU_META.read_text())["estimates"]
+    est = json.loads(CPU_EST.read_text())["estimates"]        # review of 2cd2ec77: frame-weighted (primary)
     for j, m in enumerate(C.MODES):
         if m in est:
-            t.enc_s[j] = est[m]["weighted_mean"]
+            t.enc_s[j] = est[m][est[m]["primary"]]
     idx = {n: i for i, n in enumerate(t.images)}
     pools = defaultdict(list)
     for e in man:
