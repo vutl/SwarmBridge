@@ -1,0 +1,104 @@
+== phase 2 test start 2026-11-24 13:11:02 commit 73b45071
+  TD      h=fixed_avif_20                      ret   -48.09 int p99   3.7 ms >50 0.000
+  TD      h=fixed_avif_20+mpc                  ret   -40.81 planned  209.0 gated   51.0 switched  71.7 aborts  0.0 band med lo/hi 0.65/1.26 int p99  42.4 ms >50 0.000
+  TD      h=fixed_avif_20+mpcnc                ret   -59.40 planned  260.0 gated    0.0 switched 181.5 aborts  0.0 band med lo/hi nan/nan int p99  43.5 ms >50 0.000
+  TD      h=fixed_avif_20+mpcng                ret   -40.71 planned  209.0 gated   51.0 switched  57.4 aborts  0.0 band med lo/hi 0.48/1.15 int p99  43.6 ms >50 0.000
+  TD      h=fixed_avif_20+mpcrh                ret   -47.15 planned  209.1 gated   50.9 switched   2.1 aborts  0.1 band med lo/hi 0.05/10280.37 int p99  42.3 ms >50 0.000
+  TD      h=fixed_avif_20+mpcrhnb              ret   -92.04 planned  209.2 gated   50.8 switched 157.6 aborts  0.0 band med lo/hi 1.00/1.00 int p99  37.2 ms >50 0.000
+test TD done 521s
+  V       h=fixed_avif_20                      ret   -63.28 int p99   3.9 ms >50 0.000
+  V       h=fixed_avif_20+mpc                  ret   -59.24 planned  213.7 gated   46.3 switched  47.8 aborts  0.1 band med lo/hi 0.62/1.27 int p99  42.8 ms >50 0.000
+  V       h=fixed_avif_20+mpcnc                ret   -72.00 planned  260.0 gated    0.0 switched 166.8 aborts  0.0 band med lo/hi nan/nan int p99  43.1 ms >50 0.000
+  V       h=fixed_avif_20+mpcng                ret   -61.17 planned  213.7 gated   46.4 switched  31.1 aborts  0.0 band med lo/hi 0.42/1.15 int p99  42.9 ms >50 0.000
+  V       h=fixed_avif_20+mpcrh                ret   -63.30 planned  213.7 gated   46.3 switched   1.2 aborts  0.0 band med lo/hi 0.05/11970.54 int p99  42.0 ms >50 0.000
+  V       h=fixed_avif_20+mpcrhnb              ret  -112.18 planned  213.8 gated   46.2 switched 153.5 aborts  0.0 band med lo/hi 1.00/1.00 int p99  37.2 ms >50 0.000
+test V done 526s
+  F       h=fixed_avif_20                      ret   -73.24 int p99   3.8 ms >50 0.000
+  F       h=fixed_avif_20+mpc                  ret   -65.87 planned  210.8 gated   49.2 switched  62.9 aborts  0.0 band med lo/hi 0.65/1.26 int p99  42.4 ms >50 0.000
+  F       h=fixed_avif_20+mpcnc                ret   -77.95 planned  260.0 gated    0.0 switched 176.3 aborts  0.0 band med lo/hi nan/nan int p99  43.1 ms >50 0.000
+  F       h=fixed_avif_20+mpcng                ret   -69.84 planned  210.7 gated   49.3 switched  49.2 aborts  0.0 band med lo/hi 0.48/1.15 int p99  43.1 ms >50 0.000
+  F       h=fixed_avif_20+mpcrh                ret   -73.46 planned  210.7 gated   49.4 switched   1.2 aborts  0.0 band med lo/hi 0.05/9988.40 int p99  42.1 ms >50 0.000
+  F       h=fixed_avif_20+mpcrhnb              ret  -120.68 planned  210.9 gated   49.1 switched 158.0 aborts  0.0 band med lo/hi 1.00/1.00 int p99  37.6 ms >50 0.000
+test F done 521s
+  TD_all  h=fixed_avif_20                      ret   -56.95 int p99   3.9 ms >50 0.000
+  TD_all  h=fixed_avif_20+mpc                  ret   -48.65 planned  208.7 gated   51.3 switched  74.7 aborts  0.0 band med lo/hi 0.65/1.27 int p99  42.5 ms >50 0.000
+  TD_all  h=fixed_avif_20+mpcnc                ret   -60.39 planned  260.0 gated    0.0 switched 180.3 aborts  0.0 band med lo/hi nan/nan int p99  43.2 ms >50 0.000
+  TD_all  h=fixed_avif_20+mpcng                ret   -48.81 planned  208.7 gated   51.3 switched  58.3 aborts  0.0 band med lo/hi 0.49/1.16 int p99  43.1 ms >50 0.000
+  TD_all  h=fixed_avif_20+mpcrh                ret   -56.95 planned  208.8 gated   51.2 switched   2.1 aborts  0.0 band med lo/hi 0.05/11439.80 int p99  42.1 ms >50 0.000
+  TD_all  h=fixed_avif_20+mpcrhnb              ret  -100.50 planned  209.0 gated   51.0 switched 161.1 aborts  0.0 band med lo/hi 1.00/1.00 int p99  37.7 ms >50 0.000
+test TD_all done 518s
+== summary 13:45:51
+   integrity: episodes != 260 tasks 0, seeds with differing image sets 0, deliveries outside the pool 0
+   integrity: episodes != 260 tasks 0, seeds with differing image sets 0, deliveries outside the pool 0
+   integrity: episodes != 260 tasks 0, seeds with differing image sets 0, deliveries outside the pool 0
+   integrity: episodes != 260 tasks 0, seeds with differing image sets 0, deliveries outside the pool 0
+== TD (seeds 20000..20099, H* = fixed_avif_20)
+   integrity: episodes != 260 tasks 0, seeds with differing image sets 0, deliveries outside the pool 0
+   H1   cal-H     return   +7.28 [  +5.05,  +9.51]*  p 0.0000  [confirmatory, Holm]
+   H2   cal-rh    return   +6.34 [  +3.98,  +8.71]*  p 0.0000  [supporting]
+   H2b  cal-rhnb  return  +51.23 [ +47.81, +54.66]*  p 0.0000  [supporting]
+   H3   cal-nom   return  +18.59 [ +15.09, +22.09]*  p 0.0000  [supporting]
+   H3b  cal-ng    return   -0.10 [  -1.95,  +1.76]   p 0.9167  [confirmatory, Holm]
+   Holm (H1, H3b): H1 p_holm 0.0000 REJECT (+), H3b p_holm 0.9167 not rejected (-)
+   H1   cal-H     recall seed   +0.75 [  +0.47,  +1.04]*  video-cluster   +0.76 [  -0.11,  +1.61]  (61 sequences)
+   H3   cal-nom   recall seed   -2.58 [  -3.05,  -2.10]*  video-cluster   -2.57 [  -4.11,  -1.24]* (61 sequences)
+   H3b  cal-ng    recall seed   -0.85 [  -1.06,  -0.64]*  video-cluster   -0.85 [  -1.17,  -0.56]* (61 sequences)
+     H     ret   -48.09 ok 0.831 drop 0.024 recall 36.94 | p99 3.7 ms
+     cal   ret   -40.81 ok 0.861 drop 0.019 recall 37.70 | switched 71.7 rejects/checks 70/142 | p99 42.4 ms
+     nom   ret   -59.40 ok 0.863 drop 0.085 recall 40.27 | switched 181.5 rejects/checks 0/182 | p99 43.5 ms
+     ng    ret   -40.71 ok 0.865 drop 0.023 recall 38.54 | switched 57.4 rejects/checks 93/150 | p99 43.6 ms
+     rh    ret   -47.15 ok 0.833 drop 0.023 recall 36.99 | switched 2.1 rejects/checks 120/122 | p99 42.3 ms
+     rhnb  ret   -92.04 ok 0.673 drop 0.007 recall 26.10 | switched 157.6 rejects/checks 0/158 | p99 37.2 ms
+== F (seeds 22000..22099, H* = fixed_avif_20)
+   integrity: episodes != 260 tasks 0, seeds with differing image sets 0, deliveries outside the pool 0
+   H1   cal-H     return   +7.37 [  +5.00,  +9.75]*  p 0.0000  [confirmatory, Holm]
+   H2   cal-rh    return   +7.59 [  +5.29,  +9.90]*  p 0.0000  [supporting]
+   H2b  cal-rhnb  return  +54.81 [ +50.82, +58.80]*  p 0.0000  [supporting]
+   H3   cal-nom   return  +12.09 [  +8.78, +15.40]*  p 0.0000  [supporting]
+   H3b  cal-ng    return   +3.97 [  +1.27,  +6.67]*  p 0.0044  [confirmatory, Holm]
+   Holm (H1, H3b): H1 p_holm 0.0000 REJECT (+), H3b p_holm 0.0044 REJECT (+)
+   H1   cal-H     recall seed   +1.51 [  +1.16,  +1.85]*  video-cluster   +1.52 [  +0.18,  +2.93]* (18 sequences)
+   H3   cal-nom   recall seed   -3.75 [  -4.25,  -3.26]*  video-cluster   -3.75 [  -7.59,  -1.10]* (18 sequences)
+   H3b  cal-ng    recall seed   -0.34 [  -0.68,  +0.01]   video-cluster   -0.33 [  -0.73,  -0.00]* (18 sequences)
+     H     ret   -73.24 ok 0.769 drop 0.023 recall 41.23 | p99 3.8 ms
+     cal   ret   -65.87 ok 0.804 drop 0.024 recall 42.74 | switched 62.9 rejects/checks 75/138 | p99 42.4 ms
+     nom   ret   -77.95 ok 0.832 drop 0.093 recall 46.49 | switched 176.3 rejects/checks 0/176 | p99 43.1 ms
+     ng    ret   -69.84 ok 0.801 drop 0.035 recall 43.07 | switched 49.2 rejects/checks 95/145 | p99 43.1 ms
+     rh    ret   -73.46 ok 0.769 drop 0.024 recall 41.20 | switched 1.2 rejects/checks 116/117 | p99 42.1 ms
+     rhnb  ret  -120.68 ok 0.596 drop 0.007 recall 28.22 | switched 158.0 rejects/checks 0/158 | p99 37.6 ms
+== V (seeds 21000..21099, H* = fixed_avif_20)
+   integrity: episodes != 260 tasks 0, seeds with differing image sets 0, deliveries outside the pool 0
+   H1   cal-H     return   +4.05 [  +2.47,  +5.63]*  p 0.0000  [confirmatory, Holm]
+   H2   cal-rh    return   +4.06 [  +2.37,  +5.75]*  p 0.0000  [supporting]
+   H2b  cal-rhnb  return  +52.95 [ +50.19, +55.70]*  p 0.0000  [supporting]
+   H3   cal-nom   return  +12.77 [  +9.26, +16.27]*  p 0.0000  [supporting]
+   H3b  cal-ng    return   +1.94 [  -0.14,  +4.01]   p 0.0669  [confirmatory, Holm]
+   Holm (H1, H3b): H1 p_holm 0.0000 REJECT (+), H3b p_holm 0.0669 not rejected (+)
+   H1   cal-H     recall seed   +1.00 [  +0.80,  +1.19]*  video-cluster   +1.00 [  +0.23,  +1.72]* (76 sequences)
+   H3   cal-nom   recall seed   -4.77 [  -5.24,  -4.30]*  video-cluster   -4.77 [  -6.32,  -3.40]* (76 sequences)
+   H3b  cal-ng    recall seed   -0.39 [  -0.61,  -0.18]*  video-cluster   -0.39 [  -0.72,  -0.10]* (76 sequences)
+     H     ret   -63.28 ok 0.764 drop 0.007 recall 36.41 | p99 3.9 ms
+     cal   ret   -59.24 ok 0.785 drop 0.009 recall 37.41 | switched 47.8 rejects/checks 71/119 | p99 42.8 ms
+     nom   ret   -72.00 ok 0.819 drop 0.085 recall 42.18 | switched 166.8 rejects/checks 0/167 | p99 43.1 ms
+     ng    ret   -61.17 ok 0.784 drop 0.013 recall 37.80 | switched 31.1 rejects/checks 112/143 | p99 42.9 ms
+     rh    ret   -63.30 ok 0.765 drop 0.008 recall 36.44 | switched 1.2 rejects/checks 129/130 | p99 42.0 ms
+     rhnb  ret  -112.18 ok 0.603 drop 0.003 recall 25.23 | switched 153.5 rejects/checks 0/154 | p99 37.2 ms
+== TD_all (seeds 20000..20099, H* = fixed_avif_20)
+   integrity: episodes != 260 tasks 0, seeds with differing image sets 0, deliveries outside the pool 0
+   H1   cal-H     return   +8.30 [  +5.82, +10.78]*  p 0.0000  [confirmatory, Holm]
+   H2   cal-rh    return   +8.29 [  +5.80, +10.79]*  p 0.0000  [supporting]
+   H2b  cal-rhnb  return  +51.84 [ +48.27, +55.42]*  p 0.0000  [supporting]
+   H3   cal-nom   return  +11.74 [  +8.32, +15.16]*  p 0.0000  [supporting]
+   H3b  cal-ng    return   +0.16 [  -2.05,  +2.36]   p 0.8868  [confirmatory, Holm]
+   Holm (H1, H3b): H1 p_holm 0.0000 REJECT (+), H3b p_holm 0.8868 not rejected (+)
+   H1   cal-H     recall seed   +0.84 [  +0.57,  +1.10]*  video-cluster   +0.84 [  -0.51,  +1.78]  (61 sequences)
+   H3   cal-nom   recall seed   -2.64 [  -3.04,  -2.25]*  video-cluster   -2.64 [  -4.13,  -1.42]* (61 sequences)
+   H3b  cal-ng    recall seed   -0.74 [  -0.94,  -0.55]*  video-cluster   -0.75 [  -1.20,  -0.49]* (61 sequences)
+     H     ret   -56.95 ok 0.810 drop 0.028 recall 33.50 | p99 3.9 ms
+     cal   ret   -48.65 ok 0.846 drop 0.023 recall 34.34 | switched 74.7 rejects/checks 67/142 | p99 42.5 ms
+     nom   ret   -60.39 ok 0.861 drop 0.079 recall 36.98 | switched 180.3 rejects/checks 0/180 | p99 43.2 ms
+     ng    ret   -48.81 ok 0.848 drop 0.029 recall 35.08 | switched 58.3 rejects/checks 90/148 | p99 43.1 ms
+     rh    ret   -56.95 ok 0.810 drop 0.028 recall 33.49 | switched 2.1 rejects/checks 116/118 | p99 42.1 ms
+     rhnb  ret  -100.50 ok 0.653 drop 0.008 recall 23.42 | switched 161.1 rejects/checks 0/161 | p99 37.7 ms
+VERDICT (TD): {'H3b': 'no detected difference between calibrated and nominal rate models within the common design (not evidence of equivalence)', 'H1': 'CONFIRMATORY: the calibrated selective-MPC stack improved the tuned incumbent', 'H2/H2b (supporting)': 'better than both implemented RobustMPC-style variants', 'H3 (supporting)': 'full stack vs nominal planner: CI>0', 'replication_H3b': {'F': 'CI>0', 'V': 'CI incl. 0', 'TD_all': 'CI incl. 0'}}
+EXIT 0 2026-11-24 13:45:56
