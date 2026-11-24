@@ -147,17 +147,28 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     tutil = None
     if "+tmpc=" in mode:
         mode, tutil = mode.split("+tmpc=")
+    # Paper A fd_v1 Phase 2 (+mpcrhnb, proposed fairness variant): RobustMPC-style predictor with the same gate but
+    # WITHOUT the tracker band (scales [1, 1]): the predictor's built-in pessimism (harmonic mean / (1 + max error))
+    # is otherwise read by the tracker as a large bias, the band's upper end explodes and the robustness check rejects
+    # almost every switch (E4 N5x2: 0.8 switches per episode)
+    rh_noband = mode.endswith("+mpcrhnb")
+    if rh_noband:
+        mode = mode[:-2]
     harm = mode.endswith("+mpcrh")          # Paper A E2: same MPC, RobustMPC-style history-only rate predictor
     pool_cal = mode.endswith("+mpcpl")      # Paper A E2b: same calibrated MPC without SNR bins
     nocal = mode.endswith("+mpcnc")
+    # Paper A fd_v1 Phase 2 (+mpcng): the nominal rate model inside the SAME control design as the calibrated MPC:
+    # RateErrTracker on the nominal model's predictions -> same gate (>= MIN_AIR of observations) and same band rule
+    # [lo, hi]; only the rate model differs (realised gate / band values can still differ, they are logged)
+    nomgate = mode.endswith("+mpcng")
     abl = re.search(r"\+mpc(ab\d)$", mode)    # Paper A E2c: ablation ladder HarmRates -> PoolRates (a9_mpc.ABL)
     abl = abl.group(1) if abl else None
     fbm = re.search(r"[+]mpcfb(\d+)l(\d+)$", mode)    # Paper A E5: calibrated MPC with delayed / lossy rate reports
     fb_cfg = (int(fbm.group(1)), int(fbm.group(2)) / 100.0) if fbm else None
     if fbm:
         mode = mode[:fbm.start()] + "+mpc"
-    use_mpc = mode.endswith("+mpc") or nocal or harm or pool_cal or abl is not None or tutil is not None
-    mode = (mode[:-7] if abl else mode[:-6] if (nocal or harm or pool_cal)
+    use_mpc = mode.endswith("+mpc") or nocal or nomgate or harm or pool_cal or abl is not None or tutil is not None
+    mode = (mode[:-7] if abl else mode[:-6] if (nocal or nomgate or harm or pool_cal)
             else (mode[:-4] if mode.endswith("+mpc") else mode))
     mp_h, cal_h = None, False
     if mode.startswith(("h=", "hc=")):
@@ -212,7 +223,12 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
             assert list(m_.action_space.nvec) == list(e.action_space.nvec)
     audit = ServiceAudit()
     mpc = trk = cal = dl = None
-    if (use_mpc and not nocal) or cal_h:
+    if nomgate:
+        assert not cal_h and tutil is None
+        mpc = M.MPCMode("env", 8, 4, None, fallback=mp_t, seed=12345, rollout="causal", margin_z=1.0)
+        trk = M.RateErrTracker(mpc, persistent=False)
+        dl = M.Deadline(50.0, margin_ms=3.0)
+    elif (use_mpc and not nocal) or cal_h:
         assert mmod is not None or mp_h is not None, "+mpc needs an incumbent (learned mode head or h= / hc= rule)"
         cal = (M.CalRates(persistent=False, slot_weight=True, fb=M.Feedback(*fb_cfg, seed=31)) if fb_cfg
                else M.AblRates(**M.ABL[abl]) if abl
@@ -241,6 +257,7 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
     done, tot = False, 0.0
     t_slot, t_mode, biases, aborts = [], [], [], 0
     gated = planned = 0
+    bands = []                                     # (lo, hi) of every planned decision (fd_v1 Phase 2 logging)
     t_first_plan = None
     K = e.K
     while not done:
@@ -249,6 +266,7 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
             audit.update(core)
             if cal is not None:
                 cal.update(core)
+            if trk is not None:                  # (+mpcng: tracker without calibrator; other arms: unchanged order)
                 trk.update(core)
             t0 = time.perf_counter()
             a = np.zeros(len(e.action_space.nvec), dtype=np.int64)
@@ -296,7 +314,10 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
                         biases.append(b)
                         lo = max(min(1.0, 1.0 + b) - 2.0 * se, 0.05)
                         hi = max(1.0, 1.0 + b) + 2.0 * se
+                        if rh_noband:
+                            lo = hi = 1.0
                         mpc.scales = [lo, hi]
+                        bands.append((lo, hi))
                         m_sel = mpc.selective(core, k, task, m_sel, lo, cand="np", trig="any", h1=1, n_cand=2,
                                               stack=True, dl=dl)
                         aborts += int(mpc.last_abort is not None)
@@ -332,7 +353,10 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
         m.update(goodput_kbps=lm["goodput_kbps"], bler=lm["bler"], delivered_mbit=lm["delivered_mbit"])
     if use_mpc:
         m.update(switched=int(mpc.switched), gated=gated, planned=planned, aborts=aborts, t_first_plan=t_first_plan,
-                 bias_q=[float(x) for x in np.percentile(biases, [10, 50, 90])] if biases else None)
+                 bias_q=[float(x) for x in np.percentile(biases, [10, 50, 90])] if biases else None,
+                 band_lo_q=[float(x) for x in np.percentile([b[0] for b in bands], [10, 50, 90])] if bands else None,
+                 band_hi_q=[float(x) for x in np.percentile([b[1] for b in bands], [10, 50, 90])] if bands else None,
+                 robust_rejects=int(getattr(mpc, "robust_rejects", 0)), robust_checks=int(getattr(mpc, "robust_checks", 0)))
     return m, deliveries(core)
 
 
@@ -352,7 +376,7 @@ def job(j):
 
 def needs_ckpt(combo):
     s, m = combo.split("|")
-    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         re.sub(r"[+]mpc(ab\d|fb\d+l\d+)$", "", m).replace("+mpcpl", "").replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm", "qrla", "dsla")
+    return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or         re.sub(r"[+]mpc(ab\d|fb\d+l\d+)$", "", m).replace("+mpcpl", "").replace("+mpcrh", "").replace("+mpcnc", "").replace("+mpcng", "").replace("+mpcrhnb", "").replace("+mpc", "") in ("ppo", "ppola", "jm", "cmm", "qrla", "dsla")
 
 
 def main():
