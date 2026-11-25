@@ -61,8 +61,8 @@ def system(out):
     box(25.6, 11.4, 34.5, 18.4, "Uncertainty-aware selective MPC",
         ("1. gate: plan only once the tracker has 20 s of data", "2. screen 14 modes (one image ahead) at rate",
          "scales 1 and $\\ell$; best mode per scale = candidate", "3. plan $N{=}8$ rate paths over current, queued",
-         "and $H$ next images", "4. switch only if paired gain > 1 s.e. and still",
-         "positive at scales $\\ell$ and $h$; 50 ms budget"),
+         "and $H$ next images", "4. switch only if paired gain > 1 s.e., also",
+         "at rate scales $\\ell$ and $h$; 50 ms budget"),
         ec=BLUE, ls=5.2)
     box(62.0, 17.5, 8.8, 12, "Encoder", ("FIFO", "queue,", "14 modes"))
     box(72.6, 17.5, 15.4, 12, "LA uplink, $M$ ch.", ("JA scheduler,", "delayed CQI, MCS,", "OLLA, BLER, ARQ,",
@@ -156,8 +156,118 @@ def results(out):
     fig.savefig(out / "fig_fd_results.png", bbox_inches="tight", dpi=200)
 
 
+SETS = [("ref", "$K{=}5$, $M{=}2$, 1 MHz$^a$"), ("N3x2", "$K{=}3$"), ("N7x2", "$K{=}7$"), ("N5x3", "$M{=}3$"),
+        ("N5x4", "$M{=}4$"), ("B0.5", "$B{=}0.5$ MHz"), ("B2", "$B{=}2$ MHz")]
+SPLIT = [("both", "Both\ncompliant"), ("only_b", "Only\nguarded"), ("only_a", "Only\nnominal")]
+
+
+def _ablation_panel(ax, N):
+    yy = np.arange(len(ABL))
+    for j, (pool, st) in enumerate(POOL.items()):
+        con = N["ablation"][pool]["contrasts"]
+        for i, (k, _) in enumerate(ABL):
+            m, lo, hi = con[k]["ci"]
+            sig = lo > 0 or hi < 0
+            ax.errorbar(m, i + (j - 1) * 0.24, xerr=[[m - lo], [hi - m]], fmt=st["marker"], color=st["color"],
+                        mfc=st["color"] if sig else "white", ms=3.6, lw=0.8, capsize=1.5,
+                        label=st["label"] if i == 0 else None)
+    ax.axvline(0, color="black", lw=0.7)
+    ax.set_yticks(yy)
+    ax.set_yticklabels([l for _, l in ABL], fontsize=6.3)
+    ax.set_ylim(len(ABL) - 0.5, -0.5)
+    ax.set_xlabel("$\\Delta$ return (paired 95% CI)")
+    ax.legend(loc="lower left", fontsize=5.6, handletextpad=0.2, borderpad=0.3, labelspacing=0.25)
+
+
+def mechanism(out):
+    """Fig. 2: (a) ablation (reference, ablation seeds), (b) guarded - H* and calibrated - guarded per setting (TD)."""
+    N = json.loads(NUMS.read_text())
+    fig = plt.figure(figsize=(7.0, 2.15))
+    gs = fig.add_gridspec(1, 2, width_ratios=[1.15, 1.0], wspace=0.55, left=0.13, right=0.995, bottom=0.2, top=0.97)
+    ax = fig.add_subplot(gs[0])
+    _ablation_panel(ax, N)
+    ax.set_title("(a)", y=-0.3, fontsize=7)
+    ax = fig.add_subplot(gs[1])
+    ser = [("G1", "Guarded MPC $-$ $H^*$", BLUE, "o"), ("G2", "Calibrated $-$ guarded MPC", ORANGE, "s")]
+    for j, (g, lab, col, mk) in enumerate(ser):
+        for i, (cf, _) in enumerate(SETS):
+            if cf == "ref":
+                c = N["ablation"]["TD"]["contrasts"]["A8" if g == "G1" else "A7"]
+                ci, rej = c["ci"], (c["ci"][1] > 0 or c["ci"][2] < 0)
+            else:
+                c = N["phase4"]["TD"][cf][g]
+                ci, rej = c["ci"], bool(c["holm"]["rejected"])
+            m, lo, hi = ci
+            ax.errorbar(m, i + (j - 0.5) * 0.3, xerr=[[m - lo], [hi - m]], fmt=mk, color=col,
+                        mfc=col if rej else "white", ms=3.8, lw=0.8, capsize=1.5, label=lab if i == 0 else None)
+    ax.axvline(0, color="black", lw=0.7)
+    ax.set_yticks(range(len(SETS)))
+    ax.set_yticklabels([l for _, l in SETS], fontsize=6.3)
+    ax.set_ylim(len(SETS) - 0.5, -0.5)
+    ax.set_xlabel("$\\Delta$ return on TD (paired 95% CI)")
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, fontsize=5.6, handletextpad=0.2, borderpad=0.3,
+              columnspacing=0.8)
+    ax.set_title("(b)", y=-0.3, fontsize=7)
+    fig.savefig(out / "fig_fd_mechanism.pdf", bbox_inches="tight", pad_inches=0.01)
+    fig.savefig(out / "fig_fd_mechanism.png", bbox_inches="tight", dpi=200)
+
+
+def tradeoff(out):
+    """Fig. 3: (a) return vs recall per arm (TD), (b) post-hoc return decomposition guarded - nominal,
+    (c) post-hoc recall decomposition guarded - nominal (TD / V / F)."""
+    N = json.loads(NUMS.read_text())
+    fig = plt.figure(figsize=(7.0, 2.2))
+    gs = fig.add_gridspec(1, 3, width_ratios=[0.95, 1.1, 0.95], wspace=0.45, left=0.06, right=0.995, bottom=0.2,
+                          top=0.97)
+    ax = fig.add_subplot(gs[0])
+    lv = N["ablation"]["TD"]["levels"]
+    for k, lab, mk in ARMS:
+        x, y = lv[k]["ret"], lv[k]["recall"]
+        ax.plot(x, y, marker=mk, ls="none", color=INK if k == "H" else BLUE, ms=6.5 if mk == "*" else 4.3,
+                mfc="white" if k == "H" else BLUE)
+        dx, dy, ha = {"H": (1.0, 0.0, "left"), "nc": (1.0, 0.0, "left"), "gate": (1.0, 0.0, "left"),
+                      "band": (1.0, 0.0, "left"), "ng": (1.0, -0.17, "left"), "h1": (-1.0, 0.12, "right"),
+                      "h0": (1.0, 0.0, "left"), "cal": (1.0, 0.0, "left")}[k]
+        ax.text(x + dx, y + dy, lab, fontsize=5.6, ha=ha, va="center")
+    ax.set_xlabel("Return per episode (TD)")
+    ax.set_ylabel("Detection recall (%)")
+    ax.set_xlim(-67, -29)
+    ax.set_title("(a)", y=-0.3, fontsize=7)
+    ax = fig.add_subplot(gs[1])
+    xs = np.arange(len(COMP))
+    for j, (pool, st) in enumerate(POOL.items()):
+        d = N["decomp"][f"ablation|{pool}|N5x2|ng-nc"]["diff"]
+        err = [[d[k][0] - d[k][1] for k, _ in COMP], [d[k][2] - d[k][0] for k, _ in COMP]]
+        ax.bar(xs + (j - 1) * 0.26, [d[k][0] for k, _ in COMP], 0.26, color=st["color"], yerr=err, capsize=1.2,
+               error_kw=dict(lw=0.6), label=pool)
+    ax.axhline(0, color="black", lw=0.7)
+    ax.set_xticks(xs)
+    ax.set_xticklabels([l for _, l in COMP], rotation=30, ha="right", fontsize=6.0)
+    ax.set_ylabel("$\\Delta$ return, guarded $-$ nominal")
+    ax.set_ylim(-31, 25)
+    ax.legend(loc="lower right", fontsize=5.6, handlelength=1.0, borderpad=0.3, labelspacing=0.2)
+    ax.set_title("(b)", y=-0.42, fontsize=7)
+    ax = fig.add_subplot(gs[2])
+    xs = np.arange(len(SPLIT))
+    for j, (pool, st) in enumerate(POOL.items()):
+        rs = N["decomp"][f"ablation|{pool}|N5x2|ng-nc"]["recall_split"]
+        err = [[rs[k][0] - rs[k][1] for k, _ in SPLIT], [rs[k][2] - rs[k][0] for k, _ in SPLIT]]
+        ax.bar(xs + (j - 1) * 0.26, [rs[k][0] for k, _ in SPLIT], 0.26, color=st["color"], yerr=err, capsize=1.2,
+               error_kw=dict(lw=0.6), label=pool)
+    ax.axhline(0, color="black", lw=0.7)
+    ax.set_xticks(xs)
+    ax.set_xticklabels([l for _, l in SPLIT], fontsize=5.6)
+    ax.set_ylabel("$\\Delta$ recall (points), guarded $-$ nominal")
+    ax.legend(loc="upper right", fontsize=5.6, handlelength=1.0, borderpad=0.3, labelspacing=0.2)
+    ax.set_title("(c)", y=-0.42, fontsize=7)
+    fig.savefig(out / "fig_fd_tradeoff.pdf", bbox_inches="tight", pad_inches=0.01)
+    fig.savefig(out / "fig_fd_tradeoff.png", bbox_inches="tight", dpi=200)
+
+
 if __name__ == "__main__":
     o = Path(sys.argv[1])
     o.mkdir(parents=True, exist_ok=True)
     system(o)
     results(o)
+    mechanism(o)
+    tradeoff(o)

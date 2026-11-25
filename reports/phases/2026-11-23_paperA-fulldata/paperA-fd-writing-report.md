@@ -1,5 +1,27 @@
 # Paper A: manuscript rewrite for ICT Express (25/11)
 
+> **Update (25/11, later): the manuscript was expanded to 6 pages.** ChatGPT corrected the limit: original research
+> articles may have up to 6 double-column pages.
+> - **Now:** 6 full pages; no LaTeX warnings; 3 figures + 2 tables; 17 references (the 4 removed earlier are
+>   restored, with full author lists).
+>   - Fig. 2: (a) ablation, (b) per-setting gains.
+>   - Fig. 3: (a) return vs recall, (b) return decomposition, (c) recall decomposition.
+>   - Table I: settings. Table II: results.
+> - **Sections added:** subsections for the model and the method; the full protocol (Holm families listed, fail-fast
+>   check); separate subsections for F1–F3, return vs recall, decision time and threats to validity.
+> - **Method wording corrected against the code:** the robustness check requires the paired gain to exceed 1 s.e. at
+>   scales ℓ and h, not merely to stay positive (`a9_mpc._resolvable`). Fig. 1 is updated accordingly.
+> - **Page-limit source in the repo:** the in-repo 2019 template (`paper/ICT Express Submission Template_191231.zip`)
+>   says letters are recommended at 4 pages, at most 4 figures + tables in total, and USD 100 per page beyond four.
+>   Aggregator pages (myhuiban.com) give "original research articles up to 6 pages in double-column format". The
+>   official Elsevier guide was not reachable.
+> - **New open issues:**
+>   - (9) 5 floats exceed the 2019 "4 figures and tables in total" rule. If it still applies, Table I can become a
+>     text paragraph.
+>   - (10) Possible overlength charge of up to USD 200 for pages 5–6 if the 2019 charge still applies.
+>
+> The 4-page version is preserved at `484953df`. Section 1 below describes it.
+
 **Authorisation:** ChatGPT writing authorisation after reviewing 18ddc9e7. No new simulation, training or tuning
 was run. The previous method letter stays in git at `1225e287`.
 

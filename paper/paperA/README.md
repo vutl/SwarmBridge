@@ -1,6 +1,14 @@
 # Paper A: bản thảo cho ICT Express (viết lại 25/11 trên dữ liệu full-data)
 
-**Trạng thái:** bản nháp 4 trang, chờ ChatGPT phản biện lần cuối. **Chưa nộp.**
+**Trạng thái:** bản nháp **6 trang** (ChatGPT sửa giới hạn: bài nghiên cứu gốc được tối đa 6 trang), chờ phản biện
+lần cuối. **Chưa nộp.**
+- **Hình và bảng:** 3 hình (`fig_fd_system`, `fig_fd_mechanism`, `fig_fd_tradeoff`) + 2 bảng (Bảng I tham số
+  trong `main.tex`; Bảng II là `table_fd.tex`).
+- **Bản 4 trang** ở commit `484953df`.
+- **Lưu ý:** template 2019 trong repo ghi khuyến nghị 4 trang, tối đa 4 hình + bảng, và 100 USD mỗi trang vượt quá
+  4. Cần kiểm lại với Guide for Authors hiện hành trước khi nộp.
+
+Các dòng dưới đây mô tả bản 4 trang; phần nào khác với bản 6 trang thì theo ghi chú ở trên.
 
 **Bài:**
 - **Tiêu đề:** "Uncertainty-aware mode selection for multi-UAV semantic image offloading".

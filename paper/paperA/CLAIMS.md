@@ -1,7 +1,26 @@
 # Paper A (ICT Express rewrite, 25/11): claims and their sources
 
-**Manuscript:** `main.tex`. Title: "Uncertainty-aware mode selection for multi-UAV semantic image offloading"; 4 pages.
-The previous method letter is in git at `1225e287`.
+**Manuscript:** `main.tex`. Title: "Uncertainty-aware mode selection for multi-UAV semantic image offloading".
+- **6-page version** (after the ChatGPT correction: original research articles allow up to 6 pages): 3 figures
+  (`fig_fd_system`, `fig_fd_mechanism`, `fig_fd_tradeoff`) and 2 tables (Table I settings, Table II = `table_fd.tex`).
+- Earlier versions: the 4-page draft is at `484953df`, the method letter at `1225e287`.
+
+**Numbers added in the 6-page version:**
+
+| Text | Value | Source | Status |
+|---|---|---|---|
+| Guarded MPC switches 54 per episode, drops 2.0% | 54.37; 0.0198 | ablation `TD.levels.ng` | S |
+| Band median ℓ = 0.46 | 0.463 | `supplement_extras.json` ablation TD `+mpcng` `band_lo_q[1]` | S |
+| Robustness check rejects 63% of the switches that pass the paired test | 93.59 / 147.96 | ablation `TD.levels.ng` (`robust_rejects` / `robust_checks`; counted only when the best mode differs from the incumbent and its gain is resolvable; `a9_mpc.py` around line 894) | S |
+| Band only − nominal CI; gate only − nominal CI | [+11.4, +18.9]; [−5.6, +3.3] | `N.ablation.TD.contrasts.{A2,A1}.ci` | C |
+| Calibrated − H\* replicated on F, V, TD_all | +7.37\*, +4.05\*, +8.30\* | `N.phase2.{F,V,TD_all}.ret.H1` | S |
+| Calibrated − nominal MPC | +18.6 | `N.phase2.TD.ret.H3` | S |
+| Compliant-image PSNR guarded vs nominal | 30.3 vs 32.1 dB | `N.decomp["ablation\|TD\|N5x2\|ng-nc"].modes.psnr_ok` | P |
+| Guarded raises recall over H\* in 4 of 7 heuristic settings | ref, K7, B0.5, B2 (both CIs) | Table II recall column | S |
+| ng − H\* gain from fewer below-Qmin deliveries (TD / V / F) | viol +7.9 / +7.0 / +10.7 | `decomp` `ng-H*` `diff.viol` | P |
+| Same recall-split pattern on V and F | Fig. 3c | `decomp` `ng-nc` `recall_split` for V, F | P |
+| Robustness check = gain > 1 s.e. also at scales ℓ and h | | `a9_mpc._resolvable` (margin_z = 1) | — |
+| Table I parameters | | `env.py`, `env_la`, `ax2_eval.py` docstring, protocol | — |
 
 **Sources** (all stored results; no new simulation):
 - `N` = `runs/uav_semcom/paperA_fd/paper/paper_numbers.json`, written by
