@@ -1,5 +1,44 @@
 # Paper A: manuscript rewrite for ICT Express (25/11)
 
+> **Final revision (26/11; ChatGPT final authorisation, items 1–8 approved).** No new simulation, training or
+> tuning.
+>
+> **Manuscript:**
+> - New title: "Predictive mode selection under wireless rate uncertainty for multi-UAV semantic image offloading".
+> - **6 pages**, no LaTeX warnings, abstract 100 words.
+> - Floats: 3 figures + 2 tables.
+>   - Fig. 1 rebuilt as a genuine vector drawing (`paperA_fd_figures.system2`; no raster images, fonts embedded).
+>   - Fig. 2 is now a single-column ablation; its per-setting panel duplicated Table II.
+>   - Fig. 3 is the trade-off figure.
+> - 15 references; CS2P and Oboe were dropped for space.
+>
+> **Changes:**
+> 1. **RobustMPC-style comparison** (post-hoc contrast of registered Phase 2 arms; the arm is described as a predictor
+>    reuse, not a reproduction of RobustMPC). Guarded − RobustMPC-style: TD +6.4 [+4.1, +8.7]; F +3.6; V +2.1;
+>    TD_all +8.1.
+> 2. **Table II** has a Phase 2 row (calibrated − H\* +7.3†; calibrated − guarded −0.1, not rejected; guarded − H\*
+>    +7.4, post-hoc) and a new "calibrated − base" column (A8 + A7 / G3 / R3).
+> 3. **F1** is qualified by the objective and the mission-time cost.
+> 4. **New Section 5.4:** fixed-policy weight sensitivity. F2 holds at w = 0.3, 0.15 and 0 in all three pools. F1
+>    shrinks, and reverses on V at w = 0.
+> 5. **Guarded vs H\* gains** are listed: +8.3 compliant images, 7.9 fewer below-Qmin deliveries, +1.6 recall.
+> 6. **Wording fixes:** PPO "trails"; K = 3 not Holm-significant; +18.6 (Phase 2 seeds) vs +17.3 (ablation seeds).
+> 7. **Zero-shot checkpoints** are described in Setup (304 DET-val frames, earlier development).
+> 8. **Decision time:** the 50 ms per-decision budget (at most 0.07% of decisions exceed it) is separated from the
+>    per-slot sequential total (10–23% of the slot); 50 ms is named as the registered reporting threshold.
+> 9. **Layout:** `\raggedbottom`; the Table II `\tabcolsep` was reduced (fonts and margins untouched).
+> 10. **Reproducibility snapshot:**
+>     - `paper/paperA/make_snapshot.sh` builds a paper-only zip from git tag `paperA-v1.0` with `git archive`;
+>       `SNAPSHOT_README.md` describes it.
+>     - The DOI is a `\todo` until the authors upload the zip (for example to Zenodo).
+>
+> **Remaining author actions:**
+> - authors, affiliation, e-mail, funding;
+> - the snapshot DOI;
+> - confirming the current ICT Express guide (6 pages vs the 2019 template's 4 pages, at most 4 figures + tables, and
+>   USD 100 per page beyond four; this version has 5 floats);
+> - professor review.
+
 > **Update (25/11, later): the manuscript was expanded to 6 pages.** ChatGPT corrected the limit: original research
 > articles may have up to 6 double-column pages.
 > - **Now:** 6 full pages; no LaTeX warnings; 3 figures + 2 tables; 17 references (the 4 removed earlier are

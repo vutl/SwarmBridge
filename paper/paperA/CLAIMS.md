@@ -1,5 +1,39 @@
 # Paper A (ICT Express rewrite, 25/11): claims and their sources
 
+## Final revision (26/11, ChatGPT final authorisation)
+
+**Title:** "Predictive mode selection under wireless rate uncertainty for multi-UAV semantic image offloading".
+
+**Layout:** 6 pages.
+- Fig. 1: vector, `paperA_fd_figures.system2`.
+- Fig. 2: single-column ablation (`fig_fd_ablation.pdf`); its former per-setting panel duplicated Table II.
+- Fig. 3: trade-off.
+- Table I: settings.
+- Table II: `table_fd.tex`, now with the Phase 2 row and a "calibrated − base" column.
+- 15 references.
+
+**New or changed numbers.** Status: C = confirmatory, S = supporting, P = post-hoc.
+
+| Text | Value | Source | Status |
+|---|---|---|---|
+| Table II, Phase 2 row: guarded − H\* | +7.4 [+5.1, +9.7]; recall +1.6\* | `N.phase2.TD.posthoc.ng_H` | P |
+| Table II, Phase 2 row: calibrated − guarded | −0.1 [−2.0, +1.8]; recall −0.8\* | `N.phase2.TD.ret.H3b`, `.holm.H3b` (not rejected); `posthoc.cal_ng_recall` | C |
+| Table II, Phase 2 row: calibrated − H\* | +7.3† [+5.0, +9.5] | `N.phase2.TD.ret.H1`, `.holm.H1` (rejected) | C |
+| Table II, calibrated − base, ablation row | +6.7 [+4.4, +9.0] | `N.ablation.TD.contrasts["cal-H"]` | S |
+| Table II, calibrated − base, other heuristic rows | G3 values | `N.phase4.TD.<cfg>.G3` | S |
+| Table II, calibrated − base, learned rows | +10.5 / +23.7 / +31.7 | `N.phase3.TD.<x>.R3` | S |
+| Guarded − RobustMPC-style (same gate + band) | TD +6.4 [+4.1, +8.7]; F +3.6; V +2.1; TD_all +8.1 | `N.phase2.<pool>.posthoc.ng_rh` | P (contrast of registered arms) |
+| RobustMPC-style − H\* | +0.9 [−0.5, +2.3] | `posthoc.rh_H` | P |
+| Guarded − RobustMPC-style without band | +51.3 | `posthoc.ng_rhnb` | P |
+| Switches per episode: RobustMPC-style about 2, guarded 57, no-band 158 | 2.1 / 57.4 / 157.6 | `phase2/summary_test.json` `TD.mechanism.{rh, ng, rhnb}.switched` (`paperA-fd-phase2-result.md` §3) | S |
+| Guarded − H\* delivery improvement (ablation TD): +8.3 compliant images, 7.9 fewer below-Qmin deliveries, +1.6 recall | | `N.decomp["ablation\|TD\|N5x2\|ng-H*"].diff.{n_ok, n_qviol}`; `A8.recall` | P / S |
+| Weight sensitivity (w_time 0.3 / 0.15 / 0), fixed policies | TD nc − H\* −10.6 / −6.1 / −1.5 n.s.; ng − H\* +7.4 / +7.9 / +8.4; band − nc +15.2 / +12.0 / +8.8. V: ng − H\* +2.3 to +4.5; nc − H\* at w = 0: +4.8 [+1.0, +8.5]; ng − nc at w = 0: −0.3. F: ng − H\* +5.4 to +7.2. Band − nc CIs above 0 everywhere | `N.ablation.<pool>.contrasts.weights` (`paperA_fd_numbers.py`, re-scoring `J_w = 52K·mean_util − 0.02E − w·K·mission_s`) | P |
+| Calibrated − nominal, ablation seeds | +17.3 | `A3` + `A7` (paired means are additive) | S |
+| Per-decision > 50 ms share, maximum over all arms | 0.07% | `supplement_extras.json` `mode_over50` (max 0.00073) | S |
+| Per-slot p99 103–229 ms = 10–23% of the 1 s slot | | Timing rows (see below) | S |
+| Zero-shot checkpoints: trained in earlier development on 304 DET-val frames | | `paperA-fd-phase3-prereg.md` (A-X9 and E7 checkpoints, A5 training pool) | — |
+| RobustMPC-style arm: harmonic mean of the last 5 slot rates ÷ (1 + max relative error of the last 5 predictions), same gate + band; no-band variant | | `ax2_eval.py` (`+mpcrh`, `+mpcrhnb`), `a9_mpc.HarmRates` | — |
+
 **Manuscript:** `main.tex`. Title: "Uncertainty-aware mode selection for multi-UAV semantic image offloading".
 - **6-page version** (after the ChatGPT correction: original research articles allow up to 6 pages): 3 figures
   (`fig_fd_system`, `fig_fd_mechanism`, `fig_fd_tradeoff`) and 2 tables (Table I settings, Table II = `table_fd.tex`).

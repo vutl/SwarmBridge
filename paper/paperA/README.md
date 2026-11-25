@@ -1,7 +1,18 @@
 # Paper A: bản thảo cho ICT Express (viết lại 25/11 trên dữ liệu full-data)
 
-**Trạng thái:** bản nháp **6 trang** (ChatGPT sửa giới hạn: bài nghiên cứu gốc được tối đa 6 trang), chờ phản biện
-lần cuối. **Chưa nộp.**
+**Trạng thái (26/11):** bản sửa cuối, **6 trang**, chờ phản biện trước khi nộp và giáo sư xem. **Chưa nộp.**
+- **Tiêu đề mới:** "Predictive mode selection under wireless rate uncertainty for multi-UAV semantic image
+  offloading".
+- **Hình và bảng:**
+  - Hình 1 vector: `figs/fig_fd_system.pdf`, nguồn là hàm `system2` trong `paperA_fd_figures.py`.
+  - Hình 2: `figs/fig_fd_ablation.pdf` (một cột).
+  - Hình 3: `figs/fig_fd_tradeoff.pdf`.
+  - Bảng I nằm trong `main.tex`; Bảng II là `table_fd.tex`.
+- **Gói tái lập:** `make_snapshot.sh` (từ tag `paperA-v1.0`), mô tả trong `SNAPSHOT_README.md`. DOI còn để TODO,
+  chờ tác giả tải lên.
+- **Bản 6 trang trước** ở commit `0a27d406`.
+
+(Các ghi chú bên dưới thuộc các bản trước.)
 - **Hình và bảng:** 3 hình (`fig_fd_system`, `fig_fd_mechanism`, `fig_fd_tradeoff`) + 2 bảng (Bảng I tham số
   trong `main.tex`; Bảng II là `table_fd.tex`).
 - **Bản 4 trang** ở commit `484953df`.
