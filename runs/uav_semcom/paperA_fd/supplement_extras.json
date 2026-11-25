@@ -1,0 +1,2318 @@
+{
+ "R5_recall_TD_ppofd_alone": {
+  "seed": [
+   -2.0155147393165533,
+   -2.2355297709106003,
+   -1.7954997077225063
+  ],
+  "levels": [
+   34.92555756954599,
+   36.94107230886254
+  ]
+ },
+ "R5_recall_TD_ppofd_matched": {
+  "seed": [
+   -1.1761622199870856,
+   -1.493868985358505,
+   -0.8584554546156661
+  ],
+  "levels": [
+   37.368046849711526,
+   38.54420906969862
+  ]
+ },
+ "R5_recall_TD_qrfd_alone": {
+  "seed": [
+   -4.965779591457544,
+   -5.575964269339474,
+   -4.355594913575613
+  ],
+  "levels": [
+   31.975292717404987,
+   36.94107230886254
+  ]
+ },
+ "R5_recall_TD_qrfd_matched": {
+  "seed": [
+   -1.392199309058787,
+   -1.8363991911281659,
+   -0.947999426989408
+  ],
+  "levels": [
+   37.15200976063982,
+   38.54420906969862
+  ]
+ },
+ "R5_recall_TD_dsfd_alone": {
+  "seed": [
+   -9.57143508532389,
+   -9.994594330000103,
+   -9.148275840647676
+  ],
+  "levels": [
+   27.369637223538646,
+   36.94107230886254
+  ]
+ },
+ "R5_recall_TD_dsfd_matched": {
+  "seed": [
+   -4.141271350835275,
+   -4.6375565677216555,
+   -3.644986133948895
+  ],
+  "levels": [
+   34.40293771886334,
+   38.54420906969862
+  ]
+ },
+ "R5_recall_F_ppofd_alone": {
+  "seed": [
+   -1.3964244247909137,
+   -1.7105712682630092,
+   -1.0822775813188181
+  ],
+  "levels": [
+   39.833972882378546,
+   41.23039730716946
+  ]
+ },
+ "R5_recall_F_ppofd_matched": {
+  "seed": [
+   -0.4560106097056081,
+   -0.8276420845306474,
+   -0.08437913488056886
+  ],
+  "levels": [
+   42.61669615135955,
+   43.07270676106516
+  ]
+ },
+ "R5_recall_F_qrfd_alone": {
+  "seed": [
+   -4.665941373005518,
+   -5.370904534719767,
+   -3.9609782112912697
+  ],
+  "levels": [
+   36.564455934163945,
+   41.23039730716946
+  ]
+ },
+ "R5_recall_F_qrfd_matched": {
+  "seed": [
+   -0.3973571878150648,
+   -0.8991743125164539,
+   0.10445993688632427
+  ],
+  "levels": [
+   42.6753495732501,
+   43.07270676106516
+  ]
+ },
+ "R5_recall_F_dsfd_alone": {
+  "seed": [
+   -10.086708794315474,
+   -10.589341174188137,
+   -9.58407641444281
+  ],
+  "levels": [
+   31.143688512853977,
+   41.23039730716946
+  ]
+ },
+ "R5_recall_F_dsfd_matched": {
+  "seed": [
+   -3.3587531306223855,
+   -3.894296208767564,
+   -2.823210052477207
+  ],
+  "levels": [
+   39.71395363044278,
+   43.07270676106516
+  ]
+ },
+ "R5_recall_V_ppofd_alone": {
+  "seed": [
+   -0.8722000045663854,
+   -1.0770138353996228,
+   -0.6673861737331479
+  ],
+  "levels": [
+   35.538896907754975,
+   36.41109691232136
+  ]
+ },
+ "R5_recall_V_ppofd_matched": {
+  "seed": [
+   0.05582029196578112,
+   -0.2009587610347536,
+   0.31259934496631586
+  ],
+  "levels": [
+   37.85620706631998,
+   37.8003867743542
+  ]
+ },
+ "R5_recall_V_qrfd_alone": {
+  "seed": [
+   -4.3196551346876575,
+   -5.044365495179333,
+   -3.5949447741959824
+  ],
+  "levels": [
+   32.091441777633705,
+   36.41109691232136
+  ]
+ },
+ "R5_recall_V_qrfd_matched": {
+  "seed": [
+   0.6076139521830075,
+   0.12102399869643671,
+   1.0942039056695783
+  ],
+  "levels": [
+   38.40800072653721,
+   37.8003867743542
+  ]
+ },
+ "R5_recall_V_dsfd_alone": {
+  "seed": [
+   -9.658994886738311,
+   -10.073711518440609,
+   -9.244278255036013
+  ],
+  "levels": [
+   26.752102025583046,
+   36.41109691232136
+  ]
+ },
+ "R5_recall_V_dsfd_matched": {
+  "seed": [
+   -3.362408387637964,
+   -3.8659922863030824,
+   -2.858824488972845
+  ],
+  "levels": [
+   34.43797838671624,
+   37.8003867743542
+  ]
+ },
+ "R5_recall_TD_all_ppofd_alone": {
+  "seed": [
+   -1.9570571376067107,
+   -2.1845465194182365,
+   -1.729567755795185
+  ],
+  "levels": [
+   31.545987052922847,
+   33.503044190529565
+  ]
+ },
+ "R5_recall_TD_all_ppofd_matched": {
+  "seed": [
+   -1.1400860636692736,
+   -1.37363720939744,
+   -0.9065349179411071
+  ],
+  "levels": [
+   33.94271208619728,
+   35.082798149866555
+  ]
+ },
+ "R5_recall_TD_all_qrfd_alone": {
+  "seed": [
+   -4.637778852532062,
+   -5.179160409888168,
+   -4.096397295175955
+  ],
+  "levels": [
+   28.865265337997492,
+   33.503044190529565
+  ]
+ },
+ "R5_recall_TD_all_qrfd_matched": {
+  "seed": [
+   -1.4798043303981374,
+   -1.8440625476861499,
+   -1.115546113110125
+  ],
+  "levels": [
+   33.60299381946841,
+   35.082798149866555
+  ]
+ },
+ "R5_recall_TD_all_dsfd_alone": {
+  "seed": [
+   -8.923681190441142,
+   -9.292020367788624,
+   -8.55534201309366
+  ],
+  "levels": [
+   24.57936300008842,
+   33.503044190529565
+  ]
+ },
+ "R5_recall_TD_all_dsfd_matched": {
+  "seed": [
+   -4.0149863841795375,
+   -4.401511286201241,
+   -3.6284614821578347
+  ],
+  "levels": [
+   31.067811765687015,
+   35.082798149866555
+  ]
+ },
+ "ablation|test|TD|N5x2|h=fixed_avif_20": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 37.11860005108051,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|TD|N5x2|h=fixed_avif_20+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.496467929675546,
+  "aborts_per_episode": 0.12,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|TD|N5x2|h=fixed_avif_20+mpcngg": {
+  "band_lo_q": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "band_hi_q": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "bias_q": [
+   -0.45940008640457397,
+   -0.3447198380538909,
+   -0.23508056192870444
+  ],
+  "recall": 39.72554012821563,
+  "aborts_per_episode": 0.41,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|TD|N5x2|h=fixed_avif_20+mpcngb": {
+  "band_lo_q": [
+   0.3983279062135063,
+   0.5297008302247826,
+   1.0
+  ],
+  "band_hi_q": [
+   1.0,
+   1.149714399617294,
+   1.2243027182185569
+  ],
+  "bias_q": [
+   -0.4371778981637653,
+   -0.30315279543188056,
+   0.0
+  ],
+  "recall": 39.79024086320553,
+  "aborts_per_episode": 0.94,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|TD|N5x2|h=fixed_avif_20+mpcng": {
+  "band_lo_q": [
+   0.3630775479433605,
+   0.4625844465243478,
+   0.5526787064754921
+  ],
+  "band_hi_q": [
+   1.1151886132085516,
+   1.1519413316866487,
+   1.209406239468108
+  ],
+  "bias_q": [
+   -0.4833221094833449,
+   -0.3839682573592954,
+   -0.27740247385492045
+  ],
+  "recall": 38.6896701289865,
+  "aborts_per_episode": 0.19,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|TD|N5x2|h=fixed_avif_20+mpcngh1": {
+  "band_lo_q": [
+   0.36477366125367267,
+   0.46667153725218596,
+   0.5627622805262266
+  ],
+  "band_hi_q": [
+   1.1182802260289335,
+   1.154217825505204,
+   1.2129099111328738
+  ],
+  "bias_q": [
+   -0.4806841181600215,
+   -0.3755134431998394,
+   -0.2671521691822736
+  ],
+  "recall": 38.90210947051028,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|TD|N5x2|h=fixed_avif_20+mpcngh0": {
+  "band_lo_q": [
+   0.37016201113721464,
+   0.4754904853523143,
+   0.5835579591843302
+  ],
+  "band_hi_q": [
+   1.1226113356697105,
+   1.158226406245229,
+   1.2180200281764753
+  ],
+  "bias_q": [
+   -0.46947148743888134,
+   -0.3627390621135526,
+   -0.24060224134213673
+  ],
+  "recall": 38.154837111852615,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|TD|N5x2|h=fixed_avif_20+mpc": {
+  "band_lo_q": [
+   0.4665750551948531,
+   0.6378634357622294,
+   0.7391180407838032
+  ],
+  "band_hi_q": [
+   1.1960898403387754,
+   1.2673059183785476,
+   1.4024066136483162
+  ],
+  "bias_q": [
+   -0.2399148763986263,
+   -0.09653347536287443,
+   0.04556949443030622
+  ],
+  "recall": 37.58609214072128,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|V|N5x2|h=fixed_avif_20": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 36.06065498599881,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|V|N5x2|h=fixed_avif_20+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 42.15648592349192,
+  "aborts_per_episode": 0.15,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|V|N5x2|h=fixed_avif_20+mpcngg": {
+  "band_lo_q": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "band_hi_q": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "bias_q": [
+   -0.47787099888830276,
+   -0.3595520763445119,
+   -0.24682249495527261
+  ],
+  "recall": 40.747196321517336,
+  "aborts_per_episode": 0.02,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|V|N5x2|h=fixed_avif_20+mpcngb": {
+  "band_lo_q": [
+   0.40606476269416375,
+   0.5202124202345042,
+   1.0
+  ],
+  "band_hi_q": [
+   1.0,
+   1.1488781470787384,
+   1.2190055015714671
+  ],
+  "bias_q": [
+   -0.44585225668729755,
+   -0.30748185395153155,
+   0.00044496106798125865
+  ],
+  "recall": 39.742639827225524,
+  "aborts_per_episode": 0.05,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|V|N5x2|h=fixed_avif_20+mpcng": {
+  "band_lo_q": [
+   0.33139203512431203,
+   0.41979606923645785,
+   0.4961326890468792
+  ],
+  "band_hi_q": [
+   1.1082333371657236,
+   1.141932579238221,
+   1.1974462910760035
+  ],
+  "bias_q": [
+   -0.5276178896336551,
+   -0.4366901486596603,
+   -0.3413598994899465
+  ],
+  "recall": 37.60084890042604,
+  "aborts_per_episode": 0.67,
+  "mode_over50": 0.00015384615384615385,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|V|N5x2|h=fixed_avif_20+mpcngh1": {
+  "band_lo_q": [
+   0.32863368118695135,
+   0.43187171868274254,
+   0.5162709950968574
+  ],
+  "band_hi_q": [
+   1.1104891162421746,
+   1.14466427527292,
+   1.198714833699492
+  ],
+  "bias_q": [
+   -0.5286657350586477,
+   -0.4215373057091449,
+   -0.32162171888686325
+  ],
+  "recall": 38.33784374175133,
+  "aborts_per_episode": 0.04,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|V|N5x2|h=fixed_avif_20+mpcngh0": {
+  "band_lo_q": [
+   0.34868035309313833,
+   0.46370365561509347,
+   0.5631763352772092
+  ],
+  "band_hi_q": [
+   1.12130174346993,
+   1.156158458966803,
+   1.21352097555675
+  ],
+  "bias_q": [
+   -0.49433777162125225,
+   -0.3776131789740996,
+   -0.262371360679624
+  ],
+  "recall": 38.21432354176262,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|V|N5x2|h=fixed_avif_20+mpc": {
+  "band_lo_q": [
+   0.4352436301673625,
+   0.619366918013418,
+   0.7248738244201912
+  ],
+  "band_hi_q": [
+   1.2020797852562475,
+   1.2707429454773986,
+   1.4111890839346395
+  ],
+  "bias_q": [
+   -0.2571839716732176,
+   -0.11017214764962338,
+   0.039620101214551416
+  ],
+  "recall": 37.190407051632945,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|F|N5x2|h=fixed_avif_20": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 41.49612335469962,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|F|N5x2|h=fixed_avif_20+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 46.094426685885956,
+  "aborts_per_episode": 0.04,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|F|N5x2|h=fixed_avif_20+mpcngg": {
+  "band_lo_q": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "band_hi_q": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "bias_q": [
+   -0.45297135629529245,
+   -0.3486720568531558,
+   -0.22367096964076918
+  ],
+  "recall": 45.131974942010984,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|F|N5x2|h=fixed_avif_20+mpcngb": {
+  "band_lo_q": [
+   0.4064512163059644,
+   0.5287007735270349,
+   1.0
+  ],
+  "band_hi_q": [
+   1.0,
+   1.1516170884762544,
+   1.225745978486899
+  ],
+  "bias_q": [
+   -0.4303177496441626,
+   -0.3042517188925574,
+   0.0007941129989261072
+  ],
+  "recall": 45.043025840098586,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|F|N5x2|h=fixed_avif_20+mpcng": {
+  "band_lo_q": [
+   0.37108496399258273,
+   0.46014582959622585,
+   0.5539617411152434
+  ],
+  "band_hi_q": [
+   1.1133942943675013,
+   1.1499990884485154,
+   1.2082834927459023
+  ],
+  "bias_q": [
+   -0.4776321984227217,
+   -0.39221781902645214,
+   -0.2753745016438655
+  ],
+  "recall": 43.41113636375142,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|F|N5x2|h=fixed_avif_20+mpcngh1": {
+  "band_lo_q": [
+   0.37675201989477997,
+   0.4697656396987444,
+   0.5587299055233018
+  ],
+  "band_hi_q": [
+   1.1149485090047586,
+   1.1521990900852233,
+   1.2096976258028649
+  ],
+  "bias_q": [
+   -0.46688451309959034,
+   -0.37929292594898345,
+   -0.27124489805549246
+  ],
+  "recall": 44.0678361032815,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|F|N5x2|h=fixed_avif_20+mpcngh0": {
+  "band_lo_q": [
+   0.382717895899494,
+   0.48526250855400066,
+   0.586103512756439
+  ],
+  "band_hi_q": [
+   1.1213160141918324,
+   1.1602256764556649,
+   1.2194572090617997
+  ],
+  "bias_q": [
+   -0.454024312884585,
+   -0.35629325764899106,
+   -0.23548142201769032
+  ],
+  "recall": 42.78070060326215,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "ablation|test|F|N5x2|h=fixed_avif_20+mpc": {
+  "band_lo_q": [
+   0.475892288848973,
+   0.6411215926052379,
+   0.7417484059600764
+  ],
+  "band_hi_q": [
+   1.1950262744550448,
+   1.2623232670179745,
+   1.3968815062920945
+  ],
+  "bias_q": [
+   -0.23431280427643958,
+   -0.09537023533230786,
+   0.047124517266561305
+  ],
+  "recall": 42.806373753905035,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N3x2|h=fixed_mbt2018-mean_q3": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 48.228893865326135,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N3x2|h=fixed_mbt2018-mean_q3+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 46.905889279453284,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N3x2|h=fixed_mbt2018-mean_q3+mpcng": {
+  "band_lo_q": [
+   0.3939739569916989,
+   0.49441845161816167,
+   0.5798893141136715
+  ],
+  "band_hi_q": [
+   1.1180134641796768,
+   1.156229798680674,
+   1.218629158418598
+  ],
+  "bias_q": [
+   -0.4508007967384568,
+   -0.34412846054182133,
+   -0.24568976167144616
+  ],
+  "recall": 48.102961519959806,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N3x2|h=fixed_mbt2018-mean_q3+mpc": {
+  "band_lo_q": [
+   0.5165793915186594,
+   0.6541632134983447,
+   0.7425459644664616
+  ],
+  "band_hi_q": [
+   1.1846672002318643,
+   1.2486296733030395,
+   1.36164168800292
+  ],
+  "bias_q": [
+   -0.21271026607943302,
+   -0.10218497778353043,
+   0.023733516618428027
+  ],
+  "recall": 47.725301643426064,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N7x2|h=fixed_mbt2018-mean_q1": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 30.730763809624726,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N7x2|h=fixed_mbt2018-mean_q1+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 35.742206952072976,
+  "aborts_per_episode": 0.03,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N7x2|h=fixed_mbt2018-mean_q1+mpcng": {
+  "band_lo_q": [
+   0.37385252158225873,
+   0.4704746149273106,
+   0.5599791029192377
+  ],
+  "band_hi_q": [
+   1.1203106587022928,
+   1.1589881570840472,
+   1.2178964396390186
+  ],
+  "bias_q": [
+   -0.4627566792564485,
+   -0.370208516033326,
+   -0.2617335402204046
+  ],
+  "recall": 32.08363301885211,
+  "aborts_per_episode": 0.01,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N7x2|h=fixed_mbt2018-mean_q1+mpc": {
+  "band_lo_q": [
+   0.4641763994184063,
+   0.6402390728615909,
+   0.7405260311814393
+  ],
+  "band_hi_q": [
+   1.1997140700332198,
+   1.2759200296551307,
+   1.4257459912345263
+  ],
+  "bias_q": [
+   -0.22448352363178084,
+   -0.08616519497084114,
+   0.06407496430892139
+  ],
+  "recall": 31.449844856466413,
+  "aborts_per_episode": 0.01,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N5x3|h=fixed_mbt2018-mean_q3": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 47.43353102657417,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N5x3|h=fixed_mbt2018-mean_q3+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 45.99795028224165,
+  "aborts_per_episode": 0.08,
+  "mode_over50": 3.846153846153846e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N5x3|h=fixed_mbt2018-mean_q3+mpcng": {
+  "band_lo_q": [
+   0.46457888520166285,
+   0.5671233790847895,
+   0.6619031012231689
+  ],
+  "band_hi_q": [
+   1.1079567819539329,
+   1.1463962031954713,
+   1.2115810152757196
+  ],
+  "bias_q": [
+   -0.3820153185342186,
+   -0.2834378703863028,
+   -0.1780601754777657
+  ],
+  "recall": 47.06521232800988,
+  "aborts_per_episode": 0.03,
+  "mode_over50": 3.846153846153846e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N5x3|h=fixed_mbt2018-mean_q3+mpc": {
+  "band_lo_q": [
+   0.5527197638820067,
+   0.7039189112224516,
+   0.7949796803618028
+  ],
+  "band_hi_q": [
+   1.1519200914756336,
+   1.2147422999893494,
+   1.3259809269144562
+  ],
+  "bias_q": [
+   -0.19722590635925236,
+   -0.08416786111469728,
+   0.029563388335541688
+  ],
+  "recall": 46.44025954111978,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N5x4|h=fixed_mbt2018-mean_q3": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 48.36272265985941,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N5x4|h=fixed_mbt2018-mean_q3+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 47.593142498573435,
+  "aborts_per_episode": 0.06,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N5x4|h=fixed_mbt2018-mean_q3+mpcng": {
+  "band_lo_q": [
+   0.48676038149965073,
+   0.5949103026585368,
+   0.6837836970654313
+  ],
+  "band_hi_q": [
+   1.0960263325697421,
+   1.136213140982778,
+   1.2011049379153647
+  ],
+  "bias_q": [
+   -0.3676458982137345,
+   -0.26658200365658075,
+   -0.16697228078710055
+  ],
+  "recall": 48.157148826981576,
+  "aborts_per_episode": 0.03,
+  "mode_over50": 7.692307692307693e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|N5x4|h=fixed_mbt2018-mean_q3+mpc": {
+  "band_lo_q": [
+   0.561554959227121,
+   0.7264011920414799,
+   0.8145770857812957
+  ],
+  "band_hi_q": [
+   1.1332704698569451,
+   1.1925488013204264,
+   1.2931697389670223
+  ],
+  "bias_q": [
+   -0.19974131527764527,
+   -0.08427803642055637,
+   0.011310000281926323
+  ],
+  "recall": 47.52447467019838,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|B0.5|h=fixed_mbt2018-mean_q1": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 31.71636433791321,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|B0.5|h=fixed_mbt2018-mean_q1+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 38.24220592134745,
+  "aborts_per_episode": 0.03,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|B0.5|h=fixed_mbt2018-mean_q1+mpcng": {
+  "band_lo_q": [
+   0.4517497484412372,
+   0.5522677577947733,
+   0.6434530011842351
+  ],
+  "band_hi_q": [
+   1.1152025875050868,
+   1.1496750295326879,
+   1.20386645109511
+  ],
+  "bias_q": [
+   -0.396281038282944,
+   -0.2969779655776617,
+   -0.19271337273523403
+  ],
+  "recall": 34.007441927869664,
+  "aborts_per_episode": 0.02,
+  "mode_over50": 7.692307692307693e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|B0.5|h=fixed_mbt2018-mean_q1+mpc": {
+  "band_lo_q": [
+   0.5266865664790252,
+   0.6769038165372089,
+   0.7736292557547736
+  ],
+  "band_hi_q": [
+   1.1678550086133506,
+   1.219209951781374,
+   1.3129061732050702
+  ],
+  "bias_q": [
+   -0.23297465272745616,
+   -0.10593564712766491,
+   0.019369620178164005
+  ],
+  "recall": 33.2077777091333,
+  "aborts_per_episode": 0.01,
+  "mode_over50": 3.846153846153846e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|B2|h=fixed_avif_20": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 37.15921821834317,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|B2|h=fixed_avif_20+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.09848693522777,
+  "aborts_per_episode": 0.08,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|B2|h=fixed_avif_20+mpcng": {
+  "band_lo_q": [
+   0.2424317332449834,
+   0.314871759097149,
+   0.39049786171994627
+  ],
+  "band_hi_q": [
+   1.096085976903414,
+   1.1288116830219561,
+   1.1917942681240479
+  ],
+  "bias_q": [
+   -0.6325161557932903,
+   -0.5508346684187976,
+   -0.4533577993454717
+  ],
+  "recall": 38.31921523648931,
+  "aborts_per_episode": 0.02,
+  "mode_over50": 3.846153846153846e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|TD|B2|h=fixed_avif_20+mpc": {
+  "band_lo_q": [
+   0.34711245169561117,
+   0.5463236210259721,
+   0.6710035359794156
+  ],
+  "band_hi_q": [
+   1.2166689098214025,
+   1.3055362418204788,
+   1.4924475567262798
+  ],
+  "bias_q": [
+   -0.2966204181258228,
+   -0.14492623660774936,
+   0.018980620738902203
+  ],
+  "recall": 37.304146283465094,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N3x2|h=fixed_mbt2018-mean_q3": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 54.83799036194433,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N3x2|h=fixed_mbt2018-mean_q3+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 53.90414409502852,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N3x2|h=fixed_mbt2018-mean_q3+mpcng": {
+  "band_lo_q": [
+   0.38824113868470095,
+   0.4870117005882279,
+   0.569765597365971
+  ],
+  "band_hi_q": [
+   1.115384611254964,
+   1.153498963137654,
+   1.2176813825954653
+  ],
+  "bias_q": [
+   -0.45305007099238487,
+   -0.36105862098969993,
+   -0.25373363881464467
+  ],
+  "recall": 55.035657519621616,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N3x2|h=fixed_mbt2018-mean_q3+mpc": {
+  "band_lo_q": [
+   0.4860275927106242,
+   0.6464996322236797,
+   0.7394316912518897
+  ],
+  "band_hi_q": [
+   1.1855139675564201,
+   1.246052797576906,
+   1.385702041470218
+  ],
+  "bias_q": [
+   -0.2286114819903594,
+   -0.10413369984370746,
+   0.030025356025665934
+  ],
+  "recall": 54.782539495517696,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N7x2|h=fixed_mbt2018-mean_q1": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 36.3753317972447,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N7x2|h=fixed_mbt2018-mean_q1+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 41.63505685204751,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N7x2|h=fixed_mbt2018-mean_q1+mpcng": {
+  "band_lo_q": [
+   0.38508000019291366,
+   0.4820708589171073,
+   0.5729077211733039
+  ],
+  "band_hi_q": [
+   1.1169214898909678,
+   1.1528226186004127,
+   1.2155521469681863
+  ],
+  "bias_q": [
+   -0.45594158659160855,
+   -0.36482764595912764,
+   -0.2549317622596126
+  ],
+  "recall": 37.84270506024106,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N7x2|h=fixed_mbt2018-mean_q1+mpc": {
+  "band_lo_q": [
+   0.4730683323939337,
+   0.6488780505416198,
+   0.7450704793680473
+  ],
+  "band_hi_q": [
+   1.1984744646089296,
+   1.2746769081047404,
+   1.4397617681749653
+  ],
+  "bias_q": [
+   -0.21005517008869368,
+   -0.08104495250428884,
+   0.07453782354171405
+  ],
+  "recall": 37.42827760919197,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N5x3|h=fixed_mbt2018-mean_q3": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 54.513029958908504,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N5x3|h=fixed_mbt2018-mean_q3+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 53.34979507099817,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N5x3|h=fixed_mbt2018-mean_q3+mpcng": {
+  "band_lo_q": [
+   0.4635613903386914,
+   0.5807202420855945,
+   0.6688062174149667
+  ],
+  "band_hi_q": [
+   1.1055847618831327,
+   1.1448210190267583,
+   1.211497333367818
+  ],
+  "bias_q": [
+   -0.38166244962012597,
+   -0.2752513443789747,
+   -0.172458739933122
+  ],
+  "recall": 54.496706687848466,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N5x3|h=fixed_mbt2018-mean_q3+mpc": {
+  "band_lo_q": [
+   0.5461467178626019,
+   0.7108657971093376,
+   0.7993472490479056
+  ],
+  "band_hi_q": [
+   1.1518991836431862,
+   1.2103094132309287,
+   1.3258756804697558
+  ],
+  "bias_q": [
+   -0.19441641528967055,
+   -0.08010486772233588,
+   0.02320960983635766
+  ],
+  "recall": 53.85413904725883,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N5x4|h=fixed_mbt2018-mean_q3": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 55.94032684926461,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N5x4|h=fixed_mbt2018-mean_q3+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 55.34493722115832,
+  "aborts_per_episode": 0.03,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N5x4|h=fixed_mbt2018-mean_q3+mpcng": {
+  "band_lo_q": [
+   0.49314246451760146,
+   0.6094246203084848,
+   0.6888304922744192
+  ],
+  "band_hi_q": [
+   1.0946930395141687,
+   1.1347777201093254,
+   1.200498120692729
+  ],
+  "bias_q": [
+   -0.3546423530273259,
+   -0.25776223098185985,
+   -0.16609939519724548
+  ],
+  "recall": 55.862295402454265,
+  "aborts_per_episode": 0.01,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|N5x4|h=fixed_mbt2018-mean_q3+mpc": {
+  "band_lo_q": [
+   0.5633664520399683,
+   0.7368404476374715,
+   0.8219549203043945
+  ],
+  "band_hi_q": [
+   1.130454892063781,
+   1.1876084743473088,
+   1.2876719348461705
+  ],
+  "bias_q": [
+   -0.19866180694810262,
+   -0.07907456813374758,
+   0.015363727103708919
+  ],
+  "recall": 55.32264412052079,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|B0.5|h=fixed_mbt2018-mean_q1": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 37.600212621103516,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|B0.5|h=fixed_mbt2018-mean_q1+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 44.237229296761726,
+  "aborts_per_episode": 0.12,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|B0.5|h=fixed_mbt2018-mean_q1+mpcng": {
+  "band_lo_q": [
+   0.4538643581332353,
+   0.5513623202798228,
+   0.6394739549166603
+  ],
+  "band_hi_q": [
+   1.1143078472450536,
+   1.1484632072148846,
+   1.1989963108881967
+  ],
+  "bias_q": [
+   -0.3930272685706027,
+   -0.3002058592619175,
+   -0.20502124346841086
+  ],
+  "recall": 39.7137761742127,
+  "aborts_per_episode": 0.02,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|B0.5|h=fixed_mbt2018-mean_q1+mpc": {
+  "band_lo_q": [
+   0.530689509335922,
+   0.6854963067964325,
+   0.7808214853277801
+  ],
+  "band_hi_q": [
+   1.1667412022236205,
+   1.219447082892479,
+   1.3092941838558425
+  ],
+  "bias_q": [
+   -0.221920317087802,
+   -0.09903439706359851,
+   0.017527374424713766
+  ],
+  "recall": 38.81426037149418,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|B2|h=fixed_avif_20": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 41.293043021161104,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|B2|h=fixed_avif_20+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 45.89886025732828,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|B2|h=fixed_avif_20+mpcng": {
+  "band_lo_q": [
+   0.2478374294276918,
+   0.32344289240592106,
+   0.3941973848600619
+  ],
+  "band_hi_q": [
+   1.0954105175088535,
+   1.1303525217200099,
+   1.1964449301000106
+  ],
+  "bias_q": [
+   -0.6243530605879775,
+   -0.5425494195257309,
+   -0.4520192805519013
+  ],
+  "recall": 42.83606753712332,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase4|test|F|B2|h=fixed_avif_20+mpc": {
+  "band_lo_q": [
+   0.3428932474327221,
+   0.5512185341840535,
+   0.67742276691998
+  ],
+  "band_hi_q": [
+   1.2197733170936518,
+   1.3085430136073137,
+   1.4829504936348281
+  ],
+  "bias_q": [
+   -0.2970921278119371,
+   -0.14021370389381319,
+   0.021439113046546453
+  ],
+  "recall": 42.14147429722985,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|ppola": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.002321970748305,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|ppola+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.98806894431718,
+  "aborts_per_episode": 0.11666666666666667,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|ppola+mpcng": {
+  "band_lo_q": [
+   0.4041194871925278,
+   0.5116112241050617,
+   0.6140372050852612
+  ],
+  "band_hi_q": [
+   1.1247611995633724,
+   1.1662159994941568,
+   1.234893812310062
+  ],
+  "bias_q": [
+   -0.4358592410366521,
+   -0.31925479847162064,
+   -0.19478980047267677
+  ],
+  "recall": 41.00221670683491,
+  "aborts_per_episode": 0.11,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|ppola+mpc": {
+  "band_lo_q": [
+   0.5069198350043581,
+   0.652237129402784,
+   0.7465658160732563
+  ],
+  "band_hi_q": [
+   1.190103321497853,
+   1.2619937853999639,
+   1.4100222183237565
+  ],
+  "bias_q": [
+   -0.20701538371299733,
+   -0.08325762735264283,
+   0.06031109248465178
+  ],
+  "recall": 40.673882291946015,
+  "aborts_per_episode": 0.22,
+  "mode_over50": 3.846153846153846e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|qrla": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 35.58319283896131,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|qrla+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.7201040839062,
+  "aborts_per_episode": 9.026666666666667,
+  "mode_over50": 0.0007307692307692309,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|qrla+mpcng": {
+  "band_lo_q": [
+   0.3893929780605291,
+   0.49970278703909304,
+   0.5973961878635807
+  ],
+  "band_hi_q": [
+   1.122366304888628,
+   1.1655144032980687,
+   1.2340838386239386
+  ],
+  "bias_q": [
+   -0.4499098447247229,
+   -0.3318894726590047,
+   -0.21513830917866636
+  ],
+  "recall": 38.33661278543773,
+  "aborts_per_episode": 0.08333333333333333,
+  "mode_over50": 2.5641025641025643e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|qrla+mpc": {
+  "band_lo_q": [
+   0.49079081149328735,
+   0.644243298629984,
+   0.7420146453865768
+  ],
+  "band_hi_q": [
+   1.1917503498229984,
+   1.264053134063873,
+   1.4097644743043867
+  ],
+  "bias_q": [
+   -0.21886323398641924,
+   -0.08813272417093217,
+   0.04943577548042884
+  ],
+  "recall": 37.94167052979832,
+  "aborts_per_episode": 0.13,
+  "mode_over50": 5.1282051282051286e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|dsla": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 33.11516369817161,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|dsla+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.57710325424756,
+  "aborts_per_episode": 0.006666666666666667,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|dsla+mpcng": {
+  "band_lo_q": [
+   0.3913968005995286,
+   0.5021717043366255,
+   0.6008725873643995
+  ],
+  "band_hi_q": [
+   1.1238764492021465,
+   1.1648042987022247,
+   1.2324861865314005
+  ],
+  "bias_q": [
+   -0.44593413153926176,
+   -0.3291416418585457,
+   -0.21350729032215032
+  ],
+  "recall": 37.572125656579196,
+  "aborts_per_episode": 0.01,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|zeroshot|TD|N5x2|dsla+mpc": {
+  "band_lo_q": [
+   0.483963880302775,
+   0.6422852050465445,
+   0.7397532125217917
+  ],
+  "band_hi_q": [
+   1.190814729781197,
+   1.2640057992942717,
+   1.4100573002265142
+  ],
+  "bias_q": [
+   -0.22209194825727024,
+   -0.09502703755567903,
+   0.0502334933042387
+  ],
+  "recall": 37.00422592247361,
+  "aborts_per_episode": 0.02666666666666667,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|ppofd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 34.92555756954599,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|ppofd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.34478789619018,
+  "aborts_per_episode": 0.043333333333333335,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|ppofd+mpcng": {
+  "band_lo_q": [
+   0.37274969660071716,
+   0.47236382357755874,
+   0.5627056416862537
+  ],
+  "band_hi_q": [
+   1.1181025867720844,
+   1.1570330387323566,
+   1.217572517879034
+  ],
+  "bias_q": [
+   -0.47383202155507453,
+   -0.3675509650983127,
+   -0.260420912828569
+  ],
+  "recall": 37.368046849711526,
+  "aborts_per_episode": 0.07666666666666666,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|ppofd+mpc": {
+  "band_lo_q": [
+   0.47975476933602273,
+   0.6399452345704768,
+   0.7381196958885528
+  ],
+  "band_hi_q": [
+   1.1942980112430086,
+   1.2664332669757068,
+   1.4044823812631104
+  ],
+  "bias_q": [
+   -0.22916218118995382,
+   -0.09240682802058252,
+   0.04975515801104016
+  ],
+  "recall": 36.96538456818823,
+  "aborts_per_episode": 0.02666666666666667,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|qrfd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 31.975292717404987,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|qrfd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.514153755870794,
+  "aborts_per_episode": 0.02,
+  "mode_over50": 5.1282051282051286e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|qrfd+mpcng": {
+  "band_lo_q": [
+   0.38580935019036117,
+   0.49404875886595456,
+   0.5903576550790296
+  ],
+  "band_hi_q": [
+   1.1213530484759455,
+   1.1639873177201572,
+   1.2347512050430036
+  ],
+  "bias_q": [
+   -0.454324088580453,
+   -0.3377699386078531,
+   -0.22348063588827075
+  ],
+  "recall": 37.15200976063982,
+  "aborts_per_episode": 0.013333333333333334,
+  "mode_over50": 2.5641025641025643e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|qrfd+mpc": {
+  "band_lo_q": [
+   0.47960225041054316,
+   0.6402402488156792,
+   0.7383868733716081
+  ],
+  "band_hi_q": [
+   1.1927841755426933,
+   1.2676269619290619,
+   1.4267511434059337
+  ],
+  "bias_q": [
+   -0.21826958423929582,
+   -0.08975852163721394,
+   0.051681493130771625
+  ],
+  "recall": 36.73066021989871,
+  "aborts_per_episode": 0.0033333333333333335,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|dsfd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 27.369637223538646,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|dsfd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 40.2862669652451,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|dsfd+mpcng": {
+  "band_lo_q": [
+   0.3375989089197194,
+   0.43505809111116206,
+   0.5342255983156234
+  ],
+  "band_hi_q": [
+   1.113433394412365,
+   1.1506679890590579,
+   1.2107921204078147
+  ],
+  "bias_q": [
+   -0.5117729874932706,
+   -0.4100468456968249,
+   -0.29711226736851654
+  ],
+  "recall": 34.40293771886334,
+  "aborts_per_episode": 0.02666666666666667,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD|N5x2|dsfd+mpc": {
+  "band_lo_q": [
+   0.4277734841974533,
+   0.6155843709942892,
+   0.7300312588037068
+  ],
+  "band_hi_q": [
+   1.198722678745248,
+   1.2730570833807653,
+   1.413718979984781
+  ],
+  "bias_q": [
+   -0.2624315443307854,
+   -0.11150557283678661,
+   0.0343746307570763
+  ],
+  "recall": 33.68015144080723,
+  "aborts_per_episode": 0.01,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|ppofd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 39.833972882378546,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|ppofd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 46.67790531563985,
+  "aborts_per_episode": 0.26,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|ppofd+mpcng": {
+  "band_lo_q": [
+   0.375267515554557,
+   0.47585519556200134,
+   0.5614270692201893
+  ],
+  "band_hi_q": [
+   1.1139490404474641,
+   1.1513162764841998,
+   1.212247461850727
+  ],
+  "bias_q": [
+   -0.4685761909732821,
+   -0.3731343367191567,
+   -0.2684695176037056
+  ],
+  "recall": 42.61669615135955,
+  "aborts_per_episode": 0.11666666666666667,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|ppofd+mpc": {
+  "band_lo_q": [
+   0.47604118113565996,
+   0.6479627659685683,
+   0.7479135772379557
+  ],
+  "band_hi_q": [
+   1.1889440635984265,
+   1.2569613051571964,
+   1.38909418761626
+  ],
+  "bias_q": [
+   -0.2252776227463882,
+   -0.09510181948549758,
+   0.03392935476560413
+  ],
+  "recall": 42.236784010955546,
+  "aborts_per_episode": 0.02,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|qrfd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 36.564455934163945,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|qrfd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 46.77295356870573,
+  "aborts_per_episode": 0.043333333333333335,
+  "mode_over50": 2.5641025641025643e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|qrfd+mpcng": {
+  "band_lo_q": [
+   0.39066057544129235,
+   0.49946557023918614,
+   0.5847243689067473
+  ],
+  "band_hi_q": [
+   1.1188502071360253,
+   1.1578750978839538,
+   1.226770358905382
+  ],
+  "bias_q": [
+   -0.44344445967848156,
+   -0.3418012024766918,
+   -0.23728795423213067
+  ],
+  "recall": 42.6753495732501,
+  "aborts_per_episode": 0.0033333333333333335,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|qrfd+mpc": {
+  "band_lo_q": [
+   0.4738024245974745,
+   0.6489183068658209,
+   0.7495329272592555
+  ],
+  "band_hi_q": [
+   1.188009652960169,
+   1.2628488972085494,
+   1.4115136141889473
+  ],
+  "bias_q": [
+   -0.21921545866342068,
+   -0.08835453381278438,
+   0.0407017956681164
+  ],
+  "recall": 42.09631455243234,
+  "aborts_per_episode": 0.07666666666666666,
+  "mode_over50": 3.846153846153846e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|dsfd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 31.143688512853977,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|dsfd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 46.84099360705033,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|dsfd+mpcng": {
+  "band_lo_q": [
+   0.3507744867570697,
+   0.4489478159969022,
+   0.5363609580087825
+  ],
+  "band_hi_q": [
+   1.1112487257362729,
+   1.1480525783793079,
+   1.2086235763739104
+  ],
+  "bias_q": [
+   -0.4923075142248216,
+   -0.40188658557286866,
+   -0.3036625633381692
+  ],
+  "recall": 39.71395363044278,
+  "aborts_per_episode": 0.10666666666666667,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|F|N5x2|dsfd+mpc": {
+  "band_lo_q": [
+   0.42348737945700327,
+   0.626203162822096,
+   0.7386423120959881
+  ],
+  "band_hi_q": [
+   1.194695907416811,
+   1.2691653197524273,
+   1.4150333147817729
+  ],
+  "bias_q": [
+   -0.2570550440369112,
+   -0.10709100590307907,
+   0.03330450899856731
+  ],
+  "recall": 39.19112186134702,
+  "aborts_per_episode": 0.0,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|ppofd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 35.538896907754975,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|ppofd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 42.10132012475333,
+  "aborts_per_episode": 0.19333333333333333,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|ppofd+mpcng": {
+  "band_lo_q": [
+   0.337839987271781,
+   0.42854438358545754,
+   0.5108796124146014
+  ],
+  "band_hi_q": [
+   1.1112933752272518,
+   1.148757536854861,
+   1.2039269150562375
+  ],
+  "bias_q": [
+   -0.5146960027484688,
+   -0.4213103392085538,
+   -0.32582316532899597
+  ],
+  "recall": 37.85620706631998,
+  "aborts_per_episode": 0.11,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|ppofd+mpc": {
+  "band_lo_q": [
+   0.43220878212819364,
+   0.613965327948809,
+   0.7215805890219362
+  ],
+  "band_hi_q": [
+   1.197262455320088,
+   1.2716380877748856,
+   1.4018405009378887
+  ],
+  "bias_q": [
+   -0.2611888739538003,
+   -0.1196300136309436,
+   0.023309784362045158
+  ],
+  "recall": 37.444502498812945,
+  "aborts_per_episode": 0.03,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|qrfd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 32.091441777633705,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|qrfd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 42.4328532843344,
+  "aborts_per_episode": 0.14666666666666667,
+  "mode_over50": 0.0001153846153846154,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|qrfd+mpcng": {
+  "band_lo_q": [
+   0.36883205550990633,
+   0.4733783003415859,
+   0.5678072893002702
+  ],
+  "band_hi_q": [
+   1.1205976355581622,
+   1.1618386244228975,
+   1.229128727194059
+  ],
+  "bias_q": [
+   -0.46710206338738414,
+   -0.3617151466972218,
+   -0.25307985076200085
+  ],
+  "recall": 38.40800072653721,
+  "aborts_per_episode": 0.17,
+  "mode_over50": 5.1282051282051286e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|qrfd+mpc": {
+  "band_lo_q": [
+   0.4518996664768516,
+   0.6196693651565918,
+   0.7273432677239092
+  ],
+  "band_hi_q": [
+   1.1970219610110597,
+   1.275083840110257,
+   1.4191438161471495
+  ],
+  "bias_q": [
+   -0.2359556176659909,
+   -0.10594878807961913,
+   0.03219933128714092
+  ],
+  "recall": 37.908578287247174,
+  "aborts_per_episode": 0.04,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|dsfd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 26.752102025583046,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|dsfd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 42.24974621316212,
+  "aborts_per_episode": 0.12,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|dsfd+mpcng": {
+  "band_lo_q": [
+   0.30993159462311476,
+   0.40138673437463496,
+   0.49135281741158393
+  ],
+  "band_hi_q": [
+   1.1086203879622967,
+   1.1455396378127058,
+   1.2028521432962969
+  ],
+  "bias_q": [
+   -0.5447782611630494,
+   -0.4498027875723043,
+   -0.35036182488646234
+  ],
+  "recall": 34.43797838671624,
+  "aborts_per_episode": 0.013333333333333334,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|V|N5x2|dsfd+mpc": {
+  "band_lo_q": [
+   0.38802521620395825,
+   0.5865096605450553,
+   0.7190019267557873
+  ],
+  "band_hi_q": [
+   1.204195087040387,
+   1.2807266597494045,
+   1.4154509324191236
+  ],
+  "bias_q": [
+   -0.2954936424128567,
+   -0.13010114161740988,
+   0.01788860471470146
+  ],
+  "recall": 34.203612624564435,
+  "aborts_per_episode": 0.04666666666666667,
+  "mode_over50": 2.5641025641025643e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|ppofd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 31.545987052922847,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|ppofd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 36.73878627410611,
+  "aborts_per_episode": 0.03,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|ppofd+mpcng": {
+  "band_lo_q": [
+   0.38081051492129686,
+   0.4816354235135907,
+   0.5730840256947313
+  ],
+  "band_hi_q": [
+   1.1177597372666495,
+   1.1556469102325144,
+   1.2144777210611357
+  ],
+  "bias_q": [
+   -0.4660127751309991,
+   -0.36082705470313964,
+   -0.25323247507124635
+  ],
+  "recall": 33.94271208619728,
+  "aborts_per_episode": 0.06333333333333334,
+  "mode_over50": 2.5641025641025643e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|ppofd+mpc": {
+  "band_lo_q": [
+   0.48140035604905773,
+   0.6427138873679656,
+   0.7485619566357058
+  ],
+  "band_hi_q": [
+   1.1949352348338251,
+   1.2674323616899799,
+   1.4026680466004657
+  ],
+  "bias_q": [
+   -0.22293280167976018,
+   -0.08821718463904112,
+   0.05210446389455296
+  ],
+  "recall": 33.36418938081363,
+  "aborts_per_episode": 0.06666666666666667,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|qrfd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 28.865265337997492,
+  "aborts_per_episode": null,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|qrfd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 36.975228899517326,
+  "aborts_per_episode": 0.09,
+  "mode_over50": 6.41025641025641e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|qrfd+mpcng": {
+  "band_lo_q": [
+   0.39304236102285717,
+   0.49542166471909754,
+   0.5852234272285047
+  ],
+  "band_hi_q": [
+   1.1236080454573478,
+   1.1659894478605781,
+   1.233645243726645
+  ],
+  "bias_q": [
+   -0.44533185467185094,
+   -0.3349538085232363,
+   -0.22845127020629177
+  ],
+  "recall": 33.60299381946841,
+  "aborts_per_episode": 0.023333333333333334,
+  "mode_over50": 2.5641025641025643e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|qrfd+mpc": {
+  "band_lo_q": [
+   0.476351446493544,
+   0.6388127167740026,
+   0.7374760677210344
+  ],
+  "band_hi_q": [
+   1.196389108537292,
+   1.273768132216353,
+   1.424152381894942
+  ],
+  "bias_q": [
+   -0.21780777272333893,
+   -0.0886539252123783,
+   0.04999502314798788
+  ],
+  "recall": 32.949055231846046,
+  "aborts_per_episode": 0.043333333333333335,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|dsfd": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 24.57936300008842,
+  "aborts_per_episode": null,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|dsfd+mpcnc": {
+  "band_lo_q": null,
+  "band_hi_q": null,
+  "bias_q": null,
+  "recall": 36.9380964122833,
+  "aborts_per_episode": 0.03,
+  "mode_over50": 0.0,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|dsfd+mpcng": {
+  "band_lo_q": [
+   0.3439016785666017,
+   0.44198752327093094,
+   0.5349774632024102
+  ],
+  "band_hi_q": [
+   1.115018680971911,
+   1.151272112749237,
+   1.211191616388716
+  ],
+  "bias_q": [
+   -0.503825153491842,
+   -0.40273565272810874,
+   -0.2967684936697332
+  ],
+  "recall": 31.067811765687015,
+  "aborts_per_episode": 0.016666666666666666,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ },
+ "phase3|retrained|TD_all|N5x2|dsfd+mpc": {
+  "band_lo_q": [
+   0.437765797494769,
+   0.6203345904318224,
+   0.7309313329712975
+  ],
+  "band_hi_q": [
+   1.1969778791515209,
+   1.2703101159528631,
+   1.40407585729839
+  ],
+  "bias_q": [
+   -0.2543664808005059,
+   -0.10933536191346245,
+   0.029229312473513857
+  ],
+  "recall": 30.49401962192982,
+  "aborts_per_episode": 0.02,
+  "mode_over50": 1.2820512820512822e-05,
+  "abort_categories": "unavailable (only the per-episode abort count was logged)"
+ }
+}

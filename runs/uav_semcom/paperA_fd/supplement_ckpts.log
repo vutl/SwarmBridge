@@ -1,0 +1,10 @@
+versions {'python': '3.12.16', 'torch': '2.12.1+cu130', 'platform': 'Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43', 'sb3': '2.9.2', 'sb3_contrib': '2.9.2'}
+ppofd seed 0: ckpts.json == selection.json True; sha256 ok True; selected step 1400000 best val -73.02; nominal 2000000 actual 2027520 updates 3300 wall 0.77 h
+ppofd seed 1: ckpts.json == selection.json True; sha256 ok True; selected step 1600000 best val -72.67; nominal 2000000 actual 2027520 updates 3300 wall 0.77 h
+ppofd seed 2: ckpts.json == selection.json True; sha256 ok True; selected step 1600000 best val -72.87; nominal 2000000 actual 2027520 updates 3300 wall 0.76 h
+qrfd seed 0: ckpts.json == selection.json True; sha256 ok True; selected step 1600000 best val -96.61; nominal 2000000 actual None updates 495000 wall 3.74 h
+qrfd seed 1: ckpts.json == selection.json True; sha256 ok True; selected step 1400000 best val -96.24; nominal 2000000 actual None updates 495000 wall 3.74 h
+qrfd seed 2: ckpts.json == selection.json True; sha256 ok True; selected step 1800000 best val -88.75; nominal 2000000 actual None updates 495000 wall 3.78 h
+dsfd seed 0: ckpts.json == selection.json True; sha256 ok True; selected step 2000000 best val -100.37; nominal 2000000 actual None updates 495000 wall 3.52 h
+dsfd seed 1: ckpts.json == selection.json True; sha256 ok True; selected step 1800000 best val -105.34; nominal 2000000 actual None updates 495000 wall 3.56 h
+dsfd seed 2: ckpts.json == selection.json True; sha256 ok True; selected step 1800000 best val -95.79; nominal 2000000 actual None updates 495000 wall 3.58 h

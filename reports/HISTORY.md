@@ -29,7 +29,27 @@ phase reports. Two recent review rounds made factual errors that this file answe
     mapping / OT-CFM.
   - MARL was explicitly deferred; active flight (AirSim) was a later stage.
 
-## 2. Current status (20/11)
+## 2. Current status (20/11; full-data update 25/11)
+
+- **Extended full-data evaluation of Paper A (23–25/11, `phases/2026-11-23_paperA-fulldata/`, namespace paperA_fd,
+  protocol fd_v1).** All phases were pre-registered and run to completion: 25,200 new episodes, coverage and
+  checkpoint checks pass. Consolidated in `paperA-fd-consolidated.md`.
+  - **Positive:**
+    - the error-aware layer (ng) beats the tuned heuristic at the reference and in 5 / 6 network / bandwidth
+      configurations;
+    - it beats 3 / 3 learned incumbents (PPO, QR-DQN, DSAC);
+    - the robustness band is the necessary component.
+  - **Negative / inconclusive:**
+    - the tracker gate is not necessary; H4 vs H1 does not replicate;
+    - calibration adds return only with learned incumbents and at N5x3 / N5x4, and **lowers recall everywhere**;
+    - the unguarded nominal planner has the highest recall (return and recall are not aligned);
+    - sequential controller timing exceeds the 50 ms slot in 44–82% of slots (parallel too at K7 / M4);
+    - no learned incumbent beats the heuristic.
+  - **Recommendation C:** reposition Paper A as an application and empirical contribution. B (band + H1 controller)
+    only as a separately registered study. No manuscript rewrite before review.
+  - **Execution incidents:**
+    - 24/11: the WSL VM stopped 90 s after launch, unnoticed for 3 h.
+    - 25/11: host power loss; resumed with `--skip-existing`; completed pools were kept.
 
 - **Decision (18/11, after review #48):**
   - Write Paper A now as an evaluation study + calibrated planning baseline, from existing data

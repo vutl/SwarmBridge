@@ -16,3 +16,16 @@
 [2026-11-24 20:51:04] start rl_training
 [2026-11-25 10:13:27] end rl_training exit 0
 [2026-11-25 10:13:27] start rl_retrained
+[2026-11-25 12:21:38] chain start at commit 000251c7
+[2026-11-25 12:21:39] skip ablation_test (done)
+[2026-11-25 12:21:39] skip ablation_summary (done)
+[2026-11-25 12:21:39] skip grid_test (done)
+[2026-11-25 12:21:39] skip grid_summary (done)
+[2026-11-25 12:21:39] skip rl_zeroshot (done)
+[2026-11-25 12:21:39] skip rl_zs_summary (done)
+[2026-11-25 12:21:39] skip rl_training (done)
+[2026-11-25 12:21:39] start rl_retrained
+[2026-11-25 13:59:41] end rl_retrained exit 0
+[2026-11-25 13:59:41] start rl_rt_summary
+[2026-11-25 13:59:51] end rl_rt_summary exit 0
+[2026-11-25 13:59:51] CHAIN EXIT 0

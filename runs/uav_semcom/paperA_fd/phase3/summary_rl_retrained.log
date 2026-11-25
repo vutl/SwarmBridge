@@ -1,0 +1,208 @@
+== rl/retrained TD (seeds 20000..20099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   R1_ppofd                    ppofd+mpcng - ppofd                  return   +7.38 [  +5.99,  +8.77]*  p 0.0000 [confirmatory]  Holm p 0.0000 REJECT (+)
+                    recall seed   +2.44 [  +2.22,  +2.66]*  video-cluster   +2.44 [  +1.64,  +3.24]* (61 seq)
+   R2_ppofd                      ppofd+mpc - ppofd+mpcng            return   +3.13 [  +1.57,  +4.69]*  p 0.0001 [confirmatory]  Holm p 0.0001 REJECT (+)
+                    recall seed   -0.40 [  -0.59,  -0.21]*  video-cluster   -0.41 [  -0.61,  -0.18]* (61 seq)
+   R3_ppofd                      ppofd+mpc - ppofd                  return  +10.51 [  +8.99, +12.02]*  p 0.0000 [supporting]
+   R4_ppofd                    ppofd+mpcng - ppofd+mpcnc            return  +14.04 [ +11.19, +16.88]*  p 0.0000 [supporting]
+   R1_qrfd                      qrfd+mpcng - qrfd                   return  +19.01 [ +17.01, +21.02]*  p 0.0000 [confirmatory]  Holm p 0.0000 REJECT (+)
+                    recall seed   +5.18 [  +4.88,  +5.47]*  video-cluster   +5.17 [  +4.29,  +6.17]* (61 seq)
+   R2_qrfd                        qrfd+mpc - qrfd+mpcng             return   +4.68 [  +3.02,  +6.34]*  p 0.0000 [confirmatory]  Holm p 0.0000 REJECT (+)
+                    recall seed   -0.42 [  -0.62,  -0.23]*  video-cluster   -0.42 [  -0.59,  -0.26]* (61 seq)
+   R3_qrfd                        qrfd+mpc - qrfd                   return  +23.69 [ +21.93, +25.45]*  p 0.0000 [supporting]
+   R4_qrfd                      qrfd+mpcng - qrfd+mpcnc             return   +6.63 [  +4.17,  +9.09]*  p 0.0000 [supporting]
+   R1_dsfd                      dsfd+mpcng - dsfd                   return  +25.73 [ +23.79, +27.67]*  p 0.0000 [confirmatory]  Holm p 0.0000 REJECT (+)
+                    recall seed   +7.03 [  +6.67,  +7.40]*  video-cluster   +7.04 [  +6.07,  +8.17]* (61 seq)
+   R2_dsfd                        dsfd+mpc - dsfd+mpcng             return   +6.00 [  +4.23,  +7.77]*  p 0.0000 [confirmatory]  Holm p 0.0000 REJECT (+)
+                    recall seed   -0.72 [  -0.97,  -0.48]*  video-cluster   -0.72 [  -1.09,  -0.31]* (61 seq)
+   R3_dsfd                        dsfd+mpc - dsfd                   return  +31.73 [ +30.12, +33.35]*  p 0.0000 [supporting]
+   R4_dsfd                      dsfd+mpcng - dsfd+mpcnc             return   +4.61 [  +1.95,  +7.26]*  p 0.0008 [supporting]
+   R5 ppofd: alone - H*   -2.96 [  -4.88,  -1.04]*   matched - H*matched   -2.96 [  -5.35,  -0.57]*
+   R5 qrfd: alone - H*  -22.55 [ -25.06, -20.04]*   matched - H*matched  -10.91 [ -13.55,  -8.28]*
+   R5 dsfd: alone - H*  -34.06 [ -36.37, -31.75]*   matched - H*matched  -15.71 [ -18.25, -13.17]*
+   per training seed R1_ppofd_s0:   +6.65 [  +4.16,  +9.14]*
+   per training seed R1_ppofd_s1:   +6.15 [  +3.77,  +8.53]*
+   per training seed R1_ppofd_s2:   +9.33 [  +6.82, +11.84]*
+   per training seed R2_ppofd_s0:   +3.49 [  +1.07,  +5.91]*
+   per training seed R2_ppofd_s1:   +3.61 [  +1.43,  +5.79]*
+   per training seed R2_ppofd_s2:   +2.29 [  +0.00,  +4.58]*
+   per training seed R1_qrfd_s0:  +16.55 [ +13.88, +19.21]*
+   per training seed R1_qrfd_s1:  +15.70 [ +12.37, +19.04]*
+   per training seed R1_qrfd_s2:  +24.79 [ +21.45, +28.14]*
+   per training seed R2_qrfd_s0:   +3.14 [  +0.75,  +5.53]*
+   per training seed R2_qrfd_s1:   +6.19 [  +3.77,  +8.60]*
+   per training seed R2_qrfd_s2:   +4.70 [  +1.68,  +7.72]*
+   per training seed R1_dsfd_s0:  +20.12 [ +16.60, +23.64]*
+   per training seed R1_dsfd_s1:  +32.65 [ +30.07, +35.24]*
+   per training seed R1_dsfd_s2:  +24.42 [ +21.44, +27.41]*
+   per training seed R2_dsfd_s0:   +6.15 [  +3.05,  +9.25]*
+   per training seed R2_dsfd_s1:   +4.42 [  +2.32,  +6.52]*
+   per training seed R2_dsfd_s2:   +7.43 [  +4.55, +10.31]*
+     ppofd                        ret   -51.05 (per img -0.196) ok 0.822 | full-sum p99   16.7 sum   16.7 max   6.7 sched   3.6 mode   3.2 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     ppofd+mpcnc                  ret   -57.71 (per img -0.222) ok 0.870 | full-sum p99  171.2 sum  171.2 max  47.3 sched   3.8 mode  43.8 upd 0.00 ms | >50 full-sum 0.7352 (eps 300) | sw 175.7 gated 0.0 rej/chk 0/176
+     ppofd+mpcng                  ret   -43.67 (per img -0.168) ok 0.862 | full-sum p99  172.8 sum  172.4 max  47.3 sched   3.8 mode  44.0 upd 0.60 ms | >50 full-sum 0.6474 (eps 300) | sw 61.0 gated 50.7 rej/chk 91/152
+     ppofd+mpc                    ret   -40.54 (per img -0.156) ok 0.865 | full-sum p99  168.4 sum  168.2 max  47.0 sched   3.8 mode  43.7 upd 0.47 ms | >50 full-sum 0.6352 (eps 300) | sw 71.9 gated 50.7 rej/chk 66/138
+     qrfd                         ret   -70.64 (per img -0.272) ok 0.767 | full-sum p99    5.3 sum    5.3 max   4.2 sched   3.8 mode   0.5 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     qrfd+mpcnc                   ret   -58.25 (per img -0.224) ok 0.870 | full-sum p99  163.4 sum  163.4 max  44.4 sched   3.8 mode  40.8 upd 0.00 ms | >50 full-sum 0.7115 (eps 300) | sw 175.6 gated 0.0 rej/chk 0/176
+     qrfd+mpcng                   ret   -51.62 (per img -0.199) ok 0.852 | full-sum p99  157.9 sum  157.5 max  44.4 sched   3.8 mode  41.0 upd 0.59 ms | >50 full-sum 0.6210 (eps 300) | sw 68.6 gated 47.6 rej/chk 84/153
+     qrfd+mpc                     ret   -46.95 (per img -0.181) ok 0.856 | full-sum p99  154.3 sum  154.2 max  44.1 sched   3.8 mode  40.8 upd 0.44 ms | >50 full-sum 0.6158 (eps 300) | sw 76.5 gated 47.7 rej/chk 62/138
+     dsfd                         ret   -82.15 (per img -0.316) ok 0.702 | full-sum p99    4.8 sum    4.8 max   4.0 sched   3.7 mode   0.4 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     dsfd+mpcnc                   ret   -61.02 (per img -0.235) ok 0.865 | full-sum p99  162.9 sum  162.9 max  44.1 sched   3.8 mode  40.7 upd 0.00 ms | >50 full-sum 0.7120 (eps 300) | sw 194.7 gated 0.0 rej/chk 0/195
+     dsfd+mpcng                   ret   -56.42 (per img -0.217) ok 0.819 | full-sum p99  160.4 sum  160.0 max  44.3 sched   3.8 mode  40.9 upd 0.59 ms | >50 full-sum 0.6301 (eps 300) | sw 78.4 gated 47.9 rej/chk 88/167
+     dsfd+mpc                     ret   -50.42 (per img -0.194) ok 0.824 | full-sum p99  157.0 sum  156.8 max  43.5 sched   3.8 mode  40.3 upd 0.44 ms | >50 full-sum 0.6144 (eps 300) | sw 84.6 gated 47.8 rej/chk 57/142
+== rl/retrained F (seeds 22000..22099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   R1_ppofd                    ppofd+mpcng - ppofd                  return   +8.01 [  +6.45,  +9.58]*  p 0.0000 [confirmatory]
+                    recall seed   +2.78 [  +2.48,  +3.09]*  video-cluster   +2.78 [  +1.66,  +4.06]* (18 seq)
+   R2_ppofd                      ppofd+mpc - ppofd+mpcng            return   +3.51 [  +1.91,  +5.10]*  p 0.0000 [confirmatory]
+                    recall seed   -0.38 [  -0.60,  -0.16]*  video-cluster   -0.39 [  -0.64,  -0.18]* (18 seq)
+   R3_ppofd                      ppofd+mpc - ppofd                  return  +11.52 [ +10.14, +12.90]*  p 0.0000 [supporting]
+   R4_ppofd                    ppofd+mpcng - ppofd+mpcnc            return   +9.15 [  +6.64, +11.66]*  p 0.0000 [supporting]
+   R1_qrfd                      qrfd+mpcng - qrfd                   return  +20.79 [ +19.00, +22.58]*  p 0.0000 [confirmatory]
+                    recall seed   +6.11 [  +5.72,  +6.50]*  video-cluster   +6.11 [  +4.73,  +7.79]* (18 seq)
+   R2_qrfd                        qrfd+mpc - qrfd+mpcng             return   +4.18 [  +2.57,  +5.79]*  p 0.0000 [confirmatory]
+                    recall seed   -0.58 [  -0.86,  -0.30]*  video-cluster   -0.58 [  -1.02,  -0.26]* (18 seq)
+   R3_qrfd                        qrfd+mpc - qrfd                   return  +24.97 [ +23.49, +26.45]*  p 0.0000 [supporting]
+   R4_qrfd                      qrfd+mpcng - qrfd+mpcnc             return   +3.38 [  +0.92,  +5.84]*  p 0.0076 [supporting]
+   R1_dsfd                      dsfd+mpcng - dsfd                   return  +29.13 [ +27.17, +31.09]*  p 0.0000 [confirmatory]
+                    recall seed   +8.57 [  +8.13,  +9.01]*  video-cluster   +8.58 [  +6.86, +10.34]* (18 seq)
+   R2_dsfd                        dsfd+mpc - dsfd+mpcng             return   +6.73 [  +5.01,  +8.46]*  p 0.0000 [confirmatory]
+                    recall seed   -0.52 [  -0.81,  -0.23]*  video-cluster   -0.52 [  -0.88,  -0.15]* (18 seq)
+   R3_dsfd                        dsfd+mpc - dsfd                   return  +35.86 [ +34.00, +37.73]*  p 0.0000 [supporting]
+   R4_dsfd                      dsfd+mpcng - dsfd+mpcnc             return   -1.62 [  -4.32,  +1.07]   p 0.2343 [supporting]
+   R5 ppofd: alone - H*   -3.05 [  -5.49,  -0.60]*   matched - H*matched   +1.56 [  -1.01,  +4.13] 
+   R5 qrfd: alone - H*  -22.83 [ -25.64, -20.02]*   matched - H*matched   -5.44 [  -8.06,  -2.83]*
+   R5 dsfd: alone - H*  -36.61 [ -39.17, -34.05]*   matched - H*matched  -10.89 [ -13.22,  -8.55]*
+   per training seed R1_ppofd_s0:   +8.38 [  +5.89, +10.86]*
+   per training seed R1_ppofd_s1:   +6.30 [  +3.86,  +8.74]*
+   per training seed R1_ppofd_s2:   +9.37 [  +6.70, +12.04]*
+   per training seed R2_ppofd_s0:   +2.56 [  +0.32,  +4.79]*
+   per training seed R2_ppofd_s1:   +3.47 [  +1.19,  +5.74]*
+   per training seed R2_ppofd_s2:   +4.50 [  +1.71,  +7.29]*
+   per training seed R1_qrfd_s0:  +15.98 [ +13.39, +18.56]*
+   per training seed R1_qrfd_s1:  +21.39 [ +18.57, +24.22]*
+   per training seed R1_qrfd_s2:  +24.99 [ +21.53, +28.46]*
+   per training seed R2_qrfd_s0:   +4.44 [  +1.33,  +7.55]*
+   per training seed R2_qrfd_s1:   +1.52 [  -0.83,  +3.88] 
+   per training seed R2_qrfd_s2:   +6.57 [  +3.55,  +9.60]*
+   per training seed R1_dsfd_s0:  +22.59 [ +19.24, +25.94]*
+   per training seed R1_dsfd_s1:  +35.53 [ +31.67, +39.38]*
+   per training seed R1_dsfd_s2:  +29.28 [ +26.31, +32.24]*
+   per training seed R2_dsfd_s0:   +7.61 [  +4.11, +11.11]*
+   per training seed R2_dsfd_s1:   +5.93 [  +2.68,  +9.18]*
+   per training seed R2_dsfd_s2:   +6.67 [  +4.41,  +8.92]*
+     ppofd                        ret   -76.29 (per img -0.293) ok 0.758 | full-sum p99   17.2 sum   17.2 max   6.9 sched   3.7 mode   3.2 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     ppofd+mpcnc                  ret   -77.43 (per img -0.298) ok 0.837 | full-sum p99  174.0 sum  174.0 max  47.3 sched   3.8 mode  43.8 upd 0.00 ms | >50 full-sum 0.7330 (eps 300) | sw 171.7 gated 0.0 rej/chk 0/172
+     ppofd+mpcng                  ret   -68.28 (per img -0.263) ok 0.807 | full-sum p99  174.3 sum  173.9 max  47.4 sched   3.8 mode  44.0 upd 0.61 ms | >50 full-sum 0.6445 (eps 300) | sw 55.3 gated 49.4 rej/chk 93/149
+     ppofd+mpc                    ret   -64.77 (per img -0.249) ok 0.808 | full-sum p99  167.4 sum  167.2 max  47.0 sched   3.8 mode  43.6 upd 0.46 ms | >50 full-sum 0.6348 (eps 300) | sw 65.0 gated 49.4 rej/chk 68/133
+     qrfd                         ret   -96.07 (per img -0.370) ok 0.706 | full-sum p99    5.2 sum    5.2 max   4.2 sched   3.8 mode   0.5 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     qrfd+mpcnc                   ret   -78.66 (per img -0.303) ok 0.836 | full-sum p99  162.4 sum  162.4 max  44.3 sched   3.8 mode  40.8 upd 0.00 ms | >50 full-sum 0.7079 (eps 300) | sw 172.6 gated 0.0 rej/chk 0/173
+     qrfd+mpcng                   ret   -75.28 (per img -0.290) ok 0.802 | full-sum p99  159.5 sum  159.1 max  44.4 sched   3.8 mode  41.1 upd 0.59 ms | >50 full-sum 0.6272 (eps 300) | sw 67.8 gated 45.9 rej/chk 85/153
+     qrfd+mpc                     ret   -71.10 (per img -0.273) ok 0.805 | full-sum p99  156.0 sum  155.8 max  44.7 sched   3.9 mode  40.8 upd 0.44 ms | >50 full-sum 0.6193 (eps 300) | sw 75.7 gated 45.8 rej/chk 63/139
+     dsfd                         ret  -109.86 (per img -0.423) ok 0.632 | full-sum p99    4.8 sum    4.8 max   4.0 sched   3.7 mode   0.3 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     dsfd+mpcnc                   ret   -79.10 (per img -0.304) ok 0.835 | full-sum p99  164.2 sum  164.2 max  44.2 sched   3.8 mode  40.7 upd 0.00 ms | >50 full-sum 0.7126 (eps 300) | sw 192.9 gated 0.0 rej/chk 0/193
+     dsfd+mpcng                   ret   -80.73 (per img -0.310) ok 0.767 | full-sum p99  162.5 sum  162.1 max  44.4 sched   3.8 mode  41.0 upd 0.61 ms | >50 full-sum 0.6328 (eps 300) | sw 82.7 gated 46.1 rej/chk 87/170
+     dsfd+mpc                     ret   -73.99 (per img -0.285) ok 0.774 | full-sum p99  158.7 sum  158.5 max  43.7 sched   3.8 mode  40.5 upd 0.42 ms | >50 full-sum 0.6222 (eps 300) | sw 89.8 gated 46.0 rej/chk 60/149
+== rl/retrained V (seeds 21000..21099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   R1_ppofd                    ppofd+mpcng - ppofd                  return   +6.18 [  +4.85,  +7.51]*  p 0.0000 [confirmatory]
+                    recall seed   +2.32 [  +2.10,  +2.53]*  video-cluster   +2.32 [  +1.76,  +2.85]* (76 seq)
+   R2_ppofd                      ppofd+mpc - ppofd+mpcng            return   +1.26 [  -0.05,  +2.57]   p 0.0589 [confirmatory]
+                    recall seed   -0.41 [  -0.59,  -0.24]*  video-cluster   -0.41 [  -0.63,  -0.20]* (76 seq)
+   R3_ppofd                      ppofd+mpc - ppofd                  return   +7.44 [  +6.29,  +8.60]*  p 0.0000 [supporting]
+   R4_ppofd                    ppofd+mpcng - ppofd+mpcnc            return  +13.66 [ +11.02, +16.30]*  p 0.0000 [supporting]
+   R1_qrfd                      qrfd+mpcng - qrfd                   return  +20.75 [ +18.95, +22.56]*  p 0.0000 [confirmatory]
+                    recall seed   +6.32 [  +5.94,  +6.69]*  video-cluster   +6.32 [  +5.46,  +7.13]* (76 seq)
+   R2_qrfd                        qrfd+mpc - qrfd+mpcng             return   +3.70 [  +2.22,  +5.18]*  p 0.0000 [confirmatory]
+                    recall seed   -0.50 [  -0.70,  -0.29]*  video-cluster   -0.50 [  -0.70,  -0.32]* (76 seq)
+   R3_qrfd                        qrfd+mpc - qrfd                   return  +24.45 [ +22.75, +26.16]*  p 0.0000 [supporting]
+   R4_qrfd                      qrfd+mpcng - qrfd+mpcnc             return   +9.56 [  +6.86, +12.27]*  p 0.0000 [supporting]
+   R1_dsfd                      dsfd+mpcng - dsfd                   return  +25.99 [ +23.57, +28.40]*  p 0.0000 [confirmatory]
+                    recall seed   +7.69 [  +7.23,  +8.14]*  video-cluster   +7.69 [  +6.68,  +8.63]* (76 seq)
+   R2_dsfd                        dsfd+mpc - dsfd+mpcng             return   +7.19 [  +5.37,  +9.01]*  p 0.0000 [confirmatory]
+                    recall seed   -0.23 [  -0.52,  +0.05]   video-cluster   -0.23 [  -0.63,  +0.18]  (76 seq)
+   R3_dsfd                        dsfd+mpc - dsfd                   return  +33.17 [ +31.49, +34.86]*  p 0.0000 [supporting]
+   R4_dsfd                      dsfd+mpcng - dsfd+mpcnc             return   +0.30 [  -2.57,  +3.17]   p 0.8371 [supporting]
+   R5 ppofd: alone - H*   -3.08 [  -4.67,  -1.49]*   matched - H*matched   +0.99 [  -0.83,  +2.82] 
+   R5 qrfd: alone - H*  -23.08 [ -25.89, -20.28]*   matched - H*matched   -4.44 [  -6.76,  -2.13]*
+   R5 dsfd: alone - H*  -39.33 [ -41.32, -37.34]*   matched - H*matched  -15.45 [ -17.97, -12.94]*
+   per training seed R1_ppofd_s0:   +6.09 [  +4.11,  +8.07]*
+   per training seed R1_ppofd_s1:   +4.45 [  +2.48,  +6.41]*
+   per training seed R1_ppofd_s2:   +8.01 [  +5.74, +10.28]*
+   per training seed R2_ppofd_s0:   +1.47 [  -0.69,  +3.63] 
+   per training seed R2_ppofd_s1:   +1.99 [  +0.21,  +3.77]*
+   per training seed R2_ppofd_s2:   +0.33 [  -2.13,  +2.78] 
+   per training seed R1_qrfd_s0:  +13.65 [ +11.23, +16.06]*
+   per training seed R1_qrfd_s1:  +17.03 [ +14.25, +19.80]*
+   per training seed R1_qrfd_s2:  +31.59 [ +28.18, +35.01]*
+   per training seed R2_qrfd_s0:   +3.18 [  +0.71,  +5.65]*
+   per training seed R2_qrfd_s1:   +3.53 [  +1.07,  +5.98]*
+   per training seed R2_qrfd_s2:   +4.39 [  +1.76,  +7.02]*
+   per training seed R1_dsfd_s0:  +21.36 [ +17.50, +25.22]*
+   per training seed R1_dsfd_s1:  +34.26 [ +31.04, +37.48]*
+   per training seed R1_dsfd_s2:  +22.35 [ +19.25, +25.44]*
+   per training seed R2_dsfd_s0:   +6.25 [  +3.42,  +9.07]*
+   per training seed R2_dsfd_s1:   +5.53 [  +2.96,  +8.10]*
+   per training seed R2_dsfd_s2:   +9.78 [  +7.03, +12.53]*
+     ppofd                        ret   -66.36 (per img -0.255) ok 0.763 | full-sum p99   16.3 sum   16.3 max   6.7 sched   3.7 mode   3.2 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     ppofd+mpcnc                  ret   -73.84 (per img -0.284) ok 0.822 | full-sum p99  166.9 sum  166.9 max  46.7 sched   3.9 mode  43.2 upd 0.00 ms | >50 full-sum 0.7397 (eps 300) | sw 175.7 gated 0.0 rej/chk 0/176
+     ppofd+mpcng                  ret   -60.18 (per img -0.231) ok 0.796 | full-sum p99  167.2 sum  166.8 max  46.5 sched   3.8 mode  43.2 upd 0.60 ms | >50 full-sum 0.6585 (eps 300) | sw 40.4 gated 46.6 rej/chk 113/153
+     ppofd+mpc                    ret   -58.92 (per img -0.227) ok 0.797 | full-sum p99  162.1 sum  161.9 max  46.0 sched   3.8 mode  42.8 upd 0.46 ms | >50 full-sum 0.6469 (eps 300) | sw 53.1 gated 46.5 rej/chk 71/124
+     qrfd                         ret   -86.37 (per img -0.332) ok 0.704 | full-sum p99    5.1 sum    5.1 max   4.1 sched   3.7 mode   0.5 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     qrfd+mpcnc                   ret   -75.18 (per img -0.289) ok 0.822 | full-sum p99  157.5 sum  157.5 max  44.1 sched   3.9 mode  40.4 upd 0.00 ms | >50 full-sum 0.7124 (eps 300) | sw 173.8 gated 0.0 rej/chk 0/174
+     qrfd+mpcng                   ret   -65.61 (per img -0.252) ok 0.800 | full-sum p99  155.2 sum  154.8 max  43.9 sched   3.8 mode  40.6 upd 0.59 ms | >50 full-sum 0.6386 (eps 300) | sw 63.0 gated 46.0 rej/chk 97/160
+     qrfd+mpc                     ret   -61.92 (per img -0.238) ok 0.801 | full-sum p99  149.5 sum  149.4 max  43.2 sched   3.8 mode  40.0 upd 0.44 ms | >50 full-sum 0.6266 (eps 300) | sw 72.0 gated 45.9 rej/chk 67/139
+     dsfd                         ret  -102.61 (per img -0.395) ok 0.630 | full-sum p99    4.7 sum    4.7 max   4.1 sched   3.7 mode   0.3 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     dsfd+mpcnc                   ret   -76.92 (per img -0.296) ok 0.818 | full-sum p99  156.6 sum  156.6 max  43.9 sched   3.9 mode  40.3 upd 0.00 ms | >50 full-sum 0.7186 (eps 300) | sw 191.7 gated 0.0 rej/chk 0/192
+     dsfd+mpcng                   ret   -76.63 (per img -0.295) ok 0.748 | full-sum p99  157.2 sum  156.8 max  43.4 sched   3.8 mode  40.2 upd 0.58 ms | >50 full-sum 0.6458 (eps 300) | sw 71.7 gated 44.7 rej/chk 106/177
+     dsfd+mpc                     ret   -69.44 (per img -0.267) ok 0.760 | full-sum p99  151.7 sum  151.5 max  42.8 sched   3.8 mode  39.7 upd 0.43 ms | >50 full-sum 0.6290 (eps 300) | sw 85.7 gated 44.6 rej/chk 63/149
+== rl/retrained TD_all (seeds 20000..20099) integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   R1_ppofd                    ppofd+mpcng - ppofd                  return   +8.54 [  +6.99, +10.09]*  p 0.0000 [confirmatory]
+                    recall seed   +2.40 [  +2.20,  +2.59]*  video-cluster   +2.40 [  +1.22,  +3.30]* (61 seq)
+   R2_ppofd                      ppofd+mpc - ppofd+mpcng            return   +1.66 [  +0.38,  +2.94]*  p 0.0117 [confirmatory]
+                    recall seed   -0.58 [  -0.75,  -0.40]*  video-cluster   -0.58 [  -0.85,  -0.42]* (61 seq)
+   R3_ppofd                      ppofd+mpc - ppofd                  return  +10.20 [  +8.61, +11.80]*  p 0.0000 [supporting]
+   R4_ppofd                    ppofd+mpcng - ppofd+mpcnc            return  +12.01 [  +9.70, +14.32]*  p 0.0000 [supporting]
+   R1_qrfd                      qrfd+mpcng - qrfd                   return  +20.72 [ +19.00, +22.44]*  p 0.0000 [confirmatory]
+                    recall seed   +4.74 [  +4.43,  +5.04]*  video-cluster   +4.72 [  +3.21,  +5.83]* (61 seq)
+   R2_qrfd                        qrfd+mpc - qrfd+mpcng             return   +2.57 [  +1.10,  +4.04]*  p 0.0008 [confirmatory]
+                    recall seed   -0.65 [  -0.84,  -0.47]*  video-cluster   -0.65 [  -0.92,  -0.39]* (61 seq)
+   R3_qrfd                        qrfd+mpc - qrfd                   return  +23.29 [ +21.66, +24.92]*  p 0.0000 [supporting]
+   R4_qrfd                      qrfd+mpcng - qrfd+mpcnc             return   +3.76 [  +0.91,  +6.61]*  p 0.0103 [supporting]
+   R1_dsfd                      dsfd+mpcng - dsfd                   return  +27.48 [ +25.63, +29.34]*  p 0.0000 [confirmatory]
+                    recall seed   +6.49 [  +6.17,  +6.80]*  video-cluster   +6.48 [  +4.88,  +7.76]* (61 seq)
+   R2_dsfd                        dsfd+mpc - dsfd+mpcng             return   +5.45 [  +3.88,  +7.02]*  p 0.0000 [confirmatory]
+                    recall seed   -0.57 [  -0.78,  -0.37]*  video-cluster   -0.57 [  -1.08,  -0.16]* (61 seq)
+   R3_dsfd                        dsfd+mpc - dsfd                   return  +32.93 [ +31.18, +34.69]*  p 0.0000 [supporting]
+   R4_dsfd                      dsfd+mpcng - dsfd+mpcnc             return   -0.73 [  -3.26,  +1.80]   p 0.5689 [supporting]
+   R5 ppofd: alone - H*   -0.76 [  -3.36,  +1.85]    matched - H*matched   -0.36 [  -2.55,  +1.83] 
+   R5 qrfd: alone - H*  -21.20 [ -23.99, -18.42]*   matched - H*matched   -8.62 [ -11.33,  -5.92]*
+   R5 dsfd: alone - H*  -33.91 [ -36.45, -31.37]*   matched - H*matched  -14.57 [ -16.90, -12.24]*
+   per training seed R1_ppofd_s0:   +7.30 [  +4.68,  +9.92]*
+   per training seed R1_ppofd_s1:   +8.01 [  +5.63, +10.40]*
+   per training seed R1_ppofd_s2:  +10.32 [  +7.44, +13.20]*
+   per training seed R2_ppofd_s0:   +1.94 [  -0.47,  +4.34] 
+   per training seed R2_ppofd_s1:   +1.03 [  -1.18,  +3.24] 
+   per training seed R2_ppofd_s2:   +2.01 [  -0.42,  +4.43] 
+   per training seed R1_qrfd_s0:  +17.46 [ +14.57, +20.35]*
+   per training seed R1_qrfd_s1:  +16.50 [ +13.36, +19.64]*
+   per training seed R1_qrfd_s2:  +28.20 [ +25.64, +30.76]*
+   per training seed R2_qrfd_s0:   +3.05 [  +0.49,  +5.61]*
+   per training seed R2_qrfd_s1:   +4.58 [  +1.87,  +7.30]*
+   per training seed R2_qrfd_s2:   +0.08 [  -2.43,  +2.58] 
+   per training seed R1_dsfd_s0:  +20.02 [ +16.76, +23.28]*
+   per training seed R1_dsfd_s1:  +34.29 [ +31.10, +37.48]*
+   per training seed R1_dsfd_s2:  +28.14 [ +25.08, +31.20]*
+   per training seed R2_dsfd_s0:   +8.57 [  +5.51, +11.63]*
+   per training seed R2_dsfd_s1:   +2.85 [  +0.31,  +5.39]*
+   per training seed R2_dsfd_s2:   +4.93 [  +2.34,  +7.52]*
+     ppofd                        ret   -57.71 (per img -0.222) ok 0.803 | full-sum p99   17.0 sum   17.0 max   6.8 sched   3.7 mode   3.2 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     ppofd+mpcnc                  ret   -61.18 (per img -0.235) ok 0.863 | full-sum p99  164.2 sum  164.2 max  46.4 sched   3.8 mode  43.0 upd 0.00 ms | >50 full-sum 0.7302 (eps 300) | sw 171.6 gated 0.0 rej/chk 0/172
+     ppofd+mpcng                  ret   -49.17 (per img -0.189) ok 0.850 | full-sum p99  165.0 sum  164.6 max  46.5 sched   3.8 mode  43.1 upd 0.60 ms | >50 full-sum 0.6355 (eps 300) | sw 61.9 gated 50.8 rej/chk 88/149
+     ppofd+mpc                    ret   -47.51 (per img -0.183) ok 0.849 | full-sum p99  160.1 sum  159.9 max  46.1 sched   3.8 mode  42.9 upd 0.47 ms | >50 full-sum 0.6261 (eps 300) | sw 73.3 gated 50.8 rej/chk 63/136
+     qrfd                         ret   -78.15 (per img -0.301) ok 0.748 | full-sum p99    5.6 sum    5.6 max   4.7 sched   4.0 mode   0.5 upd 0.00 ms | >50 full-sum 0.0001 (eps 2)
+     qrfd+mpcnc                   ret   -61.20 (per img -0.235) ok 0.866 | full-sum p99  153.7 sum  153.7 max  43.9 sched   3.8 mode  40.2 upd 0.00 ms | >50 full-sum 0.7034 (eps 300) | sw 174.3 gated 0.0 rej/chk 0/174
+     qrfd+mpcng                   ret   -57.44 (per img -0.221) ok 0.840 | full-sum p99  150.5 sum  150.1 max  43.7 sched   3.8 mode  40.4 upd 0.59 ms | >50 full-sum 0.6158 (eps 300) | sw 70.8 gated 47.5 rej/chk 81/152
+     qrfd+mpc                     ret   -54.87 (per img -0.211) ok 0.838 | full-sum p99  147.2 sum  147.0 max  43.5 sched   3.8 mode  40.2 upd 0.45 ms | >50 full-sum 0.6069 (eps 300) | sw 78.0 gated 47.5 rej/chk 60/138
+     dsfd                         ret   -90.86 (per img -0.349) ok 0.682 | full-sum p99    4.7 sum    4.7 max   4.0 sched   3.7 mode   0.3 upd 0.00 ms | >50 full-sum 0.0000 (eps 0)
+     dsfd+mpcnc                   ret   -62.65 (per img -0.241) ok 0.862 | full-sum p99  154.9 sum  154.9 max  43.7 sched   3.8 mode  40.2 upd 0.00 ms | >50 full-sum 0.7123 (eps 300) | sw 194.0 gated 0.0 rej/chk 0/194
+     dsfd+mpcng                   ret   -63.38 (per img -0.244) ok 0.804 | full-sum p99  152.8 sum  152.4 max  43.5 sched   3.8 mode  40.3 upd 0.60 ms | >50 full-sum 0.6279 (eps 300) | sw 80.7 gated 47.9 rej/chk 85/165
+     dsfd+mpc                     ret   -57.93 (per img -0.223) ok 0.809 | full-sum p99  147.2 sum  147.1 max  42.8 sched   3.8 mode  39.7 upd 0.44 ms | >50 full-sum 0.6089 (eps 300) | sw 87.7 gated 47.9 rej/chk 56/143

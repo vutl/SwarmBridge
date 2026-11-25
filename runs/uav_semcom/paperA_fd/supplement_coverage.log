@@ -1,0 +1,11 @@
+ablation/test_TD: 800 episodes, OK
+ablation/test_V: 800 episodes, OK
+ablation/test_F: 800 episodes, OK
+phase4/test_TD: 2400 episodes, OK
+phase4/test_F: 2400 episodes, OK
+phase3/zeroshot_TD: 3600 episodes, OK
+phase3/retrained_TD: 3600 episodes, OK
+phase3/retrained_F: 3600 episodes, OK
+phase3/retrained_V: 3600 episodes, OK
+phase3/retrained_TD_all: 3600 episodes, OK
+TOTAL new evaluation episodes 25200 (expected 25,200); ALL OK
