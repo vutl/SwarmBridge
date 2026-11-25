@@ -1,6 +1,7 @@
 # SwarmBridge: full research history (for reviewers)
 
-Last updated 2026-11-18. Written for an external reviewer (e.g. ChatGPT) who needs to know everything that has been
+Last updated 2026-11-25. A shorter, self-contained brief for starting a new reviewer session is
+`reports/CHATGPT_HANDOFF.md`; read it first. This file is written for an external reviewer (e.g. ChatGPT) who needs to know everything that has been
 tried before proposing anything.
 - Sections 1–3 are the state of the project.
 - Section 4 is every phase, **newest first**, with the question, what was built and run, the key numbers, the
@@ -50,6 +51,16 @@ phase reports. Two recent review rounds made factual errors that this file answe
   - **Execution incidents:**
     - 24/11: the WSL VM stopped 90 s after launch, unnoticed for 3 h.
     - 25/11: host power loss; resumed with `--skip-existing`; completed pools were kept.
+  - **Manuscript status:** `paper/paperA/main.tex` (the 23/11 method letter) is **outdated**. Its headline,
+    "calibrated > nominal in 12/12", compared against the unguarded nominal planner; against the matched nominal
+    design the difference is −0.10 n.s. It also presents the gate and H = 4 as parts of the method and reports
+    per-decision latency. It must not be submitted as it is. The rewrite waits for the reviewer's decision on C / B / D
+    and on the venue.
+  - **Waiting for the reviewer** (new ChatGPT session, brief in `reports/CHATGPT_HANDOFF.md` §8):
+    1. C / B / D;
+    2. whether to run the post-hoc return-term decomposition of nc vs ng;
+    3. venue and page budget;
+    4. the outline of the rewritten paper.
 
 - **Decision (18/11, after review #48):**
   - Write Paper A now as an evaluation study + calibrated planning baseline, from existing data
@@ -141,6 +152,38 @@ phase reports. Two recent review rounds made factual errors that this file answe
 ## 4. Phases, newest first
 
 Format: **dates (review numbers)** | question | what was done | key numbers | conclusion | later corrections.
+
+### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
+
+`phases/2026-11-23_paperA-fulldata/` (README + consolidated report); results in `runs/uav_semcom/paperA_fd/`.
+
+- **Why:** the user and ChatGPT approved re-testing the 23/11 method letter on more data, with a pre-registered
+  protocol.
+- **Protocol (fd_v1):**
+  - New sequence-disjoint VisDrone pools (DET-train → `rl_train` / `rl_val`; test pools TD = test-dev, F = YOLO
+    hold-out, V = DET-val, TD_all), after a leakage audit.
+  - Re-profiled 14 modes; H\* re-tuned; analysis code frozen before each run.
+- **Phases:**
+  - **Phase 2 (reference):** cal − H\* +7.28 (Holm); **cal − matched nominal (ng) −0.10 n.s.**; cal − unguarded nominal
+    +18.6.
+  - **Ablation:**
+    - band − nc +15.15 (Holm);
+    - gate − nc −1.19 n.s.;
+    - H4 − H1 +5.05 on TD but −2.51\* on V;
+    - H4 − H0 +25.5.
+  - **Phase 4** (N3x2 / N7x2 / N5x3 / N5x4 / B0.5 / B2): ng − H\* Holm-rejected in 5/6 (not N3x2); cal − ng in 2/6
+    (N5x3, N5x4).
+  - **Phase 3** (PPO / QR-DQN / DSAC retrained, 3 seeds each):
+    - X + ng − X: +7.4 / +19.0 / +25.7;
+    - X + cal − X + ng: +3.1 / +4.7 / +6.0;
+    - no learned incumbent beats H\*.
+- **Recall:**
+  - Calibration lowers recall everywhere.
+  - The unguarded planner nc has the highest recall (TD 40.5 vs ng 38.7, H\* 37.1).
+- **Timing:** sequential full-sum p99 is 103–229 ms; 44–82% of slots exceed 50 ms.
+- **Conclusion:** the return gain is robust and comes from the robustness band. The multi-step gated controller and
+  the calibration are not supported as the source. Recommendation C: an application / empirical paper.
+- **Commits:** 3cf4fd62, 000251c7, bc4d2736.
 
 ### 4.0 Paper A write-up and robustness rounds: 18–23/11, SCOPE FROZEN
 
@@ -356,7 +399,8 @@ channel alone, so communication is not constrained. NO-GO.
 - PPO runs on CPU; GPU jobs go through a lock.
 - `runs/active_recovery/` is another agent's branch and is off-limits.
 
-**Used test seeds** (do not reuse for new tests): 7000–7099, 8000–8999, 9000–9099, 9200–9299, 9600–9699.
+**Used test seeds** (do not reuse for new tests): 7000–7099, 8000–8999, 9000–9099, 9200–9299, 9600–9699,
+9800–9999, 12000–12099, 13000–13099, 14000–14099, 20000–26099 (full data).
 
 ## 6. Process lessons (agreed with the user)
 

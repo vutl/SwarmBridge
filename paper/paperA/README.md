@@ -1,5 +1,13 @@
 # Paper A: bản thảo cho ICT Express (method letter, viết lại 23/11)
 
+> **Cảnh báo (25/11): bản thảo này đã LỖI THỜI. Không nộp.**
+> - Đánh giá full-data đăng ký trước ([consolidated](../../reports/phases/2026-11-23_paperA-fulldata/paperA-fd-consolidated.md))
+>   cho thấy: so với MPC danh định có cùng cổng + dải, MPC hiệu chỉnh không hơn ở cấu hình chuẩn (−0,10 n.s.). Vì vậy
+>   claim "12/12" trong tiêu đề và abstract đến từ việc so với planner không bảo vệ.
+> - Cổng và H = 4 không cần thiết.
+> - Thời gian chạy tuần tự vượt 50 ms.
+> - Chờ phản biện chọn C / B / D và venue rồi mới viết lại ([CHATGPT_HANDOFF.md](../../reports/CHATGPT_HANDOFF.md)).
+
 - **`main.tex`:** bài dạng letter theo template ICT Express (`elsarticle`, 3p, hai cột), lấy từ
   `paper/ICT Express Submission Template_191231.zip`.
   - Giới hạn của tạp chí: khuyến nghị 4 trang tính cả tài liệu tham khảo (100 USD mỗi trang vượt); hình + bảng ≤ 4;

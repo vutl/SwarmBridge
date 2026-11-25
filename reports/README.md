@@ -1,6 +1,8 @@
 # SwarmBridge: báo cáo
 
-Cập nhật 18/11/2026. Cách đọc:
+Cập nhật 25/11/2026. Cách đọc:
+0. **[CHATGPT_HANDOFF.md](CHATGPT_HANDOFF.md)** (tiếng Anh): bản tóm tắt tự đủ để bắt đầu một phiên ChatGPT phản biện
+   mới (trạng thái Paper A sau đánh giá full-data, các quyết định đang chờ, quy tắc làm việc).
 1. **[CONTEXT.md](CONTEXT.md)**: tóm tắt một trang để dán vào phiên mới hoặc gửi phản biện (mục tiêu, trạng thái, điều
    đã biết, ràng buộc).
 2. **[HISTORY.md](HISTORY.md)** (tiếng Anh): toàn bộ lịch sử, từng giai đoạn từ mới tới cũ kèm số liệu chính. Gửi
@@ -25,9 +27,17 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 | [figures/](figures/), [metadata/](metadata/README.md) | Hình; JSON kiểm toán và bảng chuyển đường dẫn |
 | [wireless-abc.md](wireless-abc.md) | Tổng hợp hướng A/B/C ngày 06/11. Để nguyên ở đây vì `runs/active_recovery/protocol-v0.1.json` (nhánh Active Semantic Recovery do Codex làm) tham chiếu đúng đường dẫn này |
 
-## 1. Đang ở đâu (18/11)
+## 1. Đang ở đâu (25/11)
 
-- **Đang làm:** [viết Paper A](phases/2026-11-18_paperA-writeup/paperA-outline.md) từ dữ liệu đã có. Hướng hợp tác nhiều UAV là Paper 2, làm sau.
+- **Paper A: đánh giá mở rộng trên full data đã xong**
+  ([2026-11-23_paperA-fulldata](phases/2026-11-23_paperA-fulldata/README.md)): 25.200 episode, đăng ký trước.
+  - Lớp MPC chọn lọc tăng return so với heuristic và RL; dải bền vững là thành phần cần thiết.
+  - Không cần: cổng, H = 4.
+  - Hiệu chỉnh ACK không thêm return ở cấu hình chuẩn và làm giảm recall.
+  - Return và recall lệch nhau; thời gian tuần tự vượt 50 ms.
+  - Khuyến nghị C (bài ứng dụng / thực nghiệm).
+  - Bản thảo 23/11 đã lỗi thời; chờ phản biện trước khi viết lại.
+- **Trước đó:** [viết Paper A](phases/2026-11-18_paperA-writeup/paperA-outline.md) từ dữ liệu đã có. Hướng hợp tác nhiều UAV là Paper 2, làm sau.
 - **Thiết kế cho Paper 2:** [đặt lại bài toán](phases/2026-11-18_design-reset/README.md).
   - Rà soát thiết kế: so đề xuất SwarmBridge gốc (29/10, truyền bằng chứng bổ sung giữa nhiều UAV theo giá trị có
     điều kiện cho bên nhận) với hệ thống đã chạy.
@@ -47,6 +57,7 @@ Kết quả số: `runs/uav_semcom/`, `runs/jepa_semcom/`. Code: `swarmbridge/ex
 
 | Giai đoạn | Thời gian (phản biện) | Câu hỏi | Kết luận | Trạng thái |
 |---|---|---|---|---|
+| [2026-11-23_paperA-fulldata](phases/2026-11-23_paperA-fulldata/README.md) | 23–25/11 | Kiểm tra lại Paper A trên dữ liệu VisDrone mới, đăng ký trước: matched design, ablation, cấu hình mạng, RL train lại | Lợi ích return đứng (dải bền vững); cổng / H4 / hiệu chỉnh không cần ở cấu hình chuẩn; hiệu chỉnh giảm recall; return ≠ recall; tuần tự > 50 ms; RL < heuristic → khuyến nghị C | **Xong, chờ phản biện** |
 | [2026-11-18_paperA-writeup](phases/2026-11-18_paperA-writeup/README.md) | 18/11 → | Viết Paper A với luận điểm đánh giá (LA thực tế + baseline công bằng xóa ưu thế DRL; MPC hiệu chỉnh từ ACK) | Khung bài + việc còn thiếu (R1 bảng Shannon so với LA; R2 tái lập phương pháp đã công bố) | **Đang làm** |
 | [2026-11-18_design-reset](phases/2026-11-18_design-reset/README.md) | 18/11 (#47–#48) | Đề xuất gốc bị lệch ở đâu; khôi phục thế nào | Hợp tác và trạng thái bên nhận bị bỏ từ 06/11; đề xuất LA + UAV3D + trạng thái bên nhận | **Đang mở** |
 | [2026-11-17_paperA-scheduling](phases/2026-11-17_paperA-scheduling/README.md) | 17–18/11 (#37–#47) | Lập lịch kênh, LA thực tế, đối chứng công bằng, DRL cuối, tiện ích tác vụ | JA heuristic ≥ RL; PPO-LA + MPC ≈ heuristic + MPC (−0,14); tiện ích từng ảnh không tổng quát | Đóng |
@@ -95,4 +106,7 @@ Cột trái là điều từng được báo. Cột giữa là báo cáo đã s�
 | B-E3: JEPA-32 hơn non-JEPA +0,02 | B-E4, B-E5 | CI chứa 0 qua 3 seed; bằng với chỉ làm mượt theo thời gian |
 | B-E3: mã học được hơn AVIF | B-E7 | Đúng so với AVIF ảnh đơn, nhưng thua codec video liên khung ở ≤ 12 kbit |
 | B-E8: số hạng sự kiện | B-E9 | Bản B-E8 gần như không kích hoạt (lỗi thiết kế phân bổ theo hạng); B-E9 sửa, trần khoảng +0,01 |
+| Method letter 23/11: MPC hiệu chỉnh ACK hơn MPC danh định ở 12/12 cấu hình LA | Full-data Phase 2 (H3b), ablation A7 | "Danh định" ở đó là planner **không** có cổng / dải. So với danh định có cùng cổng + dải: −0,10 [−1,95, +1,76] (TD, n.s.). Lợi ích chủ yếu do dải (A2 +15,15). Hiệu chỉnh chỉ thêm return với RL (3/3) và ở N5x3 / N5x4, và làm giảm recall |
+| Method letter 23/11 / E-series: thời gian quyết định p99 39–48 ms, gần như không vượt 50 ms | Full-data Phase 2 §7, Phase 4, ablation | Đó là thời gian từng quyết định / giả định song song. Chạy tuần tự đúng như simulator (scheduler + mọi quyết định + cập nhật): p99 103–229 ms, 44–82 % số slot vượt 50 ms. Song song vẫn vượt ở N7x2 / N5x4 |
+| Method letter 23/11: cổng theo dõi sai số và tầm nhìn H = 4 là thành phần của phương pháp | Full-data ablation | Cổng không cần (A1 n.s., A6 không nhất quán); H4 so với H1 không lặp lại (TD +5,05, V −2,51\*) |
 | A-X2 (lời phản biện #48 sau đó): "chưa thử điều khiển chung bay + truyền thông + nén" | Rà soát thiết kế 18/11 | Đã thử ở A3.2 / A4 / A5 (bay, kênh, công suất, mode do PPO quyết định). Lợi ích nhỏ; bay do RL quyết định không đóng góp ở A4, vì nội dung ảnh không phụ thuộc vị trí |

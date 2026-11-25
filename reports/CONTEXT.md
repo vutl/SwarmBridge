@@ -1,6 +1,8 @@
 # SwarmBridge: ngữ cảnh ngắn
 
-Cập nhật 18/11/2026. Dán file này vào đầu phiên mới hoặc gửi kèm khi nhờ phản biện. Chi tiết:
+Cập nhật 25/11/2026. Dán file này vào đầu phiên mới. Chi tiết:
+- **[CHATGPT_HANDOFF.md](CHATGPT_HANDOFF.md)** (tiếng Anh): bản tóm tắt đầy đủ để bắt đầu một phiên ChatGPT phản biện
+  mới. Dán nguyên văn file này;
 - [HISTORY.md](HISTORY.md): lịch sử đầy đủ bằng tiếng Anh, để gửi phản biện;
 - [README.md](README.md): các giai đoạn từ mới tới cũ, bảng sửa kết luận;
 - `phases/*/README.md`: từng giai đoạn.
@@ -18,12 +20,32 @@ the receiver's task uncertainty?*
 
 Schrödinger Bridge ban đầu là ứng viên cho bộ hoàn thiện, không phải lõi.
 
-## Trạng thái (18/11)
+## Trạng thái (25/11)
 
-- **Đang làm (23/11):** Paper A đã viết lại thành method letter 4 trang (ICT Express) ở `paper/paperA/main.tex`.
-  - Nguồn của từng con số: [CLAIMS.md](../paper/paperA/CLAIMS.md).
-  - Phạm vi đã đóng băng sau E7. Đang chờ ChatGPT phản biện lần cuối.
-  - Hướng dưới đây là Paper 2, làm sau.
+- **Paper A: đánh giá mở rộng đã XONG** (23–25/11, [phases/2026-11-23_paperA-fulldata](phases/2026-11-23_paperA-fulldata/README.md)).
+  - Quy mô: 25.200 episode mới, toàn bộ đăng ký trước. Kiểm tra coverage và checkpoint đều đạt.
+  - **Đứng:**
+    - lớp MPC chọn lọc tăng return so với heuristic tune (cấu hình chuẩn + 5/6 cấu hình mạng);
+    - tăng return so với cả 3 họ RL (PPO / QR-DQN / DSAC);
+    - **dải bền vững** là thành phần cần thiết.
+  - **Không đứng:**
+    - cổng và tầm nhìn H = 4 không cần thiết;
+    - hiệu chỉnh ACK không thêm return ở cấu hình chuẩn (−0,10 n.s. so với danh định cùng thiết kế), chỉ thêm với RL
+      và ở N5x3 / N5x4;
+    - hiệu chỉnh **giảm recall** ở mọi nơi;
+    - planner không bảo vệ có recall cao nhất, tức là return và recall lệch nhau;
+    - chạy tuần tự vượt 50 ms ở 44–82 % số slot;
+    - không họ RL nào hơn heuristic;
+    - không có thành phần thuật toán mới.
+  - **Khuyến nghị C:** viết lại Paper A thành đóng góp ứng dụng / thực nghiệm.
+  - **Bản thảo `paper/paperA/main.tex` (method letter 23/11) đã lỗi thời.** Tiêu đề và abstract của nó ("hiệu chỉnh
+    hơn danh định 12/12") bị kết quả matched design bác bỏ. Không sửa trước khi phản biện chốt hướng và venue.
+  - **Đang chờ ChatGPT (phiên mới) quyết định:**
+    1. C / B / D;
+    2. có làm phân rã return nc so với ng (hậu kiểm, không mô phỏng) không;
+    3. venue và số trang;
+    4. dàn ý bài viết lại.
+- **Paper 2** làm sau khi nộp Paper A.
 - **Thiết kế Paper 2:** đặt lại bài toán ([rà soát thiết kế](phases/2026-11-18_design-reset/swarmbridge-design-review-2026-11-18.md)).
   - Đề xuất khôi phục: bộ vô tuyến LA đã kiểm chứng + pipeline hợp tác UAV3D (5 UAV đồng bộ) + trạng thái bên nhận
     (bất định / tuổi track).
@@ -35,7 +57,8 @@ Schrödinger Bridge ban đầu là ứng viên cho bộ hoàn thiện, không ph
     3. có tải được UAV3D đầy đủ không;
     4. giữ hay bỏ SB.
 - **Đã đóng:**
-  - Paper A (offloading ảnh độc lập; RL / MPC chọn mode và lập lịch) ở phản biện #47.
+  - Hướng thuật toán RL cho Paper A (offloading ảnh độc lập; RL / MPC chọn mode và lập lịch) ở phản biện #47.
+    Paper A tiếp tục dưới dạng bài đánh giá / ứng dụng.
   - Paper B (JEPA-SemCom) tạm dừng từ #35.
 
 ## Điều đã biết (đứng vững sau các lần sửa)
@@ -61,8 +84,9 @@ Schrödinger Bridge ban đầu là ứng viên cho bộ hoàn thiện, không ph
    - PPO (kể cả train đúng PHY) ≈ heuristic + MPC hiệu chỉnh: −0,14 [−2,83, +2,56] (A-X9).
    - Điều khiển chung bay + kênh + công suất + mode đã thử (A3.2 / A4 / A5): lợi ích nhỏ, bay không đóng góp, vì nội
      dung ảnh không phụ thuộc vị trí.
-5. **MPC hiệu chỉnh online từ ACK sửa được mô hình kênh sai**: hiệu chỉnh +17 so với MPC danh nghĩa. Nhưng MPC
-   giới hạn tính toán có hiệu chỉnh đã có ở ABR (RobustMPC, Oboe, Fugu).
+5. **MPC hiệu chỉnh online từ ACK hơn MPC danh nghĩa *không bảo vệ*** khoảng +17. Nhưng (full-data 25/11) nếu MPC
+   danh nghĩa có cùng cổng + dải bền vững thì khác biệt gần như mất ở cấu hình chuẩn (−0,10 n.s.): phần lớn lợi ích là
+   do **dải**, không do hiệu chỉnh. MPC giới hạn tính toán có hiệu chỉnh đã có ở ABR (RobustMPC, Oboe, Fugu).
 6. **Giá trị nội dung từng ảnh không dự đoán được từ đặc trưng rẻ, và không tổng quát.**
    - Oracle số vật thể +1,53 trên nội dung cùng nguồn, −0,97 trên test-dev.
    - Oracle kết quả detector +2,17 nhưng không xấp xỉ được.
@@ -93,7 +117,11 @@ Schrödinger Bridge ban đầu là ứng viên cho bộ hoàn thiện, không ph
   đúng chỗ.
 - PPO chạy CPU. Việc dùng GPU phải qua khóa GPU (`gpulock`).
 - **Seed test đã dùng** (không dùng lại cho test mới): 7000–7099, 8000–8999 (A-E9 trở đi), 8300–8399, 8800–8999,
-  9000–9099, 9200–9299, 9600–9699. Train 0–29; val 3000–3049.
+  9000–9099, 9200–9299, 9600–9699, 9800–9999, 12000–12099, 13000–13099, 14000–14099, 20000–26099 (full-data).
+  Train 0–29; val 3000–3049.
+- **Job dài:** khởi chạy tách rời qua WMI. Sau khi chạy và khi quay lại, phải kiểm tra tiến trình và `uptime` của WSL,
+  không tin dòng "start" trong log. MPC không tái lập bit-for-bit (giới hạn thời gian thật), nên không chạy lại pool
+  đã xong.
 
 ## Ở đâu
 
