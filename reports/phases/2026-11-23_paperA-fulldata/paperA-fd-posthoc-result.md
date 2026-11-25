@@ -111,6 +111,23 @@ drop, so drops and violations roughly cancel. The **net return gain therefore co
 
 ### 2.4 Is the mechanism general? (`decomp.log`, 53 contrasts)
 
+> **Correction (25/11, after the ChatGPT review of 18ddc9e7).** "The same direction in all 53 contrasts" was too
+> strong. The exact counts:
+> - 44 of the 53 contrasts have a positive mean return difference;
+> - 41 of those 44 send smaller compliant-image payloads;
+> - the 3 exceptions are ng − H\* in TD, V and F, which raise return with larger payloads;
+> - 49 of 53 have a lower detection yield per compliant image.
+>
+> Detection yield per compliant image is not the same as end-to-end recall. The smaller-payload mechanism is not
+> universal.
+>
+> **On "exact":**
+> - The decomposition uses the stored per-episode aggregates (mean utility, rates, energy, mission time), not
+>   per-image records.
+> - The time term is obtained as a residual. It matches 0.3 · K · mean mission time to within 2e-13 in all 27,600
+>   episodes.
+> - The quality and deadline parts of SCE cannot be separated.
+
 **ng − nc**, in every pool and configuration (TD / V / F, Phase 2 TD / F / V / TD_all, Phase 4 × 6 configurations ×
 TD / F, Phase 3 × 3 families):
 - ng's compliant-image payload is lower in every pair: 138–349 kbit for ng vs 213–476 kbit for nc.

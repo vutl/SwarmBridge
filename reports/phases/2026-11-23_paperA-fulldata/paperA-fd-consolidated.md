@@ -107,8 +107,9 @@
     UAV-second).
   - **Recall:** −1.8. About two thirds comes from a lower detection yield on the same compliant images (lower PSNR);
     one third from which images end up compliant.
-  - **Generality:** the same direction holds in all 53 contrasts examined (pools, configurations, RL families; band,
-    gate and calibration steps too).
+  - **Generality** (corrected wording): 44 of the 53 contrasts examined have a positive mean return difference, and
+    41 of those send smaller payloads. The exceptions are ng − H\* in three pools. This is post-hoc and not a
+    universal mechanism.
 
 **Consequence:** a paper claim such as "improves perception" cannot be based on the return results. Recall must be
 reported as a separate outcome, with the trade-off stated.

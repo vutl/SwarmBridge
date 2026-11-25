@@ -168,8 +168,8 @@ An asterisk (\*) marks a 95% CI that excludes 0. Values are return differences o
     at 0.3 per UAV-second).
   - **Recall:** falls by 1.8 points. Two thirds of that is a lower detection yield on the same compliant images (lower
     PSNR); one third is a change in which images end up compliant.
-  - **Generality:** the same direction holds in all 53 contrasts examined, including the band, gate and calibration
-    steps and the RL incumbents.
+  - **Generality** (corrected): 44 of the 53 contrasts examined have a positive mean return difference, and 41 of
+    those send smaller payloads. The exceptions are ng − H\* in three pools.
   - **In short:** the return rewards fast delivery and short missions, while detection keeps improving with bits.
 
 **Controller timing (slot = 1 s; the 50 ms budget is per decision):**

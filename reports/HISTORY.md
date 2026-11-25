@@ -63,7 +63,14 @@ phase reports. Two recent review rounds made factual errors that this file answe
     - **Return decomposition:** ng sends smaller payloads than nc (194 vs 303 kbit). Drops fall by 15.8 and
       below-Qmin deliveries rise by 15.7; these cancel. The net return gain comes from SCE (+9.7) and mission time
       (+8.1). Recall falls by 1.8: two thirds from a lower detection yield (lower PSNR), one third from which images
-      end up compliant. The same direction holds in all 53 contrasts.
+      end up compliant. Of 53 contrasts, 44 have a positive mean return difference and 41 of those send smaller
+      payloads (exceptions: ng − H\* in three pools).
+  - **Manuscript rewritten (25/11, ChatGPT GO for ICT Express):**
+    - title "Uncertainty-aware mode selection for multi-UAV semantic image offloading";
+    - 4 pages; 2 figures + 1 table, all from stored fd_v1 results (`paperA_fd_numbers.py`, `paperA_fd_figures.py`);
+    - claims → sources in `paper/paperA/CLAIMS.md`;
+    - writing report `phases/2026-11-23_paperA-fulldata/paperA-fd-writing-report.md`;
+    - not submitted; awaiting final review.
     - **PPO + cal − H\* + cal:** +0.27 n.s. on TD (n.s. in all 4 pools); recall −0.73\*.
     - **R5 recall with the cluster bootstrap:** the retrained incumbents are at or below H\*. Correction: the
       zero-shot PPO-LA has recall +3.1\* above H\*, with return −4.9\*.

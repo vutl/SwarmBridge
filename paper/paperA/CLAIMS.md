@@ -1,144 +1,88 @@
-# Paper A method letter: numerical claims and their sources
+# Paper A (ICT Express rewrite, 25/11): claims and their sources
 
-The manuscript is `main.tex` (method-letter rewrite of 2026-11-23, 4 pages).
+**Manuscript:** `main.tex`. Title: "Uncertainty-aware mode selection for multi-UAV semantic image offloading"; 4 pages.
+The previous method letter is in git at `1225e287`.
 
-Numbers come from three files under `runs/uav_semcom/paperA_r2/`:
+**Sources** (all stored results; no new simulation):
+- `N` = `runs/uav_semcom/paperA_fd/paper/paper_numbers.json`, written by
+  `swarmbridge/experiments/uav_semcom/paperA_fd_numbers.py` from the phase summaries, `supplement_extras.json` and
+  `posthoc/{decomp,r5}.json`.
+- `table_fd.tex` (Table 1) and Fig. 2 are generated from `N` (`paperA_fd_figures.py`). Fig. 1 is a diagram drawn by
+  the same script; its flow was checked against `ax2_eval.py` and `a9_mpc.py`.
+- Paired 95% t-CIs over 100 environment seeds. Recall CIs are seed-level, plus a video-cluster bootstrap (B 2000).
 
-| File | Written by | Holds |
-|---|---|---|
-| `letter_numbers.json` | `paperA_letter_numbers.py` | Table 1, E5, E2c copy, E7 copy, latency |
-| `summary_e7.json` | `paperA_e7_summary.py` | E7 |
-| `paper_numbers.json` | `paperA_paper_numbers.py` | old Table 1; used only for the motivation sentence |
+## Evidence status
 
-The manuscript shows the results as figures. Fig. 1 is drawn by `paperA_letter_figures.py`; Figs. 2–4 are IEEE-style versions drawn by `paperA_ieee_figures.py` (`fig_sweeps.pdf`, `fig_phy.pdf`, `fig_rl.pdf`) from the same data as listed below; Fig. 4a also plots the validation curves in `summary_e7.json["val_curves"]`.
-- Fig. 2 `figs/fig_lines.pdf`: return per image (level ÷ 52K) of H\*, +RobustMPC-style, +nominal and +calibrated MPC.
-  - x-axes: bandwidth (BW rows plus NET:N5x2), K (NET N3x2/N5x2/N7x2) and M (NET N5x2/N5x3/N5x4).
-  - Data: `T1[...]["level"][arm]["ret"]`; bands from `["ret_ci"]`.
-  - Panel (d): `letter_numbers.json["E5"][fb]["level"]`.
-- Fig. 3 `figs/fig_phy.pdf`: the PHY and TD rows. `cal_minus_nom`, `cal_minus_rh` and `cal_minus_H` (bars + CI), and `recall_cal_minus_H`.
-- Fig. 4 `figs/fig_e7bars.pdf`: E7 B1, B2, B1_recall and B2_recall, for test and test-dev (`summary_e7.json` `B` / `H_ref`).
-  - `B2_recall` was added on 23/11 from the same delivery files; no new runs.
-- Figures drawn earlier but no longer in the PDF: `fig_robust.pdf` (forest plot), `fig_e7.pdf` (dot plot) and `fig_recall.pdf`.
+| Status | Meaning |
+|---|---|
+| **C** | Pre-registered confirmatory (Holm within the family) |
+| **S** | Pre-registered supporting / replication (unadjusted) |
+| **P** | Post-hoc, done after the consolidated report (`paperA-fd-posthoc-result.md`) |
 
-The tables `table_robust.tex` and `table_e7.tex` (from `paperA_letter_numbers.py`) carry the same numbers. They are
-not in the PDF.
-
-**Notation:**
-- `T1[g:c]` = `letter_numbers.json["table1"]["<group>:<config>"]`.
-- `cal_minus_nom`, `cal_minus_rh`, `cal_minus_H` and `recall_cal_minus_H` are `[mean, CI low, CI high]` (paired 95% t-CI over 100 environment seeds).
-- `n.s.` means the CI includes 0.
-
-**Seed sets and incumbents:**
-- PHY rows: E1, seeds 9900–9999.
-- TD rows: E3, seeds 12000–12099.
-- NET rows: E4, seeds 13000–13099.
-- BW rows: E6, seeds 13000–13099.
-- E7: test seeds 13000–13099, test-dev seeds 14000–14099.
-- H\*: frozen fixed_mbt2018-mean_q3 (AVIF-50 under Shannon) in PHY/TD rows. Re-tuned in NET rows (q1 at K=7) and BW rows (AVIF-20 at 0.5 MHz).
-
-## Abstract
+## Model and method (Sections 2–3)
 
 | Claim | Source |
 |---|---|
-| beats nominal rates in all 12 evaluated LA configurations | `letter_numbers.json["counts"]["cal_minus_nom"]` = pos 12 / of 12 (LA rows = all rows except PHY:S and TD:S) |
-| beats a RobustMPC-style predictor in 11 | `counts["cal_minus_rh"]` = pos 11 / 12; the exception is NET:N5x3, +1.66 [−0.16, +3.49] |
-| improves policies from three RL families | `summary_e7.json` test `B_pass` = 6/6 |
-| gains over the policy without MPC depend on the configuration | `counts["cal_minus_H"]` = 10/12; NET:N5x2 +2.66 n.s. vs PHY:L +8.25 |
-| higher return is not always higher recall | `counts["recall_cal_minus_H"]` = 4 positive, 8 negative |
+| Utility (1): 0.5 / 0.5 weights, span 15 dB, −1 for a violation, −1 for a drop | `env.py` `utility`, `_drop`; `q_span=15`, `xi_q = xi_d = 0.5` |
+| Return (2): energy 0.02 per kJ, time 0.3 per UAV-second | `env.py` `w_energy=0.02`; `w_time=0.3` from `a5_common.REF`. Identity checked on all 27,600 episodes: the time residual equals 0.3·K·mission_s within 2e-13 (`fd_posthoc.py verify`) |
+| UAV active until its queue is empty | `env.py` step (6): a sortie ends when the survey is done and the queue is empty |
+| LA parameters (2-block report delay, 1 dB error, OLLA 10%, logistic BLER, ARQ, slot-long interference) | `env_la` (unchanged since A-X5 / A-X6; described in the earlier letter) |
+| Rate models, tracker, gate (20 s airtime), band formula | `a9_mpc.py` (`CalRates`, `RateErrTracker`, `MIN_AIR = 20`); band rule as in the previous letter |
+| Nominal model = genie CQI rate × (1 − BLER target) on statistical fading | `ax2_eval.py` docstring (`+mpcnc`) |
+| Guarded MPC = nominal model + the same gate and band; gate-only = band fixed [1, 1]; band-only = no cold-start gate | `ax2_eval.py` lines 160–170 (`+mpcng`, `+mpcngg`, `+mpcngb`, `+mpcngh1`, `+mpcngh0`) |
+| Screen at scales [1, ℓ] one image ahead; N = 8; H = 4; 1-s.e. paired test; endpoint check at ℓ and h; 50 ms budget | `ax2_eval.py` `+mpc` docstring (np-any, N 8, H 4, Z 1, H1 1, 50 ms); `a9_mpc.py` `screen` / selective controller |
+| 14 modes | `a5_common.MODES` |
 
-## Introduction
-
-| Claim | Source |
-|---|---|
-| PPO +2.3 under Shannon | `paper_numbers.json["S"]["A_return"]` = +2.25 (PPO-S − T:best, same slot rule, seeds 9900–9999) |
-| trails by 22 to 60 under LA | `paper_numbers.json` `A_return` for L (−23.4), L_fade (−39.0), L_bursty (−22.1), L_badfb (−37.9) and TD-L (−59.7) |
-| 14 configurations | the 14 rows of Table 1 (12 LA + 2 Shannon) |
-
-## System model and method (design facts)
-
-Each design fact is checked against code.
-
-| Fact | Code |
-|---|---|
-| 52 images per UAV; 14 modes | `a5_common`, regime `K5_la` |
-| 2 dB SNR bins; 20 s minimum observations; cold start; observations pooled over UAVs; slot-weighted observation | `a9_mpc.CalRates` (`BIN_DB`, `MIN_AIR`, `persistent=False`, `slot_weight=True`); bin keys depend on SNR only |
-| error tracker: bias and standard error; gate (`stats` is None, so the incumbent is kept) | `a9_mpc.RateErrTracker.stats`; `ax2_eval.episode` (`gated`) |
-| band ℓ = max(min(1, 1+b) − 2σ, 0.05), h = max(1, 1+b) + 2σ | `ax2_eval.episode` |
-| screen: horizon 1, scales [1, ℓ]; candidates = best nominal + best pessimistic; trigger "any" | `MPCMode.selective(cand="np", trig="any", h1=1)` |
-| full plan: N = 8, H = 4, 40 slots, causal rollout, switch threshold margin_z = 1, robustness check at scales [ℓ, h] | `MPCMode("cal", 8, 4, ..., rollout="causal", margin_z=1.0)`; `S_SLOTS = 40`; `MPCMode.__call__` |
-| 50 ms budget including incumbent inference, 3 ms margin | `a9_mpc.Deadline(50.0, margin_ms=3.0)`, started before the incumbent's inference |
-| nominal MPC: LA mapping on fading samples, no gate, band [1, 1] | `ax2_eval` `nocal` branch; `MPCMode._rate` (phy "la") |
-| RobustMPC-style: harmonic mean of the last 5 rates / (1 + max relative error of the last 5) | `a9_mpc.HarmRates` |
-| QR-DQN and Discrete SAC hyper-parameters | `offpolicy_rl.py`, `offpolicy_train.py`; `runs/uav_semcom/paperA_rl/selection.json` |
-
-## Results: calibration versus matched planners
+## Setup (Section 4)
 
 | Claim | Source |
 |---|---|
-| nominal: 5.2 to 36.4 in all 12 LA rows | min TD:L +5.24, max PHY:L_fade +36.43 (`cal_minus_nom`) |
-| Shannon: +0.6 n.s. (test), +1.8 (test-dev) | PHY:S +0.57 [−0.92, +2.07]; TD:S +1.79 [+0.34, +3.23] |
-| RobustMPC-style 11/12; K=5, M=3: +1.7 n.s. | `counts`; NET:N5x3 `cal_minus_rh` +1.66 [−0.16, +3.49] |
-| RobustMPC-style within 0.7 of H\* alone (NET and BW rows) | `cal_minus_H − cal_minus_rh` per row: −0.03, −0.59, +0.55, −0.17, −0.31, −0.10, −0.66 |
-| ladder: no single step; pooling +3.9 to +9.0, significant in 4 of 7 | `summary_e2c.json` "pool UAVs": L_fade +3.9*, L_bursty +4.0*, L_badfb +9.0*, TD-S +4.3*; others n.s. |
-| SNR binning: no difference in the ladder | `summary_e2c.json` "SNR bins (cal - pl)": all 7 CIs include 0 |
-| unbinned model lower in all 5 networks (−0.7 to −1.7; 2 significant) | `summary_e4.log` / `paperA-e4-result.md`: pooled − cal = −1.7*, −1.5, −1.4, −0.7, −1.2* |
+| Pools: training 1,523, validation 374, TD 582 / 61 sequences, F 168 / 18, V 548; ≤ 30 frames per sequence; 49 TD sequences and V used in development; F used for detector checkpoint selection | `paperA-full-data-protocol.md` §1–2, §8 |
+| H\*: best of 22 rules (AVIF-20 at the reference) | `phase2/tune.json` (22 candidates, `H`) |
+| Re-tuned H\* per setting | `phase4/tune.json` |
+| RL: 3 seeds × 2M decisions; checkpoint chosen on validation; fixed hyper-parameters | `paperA-fd-phase3-result.md` §1; `phase3/selection.json` |
+| Holm families 2 / 4 / 12 / 6 | Phase 2, ablation, Phase 4 and Phase 3 pre-registrations |
+| 27,600 episodes | `posthoc/run_verify.log` |
 
-## Results: gains over the incumbent alone
+## Results (Section 5, Table 1, Fig. 2)
 
-| Claim | Source |
+| Text | Value | Source | Status |
+|---|---|---|---|
+| Nominal MPC − H\* (TD / V / F) | −10.6 [−14.8, −6.4] / −6.8 / −8.6 | `N.ablation.{TD,V,F}.contrasts["nc-H"].ci` (= `decomp.json` `ablation\|*\|N5x2\|nc-H*`) | P (a derived difference of two registered arms) |
+| Median bias −0.38 (tracker in the guarded arm, TD) | −0.384 | `supplement_extras.json` `ablation\|test\|TD\|N5x2\|h=fixed_avif_20+mpcng` `bias_q[1]` | S |
+| Nominal MPC: 180 switches per episode; drops 8.1% vs 2.1% | 180.0; 0.0807 / 0.0214 | `ablation/summary_ablation_test.json` `TD.levels.{nc,H}` | S |
+| Calibrated − H\* (reference) | +7.3 [+5.0, +9.5] | `N.phase2.TD.ret.H1` | C |
+| Guarded − H\* (ablation seeds) | +7.4 [+5.1, +9.8] | `N.ablation.TD.contrasts.A8.ci` | S |
+| Band only − nominal | +15.2 (Holm); V +13.4, F +16.2 | `A2` | C (TD), S (V / F) |
+| Gate only − nominal | −1.2 | `A1` | C (not rejected) |
+| Gate + band − band (TD / V / F) | +2.9 / −4.3 / −2.1 | `A6` | S |
+| H = 1 − H = 0 | +17 to +21 (20.4 / 17.1 / 20.8) | `A9` | S |
+| H = 4 − H = 1 (TD / V / F) | +5.1 (Holm) / −2.5 / +0.4 | `A4` | C (TD), S |
+| Guarded − H\* per setting: 5 / 6 rejected, K = 3 n.s. | Table 1 | `N.phase4.TD.<cfg>.G1` | C |
+| Learned incumbents: X + guarded − X | +7.4 / +19.0 / +25.7 | `N.phase3.TD.<x>.R1` | C |
+| Calibrated − guarded, reference | −0.1 [−2.0, +1.8] | `N.phase2.TD.ret.H3b` | C (not rejected) |
+| Calibrated − guarded, V / F (ablation replications) | +2.5 / +2.6 | `A7` V / F | S |
+| Calibrated − guarded per setting: rejected at M = 3, M = 4 | Table 1 | `N.phase4.TD.<cfg>.G2` | C |
+| Calibrated − guarded, learned | +3.1 / +4.7 / +6.0 | `N.phase3.TD.<x>.R2` | C |
+| X − H\* (PPO / QR-DQN / DSAC) | −3.0 [−4.9, −1.0] / −22.5 / −34.1 | `N.phase3.TD.<x>.R5.alone.ret` | S (R5 descriptive) |
+| PPO + cal − H\* + cal | +0.3 [−1.6, +2.1] | `N.phase3.TD.ppofd.R5.calibrated.ret` | P |
+| Recall levels nominal / guarded / calibrated / H\* | 40.5 / 38.7 / 37.6 / 37.1 | `N.ablation.TD.levels.<arm>.recall` | S |
+| Nominal return 18.1 below guarded | 18.05 | `A3` / `decomp` `ng-nc` `ret` | S |
+| Calibration lowers recall in every row: −0.4 to −1.1 | Table 1 | `A7` recall, `G2` recall, `R2` recall | S |
+| Decomposition guarded − nominal: payload 194 vs 303 kbit; drops +15.8; below-Qmin −15.7; SCE +9.7; delay −1.2 s; time +8.1 (mission −5.4 s); recall −1.8 = −1.2 (both compliant) − 0.6 (set) | as stated | `N.decomp["ablation\|TD\|N5x2\|ng-nc"]` (`modes.kbit`, `diff.*`, `recall_split`) | P |
+| 53 contrasts: 44 with a positive mean return difference, 41 of them with smaller payloads; the exceptions are ng − H\* in TD / V / F | counts | computed from `posthoc/decomp.json` (see `paperA-fd-writing-report.md`) | P |
+| Zero-shot PPO: recall +3.1, return −4.9 vs H\*; larger payloads (234 vs 175 kbit) | | `N.zeroshot_R5.ppola.alone`; payload from the post-hoc ad-hoc check (`paperA-fd-posthoc-result.md` §2.4) | P |
+| Timing: sequential p99 103–229 ms, 42–82% of slots over 50 ms (all H ≥ 1 planner arms, all pools) | 102.8–228.9; 0.418–0.820 | ablation / Phase 4 / Phase 3 summary `levels` (`ms_full_sum_p99`, `full_sum_over50`) | S |
+| Timing: parallel ≤ 4.1% (K ≤ 5, M ≤ 3); 31% (K = 7) and 41% (M = 4) for the guarded MPC on TD; scheduler about 30 ms | 0.041; 0.307; 0.411; 28.6 / 30.9 ms | Phase 4 `levels.<cfg>.ng` (`full_max_over50`, `ms_slot_p99`) | S |
+| H = 0: 16 ms | 15.9 | ablation `levels.h0.ms_full_sum_p99` | S |
+| Not bit-reproducible | | `paperA-fd-phase3-result.md` (resume note); E7 rerun (earlier letter) | — |
+
+## Table 1 columns
+
+| Column | Source |
 |---|---|
-| 10 of 12 LA rows | `counts["cal_minus_H"]`; the exceptions are NET:N5x2 and NET:N5x3 |
-| +8.2 (seeds 9900–9999) | PHY:L `cal_minus_H` +8.25 [+4.83, +11.66] |
-| +2.7 n.s. (seeds 13000–13099) | NET:N5x2 +2.66 [−0.52, +5.84] |
-| +16.4 (seeds 14000–14099) | `summary_e7.json` testdev `H_ref.B1` +16.36 [+11.66, +21.06] |
-| pre-registered rules failed (3/5, 2/3); nominal advantage held in all | `summary_e4.json["pass"]` (H1 3/5, H3 5/5); `summary_e6.json["pass"]` (H1 2/3, H3 3/3) |
-
-## Results: delayed or lost reports (E5)
-
-| Claim | Source |
-|---|---|
-| +18.1 to +21.3 vs nominal, all 5 settings | `letter_numbers.json["E5"][fb]["minus_nominal"]`: fb10l0 +18.11 … fb1l0 +21.31, all CIs > 0 |
-| no difference from immediate reports detected | `E5[fb]["minus_immediate"]`: all 5 CIs include 0 |
-| untested cases | `paperA-e4-result.md`, section E5 |
-
-## Results: RL families (E7, `summary_e7.json`)
-
-| Claim | Source |
-|---|---|
-| Fig. 3 | `test.levels` and `testdev.levels` (means and `ret_per_seed` ticks) |
-| B1 in text, test: +6.2±1.3, +23.9±1.9, +29.2±1.9 | `test.B[...].B1`; ± = half-width of the CI |
-| B2 in text, test: +20.2±2.7, +10.6±3.4, +9.0±2.9 | `test.B[...].B2` |
-| 6/6 on test | `test.B_pass` = 6 |
-| 5/6 on test-dev; Discrete SAC B2 +1.2 n.s. | `testdev.B_pass` = 5; `testdev.B["Discrete SAC"].B2` = +1.19 [−1.42, +3.81] |
-| per seed: B1 18/18; B2 not significant in 4 (QR-DQN s2 on both pools; Discrete SAC s0 and s2 on test-dev) | `test.B_per_seed`, `testdev.B_per_seed` |
-| weaker than PPO-LA | `test.A["QR-DQN"]["X - PPO-LA"]` −30.85*; Discrete SAC −38.47* (test-dev −22.70*, −37.42*) |
-| X+cal − H\*+cal on test: −13.6, −15.9 | `test.A[...]["X+cal - H*+cal"]`: −13.57*, −15.89* |
-| PPO-LA − H\*: −4.4 (test), +13.7 (test-dev) | `test.A["PPO-LA"]["X - H*"]` −4.38*; `testdev` +13.68* |
-| with MPC: −0.4 n.s. (test), +8.1 (test-dev) | `X+cal - H*+cal`: −0.43 n.s.; +8.05* |
-
-## Results: return and recall
-
-| Claim | Source |
-|---|---|
-| H\* incumbent: recall lower in 8/12 LA rows (−0.3 to −1.2), higher in 4 (+0.9 to +2.6) | `recall_cal_minus_H` per row: negative −0.31 … −1.21; positive +0.90, +1.08, +1.90, +2.58 |
-| learned incumbents: B1 recall +0.6 to +6.1 | `B[...].B1_recall` on test (+0.94, +4.53, +6.13) and test-dev (+0.58, +2.57, +4.14) |
-| nominal MPC has higher recall than cal for QR-DQN and Discrete SAC, by 3.5 and 4.4 points (Fig. 4b) | `test.levels`: QR-DQN X+nom 47.1 vs X+cal 43.6; Discrete SAC 47.2 vs 42.8 |
-
-## Results: decision time and reproducibility
-
-| Claim | Source |
-|---|---|
-| K=5, M=2: per-episode p99 40–64 ms | `letter_numbers.json["E1_latency"]`: p99_min 40.4, p99_max 64.0 (all +mpc arms of E1 and E3) |
-| at most 0.5% of slots over 50 ms on average | per-configuration means: E1/E3 rows ≤ 0.1% (`over50_cal`), NET:N5x2 0.5%, BW rows 0.0%, E7 ≤ 0.1% (`summary_e7.json` levels `int_over50`) |
-| K=7 / M=4: scheduler p99 35–38 ms; 28% / 40% of slots over 50 ms | `paperA-e4-result.md` (scheduler p99 34.9 / 38.0 ms); `T1[NET:N7x2]` and `T1[NET:N5x4]` `over50_cal` = 0.277 / 0.402 |
-| rerun changed 16/100 episodes, mean −0.4 [−1.3, +0.5] | `paperA-e7-result.md` section 7: E7 H\*+cal vs E4 N5x2 H\*+cal, same seeds |
-
-## Changes from the 20/11 version
-
-- **Framing:** from "wireless model and task metric disagree" (evaluation study) to a method letter. The PPO-S Shannon/LA reversal remains as one motivating sentence.
-- **Removed claims:**
-  - "the mechanism behind the gain over RobustMPC-style is not resolved": now covered by the E2c ladder;
-  - "ideal feedback only": E5 now relaxes this partly, and the untested cases are listed;
-  - "only PPO": E7 adds QR-DQN and Discrete SAC.
-- **Removed references:** hu2025 and zhou2026 (space); pedersen2007 (never verified).
-- **Added references:** sun2016 (CS2P), yan2020 (Fugu), akhtar2018 (Oboe), dabney2018 (QR-DQN), christodoulou2019 (Discrete SAC). Their page numbers should be checked before submission.
+| Guarded − base, heuristic rows | Reference: ablation A8 (supporting). Other rows: Phase 4 G1 (confirmatory) |
+| Calibrated − guarded, heuristic rows | Reference: A7. Other rows: G2 |
+| Learned rows | R1 and R2 (confirmatory) |
+| Recall | Each contrast's `recall.seed` / `recall.cluster`. `*` = both CIs exclude 0; `°` = seed-level only |
+| Timing | `levels.ng` (or `X+mpcng`): `ms_full_sum_p99` / `full_sum_over50` / `full_max_over50` |
