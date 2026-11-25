@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Build the paper-only reproducibility snapshot from a git tag (default: paperA-v1.0).
+# Build the paper-only reproducibility snapshot from a git tag (default: paperA-v1.1).
 # Output: paper/paperA/dist/paperA-snapshot-<tag>.zip (+ .sha256). Content = exactly the tagged commit, restricted to
 # the paths listed in SNAPSHOT_README.md. Upload to an archive (e.g. Zenodo) is a manual step by the authors.
 set -euo pipefail
-TAG="${1:-paperA-v1.0}"
+TAG="${1:-paperA-v1.1}"
 ROOT="$(git -C "$(dirname "$0")" rev-parse --show-toplevel)"
 cd "$ROOT"
 git rev-parse -q --verify "refs/tags/$TAG" >/dev/null || { echo "tag $TAG not found"; exit 1; }

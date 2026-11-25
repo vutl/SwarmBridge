@@ -8,7 +8,7 @@
   - Hình 2: `figs/fig_fd_ablation.pdf` (một cột).
   - Hình 3: `figs/fig_fd_tradeoff.pdf`.
   - Bảng I nằm trong `main.tex`; Bảng II là `table_fd.tex`.
-- **Gói tái lập:** `make_snapshot.sh` (từ tag `paperA-v1.0`), mô tả trong `SNAPSHOT_README.md`. DOI còn để TODO,
+- **Gói tái lập:** `make_snapshot.sh` (từ tag `paperA-v1.1`; v1.0 có câu README chưa chính xác), mô tả trong `SNAPSHOT_README.md`. DOI còn để TODO,
   chờ tác giả tải lên.
 - **Bản 6 trang trước** ở commit `0a27d406`.
 

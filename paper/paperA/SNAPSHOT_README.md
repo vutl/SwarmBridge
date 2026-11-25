@@ -18,7 +18,11 @@ the paths below.
 - VisDrone images. Obtain VisDrone2019-DET from the official source under its own terms; the image lists are in the
   manifest.
 - Detector and RL weights.
-- Anything unrelated to this paper.
+- Data, images or results from other datasets or other project phases.
+
+**Note:** the code directory `swarmbridge/experiments/uav_semcom/` is included whole, to keep the import
+dependencies intact. It therefore also contains code of earlier project experiments (for example dataset adapters)
+that this paper does not use. That code carries no data.
 
 ## Regenerating the paper's numbers, table and figures (no simulation)
 
