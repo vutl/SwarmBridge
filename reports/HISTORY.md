@@ -79,7 +79,7 @@ phase reports. Two recent review rounds made factual errors that this file answe
     - fixed-policy weight sensitivity: F2 robust, F1 depends on the mission-time cost (V, w = 0: nominal − H\*
       +4.8\*);
     - wording fixes;
-    - snapshot script (tag `paperA-v1.0`).
+    - snapshot script (tag `paperA-v1.1`).
     The next step is the final pre-submission review, then the professor review.
     - **PPO + cal − H\* + cal:** +0.27 n.s. on TD (n.s. in all 4 pools); recall −0.73\*.
     - **R5 recall with the cluster bootstrap:** the retrained incumbents are at or below H\*. Correction: the

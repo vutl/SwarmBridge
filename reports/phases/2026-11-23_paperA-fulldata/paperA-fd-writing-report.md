@@ -28,7 +28,7 @@
 >    per-slot sequential total (10–23% of the slot); 50 ms is named as the registered reporting threshold.
 > 9. **Layout:** `\raggedbottom`; the Table II `\tabcolsep` was reduced (fonts and margins untouched).
 > 10. **Reproducibility snapshot:**
->     - `paper/paperA/make_snapshot.sh` builds a paper-only zip from git tag `paperA-v1.0` with `git archive`;
+>     - `paper/paperA/make_snapshot.sh` builds a paper-only zip from git tag `paperA-v1.1` with `git archive`;
 >       `SNAPSHOT_README.md` describes it.
 >     - The DOI is a `\todo` until the authors upload the zip (for example to Zenodo).
 >
