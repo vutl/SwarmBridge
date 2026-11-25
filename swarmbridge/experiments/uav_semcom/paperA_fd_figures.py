@@ -361,15 +361,62 @@ def _ablation_panel(ax, N):
     ax.legend(loc="lower left", fontsize=5.6, handletextpad=0.2, borderpad=0.3, labelspacing=0.25)
 
 
+ABL_GROUPS = [("Main components", [("nc-H", "Nominal MPC $-$ $H^*$"), ("A8", "Guarded MPC $-$ $H^*$"),
+                                     ("A2", "Band only $-$ nominal MPC"), ("A7", "Calibrated $-$ guarded MPC")]),
+              ("Supporting contrasts", [("A1", "Gate only $-$ nominal MPC"), ("A6", "Gate + band $-$ band only"),
+                                        ("A4", "Look-ahead $H{=}4$ $-$ $H{=}1$"), ("A9", "Look-ahead $H{=}1$ $-$ $H{=}0$")])]
+
+
 def ablation_col(out):
-    """Fig. 2 (final revision): single-column mechanism ablation (the per-setting panel duplicated Table II)."""
+    """Fig. 2: single-column component ablation (reference network, ablation seeds), forest plot with the row labels
+    inside the plot area (no label column); TD emphasised, V and F as consistency markers; values unchanged."""
+    from matplotlib.lines import Line2D
+    from matplotlib.transforms import blended_transform_factory
     N = json.loads(NUMS.read_text())
-    fig, ax = plt.subplots(figsize=(3.45, 2.35))
-    _ablation_panel(ax, N)
-    ax.legend(loc="lower left", fontsize=5.4, handletextpad=0.2, borderpad=0.3, labelspacing=0.2)
+    fig, ax = plt.subplots(figsize=(3.45, 2.55))
+    tr = blended_transform_factory(ax.transAxes, ax.transData)
+    off = {"TD": 0.72, "V": 0.88, "F": 1.03}
+    sty = {"TD": dict(ms=4.0, lw=1.1, capsize=1.6), "V": dict(ms=3.0, lw=0.75, capsize=1.2),
+           "F": dict(ms=3.0, lw=0.75, capsize=1.2)}
+    y = 0.0
+    for gi, (gname, rows) in enumerate(ABL_GROUPS):
+        if gi:
+            ax.axhline(y - 0.08, color="#9a9a9a", lw=0.5, xmin=0, xmax=1)
+        ax.text(0.012, y + 0.05, gname, transform=tr, ha="left", va="top", fontsize=6.4, fontweight="bold",
+                color=INK)
+        if gi == 0:
+            ax.text(1.115, y + 0.05, "TD", transform=tr, ha="right", va="top", fontsize=6.0, fontweight="bold",
+                    color=POOL["TD"]["color"], clip_on=False)
+        y += 0.62
+        for k, lab in rows:
+            ax.text(0.012, y - 0.02, lab, transform=tr, ha="left", va="top", fontsize=6.0, color=INK)
+            for pool, st in POOL.items():
+                m, lo, hi = N["ablation"][pool]["contrasts"][k]["ci"]
+                sig = lo > 0 or hi < 0
+                ax.errorbar(m, y + off[pool], xerr=[[m - lo], [hi - m]], fmt=st["marker"], color=st["color"],
+                            mfc=st["color"] if sig else "white", **sty[pool])
+                if pool == "TD":
+                    ax.text(1.115, y + off[pool], sg_txt(m), transform=tr, ha="right", va="center", fontsize=6.0,
+                            color=st["color"], clip_on=False)
+            y += 1.22
+        y += 0.12
+    ax.axvline(0, color="black", lw=0.7)
+    ax.set_ylim(y - 0.1, -0.08)
+    ax.set_xlim(-17, 26)
+    ax.set_yticks([])
+    ax.grid(axis="y", visible=False)
+    ax.set_xlabel(r"$\Delta$ return (paired 95% CI)")
+    hs = [Line2D([], [], marker=st["marker"], color=st["color"], lw=sty[p]["lw"], ms=sty[p]["ms"])
+          for p, st in POOL.items()]
+    ax.legend(hs, [st["label"] for st in POOL.values()], loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=3,
+              fontsize=5.8, handletextpad=0.3, borderpad=0.3, columnspacing=1.0, frameon=False, handlelength=1.6)
     fig.savefig(out / "fig_fd_ablation.pdf", bbox_inches="tight", pad_inches=0.01)
     fig.savefig(out / "fig_fd_ablation.png", bbox_inches="tight", dpi=220)
     plt.close(fig)
+
+
+def sg_txt(v):
+    return f"{v:+.1f}".replace("-", "−")
 
 
 def mechanism(out):
