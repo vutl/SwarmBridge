@@ -57,7 +57,7 @@
 | Claim | Evidence | Status |
 |---|---|---|
 | The layer is incumbent-agnostic | R1 positive for PPO / QR-DQN / DSAC, retrained and zero-shot | **Supported** |
-| Learned incumbents beat the tuned heuristic | R5: PPO −3.0\* (TD), −0.8 (TD_all, n.s.); QR-DQN about −22\*; DSAC about −34\*. Recall −2 to −10\*. With the layer: PPO n.s. on F / V / TD_all; others negative | **Not supported** (no learned incumbent better on return or recall) |
+| Learned incumbents beat the tuned heuristic | R5: PPO −3.0\* (TD), −0.8 (TD_all, n.s.); QR-DQN about −22\*; DSAC about −34\*. Recall −2 to −10\*. With the layer: PPO n.s. on F / V / TD_all; others negative. **Post-hoc (§3 of the post-hoc report):** PPO + cal − H\* + cal: TD +0.27 [−1.58, +2.12], n.s. in all 4 pools; recall −0.73\* (cluster CI excludes 0) | **Not supported on return.** Recall: the retrained incumbents are at or below H\* (cluster bootstrap). **Correction (post-hoc §4): the zero-shot PPO-LA has HIGHER recall than H\* (+3.1, cluster CI [+1.6, +4.8]) with lower return (−4.9)** |
 | Training-seed robustness | All 18 per-seed R1 / R2 TD contrasts positive. Spreads: R1 PPO 6.2–9.3, QR 15.7–24.8, DSAC 20.1–32.7 | Consistent in sign; magnitude varies; 3 seeds only |
 
 ### E. Novelty
@@ -100,8 +100,15 @@
 - The return combines delivery, quality and energy terms. Recall counts detected objects.
 - The Qmin-compliance rate is about equal for nc and ng (0.866 vs 0.867 at the reference), so the return gap is not
   explained by compliance.
-- Which return term separates them has **not been decomposed** here. That would be a post-hoc diagnostic on the stored
-  rows (no simulation), done only if the reviewer requests it.
+- **Post-hoc decomposition (added 25/11, [paperA-fd-posthoc-result.md](paperA-fd-posthoc-result.md) §2).** ng sends
+  smaller payloads than nc (194 vs 303 kbit per compliant image).
+  - **Return:** fewer drops (+15.8) and about 15.7 more below-Qmin deliveries roughly cancel, because each costs −1.
+    The net gain comes from the SCE terms (+9.7) and from mission time (+8.1: 5.4 s shorter per UAV at 0.3 per
+    UAV-second).
+  - **Recall:** −1.8. About two thirds comes from a lower detection yield on the same compliant images (lower PSNR);
+    one third from which images end up compliant.
+  - **Generality:** the same direction holds in all 53 contrasts examined (pools, configurations, RL families; band,
+    gate and calibration steps too).
 
 **Consequence:** a paper claim such as "improves perception" cannot be based on the return results. Recall must be
 reported as a separate outcome, with the trade-off stated.

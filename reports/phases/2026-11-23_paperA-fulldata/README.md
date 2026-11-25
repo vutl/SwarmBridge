@@ -27,6 +27,7 @@ Khuyến nghị **C**: định vị lại Paper A là đóng góp ứng dụng /
 | [paperA-fd-ablation-prereg.md](paperA-fd-ablation-prereg.md) / [result](paperA-fd-ablation-result.md) | Dải cần thiết (+15); cổng không; H4 vs H1 không lặp lại; H ≥ 1 cần thiết |
 | [paperA-fd-phase4-prereg.md](paperA-fd-phase4-prereg.md) / [result](paperA-fd-phase4-result.md) | Số UAV / kênh / băng thông: G1 5/6, G2 2/6; thời gian tính toán |
 | [paperA-fd-phase3-prereg.md](paperA-fd-phase3-prereg.md) / [result](paperA-fd-phase3-result.md) | PPO / QR-DQN / DSAC train lại: R1 3/3, R2 3/3; không họ RL nào hơn H\* |
+| [paperA-fd-posthoc-result.md](paperA-fd-posthoc-result.md) | **Hậu kiểm (25/11, không đăng ký trước, chỉ dùng dữ liệu đã lưu).** Kiểm tra fail-fast 27.600/27.600 episode; phân rã return nc / ng (ng gửi file nhỏ hơn → ít drop, nhiệm vụ ngắn hơn → return cao hơn, nhưng PSNR thấp hơn → ít vật thể detect được hơn); PPO + cal so với H\* + cal (+0,27 n.s.); bootstrap theo video cho R5 recall |
 | [paperA-novelty-audit-ea-smpc.md](paperA-novelty-audit-ea-smpc.md) | Rà soát tính mới: không có thành phần thuật toán mới |
 
 **Bản tóm tắt cho phản biện mới:** [../../CHATGPT_HANDOFF.md](../../CHATGPT_HANDOFF.md).

@@ -1,0 +1,423 @@
+Post-hoc return decomposition (stored rows; paired over environment seeds; contrast = B - A).
+return = SCE(quality+deadline terms of delivered images) + viol(-1 each) + drop(-1 each) + uncapt(-1 each) + energy(-0.02/kJ) + time(-0.3 per UAV-second)
+
+ablation|TD|N5x2|ng-nc
+  ret  +18.05[+13.79,+22.32]*  sce   +9.74[ +7.84,+11.64]*  viol  -15.71[-16.62,-14.80]*  drop  +15.83[+13.65,+18.01]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.09[ +0.08, +0.10]*  time   +8.10[ +7.46, +8.74]*
+  counts: ok   +0.12[ -2.17, +2.41]  qviol  +15.71[+14.80,+16.62]* late   +0.00[ +0.00, +0.00]  mission_s   -5.40[ -5.82, -4.98]*
+  levels A/B: ret -57.0/-38.9; sce 107.3/117.1; viol -13.7/-29.4; drop -21.0/-5.2; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.1/-120.0; n_ok 225.3/225.4; mission_s 85.4/80.0
+  compliant images: kbit 302.9/194.5  PSNR 32.07/30.32  yield TP/GT % 47.09/45.39 diff   -1.70[ -1.89, -1.51]*
+  top modes A {'avif_20': 0.286, 'mbt2018-mean_q3': 0.204, 'avif_50': 0.184, 'avif_5': 0.168}  B {'avif_20': 0.771, 'avif_5': 0.109, 'mbt2018-mean_q3': 0.053, 'avif_50': 0.033}
+  recall split (pp): both-compliant   -1.16[ -1.30, -1.03]* only-B   +2.82[ +2.48, +3.16]* only-A   -3.47[ -3.69, -3.24]*; n both 209 (diff mode 124) only-B 16.5 only-A 16.4
+
+ablation|TD|N5x2|band-nc
+  ret  +15.15[+11.41,+18.89]*  sce   +6.13[ +4.49, +7.77]*  viol  -10.01[-10.69, -9.33]*  drop  +12.58[+10.61,+14.55]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.07[ +0.07, +0.08]*  time   +6.38[ +5.84, +6.93]*
+  counts: ok   +2.57[ +0.59, +4.55]* qviol  +10.01[ +9.33,+10.69]* late   +0.00[ +0.00, +0.00]  mission_s   -4.25[ -4.62, -3.89]*
+  levels A/B: ret -57.0/-41.8; sce 107.3/113.5; viol -13.7/-23.8; drop -21.0/-8.4; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.1/-121.7; n_ok 225.3/227.8; mission_s 85.4/81.1
+  compliant images: kbit 302.9/232.1  PSNR 32.07/30.87  yield TP/GT % 47.09/45.99 diff   -1.11[ -1.26, -0.95]*
+  top modes A {'avif_20': 0.286, 'mbt2018-mean_q3': 0.204, 'avif_50': 0.184, 'avif_5': 0.168}  B {'avif_20': 0.607, 'avif_5': 0.139, 'mbt2018-mean_q3': 0.097, 'avif_50': 0.088}
+  recall split (pp): both-compliant   -0.76[ -0.87, -0.65]* only-B   +2.43[ +2.13, +2.73]* only-A   -2.38[ -2.57, -2.19]*; n both 214 (diff mode 98) only-B 14.1 only-A 11.5
+
+ablation|TD|N5x2|gate-nc
+  ret   -1.19[ -5.63, +3.25]   sce   +0.52[ -1.38, +2.43]   viol   -4.93[ -5.76, -4.10]*  drop   +2.31[ +0.01, +4.61]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.02]*  time   +0.89[ +0.28, +1.51]*
+  counts: ok   -2.62[ -5.01, -0.23]* qviol   +4.93[ +4.10, +5.76]* late   +0.00[ +0.00, +0.00]  mission_s   -0.60[ -1.01, -0.19]*
+  levels A/B: ret -57.0/-58.2; sce 107.3/107.9; viol -13.7/-18.7; drop -21.0/-18.7; uncapt 0.0/0.0; energy -1.5/-1.5; time -128.1/-127.2; n_ok 225.3/222.7; mission_s 85.4/84.8
+  compliant images: kbit 302.9/273.5  PSNR 32.07/31.64  yield TP/GT % 47.09/46.75 diff   -0.34[ -0.51, -0.18]*
+  top modes A {'avif_20': 0.286, 'mbt2018-mean_q3': 0.204, 'avif_50': 0.184, 'avif_5': 0.168}  B {'avif_20': 0.418, 'mbt2018-mean_q3': 0.163, 'avif_50': 0.145, 'avif_5': 0.14}
+  recall split (pp): both-compliant   -0.26[ -0.37, -0.15]* only-B   +2.92[ +2.59, +3.25]* only-A   -3.43[ -3.70, -3.17]*; n both 207 (diff mode 120) only-B 15.8 only-A 18.4
+
+ablation|TD|N5x2|ng-H*
+  ret   +7.44[ +5.12, +9.76]*  sce   +0.15[ -1.08, +1.38]   viol   +7.87[ +7.19, +8.55]*  drop   +0.41[ -0.59, +1.41]   uncapt   +0.00[ +0.00, +0.00]   energy   -0.01[ -0.02, -0.01]*  time   -0.98[ -1.48, -0.48]*
+  counts: ok   +8.28[ +7.22, +9.34]* qviol   -7.87[ -8.55, -7.19]* late   +0.00[ +0.00, +0.00]  mission_s   +0.65[ +0.32, +0.98]*
+  levels A/B: ret -46.4/-38.9; sce 116.9/117.1; viol -37.3/-29.4; drop -5.6/-5.2; uncapt 0.0/0.0; energy -1.4/-1.4; time -119.0/-120.0; n_ok 217.1/225.4; mission_s 79.3/80.0
+  compliant images: kbit 173.8/194.5  PSNR 30.17/30.32  yield TP/GT % 45.63/45.39 diff   -0.24[ -0.37, -0.10]*
+  top modes A {'avif_20': 1.0}  B {'avif_20': 0.771, 'avif_5': 0.109, 'mbt2018-mean_q3': 0.053, 'avif_50': 0.033}
+  recall split (pp): both-compliant   -0.35[ -0.44, -0.26]* only-B   +2.36[ +2.16, +2.56]* only-A   -0.44[ -0.54, -0.34]*; n both 214 (diff mode 43) only-B 11.1 only-A 2.8
+
+ablation|TD|N5x2|nc-H*
+  ret  -10.61[-14.85, -6.38]*  sce   -9.59[-11.52, -7.67]*  viol  +23.58[+22.53,+24.63]*  drop  -15.42[-17.60,-13.24]*  uncapt   +0.00[ +0.00, +0.00]   energy   -0.10[ -0.11, -0.09]*  time   -9.08[ -9.81, -8.35]*
+  counts: ok   +8.16[ +5.92,+10.40]* qviol  -23.58[-24.63,-22.53]* late   +0.00[ +0.00, +0.00]  mission_s   +6.05[ +5.57, +6.54]*
+  levels A/B: ret -46.4/-57.0; sce 116.9/107.3; viol -37.3/-13.7; drop -5.6/-21.0; uncapt 0.0/0.0; energy -1.4/-1.5; time -119.0/-128.1; n_ok 217.1/225.3; mission_s 79.3/85.4
+  compliant images: kbit 173.8/302.9  PSNR 30.17/32.07  yield TP/GT % 45.63/47.09 diff   +1.46[ +1.23, +1.69]*
+  top modes A {'avif_20': 1.0}  B {'avif_20': 0.286, 'mbt2018-mean_q3': 0.204, 'avif_50': 0.184, 'avif_5': 0.168}
+  recall split (pp): both-compliant   +0.85[ +0.67, +1.02]* only-B   +5.13[ +4.88, +5.38]* only-A   -2.60[ -2.90, -2.29]*; n both 202 (diff mode 138) only-B 23.7 only-A 15.5
+
+ablation|TD|N5x2|cal-ng
+  ret   -0.75[ -2.87, +1.38]   sce   +0.20[ -0.93, +1.33]   viol   -2.40[ -3.10, -1.70]*  drop   +0.93[ +0.06, +1.80]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.52[ +0.05, +0.99]*
+  counts: ok   -1.47[ -2.45, -0.49]* qviol   +2.40[ +1.70, +3.10]* late   +0.00[ +0.00, +0.00]  mission_s   -0.35[ -0.66, -0.03]*
+  levels A/B: ret -38.9/-39.7; sce 117.1/117.3; viol -29.4/-31.9; drop -5.2/-4.2; uncapt 0.0/0.0; energy -1.4/-1.4; time -120.0/-119.5; n_ok 225.4/223.9; mission_s 80.0/79.6
+  compliant images: kbit 194.5/178.7  PSNR 30.32/30.03  yield TP/GT % 45.39/44.50 diff   -0.90[ -1.02, -0.78]*
+  top modes A {'avif_20': 0.771, 'avif_5': 0.109, 'mbt2018-mean_q3': 0.053, 'avif_50': 0.033}  B {'avif_20': 0.704, 'avif_5': 0.172, 'mbt2018-mean_q3': 0.05, 'mbt2018-mean_q1': 0.047}
+  recall split (pp): both-compliant   -0.68[ -0.76, -0.59]* only-B   +0.97[ +0.83, +1.10]* only-A   -1.39[ -1.55, -1.24]*; n both 219 (diff mode 59) only-B 5.1 only-A 6.6
+
+ablation|V|N5x2|ng-nc
+  ret   +9.10[ +5.09,+13.11]*  sce   +9.34[ +7.42,+11.26]*  viol  -27.58[-28.78,-26.38]*  drop  +17.86[+16.09,+19.63]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.11[ +0.10, +0.11]*  time   +9.37[ +8.72,+10.03]*
+  counts: ok   -9.72[-11.78, -7.66]* qviol  +27.58[+26.38,+28.78]* late   +0.00[ +0.00, +0.00]  mission_s   -6.25[ -6.69, -5.81]*
+  levels A/B: ret -71.4/-62.3; sce 105.7/115.1; viol -25.8/-53.4; drop -21.4/-3.6; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.4/-119.0; n_ok 212.8/203.1; mission_s 85.6/79.3
+  compliant images: kbit 315.8/169.8  PSNR 32.49/29.82  yield TP/GT % 52.13/49.22 diff   -2.91[ -3.08, -2.74]*
+  top modes A {'avif_20': 0.306, 'avif_50': 0.26, 'mbt2018-mean_q3': 0.187, 'mbt2018-mean_q1': 0.088}  B {'avif_20': 0.857, 'avif_5': 0.042, 'avif_50': 0.04, 'mbt2018-mean_q3': 0.033}
+  recall split (pp): both-compliant   -1.95[ -2.07, -1.84]* only-B   +2.98[ +2.72, +3.23]* only-A   -5.58[ -5.88, -5.28]*; n both 187 (diff mode 115) only-B 16.0 only-A 25.7
+
+ablation|V|N5x2|band-nc
+  ret  +13.36[ +9.98,+16.74]*  sce   +8.95[ +7.38,+10.52]*  viol  -18.45[-19.41,-17.49]*  drop  +15.01[+13.31,+16.71]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.09[ +0.08, +0.09]*  time   +7.76[ +7.15, +8.37]*
+  counts: ok   -3.44[ -5.14, -1.74]* qviol  +18.45[+17.49,+19.41]* late   +0.00[ +0.00, +0.00]  mission_s   -5.18[ -5.58, -4.77]*
+  levels A/B: ret -71.4/-58.0; sce 105.7/114.7; viol -25.8/-44.2; drop -21.4/-6.4; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.4/-120.6; n_ok 212.8/209.3; mission_s 85.6/80.4
+  compliant images: kbit 315.8/225.9  PSNR 32.49/30.84  yield TP/GT % 52.13/50.30 diff   -1.83[ -1.97, -1.69]*
+  top modes A {'avif_20': 0.306, 'avif_50': 0.26, 'mbt2018-mean_q3': 0.187, 'mbt2018-mean_q1': 0.088}  B {'avif_20': 0.668, 'avif_50': 0.13, 'mbt2018-mean_q3': 0.074, 'avif_5': 0.051}
+  recall split (pp): both-compliant   -1.26[ -1.35, -1.16]* only-B   +2.74[ +2.50, +2.98]* only-A   -3.90[ -4.13, -3.67]*; n both 195 (diff mode 90) only-B 14.8 only-A 18.2
+
+ablation|V|N5x2|gate-nc
+  ret   -2.86[ -7.19, +1.48]   sce   +0.18[ -1.73, +2.08]   viol   -5.58[ -6.56, -4.60]*  drop   +1.41[ -0.80, +3.62]   uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.01, +0.02]*  time   +1.13[ +0.52, +1.73]*
+  counts: ok   -4.17[ -6.40, -1.94]* qviol   +5.58[ +4.60, +6.56]* late   +0.00[ +0.00, +0.00]  mission_s   -0.75[ -1.15, -0.35]*
+  levels A/B: ret -71.4/-74.2; sce 105.7/105.9; viol -25.8/-31.4; drop -21.4/-20.0; uncapt 0.0/0.0; energy -1.5/-1.5; time -128.4/-127.2; n_ok 212.8/208.6; mission_s 85.6/84.8
+  compliant images: kbit 315.8/282.5  PSNR 32.49/31.88  yield TP/GT % 52.13/51.51 diff   -0.62[ -0.74, -0.49]*
+  top modes A {'avif_20': 0.306, 'avif_50': 0.26, 'mbt2018-mean_q3': 0.187, 'mbt2018-mean_q1': 0.088}  B {'avif_20': 0.433, 'avif_50': 0.209, 'mbt2018-mean_q3': 0.154, 'mbt2018-mean_q1': 0.071}
+  recall split (pp): both-compliant   -0.46[ -0.54, -0.39]* only-B   +3.64[ +3.38, +3.91]* only-A   -4.59[ -4.89, -4.28]*; n both 191 (diff mode 117) only-B 18.1 only-A 22.2
+
+ablation|V|N5x2|ng-H*
+  ret   +2.28[ +0.23, +4.33]*  sce   -1.07[ -2.34, +0.19]   viol   +6.98[ +6.28, +7.68]*  drop   -1.38[ -2.12, -0.64]*  uncapt   +0.00[ +0.00, +0.00]   energy   -0.02[ -0.03, -0.02]*  time   -2.22[ -2.75, -1.70]*
+  counts: ok   +5.60[ +4.82, +6.38]* qviol   -6.98[ -7.68, -6.28]* late   +0.00[ +0.00, +0.00]  mission_s   +1.48[ +1.13, +1.83]*
+  levels A/B: ret -64.5/-62.3; sce 116.1/115.1; viol -60.3/-53.4; drop -2.2/-3.6; uncapt 0.0/0.0; energy -1.4/-1.4; time -116.8/-119.0; n_ok 197.5/203.1; mission_s 77.8/79.3
+  compliant images: kbit 142.4/169.8  PSNR 29.40/29.82  yield TP/GT % 48.95/49.22 diff   +0.27[ +0.17, +0.37]*
+  top modes A {'avif_20': 1.0}  B {'avif_20': 0.857, 'avif_5': 0.042, 'avif_50': 0.04, 'mbt2018-mean_q3': 0.033}
+  recall split (pp): both-compliant   +0.07[ +0.01, +0.12]* only-B   +1.87[ +1.70, +2.04]* only-A   -0.40[ -0.47, -0.32]*; n both 195 (diff mode 22) only-B 7.9 only-A 2.3
+
+ablation|V|N5x2|nc-H*
+  ret   -6.82[-10.70, -2.94]*  sce  -10.41[-12.33, -8.50]*  viol  +34.56[+33.29,+35.83]*  drop  -19.24[-20.99,-17.49]*  uncapt   +0.00[ +0.00, +0.00]   energy   -0.13[ -0.14, -0.12]*  time  -11.60[-12.29,-10.91]*
+  counts: ok  +15.32[+13.21,+17.43]* qviol  -34.56[-35.83,-33.29]* late   +0.00[ +0.00, +0.00]  mission_s   +7.73[ +7.27, +8.19]*
+  levels A/B: ret -64.5/-71.4; sce 116.1/105.7; viol -60.3/-25.8; drop -2.2/-21.4; uncapt 0.0/0.0; energy -1.4/-1.5; time -116.8/-128.4; n_ok 197.5/212.8; mission_s 77.8/85.6
+  compliant images: kbit 142.4/315.8  PSNR 29.40/32.49  yield TP/GT % 48.95/52.13 diff   +3.18[ +2.96, +3.39]*
+  top modes A {'avif_20': 1.0}  B {'avif_20': 0.306, 'avif_50': 0.26, 'mbt2018-mean_q3': 0.187, 'mbt2018-mean_q1': 0.088}
+  recall split (pp): both-compliant   +2.02[ +1.88, +2.16]* only-B   +6.90[ +6.58, +7.23]* only-A   -2.83[ -3.07, -2.59]*; n both 182 (diff mode 117) only-B 30.8 only-A 15.5
+
+ablation|V|N5x2|cal-ng
+  ret   +2.48[ +0.70, +4.26]*  sce   +1.08[ -0.05, +2.22]   viol   -0.84[ -1.46, -0.22]*  drop   +1.36[ +0.75, +1.97]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.02]*  time   +0.87[ +0.40, +1.34]*
+  counts: ok   +0.52[ -0.15, +1.19]  qviol   +0.84[ +0.22, +1.46]* late   +0.00[ +0.00, +0.00]  mission_s   -0.58[ -0.90, -0.26]*
+  levels A/B: ret -62.3/-59.8; sce 115.1/116.1; viol -53.4/-54.2; drop -3.6/-2.2; uncapt 0.0/0.0; energy -1.4/-1.4; time -119.0/-118.1; n_ok 203.1/203.6; mission_s 79.3/78.7
+  compliant images: kbit 169.8/156.5  PSNR 29.82/29.54  yield TP/GT % 49.22/48.60 diff   -0.62[ -0.71, -0.53]*
+  top modes A {'avif_20': 0.857, 'avif_5': 0.042, 'avif_50': 0.04, 'mbt2018-mean_q3': 0.033}  B {'avif_20': 0.799, 'avif_5': 0.085, 'mbt2018-mean_q1': 0.043, 'mbt2018-mean_q3': 0.035}
+  recall split (pp): both-compliant   -0.46[ -0.51, -0.40]* only-B   +1.05[ +0.94, +1.16]* only-A   -1.01[ -1.13, -0.88]*; n both 198 (diff mode 40) only-B 5.1 only-A 4.6
+
+ablation|F|N5x2|ng-nc
+  ret  +14.05[ +9.37,+18.73]*  sce  +10.73[ +8.60,+12.86]*  viol  -23.60[-24.77,-22.43]*  drop  +18.28[+15.84,+20.72]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.10[ +0.09, +0.10]*  time   +8.54[ +7.87, +9.22]*
+  counts: ok   -5.32[ -7.70, -2.94]* qviol  +23.60[+22.43,+24.77]* late   +0.00[ +0.00, +0.00]  mission_s   -5.70[ -6.14, -5.25]*
+  levels A/B: ret -83.4/-69.3; sce 94.5/105.3; viol -19.5/-43.1; drop -27.1/-8.8; uncapt 0.0/0.0; energy -1.5/-1.4; time -129.8/-121.2; n_ok 213.3/208.0; mission_s 86.5/80.8
+  compliant images: kbit 315.1/207.3  PSNR 31.30/29.56  yield TP/GT % 56.27/54.62 diff   -1.64[ -1.85, -1.44]*
+  top modes A {'avif_20': 0.293, 'mbt2018-mean_q3': 0.226, 'avif_50': 0.175, 'mbt2018-mean_q1': 0.123}  B {'avif_20': 0.795, 'avif_5': 0.066, 'mbt2018-mean_q3': 0.063, 'mbt2018-mean_q1': 0.034}
+  recall split (pp): both-compliant   -1.08[ -1.23, -0.94]* only-B   +4.04[ +3.65, +4.43]* only-A   -5.64[ -5.95, -5.33]*; n both 189 (diff mode 114) only-B 19.5 only-A 24.8
+
+ablation|F|N5x2|band-nc
+  ret  +16.19[+12.10,+20.29]*  sce   +8.71[ +6.84,+10.59]*  viol  -15.41[-16.40,-14.42]*  drop  +15.84[+13.75,+17.93]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.08[ +0.07, +0.09]*  time   +6.97[ +6.33, +7.61]*
+  counts: ok   +0.43[ -1.65, +2.51]  qviol  +15.41[+14.42,+16.40]* late   +0.00[ +0.00, +0.00]  mission_s   -4.65[ -5.07, -4.22]*
+  levels A/B: ret -83.4/-67.2; sce 94.5/103.3; viol -19.5/-34.9; drop -27.1/-11.3; uncapt 0.0/0.0; energy -1.5/-1.4; time -129.8/-122.8; n_ok 213.3/213.8; mission_s 86.5/81.9
+  compliant images: kbit 315.1/245.7  PSNR 31.30/30.15  yield TP/GT % 56.27/55.11 diff   -1.16[ -1.33, -0.98]*
+  top modes A {'avif_20': 0.293, 'mbt2018-mean_q3': 0.226, 'avif_50': 0.175, 'mbt2018-mean_q1': 0.123}  B {'avif_20': 0.638, 'mbt2018-mean_q3': 0.112, 'avif_5': 0.085, 'avif_50': 0.083}
+  recall split (pp): both-compliant   -0.75[ -0.86, -0.64]* only-B   +3.61[ +3.26, +3.95]* only-A   -3.91[ -4.17, -3.65]*; n both 197 (diff mode 91) only-B 17.1 only-A 16.7
+
+ablation|F|N5x2|gate-nc
+  ret   +0.61[ -3.92, +5.13]   sce   +2.71[ +0.76, +4.67]*  viol   -7.38[ -8.34, -6.42]*  drop   +3.89[ +1.53, +6.25]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.02[ +0.01, +0.02]*  time   +1.37[ +0.75, +1.98]*
+  counts: ok   -3.49[ -5.88, -1.10]* qviol   +7.38[ +6.42, +8.34]* late   +0.00[ +0.00, +0.00]  mission_s   -0.91[ -1.32, -0.50]*
+  levels A/B: ret -83.4/-82.8; sce 94.5/97.3; viol -19.5/-26.9; drop -27.1/-23.2; uncapt 0.0/0.0; energy -1.5/-1.5; time -129.8/-128.4; n_ok 213.3/209.9; mission_s 86.5/85.6
+  compliant images: kbit 315.1/289.3  PSNR 31.30/30.94  yield TP/GT % 56.27/56.02 diff   -0.25[ -0.42, -0.08]*
+  top modes A {'avif_20': 0.293, 'mbt2018-mean_q3': 0.226, 'avif_50': 0.175, 'mbt2018-mean_q1': 0.123}  B {'avif_20': 0.422, 'mbt2018-mean_q3': 0.184, 'avif_50': 0.142, 'mbt2018-mean_q1': 0.101}
+  recall split (pp): both-compliant   -0.18[ -0.28, -0.07]* only-B   +4.32[ +3.91, +4.72]* only-A   -5.10[ -5.44, -4.77]*; n both 190 (diff mode 114) only-B 19.8 only-A 23.3
+
+ablation|F|N5x2|ng-H*
+  ret   +5.42[ +2.63, +8.21]*  sce   -1.26[ -2.59, +0.07]   viol  +10.73[ +9.78,+11.68]*  drop   -2.25[ -3.51, -0.99]*  uncapt   +0.00[ +0.00, +0.00]   energy   -0.02[ -0.03, -0.01]*  time   -1.78[ -2.31, -1.25]*
+  counts: ok   +8.48[ +7.01, +9.95]* qviol  -10.73[-11.68, -9.78]* late   +0.00[ +0.00, +0.00]  mission_s   +1.19[ +0.83, +1.54]*
+  levels A/B: ret -74.8/-69.3; sce 106.5/105.3; viol -53.9/-43.1; drop -6.6/-8.8; uncapt 0.0/0.0; energy -1.4/-1.4; time -119.4/-121.2; n_ok 199.6/208.0; mission_s 79.6/80.8
+  compliant images: kbit 181.0/207.3  PSNR 29.26/29.56  yield TP/GT % 54.98/54.62 diff   -0.35[ -0.49, -0.22]*
+  top modes A {'avif_20': 1.0}  B {'avif_20': 0.795, 'avif_5': 0.066, 'mbt2018-mean_q3': 0.063, 'mbt2018-mean_q1': 0.034}
+  recall split (pp): both-compliant   -0.24[ -0.31, -0.16]* only-B   +3.16[ +2.89, +3.43]* only-A   -1.01[ -1.22, -0.80]*; n both 195 (diff mode 32) only-B 13.4 only-A 4.9
+
+ablation|F|N5x2|nc-H*
+  ret   -8.63[-13.08, -4.18]*  sce  -11.99[-13.98,-10.01]*  viol  +34.33[+33.07,+35.59]*  drop  -20.53[-22.84,-18.22]*  uncapt   +0.00[ +0.00, +0.00]   energy   -0.12[ -0.12, -0.11]*  time  -10.32[-11.02, -9.62]*
+  counts: ok  +13.80[+11.31,+16.29]* qviol  -34.33[-35.59,-33.07]* late   +0.00[ +0.00, +0.00]  mission_s   +6.88[ +6.41, +7.35]*
+  levels A/B: ret -74.8/-83.4; sce 106.5/94.5; viol -53.9/-19.5; drop -6.6/-27.1; uncapt 0.0/0.0; energy -1.4/-1.5; time -119.4/-129.8; n_ok 199.6/213.3; mission_s 79.6/86.5
+  compliant images: kbit 181.0/315.1  PSNR 29.26/31.30  yield TP/GT % 54.98/56.27 diff   +1.29[ +1.04, +1.54]*
+  top modes A {'avif_20': 1.0}  B {'avif_20': 0.293, 'mbt2018-mean_q3': 0.226, 'avif_50': 0.175, 'mbt2018-mean_q1': 0.123}
+  recall split (pp): both-compliant   +0.90[ +0.73, +1.08]* only-B   +7.52[ +7.16, +7.87]* only-A   -3.82[ -4.18, -3.47]*; n both 181 (diff mode 120) only-B 32.2 only-A 18.4
+
+ablation|F|N5x2|cal-ng
+  ret   +2.62[ +0.11, +5.14]*  sce   +1.11[ -0.16, +2.39]   viol   -2.07[ -2.73, -1.41]*  drop   +2.85[ +1.69, +4.01]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.72[ +0.23, +1.21]*
+  counts: ok   +0.78[ -0.41, +1.97]  qviol   +2.07[ +1.41, +2.73]* late   +0.00[ +0.00, +0.00]  mission_s   -0.48[ -0.81, -0.16]*
+  levels A/B: ret -69.3/-66.7; sce 105.3/106.4; viol -43.1/-45.2; drop -8.8/-6.0; uncapt 0.0/0.0; energy -1.4/-1.4; time -121.2/-120.5; n_ok 208.0/208.8; mission_s 80.8/80.3
+  compliant images: kbit 207.3/191.9  PSNR 29.56/29.29  yield TP/GT % 54.62/53.83 diff   -0.80[ -0.92, -0.68]*
+  top modes A {'avif_20': 0.795, 'avif_5': 0.066, 'mbt2018-mean_q3': 0.063, 'mbt2018-mean_q1': 0.034}  B {'avif_20': 0.73, 'avif_5': 0.121, 'mbt2018-mean_q1': 0.06, 'mbt2018-mean_q3': 0.06}
+  recall split (pp): both-compliant   -0.55[ -0.62, -0.49]* only-B   +1.72[ +1.52, +1.92]* only-A   -1.77[ -1.98, -1.56]*; n both 201 (diff mode 52) only-B 8.1 only-A 7.4
+
+phase2|TD|N5x2|ng-nc
+  ret  +18.69[+14.88,+22.50]*  sce   +9.92[ +8.15,+11.69]*  viol  -15.58[-16.43,-14.73]*  drop  +16.04[+14.26,+17.82]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.09[ +0.09, +0.10]*  time   +8.22[ +7.58, +8.85]*
+  counts: ok   +0.46[ -1.61, +2.53]  qviol  +15.58[+14.73,+16.43]* late   +0.00[ +0.00, +0.00]  mission_s   -5.48[ -5.90, -5.05]*
+  levels A/B: ret -59.4/-40.7; sce 106.4/116.3; viol -13.6/-29.2; drop -22.0/-6.0; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.6/-120.4; n_ok 224.4/224.8; mission_s 85.8/80.3
+  compliant images: kbit 305.7/199.7  PSNR 32.09/30.38  yield TP/GT % 47.18/45.51 diff   -1.67[ -1.86, -1.48]*
+  top modes A {'avif_20': 0.281, 'mbt2018-mean_q3': 0.201, 'avif_50': 0.184, 'avif_5': 0.168}  B {'avif_20': 0.757, 'avif_5': 0.111, 'mbt2018-mean_q3': 0.059, 'avif_50': 0.036}
+  recall split (pp): both-compliant   -1.11[ -1.24, -0.98]* only-B   +3.04[ +2.75, +3.33]* only-A   -3.66[ -3.90, -3.41]*; n both 208 (diff mode 124) only-B 17.2 only-A 16.7
+
+phase2|TD|N5x2|cal-ng
+  ret   -0.10[ -1.95, +1.76]   sce   +0.07[ -0.87, +1.01]   viol   -1.99[ -2.67, -1.31]*  drop   +1.08[ +0.30, +1.86]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.73[ +0.29, +1.18]*
+  counts: ok   -0.91[ -1.88, +0.06]  qviol   +1.99[ +1.31, +2.67]* late   +0.00[ +0.00, +0.00]  mission_s   -0.49[ -0.78, -0.20]*
+  levels A/B: ret -40.7/-40.8; sce 116.3/116.4; viol -29.2/-31.1; drop -6.0/-4.9; uncapt 0.0/0.0; energy -1.4/-1.4; time -120.4/-119.7; n_ok 224.8/223.9; mission_s 80.3/79.8
+  compliant images: kbit 199.7/183.1  PSNR 30.38/30.08  yield TP/GT % 45.51/44.69 diff   -0.82[ -0.93, -0.70]*
+  top modes A {'avif_20': 0.757, 'avif_5': 0.111, 'mbt2018-mean_q3': 0.059, 'avif_50': 0.036}  B {'avif_20': 0.703, 'avif_5': 0.164, 'mbt2018-mean_q3': 0.056, 'mbt2018-mean_q1': 0.048}
+  recall split (pp): both-compliant   -0.59[ -0.66, -0.51]* only-B   +1.10[ +0.97, +1.24]* only-A   -1.37[ -1.53, -1.20]*; n both 218 (diff mode 60) only-B 5.6 only-A 6.5
+
+phase2|F|N5x2|ng-nc
+  ret   +8.12[ +4.44,+11.80]*  sce   +8.35[ +6.62,+10.07]*  viol  -22.79[-23.89,-21.69]*  drop  +14.91[+12.96,+16.86]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.09[ +0.08, +0.09]*  time   +7.56[ +6.87, +8.25]*
+  counts: ok   -7.88[ -9.84, -5.92]* qviol  +22.79[+21.69,+23.89]* late   +0.00[ +0.00, +0.00]  mission_s   -5.04[ -5.50, -4.58]*
+  levels A/B: ret -78.0/-69.8; sce 96.5/104.9; viol -19.6/-42.4; drop -24.1/-9.2; uncapt 0.0/0.0; energy -1.5/-1.4; time -129.3/-121.7; n_ok 216.3/208.4; mission_s 86.2/81.1
+  compliant images: kbit 316.4/210.0  PSNR 31.34/29.62  yield TP/GT % 56.25/54.44 diff   -1.81[ -2.00, -1.62]*
+  top modes A {'avif_20': 0.29, 'mbt2018-mean_q3': 0.226, 'avif_50': 0.176, 'mbt2018-mean_q1': 0.121}  B {'avif_20': 0.784, 'avif_5': 0.069, 'mbt2018-mean_q3': 0.064, 'mbt2018-mean_q1': 0.036}
+  recall split (pp): both-compliant   -1.17[ -1.30, -1.03]* only-B   +3.54[ +3.20, +3.88]* only-A   -5.80[ -6.11, -5.48]*; n both 192 (diff mode 116) only-B 16.9 only-A 24.7
+
+phase2|F|N5x2|cal-ng
+  ret   +3.97[ +1.27, +6.67]*  sce   +2.01[ +0.70, +3.31]*  viol   -2.27[ -3.02, -1.52]*  drop   +3.02[ +1.67, +4.37]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.01, +0.02]*  time   +1.20[ +0.68, +1.72]*
+  counts: ok   +0.75[ -0.53, +2.03]  qviol   +2.27[ +1.52, +3.02]* late   +0.00[ +0.00, +0.00]  mission_s   -0.80[ -1.15, -0.45]*
+  levels A/B: ret -69.8/-65.9; sce 104.9/106.9; viol -42.4/-44.7; drop -9.2/-6.2; uncapt 0.0/0.0; energy -1.4/-1.4; time -121.7/-120.5; n_ok 208.4/209.1; mission_s 81.1/80.3
+  compliant images: kbit 210.0/195.6  PSNR 29.62/29.36  yield TP/GT % 54.44/53.85 diff   -0.59[ -0.71, -0.46]*
+  top modes A {'avif_20': 0.784, 'avif_5': 0.069, 'mbt2018-mean_q3': 0.064, 'mbt2018-mean_q1': 0.036}  B {'avif_20': 0.728, 'avif_5': 0.119, 'mbt2018-mean_q3': 0.064, 'mbt2018-mean_q1': 0.056}
+  recall split (pp): both-compliant   -0.48[ -0.56, -0.41]* only-B   +1.86[ +1.63, +2.09]* only-A   -1.71[ -1.91, -1.51]*; n both 201 (diff mode 52) only-B 8.4 only-A 7.6
+
+phase2|V|N5x2|ng-nc
+  ret  +10.83[ +7.53,+14.13]*  sce  +10.09[ +8.58,+11.60]*  viol  -27.50[-28.68,-26.32]*  drop  +18.55[+16.96,+20.14]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.11[ +0.10, +0.12]*  time   +9.58[ +8.90,+10.26]*
+  counts: ok   -8.95[-10.70, -7.20]* qviol  +27.50[+26.32,+28.68]* late   +0.00[ +0.00, +0.00]  mission_s   -6.39[ -6.84, -5.94]*
+  levels A/B: ret -72.0/-61.2; sce 104.7/114.8; viol -25.1/-52.6; drop -22.0/-3.5; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.1/-118.6; n_ok 212.9/203.9; mission_s 85.4/79.0
+  compliant images: kbit 309.5/166.6  PSNR 32.38/29.76  yield TP/GT % 52.04/49.21 diff   -2.84[ -3.00, -2.67]*
+  top modes A {'avif_20': 0.31, 'avif_50': 0.246, 'mbt2018-mean_q3': 0.19, 'mbt2018-mean_q1': 0.093}  B {'avif_20': 0.859, 'avif_5': 0.044, 'avif_50': 0.036, 'mbt2018-mean_q3': 0.034}
+  recall split (pp): both-compliant   -1.90[ -2.02, -1.78]* only-B   +3.04[ +2.80, +3.29]* only-A   -5.52[ -5.81, -5.22]*; n both 187 (diff mode 113) only-B 16.6 only-A 25.6
+
+phase2|V|N5x2|cal-ng
+  ret   +1.94[ -0.14, +4.01]   sce   +0.99[ -0.24, +2.22]   viol   -0.95[ -1.52, -0.38]*  drop   +1.18[ +0.40, +1.96]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.71[ +0.28, +1.13]*
+  counts: ok   +0.23[ -0.62, +1.08]  qviol   +0.95[ +0.38, +1.52]* late   +0.00[ +0.00, +0.00]  mission_s   -0.47[ -0.75, -0.19]*
+  levels A/B: ret -61.2/-59.2; sce 114.8/115.8; viol -52.6/-53.5; drop -3.5/-2.3; uncapt 0.0/0.0; energy -1.4/-1.4; time -118.6/-117.9; n_ok 203.9/204.2; mission_s 79.0/78.6
+  compliant images: kbit 166.6/153.1  PSNR 29.76/29.46  yield TP/GT % 49.21/48.55 diff   -0.66[ -0.75, -0.57]*
+  top modes A {'avif_20': 0.859, 'avif_5': 0.044, 'avif_50': 0.036, 'mbt2018-mean_q3': 0.034}  B {'avif_20': 0.791, 'avif_5': 0.092, 'mbt2018-mean_q1': 0.05, 'mbt2018-mean_q3': 0.037}
+  recall split (pp): both-compliant   -0.46[ -0.52, -0.41]* only-B   +1.07[ +0.96, +1.19]* only-A   -1.00[ -1.15, -0.86]*; n both 199 (diff mode 41) only-B 5.1 only-A 4.9
+
+phase2|TD_all|N5x2|ng-nc
+  ret  +11.58[ +8.20,+14.97]*  sce   +8.01[ +6.29, +9.73]*  viol  -16.69[-17.63,-15.75]*  drop  +13.23[+11.57,+14.89]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.08[ +0.07, +0.09]*  time   +6.95[ +6.33, +7.57]*
+  counts: ok   -3.46[ -5.16, -1.76]* qviol  +16.69[+15.75,+17.63]* late   +0.00[ +0.00, +0.00]  mission_s   -4.64[ -5.05, -4.22]*
+  levels A/B: ret -60.4/-48.8; sce 105.2/113.2; viol -15.4/-32.1; drop -20.7/-7.4; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.0/-121.1; n_ok 224.0/220.5; mission_s 85.4/80.7
+  compliant images: kbit 301.9/203.6  PSNR 31.80/30.28  yield TP/GT % 43.79/42.80 diff   -0.99[ -1.20, -0.77]*
+  top modes A {'avif_20': 0.285, 'mbt2018-mean_q3': 0.22, 'avif_50': 0.169, 'avif_5': 0.165}  B {'avif_20': 0.753, 'avif_5': 0.112, 'mbt2018-mean_q3': 0.061, 'mbt2018-mean_q1': 0.032}
+  recall split (pp): both-compliant   -0.60[ -0.73, -0.48]* only-B   +2.32[ +2.07, +2.56]* only-A   -3.62[ -3.85, -3.39]*; n both 206 (diff mode 123) only-B 14.6 only-A 18.0
+
+phase2|TD_all|N5x2|cal-ng
+  ret   +0.16[ -2.05, +2.36]   sce   -0.15[ -1.37, +1.06]   viol   -2.08[ -2.69, -1.47]*  drop   +1.58[ +0.73, +2.43]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.80[ +0.27, +1.33]*
+  counts: ok   -0.50[ -1.40, +0.40]  qviol   +2.08[ +1.47, +2.69]* late   +0.00[ +0.00, +0.00]  mission_s   -0.54[ -0.89, -0.18]*
+  levels A/B: ret -48.8/-48.7; sce 113.2/113.0; viol -32.1/-34.1; drop -7.4/-5.8; uncapt 0.0/0.0; energy -1.4/-1.4; time -121.1/-120.3; n_ok 220.5/220.0; mission_s 80.7/80.2
+  compliant images: kbit 203.6/187.4  PSNR 30.28/30.00  yield TP/GT % 42.80/42.07 diff   -0.73[ -0.86, -0.60]*
+  top modes A {'avif_20': 0.753, 'avif_5': 0.112, 'mbt2018-mean_q3': 0.061, 'mbt2018-mean_q1': 0.032}  B {'avif_20': 0.692, 'avif_5': 0.17, 'mbt2018-mean_q3': 0.059, 'mbt2018-mean_q1': 0.054}
+  recall split (pp): both-compliant   -0.58[ -0.66, -0.50]* only-B   +1.11[ +0.98, +1.25]* only-A   -1.28[ -1.42, -1.15]*; n both 214 (diff mode 59) only-B 6.3 only-A 6.8
+
+phase4|TD|N3x2|ng-nc
+  ret  +11.53[ +9.24,+13.82]*  sce   +1.99[ +0.96, +3.03]*  viol   +0.12[ -0.12, +0.36]   drop   +6.28[ +5.10, +7.46]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.03[ +0.03, +0.04]*  time   +3.10[ +2.74, +3.47]*
+  counts: ok   +6.40[ +5.21, +7.59]* qviol   -0.12[ -0.36, +0.12]  late   +0.00[ +0.00, +0.00]  mission_s   -3.45[ -3.86, -3.04]*
+  levels A/B: ret -6.2/5.4; sce 80.0/82.0; viol -1.2/-1.1; drop -11.6/-5.3; uncapt 0.0/0.0; energy -0.9/-0.8; time -72.5/-69.4; n_ok 143.2/149.6; mission_s 80.6/77.1
+  compliant images: kbit 456.4/325.8  PSNR 34.56/32.83  yield TP/GT % 51.21/50.38 diff   -0.83[ -1.00, -0.67]*
+  top modes A {'mbt2018-mean_q3': 0.507, 'avif_50': 0.26, 'avif_80': 0.115, 'avif_5': 0.057}  B {'mbt2018-mean_q3': 0.867, 'avif_50': 0.056, 'avif_5': 0.033, 'avif_80': 0.026}
+  recall split (pp): both-compliant   -0.78[ -0.89, -0.67]* only-B   +2.80[ +2.40, +3.20]* only-A   -0.82[ -0.99, -0.65]*; n both 141 (diff mode 65) only-B 8.9 only-A 2.5
+
+phase4|TD|N3x2|cal-ng
+  ret   +1.34[ +0.08, +2.60]*  sce   +0.12[ -0.50, +0.74]   viol   -0.94[ -1.17, -0.71]*  drop   +1.62[ +1.03, +2.21]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.53[ +0.31, +0.75]*
+  counts: ok   +0.68[ -0.00, +1.36]  qviol   +0.94[ +0.71, +1.17]* late   +0.00[ +0.00, +0.00]  mission_s   -0.59[ -0.84, -0.35]*
+  levels A/B: ret 5.4/6.7; sce 82.0/82.2; viol -1.1/-2.0; drop -5.3/-3.7; uncapt 0.0/0.0; energy -0.8/-0.8; time -69.4/-68.9; n_ok 149.6/150.3; mission_s 77.1/76.5
+  compliant images: kbit 325.8/303.8  PSNR 32.83/32.45  yield TP/GT % 50.38/49.67 diff   -0.71[ -0.83, -0.59]*
+  top modes A {'mbt2018-mean_q3': 0.867, 'avif_50': 0.056, 'avif_5': 0.033, 'avif_80': 0.026}  B {'mbt2018-mean_q3': 0.826, 'avif_5': 0.064, 'avif_50': 0.047, 'mbt2018-mean_q1': 0.027}
+  recall split (pp): both-compliant   -0.58[ -0.67, -0.48]* only-B   +0.91[ +0.72, +1.10]* only-A   -0.71[ -0.88, -0.54]*; n both 147 (diff mode 30) only-B 2.9 only-A 2.2
+
+phase4|TD|N7x2|ng-nc
+  ret  +11.44[ +6.11,+16.77]*  sce   +6.38[ +4.11, +8.64]*  viol  -23.14[-24.43,-21.85]*  drop  +19.07[+16.07,+22.07]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.10[ +0.09, +0.11]*  time   +9.03[ +8.25, +9.81]*
+  counts: ok   -4.07[ -6.88, -1.26]* qviol  +23.14[+21.85,+24.43]* late   +0.00[ +0.00, +0.00]  mission_s   -4.30[ -4.67, -3.93]*
+  levels A/B: ret -130.9/-119.5; sce 123.6/130.0; viol -26.0/-49.2; drop -39.6/-20.6; uncapt 0.0/0.0; energy -2.2/-2.1; time -186.7/-177.7; n_ok 298.3/294.2; mission_s 88.9/84.6
+  compliant images: kbit 213.4/138.2  PSNR 30.71/29.54  yield TP/GT % 44.18/40.73 diff   -3.45[ -3.65, -3.25]*
+  top modes A {'mbt2018-mean_q1': 0.357, 'avif_5': 0.248, 'mbt2018-mean_q3': 0.195, 'avif_50': 0.097}  B {'mbt2018-mean_q1': 0.734, 'avif_5': 0.181, 'mbt2018-mean_q3': 0.038, 'avif_20': 0.033}
+  recall split (pp): both-compliant   -2.28[ -2.41, -2.16]* only-B   +2.96[ +2.73, +3.20]* only-A   -4.34[ -4.60, -4.08]*; n both 268 (diff mode 134) only-B 26.4 only-A 30.4
+
+phase4|TD|N7x2|cal-ng
+  ret   +1.33[ -2.52, +5.18]   sce   +1.42[ -0.29, +3.13]   viol   -4.54[ -5.35, -3.73]*  drop   +3.57[ +1.49, +5.65]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.02]*  time   +0.88[ +0.31, +1.44]*
+  counts: ok   -0.97[ -2.97, +1.03]  qviol   +4.54[ +3.73, +5.35]* late   +0.00[ +0.00, +0.00]  mission_s   -0.42[ -0.69, -0.15]*
+  levels A/B: ret -119.5/-118.2; sce 130.0/131.4; viol -49.2/-53.7; drop -20.6/-17.0; uncapt 0.0/0.0; energy -2.1/-2.1; time -177.7/-176.8; n_ok 294.2/293.3; mission_s 84.6/84.2
+  compliant images: kbit 138.2/130.1  PSNR 29.54/29.38  yield TP/GT % 40.73/40.24 diff   -0.49[ -0.60, -0.37]*
+  top modes A {'mbt2018-mean_q1': 0.734, 'avif_5': 0.181, 'mbt2018-mean_q3': 0.038, 'avif_20': 0.033}  B {'mbt2018-mean_q1': 0.697, 'avif_5': 0.234, 'avif_20': 0.033, 'mbt2018-mean_q3': 0.029}
+  recall split (pp): both-compliant   -0.23[ -0.28, -0.17]* only-B   +1.41[ +1.23, +1.59]* only-A   -1.82[ -1.99, -1.65]*; n both 281 (diff mode 69) only-B 12.6 only-A 13.5
+
+phase4|TD|N5x3|ng-nc
+  ret  +13.96[+11.17,+16.76]*  sce   +3.35[ +2.08, +4.63]*  viol   +0.61[ +0.26, +0.96]*  drop   +5.95[ +4.57, +7.33]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.05[ +0.04, +0.05]*  time   +4.00[ +3.49, +4.52]*
+  counts: ok   +6.56[ +5.14, +7.98]* qviol   -0.61[ -0.96, -0.26]* late   +0.00[ +0.00, +0.00]  mission_s   -2.67[ -3.01, -2.33]*
+  levels A/B: ret -20.7/-6.7; sce 125.4/128.8; viol -3.5/-2.9; drop -15.4/-9.5; uncapt 0.0/0.0; energy -1.5/-1.4; time -125.7/-121.7; n_ok 241.0/247.6; mission_s 83.8/81.1
+  compliant images: kbit 375.2/302.1  PSNR 33.41/32.44  yield TP/GT % 49.87/49.62 diff   -0.25[ -0.35, -0.14]*
+  top modes A {'mbt2018-mean_q3': 0.539, 'avif_50': 0.194, 'avif_5': 0.104, 'avif_80': 0.066}  B {'mbt2018-mean_q3': 0.832, 'avif_5': 0.064, 'avif_50': 0.044, 'mbt2018-mean_q1': 0.026}
+  recall split (pp): both-compliant   -0.19[ -0.27, -0.10]* only-B   +2.25[ +2.02, +2.48]* only-A   -1.00[ -1.14, -0.86]*; n both 236 (diff mode 103) only-B 11.6 only-A 5.0
+
+phase4|TD|N5x3|cal-ng
+  ret   +2.79[ +1.00, +4.59]*  sce   +0.65[ -0.21, +1.50]   viol   -1.59[ -2.01, -1.17]*  drop   +2.28[ +1.39, +3.17]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.02[ +0.01, +0.02]*  time   +1.44[ +1.04, +1.85]*
+  counts: ok   +0.69[ -0.27, +1.65]  qviol   +1.59[ +1.17, +2.01]* late   +0.00[ +0.00, +0.00]  mission_s   -0.96[ -1.23, -0.69]*
+  levels A/B: ret -6.7/-3.9; sce 128.8/129.4; viol -2.9/-4.5; drop -9.5/-7.2; uncapt 0.0/0.0; energy -1.4/-1.4; time -121.7/-120.2; n_ok 247.6/248.3; mission_s 81.1/80.1
+  compliant images: kbit 302.1/282.6  PSNR 32.44/32.07  yield TP/GT % 49.62/48.81 diff   -0.82[ -0.93, -0.70]*
+  top modes A {'mbt2018-mean_q3': 0.832, 'avif_5': 0.064, 'avif_50': 0.044, 'mbt2018-mean_q1': 0.026}  B {'mbt2018-mean_q3': 0.776, 'avif_5': 0.102, 'mbt2018-mean_q1': 0.048, 'avif_50': 0.035}
+  recall split (pp): both-compliant   -0.74[ -0.82, -0.65]* only-B   +1.11[ +0.94, +1.28]* only-A   -1.00[ -1.12, -0.88]*; n both 243 (diff mode 59) only-B 5.7 only-A 5.0
+
+phase4|TD|N5x4|ng-nc
+  ret  +13.62[+11.72,+15.53]*  sce   +2.94[ +1.96, +3.92]*  viol   +0.33[ -0.03, +0.69]   drop   +5.42[ +4.45, +6.39]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.05[ +0.05, +0.06]*  time   +4.88[ +4.52, +5.24]*
+  counts: ok   +5.75[ +4.79, +6.71]* qviol   -0.33[ -0.69, +0.03]  late   +0.00[ +0.00, +0.00]  mission_s   -3.25[ -3.49, -3.02]*
+  levels A/B: ret -3.8/9.8; sce 135.8/138.8; viol -2.7/-2.4; drop -11.9/-6.5; uncapt 0.0/0.0; energy -1.5/-1.4; time -123.6/-118.7; n_ok 245.4/251.1; mission_s 82.4/79.1
+  compliant images: kbit 415.6/320.9  PSNR 34.01/32.75  yield TP/GT % 50.59/50.03 diff   -0.56[ -0.68, -0.43]*
+  top modes A {'mbt2018-mean_q3': 0.52, 'avif_50': 0.237, 'avif_80': 0.086, 'avif_5': 0.076}  B {'mbt2018-mean_q3': 0.821, 'avif_50': 0.069, 'avif_5': 0.051, 'avif_80': 0.024}
+  recall split (pp): both-compliant   -0.52[ -0.61, -0.43]* only-B   +1.86[ +1.67, +2.04]* only-A   -0.77[ -0.91, -0.63]*; n both 242 (diff mode 107) only-B 9.5 only-A 3.7
+
+phase4|TD|N5x4|cal-ng
+  ret   +1.63[ +0.47, +2.80]*  sce   +0.09[ -0.50, +0.67]   viol   -1.24[ -1.56, -0.92]*  drop   +1.53[ +1.02, +2.04]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.01, +0.02]*  time   +1.24[ +0.94, +1.54]*
+  counts: ok   +0.29[ -0.33, +0.91]  qviol   +1.24[ +0.92, +1.56]* late   +0.00[ +0.00, +0.00]  mission_s   -0.83[ -1.03, -0.63]*
+  levels A/B: ret 9.8/11.5; sce 138.8/138.9; viol -2.4/-3.6; drop -6.5/-5.0; uncapt 0.0/0.0; energy -1.4/-1.4; time -118.7/-117.4; n_ok 251.1/251.4; mission_s 79.1/78.3
+  compliant images: kbit 320.9/298.6  PSNR 32.75/32.35  yield TP/GT % 50.03/49.29 diff   -0.74[ -0.85, -0.64]*
+  top modes A {'mbt2018-mean_q3': 0.821, 'avif_50': 0.069, 'avif_5': 0.051, 'avif_80': 0.024}  B {'mbt2018-mean_q3': 0.786, 'avif_5': 0.083, 'avif_50': 0.054, 'avif_20': 0.031}
+  recall split (pp): both-compliant   -0.66[ -0.75, -0.58]* only-B   +0.69[ +0.59, +0.79]* only-A   -0.66[ -0.77, -0.56]*; n both 248 (diff mode 61) only-B 3.6 only-A 3.3
+
+phase4|TD|B0.5|ng-nc
+  ret   +2.83[ -0.05, +5.71]   sce   +4.23[ +2.85, +5.61]*  viol  -14.84[-15.70,-13.98]*  drop   +7.38[ +6.11, +8.65]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.07[ +0.06, +0.07]*  time   +5.99[ +5.37, +6.62]*
+  counts: ok   -7.46[ -8.77, -6.15]* qviol  +14.84[+13.98,+15.70]* late   +0.00[ +0.00, +0.00]  mission_s   -3.99[ -4.41, -3.58]*
+  levels A/B: ret -62.2/-59.4; sce 103.0/107.2; viol -19.4/-34.2; drop -12.6/-5.2; uncapt 0.0/0.0; energy -1.5/-1.5; time -131.8/-125.8; n_ok 228.1/220.6; mission_s 87.8/83.8
+  compliant images: kbit 212.8/147.8  PSNR 30.67/29.64  yield TP/GT % 44.26/41.04 diff   -3.22[ -3.37, -3.06]*
+  top modes A {'mbt2018-mean_q1': 0.325, 'avif_5': 0.255, 'mbt2018-mean_q3': 0.208, 'avif_50': 0.097}  B {'mbt2018-mean_q1': 0.679, 'avif_5': 0.192, 'mbt2018-mean_q3': 0.055, 'avif_20': 0.051}
+  recall split (pp): both-compliant   -2.22[ -2.34, -2.10]* only-B   +1.67[ +1.49, +1.85]* only-A   -3.69[ -3.93, -3.45]*; n both 211 (diff mode 106) only-B 9.7 only-A 17.1
+
+phase4|TD|B0.5|cal-ng
+  ret   +0.22[ -1.67, +2.11]   sce   +1.08[ +0.10, +2.05]*  viol   -2.96[ -3.50, -2.42]*  drop   +1.13[ +0.36, +1.90]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.01, +0.02]*  time   +0.96[ +0.52, +1.41]*
+  counts: ok   -1.83[ -2.65, -1.01]* qviol   +2.96[ +2.42, +3.50]* late   +0.00[ +0.00, +0.00]  mission_s   -0.64[ -0.94, -0.35]*
+  levels A/B: ret -59.4/-59.2; sce 107.2/108.3; viol -34.2/-37.2; drop -5.2/-4.0; uncapt 0.0/0.0; energy -1.5/-1.5; time -125.8/-124.8; n_ok 220.6/218.8; mission_s 83.8/83.2
+  compliant images: kbit 147.8/138.9  PSNR 29.64/29.47  yield TP/GT % 41.04/40.58 diff   -0.47[ -0.59, -0.34]*
+  top modes A {'mbt2018-mean_q1': 0.679, 'avif_5': 0.192, 'mbt2018-mean_q3': 0.055, 'avif_20': 0.051}  B {'mbt2018-mean_q1': 0.649, 'avif_5': 0.242, 'avif_20': 0.048, 'mbt2018-mean_q3': 0.046}
+  recall split (pp): both-compliant   -0.27[ -0.35, -0.19]* only-B   +0.91[ +0.76, +1.05]* only-A   -1.44[ -1.58, -1.30]*; n both 214 (diff mode 57) only-B 4.8 only-A 6.6
+
+phase4|TD|B2|ng-nc
+  ret  +30.37[+25.07,+35.68]*  sce  +15.08[+12.69,+17.47]*  viol  -21.82[-22.86,-20.78]*  drop  +28.38[+25.88,+30.88]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.10[ +0.09, +0.10]*  time   +8.63[ +8.01, +9.26]*
+  counts: ok   +6.56[ +3.81, +9.31]* qviol  +21.82[+20.78,+22.86]* late   +0.00[ +0.00, +0.00]  mission_s   -5.76[ -6.17, -5.34]*
+  levels A/B: ret -62.0/-31.6; sce 105.8/120.9; viol -10.0/-31.8; drop -33.0/-4.6; uncapt 0.0/0.0; energy -1.5/-1.4; time -123.4/-114.8; n_ok 217.0/223.6; mission_s 82.3/76.5
+  compliant images: kbit 380.7/189.9  PSNR 33.17/30.27  yield TP/GT % 48.53/45.55 diff   -2.98[ -3.20, -2.76]*
+  top modes A {'avif_20': 0.29, 'avif_50': 0.251, 'mbt2018-mean_q3': 0.175, 'avif_5': 0.115}  B {'avif_20': 0.837, 'avif_5': 0.084, 'mbt2018-mean_q3': 0.043, 'avif_50': 0.019}
+  recall split (pp): both-compliant   -2.02[ -2.16, -1.88]* only-B   +4.58[ +4.17, +4.99]* only-A   -4.34[ -4.60, -4.08]*; n both 197 (diff mode 122) only-B 26.2 only-A 19.6
+
+phase4|TD|B2|cal-ng
+  ret   +2.10[ -0.51, +4.71]   sce   +1.04[ -0.28, +2.36]   viol   -1.66[ -2.28, -1.04]*  drop   +1.79[ +0.76, +2.82]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.02]*  time   +0.92[ +0.41, +1.42]*
+  counts: ok   +0.13[ -1.06, +1.32]  qviol   +1.66[ +1.04, +2.28]* late   +0.00[ +0.00, +0.00]  mission_s   -0.61[ -0.95, -0.28]*
+  levels A/B: ret -31.6/-29.5; sce 120.9/121.9; viol -31.8/-33.5; drop -4.6/-2.8; uncapt 0.0/0.0; energy -1.4/-1.3; time -114.8/-113.8; n_ok 223.6/223.7; mission_s 76.5/75.9
+  compliant images: kbit 189.9/172.8  PSNR 30.27/29.91  yield TP/GT % 45.55/44.44 diff   -1.12[ -1.24, -1.00]*
+  top modes A {'avif_20': 0.837, 'avif_5': 0.084, 'mbt2018-mean_q3': 0.043, 'avif_50': 0.019}  B {'avif_20': 0.735, 'avif_5': 0.174, 'mbt2018-mean_q3': 0.039, 'mbt2018-mean_q1': 0.038}
+  recall split (pp): both-compliant   -0.87[ -0.96, -0.79]* only-B   +1.12[ +0.96, +1.28]* only-A   -1.26[ -1.43, -1.09]*; n both 218 (diff mode 53) only-B 5.7 only-A 5.6
+
+phase4|F|N3x2|ng-nc
+  ret   +8.17[ +5.68,+10.66]*  sce   +0.43[ -0.65, +1.51]   viol   -0.84[ -1.18, -0.50]*  drop   +5.60[ +4.30, +6.90]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.03[ +0.03, +0.04]*  time   +2.94[ +2.56, +3.32]*
+  counts: ok   +4.76[ +3.46, +6.06]* qviol   +0.84[ +0.50, +1.18]* late   +0.00[ +0.00, +0.00]  mission_s   -3.27[ -3.69, -2.84]*
+  levels A/B: ret -17.8/-9.6; sce 72.9/73.3; viol -2.1/-2.9; drop -14.5/-8.9; uncapt 0.0/0.0; energy -0.9/-0.8; time -73.2/-70.3; n_ok 139.4/144.2; mission_s 81.3/78.1
+  compliant images: kbit 475.7/348.5  PSNR 33.78/32.04  yield TP/GT % 60.35/59.64 diff   -0.71[ -0.87, -0.54]*
+  top modes A {'mbt2018-mean_q3': 0.556, 'avif_50': 0.25, 'avif_80': 0.103, 'mbt2018-mean_q1': 0.029}  B {'mbt2018-mean_q3': 0.89, 'avif_50': 0.054, 'avif_80': 0.023, 'avif_5': 0.013}
+  recall split (pp): both-compliant   -0.67[ -0.75, -0.58]* only-B   +3.74[ +3.23, +4.25]* only-A   -1.94[ -2.28, -1.60]*; n both 134 (diff mode 58) only-B 9.9 only-A 5.2
+
+phase4|F|N3x2|cal-ng
+  ret   +2.50[ +0.86, +4.15]*  sce   +0.55[ -0.18, +1.27]   viol   -1.17[ -1.50, -0.84]*  drop   +2.42[ +1.54, +3.30]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.70[ +0.43, +0.96]*
+  counts: ok   +1.25[ +0.36, +2.14]* qviol   +1.17[ +0.84, +1.50]* late   +0.00[ +0.00, +0.00]  mission_s   -0.77[ -1.07, -0.48]*
+  levels A/B: ret -9.6/-7.1; sce 73.3/73.9; viol -2.9/-4.1; drop -8.9/-6.5; uncapt 0.0/0.0; energy -0.8/-0.8; time -70.3/-69.6; n_ok 144.2/145.4; mission_s 78.1/77.3
+  compliant images: kbit 348.5/322.1  PSNR 32.04/31.60  yield TP/GT % 59.64/58.83 diff   -0.81[ -0.96, -0.67]*
+  top modes A {'mbt2018-mean_q3': 0.89, 'avif_50': 0.054, 'avif_80': 0.023, 'avif_5': 0.013}  B {'mbt2018-mean_q3': 0.855, 'avif_5': 0.04, 'avif_50': 0.039, 'mbt2018-mean_q1': 0.032}
+  recall split (pp): both-compliant   -0.66[ -0.76, -0.57]* only-B   +1.71[ +1.41, +2.01]* only-A   -1.30[ -1.53, -1.07]*; n both 141 (diff mode 26) only-B 4.5 only-A 3.3
+
+phase4|F|N7x2|ng-nc
+  ret   +5.59[ +0.17,+11.00]*  sce   +7.42[ +5.02, +9.82]*  viol  -34.85[-36.14,-33.56]*  drop  +23.47[+20.35,+26.59]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.11[ +0.10, +0.11]*  time   +9.44[ +8.65,+10.23]*
+  counts: ok  -11.38[-14.29, -8.47]* qviol  +34.85[+33.56,+36.14]* late   +0.00[ +0.00, +0.00]  mission_s   -4.49[ -4.87, -4.12]*
+  levels A/B: ret -159.2/-153.6; sce 111.6/119.0; viol -35.8/-70.6; drop -44.7/-21.3; uncapt 0.0/0.0; energy -2.2/-2.1; time -188.1/-178.7; n_ok 283.5/272.1; mission_s 89.6/85.1
+  compliant images: kbit 227.0/147.8  PSNR 30.02/28.79  yield TP/GT % 53.65/51.07 diff   -2.58[ -2.76, -2.40]*
+  top modes A {'mbt2018-mean_q1': 0.39, 'mbt2018-mean_q3': 0.216, 'avif_5': 0.188, 'avif_50': 0.093}  B {'mbt2018-mean_q1': 0.762, 'avif_5': 0.138, 'mbt2018-mean_q3': 0.049, 'avif_20': 0.037}
+  recall split (pp): both-compliant   -1.38[ -1.49, -1.28]* only-B   +4.00[ +3.71, +4.30]* only-A   -6.41[ -6.70, -6.12]*; n both 244 (diff mode 117) only-B 28.6 only-A 40.0
+
+phase4|F|N7x2|cal-ng
+  ret   +4.21[ +0.30, +8.12]*  sce   +2.56[ +0.87, +4.24]*  viol   -3.97[ -4.85, -3.09]*  drop   +4.30[ +2.20, +6.40]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.01, +0.02]*  time   +1.31[ +0.68, +1.94]*
+  counts: ok   +0.33[ -1.78, +2.44]  qviol   +3.97[ +3.09, +4.85]* late   +0.00[ +0.00, +0.00]  mission_s   -0.62[ -0.92, -0.32]*
+  levels A/B: ret -153.6/-149.4; sce 119.0/121.5; viol -70.6/-74.6; drop -21.3/-17.0; uncapt 0.0/0.0; energy -2.1/-2.1; time -178.7/-177.4; n_ok 272.1/272.5; mission_s 85.1/84.5
+  compliant images: kbit 147.8/140.0  PSNR 28.79/28.63  yield TP/GT % 51.07/50.61 diff   -0.46[ -0.57, -0.36]*
+  top modes A {'mbt2018-mean_q1': 0.762, 'avif_5': 0.138, 'mbt2018-mean_q3': 0.049, 'avif_20': 0.037}  B {'mbt2018-mean_q1': 0.726, 'avif_5': 0.189, 'mbt2018-mean_q3': 0.04, 'avif_20': 0.035}
+  recall split (pp): both-compliant   -0.29[ -0.34, -0.25]* only-B   +2.04[ +1.84, +2.23]* only-A   -2.16[ -2.37, -1.95]*; n both 258 (diff mode 62) only-B 14.9 only-A 14.6
+
+phase4|F|N5x3|ng-nc
+  ret  +11.78[ +8.67,+14.89]*  sce   +2.57[ +1.06, +4.08]*  viol   -0.53[ -1.06, -0.00]*  drop   +5.72[ +4.16, +7.28]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.04[ +0.04, +0.05]*  time   +3.98[ +3.42, +4.54]*
+  counts: ok   +5.19[ +3.65, +6.73]* qviol   +0.53[ +0.00, +1.06]* late   +0.00[ +0.00, +0.00]  mission_s   -2.65[ -3.03, -2.28]*
+  levels A/B: ret -39.0/-27.2; sce 114.4/117.0; viol -5.7/-6.3; drop -18.9/-13.2; uncapt 0.0/0.0; energy -1.5/-1.5; time -127.2/-123.2; n_ok 235.3/240.5; mission_s 84.8/82.1
+  compliant images: kbit 391.8/323.4  PSNR 32.67/31.66  yield TP/GT % 59.17/58.95 diff   -0.22[ -0.36, -0.08]*
+  top modes A {'mbt2018-mean_q3': 0.601, 'avif_50': 0.171, 'avif_80': 0.059, 'avif_5': 0.056}  B {'mbt2018-mean_q3': 0.862, 'avif_50': 0.036, 'avif_5': 0.035, 'mbt2018-mean_q1': 0.033}
+  recall split (pp): both-compliant   -0.18[ -0.27, -0.09]* only-B   +3.21[ +2.88, +3.54]* only-A   -1.89[ -2.15, -1.62]*; n both 227 (diff mode 90) only-B 13.8 only-A 8.6
+
+phase4|F|N5x3|cal-ng
+  ret   +2.77[ +0.69, +4.85]*  sce   +0.69[ -0.27, +1.65]   viol   -2.49[ -2.93, -2.05]*  drop   +3.15[ +2.06, +4.24]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.02[ +0.01, +0.02]*  time   +1.40[ +0.93, +1.87]*
+  counts: ok   +0.66[ -0.43, +1.75]  qviol   +2.49[ +2.05, +2.93]* late   +0.00[ +0.00, +0.00]  mission_s   -0.93[ -1.24, -0.62]*
+  levels A/B: ret -27.2/-24.4; sce 117.0/117.7; viol -6.3/-8.8; drop -13.2/-10.1; uncapt 0.0/0.0; energy -1.5/-1.4; time -123.2/-121.8; n_ok 240.5/241.2; mission_s 82.1/81.2
+  compliant images: kbit 323.4/303.9  PSNR 31.66/31.31  yield TP/GT % 58.95/58.21 diff   -0.74[ -0.86, -0.61]*
+  top modes A {'mbt2018-mean_q3': 0.862, 'avif_50': 0.036, 'avif_5': 0.035, 'mbt2018-mean_q1': 0.033}  B {'mbt2018-mean_q3': 0.811, 'avif_5': 0.067, 'mbt2018-mean_q1': 0.054, 'avif_20': 0.03}
+  recall split (pp): both-compliant   -0.67[ -0.77, -0.58]* only-B   +1.66[ +1.42, +1.90]* only-A   -1.63[ -1.81, -1.45]*; n both 233 (diff mode 52) only-B 7.9 only-A 7.2
+
+phase4|F|N5x4|ng-nc
+  ret  +12.95[+10.85,+15.04]*  sce   +2.88[ +1.96, +3.81]*  viol   -1.35[ -1.80, -0.90]*  drop   +6.20[ +5.18, +7.22]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.06[ +0.05, +0.06]*  time   +5.15[ +4.67, +5.63]*
+  counts: ok   +4.85[ +3.77, +5.93]* qviol   +1.35[ +0.90, +1.80]* late   +0.00[ +0.00, +0.00]  mission_s   -3.44[ -3.76, -3.12]*
+  levels A/B: ret -20.3/-7.3; sce 125.5/128.4; viol -4.2/-5.5; drop -14.8/-8.6; uncapt 0.0/0.0; energy -1.5/-1.4; time -125.3/-120.1; n_ok 241.0/245.9; mission_s 83.5/80.1
+  compliant images: kbit 435.0/343.6  PSNR 33.28/31.99  yield TP/GT % 59.89/59.35 diff   -0.54[ -0.65, -0.42]*
+  top modes A {'mbt2018-mean_q3': 0.58, 'avif_50': 0.218, 'avif_80': 0.078, 'avif_5': 0.036}  B {'mbt2018-mean_q3': 0.856, 'avif_50': 0.06, 'avif_80': 0.024, 'avif_5': 0.023}
+  recall split (pp): both-compliant   -0.43[ -0.52, -0.35]* only-B   +2.46[ +2.20, +2.71]* only-A   -1.51[ -1.69, -1.32]*; n both 235 (diff mode 95) only-B 11.1 only-A 6.2
+
+phase4|F|N5x4|cal-ng
+  ret   +1.66[ +0.24, +3.07]*  sce   +0.32[ -0.29, +0.94]   viol   -1.89[ -2.36, -1.42]*  drop   +1.98[ +1.25, +2.71]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.01, +0.02]*  time   +1.23[ +0.88, +1.58]*
+  counts: ok   +0.09[ -0.71, +0.89]  qviol   +1.89[ +1.42, +2.36]* late   +0.00[ +0.00, +0.00]  mission_s   -0.82[ -1.05, -0.59]*
+  levels A/B: ret -7.3/-5.7; sce 128.4/128.7; viol -5.5/-7.4; drop -8.6/-6.6; uncapt 0.0/0.0; energy -1.4/-1.4; time -120.1/-118.9; n_ok 245.9/246.0; mission_s 80.1/79.3
+  compliant images: kbit 343.6/321.7  PSNR 31.99/31.61  yield TP/GT % 59.35/58.67 diff   -0.69[ -0.78, -0.60]*
+  top modes A {'mbt2018-mean_q3': 0.856, 'avif_50': 0.06, 'avif_80': 0.024, 'avif_5': 0.023}  B {'mbt2018-mean_q3': 0.825, 'avif_50': 0.048, 'avif_5': 0.048, 'mbt2018-mean_q1': 0.035}
+  recall split (pp): both-compliant   -0.60[ -0.67, -0.53]* only-B   +1.17[ +0.98, +1.35]* only-A   -1.11[ -1.27, -0.95]*; n both 241 (diff mode 51) only-B 5.1 only-A 5.0
+
+phase4|F|B0.5|ng-nc
+  ret   -0.12[ -3.28, +3.03]   sce   +5.57[ +4.13, +7.01]*  viol  -22.26[-23.35,-21.17]*  drop   +9.53[ +8.03,+11.03]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.08[ +0.07, +0.08]*  time   +6.96[ +6.38, +7.53]*
+  counts: ok  -12.73[-14.44,-11.02]* qviol  +22.26[+21.17,+23.35]* late   +0.00[ +0.00, +0.00]  mission_s   -4.64[ -5.02, -4.26]*
+  levels A/B: ret -84.5/-84.6; sce 93.0/98.6; viol -28.0/-50.3; drop -15.0/-5.5; uncapt 0.0/0.0; energy -1.6/-1.5; time -132.9/-126.0; n_ok 217.0/204.2; mission_s 88.6/84.0
+  compliant images: kbit 223.3/155.6  PSNR 29.95/28.88  yield TP/GT % 53.61/51.29 diff   -2.31[ -2.48, -2.14]*
+  top modes A {'mbt2018-mean_q1': 0.372, 'mbt2018-mean_q3': 0.227, 'avif_5': 0.195, 'avif_20': 0.095}  B {'mbt2018-mean_q1': 0.703, 'avif_5': 0.155, 'mbt2018-mean_q3': 0.064, 'avif_20': 0.056}
+  recall split (pp): both-compliant   -1.42[ -1.53, -1.31]* only-B   +2.29[ +2.03, +2.56]* only-A   -5.39[ -5.65, -5.13]*; n both 193 (diff mode 92) only-B 11.2 only-A 23.9
+
+phase4|F|B0.5|cal-ng
+  ret   -0.41[ -2.28, +1.45]   sce   +0.77[ -0.12, +1.66]   viol   -2.52[ -3.14, -1.90]*  drop   +0.83[ +0.08, +1.58]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.50[ +0.09, +0.91]*
+  counts: ok   -1.69[ -2.67, -0.71]* qviol   +2.52[ +1.90, +3.14]* late   +0.00[ +0.00, +0.00]  mission_s   -0.33[ -0.61, -0.06]*
+  levels A/B: ret -84.6/-85.0; sce 98.6/99.4; viol -50.3/-52.8; drop -5.5/-4.7; uncapt 0.0/0.0; energy -1.5/-1.5; time -126.0/-125.5; n_ok 204.2/202.5; mission_s 84.0/83.7
+  compliant images: kbit 155.6/145.6  PSNR 28.88/28.70  yield TP/GT % 51.29/50.78 diff   -0.51[ -0.63, -0.39]*
+  top modes A {'mbt2018-mean_q1': 0.703, 'avif_5': 0.155, 'mbt2018-mean_q3': 0.064, 'avif_20': 0.056}  B {'mbt2018-mean_q1': 0.679, 'avif_5': 0.2, 'mbt2018-mean_q3': 0.054, 'avif_20': 0.053}
+  recall split (pp): both-compliant   -0.31[ -0.38, -0.24]* only-B   +1.12[ +1.00, +1.25]* only-A   -1.71[ -1.90, -1.52]*; n both 197 (diff mode 51) only-B 5.9 only-A 7.6
+
+phase4|F|B2|ng-nc
+  ret  +22.63[+17.42,+27.85]*  sce  +13.93[+11.65,+16.22]*  viol  -31.11[-32.29,-29.93]*  drop  +30.38[+27.60,+33.16]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.10[ +0.10, +0.11]*  time   +9.32[ +8.67, +9.98]*
+  counts: ok   -0.73[ -3.55, +2.09]  qviol  +31.11[+29.93,+32.29]* late   +0.00[ +0.00, +0.00]  mission_s   -6.22[ -6.65, -5.78]*
+  levels A/B: ret -81.6/-59.0; sce 96.7/110.7; viol -15.4/-46.5; drop -36.7/-6.3; uncapt 0.0/0.0; energy -1.5/-1.4; time -124.7/-115.4; n_ok 207.9/207.2; mission_s 83.2/76.9
+  compliant images: kbit 397.8/202.3  PSNR 32.47/29.52  yield TP/GT % 57.70/54.67 diff   -3.03[ -3.25, -2.82]*
+  top modes A {'avif_20': 0.316, 'avif_50': 0.251, 'mbt2018-mean_q3': 0.191, 'avif_80': 0.083}  B {'avif_20': 0.87, 'mbt2018-mean_q3': 0.046, 'avif_5': 0.043, 'avif_50': 0.02}
+  recall split (pp): both-compliant   -2.03[ -2.17, -1.89]* only-B   +5.61[ +5.15, +6.06]* only-A   -6.64[ -6.97, -6.30]*; n both 180 (diff mode 109) only-B 26.8 only-A 27.5
+
+phase4|F|B2|cal-ng
+  ret   +2.85[ +0.35, +5.34]*  sce   +1.20[ -0.08, +2.48]   viol   -1.63[ -2.38, -0.88]*  drop   +2.48[ +1.41, +3.55]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.01[ +0.00, +0.01]*  time   +0.79[ +0.35, +1.23]*
+  counts: ok   +0.85[ -0.29, +1.99]  qviol   +1.63[ +0.88, +2.38]* late   +0.00[ +0.00, +0.00]  mission_s   -0.53[ -0.82, -0.23]*
+  levels A/B: ret -59.0/-56.1; sce 110.7/111.9; viol -46.5/-48.1; drop -6.3/-3.9; uncapt 0.0/0.0; energy -1.4/-1.4; time -115.4/-114.6; n_ok 207.2/208.0; mission_s 76.9/76.4
+  compliant images: kbit 202.3/184.4  PSNR 29.52/29.18  yield TP/GT % 54.67/53.64 diff   -1.03[ -1.14, -0.92]*
+  top modes A {'avif_20': 0.87, 'mbt2018-mean_q3': 0.046, 'avif_5': 0.043, 'avif_50': 0.02}  B {'avif_20': 0.763, 'avif_5': 0.126, 'mbt2018-mean_q1': 0.047, 'mbt2018-mean_q3': 0.046}
+  recall split (pp): both-compliant   -0.79[ -0.86, -0.72]* only-B   +1.59[ +1.40, +1.78]* only-A   -1.49[ -1.68, -1.30]*; n both 201 (diff mode 45) only-B 7.3 only-A 6.5
+
+phase3|TD|N5x2|ppofd+ng-ppofd+nc
+  ret  +14.04[+11.19,+16.88]*  sce   +8.03[ +6.74, +9.32]*  viol  -18.26[-19.06,-17.46]*  drop  +16.24[+14.69,+17.80]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.09[ +0.08, +0.09]*  time   +7.93[ +7.48, +8.38]*
+  counts: ok   -2.02[ -3.61, -0.43]* qviol  +18.26[+17.46,+19.06]* late   +0.00[ +0.00, +0.00]  mission_s   -5.29[ -5.59, -4.99]*
+  levels A/B: ret -57.7/-43.7; sce 106.2/114.2; viol -11.6/-29.9; drop -22.3/-6.1; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.4/-120.5; n_ok 226.1/224.1; mission_s 85.6/80.3
+  compliant images: kbit 306.7/197.7  PSNR 32.11/30.41  yield TP/GT % 46.88/44.25 diff   -2.62[ -2.77, -2.48]*
+  top modes A {'mbt2018-mean_q3': 0.246, 'avif_5': 0.198, 'avif_50': 0.186, 'mbt2018-mean_q1': 0.166}  B {'avif_20': 0.373, 'mbt2018-mean_q1': 0.264, 'avif_5': 0.163, 'mbt2018-mean_q3': 0.141}
+
+phase3|TD|N5x2|qrfd+ng-qrfd+nc
+  ret   +6.63[ +4.17, +9.09]*  sce   +5.53[ +4.39, +6.67]*  viol  -18.47[-19.38,-17.55]*  drop  +13.84[+12.42,+15.26]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.06[ +0.06, +0.07]*  time   +5.67[ +5.23, +6.11]*
+  counts: ok   -4.63[ -5.92, -3.34]* qviol  +18.47[+17.55,+19.38]* late   +0.00[ +0.00, +0.00]  mission_s   -3.78[ -4.07, -3.48]*
+  levels A/B: ret -58.3/-51.6; sce 105.7/111.3; viol -10.9/-29.3; drop -23.0/-9.1; uncapt 0.0/0.0; energy -1.5/-1.4; time -128.7/-123.0; n_ok 226.2/221.5; mission_s 85.8/82.0
+  compliant images: kbit 310.5/237.7  PSNR 32.20/30.85  yield TP/GT % 46.99/44.46 diff   -2.53[ -2.70, -2.36]*
+  top modes A {'mbt2018-mean_q3': 0.278, 'avif_5': 0.197, 'avif_50': 0.187, 'mbt2018-mean_q1': 0.161}  B {'avif_5': 0.243, 'avif_20': 0.227, 'mbt2018-mean_q1': 0.216, 'mbt2018-mean_q3': 0.186}
+
+phase3|TD|N5x2|dsfd+ng-dsfd+nc
+  ret   +4.61[ +1.95, +7.26]*  sce   +7.47[ +6.25, +8.69]*  viol  -30.61[-32.17,-29.05]*  drop  +18.79[+17.24,+20.34]*  uncapt   +0.00[ +0.00, +0.00]   energy   +0.10[ +0.09, +0.10]*  time   +8.86[ +8.37, +9.34]*
+  counts: ok  -11.82[-13.38,-10.26]* qviol  +30.61[+29.05,+32.17]* late   +0.00[ +0.00, +0.00]  mission_s   -5.90[ -6.23, -5.58]*
+  levels A/B: ret -61.0/-56.4; sce 105.1/112.5; viol -10.9/-41.5; drop -24.3/-5.5; uncapt 0.0/0.0; energy -1.5/-1.4; time -129.4/-120.5; n_ok 224.8/213.0; mission_s 86.3/80.4
+  compliant images: kbit 314.8/205.1  PSNR 32.26/30.34  yield TP/GT % 47.06/43.04 diff   -4.02[ -4.23, -3.81]*
+  top modes A {'mbt2018-mean_q3': 0.265, 'avif_5': 0.197, 'avif_50': 0.194, 'mbt2018-mean_q1': 0.159}  B {'avif_5': 0.322, 'mbt2018-mean_q1': 0.217, 'avif_20': 0.208, 'mbt2018-mean_q3': 0.147}

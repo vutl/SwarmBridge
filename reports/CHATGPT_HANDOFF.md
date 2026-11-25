@@ -145,8 +145,13 @@ An asterisk (\*) marks a 95% CI that excludes 0. Values are return differences o
 - R1, X + ng − X: PPO +7.4, QR-DQN +19.0, DSAC +25.7 (3/3 rejected).
 - R2, X + cal − X + ng: +3.1, +4.7, +6.0 (3/3 rejected).
 - All 18 per-training-seed contrasts are positive.
-- **R5:** no learned incumbent beats H\*. PPO − H\* = −2.96\* (TD), −0.76 n.s. (TD_all); QR-DQN ≈ −22\*;
+- **R5:** no learned incumbent beats H\* on return. PPO − H\* = −2.96\* (TD), −0.76 n.s. (TD_all); QR-DQN ≈ −22\*;
   DSAC ≈ −34\*.
+- **Post-hoc, PPO + cal − H\* + cal:** +0.27 [−1.58, +2.12] on TD; n.s. in all 4 pools. Recall −0.73\* (the
+  video-cluster CI also excludes 0).
+- **Post-hoc, R5 recall with the video-cluster bootstrap:** the retrained incumbents are at or below H\*. Correction:
+  the zero-shot PPO-LA has recall +3.1\* **above** H\* (cluster CI [+1.6, +4.8]), with return −4.9\*. It sends larger
+  payloads, which is the same mechanism as above.
 - Zero-shot (old checkpoints) gives the same signs.
 
 **Recall (the main weakness):**
@@ -156,8 +161,16 @@ An asterisk (\*) marks a 95% CI that excludes 0. Values are return differences o
   incumbent. Yet its return is 9–30 points lower than ng.
 - **Calibration lowers recall** in every setting with a detectable difference (−0.4 to −1.0 points\*).
 - ng − H\* recall: +1.2 to +2.3\* in N7x2 / B0.5 / B2; −0.2 to −0.4\* in N5x3 / N5x4; n.s. in N3x2.
-- The cause has not been decomposed. The Qmin-compliance rates of nc and ng are equal (0.866 vs 0.867). A post-hoc
-  return-term decomposition on stored rows is possible without simulation.
+- **Cause (post-hoc decomposition, `paperA-fd-posthoc-result.md` §2).** ng sends smaller payloads than nc (194 vs 303
+  kbit per compliant image).
+  - **Return:** drops fall by 15.8 and below-Qmin deliveries rise by 15.7. These cancel, because each costs −1. The
+    net return gain comes from the SCE terms (+9.7) and from mission time (+8.1: missions are 5.4 s shorter per UAV,
+    at 0.3 per UAV-second).
+  - **Recall:** falls by 1.8 points. Two thirds of that is a lower detection yield on the same compliant images (lower
+    PSNR); one third is a change in which images end up compliant.
+  - **Generality:** the same direction holds in all 53 contrasts examined, including the band, gate and calibration
+    steps and the RL incumbents.
+  - **In short:** the return rewards fast delivery and short missions, while detection keeps improving with bits.
 
 **Controller timing (slot = 1 s; the 50 ms budget is per decision):**
 - **Sequential** (how the simulator runs; includes scheduler and updates): p99 103–229 ms for every H ≥ 1 planner.
@@ -209,8 +222,8 @@ An asterisk (\*) marks a 95% CI that excludes 0. Values are return differences o
 - **This is now outdated.** The full-data results contradict its headline (matched nominal ≈ calibrated). It also
   presents the gate and H = 4 as parts of the method, and it uses per-decision latency.
 - Agreed process: **no rewrite until the reviewer accepts a direction** (C / B / D) and a venue.
-- Open TODOs: authors, affiliation, funding. The venue / page budget is undecided: ICT Express allows 4 pages
-  including references, with a fee for extra pages; the alternative is a longer venue.
+- Open TODOs: authors, affiliation, funding.
+- The venue is now fixed (section 8): ICT Express, 4 pages, so the current 6-page draft must also be cut.
 
 ## 7. Claude's honest view on "is it strong enough to submit?"
 
@@ -227,18 +240,35 @@ An asterisk (\*) marks a 95% CI that excludes 0. Values are return differences o
      communication" paper;
   4. controller time is not charged, and the sequential timing exceeds the slot;
   5. a single dataset family (VisDrone).
-- What would most strengthen it **without new simulation**: the post-hoc return-term decomposition explaining nc's
-  higher recall but lower return. This could become a finding ("return-optimal guards suppress recall-useful
-  switches") instead of an unexplained weakness.
+- The post-hoc return decomposition (now done) turns objection 3 into an explained finding. The SCE + mission-time
+  return used in this literature rewards small payloads (fast delivery, short missions), and every return-improving
+  step sends fewer bits and loses detections.
 
-## 8. Decisions requested from the reviewer
+## 8. Decisions taken (new reviewer session, 25/11) and next step
 
-1. Accept recommendation C, or argue for B or D.
-2. Request (or not) the post-hoc return-term decomposition nc vs ng (stored rows only, no simulation).
-3. Venue and page budget (ICT Express 4-page letter vs a longer venue). This determines how much of section 4 fits.
-4. If C: an outline of the rewritten letter (title, the 3 claims, which figures), before any LaTeX edit.
-5. Confirm that Paper 2 (cooperative UAV3D + LA + receiver state; `phases/2026-11-18_design-reset/`) starts after
-   submission.
+**Taken:**
+- **C** (empirical paper).
+- **Venue fixed: ICT Express.** Hard limit of 4 pages including figures, tables and references.
+  - Page budget: Intro 0.65, Model 0.65, Method 0.65, Setup 0.30, Results 1.15, Conclusion 0.15, References 0.45.
+  - Figures / tables: Fig. 1 system + method; Fig. 2 main results + ablation (multi-panel); Table 1 settings; Table 2
+    generalisation + RL + key metrics.
+- **Three findings to build on:**
+  - F1: an MPC with inaccurate rate estimates can underperform the tuned heuristic (nc − H\* −10.6\*).
+  - F2: error-aware screening, mainly the band, recovers and improves it.
+  - F3: calibration's benefit depends on the configuration and the controller, with trade-offs between return,
+    recall and compute.
+- **Scope:** Paper A only until submission. No new scope, no new algorithm, no new simulation unless a serious error
+  is found.
+
+**Done (post-hoc, stored data only; `paperA-fd-posthoc-result.md`):**
+1. Return decomposition.
+2. PPO + cal vs H\* + cal.
+3. Video-cluster bootstrap for R5 recall.
+4. Fail-fast verification: 27,600 / 27,600 OK; a negative test exits 1.
+
+**Next, for the reviewer:**
+- Re-assess novelty, significance and the publication target.
+- Then the manuscript outline, before any LaTeX edit.
 
 ## 9. Constraints and where things are
 

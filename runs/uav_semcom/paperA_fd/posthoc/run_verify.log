@@ -1,0 +1,21 @@
+manifest / profile sha256 OK
+phase2/test_TD: 600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase2/test_V: 600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase2/test_F: 600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase2/test_TD_all: 600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+ablation/test_TD: 800 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+ablation/test_V: 800 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+ablation/test_F: 800 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase4/test_TD: 2400 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase4/test_F: 2400 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase3/zeroshot_TD: 3600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase3/retrained_TD: 3600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase3/retrained_F: 3600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase3/retrained_V: 3600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+phase3/retrained_TD_all: 3600 episodes OK; integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+R5 pairing TD: Phase 3 and Phase 2 share seeds and images per seed
+R5 pairing F: Phase 3 and Phase 2 share seeds and images per seed
+R5 pairing V: Phase 3 and Phase 2 share seeds and images per seed
+R5 pairing TD_all: Phase 3 and Phase 2 share seeds and images per seed
+Phase 4 reuses the Phase 2 N5x2 seeds: OK
+ALL OK: 27600 evaluation episodes (Phase 2 2,400 + new 25,200)

@@ -56,11 +56,18 @@ phase reports. Two recent review rounds made factual errors that this file answe
     design the difference is −0.10 n.s. It also presents the gate and H = 4 as parts of the method and reports
     per-decision latency. It must not be submitted as it is. The rewrite waits for the reviewer's decision on C / B / D
     and on the venue.
-  - **Waiting for the reviewer** (new ChatGPT session, brief in `reports/CHATGPT_HANDOFF.md` §8):
-    1. C / B / D;
-    2. whether to run the post-hoc return-term decomposition of nc vs ng;
-    3. venue and page budget;
-    4. the outline of the rewritten paper.
+  - **Decided (new ChatGPT session, 25/11):** C; venue ICT Express (4 pages including references); Paper A only until
+    submission.
+  - **Post-hoc analyses on stored data** (`paperA-fd-posthoc-result.md`; no simulation):
+    - **Fail-fast verification:** 27,600 / 27,600 episodes OK; a negative test exits 1.
+    - **Return decomposition:** ng sends smaller payloads than nc (194 vs 303 kbit). Drops fall by 15.8 and
+      below-Qmin deliveries rise by 15.7; these cancel. The net return gain comes from SCE (+9.7) and mission time
+      (+8.1). Recall falls by 1.8: two thirds from a lower detection yield (lower PSNR), one third from which images
+      end up compliant. The same direction holds in all 53 contrasts.
+    - **PPO + cal − H\* + cal:** +0.27 n.s. on TD (n.s. in all 4 pools); recall −0.73\*.
+    - **R5 recall with the cluster bootstrap:** the retrained incumbents are at or below H\*. Correction: the
+      zero-shot PPO-LA has recall +3.1\* above H\*, with return −4.9\*.
+  - **Next:** the reviewer re-assesses novelty, significance and the target; then the 4-page outline.
 
 - **Decision (18/11, after review #48):**
   - Write Paper A now as an evaluation study + calibrated planning baseline, from existing data
