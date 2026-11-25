@@ -23,6 +23,6 @@ step grid_summary      $OUT/phase4/summary_grid_test.log         $PY fd_next_sum
 step rl_zeroshot       $OUT/phase3/zeroshot_TD.json              $PY fd_next.py rl zeroshot --procs 6
 step rl_zs_summary     $OUT/phase3/summary_rl_zeroshot.log       $PY fd_next_summary.py rl --name zeroshot --pools TD
 step rl_training       $OUT/phase3/selection.json                $PY fd_phase3_queue.py
-step rl_retrained      $OUT/phase3/retrained_TD_all.json         $PY fd_next.py rl retrained --procs 6
+step rl_retrained      $OUT/phase3/retrained_TD_all.json         $PY fd_next.py rl retrained --procs 6 --skip-existing
 step rl_rt_summary     $OUT/phase3/summary_rl_retrained.log      $PY fd_next_summary.py rl --name retrained
 echo "[$(date '+%F %T')] CHAIN EXIT 0" >> $LOG

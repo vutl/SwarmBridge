@@ -167,6 +167,9 @@ def rl(cmd, procs):
         print("retrained checkpoints verified (sha256)", flush=True)
     pools = {"TD": RL_TEST["TD"]} if cmd == "zeroshot" else RL_TEST
     for pool, seeds in pools.items():
+        if SKIP_EXISTING and _complete(phase_dir("phase3"), f"{cmd}_{pool}", seeds, 3 * len(which) * len(RL_ARMS)):
+            print(f"skip {cmd}_{pool}: complete output exists (resume after interruption)", flush=True)
+            continue
         t0 = time.time()
         res = run([("N5x2", f"{S}|{x}{a}") for x in which for a in RL_ARMS], seeds, pool, procs, 25)
         save(phase_dir("phase3"), f"{cmd}_{pool}", res, dict(sched=S, pool=pool, seeds=list(seeds), incumbents=which,
@@ -174,10 +177,28 @@ def rl(cmd, procs):
         report(res)
 
 
+SKIP_EXISTING = False
+
+
+def _complete(d, name, seeds, n_rows):
+    """Resume helper (added 25/11 after a host power loss during rl retrained): a pool counts as done only if both files
+    parse, the seed list matches and every (combo, checkpoint) row has one result per seed and one delivery list."""
+    try:
+        te = json.loads((d / f"{name}.json").read_text())
+        dl = json.load(gzip.open(d / f"{name}.deliv.json.gz", "rt"))
+    except (OSError, ValueError, EOFError):
+        return False
+    return (te.get("seeds") == list(seeds) and len(te["results"]) == n_rows == len(dl)
+            and all(len(v) == len(seeds) for v in dl.values()) and all(len(r["rows"]) == len(seeds) for r in te["results"]))
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("phase", choices=("ablation", "grid", "rl"))
     ap.add_argument("cmd", choices=("tune", "smoke", "test", "zeroshot", "retrained"))
     ap.add_argument("--procs", type=int, default=6)
+    ap.add_argument("--skip-existing", action="store_true",
+                    help="rl only: keep pools whose complete output already exists (no re-simulation, no overwrite)")
     a = ap.parse_args()
+    SKIP_EXISTING = a.skip_existing
     dict(ablation=ablation, grid=grid, rl=rl)[a.phase](a.cmd, a.procs)

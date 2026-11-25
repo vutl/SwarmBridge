@@ -1,0 +1,14 @@
+/mnt/c/Users/USER/Documents/SwarmBridge/swarmbridge/experiments/uav_semcom/offpolicy_train.py:112: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:838.)
+  alpha=float(agent.log_alpha.exp()) if a.algo == "dsac" else None)
+STEP 200000 val_return -223.78 ok 0.539 1134s episodes 768 updates 45000 loss 3.2629122672080992 best@200000
+STEP 400000 val_return -168.91 ok 0.567 2467s episodes 1538 updates 95000 loss 2.9925155473947527 best@400000
+STEP 600000 val_return -146.95 ok 0.576 3775s episodes 2306 updates 145000 loss 2.466556359052658 best@600000
+STEP 800000 val_return -147.93 ok 0.588 5081s episodes 3076 updates 195000 loss 2.468091863632202 best@600000
+STEP 1000000 val_return -148.95 ok 0.515 6369s episodes 3846 updates 245000 loss 2.714361936211586 best@600000
+STEP 1200000 val_return -139.80 ok 0.592 7653s episodes 4614 updates 295000 loss 2.3597406706809996 best@1200000
+STEP 1400000 val_return -132.08 ok 0.567 8940s episodes 5384 updates 345000 loss 2.4714581114053726 best@1400000
+STEP 1600000 val_return -118.68 ok 0.597 10227s episodes 6152 updates 395000 loss 2.1662265462875365 best@1600000
+STEP 1800000 val_return -105.34 ok 0.640 11514s episodes 6922 updates 445000 loss 2.4113406785726546 best@1800000
+STEP 2000000 val_return -105.38 ok 0.667 12813s episodes 7692 updates 495000 loss 2.3359724618196487 best@1800000
+RUN_DONE e7

@@ -1,0 +1,17 @@
+{
+ "ppofd": [
+  "/home/uservutl/work/fd_phase3/ppofd_s0/ckpt_1400000.zip",
+  "/home/uservutl/work/fd_phase3/ppofd_s1/ckpt_1600000.zip",
+  "/home/uservutl/work/fd_phase3/ppofd_s2/ckpt_1600000.zip"
+ ],
+ "qrfd": [
+  "/home/uservutl/work/fd_phase3/qrfd_s0/ckpt_1600000.pt",
+  "/home/uservutl/work/fd_phase3/qrfd_s1/ckpt_1400000.pt",
+  "/home/uservutl/work/fd_phase3/qrfd_s2/ckpt_1800000.pt"
+ ],
+ "dsfd": [
+  "/home/uservutl/work/fd_phase3/dsfd_s0/ckpt_2000000.pt",
+  "/home/uservutl/work/fd_phase3/dsfd_s1/ckpt_1800000.pt",
+  "/home/uservutl/work/fd_phase3/dsfd_s2/ckpt_1800000.pt"
+ ]
+}

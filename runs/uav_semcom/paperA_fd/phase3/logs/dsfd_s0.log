@@ -3,3 +3,12 @@ Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/cs
   alpha=float(agent.log_alpha.exp()) if a.algo == "dsac" else None)
 STEP 200000 val_return -192.52 ok 0.583 1110s episodes 768 updates 45000 loss 3.428287867307663 best@200000
 STEP 400000 val_return -189.54 ok 0.530 2419s episodes 1538 updates 95000 loss 3.216251616477966 best@400000
+STEP 600000 val_return -139.72 ok 0.587 3714s episodes 2306 updates 145000 loss 2.606608354687691 best@600000
+STEP 800000 val_return -152.94 ok 0.562 5011s episodes 3076 updates 195000 loss 2.599110576748848 best@600000
+STEP 1000000 val_return -131.87 ok 0.597 6291s episodes 3846 updates 245000 loss 2.894345247030258 best@1000000
+STEP 1200000 val_return -154.42 ok 0.551 7566s episodes 4614 updates 295000 loss 2.691480488538742 best@1000000
+STEP 1400000 val_return -125.73 ok 0.582 8847s episodes 5384 updates 345000 loss 2.846612321257591 best@1400000
+STEP 1600000 val_return -142.18 ok 0.554 10120s episodes 6152 updates 395000 loss 2.6564010303020478 best@1400000
+STEP 1800000 val_return -105.76 ok 0.649 11392s episodes 6922 updates 445000 loss 2.2547394227981568 best@1800000
+STEP 2000000 val_return -100.37 ok 0.689 12668s episodes 7692 updates 495000 loss 2.3753744554519653 best@2000000
+RUN_DONE e7
