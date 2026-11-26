@@ -177,6 +177,24 @@ phase reports. Two recent review rounds made factual errors that this file answe
 
 Format: **dates (review numbers)** | question | what was done | key numbers | conclusion | later corrections.
 
+### 4.0b Paper A independent evaluation: 26/11, STAGE 1 PROPOSAL (awaiting review)
+
+`phases/2026-11-26_independent-eval/independent-eval-audit-proposal.md`. Submission paused.
+- **Trigger:** TD / V were used in earlier development, so there is no fully untouched test set.
+- **Audit:**
+  - TD reuse is 146/582 frames and 49/61 sequences; the 26/11 discussion said 403/582, which is wrong.
+  - rl_train, rl_val and F were never touched.
+  - F is method-unseen (used only for YOLO checkpoint selection) and already replicates the return findings:
+    nominal − H\* −8.6, band +16.2, guarded − H\* +5.4.
+  - UAVDT, DroneVehicle and DET test-challenge were never downloaded.
+- **Proposal:**
+  - X1: DET test-challenge, frozen artifacts, return endpoints only (no public labels). Includes a prefix-overlap
+    exclusion rule.
+  - X2: UAVDT in two arms. X2-frozen tests zero-shot transfer. X2-retrained re-applies the procedure on UAVDT
+    train, including RL. Recall uses the frozen YOLO with mapped classes.
+  - 3 × 7,400 episodes, about 2–3 days.
+  - Retraining on VisDrone alone removes nothing (fd_v1 already trained on clean splits).
+
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 
 `phases/2026-11-23_paperA-fulldata/` (README + consolidated report); results in `runs/uav_semcom/paperA_fd/`.
