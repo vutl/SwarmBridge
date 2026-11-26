@@ -195,6 +195,17 @@ Format: **dates (review numbers)** | question | what was done | key numbers | co
   - 3 × 7,400 episodes, about 2–3 days.
   - Retraining on VisDrone alone removes nothing (fd_v1 already trained on clean splits).
 
+**26/11 later: stage 1 review approved in principle** (10,200 episodes). Done:
+- downloaded VisDrone DET test-challenge (1,580 images) and the UAVDT GT/toolkit;
+- UAVDT images are blocked by the gdown quota, so the user downloads them in a browser;
+- X1 hash audit (`ix_audit.py`): 0 prefix / sha matches, 1 near-duplicate sequence (0000332) excluded, leaving
+  52 sequences and 631 capped frames;
+- UAVDT: 50 sequences, official test = 20 sequences (from RES_DET), classes car/truck/bus with no van;
+- fd_v1 14-mode audit (`ix_modes.py`): the generative modes are 0.1–0.2% of frames, cap_t2i is never compliant;
+- revised prereg draft `paperA-ix-prereg-draft.md`: A2 = band only − nominal; replication families as registered;
+  new family N1–N3 (nc−H\*, guarded−H\*, cal−guarded); lock L4 = retrained checkpoints hashed before any test episode;
+  frozen loader spec + tests.
+
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 
 `phases/2026-11-23_paperA-fulldata/` (README + consolidated report); results in `runs/uav_semcom/paperA_fd/`.

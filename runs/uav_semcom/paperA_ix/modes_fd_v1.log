@@ -1,0 +1,104 @@
+RL training action counts: NOT RECORDED in phase3/train/*.train.json (validation returns only).
+
+ablation | N5x2 | h=fixed_avif_20 | -1 | n=26000 no_mode=0 | avif_20 100.0% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, avif_5, avif_50, avif_80, mbt2018-mean_q1, mbt2018-mean_q3, mbt2018-mean_q5, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+ablation | N5x2 | h=fixed_avif_20+mpc | -1 | n=26000 no_mode=0 | avif_20 72.5%, avif_5 15.3%, mbt2018-mean_q1 4.9%, mbt2018-mean_q3 4.5%, avif_50 1.9% | never: cap_t2i, jpeg2000_100, jpeg2000_25
+ablation | N5x2 | h=fixed_avif_20+mpcnc | -1 | n=26000 no_mode=0 | avif_20 30.8%, mbt2018-mean_q3 19.4%, avif_5 16.5%, avif_50 16.4%, mbt2018-mean_q1 11.1% | never: cap_t2i, cap_thumb128_i2i_t0.3, jpeg2000_25
+ablation | N5x2 | h=fixed_avif_20+mpcng | -1 | n=26000 no_mode=0 | avif_20 79.1%, avif_5 9.7%, mbt2018-mean_q3 4.8%, avif_50 2.9%, mbt2018-mean_q1 2.6% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, jpeg2000_100, jpeg2000_25
+ablation | N5x2 | h=fixed_avif_20+mpcngb | -1 | n=26000 no_mode=0 | avif_20 63.5%, avif_5 12.7%, mbt2018-mean_q3 9.0%, avif_50 7.7%, mbt2018-mean_q1 4.7% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, jpeg2000_100, jpeg2000_25
+ablation | N5x2 | h=fixed_avif_20+mpcngg | -1 | n=26000 no_mode=0 | avif_20 43.7%, mbt2018-mean_q3 15.6%, avif_5 13.8%, avif_50 12.9%, mbt2018-mean_q1 9.5% | never: cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, jpeg2000_25
+ablation | N5x2 | h=fixed_avif_20+mpcngh0 | -1 | n=26000 no_mode=0 | avif_20 78.5%, avif_50 7.9%, avif_80 5.0%, avif_5 4.8%, mbt2018-mean_q3 3.6% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+ablation | N5x2 | h=fixed_avif_20+mpcngh1 | -1 | n=26000 no_mode=0 | avif_20 76.0%, avif_5 10.0%, mbt2018-mean_q3 5.4%, avif_50 4.7%, mbt2018-mean_q1 1.9% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase2 | ref | h=fixed_avif_20 | - | n=26000 no_mode=0 | avif_20 100.0% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, avif_5, avif_50, avif_80, mbt2018-mean_q1, mbt2018-mean_q3, mbt2018-mean_q5, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase2 | ref | h=fixed_avif_20+mpc | - | n=26000 no_mode=0 | avif_20 72.4%, avif_5 14.6%, mbt2018-mean_q3 5.1%, mbt2018-mean_q1 5.0%, avif_50 2.1% | never: cap_thumb64_i2i_t0.6, jpeg2000_100, jpeg2000_25
+phase2 | ref | h=fixed_avif_20+mpcnc | - | n=26000 no_mode=0 | avif_20 30.2%, mbt2018-mean_q3 19.5%, avif_5 16.6%, avif_50 16.5%, mbt2018-mean_q1 11.2% | never: cap_t2i, cap_thumb128_i2i_t0.3, jpeg2000_25
+phase2 | ref | h=fixed_avif_20+mpcng | - | n=26000 no_mode=0 | avif_20 77.9%, avif_5 9.9%, mbt2018-mean_q3 5.3%, avif_50 3.2%, mbt2018-mean_q1 2.7% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase2 | ref | h=fixed_avif_20+mpcrh | - | n=26000 no_mode=0 | avif_20 99.2%, avif_5 0.5%, mbt2018-mean_q3 0.2%, avif_50 0.1%, thumb64_up 0.0% | never: cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, avif_80, mbt2018-mean_q5, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase2 | ref | h=fixed_avif_20+mpcrhnb | - | n=26000 no_mode=0 | avif_20 39.4%, avif_5 26.7%, thumb64_up 24.3%, mbt2018-mean_q1 6.2%, mbt2018-mean_q3 1.7% | never: jpeg2000_100, jpeg2000_25
+phase3_retrained | N5x2 | dsfd | 0 | n=26000 no_mode=0 | mbt2018-mean_q1 29.8%, avif_20 27.1%, avif_5 25.7%, mbt2018-mean_q3 7.9%, thumb64_up 3.2% | never: mbt2018-mean_q8
+phase3_retrained | N5x2 | dsfd | 1 | n=26000 no_mode=0 | avif_5 55.3%, mbt2018-mean_q1 18.5%, mbt2018-mean_q3 8.4%, avif_20 8.2%, thumb64_up 6.8% | never: mbt2018-mean_q8
+phase3_retrained | N5x2 | dsfd | 2 | n=26000 no_mode=0 | avif_5 41.2%, avif_20 36.7%, mbt2018-mean_q1 7.6%, thumb64_up 5.0%, mbt2018-mean_q3 3.5% | never: -
+phase3_retrained | N5x2 | dsfd+mpc | 0 | n=26000 no_mode=0 | mbt2018-mean_q1 29.2%, avif_5 29.1%, avif_20 22.4%, mbt2018-mean_q3 11.6%, avif_50 3.0% | never: mbt2018-mean_q8
+phase3_retrained | N5x2 | dsfd+mpc | 1 | n=26000 no_mode=0 | avif_5 46.0%, mbt2018-mean_q1 19.5%, avif_20 14.1%, mbt2018-mean_q3 11.4%, thumb64_up 3.6% | never: mbt2018-mean_q8
+phase3_retrained | N5x2 | dsfd+mpc | 2 | n=26000 no_mode=0 | avif_5 37.3%, avif_20 28.2%, mbt2018-mean_q1 13.3%, mbt2018-mean_q3 10.3%, avif_50 4.7% | never: -
+phase3_retrained | N5x2 | dsfd+mpcnc | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 25.8%, mbt2018-mean_q1 20.3%, avif_5 18.8%, avif_50 17.2%, avif_20 10.6% | never: jpeg2000_25
+phase3_retrained | N5x2 | dsfd+mpcnc | 1 | n=26000 no_mode=0 | mbt2018-mean_q3 26.5%, avif_5 19.8%, mbt2018-mean_q1 17.6%, avif_50 17.4%, avif_20 11.8% | never: cap_thumb64_i2i_t0.6
+phase3_retrained | N5x2 | dsfd+mpcnc | 2 | n=26000 no_mode=0 | mbt2018-mean_q3 24.0%, avif_5 19.8%, avif_50 17.7%, mbt2018-mean_q1 16.6%, avif_20 14.3% | never: -
+phase3_retrained | N5x2 | dsfd+mpcng | 0 | n=26000 no_mode=0 | mbt2018-mean_q1 31.0%, avif_5 23.4%, avif_20 20.9%, mbt2018-mean_q3 13.4%, avif_50 5.1% | never: -
+phase3_retrained | N5x2 | dsfd+mpcng | 1 | n=26000 no_mode=0 | avif_5 39.7%, mbt2018-mean_q1 20.7%, avif_20 13.9%, mbt2018-mean_q3 13.1%, avif_50 5.3% | never: -
+phase3_retrained | N5x2 | dsfd+mpcng | 2 | n=26000 no_mode=0 | avif_5 31.9%, avif_20 27.1%, mbt2018-mean_q1 14.3%, mbt2018-mean_q3 11.2%, avif_50 6.9% | never: -
+phase3_retrained | N5x2 | ppofd | 0 | n=26000 no_mode=0 | avif_20 42.6%, mbt2018-mean_q1 33.2%, mbt2018-mean_q3 16.5%, avif_5 6.3%, thumb64_up 0.8% | never: cap_thumb64_i2i_t0.6, avif_80, mbt2018-mean_q8, jpeg2000_25
+phase3_retrained | N5x2 | ppofd | 1 | n=26000 no_mode=0 | avif_20 48.2%, mbt2018-mean_q1 44.3%, avif_5 3.7%, mbt2018-mean_q3 3.3%, cap_thumb128_i2i_t0.3 0.1% | never: avif_80, mbt2018-mean_q5, jpeg2000_25
+phase3_retrained | N5x2 | ppofd | 2 | n=26000 no_mode=0 | avif_20 59.3%, mbt2018-mean_q1 23.2%, avif_5 12.3%, mbt2018-mean_q3 4.3%, thumb64_up 0.4% | never: avif_80, mbt2018-mean_q8
+phase3_retrained | N5x2 | ppofd+mpc | 0 | n=26000 no_mode=0 | avif_20 32.6%, mbt2018-mean_q1 26.9%, mbt2018-mean_q3 18.9%, avif_5 17.8%, avif_50 2.6% | never: cap_thumb64_i2i_t0.6, jpeg2000_25
+phase3_retrained | N5x2 | ppofd+mpc | 1 | n=26000 no_mode=0 | avif_20 37.7%, mbt2018-mean_q1 33.9%, avif_5 17.4%, mbt2018-mean_q3 7.7%, avif_50 2.3% | never: mbt2018-mean_q8, jpeg2000_25
+phase3_retrained | N5x2 | ppofd+mpc | 2 | n=26000 no_mode=0 | avif_20 45.0%, avif_5 22.0%, mbt2018-mean_q1 20.0%, mbt2018-mean_q3 9.1%, avif_50 2.8% | never: -
+phase3_retrained | N5x2 | ppofd+mpcnc | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 25.6%, avif_5 19.3%, mbt2018-mean_q1 19.1%, avif_50 16.6%, avif_20 13.2% | never: cap_thumb64_i2i_t0.6, jpeg2000_25
+phase3_retrained | N5x2 | ppofd+mpcnc | 1 | n=26000 no_mode=0 | mbt2018-mean_q3 21.6%, mbt2018-mean_q1 20.2%, avif_5 18.5%, avif_50 17.0%, avif_20 16.2% | never: jpeg2000_25
+phase3_retrained | N5x2 | ppofd+mpcnc | 2 | n=26000 no_mode=0 | mbt2018-mean_q3 23.8%, avif_5 21.3%, avif_50 16.7%, mbt2018-mean_q1 16.4%, avif_20 14.9% | never: -
+phase3_retrained | N5x2 | ppofd+mpcng | 0 | n=26000 no_mode=0 | avif_20 31.9%, mbt2018-mean_q1 28.2%, mbt2018-mean_q3 19.8%, avif_5 14.5%, avif_50 3.8% | never: cap_thumb64_i2i_t0.6, jpeg2000_25
+phase3_retrained | N5x2 | ppofd+mpcng | 1 | n=26000 no_mode=0 | avif_20 39.0%, mbt2018-mean_q1 34.8%, avif_5 13.6%, mbt2018-mean_q3 7.8%, avif_50 3.4% | never: jpeg2000_25
+phase3_retrained | N5x2 | ppofd+mpcng | 2 | n=26000 no_mode=0 | avif_20 43.9%, mbt2018-mean_q1 20.5%, avif_5 19.2%, mbt2018-mean_q3 10.1%, avif_50 4.3% | never: -
+phase3_retrained | N5x2 | qrfd | 0 | n=26000 no_mode=0 | avif_20 43.3%, mbt2018-mean_q1 24.9%, avif_5 13.9%, avif_50 5.5%, mbt2018-mean_q3 5.0% | never: -
+phase3_retrained | N5x2 | qrfd | 1 | n=26000 no_mode=0 | mbt2018-mean_q1 41.2%, avif_20 36.7%, avif_5 10.2%, mbt2018-mean_q5 4.2%, mbt2018-mean_q3 1.9% | never: mbt2018-mean_q8
+phase3_retrained | N5x2 | qrfd | 2 | n=26000 no_mode=0 | avif_5 57.2%, mbt2018-mean_q3 26.0%, avif_20 10.2%, avif_50 2.6%, mbt2018-mean_q1 1.9% | never: cap_thumb128_i2i_t0.3
+phase3_retrained | N5x2 | qrfd+mpc | 0 | n=26000 no_mode=0 | avif_20 31.7%, mbt2018-mean_q1 24.2%, avif_5 21.8%, mbt2018-mean_q3 10.3%, avif_50 6.7% | never: -
+phase3_retrained | N5x2 | qrfd+mpc | 1 | n=26000 no_mode=0 | mbt2018-mean_q1 34.1%, avif_20 29.1%, avif_5 19.0%, mbt2018-mean_q3 7.7%, mbt2018-mean_q5 3.5% | never: mbt2018-mean_q8
+phase3_retrained | N5x2 | qrfd+mpc | 2 | n=26000 no_mode=0 | avif_5 41.9%, mbt2018-mean_q3 28.1%, avif_20 13.5%, mbt2018-mean_q1 8.1%, avif_50 6.0% | never: cap_t2i
+phase3_retrained | N5x2 | qrfd+mpcnc | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 23.6%, mbt2018-mean_q1 19.1%, avif_5 18.4%, avif_50 18.1%, avif_20 14.0% | never: -
+phase3_retrained | N5x2 | qrfd+mpcnc | 1 | n=26000 no_mode=0 | mbt2018-mean_q1 25.4%, mbt2018-mean_q3 21.8%, avif_5 17.4%, avif_50 17.1%, avif_20 11.5% | never: cap_thumb128_i2i_t0.3
+phase3_retrained | N5x2 | qrfd+mpcnc | 2 | n=26000 no_mode=0 | mbt2018-mean_q3 34.5%, avif_5 23.1%, avif_50 15.4%, mbt2018-mean_q1 10.7%, avif_20 10.0% | never: cap_thumb128_i2i_t0.3, jpeg2000_25
+phase3_retrained | N5x2 | qrfd+mpcng | 0 | n=26000 no_mode=0 | avif_20 31.6%, mbt2018-mean_q1 24.4%, avif_5 18.2%, mbt2018-mean_q3 10.9%, avif_50 8.7% | never: -
+phase3_retrained | N5x2 | qrfd+mpcng | 1 | n=26000 no_mode=0 | mbt2018-mean_q1 37.9%, avif_20 26.1%, avif_5 15.7%, mbt2018-mean_q3 7.6%, avif_50 5.1% | never: -
+phase3_retrained | N5x2 | qrfd+mpcng | 2 | n=26000 no_mode=0 | avif_5 39.4%, mbt2018-mean_q3 31.7%, avif_20 12.1%, avif_50 7.4%, mbt2018-mean_q1 6.4% | never: cap_t2i, cap_thumb128_i2i_t0.3, jpeg2000_25
+phase3_zeroshot | N5x2 | dsla | 0 | n=26000 no_mode=0 | avif_20 36.3%, avif_5 23.9%, mbt2018-mean_q1 13.3%, mbt2018-mean_q3 12.4%, cap_t2i 3.6% | never: -
+phase3_zeroshot | N5x2 | dsla | 1 | n=26000 no_mode=0 | avif_20 40.7%, mbt2018-mean_q3 19.6%, mbt2018-mean_q1 13.5%, avif_5 11.8%, avif_50 5.3% | never: -
+phase3_zeroshot | N5x2 | dsla | 2 | n=26000 no_mode=0 | avif_20 28.2%, mbt2018-mean_q1 24.0%, mbt2018-mean_q3 19.2%, avif_5 9.1%, avif_50 4.4% | never: -
+phase3_zeroshot | N5x2 | dsla+mpc | 0 | n=26000 no_mode=0 | avif_20 28.7%, avif_5 26.8%, mbt2018-mean_q1 16.4%, mbt2018-mean_q3 16.2%, avif_50 5.6% | never: -
+phase3_zeroshot | N5x2 | dsla+mpc | 1 | n=26000 no_mode=0 | avif_20 32.3%, avif_5 22.2%, mbt2018-mean_q3 18.8%, mbt2018-mean_q1 14.9%, avif_50 7.1% | never: -
+phase3_zeroshot | N5x2 | dsla+mpc | 2 | n=26000 no_mode=0 | avif_20 24.6%, mbt2018-mean_q1 21.4%, avif_5 20.4%, mbt2018-mean_q3 18.8%, avif_50 7.4% | never: -
+phase3_zeroshot | N5x2 | dsla+mpcnc | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 28.2%, avif_5 19.2%, avif_50 16.6%, mbt2018-mean_q1 14.7%, avif_20 14.0% | never: jpeg2000_25
+phase3_zeroshot | N5x2 | dsla+mpcnc | 1 | n=26000 no_mode=0 | mbt2018-mean_q3 27.5%, avif_5 18.4%, avif_50 17.0%, avif_20 15.7%, mbt2018-mean_q1 14.5% | never: -
+phase3_zeroshot | N5x2 | dsla+mpcnc | 2 | n=26000 no_mode=0 | mbt2018-mean_q3 29.4%, avif_5 17.8%, avif_50 17.0%, mbt2018-mean_q1 16.2%, avif_20 12.9% | never: -
+phase3_zeroshot | N5x2 | dsla+mpcng | 0 | n=26000 no_mode=0 | avif_20 27.4%, avif_5 21.7%, mbt2018-mean_q3 18.7%, mbt2018-mean_q1 16.2%, avif_50 7.7% | never: -
+phase3_zeroshot | N5x2 | dsla+mpcng | 1 | n=26000 no_mode=0 | avif_20 33.0%, mbt2018-mean_q3 21.1%, avif_5 17.0%, mbt2018-mean_q1 14.5%, avif_50 8.5% | never: -
+phase3_zeroshot | N5x2 | dsla+mpcng | 2 | n=26000 no_mode=0 | mbt2018-mean_q3 23.4%, avif_20 22.3%, mbt2018-mean_q1 20.9%, avif_5 15.7%, avif_50 8.8% | never: -
+phase3_zeroshot | N5x2 | ppola | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 41.0%, mbt2018-mean_q1 36.8%, avif_20 22.1%, avif_5 0.2% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, avif_50, avif_80, mbt2018-mean_q5, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola | 1 | n=26000 no_mode=0 | mbt2018-mean_q3 68.5%, mbt2018-mean_q1 20.8%, avif_20 10.6%, avif_50 0.1%, avif_5 0.0% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, avif_80, mbt2018-mean_q5, mbt2018-mean_q8, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola | 2 | n=26000 no_mode=0 | avif_20 53.6%, mbt2018-mean_q3 38.7%, mbt2018-mean_q1 7.7%, avif_5 0.0% | never: cap_t2i, thumb64_up, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, avif_50, avif_80, mbt2018-mean_q5, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpc | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 38.8%, mbt2018-mean_q1 27.0%, avif_20 17.6%, avif_5 13.5%, avif_50 2.2% | never: cap_t2i, cap_thumb64_i2i_t0.6, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpc | 1 | n=26000 no_mode=0 | mbt2018-mean_q3 54.0%, mbt2018-mean_q1 18.6%, avif_5 13.1%, avif_20 12.1%, avif_50 1.6% | never: cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpc | 2 | n=26000 no_mode=0 | mbt2018-mean_q3 36.6%, avif_20 36.6%, avif_5 13.4%, mbt2018-mean_q1 10.7%, avif_50 2.0% | never: cap_t2i, cap_thumb64_i2i_t0.6, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpcnc | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 31.3%, mbt2018-mean_q1 21.6%, avif_5 15.6%, avif_50 15.1%, avif_20 10.5% | never: cap_t2i, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpcnc | 1 | n=26000 no_mode=0 | mbt2018-mean_q3 41.6%, avif_5 16.1%, mbt2018-mean_q1 15.5%, avif_50 13.5%, avif_20 7.7% | never: cap_t2i, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpcnc | 2 | n=26000 no_mode=0 | mbt2018-mean_q3 30.2%, avif_20 19.6%, avif_5 16.1%, avif_50 14.9%, mbt2018-mean_q1 13.4% | never: cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpcng | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 40.4%, mbt2018-mean_q1 28.3%, avif_20 17.5%, avif_5 9.8%, avif_50 3.1% | never: cap_t2i, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpcng | 1 | n=26000 no_mode=0 | mbt2018-mean_q3 59.2%, mbt2018-mean_q1 18.1%, avif_20 11.2%, avif_5 8.8%, avif_50 2.1% | never: cap_t2i, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | ppola+mpcng | 2 | n=26000 no_mode=0 | avif_20 40.5%, mbt2018-mean_q3 37.6%, avif_5 9.3%, mbt2018-mean_q1 8.9%, avif_50 2.8% | never: cap_t2i, cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3, mbt2018-mean_q8, jpeg2000_100, jpeg2000_25
+phase3_zeroshot | N5x2 | qrla | 0 | n=26000 no_mode=0 | avif_20 64.5%, mbt2018-mean_q3 21.5%, jpeg2000_100 6.1%, thumb64_up 2.4%, cap_t2i 1.1% | never: -
+phase3_zeroshot | N5x2 | qrla | 1 | n=26000 no_mode=0 | avif_20 51.5%, mbt2018-mean_q3 35.2%, mbt2018-mean_q1 5.4%, cap_thumb64_i2i_t0.6 2.5%, thumb64_up 1.9% | never: mbt2018-mean_q5, mbt2018-mean_q8
+phase3_zeroshot | N5x2 | qrla | 2 | n=26000 no_mode=0 | mbt2018-mean_q1 55.0%, avif_5 16.9%, mbt2018-mean_q3 12.1%, jpeg2000_25 7.6%, avif_20 2.1% | never: -
+phase3_zeroshot | N5x2 | qrla+mpc | 0 | n=26000 no_mode=0 | avif_20 45.4%, mbt2018-mean_q3 21.5%, avif_5 14.2%, mbt2018-mean_q1 6.2%, jpeg2000_100 4.8% | never: -
+phase3_zeroshot | N5x2 | qrla+mpc | 1 | n=26000 no_mode=0 | avif_20 42.3%, mbt2018-mean_q3 27.5%, avif_5 14.5%, mbt2018-mean_q1 10.3%, avif_50 3.1% | never: -
+phase3_zeroshot | N5x2 | qrla+mpc | 2 | n=26000 no_mode=0 | mbt2018-mean_q1 41.2%, avif_5 24.9%, mbt2018-mean_q3 15.1%, avif_20 7.2%, avif_50 4.7% | never: -
+phase3_zeroshot | N5x2 | qrla+mpcnc | 0 | n=26000 no_mode=0 | mbt2018-mean_q3 28.1%, avif_20 22.3%, avif_5 16.3%, avif_50 15.5%, mbt2018-mean_q1 10.9% | never: cap_thumb64_i2i_t0.6, cap_thumb128_i2i_t0.3
+phase3_zeroshot | N5x2 | qrla+mpcnc | 1 | n=26000 no_mode=0 | mbt2018-mean_q3 34.2%, avif_20 15.6%, avif_5 15.6%, avif_50 14.6%, mbt2018-mean_q1 13.6% | never: jpeg2000_25
+phase3_zeroshot | N5x2 | qrla+mpcnc | 2 | n=26000 no_mode=0 | mbt2018-mean_q3 24.7%, mbt2018-mean_q1 22.6%, avif_5 19.9%, avif_50 17.1%, avif_20 8.6% | never: -
+phase3_zeroshot | N5x2 | qrla+mpcng | 0 | n=26000 no_mode=0 | avif_20 48.0%, mbt2018-mean_q3 22.9%, avif_5 10.4%, jpeg2000_100 4.8%, mbt2018-mean_q1 4.7% | never: -
+phase3_zeroshot | N5x2 | qrla+mpcng | 1 | n=26000 no_mode=0 | avif_20 41.7%, mbt2018-mean_q3 32.5%, avif_5 9.9%, mbt2018-mean_q1 8.9%, avif_50 3.9% | never: -
+phase3_zeroshot | N5x2 | qrla+mpcng | 2 | n=26000 no_mode=0 | mbt2018-mean_q1 42.1%, avif_5 21.9%, mbt2018-mean_q3 15.8%, avif_50 6.6%, avif_20 5.7% | never: -
+
+generative / thumbnail modes ['cap_t2i', 'thumb64_up', 'cap_thumb64_i2i_t0.6', 'cap_thumb128_i2i_t0.3']: selected 119049 of 7176000 finished frames (1.659%), compliant 8415
+  cap_t2i                  selected     15440 ( 0.215%)  compliant         0  (  0.0% of selected)
+  thumb64_up               selected     79716 ( 1.111%)  compliant      6948  (  8.7% of selected)
+  cap_thumb64_i2i_t0.6     selected      7396 ( 0.103%)  compliant        71  (  1.0% of selected)
+  cap_thumb128_i2i_t0.3    selected     16497 ( 0.230%)  compliant      1396  (  8.5% of selected)
+  avif_5                   selected   1142118 (15.916%)  compliant    919223  ( 80.5% of selected)
+  avif_20                  selected   2328822 (32.453%)  compliant   1840163  ( 79.0% of selected)
+  avif_50                  selected    458748 ( 6.393%)  compliant    444586  ( 96.9% of selected)
+  avif_80                  selected    120270 ( 1.676%)  compliant    116020  ( 96.5% of selected)
+  mbt2018-mean_q1          selected   1495984 (20.847%)  compliant   1142881  ( 76.4% of selected)
+  mbt2018-mean_q3          selected   1413721 (19.701%)  compliant   1314365  ( 93.0% of selected)
+  mbt2018-mean_q5          selected     56099 ( 0.782%)  compliant     51055  ( 91.0% of selected)
+  mbt2018-mean_q8          selected      3514 ( 0.049%)  compliant      2286  ( 65.1% of selected)
+  jpeg2000_100             selected     23975 ( 0.334%)  compliant     15381  ( 64.2% of selected)
+  jpeg2000_25              selected     13700 ( 0.191%)  compliant     11415  ( 83.3% of selected)
