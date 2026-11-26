@@ -109,3 +109,6 @@ runs/uav_semcom/a6l1/final/*.dec.json.gz
 # MDMT images (unofficial HF mirror mrhwl123/MDMT; no license; never commit)
 /data/mdmt/
 /data/songdo/
+
+# UAVDT-Benchmark-M images (6.8 GB, research-only dataset; working copy lives in WSL ~/data/uavdt)
+/data/UAV-benchmark-M.zip
