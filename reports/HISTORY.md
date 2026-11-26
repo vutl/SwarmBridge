@@ -219,6 +219,18 @@ Format: **dates (review numbers)** | question | what was done | key numbers | co
 - Principal finding: N2 and A2 in X1.
 - Recall: vehicle class-agnostic primary; GT inside ignore regions removed; all occlusion levels count.
 
+**27/11: design APPROVED (ChatGPT, e964ad41); drivers and tests done** (prereg FINAL v3 §10).
+- New drivers: `ix_profile`, `ix_cpu`, `ix_stage` (fit / tune / train / select / lock), `ix_eval`, `ix_analysis` and
+  `ix_actlog`. Trainers get opt-in flags `--ix` and `--log-actions`; `ax2_eval` gets ppoix / qrix / dsix.
+- Frozen and retrained states are serialised. Evaluation loads them with every fitting function disabled. L2 pins
+  the data, states, H\*, 9 checkpoints and 22 code files, and stage B refuses to start without it.
+- Tests: 561 in the full suite pass, plus 2 GPU tests (`IxPipe` reproduces the stored fd_v1 rows).
+  - `ix_analysis` reproduces the stored fd_v1 ablation / Phase 2 summaries.
+  - Action logging leaves PPO and QR-DQN parameters bit-identical.
+  - End-to-end smoke test on the sandbox.
+- Launcher: `runs/uav_semcom/paperA_ix/scripts/run_stage.ps1 -Stage A|uavdt|x1`.
+- Stage A not started yet. X1 waits for the VisDrone answer.
+
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 
 `phases/2026-11-23_paperA-fulldata/` (README + consolidated report); results in `runs/uav_semcom/paperA_fd/`.

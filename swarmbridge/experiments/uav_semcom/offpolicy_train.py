@@ -25,10 +25,13 @@ from train_ev import evaluate_rl
 BASE_EXTRA = dict(la_mode="sched", la_interf="persistent", obs_la=True)
 
 
-def setup(fd=False):
+def setup(fd=False, ix=False):
     f = json.loads((C.REPO / "runs" / "uav_semcom" / "ax9" / "sched.json").read_text())["frozen"]
     cfg = C.regime_cfg("K5_la", **BASE_EXTRA)
-    if fd:                            # Paper A full-data Phase 3: fd_v1 table / pools (fd_common.load)
+    if ix:                            # paperA_ix stage A (X2-retrained): U_train / U_val, serialised retrained state
+        import ix_common as IX
+        table, pools = IX.load_stage_a()[:2]
+    elif fd:                          # Paper A full-data Phase 3: fd_v1 table / pools (fd_common.load)
         import fd_common as FD
         table, pools = FD.load()[:2]
     else:
@@ -57,11 +60,14 @@ def main():
     ap.add_argument("--train-every", type=int, default=4, help="RL decisions (transitions) per gradient step")
     ap.add_argument("--fd", action="store_true", help="train / validate on the fd_v1 pools (rl_train / rl_val)")
     ap.add_argument("--eps-frac", type=float, default=0.1, help="QR-DQN: epsilon 1 -> 0.05 over this share of steps")
+    ap.add_argument("--ix", action="store_true", help="paperA_ix stage A: U_train / U_val, serialised retrained state")
+    ap.add_argument("--log-actions", action="store_true", help="paperA_ix: count executed training mode actions "
+                    "(warm-up random and policy phases separately; read-only)")
     a = ap.parse_args()
     torch.set_num_threads(1)
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-    cfg, table, pools, kw, frozen = setup(a.fd)
+    cfg, table, pools, kw, frozen = setup(a.fd, a.ix)
     venv = SubprocVecEnv([make(table, pools["train"], cfg, a.seed * 100 + i, kw) for i in range(a.n_env)])
     obs_dim = venv.observation_space.shape[0]
     nvec = list(venv.action_space.nvec)
@@ -74,8 +80,16 @@ def main():
     rng = np.random.default_rng(1000 + a.seed)
     meta = dict(algo=a.algo, hp=agent.hp, seed=a.seed, steps=a.steps, n_env=a.n_env, buffer=a.buffer, batch=a.batch,
                 learning_starts=a.learning_starts, train_every=a.train_every, eps_frac=a.eps_frac, cfg=cfg,
-                slot_move=frozen["move"], slot_ja=frozen["member"], val_seeds=C.PPO_VAL_SEEDS, val_pool="val", table="fd_v1 (rl_train / rl_val)" if a.fd else "A5",
+                slot_move=frozen["move"], slot_ja=frozen["member"], val_seeds=C.PPO_VAL_SEEDS, val_pool="val",
+                table=("paperA_ix stage A (U_train / U_val)" if a.ix else
+                       "fd_v1 (rl_train / rl_val)" if a.fd else "A5"),
                 train_pool="train", time_discount=True, obs_dim=obs_dim, nvec=[int(x) for x in nvec])
+    hist_rand = hist_pol = None
+    if a.log_actions:
+        import ix_actlog as AL
+        hist_rand, hist_pol = np.zeros(n_act, np.int64), np.zeros(n_act, np.int64)
+        meta["action_log"] = dict(modes=list(C.MODES), what="executed training mode actions; random = warm-up "
+                                                                "(t < learning_starts), policy = afterwards")
     obs = venv.reset()
     t = upd = 0
     next_eval, log, t0, episodes, losses = int(a.eval_every), [], time.time(), 0, []
@@ -87,6 +101,8 @@ def main():
         else:
             eps = max(0.05, 1.0 - 0.95 * t / (a.eps_frac * a.steps)) if a.algo == "qrdqn" else 0.0
             act = agent.act(obs, rng, eps=eps, mask=masks)
+        if hist_rand is not None:
+            AL.count(hist_rand if t < a.learning_starts else hist_pol, act)
         full = np.zeros((a.n_env, len(nvec)), dtype=np.int64)
         full[:, -1] = act
         nobs, rew, done, infos = venv.step(full)
@@ -110,6 +126,8 @@ def main():
                        val_ok=float(np.mean([m["ok_rate"] for m in ev])), episodes=episodes, updates=upd,
                        loss=float(np.mean(losses[-1000:])) if losses else None,
                        alpha=float(agent.log_alpha.exp()) if a.algo == "dsac" else None)
+            if hist_rand is not None:
+                rec["train_action_hist"] = dict(random=hist_rand.tolist(), policy=hist_pol.tolist())   # cumulative
             log.append(rec)
             best = max(log, key=lambda r: (r["val_return"], -r["steps"]))
             (out / "train.json").write_text(json.dumps(dict(meta, log=log, best_steps=best["steps"], last_steps=steps),

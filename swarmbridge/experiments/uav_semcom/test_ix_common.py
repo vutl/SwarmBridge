@@ -63,9 +63,16 @@ def test_pinned_hash_if_set(fd):
         assert IX.state_hash(fd["st"]) == IX.FROZEN_EXPECT
 
 
+def test_serialised_frozen_file_is_fd_v1(fd):
+    st = IX.frozen_state()
+    for k in IX.FROZEN_KEYS:
+        assert np.array_equal(st[k], fd["st"][k]), k
+    assert st["probe_j"] == fd["st"]["probe_j"] and st["modes"] == fd["st"]["modes"]
+
+
 def test_fit_info_is_disabled(ixman):
     for arm in ("frozen", "retrained"):
-        t = IX.load(FC.PROFILE, ixman, arm)[0]
+        t = IX.load(FC.PROFILE, ixman, arm, cpu_est=False)[0]
         with pytest.raises(IX.RefitForbidden):
             t.fit_info(np.arange(10), "avif_5")
 
@@ -83,11 +90,11 @@ def test_frozen_state_ignores_new_rows(fd, ixman, tmp_path):
 
 
 def test_retrained_state_uses_u_train_rows_only(ixman, tmp_path):
-    base = IX.load(FC.PROFILE, ixman, "retrained")[4]
+    base = IX.load(FC.PROFILE, ixman, "retrained", cpu_est=False)[4]
     other = perturbed_profile(tmp_path, "nontrain", ixman, lambda s: s != "U_train")
-    assert IX.state_hash(IX.load(other, ixman, "retrained")[4]) == IX.state_hash(base)
+    assert IX.state_hash(IX.load(other, ixman, "retrained", cpu_est=False)[4]) == IX.state_hash(base)
     train = perturbed_profile(tmp_path, "train", ixman, lambda s: s == "U_train")
-    assert IX.state_hash(IX.load(train, ixman, "retrained")[4]) != IX.state_hash(base)
+    assert IX.state_hash(IX.load(train, ixman, "retrained", cpu_est=False)[4]) != IX.state_hash(base)
 
 
 def test_refit_path_reproduces_fd_v1_on_rl_train(fd, ixman):
@@ -100,7 +107,7 @@ def test_refit_path_reproduces_fd_v1_on_rl_train(fd, ixman):
 def test_frozen_arm_has_no_train_pool(ixman):
     pools = IX.load(FC.PROFILE, ixman, "frozen")[1]
     assert "train" not in pools and "val" not in pools
-    pools = IX.load(FC.PROFILE, ixman, "retrained")[1]
+    pools = IX.load(FC.PROFILE, ixman, "retrained", cpu_est=False)[1]
     assert np.array_equal(pools["train"], pools["U_train"])
 
 

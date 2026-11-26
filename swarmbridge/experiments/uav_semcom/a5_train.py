@@ -53,6 +53,10 @@ def main():
     ap.add_argument("--slot-move", default=None)
     ap.add_argument("--slot-ja", default=None)
     ap.add_argument("--fd", action="store_true", help="train / validate on the fd_v1 pools (rl_train / rl_val)")
+    ap.add_argument("--ix", action="store_true", help="paperA_ix stage A: U_train / U_val with the serialised "
+                    "retrained controller state (ix_common.load_stage_a)")
+    ap.add_argument("--log-actions", action="store_true", help="paperA_ix: count the executed training mode actions "
+                    "(read-only callback, ix_actlog.ActionHist; training unchanged)")
     ap.add_argument("--resume", default="", help="run dir: continue its last checkpoint (extended-training "
                     "experiment); episodes use env seeds offset by +50 so the start of training is not replayed")
     args = ap.parse_args()
@@ -60,7 +64,10 @@ def main():
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     cfg = C.regime_cfg(args.regime, **(json.loads(args.cfg_extra) if args.cfg_extra else {}))
-    if args.fd:                       # Paper A full-data Phase 3: fd_v1 table / pools (fd_common.load)
+    if args.ix:                       # paperA_ix stage A (X2-retrained): U_train / U_val, serialised retrained state
+        import ix_common as IX
+        table, pools = IX.load_stage_a()[:2]
+    elif args.fd:                     # Paper A full-data Phase 3: fd_v1 table / pools (fd_common.load)
         import fd_common as FD
         table, pools = FD.load()[:2]
     else:
@@ -84,8 +91,16 @@ def main():
     meta = dict(regime=args.regime, cfg=cfg, rl_part=args.rl_part, heur=heur, seed=args.seed, steps=args.steps,
                 cfg_extra=args.cfg_extra, slot_move=args.slot_move, slot_ja=args.slot_ja,
                 val_seeds=C.PPO_VAL_SEEDS, val_pool="val", train_pool="train", time_discount=True,
-                table="fd_v1 (rl_train / rl_val)" if args.fd else "A5")
+                table=("paperA_ix stage A (U_train / U_val)" if args.ix else
+                       "fd_v1 (rl_train / rl_val)" if args.fd else "A5"))
     t0, log, done_steps, exp = time.time(), [], 0, Experience()
+    hist, cb = None, exp
+    if args.log_actions:
+        from stable_baselines3.common.callbacks import CallbackList
+        from ix_actlog import ActionHist
+        hist = ActionHist(len(C.MODES))
+        cb = CallbackList([exp, hist])
+        meta["action_log"] = dict(modes=list(C.MODES), what="executed training mode actions (kind == 'mode')")
     if args.resume:
         prev = json.loads((Path(args.resume) / "train.json").read_text())
         done_steps = prev["last_steps"]
@@ -96,13 +111,15 @@ def main():
         model._last_obs = None          # saved obs belong to the old envs: force a reset of the new ones
         meta["resumed_from"] = dict(dir=args.resume, steps=done_steps)
     while done_steps < args.steps:
-        model.learn(int(args.eval_every), reset_num_timesteps=False, callback=exp)
+        model.learn(int(args.eval_every), reset_num_timesteps=False, callback=cb)
         done_steps += int(args.eval_every)
         model.save(out / f"ckpt_{done_steps}")
         ev = evaluate_rl(model, table, pools["val"], cfg, C.PPO_VAL_SEEDS, SV.UavSurveyEnv, kw)
         rec = dict(steps=done_steps, num_timesteps=int(model.num_timesteps),          # actual (review 1c8023c4)
                    n_updates=int(getattr(model, "_n_updates", -1)), sec=time.time() - t0, val_return=float(np.mean([m["return"] for m in ev])),
                    val_ok=float(np.mean([m["ok_rate"] for m in ev])), experience=dict(exp.c))
+        if hist is not None:
+            rec["train_action_hist"] = hist.counts.tolist()          # cumulative since the start of this run
         log.append(rec)
         best = max(log, key=lambda r: (r["val_return"], -r["steps"]))
         (out / "train.json").write_text(json.dumps(dict(meta, log=log, best_steps=best["steps"],

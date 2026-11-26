@@ -1,7 +1,7 @@
-# Paper A independent evaluation (`paperA_ix`): pre-registration, FINAL CANDIDATE v2 (26/11)
+# Paper A independent evaluation (`paperA_ix`): pre-registration, FINAL v3 (27/11)
 
-**Status:** final candidate for review. It becomes final (lock L0) when approved. The approval commit hash is then
-quoted in every later report.
+**Status: APPROVED** (ChatGPT final scientific review of `e964ad41`). This version adds the approved corrections and
+the execution requirements of that review (§10). Design, data, metrics, hypotheses and scope are unchanged.
 
 **Done so far:** data acquisition, integrity and overlap audit, manifest, frozen/refitted loader and its tests.
 
@@ -16,9 +16,8 @@ performance statistic of any new image exists.
 **Code:**
 - `ix_audit.py`: audit;
 - `ix_manifest.py`: manifest;
-- `ix_common.py`: loader;
-- `test_ix_common.py`: 11 tests, all passing;
-- `ix_modes.py`: fd_v1 mode audit.
+- `ix_modes.py`: fd_v1 mode audit;
+- drivers and tests: §10 (added 27/11).
 
 ## 1. Data and integrity (done)
 
@@ -218,18 +217,22 @@ X2-frozen tests transfer of the heuristic-incumbent stack only. No zero-shot RL 
 Supporting contrasts get unadjusted CIs. The two X2 conditions share U_test: they are never pooled and never count
 as independent replications.
 
-**Principal independent finding (fixed before execution).** It is the paper's central claim, that the robustness
-band makes predictive mode selection safe, operationalised as:
+**Principal independent finding (fixed before execution).** It is the paper's central claim, that uncertainty-band
+screening improves predictive mode selection under the evaluated wireless conditions. No formal safety or robustness
+guarantee is claimed; both tests concern expected return. Operationalised as:
 - **N2 > 0:** guarded MPC beats the tuned incumbent;
 - **A2 > 0:** the band alone improves on nominal MPC.
 
 **Principal block:** **X1**, because it is unseen, in-domain, uses frozen artifacts and needs no transfer assumption.
 
-| Verdict in a block | Rule |
-|---|---|
-| supported | N2 and A2 both Holm-rejected with positive sign |
-| partially supported | exactly one of them |
-| not supported | neither, or a Holm-rejected negative sign |
+Verdict rules, applied in this order (implemented in `ix_analysis.verdict` and unit-tested):
+
+| Order | Verdict in a block | Rule |
+|---|---|---|
+| 1 | not supported | N2 or A2 Holm-rejected with a **negative** sign. This takes precedence over every other rule |
+| 2 | supported | N2 and A2 both Holm-rejected with a positive sign |
+| 3 | partially supported | exactly one of them Holm-rejected with a positive sign |
+| 4 | not supported | neither Holm-rejected |
 
 The rule is applied to X1 (principal), to X2-retrained (method transfer) and to X2-frozen (artifact transfer), each
 reported under its own label. The labels are never swapped after results are seen. A summary sentence quotes all
@@ -292,3 +295,95 @@ About 1.5–2 days of unattended detached jobs:
 - RL training: ≈ 13 h CPU;
 - tuning: 1–2 h CPU;
 - test blocks: 3–4 h CPU.
+
+## 10. Execution implementation (review of `e964ad41`; drivers and tests done 27/11)
+
+### 10.1 Drivers (`swarmbridge/experiments/uav_semcom/`)
+
+| File | Role |
+|---|---|
+| `ix_common.py` | tables; frozen / retrained controller state; serialisation; L2 lock (`lock_items`, `verify_lock`); stage-A loader (`load_stage_a`); evaluation loader (`load_eval`, verifies L2, never fits) |
+| `ix_profile.py` | profiling (fd_v1 pipeline, `IxPipe.recon`) and UAVDT recall (§3); stages `A`, `uavdt`, `x1`; `uavdt` / `x1` refuse to start without a verified L2; prints timing and counts only |
+| `ix_cpu.py` | CPU MBT2018 timing on U_train (rules below) |
+| `ix_stage.py` | stage A: `fit`, `tune`, `train`, `select`; then `lock`, `verify`, `status` |
+| `ix_eval.py` | the 8 test blocks; `x1` and `uavdt` groups run independently |
+| `ix_analysis.py` | registered analysis (§6), principal verdict, recall variants, mode utilisation |
+| `ix_actlog.py` | training-action histograms (read-only) |
+| `a5_train.py`, `offpolicy_train.py` | new opt-in flags `--ix` (stage-A table) and `--log-actions`; defaults unchanged |
+| `ax2_eval.py` | learned incumbents `ppoix` / `qrix` / `dsix` (checkpoints from `paperA_ix/ckpts.json`); existing paths unchanged |
+
+### 10.2 State serialisation and the L2 lock
+
+- **Frozen state.** It is serialised once from `fd_common.load()` to `paperA_ix/state_frozen_fd_v1.json`, with a pinned
+  hash (`39018855…`). Evaluation loads this file, so no fitting function runs at evaluation time, not even on fd_v1.
+- **Retrained state.** `ix_stage.py fit` fits once on U_train, with the CPU estimate **required**
+  (`refit_state(cpu_est=None)` raises). The result is written to `paperA_ix/state_retrained.json`, which stores its own
+  hash and the hashes of the stage-A profile and the CPU estimate. H\* tuning, RL training and checkpoint selection
+  load this file (`load_stage_a`).
+- **L2_lock.json** (`ix_stage.py lock`, written once, then committed) pins:
+  - the manifest;
+  - the stage-A profile (sha256 of the file);
+  - the CPU estimate;
+  - the retrained state file and its hash;
+  - the frozen state file and its hash;
+  - H\* (U_train) and the frozen fd_v1 H\*;
+  - `ckpts.json`, `selection.json` and the sha256 of all 9 checkpoints;
+  - the sha256 of 22 code files the test blocks depend on (`ix_common.LOCKED_CODE`).
+- **Verification.** `verify_lock` recomputes every item and re-hashes the checkpoint files. Stage-B profiling,
+  `ix_eval` and `ix_analysis` call it before anything else, and evaluation workers call it again inside `load_eval`.
+  A change to any pinned item after L2 stops stage B; continuing would require a documented deviation.
+
+### 10.3 CPU MBT2018 estimate on U_train
+
+The fd_v1 procedure, with the following rules (fixed in `ix_cpu.py` before any timing):
+- 48 frames;
+- strata by resolution, quotas proportional to stratum size with a minimum of 2: 1024×540 → 46, 960×540 → 2;
+- RNG `default_rng(20261127)`; one frame per distinct sequence first;
+- 6 threads, one warm-up image discarded;
+- frame-weighted primary estimate.
+
+The sample is fixed with `ix_cpu.py select` and committed before `measure` runs.
+
+### 10.4 Files kept outside git (WSL `~/work/paperA_ix/`)
+
+- Profiles: `profile/profile_A.jsonl`, `profile_B_uavdt.jsonl`, `profile_B_x1.jsonl`. They hold captions and
+  per-image values.
+- Per-delivery records: `eval/<block>.deliv.json.gz`.
+- RL weights: `rl/`.
+
+**In git** (`runs/uav_semcom/paperA_ix/`):
+- manifest, audits, states, tune, ckpts / selection (paths and hashes);
+- the CPU sample and estimates;
+- logs (timing and counts only);
+- per-episode block results `eval/<block>.json` (simulation metrics, no image content);
+- the analysis.
+
+### 10.5 Tests (all passing, 27/11)
+
+| Test file | Content |
+|---|---|
+| `test_ix_common.py` (12) | frozen state bit-identical to fd_v1; serialised frozen file equals fd_v1; perturbation invariance; refit uses U_train only; the refit path reproduces fd_v1; deterministic-budget behavioural equivalence (H\*, guarded, calibrated); real 50 ms timing path |
+| `test_ix_lock.py` (12) | exact state round trip; fit requires the CPU estimate; fit runs once; stage A loads the serialised state with refit disabled; **evaluation loading with `refit_state`, `fit_retrained` and `ModeTable.fit_info` all disabled**; lock verification fails on a missing lock, a changed state, checkpoint, H\*, profile or code; stage-B profiling and every `ix_eval` block refuse without a lock |
+| `test_ix_recall.py` (10) | one-to-one matching; van on car (veh and van→car hit, car-only miss); wrong vehicle class; non-vehicle predictions discarded; confidence and IoU thresholds; ignored detections; ignored GT removed from the denominator; all other boxes counted; GT reader |
+| `test_ix_analysis.py` (10) | on stored fd_v1 results: the ablation block reproduces `summary_ablation_test.json` (A1–A9 CIs, Holm, recall cluster CIs) and the N family; the reference block reproduces the Phase 2 H1–H3b CIs and Holm; verdict precedence (7 cases); utilisation counts |
+| `test_ix_actlog.py` (2) | PPO (2,048 steps) and QR-DQN (400 steps) give **bit-identical parameters** with and without `--log-actions`; histograms count every executed mode action (PPO total = `rl_steps_mode`; QR-DQN warm-up 200 + policy 200) |
+| `test_ix_profile.py` (2, GPU, run under the GPU lock) | `IxPipe.recon` reproduces the stored fd_v1 profile rows of two rl_train images (codec bytes equal, \|ΔPSNR\| < 0.05 dB, same captions); the full stage path including recall fields runs on one UAVDT **training** image |
+| `test_ix_smoke.py` (1) | end to end on the sandbox: `ix_stage tune` (tiny) → `lock` → `ix_eval` x1_ref / x2r_ref / x2r_rl (2 seeds, fd_v1 checkpoints as stand-ins) → `ix_analysis` |
+
+### 10.6 Commands
+
+Launch detached via WMI, from PowerShell:
+
+```powershell
+$cmd = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Users\USER\Documents\SwarmBridge\runs\uav_semcom\paperA_ix\scripts\run_stage.ps1 -Stage A'
+Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine = $cmd}
+```
+
+- **Stage A:** `-Stage A`, about 16 h. GPU profile of U_train / U_val (under the GPU lock), then CPU timing, fit,
+  H\* tuning, 9 RL runs and selection. It stops with `STAGE_A_DONE` in `logs/stageA.log`.
+- **Mandatory stop.** Review the stage-A outputs, then run `python ix_stage.py lock`, commit `L2_lock.json`, and run
+  `python ix_stage.py verify`.
+- **Stage B, UAVDT:** `-Stage uavdt`, about 6 h. U_test profile + fidelity, then 6 blocks (8,800 episodes) and the
+  analysis.
+- **Stage B, X1:** `-Stage x1`, about 2.5 h. It is started only after the VisDrone test-challenge question is
+  resolved. X1 profile, then 2 blocks (1,400 episodes) and the analysis.

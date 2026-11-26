@@ -213,6 +213,16 @@ def episode(ctrl_regime, env_regime, combo, i, seed, extra=None, ja=None, pool="
                 paths = json.loads((C.REPO / "runs" / "uav_semcom" / "paperA_fd" / "phase3" / "ckpts.json").read_text())[mode]
                 models[mode] = OPR.ModePolicy(paths[i], e.action_space.nvec)
             return models[mode]
+    if mode in ("ppoix", "qrix", "dsix"):    # paperA_ix X2-retrained: policies trained on UAVDT U_train (ix_stage.py)
+        import ix_common as IX
+        import offpolicy_rl as OPR
+        ix_ck = IX.CKPTS
+
+        def mmod():
+            if mode not in models:
+                p = json.loads(ix_ck.read_text())[mode][i]
+                models[mode] = AE.model(p) if mode == "ppoix" else OPR.ModePolicy(p, e.action_space.nvec)
+            return models[mode]
     if mode in ("qrla", "dsla"):             # Paper A E7: QR-DQN / Discrete SAC trained on the LA PHY (offpolicy_train)
         import offpolicy_rl as OPR
 
@@ -414,7 +424,7 @@ def needs_ckpt(combo):
     s, m = combo.split("|")
     base = re.sub(r"[+]mpc[a-z0-9]*$", "", m)         # strip any MPC arm suffix (+mpc, +mpcnc, +mpcng*, +mpcrh*, ...)
     return s.split("@")[0].split("~")[0] in ("jc", "c", "cm") or base in (
-        "ppo", "ppola", "jm", "cmm", "qrla", "dsla", "ppofd", "qrfd", "dsfd")
+        "ppo", "ppola", "jm", "cmm", "qrla", "dsla", "ppofd", "qrfd", "dsfd", "ppoix", "qrix", "dsix")
 
 
 def main():

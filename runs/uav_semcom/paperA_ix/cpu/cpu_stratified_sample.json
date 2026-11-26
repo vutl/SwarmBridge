@@ -1,0 +1,403 @@
+{
+ "rule": "* population: U_train of manifest_ix_v1.json (780 frames: 1024x540 750, 960x540 30);\n  * sample size 48 (as fd_v1); quotas proportional to stratum size, at least 2: 1024x540 46, 960x540 2;\n  * RNG numpy default_rng(20261127); within a stratum, sequences are shuffled and one random frame is taken per\n    sequence in that order, further rounds only when a stratum has fewer sequences than its quota (fd_v1 rule);\n  * timing: torch.set_num_threads(os.cpu_count()), one warm-up image discarded, then every sampled frame once;\n  * PRIMARY estimate per mode: frame-weighted (fd_v1 `estimate`, review of 2cd2ec77): within stratum h,\n    mu_h = sum_s n_sh t_s / sum_s n_sh, then sum_h (N_h / N) mu_h; the sequence-balanced estimate is also written.",
+ "seed": 20261127,
+ "strata": {
+  "1024x540": {
+   "quota": 46,
+   "N_h": 750,
+   "weight": 0.9615384615384616
+  },
+  "960x540": {
+   "quota": 2,
+   "N_h": 30,
+   "weight": 0.038461538461538464
+  }
+ },
+ "n_U_train": 780,
+ "sample": [
+  {
+   "name": "M1008/img000530.jpg",
+   "seq": "M1008",
+   "sha256": "f17a509dc8681038591931a326bb090b0a8d9c47090c3632353af8207d709139",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0604/img000596.jpg",
+   "seq": "M0604",
+   "sha256": "be51b265a7a32b287804d7eaf453892c1ff432d8778ae3d5ca5a8d45f068f57a",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0605/img000760.jpg",
+   "seq": "M0605",
+   "sha256": "ad6f193e14dde7696b157d3b15c73fe2d762cab826e62655a21f60ff754bbe78",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1306/img001159.jpg",
+   "seq": "M1306",
+   "sha256": "e6bf47e52ee24e29115092061d0127c7e1078a0b078a04eb526fcb445c9b1d3a",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0704/img000746.jpg",
+   "seq": "M0704",
+   "sha256": "8c3b8e0f1b7521526db55f4401c3ce9b80ad382710520d50ac3bcb240354db80",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0204/img000049.jpg",
+   "seq": "M0204",
+   "sha256": "e2f008ac54581899727907bd583ff1c9fa439a7f501f652fa03566de5f0bf879",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0101/img000281.jpg",
+   "seq": "M0101",
+   "sha256": "ff81a3c077d5aa7100574f33906de5c3e8d44bad979a8de7914aaaf6077285d3",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1002/img000251.jpg",
+   "seq": "M1002",
+   "sha256": "1faab1d0d9bf1d0173af484e171edd5afa36a2930658344efc686f4b3cef76c6",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1006/img000342.jpg",
+   "seq": "M1006",
+   "sha256": "97d26b2ae206ff11af42a8223ecafd8616aac08d84a43ba69587db1d290e3efd",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0210/img000362.jpg",
+   "seq": "M0210",
+   "sha256": "9ec21e0e27b413332850e7a68257f87e3a80576c38221ff7e835e07601ac033a",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0301/img000124.jpg",
+   "seq": "M0301",
+   "sha256": "73a426040d78ba8f402ab86f9998f2d9ff74e19ec912276b6ae14097f7f8a7a1",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0501/img000231.jpg",
+   "seq": "M0501",
+   "sha256": "484e9c6cd72f2ac4f7ca7dce16d89f4bb60bbd4a869cf240a63faa5c379b60dc",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0201/img000742.jpg",
+   "seq": "M0201",
+   "sha256": "0f40ee29015d4dfcb9838633357a0d8e5dff52b4e03f5725093549b1b4bb8712",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0206/img000040.jpg",
+   "seq": "M0206",
+   "sha256": "8bf26e6d8091da6e15fcfa832c8d964d05a70b884b4903b4453ff0a4c360feab",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1201/img001115.jpg",
+   "seq": "M1201",
+   "sha256": "a378fa3d1aba0fdcab292fd0b61d555f4624cf40d06f66a76fbb9c2fada28904",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1304/img000909.jpg",
+   "seq": "M1304",
+   "sha256": "eb1bf2dcf92d5aee79e409aca4a2402e1d6ec12b0d57c309e2afc6199285684e",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0402/img000100.jpg",
+   "seq": "M0402",
+   "sha256": "ef8d76262bdc07061fd00adf29330514078449954cbc7c1abd31ea3c6548bc65",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1305/img000042.jpg",
+   "seq": "M1305",
+   "sha256": "f5fbbee0f6a0fdc0729730e3202ea7954aab11be837338b5cd12dc0e47660790",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1003/img000558.jpg",
+   "seq": "M1003",
+   "sha256": "51fe5dbbd28a114c393160ec2283d52e90096d9449026d83bfac4d9b978fcb51",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0401/img000064.jpg",
+   "seq": "M0401",
+   "sha256": "d47bb6d94e77c53dbb80ac54fadcf0f3e829cfe38c124ffd64006c83b48c2610",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1102/img000834.jpg",
+   "seq": "M1102",
+   "sha256": "59ef32faf70006aae493758afca24b31bbd09732c8cfbf1e1ca929f90ca6d859",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0902/img000358.jpg",
+   "seq": "M0902",
+   "sha256": "350c9fdbbdd64131ea6e73ce8f65df74e83bb83df51e0dee58a898b4a268003d",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0703/img000518.jpg",
+   "seq": "M0703",
+   "sha256": "1f0e467d595a977938e6070808a1437c78e340024c9da82cc9ab6cdc61fe48d0",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0702/img000269.jpg",
+   "seq": "M0702",
+   "sha256": "358e68d07b79527392d135826a34a9c2c6ea6672fb3ea886b4d4a48c4d6df851",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0207/img000453.jpg",
+   "seq": "M0207",
+   "sha256": "2b2ce4214e0d35bd4c333fb77ff18ca3d0c9035ef7776fdaa1b69a498ef86811",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1008/img000099.jpg",
+   "seq": "M1008",
+   "sha256": "62e264bfec64ae116e304aaba2d05244e2d4f95e460fc8a82676a98e60e42e48",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0604/img000113.jpg",
+   "seq": "M0604",
+   "sha256": "f451f238079646929c06cca7328d7dd7602ee32a1db87d2a4aae35d8cd1d1643",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0605/img000597.jpg",
+   "seq": "M0605",
+   "sha256": "08fe0195b576c2bb983bbd506887895cb63c43c406a6eb7db2a0b2c71bf54f93",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1306/img001076.jpg",
+   "seq": "M1306",
+   "sha256": "01dc5b17d2036c45f69b4ef30d756ea6b01b21f35d43e1ebf5ddf256cb021005",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0704/img000030.jpg",
+   "seq": "M0704",
+   "sha256": "52963672594a372ba17f6aeb32353b90d7ac407141bb9750a9bf4c95fe33cd22",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0204/img000326.jpg",
+   "seq": "M0204",
+   "sha256": "65c4579d274993178c427c9fc71e5da3d834caf6628231d5de0cfd813ec471a2",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0101/img000183.jpg",
+   "seq": "M0101",
+   "sha256": "6e54d7d9499f7ed398a653eb80f10a8f01d7f3b1c92446ef80f792bc2fc9dd78",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1002/img000569.jpg",
+   "seq": "M1002",
+   "sha256": "e1d37429150d0155c5be6f659e808718f6f17903485e711ae4e7e403fed91816",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1006/img000172.jpg",
+   "seq": "M1006",
+   "sha256": "6764ef1e5e50f4933145113ebda050900da3b95edb6f158279a910e69bb8f762",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0210/img000543.jpg",
+   "seq": "M0210",
+   "sha256": "9df8282a7c9eb338536f2a912a06e603e8e631bcb42a840fc24349a5bf16c93c",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0301/img000102.jpg",
+   "seq": "M0301",
+   "sha256": "afc1b1fddf17d8b302a25816d037dbc5d48557a1e0eea4523844c73851d7f02b",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0501/img000207.jpg",
+   "seq": "M0501",
+   "sha256": "ebd666600cfffd0adca7a831d22f6d299c15c80e27551e70ea60bb743e926e2a",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0201/img000928.jpg",
+   "seq": "M0201",
+   "sha256": "d6dffb5818a5f550618b75542797162e85776d24d44b19862145aedca57cc247",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0206/img000291.jpg",
+   "seq": "M0206",
+   "sha256": "c8fc577a3441beb5008047329f274f288ef54fdb6f7140a094e929485ee087b2",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1201/img000207.jpg",
+   "seq": "M1201",
+   "sha256": "83c172beadea4841a73cd4ffdcbf413dddb643e1bf908d53c0b1c9fc68bdc25e",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1304/img001016.jpg",
+   "seq": "M1304",
+   "sha256": "f4e8b9dba3cac50cb72cf7ab8e12c5698fa36dd090c31075c117018c224e2210",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0402/img000311.jpg",
+   "seq": "M0402",
+   "sha256": "6d28f4c79ba6e3f2269ac0b5bae99f26d1316f3c3fbae9976b0986ca0ac12727",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1305/img000393.jpg",
+   "seq": "M1305",
+   "sha256": "6d17a44c1369d083d85cca8e923a8d10af68e7f6e73a6acea1bc71a59ecc276d",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1003/img000650.jpg",
+   "seq": "M1003",
+   "sha256": "ae4d94815a3671a3aeb14f845fb3225014bb0a89e7e4b74471d6ab039e63f503",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0401/img000275.jpg",
+   "seq": "M0401",
+   "sha256": "2685138e6077040a22bd6302256205baf75f81c575cb9a4978a7843748085630",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M1102/img000701.jpg",
+   "seq": "M1102",
+   "sha256": "635d8d51abfd6d1db8aac097142a07d303d01cc2a90b879fe51763899711b92c",
+   "w": 1024,
+   "h": 540,
+   "stratum": "1024x540"
+  },
+  {
+   "name": "M0901/img000329.jpg",
+   "seq": "M0901",
+   "sha256": "cb6036bdb0d98ac297aeae5375b1654fc9b251d5605a6d4a253975959e55d60c",
+   "w": 960,
+   "h": 540,
+   "stratum": "960x540"
+  },
+  {
+   "name": "M0901/img001906.jpg",
+   "seq": "M0901",
+   "sha256": "0832109e52e2247fc48a3cf89ac3a82369648146b17caabfd741064d7ee543f2",
+   "w": 960,
+   "h": 540,
+   "stratum": "960x540"
+  }
+ ]
+}
