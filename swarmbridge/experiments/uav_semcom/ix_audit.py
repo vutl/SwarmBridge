@@ -113,9 +113,153 @@ def x1(a):
     print(log)
 
 
+# ---------------------------------------------------------------- full cross-dataset audit (after UAVDT acquisition)
+UAVDT = Path("/home/uservutl/data/uavdt/UAV-benchmark-M")
+UGT = Path("/home/uservutl/data/uavdt/UAV-benchmark-MOTD_v1.0/GT")
+U_TEST = ("M0203 M0205 M0208 M0209 M0403 M0601 M0602 M0606 M0701 M0801 M0802 M1001 M1004 M1007 M1009 M1101 M1301 "
+          "M1302 M1303 M1401").split()
+CACHE = Path("/home/uservutl/work/paperA_ix/hashcache.npz")
+
+
+def pc64(x):
+    """popcount of uint64 arrays (SWAR)."""
+    x = x - ((x >> np.uint64(1)) & np.uint64(0x5555555555555555))
+    x = (x & np.uint64(0x3333333333333333)) + ((x >> np.uint64(2)) & np.uint64(0x3333333333333333))
+    x = (x + (x >> np.uint64(4))) & np.uint64(0x0F0F0F0F0F0F0F0F)
+    return (x * np.uint64(0x0101010101010101)) >> np.uint64(56)
+
+
+def _near_chunk(args):
+    """for query rows qi: indices j of reference rows with dHash <= T and aHash <= T, plus the nearest max-distance."""
+    qd, qa, rd, ra, t = args
+    out, nearest = [], []
+    for i in range(len(qd)):
+        dd = pc64(rd ^ qd[i]).sum(1)
+        cand = np.flatnonzero(dd <= t)
+        da = pc64(ra[cand] ^ qa[i]).sum(1) if len(cand) else np.zeros(0, np.uint64)
+        out.append([(int(j), int(dd[j]), int(a)) for j, a in zip(cand, da) if a <= t])
+        nearest.append(int(dd.min()) if len(dd) else 256)
+    return out, nearest
+
+
+def near(qd, qa, rd, ra, procs, t=T):
+    qd, qa, rd, ra = (np.ascontiguousarray(x).view(np.uint64) for x in (qd, qa, rd, ra))
+    ch = max(1, len(qd) // (procs * 8))
+    jobs = [(qd[i:i + ch], qa[i:i + ch], rd, ra, t) for i in range(0, len(qd), ch)]
+    with Pool(procs) as pool:
+        res = pool.map(_near_chunk, jobs)
+    return [m for r in res for m in r[0]], [m for r in res for m in r[1]]
+
+
+def hashed(paths, procs):
+    """(sha256, w, h, dhash, ahash) per path, cached outside git (hashes are of local files, not artifacts)."""
+    cache = {}
+    if CACHE.exists():
+        z = np.load(CACHE, allow_pickle=True)
+        cache = dict(zip(z["paths"].tolist(), zip(z["sha"].tolist(), z["w"].tolist(), z["h"].tolist(), z["d"], z["a"])))
+    todo = [str(p) for p in paths if str(p) not in cache]
+    if todo:
+        print(f"hashing {len(todo)} files", flush=True)
+        for p, sha, w, h, d, a in run(todo, procs):
+            cache[p] = (sha, w, h, d, a)
+        CACHE.parent.mkdir(parents=True, exist_ok=True)
+        ks = sorted(cache)
+        np.savez(CACHE, paths=np.array(ks, object), sha=np.array([cache[k][0] for k in ks], object),
+                 w=np.array([cache[k][1] for k in ks]), h=np.array([cache[k][2] for k in ks]),
+                 d=np.stack([cache[k][3] for k in ks]), a=np.stack([cache[k][4] for k in ks]))
+    return [cache[str(p)] for p in paths]
+
+
+def ugt_last_frame(seq):
+    last = 0
+    for f in (UGT / f"{seq}_gt_whole.txt", UGT / f"{seq}_gt_ignore.txt"):
+        for line in f.read_text().splitlines():
+            if line.strip():
+                last = max(last, int(line.split(",")[0]))
+    return last
+
+
+def full(a):
+    """Cross audit of VD_dev (history: DET train/val/test-dev + VID), X1 (test-challenge), U (UAVDT train / test).
+    Deterministic exclusion direction (pre-registration §1.3): history is never excluded; the official UAVDT test split
+    is preserved against any non-history pool; X1 (unofficial) yields to everything else.
+      X1 seq ~ VD_dev        -> exclude X1 seq          U_test seq ~ VD_dev -> exclude U_test seq
+      X1 seq ~ U (any)       -> exclude X1 seq          U_train seq ~ U_test seq -> exclude U_train seq
+      U_train ~ VD_dev       -> no exclusion (U_train trains only the X2-retrained arm; VisDrone history is not tested)"""
+    OUT.mkdir(parents=True, exist_ok=True)
+    det = [(k, p) for k, v in SRC.items() for p in sorted((v / "images").glob("*.jpg"))]
+    vid = [("VID", p) for d in VID for p in sorted(d.glob("*/*.jpg"))]
+    tc = [("X1", p) for p in sorted(TC.glob("*.jpg"))]
+    useq = sorted(d.name for d in UAVDT.iterdir() if d.is_dir())
+    uu = [("U_test" if s in U_TEST else "U_train", p) for s in useq for p in sorted((UAVDT / s).glob("*.jpg"))]
+    allp = det + vid + tc + uu
+    H = hashed([p for _, p in allp], a.procs)
+    grp = np.array([g if g in ("X1", "U_test", "U_train") else "VD" for g, _ in allp])
+    seq = np.array([p.parent.name if g.startswith("U_") else (p.parent.name if g == "VID" else seq_of(p.name))
+                    for g, p in allp])
+    d = np.stack([h[3] for h in H])
+    av = np.stack([h[4] for h in H])
+    sha = np.array([h[0] for h in H])
+    idx = {g: np.flatnonzero(grp == g) for g in ("VD", "X1", "U_test", "U_train")}
+    links = []
+
+    def check(qg, rg, same_seq_ok=False):
+        qi, ri = idx[qg], idx[rg]
+        m, nn = near(d[qi], av[qi], d[ri], av[ri], a.procs)
+        sref = defaultdict(list)
+        for k, j in enumerate(ri):
+            sref[sha[j]].append(j)
+        for k, i in enumerate(qi):
+            hits = [(int(ri[j]), dd, aa, "near") for j, dd, aa in m[k]]
+            hits += [(int(j), 0, 0, "sha") for j in sref.get(sha[i], [])]
+            for j, dd, aa, kind in hits:
+                if i == j or (same_seq_ok and seq[i] == seq[j]):
+                    continue
+                links.append(dict(q=qg, q_seq=str(seq[i]), q_file=str(allp[i][1].name), r=rg, r_src=allp[j][0],
+                                  r_seq=str(seq[j]), r_file=str(allp[j][1].name), kind=kind, dhash=dd, ahash=aa))
+        return nn
+
+    print("checking", flush=True)
+    nn = {}
+    nn["X1~VD"] = check("X1", "VD")
+    nn["U_test~VD"] = check("U_test", "VD")
+    nn["U_train~VD"] = check("U_train", "VD")
+    nn["X1~U_test"] = check("X1", "U_test")
+    nn["X1~U_train"] = check("X1", "U_train")
+    nn["U_train~U_test"] = check("U_train", "U_test")
+    nn["X1~X1"] = check("X1", "X1", same_seq_ok=True)
+    nn["U_test~U_test"] = check("U_test", "U_test", same_seq_ok=True)
+    nn["U_train~U_train"] = check("U_train", "U_train", same_seq_ok=True)
+    excl = defaultdict(set)
+    for l in links:
+        if l["q"] == "X1" and l["r"] in ("VD", "U_test", "U_train"):
+            excl["X1"].add(l["q_seq"])
+        elif l["q"] == "U_test" and l["r"] == "VD":
+            excl["U_test"].add(l["q_seq"])
+        elif l["q"] == "U_train" and l["r"] == "U_test":
+            excl["U_train"].add(l["q_seq"])
+    gt = {s: dict(images=len(list((UAVDT / s).glob("*.jpg"))), last_annotated=ugt_last_frame(s)) for s in useq}
+    res_u = Counter(f"{H[i][1]}x{H[i][2]}" for i in np.r_[idx["U_test"], idx["U_train"]])
+    pct = {k: {str(p): float(np.percentile(v, p)) for p in (0, 1, 5, 50)} for k, v in nn.items() if len(v)}
+    cnt = Counter((l["q"], l["r"], l["kind"]) for l in links)
+    summ = dict(threshold=T, sizes={g: int(len(v)) for g, v in idx.items()},
+                uavdt_sequences=dict(test=[s for s in useq if s in U_TEST], train=[s for s in useq if s not in U_TEST]),
+                uavdt_resolutions=res_u.most_common(), uavdt_gt_coverage=gt,
+                link_counts={f"{q}~{r}:{k}": v for (q, r, k), v in sorted(cnt.items())},
+                link_sequences={f"{q}~{r}": sorted({f"{l['q_seq']}~{l['r_seq']}" for l in links
+                                                    if l["q"] == q and l["r"] == r})
+                                for q, r in sorted({(l["q"], l["r"]) for l in links})},
+                excluded={k: sorted(v) for k, v in excl.items()},
+                nearest_dhash_pct=pct)
+    (OUT / "audit_full.json").write_text(json.dumps(dict(summary=summ, links=links[:5000]), indent=0))
+    log = json.dumps(summ, indent=1)
+    (OUT / "audit_full.log").write_text(log + "\n")
+    print(log)
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("what", choices=["x1"])
+    ap.add_argument("what", choices=["x1", "full"])
     ap.add_argument("--procs", type=int, default=6)
     a = ap.parse_args()
-    x1(a)
+    x1(a) if a.what == "x1" else full(a)

@@ -1,0 +1,362 @@
+{
+"summary": {
+"threshold": 20,
+"sizes": {
+"VD": 35676,
+"X1": 1580,
+"U_test": 16592,
+"U_train": 24143
+},
+"uavdt_sequences": {
+"test": [
+"M0203",
+"M0205",
+"M0208",
+"M0209",
+"M0403",
+"M0601",
+"M0602",
+"M0606",
+"M0701",
+"M0801",
+"M0802",
+"M1001",
+"M1004",
+"M1007",
+"M1009",
+"M1101",
+"M1301",
+"M1302",
+"M1303",
+"M1401"
+],
+"train": [
+"M0101",
+"M0201",
+"M0202",
+"M0204",
+"M0206",
+"M0207",
+"M0210",
+"M0301",
+"M0401",
+"M0402",
+"M0501",
+"M0603",
+"M0604",
+"M0605",
+"M0702",
+"M0703",
+"M0704",
+"M0901",
+"M0902",
+"M1002",
+"M1003",
+"M1005",
+"M1006",
+"M1008",
+"M1102",
+"M1201",
+"M1202",
+"M1304",
+"M1305",
+"M1306"
+]
+},
+"uavdt_resolutions": [
+[
+"1024x540",
+38829
+],
+[
+"960x540",
+1906
+]
+],
+"uavdt_gt_coverage": {
+"M0101": {
+"images": 407,
+"last_annotated": 407
+},
+"M0201": {
+"images": 1076,
+"last_annotated": 1076
+},
+"M0202": {
+"images": 291,
+"last_annotated": 291
+},
+"M0203": {
+"images": 1007,
+"last_annotated": 1007
+},
+"M0204": {
+"images": 350,
+"last_annotated": 350
+},
+"M0205": {
+"images": 646,
+"last_annotated": 646
+},
+"M0206": {
+"images": 562,
+"last_annotated": 562
+},
+"M0207": {
+"images": 885,
+"last_annotated": 571
+},
+"M0208": {
+"images": 265,
+"last_annotated": 265
+},
+"M0209": {
+"images": 1576,
+"last_annotated": 1576
+},
+"M0210": {
+"images": 583,
+"last_annotated": 583
+},
+"M0301": {
+"images": 325,
+"last_annotated": 325
+},
+"M0401": {
+"images": 613,
+"last_annotated": 613
+},
+"M0402": {
+"images": 410,
+"last_annotated": 410
+},
+"M0403": {
+"images": 514,
+"last_annotated": 514
+},
+"M0501": {
+"images": 352,
+"last_annotated": 352
+},
+"M0601": {
+"images": 372,
+"last_annotated": 372
+},
+"M0602": {
+"images": 480,
+"last_annotated": 480
+},
+"M0603": {
+"images": 2035,
+"last_annotated": 2035
+},
+"M0604": {
+"images": 1079,
+"last_annotated": 1079
+},
+"M0605": {
+"images": 787,
+"last_annotated": 787
+},
+"M0606": {
+"images": 1374,
+"last_annotated": 1374
+},
+"M0701": {
+"images": 1308,
+"last_annotated": 1308
+},
+"M0702": {
+"images": 777,
+"last_annotated": 777
+},
+"M0703": {
+"images": 683,
+"last_annotated": 683
+},
+"M0704": {
+"images": 832,
+"last_annotated": 832
+},
+"M0801": {
+"images": 298,
+"last_annotated": 298
+},
+"M0802": {
+"images": 1101,
+"last_annotated": 1101
+},
+"M0901": {
+"images": 1906,
+"last_annotated": 1906
+},
+"M0902": {
+"images": 384,
+"last_annotated": 384
+},
+"M1001": {
+"images": 1859,
+"last_annotated": 1859
+},
+"M1002": {
+"images": 660,
+"last_annotated": 660
+},
+"M1003": {
+"images": 1346,
+"last_annotated": 1346
+},
+"M1004": {
+"images": 269,
+"last_annotated": 269
+},
+"M1005": {
+"images": 537,
+"last_annotated": 537
+},
+"M1006": {
+"images": 708,
+"last_annotated": 708
+},
+"M1007": {
+"images": 659,
+"last_annotated": 659
+},
+"M1008": {
+"images": 569,
+"last_annotated": 569
+},
+"M1009": {
+"images": 604,
+"last_annotated": 604
+},
+"M1101": {
+"images": 864,
+"last_annotated": 864
+},
+"M1102": {
+"images": 967,
+"last_annotated": 967
+},
+"M1201": {
+"images": 1197,
+"last_annotated": 1197
+},
+"M1202": {
+"images": 472,
+"last_annotated": 472
+},
+"M1301": {
+"images": 1182,
+"last_annotated": 1182
+},
+"M1302": {
+"images": 719,
+"last_annotated": 719
+},
+"M1303": {
+"images": 445,
+"last_annotated": 445
+},
+"M1304": {
+"images": 1550,
+"last_annotated": 1550
+},
+"M1305": {
+"images": 600,
+"last_annotated": 600
+},
+"M1306": {
+"images": 1200,
+"last_annotated": 1200
+},
+"M1401": {
+"images": 1050,
+"last_annotated": 1050
+}
+},
+"link_counts": {
+"X1~VD:near": 1
+},
+"link_sequences": {
+"X1~VD": [
+"0000332~0000331"
+]
+},
+"excluded": {
+"X1": [
+"0000332"
+]
+},
+"nearest_dhash_pct": {
+"X1~VD": {
+"0": 4.0,
+"1": 50.79,
+"5": 63.0,
+"50": 81.0
+},
+"U_test~VD": {
+"0": 55.0,
+"1": 63.0,
+"5": 68.0,
+"50": 83.0
+},
+"U_train~VD": {
+"0": 38.0,
+"1": 47.0,
+"5": 64.0,
+"50": 84.0
+},
+"X1~U_test": {
+"0": 53.0,
+"1": 66.0,
+"5": 75.0,
+"50": 89.0
+},
+"X1~U_train": {
+"0": 42.0,
+"1": 56.0,
+"5": 67.0,
+"50": 87.0
+},
+"U_train~U_test": {
+"0": 58.0,
+"1": 65.0,
+"5": 72.0,
+"50": 89.0
+},
+"X1~X1": {
+"0": 0.0,
+"1": 0.0,
+"5": 0.0,
+"50": 0.0
+},
+"U_test~U_test": {
+"0": 0.0,
+"1": 0.0,
+"5": 0.0,
+"50": 0.0
+},
+"U_train~U_train": {
+"0": 0.0,
+"1": 0.0,
+"5": 0.0,
+"50": 0.0
+}
+}
+},
+"links": [
+{
+"q": "X1",
+"q_seq": "0000332",
+"q_file": "0000332_00600_d_0000028.jpg",
+"r": "VD",
+"r_src": "VisDrone2019-DET-train",
+"r_seq": "0000331",
+"r_file": "0000331_00601_d_0000844.jpg",
+"kind": "near",
+"dhash": 4,
+"ahash": 2
+}
+]
+}

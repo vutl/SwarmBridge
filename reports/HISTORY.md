@@ -206,6 +206,19 @@ Format: **dates (review numbers)** | question | what was done | key numbers | co
   new family N1–N3 (nc−H\*, guarded−H\*, cal−guarded); lock L4 = retrained checkpoints hashed before any test episode;
   frozen loader spec + tests.
 
+**26/11 latest: draft approved in principle; final candidate v2** (`paperA-ix-prereg.md`).
+- UAVDT images downloaded by the user (sha256 e82675c9…, 40,735 frames).
+- Full cross audit `ix_audit.py full`: 0 UAVDT~VisDrone, 0 X1~UAVDT and 0 UAVDT train~test links; only X1 0000332
+  is excluded.
+- UAVDT frames are 1024×540 / 960×540. M0207 annotations end at frame 571, so only annotated frames are used.
+- Manifest `manifest_ix_v1.json` (734ea49b…): U_train 26 sequences / 780 frames, U_val 4 / 120, U_test 20 / 600,
+  X1 52 / 631.
+- `ix_common.py` frozen / refit loader, pinned fd_v1 state hash 39018855…; `test_ix_common.py` 11/11 pass,
+  including deterministic-budget behavioural equivalence and the real timing path.
+- Order corrected: test profiling only after the L2 lock.
+- Principal finding: N2 and A2 in X1.
+- Recall: vehicle class-agnostic primary; GT inside ignore regions removed; all occlusion levels count.
+
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 
 `phases/2026-11-23_paperA-fulldata/` (README + consolidated report); results in `runs/uav_semcom/paperA_fd/`.
