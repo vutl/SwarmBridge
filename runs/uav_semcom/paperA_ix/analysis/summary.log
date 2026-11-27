@@ -1,5 +1,24 @@
-== x1_ref: incomplete / missing
-== x1_abl: incomplete / missing
+== x1_ref: seeds 30000..30099, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   H1          h=fixed_avif_20+mpc - h=fixed_avif_20        +5.54 [  +3.26,  +7.82] p 0.0000  Holm[C] p 0.0000 REJECT
+   H3b         h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   +0.42 [  -2.23,  +3.06] p 0.7562  Holm[C] p 0.7562 not rejected
+   H2          h=fixed_avif_20+mpc - =fixed_avif_20+mpcrh   +5.94 [  +3.76,  +8.12] p 0.0000  supporting
+   H2b         h=fixed_avif_20+mpc - ixed_avif_20+mpcrhnb  +45.76 [ +42.34, +49.18] p 0.0000  supporting
+   H3          h=fixed_avif_20+mpc - =fixed_avif_20+mpcnc  +18.05 [ +14.18, +21.92] p 0.0000  supporting
+== x1_abl: seeds 30100..30199, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   A1         fixed_avif_20+mpcngg - =fixed_avif_20+mpcnc   -0.09 [  -4.22,  +4.05] p 0.9675  Holm[C] p 0.9675 not rejected
+   A2         fixed_avif_20+mpcngb - =fixed_avif_20+mpcnc  +19.27 [ +16.00, +22.54] p 0.0000  Holm[C] p 0.0000 REJECT
+   A4         =fixed_avif_20+mpcng - ixed_avif_20+mpcngh1   +1.95 [  -0.79,  +4.68] p 0.1611  Holm[C] p 0.3221 not rejected
+   A4b        =fixed_avif_20+mpcng - ixed_avif_20+mpcngh0  +23.18 [ +20.59, +25.78] p 0.0000  Holm[C] p 0.0000 REJECT
+   A3         =fixed_avif_20+mpcng - =fixed_avif_20+mpcnc  +16.83 [ +12.84, +20.81] p 0.0000  supporting
+   A5         =fixed_avif_20+mpcng - fixed_avif_20+mpcngg  +16.91 [ +13.29, +20.53] p 0.0000  supporting
+   A6         =fixed_avif_20+mpcng - fixed_avif_20+mpcngb   -2.44 [  -5.35,  +0.47] p 0.0990  supporting
+   A7          h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   +3.86 [  +1.38,  +6.33] p 0.0026  supporting
+   A8         =fixed_avif_20+mpcng - h=fixed_avif_20        +2.13 [  -0.42,  +4.69] p 0.1007  supporting
+   A9         ixed_avif_20+mpcngh1 - ixed_avif_20+mpcngh0  +21.24 [ +18.40, +24.07] p 0.0000  supporting
+   N1         =fixed_avif_20+mpcnc - h=fixed_avif_20       -14.69 [ -18.58, -10.80] p 0.0000  Holm[N] p 0.0000 REJECT
+   N2         =fixed_avif_20+mpcng - h=fixed_avif_20        +2.13 [  -0.42,  +4.69] p 0.1007  Holm[N] p 0.1007 not rejected
+   N3          h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   +3.86 [  +1.38,  +6.33] p 0.0026  Holm[N] p 0.0052 REJECT
+   PRINCIPAL FINDING (N2 & A2): partially supported
 == x2f_ref: seeds 31000..31099, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
    original-image recall (%): veh 78.94, cls_vancar 75.44, cls_car 70.85
    H1          h=fixed_avif_20+mpc - h=fixed_avif_20        -0.85 [  -1.61,  -0.08] p 0.0301  Holm[C] p 0.0301 REJECT
@@ -194,4 +213,4 @@
               recall[cls_car] seed -2.04 [-2.46,-1.62] cluster -2.05 [-2.71,-1.31] (20 seq)
    R3_dsix                dsix+mpc - dsix                  +37.19 [ +35.59, +38.80] p 0.0000  supporting
    R4_dsix              dsix+mpcng - dsix+mpcnc             -2.93 [  -5.83,  -0.02] p 0.0481  supporting
-PRINCIPAL FINDING by block (X1 principal; X2-retrained = method transfer; X2-frozen = artifact transfer): {'x2f_abl': 'supported', 'x2r_abl': 'supported'}
+PRINCIPAL FINDING by block (X1 principal; X2-retrained = method transfer; X2-frozen = artifact transfer): {'x1_abl': 'partially supported', 'x2f_abl': 'supported', 'x2r_abl': 'supported'}

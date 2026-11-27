@@ -291,7 +291,22 @@ Format: **dates (review numbers)** | question | what was done | key numbers | co
 - **X1:**
   - The queued launch failed at start: at 19:50 the `.venv` uv trampoline could not find the base interpreter (works
     again at 20:40). No X1 profile or episode exists.
-  - The relaunch is waiting for the user.
+  - The relaunch waited for the user.
+
+**27/11: stage B X1 DONE** (the user said go; 20:39–22:03; L2 verified). The X2 analysis is unchanged by the rerun.
+- 1,400 episodes. Integrity is clean. Recall is unavailable by design.
+- **Principal block X1: PARTIALLY SUPPORTED.**
+  - N2 (guarded − H\*) +2.13 [−0.42, +4.69], Holm p 0.10, not rejected.
+  - A2 (band − nominal) +19.27 [+16.00, +22.54], rejected.
+- **Other results:**
+  - N1 (nominal − H\*) −14.69, rejected (nominal loses, as in fd_v1).
+  - N3 (cal − guarded) +3.86, rejected.
+  - A1 −0.09, not significant. A4 +1.95, not significant. A4b +23.18.
+  - Reference block: H1 (cal − H\*) +5.54, rejected; H3b +0.42, not significant; H2 vs RobustMPC +5.94.
+- **Utilisation:** generative modes ≤0.5%, except RobustMPC without band at 26%.
+- **Cost:** as on UAVDT. Sequential p99 129–160 ms, 47–75% of slots over 50 ms; parallel max p99 31–44 ms with
+  0 slots over 50 ms.
+- **All three verdicts:** X1 partially supported, X2-retrained supported, X2-frozen supported.
 
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 

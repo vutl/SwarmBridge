@@ -195,3 +195,219 @@
    R3_dsix                dsix+mpc - dsix                  +37.19 [ +35.59, +38.80] p 0.0000  supporting
    R4_dsix              dsix+mpcng - dsix+mpcnc             -2.93 [  -5.83,  -0.02] p 0.0481  supporting
 PRINCIPAL FINDING by block (X1 principal; X2-retrained = method transfer; X2-frozen = artifact transfer): {'x2f_abl': 'supported', 'x2r_abl': 'supported'}
+== x1_ref: seeds 30000..30099, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   H1          h=fixed_avif_20+mpc - h=fixed_avif_20        +5.54 [  +3.26,  +7.82] p 0.0000  Holm[C] p 0.0000 REJECT
+   H3b         h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   +0.42 [  -2.23,  +3.06] p 0.7562  Holm[C] p 0.7562 not rejected
+   H2          h=fixed_avif_20+mpc - =fixed_avif_20+mpcrh   +5.94 [  +3.76,  +8.12] p 0.0000  supporting
+   H2b         h=fixed_avif_20+mpc - ixed_avif_20+mpcrhnb  +45.76 [ +42.34, +49.18] p 0.0000  supporting
+   H3          h=fixed_avif_20+mpc - =fixed_avif_20+mpcnc  +18.05 [ +14.18, +21.92] p 0.0000  supporting
+== x1_abl: seeds 30100..30199, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   A1         fixed_avif_20+mpcngg - =fixed_avif_20+mpcnc   -0.09 [  -4.22,  +4.05] p 0.9675  Holm[C] p 0.9675 not rejected
+   A2         fixed_avif_20+mpcngb - =fixed_avif_20+mpcnc  +19.27 [ +16.00, +22.54] p 0.0000  Holm[C] p 0.0000 REJECT
+   A4         =fixed_avif_20+mpcng - ixed_avif_20+mpcngh1   +1.95 [  -0.79,  +4.68] p 0.1611  Holm[C] p 0.3221 not rejected
+   A4b        =fixed_avif_20+mpcng - ixed_avif_20+mpcngh0  +23.18 [ +20.59, +25.78] p 0.0000  Holm[C] p 0.0000 REJECT
+   A3         =fixed_avif_20+mpcng - =fixed_avif_20+mpcnc  +16.83 [ +12.84, +20.81] p 0.0000  supporting
+   A5         =fixed_avif_20+mpcng - fixed_avif_20+mpcngg  +16.91 [ +13.29, +20.53] p 0.0000  supporting
+   A6         =fixed_avif_20+mpcng - fixed_avif_20+mpcngb   -2.44 [  -5.35,  +0.47] p 0.0990  supporting
+   A7          h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   +3.86 [  +1.38,  +6.33] p 0.0026  supporting
+   A8         =fixed_avif_20+mpcng - h=fixed_avif_20        +2.13 [  -0.42,  +4.69] p 0.1007  supporting
+   A9         ixed_avif_20+mpcngh1 - ixed_avif_20+mpcngh0  +21.24 [ +18.40, +24.07] p 0.0000  supporting
+   N1         =fixed_avif_20+mpcnc - h=fixed_avif_20       -14.69 [ -18.58, -10.80] p 0.0000  Holm[N] p 0.0000 REJECT
+   N2         =fixed_avif_20+mpcng - h=fixed_avif_20        +2.13 [  -0.42,  +4.69] p 0.1007  Holm[N] p 0.1007 not rejected
+   N3          h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   +3.86 [  +1.38,  +6.33] p 0.0026  Holm[N] p 0.0052 REJECT
+   PRINCIPAL FINDING (N2 & A2): partially supported
+== x2f_ref: seeds 31000..31099, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   original-image recall (%): veh 78.94, cls_vancar 75.44, cls_car 70.85
+   H1          h=fixed_avif_20+mpc - h=fixed_avif_20        -0.85 [  -1.61,  -0.08] p 0.0301  Holm[C] p 0.0301 REJECT
+              recall[veh] seed -0.19 [-0.35,-0.04] cluster -0.19 [-1.17,+0.39] (20 seq)
+              recall[cls_vancar] seed -0.20 [-0.35,-0.05] cluster -0.20 [-1.16,+0.38] (20 seq)
+              recall[cls_car] seed -0.24 [-0.38,-0.10] cluster -0.24 [-1.20,+0.34] (20 seq)
+   H3b         h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   -1.77 [  -2.58,  -0.96] p 0.0000  Holm[C] p 0.0001 REJECT
+              recall[veh] seed -1.07 [-1.27,-0.86] cluster -1.06 [-2.05,-0.49] (20 seq)
+              recall[cls_vancar] seed -1.04 [-1.24,-0.84] cluster -1.03 [-2.01,-0.46] (20 seq)
+              recall[cls_car] seed -1.00 [-1.18,-0.81] cluster -0.99 [-1.96,-0.43] (20 seq)
+   H2          h=fixed_avif_20+mpc - =fixed_avif_20+mpcrh   -0.31 [  -1.01,  +0.38] p 0.3733  supporting
+   H2b         h=fixed_avif_20+mpc - ixed_avif_20+mpcrhnb  +36.20 [ +34.69, +37.71] p 0.0000  supporting
+   H3          h=fixed_avif_20+mpc - =fixed_avif_20+mpcnc   +1.72 [  -2.09,  +5.52] p 0.3732  supporting
+== x2f_abl: seeds 31100..31199, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   original-image recall (%): veh 78.94, cls_vancar 75.44, cls_car 70.85
+   A1         fixed_avif_20+mpcngg - =fixed_avif_20+mpcnc   -0.03 [  -3.84,  +3.78] p 0.9874  Holm[C] p 0.9874 not rejected
+              recall[veh] seed -2.87 [-3.61,-2.14] cluster -2.87 [-3.78,-1.79] (20 seq)
+              recall[cls_vancar] seed -2.74 [-3.44,-2.03] cluster -2.73 [-3.63,-1.68] (20 seq)
+              recall[cls_car] seed -2.49 [-3.15,-1.83] cluster -2.48 [-3.31,-1.51] (20 seq)
+   A2         fixed_avif_20+mpcngb - =fixed_avif_20+mpcnc  +11.82 [  +8.05, +15.59] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed -7.70 [-8.42,-6.98] cluster -7.67 [-10.42,-4.49] (20 seq)
+              recall[cls_vancar] seed -7.26 [-7.94,-6.57] cluster -7.23 [-9.79,-4.13] (20 seq)
+              recall[cls_car] seed -6.59 [-7.24,-5.94] cluster -6.56 [-9.03,-3.67] (20 seq)
+   A4         =fixed_avif_20+mpcng - ixed_avif_20+mpcngh1   -1.23 [  -2.19,  -0.26] p 0.0134  Holm[C] p 0.0268 REJECT
+              recall[veh] seed -1.31 [-1.60,-1.03] cluster -1.31 [-1.77,-0.93] (20 seq)
+              recall[cls_vancar] seed -1.27 [-1.54,-1.00] cluster -1.27 [-1.72,-0.89] (20 seq)
+              recall[cls_car] seed -1.13 [-1.38,-0.88] cluster -1.13 [-1.52,-0.79] (20 seq)
+   A4b        =fixed_avif_20+mpcng - ixed_avif_20+mpcngh0   +5.29 [  +2.46,  +8.12] p 0.0003  Holm[C] p 0.0010 REJECT
+              recall[veh] seed -4.68 [-5.26,-4.10] cluster -4.65 [-5.93,-3.41] (20 seq)
+              recall[cls_vancar] seed -4.44 [-5.00,-3.89] cluster -4.42 [-5.62,-3.24] (20 seq)
+              recall[cls_car] seed -3.98 [-4.50,-3.46] cluster -3.96 [-5.14,-2.85] (20 seq)
+   A3         =fixed_avif_20+mpcng - =fixed_avif_20+mpcnc   +0.11 [  -4.55,  +4.78] p 0.9613  supporting
+   A5         =fixed_avif_20+mpcng - fixed_avif_20+mpcngg   +0.14 [  -4.10,  +4.39] p 0.9463  supporting
+   A6         =fixed_avif_20+mpcng - fixed_avif_20+mpcngb  -11.70 [ -14.06,  -9.35] p 0.0000  supporting
+   A7          h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   -1.65 [  -2.59,  -0.72] p 0.0007  supporting
+   A8         =fixed_avif_20+mpcng - h=fixed_avif_20        +1.17 [  +0.18,  +2.15] p 0.0207  supporting
+   A9         ixed_avif_20+mpcngh1 - ixed_avif_20+mpcngh0   +6.52 [  +3.88,  +9.16] p 0.0000  supporting
+   N1         =fixed_avif_20+mpcnc - h=fixed_avif_20        +1.05 [  -3.80,  +5.90] p 0.6681  Holm[N] p 0.6681 not rejected
+              recall[veh] seed +16.51 [+15.57,+17.45] cluster +16.46 [+11.31,+20.85] (20 seq)
+              recall[cls_vancar] seed +15.65 [+14.74,+16.55] cluster +15.60 [+10.72,+19.73] (20 seq)
+              recall[cls_car] seed +14.28 [+13.44,+15.11] cluster +14.23 [+9.64,+18.27] (20 seq)
+   N2         =fixed_avif_20+mpcng - h=fixed_avif_20        +1.17 [  +0.18,  +2.15] p 0.0207  Holm[N] p 0.0414 REJECT
+              recall[veh] seed +1.01 [+0.79,+1.24] cluster +1.02 [+0.83,+1.23] (20 seq)
+              recall[cls_vancar] seed +0.97 [+0.75,+1.18] cluster +0.97 [+0.80,+1.17] (20 seq)
+              recall[cls_car] seed +0.88 [+0.68,+1.08] cluster +0.88 [+0.72,+1.07] (20 seq)
+   N3          h=fixed_avif_20+mpc - =fixed_avif_20+mpcng   -1.65 [  -2.59,  -0.72] p 0.0007  Holm[N] p 0.0021 REJECT
+              recall[veh] seed -1.21 [-1.42,-0.99] cluster -1.21 [-2.05,-0.67] (20 seq)
+              recall[cls_vancar] seed -1.17 [-1.37,-0.96] cluster -1.17 [-1.99,-0.64] (20 seq)
+              recall[cls_car] seed -1.11 [-1.31,-0.92] cluster -1.12 [-1.94,-0.59] (20 seq)
+   PRINCIPAL FINDING (N2 & A2): supported
+== x2r_ref: seeds 32000..32099, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   original-image recall (%): veh 78.94, cls_vancar 75.44, cls_car 70.85
+   H1         _mbt2018-mean_q3+mpc - ixed_mbt2018-mean_q3   +6.98 [  +4.50,  +9.46] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed +3.01 [+2.51,+3.51] cluster +3.01 [+1.06,+4.61] (20 seq)
+              recall[cls_vancar] seed +2.86 [+2.39,+3.33] cluster +2.86 [+0.96,+4.37] (20 seq)
+              recall[cls_car] seed +2.63 [+2.20,+3.07] cluster +2.64 [+0.83,+4.03] (20 seq)
+   H3b        _mbt2018-mean_q3+mpc - bt2018-mean_q3+mpcng   +0.21 [  -2.25,  +2.68] p 0.8637  Holm[C] p 0.8637 not rejected
+              recall[veh] seed -1.14 [-1.59,-0.69] cluster -1.14 [-1.64,-0.67] (20 seq)
+              recall[cls_vancar] seed -1.06 [-1.49,-0.63] cluster -1.06 [-1.52,-0.61] (20 seq)
+              recall[cls_car] seed -0.95 [-1.35,-0.55] cluster -0.95 [-1.41,-0.53] (20 seq)
+   H2         _mbt2018-mean_q3+mpc - bt2018-mean_q3+mpcrh   +7.55 [  +5.13,  +9.97] p 0.0000  supporting
+   H2b        _mbt2018-mean_q3+mpc - 2018-mean_q3+mpcrhnb  +53.66 [ +49.89, +57.43] p 0.0000  supporting
+   H3         _mbt2018-mean_q3+mpc - bt2018-mean_q3+mpcnc   +7.04 [  +3.60, +10.48] p 0.0001  supporting
+== x2r_abl: seeds 32100..32199, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   original-image recall (%): veh 78.94, cls_vancar 75.44, cls_car 70.85
+   A1         t2018-mean_q3+mpcngg - bt2018-mean_q3+mpcnc   -2.00 [  -6.06,  +2.06] p 0.3306  Holm[C] p 0.3306 not rejected
+              recall[veh] seed -1.58 [-2.28,-0.87] cluster -1.58 [-2.66,-0.61] (20 seq)
+              recall[cls_vancar] seed -1.51 [-2.18,-0.84] cluster -1.51 [-2.54,-0.59] (20 seq)
+              recall[cls_car] seed -1.39 [-2.01,-0.76] cluster -1.39 [-2.36,-0.52] (20 seq)
+   A2         t2018-mean_q3+mpcngb - bt2018-mean_q3+mpcnc   +9.19 [  +5.69, +12.69] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed -1.08 [-1.66,-0.49] cluster -1.09 [-2.14,-0.06] (20 seq)
+              recall[cls_vancar] seed -1.02 [-1.57,-0.46] cluster -1.03 [-2.03,-0.05] (20 seq)
+              recall[cls_car] seed -0.87 [-1.39,-0.35] cluster -0.88 [-1.82,+0.05] (20 seq)
+   A4         bt2018-mean_q3+mpcng - 2018-mean_q3+mpcngh1   +5.84 [  +2.88,  +8.80] p 0.0002  Holm[C] p 0.0003 REJECT
+              recall[veh] seed +0.22 [-0.29,+0.74] cluster +0.23 [-0.32,+0.91] (20 seq)
+              recall[cls_vancar] seed +0.23 [-0.25,+0.72] cluster +0.24 [-0.29,+0.90] (20 seq)
+              recall[cls_car] seed +0.24 [-0.22,+0.70] cluster +0.24 [-0.26,+0.87] (20 seq)
+   A4b        bt2018-mean_q3+mpcng - 2018-mean_q3+mpcngh0  +23.78 [ +20.25, +27.30] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed +2.59 [+1.92,+3.27] cluster +2.62 [+1.00,+4.21] (20 seq)
+              recall[cls_vancar] seed +2.48 [+1.84,+3.12] cluster +2.51 [+0.95,+4.06] (20 seq)
+              recall[cls_car] seed +2.38 [+1.78,+2.98] cluster +2.41 [+0.94,+3.86] (20 seq)
+   A3         bt2018-mean_q3+mpcng - bt2018-mean_q3+mpcnc   +7.87 [  +4.45, +11.29] p 0.0000  supporting
+   A5         bt2018-mean_q3+mpcng - t2018-mean_q3+mpcngg   +9.87 [  +6.80, +12.93] p 0.0000  supporting
+   A6         bt2018-mean_q3+mpcng - t2018-mean_q3+mpcngb   -1.32 [  -4.41,  +1.76] p 0.3975  supporting
+   A7         _mbt2018-mean_q3+mpc - bt2018-mean_q3+mpcng   -0.43 [  -3.06,  +2.21] p 0.7480  supporting
+   A8         bt2018-mean_q3+mpcng - ixed_mbt2018-mean_q3   +7.61 [  +4.65, +10.57] p 0.0000  supporting
+   A9         2018-mean_q3+mpcngh1 - 2018-mean_q3+mpcngh0  +17.94 [ +14.27, +21.61] p 0.0000  supporting
+   N1         bt2018-mean_q3+mpcnc - ixed_mbt2018-mean_q3   -0.26 [  -3.96,  +3.44] p 0.8903  Holm[N] p 1.0000 not rejected
+              recall[veh] seed +7.29 [+6.52,+8.06] cluster +7.31 [+3.65,+10.55] (20 seq)
+              recall[cls_vancar] seed +6.91 [+6.17,+7.64] cluster +6.92 [+3.47,+9.95] (20 seq)
+              recall[cls_car] seed +6.24 [+5.56,+6.92] cluster +6.26 [+2.95,+9.06] (20 seq)
+   N2         bt2018-mean_q3+mpcng - ixed_mbt2018-mean_q3   +7.61 [  +4.65, +10.57] p 0.0000  Holm[N] p 0.0000 REJECT
+              recall[veh] seed +4.51 [+3.92,+5.10] cluster +4.52 [+2.21,+6.47] (20 seq)
+              recall[cls_vancar] seed +4.26 [+3.70,+4.82] cluster +4.27 [+2.07,+6.12] (20 seq)
+              recall[cls_car] seed +3.90 [+3.38,+4.42] cluster +3.91 [+1.87,+5.63] (20 seq)
+   N3         _mbt2018-mean_q3+mpc - bt2018-mean_q3+mpcng   -0.43 [  -3.06,  +2.21] p 0.7480  Holm[N] p 1.0000 not rejected
+              recall[veh] seed -1.35 [-1.82,-0.88] cluster -1.35 [-1.89,-0.76] (20 seq)
+              recall[cls_vancar] seed -1.24 [-1.69,-0.80] cluster -1.24 [-1.75,-0.69] (20 seq)
+              recall[cls_car] seed -1.11 [-1.53,-0.70] cluster -1.11 [-1.58,-0.60] (20 seq)
+   PRINCIPAL FINDING (N2 & A2): supported
+== x2r_grid: seeds 32200..32299, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   original-image recall (%): veh 78.94, cls_vancar 75.44, cls_car 70.85
+   G1_N3x2    =fixed_avif_50+mpcng - h=fixed_avif_50        +0.69 [  -0.94,  +2.32] p 0.4008  Holm[C] p 1.0000 not rejected
+              recall[veh] seed +0.15 [-0.31,+0.60] cluster +0.13 [-0.28,+0.49] (20 seq)
+              recall[cls_vancar] seed +0.13 [-0.31,+0.57] cluster +0.11 [-0.29,+0.47] (20 seq)
+              recall[cls_car] seed +0.16 [-0.25,+0.57] cluster +0.15 [-0.22,+0.47] (20 seq)
+   G2_N3x2     h=fixed_avif_50+mpc - =fixed_avif_50+mpcng   +2.56 [  +1.23,  +3.89] p 0.0002  Holm[C] p 0.0014 REJECT
+              recall[veh] seed +0.35 [-0.05,+0.75] cluster +0.35 [+0.01,+0.61] (20 seq)
+              recall[cls_vancar] seed +0.33 [-0.05,+0.71] cluster +0.33 [-0.00,+0.58] (20 seq)
+              recall[cls_car] seed +0.35 [-0.02,+0.71] cluster +0.35 [+0.02,+0.60] (20 seq)
+   G3_N3x2     h=fixed_avif_50+mpc - h=fixed_avif_50        +3.25 [  +1.73,  +4.77] p 0.0000  supporting
+   G4_N3x2    =fixed_avif_50+mpcng - =fixed_avif_50+mpcnc   +0.04 [  -2.09,  +2.17] p 0.9716  supporting
+   G1_N7x2    =fixed_avif_20+mpcng - h=fixed_avif_20       +14.08 [ +11.16, +17.00] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed +6.19 [+5.56,+6.83] cluster +6.18 [+3.11,+8.57] (20 seq)
+              recall[cls_vancar] seed +5.87 [+5.27,+6.48] cluster +5.87 [+2.88,+8.22] (20 seq)
+              recall[cls_car] seed +5.48 [+4.91,+6.04] cluster +5.47 [+2.64,+7.68] (20 seq)
+   G2_N7x2     h=fixed_avif_20+mpc - =fixed_avif_20+mpcng  -10.10 [ -13.30,  -6.90] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed -5.48 [-6.20,-4.76] cluster -5.47 [-6.79,-3.97] (20 seq)
+              recall[cls_vancar] seed -5.21 [-5.90,-4.53] cluster -5.20 [-6.48,-3.75] (20 seq)
+              recall[cls_car] seed -4.83 [-5.47,-4.20] cluster -4.82 [-5.95,-3.51] (20 seq)
+   G3_N7x2     h=fixed_avif_20+mpc - h=fixed_avif_20        +3.98 [  +1.38,  +6.59] p 0.0031  supporting
+   G4_N7x2    =fixed_avif_20+mpcng - =fixed_avif_20+mpcnc   +4.49 [  -1.00,  +9.97] p 0.1076  supporting
+   G1_N5x3    =fixed_avif_50+mpcng - h=fixed_avif_50       +11.51 [  +8.72, +14.29] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed +0.97 [+0.58,+1.35] cluster +0.95 [+0.18,+1.62] (20 seq)
+              recall[cls_vancar] seed +0.89 [+0.52,+1.27] cluster +0.88 [+0.11,+1.54] (20 seq)
+              recall[cls_car] seed +0.93 [+0.58,+1.29] cluster +0.92 [+0.19,+1.54] (20 seq)
+   G2_N5x3     h=fixed_avif_50+mpc - =fixed_avif_50+mpcng   +2.37 [  -0.28,  +5.02] p 0.0792  Holm[C] p 0.3168 not rejected
+              recall[veh] seed +0.04 [-0.39,+0.46] cluster +0.05 [-0.43,+0.50] (20 seq)
+              recall[cls_vancar] seed +0.07 [-0.34,+0.48] cluster +0.08 [-0.37,+0.52] (20 seq)
+              recall[cls_car] seed +0.13 [-0.25,+0.52] cluster +0.14 [-0.31,+0.58] (20 seq)
+   G3_N5x3     h=fixed_avif_50+mpc - h=fixed_avif_50       +13.88 [ +10.59, +17.16] p 0.0000  supporting
+   G4_N5x3    =fixed_avif_50+mpcng - =fixed_avif_50+mpcnc   -0.75 [  -3.91,  +2.40] p 0.6364  supporting
+   G1_N5x4    =fixed_avif_50+mpcng - h=fixed_avif_50        +3.06 [  +1.75,  +4.37] p 0.0000  Holm[C] p 0.0001 REJECT
+              recall[veh] seed +0.13 [-0.12,+0.38] cluster +0.13 [-0.33,+0.57] (20 seq)
+              recall[cls_vancar] seed +0.11 [-0.13,+0.34] cluster +0.11 [-0.37,+0.55] (20 seq)
+              recall[cls_car] seed +0.17 [-0.05,+0.40] cluster +0.18 [-0.29,+0.60] (20 seq)
+   G2_N5x4     h=fixed_avif_50+mpc - =fixed_avif_50+mpcng   +2.60 [  +1.17,  +4.03] p 0.0005  Holm[C] p 0.0024 REJECT
+              recall[veh] seed +0.07 [-0.17,+0.32] cluster +0.07 [-0.27,+0.38] (20 seq)
+              recall[cls_vancar] seed +0.08 [-0.16,+0.31] cluster +0.07 [-0.25,+0.37] (20 seq)
+              recall[cls_car] seed +0.09 [-0.13,+0.32] cluster +0.09 [-0.23,+0.39] (20 seq)
+   G3_N5x4     h=fixed_avif_50+mpc - h=fixed_avif_50        +5.66 [  +3.85,  +7.47] p 0.0000  supporting
+   G4_N5x4    =fixed_avif_50+mpcng - =fixed_avif_50+mpcnc   +2.57 [  +1.05,  +4.09] p 0.0012  supporting
+   G1_B0.5    bt2018-mean_q3+mpcng - ixed_mbt2018-mean_q3   +5.80 [  +3.28,  +8.33] p 0.0000  Holm[C] p 0.0001 REJECT
+              recall[veh] seed +2.84 [+2.32,+3.36] cluster +2.85 [+0.88,+4.54] (20 seq)
+              recall[cls_vancar] seed +2.70 [+2.20,+3.20] cluster +2.71 [+0.81,+4.32] (20 seq)
+              recall[cls_car] seed +2.50 [+2.04,+2.96] cluster +2.51 [+0.70,+4.00] (20 seq)
+   G2_B0.5    _mbt2018-mean_q3+mpc - bt2018-mean_q3+mpcng   +1.07 [  -1.76,  +3.89] p 0.4562  Holm[C] p 1.0000 not rejected
+              recall[veh] seed -1.11 [-1.57,-0.65] cluster -1.10 [-2.00,-0.37] (20 seq)
+              recall[cls_vancar] seed -1.03 [-1.47,-0.60] cluster -1.03 [-1.85,-0.34] (20 seq)
+              recall[cls_car] seed -0.95 [-1.35,-0.55] cluster -0.94 [-1.71,-0.29] (20 seq)
+   G3_B0.5    _mbt2018-mean_q3+mpc - ixed_mbt2018-mean_q3   +6.87 [  +4.31,  +9.43] p 0.0000  supporting
+   G4_B0.5    bt2018-mean_q3+mpcng - bt2018-mean_q3+mpcnc   +1.62 [  -1.27,  +4.51] p 0.2698  supporting
+   G1_B2      bt2018-mean_q3+mpcng - ixed_mbt2018-mean_q3   +6.26 [  +3.35,  +9.17] p 0.0000  Holm[C] p 0.0003 REJECT
+              recall[veh] seed +3.62 [+3.04,+4.21] cluster +3.64 [+1.71,+5.28] (20 seq)
+              recall[cls_vancar] seed +3.41 [+2.86,+3.97] cluster +3.43 [+1.63,+4.99] (20 seq)
+              recall[cls_car] seed +3.12 [+2.60,+3.63] cluster +3.13 [+1.45,+4.57] (20 seq)
+   G2_B2      _mbt2018-mean_q3+mpc - bt2018-mean_q3+mpcng   +1.16 [  -1.92,  +4.25] p 0.4559  Holm[C] p 1.0000 not rejected
+              recall[veh] seed -1.17 [-1.75,-0.60] cluster -1.17 [-2.02,-0.43] (20 seq)
+              recall[cls_vancar] seed -1.07 [-1.62,-0.53] cluster -1.07 [-1.84,-0.38] (20 seq)
+              recall[cls_car] seed -0.94 [-1.45,-0.43] cluster -0.94 [-1.69,-0.29] (20 seq)
+   G3_B2      _mbt2018-mean_q3+mpc - ixed_mbt2018-mean_q3   +7.42 [  +4.99,  +9.86] p 0.0000  supporting
+   G4_B2      bt2018-mean_q3+mpcng - bt2018-mean_q3+mpcnc  +19.46 [ +14.88, +24.04] p 0.0000  supporting
+== x2r_rl: seeds 32000..32099, integrity {'episodes_wrong_task_count': 0, 'seeds_with_differing_images': 0, 'deliveries_outside_pool': 0}
+   original-image recall (%): veh 78.94, cls_vancar 75.44, cls_car 70.85
+   R1_ppoix            ppoix+mpcng - ppoix                  +6.88 [  +5.05,  +8.71] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed +5.26 [+4.84,+5.68] cluster +5.26 [+2.99,+7.05] (20 seq)
+              recall[cls_vancar] seed +4.97 [+4.57,+5.37] cluster +4.97 [+2.80,+6.68] (20 seq)
+              recall[cls_car] seed +4.59 [+4.22,+4.97] cluster +4.59 [+2.58,+6.17] (20 seq)
+   R2_ppoix              ppoix+mpc - ppoix+mpcng            +2.75 [  +1.19,  +4.30] p 0.0007  Holm[C] p 0.0021 REJECT
+              recall[veh] seed -0.51 [-0.81,-0.21] cluster -0.50 [-0.86,-0.19] (20 seq)
+              recall[cls_vancar] seed -0.47 [-0.76,-0.18] cluster -0.46 [-0.79,-0.16] (20 seq)
+              recall[cls_car] seed -0.39 [-0.66,-0.13] cluster -0.39 [-0.70,-0.10] (20 seq)
+   R3_ppoix              ppoix+mpc - ppoix                  +9.63 [  +8.10, +11.15] p 0.0000  supporting
+   R4_ppoix            ppoix+mpcng - ppoix+mpcnc            +7.89 [  +5.08, +10.70] p 0.0000  supporting
+   R1_qrix              qrix+mpcng - qrix                  +22.93 [ +20.79, +25.06] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed +8.82 [+8.23,+9.41] cluster +8.81 [+6.24,+10.99] (20 seq)
+              recall[cls_vancar] seed +8.39 [+7.82,+8.96] cluster +8.38 [+5.91,+10.51] (20 seq)
+              recall[cls_car] seed +7.91 [+7.37,+8.44] cluster +7.90 [+5.62,+9.88] (20 seq)
+   R2_qrix                qrix+mpc - qrix+mpcng             +1.84 [  +0.14,  +3.54] p 0.0345  Holm[C] p 0.0689 not rejected
+              recall[veh] seed -0.76 [-1.11,-0.41] cluster -0.75 [-1.17,-0.30] (20 seq)
+              recall[cls_vancar] seed -0.69 [-1.02,-0.35] cluster -0.68 [-1.07,-0.24] (20 seq)
+              recall[cls_car] seed -0.61 [-0.92,-0.30] cluster -0.60 [-0.98,-0.18] (20 seq)
+   R3_qrix                qrix+mpc - qrix                  +24.76 [ +22.61, +26.91] p 0.0000  supporting
+   R4_qrix              qrix+mpcng - qrix+mpcnc             +4.38 [  +2.12,  +6.65] p 0.0002  supporting
+   R1_dsix              dsix+mpcng - dsix                  +37.60 [ +35.86, +39.34] p 0.0000  Holm[C] p 0.0000 REJECT
+              recall[veh] seed +15.03 [+14.39,+15.68] cluster +15.02 [+10.58,+18.81] (20 seq)
+              recall[cls_vancar] seed +14.30 [+13.68,+14.91] cluster +14.29 [+10.04,+17.99] (20 seq)
+              recall[cls_car] seed +13.39 [+12.81,+13.96] cluster +13.38 [+9.44,+16.76] (20 seq)
+   R2_dsix                dsix+mpc - dsix+mpcng             -0.40 [  -1.90,  +1.09] p 0.5923  Holm[C] p 0.5923 not rejected
+              recall[veh] seed -2.39 [-2.87,-1.92] cluster -2.40 [-3.14,-1.56] (20 seq)
+              recall[cls_vancar] seed -2.25 [-2.71,-1.80] cluster -2.26 [-2.98,-1.46] (20 seq)
+              recall[cls_car] seed -2.04 [-2.46,-1.62] cluster -2.05 [-2.71,-1.31] (20 seq)
+   R3_dsix                dsix+mpc - dsix                  +37.19 [ +35.59, +38.80] p 0.0000  supporting
+   R4_dsix              dsix+mpcng - dsix+mpcnc             -2.93 [  -5.83,  -0.02] p 0.0481  supporting
+PRINCIPAL FINDING by block (X1 principal; X2-retrained = method transfer; X2-frozen = artifact transfer): {'x1_abl': 'partially supported', 'x2f_abl': 'supported', 'x2r_abl': 'supported'}

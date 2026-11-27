@@ -1,0 +1,6 @@
+[2026-11-27 20:39:51] stage B profile x1 start
+[2026-11-27 21:44:03] stage B profile x1 done
+[2026-11-27 21:44:03] stage B eval x1 start
+x1_ref: 6 arm rows x 100 seeds done (506s)
+x1_abl: 8 arm rows x 100 seeds done (615s)
+[2026-11-27 22:03:00] STAGE_B_x1_DONE
