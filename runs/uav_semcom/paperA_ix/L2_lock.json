@@ -1,0 +1,88 @@
+{
+ "created": "2026-11-27 17:14:08",
+ "items": {
+  "manifest_sha256": "734ea49b8d71e1caed6a2fc7f2198dcfb3685bfb2ea05654fb0971bc1f28bd92",
+  "profile_A_sha256": "75e65aa000e36dbf154ce3bff2d9e5250333e197ea0a35b5fcde6f6debaa118d",
+  "cpu_est_sha256": "ee91b4cb390a43dc2c4595ebdbaf8cdc7ff37067404c12886483d699237bd14a",
+  "state_retrained_file_sha256": "dace58f2335f94e470aed3a48657ed5b75100325fd31dbf92f24ec3682d0ad29",
+  "state_retrained_hash": "8fd86b5011fcd56050e2a67026800a7b7fbeeac43cda1d237e13f8253b7248d6",
+  "frozen_state_hash": "39018855000424ebb39fb71c5702a626ab268132d0ca22b4b5b8e30843c6d3bf",
+  "frozen_file_sha256": "834e5c7717b849c83f379c0daa39b7e6422adecc6a14506bd642ae7d6705cddf",
+  "tune_sha256": "3958e5443003a18853e8b583267a2cf901cdc04fdd1f21bda9cbd864211911b3",
+  "H_star": {
+   "N5x2": "fixed_mbt2018-mean_q3",
+   "N3x2": "fixed_avif_50",
+   "N7x2": "fixed_avif_20",
+   "N5x3": "fixed_avif_50",
+   "N5x4": "fixed_avif_50",
+   "B0.5": "fixed_mbt2018-mean_q3",
+   "B2": "fixed_mbt2018-mean_q3"
+  },
+  "frozen_H_star": "fixed_avif_20",
+  "ckpts_sha256": "3e6cb2d0e5b013d908f258fd5c942318503e3faa71ee2c46ee540fb2371304e7",
+  "selection_sha256": "858567045b84c06ee83150f887be89f18903692df3c2d9398b8ebe44a277f8c2",
+  "checkpoints": {
+   "ppoix_s0": {
+    "path": "/home/uservutl/work/paperA_ix/rl/ppoix_s0/ckpt_2000000.zip",
+    "sha256": "249551ede68554506a5aed2d377f2b577d13ebd6dcecf6a3872664503711653c"
+   },
+   "ppoix_s1": {
+    "path": "/home/uservutl/work/paperA_ix/rl/ppoix_s1/ckpt_1000000.zip",
+    "sha256": "505424afc23d29a423e286876e98fc1d29b6a0b779126afb2bb91f925c711d64"
+   },
+   "ppoix_s2": {
+    "path": "/home/uservutl/work/paperA_ix/rl/ppoix_s2/ckpt_2000000.zip",
+    "sha256": "40d6549fc9f805ac5b3f6d851e133d5a5c96804ba1832262fc1131d0bf8b8190"
+   },
+   "qrix_s0": {
+    "path": "/home/uservutl/work/paperA_ix/rl/qrix_s0/ckpt_1800000.pt",
+    "sha256": "6eee1b7ae98ed1466fc97e29ac0d2dc05bc0144ea45136397a8c0e531b9cf79a"
+   },
+   "qrix_s1": {
+    "path": "/home/uservutl/work/paperA_ix/rl/qrix_s1/ckpt_1600000.pt",
+    "sha256": "d6b7770018945f3acd2063ebc8f847bb607544644b40dceb5a16e31abfb28e0e"
+   },
+   "qrix_s2": {
+    "path": "/home/uservutl/work/paperA_ix/rl/qrix_s2/ckpt_1800000.pt",
+    "sha256": "7a53962cb266cce5a3ee706d8bf8416d634c3319454b76c0ea7b12c940536292"
+   },
+   "dsix_s0": {
+    "path": "/home/uservutl/work/paperA_ix/rl/dsix_s0/ckpt_800000.pt",
+    "sha256": "109e3916bb3082aa7362268c8a7a4847e43bc6e906461da34aa2a1183ff234ad"
+   },
+   "dsix_s1": {
+    "path": "/home/uservutl/work/paperA_ix/rl/dsix_s1/ckpt_1400000.pt",
+    "sha256": "55970f768f258c5996b49a202a6a87c370daaeadbe700d16847d81554dc7921e"
+   },
+   "dsix_s2": {
+    "path": "/home/uservutl/work/paperA_ix/rl/dsix_s2/ckpt_1400000.pt",
+    "sha256": "1f934089be34e3b85b00696b3e69f193d4201a128758f7861c90e2a40d4a6a31"
+   }
+  },
+  "code": {
+   "ix_common.py": "0b9e853d2f9285239a69ab3b198140d7c6239fca2ffb1f9de18ad9e5dc7f454b",
+   "ix_eval.py": "14073d3a8ce53b0e0e8d2b4de2528227e89023e47451ed11264ed73e6cb633ac",
+   "ix_profile.py": "88deea17362ae1f0e5127c1c474b29ffe738d523c53f8334099e91cc724552bf",
+   "ax2_eval.py": "3553e1442fdb0b326d4f5e0dd5e3df5701ac8ffd469e013ad9bc511efa5ce126",
+   "a9_mpc.py": "612024bf8e53b30c00af764ab182671a32114c8430cb690a5b8fb797e96f129b",
+   "env.py": "a37183a1e54d659f39a9514ab79cfb01288029537027e63f5b30d14517266c49",
+   "env_la.py": "5d979fcddd61cbe8c6a6d08cfece4eb4c38a26a1cd1fc138bd9b75d8b7f88195",
+   "env_survey.py": "8d9e790316698df7c1465cd0178decc35646dcd24b4569aaf080d1f37926b8e5",
+   "env_ev.py": "e894f1352e91fe42515b6401b4fcab9fca873ee5707653048e019db863e39bd3",
+   "ax2_env.py": "3e7a04222631e1f73c764548b80de841289c9a9083eaad062dfb66b46114e2c2",
+   "ja_sched.py": "b8434b0d730bfe37262d5bf8c197b44298ed89e96e17a5668b092655e087bfb5",
+   "mode_heur.py": "40fd4dec9af55d65b8b112836519b5b531906deebd46d74fe46885a1d06af81e",
+   "policies.py": "4ae3b384886bb59bd7198bb65c9d9c7e4ddb7145228f12a31a404160e9272037",
+   "offpolicy_rl.py": "d788d248011a6dfd5bb861daec963410e93ea1b5c102258bb3940bfe7ea07c2a",
+   "timeppo.py": "73050645e910d675cd85b1b17772b686171aa67a7579a1da10cd66761193a8b5",
+   "a5_fidelity.py": "a12f55e85112fb03c0174a959ea77808a1009acbc50f7410641e4eda1a421f14",
+   "a5_common.py": "7dd213ee713e0c98148138d1ed66170ef1589e56d202cbdf516e614bef50e96a",
+   "a5_eval.py": "270b9bd940160494d0d8ed8c269cdf555852f93ab7eeb744e932e4d75524e050",
+   "imcodecs.py": "0c14819f2ffe8face67bc4240328c643db59c5735a22779fd47800ad2b6bd575",
+   "metrics.py": "5b13620ccb8863584c475c4ee77475b86fc809218cc164e5b7159226523f9d8b",
+   "fd_profile.py": "a0ce9eb26b354ec37283017948ea0e115e3a9fdc20a939b8b1a42869d8892354",
+   "profile_a11.py": "d356f260274e398f0d9dc91ea91a32eeb18901c5b2d5257e013afad74e573576"
+  }
+ },
+ "note": "L2: every fitted component of stage A; stage B verifies all items"
+}

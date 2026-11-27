@@ -1,0 +1,20 @@
+{
+ "threads": 6,
+ "n": 48,
+ "hardware": {
+  "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.12.16",
+  "torch": "2.12.1+cu130",
+  "cpu_count": 6,
+  "torch_threads": 6,
+  "cpu": "Intel(R) Core(TM) i5-14400F",
+  "gpu": "NVIDIA GeForce RTX 3070",
+  "pillow": {
+   "jpg": "6.2",
+   "jpg_2000": "2.5.4",
+   "avif": "1.4.2"
+  },
+  "compressai": "1.2.8"
+ },
+ "wall_s": 151.0358123779297
+}

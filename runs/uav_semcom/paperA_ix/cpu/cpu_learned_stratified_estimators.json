@@ -1,0 +1,75 @@
+{
+ "rule": "frame-weighted primary (fd_v1 estimate rule)",
+ "sample_sha256": "0ece0ce251a25bfa695c8312cf9bebac2c096942e3434b31e955d9385e29a3ec",
+ "rows_sha256": "2dcfa93eb5a05529fcdd44e13530c6c78fec01f05f35eb0b1bba642c038e7165",
+ "estimates": {
+  "mbt2018-mean_q1": {
+   "primary": "frame_weighted",
+   "frame_weighted": 0.2317987871755722,
+   "seq_balanced": 0.2317987871755722,
+   "strata": {
+    "1024x540": {
+     "seq_balanced": 0.232194043282591,
+     "frame_weighted": 0.232194043282591,
+     "N_h": 750
+    },
+    "960x540": {
+     "seq_balanced": 0.22191738450010234,
+     "frame_weighted": 0.22191738450010234,
+     "N_h": 30
+    }
+   }
+  },
+  "mbt2018-mean_q3": {
+   "primary": "frame_weighted",
+   "frame_weighted": 0.2275937642642292,
+   "seq_balanced": 0.2275937642642292,
+   "strata": {
+    "1024x540": {
+     "seq_balanced": 0.22791951743480518,
+     "frame_weighted": 0.22791951743480518,
+     "N_h": 750
+    },
+    "960x540": {
+     "seq_balanced": 0.21944993499982957,
+     "frame_weighted": 0.21944993499982957,
+     "N_h": 30
+    }
+   }
+  },
+  "mbt2018-mean_q5": {
+   "primary": "frame_weighted",
+   "frame_weighted": 0.4634930658076772,
+   "seq_balanced": 0.4634930658076772,
+   "strata": {
+    "1024x540": {
+     "seq_balanced": 0.46503128899998164,
+     "frame_weighted": 0.46503128899998164,
+     "N_h": 750
+    },
+    "960x540": {
+     "seq_balanced": 0.42503748600006475,
+     "frame_weighted": 0.42503748600006475,
+     "N_h": 30
+    }
+   }
+  },
+  "mbt2018-mean_q8": {
+   "primary": "frame_weighted",
+   "frame_weighted": 0.4609793095451499,
+   "seq_balanced": 0.4609793095451499,
+   "strata": {
+    "1024x540": {
+     "seq_balanced": 0.46315137758695174,
+     "frame_weighted": 0.46315137758695174,
+     "N_h": 750
+    },
+    "960x540": {
+     "seq_balanced": 0.4066776085001038,
+     "frame_weighted": 0.4066776085001038,
+     "N_h": 30
+    }
+   }
+  }
+ }
+}

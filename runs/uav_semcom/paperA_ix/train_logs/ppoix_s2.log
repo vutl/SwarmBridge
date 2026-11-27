@@ -1,0 +1,11 @@
+STEP 200000 val_return -10.39 ok 0.902 278s episodes 774 best@200000
+STEP 400000 val_return -4.50 ok 0.903 553s episodes 1554 best@400000
+STEP 600000 val_return -6.07 ok 0.901 828s episodes 2334 best@400000
+STEP 800000 val_return -5.15 ok 0.890 1102s episodes 3114 best@400000
+STEP 1000000 val_return -4.21 ok 0.898 1376s episodes 3894 best@1000000
+STEP 1200000 val_return -1.60 ok 0.904 1649s episodes 4674 best@1200000
+STEP 1400000 val_return -2.07 ok 0.901 1924s episodes 5454 best@1200000
+STEP 1600000 val_return -12.65 ok 0.877 2198s episodes 6234 best@1200000
+STEP 1800000 val_return -2.78 ok 0.896 2472s episodes 7014 best@1200000
+STEP 2000000 val_return -0.80 ok 0.896 2744s episodes 7794 best@2000000
+RUN_DONE a5

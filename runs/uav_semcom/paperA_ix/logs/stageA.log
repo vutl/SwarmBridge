@@ -1,0 +1,44 @@
+[2026-11-27 00:26:30] stage A profile start
+[2026-11-27 01:14:30] stage A profile done
+[2026-11-27 01:14:30] stage A cpu start
+MEASURE_DONE 151s
+ESTIMATE_DONE {'mbt2018-mean_q1': 0.2318, 'mbt2018-mean_q3': 0.2276, 'mbt2018-mean_q5': 0.4635, 'mbt2018-mean_q8': 0.461}
+retrained state fitted on U_train: 8fd86b5011fcd56050e2a67026800a7b7fbeeac43cda1d237e13f8253b7248d6
+H* per setting (U_train): {'N5x2': 'fixed_mbt2018-mean_q3', 'N3x2': 'fixed_avif_50', 'N7x2': 'fixed_avif_20', 'N5x3': 'fixed_avif_50', 'N5x4': 'fixed_avif_50', 'B0.5': 'fixed_mbt2018-mean_q3', 'B2': 'fixed_mbt2018-mean_q3'} (729s)
+[01:29] start ppoix_s0
+[02:14] done ppoix_s0 exit 0
+[02:14] start ppoix_s1
+[02:59] done ppoix_s1 exit 0
+[02:59] start ppoix_s2
+[03:45] done ppoix_s2 exit 0
+[03:45] start qrix_s0
+[03:45] start dsix_s0
+[07:12] done dsix_s0 exit 0
+[07:12] start qrix_s1
+[07:23] done qrix_s0 exit 0
+[07:23] start dsix_s1
+[10:47] done qrix_s1 exit 0
+[10:47] start qrix_s2
+[10:50] done dsix_s1 exit 0
+[10:50] start dsix_s2
+[14:20] done qrix_s2 exit 0
+[14:22] done dsix_s2 exit 0
+TRAIN_DONE
+checkpoints: {'ppoix': ['/home/uservutl/work/paperA_ix/rl/ppoix_s0/ckpt_2000000.zip', '/home/uservutl/work/paperA_ix/rl/ppoix_s1/ckpt_1000000.zip', '/home/uservutl/work/paperA_ix/rl/ppoix_s2/ckpt_2000000.zip'], 'qrix': ['/home/uservutl/work/paperA_ix/rl/qrix_s0/ckpt_1800000.pt', '/home/uservutl/work/paperA_ix/rl/qrix_s1/ckpt_1600000.pt', '/home/uservutl/work/paperA_ix/rl/qrix_s2/ckpt_1800000.pt'], 'dsix': ['/home/uservutl/work/paperA_ix/rl/dsix_s0/ckpt_800000.pt', '/home/uservutl/work/paperA_ix/rl/dsix_s1/ckpt_1400000.pt', '/home/uservutl/work/paperA_ix/rl/dsix_s2/ckpt_1400000.pt']}
+stage-A profile: 900/900 images complete
+  cpu_learned_stratified_estimators.json     present
+  state_retrained.json                       present
+  tune.json                                  present
+  ckpts.json                                 present
+  selection.json                             present
+  L2_lock.json                               missing
+  ppoix_s0: 2000000 steps
+  ppoix_s1: 2000000 steps
+  ppoix_s2: 2000000 steps
+  qrix_s0: 2000000 steps
+  dsix_s0: 2000000 steps
+  qrix_s1: 2000000 steps
+  dsix_s1: 2000000 steps
+  qrix_s2: 2000000 steps
+  dsix_s2: 2000000 steps
+[2026-11-27 14:22:12] STAGE_A_DONE (stop: review, then python ix_stage.py lock and commit L2)

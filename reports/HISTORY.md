@@ -229,7 +229,30 @@ Format: **dates (review numbers)** | question | what was done | key numbers | co
   - Action logging leaves PPO and QR-DQN parameters bit-identical.
   - End-to-end smoke test on the sandbox.
 - Launcher: `runs/uav_semcom/paperA_ix/scripts/run_stage.ps1 -Stage A|uavdt|x1`.
-- Stage A not started yet. X1 waits for the VisDrone answer.
+- X1 waits for the VisDrone answer.
+
+**27/11: stage A DONE and L2 locked** (run 00:26–14:22; `L2_lock.json` created 17:14, verify OK).
+- Profiling U_train + U_val: 48 min.
+- MBT2018 CPU frame-weighted estimates (s): q1 0.232, q3 0.228, q5 0.463, q8 0.461.
+- Retrained state on U_train (780 frames): 8fd86b50….
+- H\* on U_train:
+  - N5x2, B0.5, B2: mbt2018 q3
+  - N3x2, N5x3, N5x4: avif_50
+  - N7x2: avif_20
+  - fd_v1 was avif_20.
+- RL: 9/9 runs completed the full 2M steps, all exit 0. Selected checkpoints (best step, best U_val return):
+
+  | Algorithm | s0 | s1 | s2 |
+  |---|---|---|---|
+  | PPO | 2.0M, −1.13 | 1.0M, −2.86 | 2.0M, −0.80 |
+  | QR-DQN | 1.8M, −35.7 | 1.6M, −28.5 | 1.8M, −26.7 |
+  | DSAC | 0.8M, −63.1 | 1.4M, −53.3 | 1.4M, −50.2 |
+
+  These are validation numbers only.
+- Training action histograms: all 14 modes are executed in every run.
+  - PPO mostly picks mbt q3 (33–39%), avif_50 (14–22%) and mbt q1 (12–15%); generative modes are ≤1.8% each.
+  - The `--heur` flag is identical to fd_v1 and inactive (heur_mode = 0).
+- No hyperparameters, budgets or selection rules changed. Next: stage B uavdt.
 
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 
