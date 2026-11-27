@@ -257,6 +257,42 @@ Format: **dates (review numbers)** | question | what was done | key numbers | co
 - 27/11 18:19: the user authorised running X1 now. `scripts/after_uavdt_x1.ps1` starts stage x1 after the uavdt
   launcher exits. The two run sequentially because the MPC arms use a wall-clock budget.
 
+**27/11: stage B UAVDT DONE** (17:14–19:49; commit 757388aa; `paperA_ix/analysis/summary.log`).
+- All 6 blocks are complete (8,800 episodes). Integrity: 0 wrong task counts, 0 differing images, 0 deliveries
+  outside the pool. Original-image recall: veh 78.94, vancar 75.44, car 70.85.
+- **Principal verdict (N2 & A2):**
+  - **X2-frozen: supported.** N2 +1.17 [+0.18, +2.15], Holm p 0.041; A2 +11.82 [+8.05, +15.59].
+  - **X2-retrained: supported.** N2 +7.61 [+4.65, +10.57]; A2 +9.19 [+5.69, +12.69].
+  - No negative N2 / A2.
+- **X2-frozen secondary results:**
+  - Calibration hurts: H1 (cal − H\*) −0.85 and H3b / N3 (cal − guarded) −1.77 / −1.65, all Holm-rejected negative.
+  - A4 (H4 − H1) −1.23, Holm-negative. A4b +5.29.
+  - N1 (nominal − H\*) +1.05, not significant (fd_v1: nominal lost). A1 (gate only) −0.03, not significant.
+- **X2-retrained secondary results:**
+  - H1 +6.98. H3b / N3 (cal − guarded) about 0, not significant. N1 −0.26, not significant. A1 −2.00, not
+    significant. A4 +5.84, A4b +23.78.
+- **Grid:**
+  - G1 (guarded − H\*) is positive and Holm-significant in 5 of 6 settings; N3x2 +0.69 is not significant.
+  - G2 (cal − guarded): +2.56 at N3x2 and +2.60 at N5x4; **−10.10 at N7x2**; not significant at N5x3, B0.5, B2.
+- **RL:**
+  - R1 (guarded on top of RL − RL): PPO +6.88, QR-DQN +22.93, DSAC +37.60, all Holm-significant.
+  - R2 (cal − guarded): PPO +2.75 Holm-significant; QR-DQN +1.84 (Holm p 0.069); DSAC −0.40.
+  - Level (not tested): PPO alone −36.78 vs H\* −31.48.
+- **Recall (veh, system level):**
+  - N2: +1.0 (frozen), +4.5 (retrained).
+  - A2 (band − nominal): −7.7 (frozen), −1.1 (retrained).
+  - N1 (nominal − H\*): +16.5 (frozen), +7.3 (retrained).
+  - So the return–recall trade-off between nominal and banded planning reappears.
+- **Utilisation:** generative modes ≤0.7% in the MPC arms. Exceptions: RobustMPC without band about 21%, DSAC alone
+  9–13%, QR-DQN alone 5–11%. cap_t2i is never compliant.
+- **Cost:** same pattern as fd_v1.
+  - Sequential full-sum p99 is 139–224 ms. 47–83% of slots exceed 50 ms; only H0 fits (16 ms).
+  - Hypothetical parallel max p99 is 39–50 ms at K ≤ 5 / M ≤ 3, but 69–75 ms at N7x2 / N5x4.
+- **X1:**
+  - The queued launch failed at start: at 19:50 the `.venv` uv trampoline could not find the base interpreter (works
+    again at 20:40). No X1 profile or episode exists.
+  - The relaunch is waiting for the user.
+
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 
 `phases/2026-11-23_paperA-fulldata/` (README + consolidated report); results in `runs/uav_semcom/paperA_fd/`.
