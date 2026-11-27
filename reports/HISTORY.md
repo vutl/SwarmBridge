@@ -252,7 +252,10 @@ Format: **dates (review numbers)** | question | what was done | key numbers | co
 - Training action histograms: all 14 modes are executed in every run.
   - PPO mostly picks mbt q3 (33–39%), avif_50 (14–22%) and mbt q1 (12–15%); generative modes are ≤1.8% each.
   - The `--heur` flag is identical to fd_v1 and inactive (heur_mode = 0).
-- No hyperparameters, budgets or selection rules changed. Next: stage B uavdt.
+- No hyperparameters, budgets or selection rules changed.
+- Stage B uavdt launched 17:14.
+- 27/11 18:19: the user authorised running X1 now. `scripts/after_uavdt_x1.ps1` starts stage x1 after the uavdt
+  launcher exits. The two run sequentially because the MPC arms use a wall-clock budget.
 
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 
