@@ -308,6 +308,27 @@ Format: **dates (review numbers)** | question | what was done | key numbers | co
   0 slots over 50 ms.
 - **All three verdicts:** X1 partially supported, X2-retrained supported, X2-frozen supported.
 
+**27/11 late: publication artifacts FROZEN; research complete.**
+- ChatGPT approved `ca6f8099`:
+  - Fig. 1 `fig_fd_system`;
+  - Fig. 2 `fig_ix_ablation` (vertical; horizontal kept as `_h`);
+  - Fig. 3 `fig_ix_tradeoff`;
+  - Table 1 `table_ix_results.tex`;
+  - supplementary CSVs in `paperA_ix/paper/`. The levels CSV now uses the union of fields: 7 MPC diagnostic columns
+    had been dropped.
+- Synced to vutl/uav-selective-mpc (57050fe):
+  - ix code and tests;
+  - `runs/uav_semcom/paperA_ix`;
+  - the 9 selected checkpoints, with sha256 matching L2;
+  - protocol and result notes (`paperA-ix-result.md`);
+  - figures and table.
+  No images, profiles or delivery logs of the new datasets are included. In the dedicated repo, the 46 ix tests pass
+  and the table and CSVs are reproduced byte-identically.
+- `main.tex` is untouched. ChatGPT now rewrites the manuscript.
+- Open items:
+  - the user's local Fig. 1 edit (uncommitted, with photos) is not synced;
+  - VisDrone test-challenge permission before publication.
+
 ### 4.0a Paper A extended full-data evaluation: 23–25/11, COMPLETE (awaiting review)
 
 `phases/2026-11-23_paperA-fulldata/` (README + consolidated report); results in `runs/uav_semcom/paperA_fd/`.
