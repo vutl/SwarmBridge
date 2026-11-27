@@ -1,0 +1,10 @@
+[2026-11-27 17:14:57] stage B profile uavdt start
+[2026-11-27 17:49:23] stage B profile uavdt done
+[2026-11-27 17:49:23] stage B eval uavdt start
+x2f_ref: 6 arm rows x 100 seeds done (518s)
+x2f_abl: 8 arm rows x 100 seeds done (630s)
+x2r_ref: 6 arm rows x 100 seeds done (497s)
+x2r_abl: 8 arm rows x 100 seeds done (616s)
+x2r_grid: 24 arm rows x 100 seeds done (2022s)
+x2r_rl: 36 arm rows x 100 seeds done (2934s)
+[2026-11-27 19:49:58] STAGE_B_uavdt_DONE
