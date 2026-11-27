@@ -8,7 +8,7 @@ experiment is re-run.
 
 | Item | File | Content |
 |---|---|---|
-| Fig. 2 | `paper/paperA/figs/fig_ix_ablation.{pdf,png}` | Ablation blocks of X1, UAVDT-frozen and UAVDT-retrained. (a): N1, A2, N2, N3. (b): A1, A4, A4b |
+| Fig. 2 | `paper/paperA/figs/fig_ix_ablation.{pdf,png}` (vertical; horizontal version kept as `fig_ix_ablation_h`) | Ablation blocks of X1, UAVDT-frozen and UAVDT-retrained. (a): N1, A2, N2, N3. (b): A1, A4, A4b |
 | Fig. 3 | `paper/paperA/figs/fig_ix_tradeoff.{pdf,png}` | Return vs vehicle-recall differences, UAVDT ablation block, both arms |
 | Table 1 | `paper/paperA/table_ix_results.tex` | UAVDT-retrained: reference row, six settings, three learned incumbents |
 

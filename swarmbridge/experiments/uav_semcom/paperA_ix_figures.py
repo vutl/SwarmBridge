@@ -105,21 +105,63 @@ def fig_ablation(figdir, nums):
     axes[0].legend(hs, [st["label"] for st in COND.values()] + ["not Holm-rejected"], loc="lower center",
                    bbox_to_anchor=(0.42, 1.0), ncol=4, fontsize=5.7, handletextpad=0.25, columnspacing=0.8,
                    handlelength=1.4, borderpad=0.2)
+    fig.savefig(figdir / "fig_ix_ablation_h.pdf", bbox_inches="tight", pad_inches=0.01)
+    fig.savefig(figdir / "fig_ix_ablation_h.png", bbox_inches="tight", dpi=250)
+    plt.close(fig)
+
+
+VLAB = {"N1": "Nominal\n$-$ $H^*$", "A2": "Band only\n$-$ nominal", "N2": "Guarded\n$-$ $H^*$",
+        "N3": "Calibrated\n$-$ guarded", "A1": "Gate only\n$-$ nominal", "A4": "$H{=}4$\n$-$ $H{=}1$",
+        "A4b": "$H{=}4$\n$-$ $H{=}0$"}
+
+
+def fig_ablation_v(figdir, nums):
+    """Fig. 2 (main): vertical grouped error bars; same estimates, CIs, colours, markers and fill rule as the
+    horizontal version (fig_ix_ablation_h)."""
+    fig, axes = plt.subplots(2, 1, figsize=(3.45, 3.05), gridspec_kw=dict(hspace=0.62))
+    off = {"x1": -0.24, "x2f": 0.0, "x2r": 0.24}
+    for ax, rows, tag, ylim in ((axes[0], PANEL_A, "(a)", (-21, 25)), (axes[1], PANEL_B, "(b)", (-9, 30))):
+        for i, (k, _) in enumerate(rows):
+            for cnd, st in COND.items():
+                c = con(st["block"], k)
+                rej = bool(c["holm_rejected"])
+                ax.errorbar(i + off[cnd], c["d"], yerr=[[c["d"] - c["lo"]], [c["hi"] - c["d"]]], fmt=st["marker"],
+                            color=st["color"], mfc=st["color"] if rej else "white", mew=0.9, ms=4.2, lw=0.9,
+                            capsize=1.8)
+        ax.axhline(0, color="black", lw=0.6)
+        ax.set_xticks(range(len(rows)))
+        ax.set_xticklabels([VLAB[k] for k, _ in rows], fontsize=6.8, linespacing=1.05)
+        ax.set_xlim(-0.55, len(rows) - 0.45)
+        ax.set_ylim(*ylim)
+        ax.grid(axis="x", visible=False)
+        ax.tick_params(axis="x", length=0, pad=2.5)
+        ax.tick_params(axis="y", labelsize=6.8)
+        ax.set_ylabel(r"$\Delta$ return", fontsize=7)
+        ax.text(0.015, 0.965, tag, transform=ax.transAxes, ha="left", va="top", fontsize=7.2, fontweight="bold")
+    hs = [Line2D([], [], marker=st["marker"], color=st["color"], lw=0.9, ms=4.2) for st in COND.values()]
+    hs += [Line2D([], [], marker="o", color=MUTED, mfc="white", lw=0, ms=4.2)]
+    axes[0].legend(hs, [st["label"] for st in COND.values()] + ["not Holm-rejected"], loc="lower center",
+                   bbox_to_anchor=(0.5, 1.0), ncol=2, fontsize=6.5, handletextpad=0.3, columnspacing=1.2,
+                   handlelength=1.5, borderpad=0.2, labelspacing=0.25)
     fig.savefig(figdir / "fig_ix_ablation.pdf", bbox_inches="tight", pad_inches=0.01)
     fig.savefig(figdir / "fig_ix_ablation.png", bbox_inches="tight", dpi=250)
     plt.close(fig)
 
 
 # ------------------------------------------------------------------ Fig. 3
-# label offsets (points) per arm and contrast, set by visual inspection only (no data selection)
-LAB = {"x2f": {"N1": (5, -2, "left"), "A2": (6, -9, "left"), "N2": (6, 6, "left"), "N3": (-20, 13, "right"),
-               "A1": (-20, -13, "right"), "A4": (-24, 1, "right"), "A4b": (8, 9, "left")},
-       "x2r": {"N1": (6, 4, "left"), "A2": (6, -7, "left"), "N2": (6, 5, "left"), "N3": (-15, -12, "right"),
-               "A1": (-16, 10, "right"), "A4": (-6, 6, "right"), "A4b": (-4, 6, "right")}}
+# label anchor (data coordinates, left-aligned) per arm and contrast, set by visual inspection only (no data
+# selection); a leader line is drawn when the label is placed away from its point
+LAB = {"x2f": {"N1": (4.0, 15.6, 0), "N2": (4.0, 3.2, 0), "N3": (-15.0, 4.0, 1), "A4": (-15.0, -4.6, 1),
+               "A1": (-15.0, -8.4, 1), "A4b": (7.0, -2.4, 0), "A2": (13.6, -9.4, 0)},
+       "x2r": {"N1": (1.6, 9.2, 0), "N2": (10.2, 6.6, 0), "A4b": (18.0, -0.9, 0), "A2": (11.2, -4.0, 0),
+               "A4": (0.5, -7.0, 1), "A1": (-15.0, 3.0, 1), "N3": (-15.0, -6.2, 1)}}
+SHORT3 = {"N1": "Nominal $-$ $H^*$", "A2": "Band only $-$ nominal", "N2": "Guarded $-$ $H^*$",
+          "N3": "Calibrated $-$ guarded", "A1": "Gate only $-$ nominal", "A4": "$H{=}4$ $-$ $H{=}1$",
+          "A4b": "$H{=}4$ $-$ $H{=}0$"}
 
 
 def fig_tradeoff(figdir, nums):
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.1), sharey=True, gridspec_kw=dict(wspace=0.06))
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.15), sharey=True, gridspec_kw=dict(wspace=0.14))
     nums["fig3"] = {"rule": "all Holm-family contrasts of the UAVDT ablation block (A1, A2, A4, A4b, N1, N2, N3)",
                     "x": "paired 95% t CI of the return difference",
                     "y": "sequence-cluster bootstrap 95% CI of the vehicle recall difference (pp)"}
@@ -134,18 +176,19 @@ def fig_tradeoff(figdir, nums):
             ax.errorbar(c["d"], r[0], xerr=[[c["d"] - c["lo"]], [c["hi"] - c["d"]]], yerr=[[r[0] - r[1]], [r[2] - r[0]]],
                         fmt=st["marker"], color=st["color"], mfc=st["color"] if rej else "white", mew=0.8, ms=4.0,
                         lw=0.7, capsize=1.2, elinewidth=0.6)
-            dx, dy, ha = LAB[cnd][k]
-            lead = abs(dx) >= 15
-            ax.annotate(SHORT[k], (c["d"], r[0]), xytext=(dx, dy), textcoords="offset points", fontsize=5.6,
-                        ha=ha, va="center", color=INK,
-                        arrowprops=dict(arrowstyle="-", lw=0.4, color=MUTED, shrinkA=1, shrinkB=2.5) if lead else None)
+            tx, ty, lead = LAB[cnd][k]
+            ax.annotate(SHORT3[k], (c["d"], r[0]), xytext=(tx, ty), textcoords="data", fontsize=6.2,
+                        ha="left", va="center", color=INK, annotation_clip=False,
+                        arrowprops=dict(arrowstyle="-", lw=0.45, color=MUTED, shrinkA=0, shrinkB=3,
+                                        relpos=(1.0, 0.5) if tx < c["d"] else (0.0, 0.5)) if lead else None)
         ax.axvline(0, color="black", lw=0.6)
         ax.axhline(0, color="black", lw=0.6)
         ax.set_xlim(-16, 29)
-        ax.set_xlabel(r"$\Delta$ return per episode (paired 95% CI)")
-        ax.set_title(st["label"], loc="left", fontsize=6.6, fontweight="bold", color=st["color"], pad=2)
+        ax.tick_params(labelsize=6.8)
+        ax.set_title(st["label"], loc="left", fontsize=7, fontweight="bold", color=st["color"], pad=2)
     axes[0].set_ylim(-11.5, 22)
-    axes[0].set_ylabel(r"$\Delta$ vehicle recall (pp)")
+    axes[0].set_ylabel(r"$\Delta$ vehicle recall (pp, cluster 95% CI)", fontsize=7)
+    fig.supxlabel(r"$\Delta$ return per episode (paired 95% CI)", fontsize=7, y=-0.02)
     for ax, tag in zip(axes, ("(a)", "(b)")):
         ax.text(0.985, 0.97, tag, transform=ax.transAxes, ha="right", va="top", fontsize=7, fontweight="bold")
     fig.savefig(figdir / "fig_ix_tradeoff.pdf", bbox_inches="tight", pad_inches=0.01)
@@ -245,22 +288,23 @@ def exports(nums):
                     rv = c.get(f"rec_{v}")
                     row += ([*rv["seed"], *rv["cluster"], *rv["levels"]] if rv else [""] * 8)
                 w.writerow(row)
-    keys = None
+    lrows, keys = [], []                                     # union of fields over all eight blocks, first-seen order
+    for b in BLOCKS:
+        for arm, L in load(b)["levels"].items():
+            flat = {}
+            for k, v in L.items():
+                if isinstance(v, dict):
+                    for kk, vv in v.items():
+                        flat[f"{k}_{kk}"] = vv
+                else:
+                    flat[k] = v
+            keys += [k for k in flat if k not in keys]
+            lrows.append((b, arm, flat))
     with open(OUTD / "ix_levels_all.csv", "w", newline="") as f:
         w = csv.writer(f)
-        for b in BLOCKS:
-            for arm, L in load(b)["levels"].items():
-                flat = {}
-                for k, v in L.items():
-                    if isinstance(v, dict):
-                        for kk, vv in v.items():
-                            flat[f"{k}_{kk}"] = vv
-                    else:
-                        flat[k] = v
-                if keys is None:
-                    keys = list(flat)
-                    w.writerow(["block", "arm"] + keys)
-                w.writerow([b, arm] + [flat.get(k, "") for k in keys])
+        w.writerow(["block", "arm"] + keys)
+        for b, arm, flat in lrows:
+            w.writerow([b, arm] + [flat.get(k, "") for k in keys])
     with open(OUTD / "ix_mode_utilisation.csv", "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["block", "key", "mode", "selected", "share", "compliant", "below_floor", "late_drop",
@@ -290,7 +334,8 @@ if __name__ == "__main__":
     figdir = Path(sys.argv[1]) if len(sys.argv) > 1 else PAPER / "figs"
     figdir.mkdir(parents=True, exist_ok=True)
     N = {}
-    fig_ablation(figdir, N)
+    fig_ablation(figdir, N)          # horizontal version, kept as fig_ix_ablation_h
+    fig_ablation_v(figdir, N)        # main Fig. 2
     fig_tradeoff(figdir, N)
     table(N)
     exports(N)
